@@ -40,6 +40,11 @@ namespace Another_Mirai_Native.WebSocket
                 LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
                 Connections.Remove(connection.ConnectionInfo.Id.ToString());
             };
+            connection.OnError = (e) =>
+            {
+                LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
+                Connections.Remove(connection.ConnectionInfo.Id.ToString());
+            };
             connection.OnMessage = (message) =>
             {
                 HandleClientMessage(message, connection.ConnectionInfo);
