@@ -4,6 +4,8 @@
     {
         public string Name { get; set; } = "MiraiAPIHttp";
 
+        public bool IsConnected { get; set; }
+
         public void AddLog(int authCode, int priority, string type, string msg)
         {
             throw new System.NotImplementedException();
@@ -19,7 +21,17 @@
             throw new System.NotImplementedException();
         }
 
+        public bool Connect()
+        {
+            return true;
+        }
+
         public int DeleteMsg(int authCode, long msgId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Disconnect()
         {
             throw new System.NotImplementedException();
         }

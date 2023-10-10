@@ -48,8 +48,7 @@ namespace Another_Mirai_Native
 
         public void LoadProtocol()
         {
-            Directory.CreateDirectory("protocols");
-            foreach (var item in Directory.GetFiles("*.dll"))
+            foreach (var item in Directory.GetFiles("protocols", "*.dll"))
             {
                 Assembly assembly = Assembly.LoadFrom(item);
                 foreach (var type in assembly.GetTypes())

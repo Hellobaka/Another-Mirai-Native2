@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Native;
+using Another_Mirai_Native.WebSocket;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native
 {
@@ -12,12 +15,17 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         private static void Main(string[] args)
         {
+            Console.WriteLine($"Args: {string.Join(" ", args)}");
+            // 创建初始文件夹
+            CreateInitFolders();
+            // 重定向异常
+            InitExceptionCapture();
             // 加载配置
             AppConfig.LoadConfig();
             if (args.Length == 0)
             {
                 // 启动WS服务器
-                WebSocketServer.Start();
+                new Server().Start();
                 // 若配置无需UI则自动连接之后加载插件
                 if (AppConfig.AutoConnect)
                 {
@@ -25,7 +33,7 @@ namespace Another_Mirai_Native
                     {
                         return;
                     }
-                    if (!new PluginManager().LoadAndEnable())
+                    if (!new PluginManager().LoadAndStart())
                     {
                         return;
                     }
@@ -38,12 +46,12 @@ namespace Another_Mirai_Native
                 // 监控核心进程
                 MonitorCoreProcess(AppConfig.Core_PID);
                 // 连接核心服务器
-                if (!new WebSocketClient().Connect(AppConfig.Core_WSURL))
+                if (!new Client().Connect(AppConfig.Core_WSURL))
                 {
                     return;
                 }
                 // 加载插件
-                if (!new PluginManager().LoadAndEnable(AppConfig.Core_PluginPath))
+                if (!new PluginManager().Load(AppConfig.Core_PluginPath))
                 {
                     return;
                 }
@@ -51,28 +59,57 @@ namespace Another_Mirai_Native
             while (true)
             {
                 string command = Console.ReadLine();
+                if (args.Length != 0)
+                {
+                    continue;
+                }
                 switch (command.ToLower())
                 {
+                    case "connect":
+                        string protocol = command.ToLower().Replace("connect", "");
+                        if (string.IsNullOrEmpty(protocol))
+                        {
+                            protocol = AppConfig.AutoProtocol;
+                        }
+                        _ = new ProtocolManager().Start(protocol) && new PluginManager().LoadAndStart();
+                        break;
                 }
             }
+        }
+
+        private static void InitExceptionCapture()
+        {
+        }
+
+        private static void CreateInitFolders()
+        {
+            Directory.CreateDirectory(@"data\app");
+            Directory.CreateDirectory(@"data\plugins");
+            Directory.CreateDirectory(@"data\image");
+            Directory.CreateDirectory(@"data\record");
+            Directory.CreateDirectory(@"logs");
+            Directory.CreateDirectory("protocols");
         }
 
         private static void MonitorCoreProcess(int pid)
         {
             if (AppConfig.Core_AutoExit)
             {
-                while (!WebSocketClient.ExitFlag)
+                Task.Run(() =>
                 {
-                    try
+                    while (!Client.ExitFlag)
                     {
-                        _ = Process.GetProcessById(pid);
+                        try
+                        {
+                            _ = Process.GetProcessById(pid);
+                        }
+                        catch
+                        {
+                            Environment.Exit(0);
+                        }
+                        Thread.Sleep(1000);
                     }
-                    catch
-                    {
-                        Environment.Exit(0);
-                    }
-                    Thread.Sleep(1000);
-                }
+                });
             }
         }
 
@@ -82,11 +119,11 @@ namespace Another_Mirai_Native
             {
                 if (args[i].ToLower() == "-pid")
                 {
-                    AppConfig.Core_PID = short.Parse(args[i + 1]);
+                    AppConfig.Core_PID = int.Parse(args[i + 1]);
                 }
                 if (args[i].ToLower() == "-autoexit")
                 {
-                    AppConfig.Core_AutoExit = args[i + 1] == "1";
+                    AppConfig.Core_AutoExit = args[i + 1] == "True";
                 }
                 if (args[i].ToLower() == "-path")
                 {

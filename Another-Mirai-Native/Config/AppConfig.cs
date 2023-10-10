@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Another_Mirai_Native
+namespace Another_Mirai_Native.Config
 {
     public static class AppConfig
     {
@@ -12,7 +12,15 @@ namespace Another_Mirai_Native
 
         public static string AutoProtocol { get; set; } = "MiraiAPIHttp";
 
-        public static short WebSocketPort { get; set; } = 30303;
+        public static bool StartUI { get; set; }
+
+        public static bool PluginExitWhenCoreExit { get; set; }
+
+        public static int ReconnectTime { get; set; }
+
+        public static bool RestartPluginIfDead { get; set; }
+
+        public static string WebSocketURL { get; set; } = "";
 
         public static int Core_PID { get; set; }
 
@@ -24,9 +32,13 @@ namespace Another_Mirai_Native
 
         public static void LoadConfig()
         {
+            PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", true);
+            StartUI = ConfigHelper.GetConfig("StartUI", false);
             AutoConnect = ConfigHelper.GetConfig("AutoConnect", false);
             AutoProtocol = ConfigHelper.GetConfig("AutoProtocol", "MiraiAPIHttp");
-            WebSocketPort = ConfigHelper.GetConfig("WebSocketPort", (short)30303);
+            WebSocketURL = ConfigHelper.GetConfig("WebSocketURL", "ws://127.0.0.1:30303");
+            ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", 5000);
+            RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", false);
         }
     }
 }

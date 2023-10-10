@@ -9,7 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{FAA0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQP", "CQP\CQP.csproj", "{FAF82352-4013-4622-911A-DAD4E6F1754B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol_MiraiAPIHttp", "Protocol_MiraiAPIHttp\Protocol_MiraiAPIHttp.csproj", "{7EAE6816-8FD9-4456-9387-851F075F73FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_MiraiAPIHttp", "Protocol_MiraiAPIHttp\Protocol_MiraiAPIHttp.csproj", "{7EAE6816-8FD9-4456-9387-851F075F73FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5A3ED6B2-A57C-4086-A425-6EEE89894A29}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,16 +42,16 @@ Global
 		{FAA042D4-4039-4E06-B95B-24F697D9564F}.Release|x86.Build.0 = Release|x86
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|x86.Build.0 = Debug|Any CPU
+		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|x86.ActiveCfg = Debug|x86
+		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Debug|x86.Build.0 = Debug|x86
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Release|x86.ActiveCfg = Release|Any CPU
 		{FAF82352-4013-4622-911A-DAD4E6F1754B}.Release|x86.Build.0 = Release|Any CPU
 		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|x86.Build.0 = Debug|Any CPU
+		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|x86.ActiveCfg = Debug|x86
+		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Debug|x86.Build.0 = Debug|x86
 		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7EAE6816-8FD9-4456-9387-851F075F73FC}.Release|x86.ActiveCfg = Release|Any CPU

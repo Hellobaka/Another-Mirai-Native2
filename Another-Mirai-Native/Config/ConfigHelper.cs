@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Another_Mirai_Native
+namespace Another_Mirai_Native.Config
 {
     /// <summary>
     /// 配置读取帮助类

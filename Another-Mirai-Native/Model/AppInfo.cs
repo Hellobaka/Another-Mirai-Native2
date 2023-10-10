@@ -1,4 +1,6 @@
-﻿namespace Another_Mirai_Native.Model
+﻿using Newtonsoft.Json;
+
+namespace Another_Mirai_Native.Model
 {
     public class AppInfo
     {
@@ -16,6 +18,7 @@
 
         public string description { get; set; }
 
+        [JsonProperty("event")]
         public Event[] _event { get; set; }
 
         public Menu[] menu { get; set; }

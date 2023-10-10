@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Another_Mirai_Native.Protocol.MiraiAPIHttp</RootNamespace>
+    <Platforms>AnyCPU;x86</Platforms>
+    <AssemblyName>MiraiAPIHttp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
