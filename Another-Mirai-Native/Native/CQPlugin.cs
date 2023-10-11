@@ -15,6 +15,10 @@ namespace Another_Mirai_Native.Native
             Path = path;
         }
 
+        public string Name { get; private set; }
+
+        public AppInfo? AppInfo { get; private set; }
+
         public string Path { get; set; } = "";
 
         public string Json { get; set; } = "";
@@ -67,10 +71,6 @@ namespace Another_Mirai_Native.Native
         private delegate int Type_Disable();
 
         private Type_AppInfo AppInfoFunction;
-
-        public string Name { get; private set; }
-
-        public AppInfo? AppInfo { get; private set; }
 
         private Type_Initialize Initialize;
 

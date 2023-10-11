@@ -1,7 +1,6 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using Fleck;
 using System.Diagnostics;
 
 namespace Another_Mirai_Native.Native
@@ -57,11 +56,7 @@ namespace Another_Mirai_Native.Native
         public int InvokeEvent(CQPluginProxy proxy, PluginEventType eventType, params object[] args)
         {
             var r = Invoke(proxy, $"InvokeEvent_{eventType}", args);
-            if (!r.Success)
-            {
-                return 0;
-            }
-            return (int)r.Result;
+            return !r.Success ? 0 : (int)r.Result;
         }
 
         private static Process? StartPluginProcess(int pid, string item)

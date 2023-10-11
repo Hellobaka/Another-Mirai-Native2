@@ -67,6 +67,9 @@ namespace Another_Mirai_Native.WebSocket
                             proxy.AppInfo = appInfo;
                         }
                         LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
+                        Thread.Sleep(10000);
+                        PluginManagerProxy.Instance.InvokeEvent(PluginManagerProxy.Proxies.First(), PluginEventType.StartUp);
+                        PluginManagerProxy.Instance.InvokeEvent(PluginManagerProxy.Proxies.First(), PluginEventType.Enable);
                         break;
 
                     default:
