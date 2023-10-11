@@ -1,4 +1,4 @@
-﻿namespace Another_Mirai_Native.WebSocket
+﻿namespace Another_Mirai_Native.Model
 {
     public class InvokeResult
     {

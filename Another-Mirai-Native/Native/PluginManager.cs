@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.WebSocket;
+﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.WebSocket;
 
 namespace Another_Mirai_Native.Native
 {
