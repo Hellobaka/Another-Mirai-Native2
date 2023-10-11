@@ -1,5 +1,9 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -55,8 +59,12 @@ namespace Another_Mirai_Native.WebSocket
         private async void StartReceiveMessage()
         {
             byte[] buffer = new byte[1024 * 4];
-            while (WebSocketClient != null && WebSocketClient.State != WebSocketState.Open)
+            while (true)
             {
+                if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
+                {
+                    break;
+                }
                 WebSocketReceiveResult result;
                 List<byte> data = new();
                 do
@@ -72,12 +80,48 @@ namespace Another_Mirai_Native.WebSocket
 
         private void HandleMessage(string message)
         {
-            string type = JObject.Parse(message)["Type"].ToString();
-            switch (type)
+            try
             {
-                case "PluginInfo":
-                    break;
+                LogHelper.Info("ReceiveServer", message);
+                InvokeBody caller = JsonConvert.DeserializeObject<InvokeBody>(message);
+                if (CheckCanHandle(caller.Function) is false)
+                {
+                    // 未定义的调用
+                    return;
+                }
+                object result = null;
+                if (caller.Function.StartsWith("InvokeEvent"))
+                {
+                    result = HandleEvent(caller.Function.Replace("InvokeEvent_", ""), caller.Args);
+                }
+                Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
             }
+            catch (Exception ex)
+            {
+                LogHelper.Error("Invoke", ex);
+            }
+        }
+
+        private bool CheckCanHandle(string function)
+        {
+            string[] canCall = new string[]
+            {
+                "InvokeEvent",
+            };
+            foreach (var item in canCall)
+            {
+                if (function.StartsWith(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private int HandleEvent(string function, object[] args)
+        {
+            PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);
+            return PluginManager.LoadedPlugin.CallEvent(eventType, args);
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Another_Mirai_Native.Config
 
         public static string Core_WSURL { get; set; } = "";
 
+        public static int PluginInvokeTimeout { get; set; } = 120 * 1000;
+
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", true);
@@ -39,6 +41,7 @@ namespace Another_Mirai_Native.Config
             WebSocketURL = ConfigHelper.GetConfig("WebSocketURL", "ws://127.0.0.1:30303");
             ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", 5000);
             RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", false);
+            PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", 120 * 1000);
         }
     }
 }

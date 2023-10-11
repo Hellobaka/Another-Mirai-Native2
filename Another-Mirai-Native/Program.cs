@@ -33,7 +33,7 @@ namespace Another_Mirai_Native
                     {
                         return;
                     }
-                    if (!new PluginManager().LoadAndStart())
+                    if (!new PluginManagerProxy().LoadPlugins())
                     {
                         return;
                     }
@@ -71,7 +71,7 @@ namespace Another_Mirai_Native
                         {
                             protocol = AppConfig.AutoProtocol;
                         }
-                        _ = new ProtocolManager().Start(protocol) && new PluginManager().LoadAndStart();
+                        _ = new ProtocolManager().Start(protocol) && (PluginManagerProxy.Instance ?? new PluginManagerProxy()).LoadPlugins();
                         break;
                 }
             }

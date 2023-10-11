@@ -8,6 +8,7 @@
     <RootNamespace>Another_Mirai_Native</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
     <LangVersion>11</LangVersion>
+    <Version>1.8.4</Version>
   </PropertyGroup>
 
   <ItemGroup>

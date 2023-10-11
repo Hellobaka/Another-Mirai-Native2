@@ -229,7 +229,7 @@ namespace Another_Mirai_Native.Native
             return valuePair;
         }
 
-        public int CallFunction(PluginEventType ApiName, params object[] args)
+        public int CallEvent(PluginEventType ApiName, params object[] args)
         {
             int returnValue = 0;
             switch (ApiName)
