@@ -18,6 +18,8 @@ namespace Another_Mirai_Native.WebSocket
 
         public ClientWebSocket WebSocketClient { get; private set; }
 
+        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
+
         public Client()
         {
             Instance = this;
@@ -84,39 +86,30 @@ namespace Another_Mirai_Native.WebSocket
             try
             {
                 LogHelper.Info("ReceiveServer", message);
-                InvokeBody caller = JsonConvert.DeserializeObject<InvokeBody>(message);
-                if (CheckCanHandle(caller.Function) is false)
+                if (JObject.Parse(message).ContainsKey("Args"))
                 {
-                    // 未定义的调用
-                    return;
+                    InvokeBody caller = JsonConvert.DeserializeObject<InvokeBody>(message);
+                    object result = null;
+                    if (caller.Function.StartsWith("InvokeEvent"))
+                    {
+                        result = HandleEvent(caller.Function.Replace("InvokeEvent_", ""), caller.Args);
+                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
+                    }
                 }
-                object result = null;
-                if (caller.Function.StartsWith("InvokeEvent"))
+                else
                 {
-                    result = HandleEvent(caller.Function.Replace("InvokeEvent_", ""), caller.Args);
+                    InvokeResult result = JsonConvert.DeserializeObject<InvokeResult>(message);
+                    if (WaitingMessage.ContainsKey(result.GUID))
+                    {
+                        WaitingMessage[result.GUID] = result;
+                        WaitingMessage[result.GUID].Success = true;
+                    }
                 }
-                Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
             }
             catch (Exception ex)
             {
                 LogHelper.Error("Invoke", ex);
             }
-        }
-
-        private bool CheckCanHandle(string function)
-        {
-            string[] canCall = new string[]
-            {
-                "InvokeEvent",
-            };
-            foreach (var item in canCall)
-            {
-                if (function.StartsWith(item))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private int HandleEvent(string function, object[] args)

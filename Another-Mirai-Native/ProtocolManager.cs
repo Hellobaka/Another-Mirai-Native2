@@ -13,6 +13,8 @@ namespace Another_Mirai_Native
 
         public static List<IProtocol> Protocols { get; set; } = new();
 
+        public IProtocol CurrentProtocol { get; set; }
+
         public ProtocolManager()
         {
             if (Protocols.Count == 0)
@@ -30,6 +32,10 @@ namespace Another_Mirai_Native
             }
             bool flag = protocol.Connect();
             LogHelper.Info("Connect", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
+            if (flag)
+            {
+                CurrentProtocol = protocol;
+            }
             return flag;
         }
 

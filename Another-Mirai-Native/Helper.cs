@@ -8,5 +8,7 @@ namespace Another_Mirai_Native
         {
             return JsonConvert.SerializeObject(obj, Formatting.None);
         }
+
+        public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
     }
 }

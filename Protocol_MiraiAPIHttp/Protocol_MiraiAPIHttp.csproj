@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>
