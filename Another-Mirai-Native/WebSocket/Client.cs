@@ -86,9 +86,10 @@ namespace Another_Mirai_Native.WebSocket
             try
             {
                 LogHelper.Info("ReceiveServer", message);
-                if (JObject.Parse(message).ContainsKey("Args"))
+                JObject json = JObject.Parse(message);
+                if (json.ContainsKey("Args"))
                 {
-                    InvokeBody caller = JsonConvert.DeserializeObject<InvokeBody>(message);
+                    InvokeBody caller = json.ToObject<InvokeBody>();
                     object result = null;
                     if (caller.Function.StartsWith("InvokeEvent"))
                     {
@@ -98,7 +99,7 @@ namespace Another_Mirai_Native.WebSocket
                 }
                 else
                 {
-                    InvokeResult result = JsonConvert.DeserializeObject<InvokeResult>(message);
+                    InvokeResult result = json.ToObject<InvokeResult>();
                     if (WaitingMessage.ContainsKey(result.GUID))
                     {
                         WaitingMessage[result.GUID] = result;
