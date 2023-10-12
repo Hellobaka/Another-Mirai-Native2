@@ -20,6 +20,8 @@ namespace Another_Mirai_Native.WebSocket
 
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
+        private object SendLock { get; set; } = new();
+
         public Client()
         {
             Instance = this;
@@ -54,6 +56,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             if (WebSocketClient != null && WebSocketClient.State == WebSocketState.Open)
             {
+                LogHelper.Info("ClientSend", message);
                 ArraySegment<byte> buffer = new(Encoding.UTF8.GetBytes(message));
                 WebSocketClient.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None).Wait();
             }
@@ -61,23 +64,30 @@ namespace Another_Mirai_Native.WebSocket
 
         private async void StartReceiveMessage()
         {
-            byte[] buffer = new byte[1024 * 4];
-            while (true)
+            try
             {
-                if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
+                byte[] buffer = new byte[1024 * 4];
+                while (true)
                 {
-                    break;
+                    if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
+                    {
+                        break;
+                    }
+                    WebSocketReceiveResult result;
+                    List<byte> data = new();
+                    do
+                    {
+                        result = await WebSocketClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                        data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
+                    }
+                    while (!result.EndOfMessage);
+                    string message = Encoding.UTF8.GetString(data.ToArray());
+                    new Thread(() => HandleMessage(message)).Start();
                 }
-                WebSocketReceiveResult result;
-                List<byte> data = new();
-                do
-                {
-                    result = await WebSocketClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
-                }
-                while (!result.EndOfMessage);
-                string message = Encoding.UTF8.GetString(data.ToArray());
-                Task.Run(() => HandleMessage(message));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("ClientError", ex);
             }
         }
 

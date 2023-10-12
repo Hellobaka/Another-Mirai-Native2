@@ -4,6 +4,7 @@ using Another_Mirai_Native.WebSocket;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace Another_Mirai_Native.Export
 {
@@ -22,10 +23,7 @@ namespace Another_Mirai_Native.Export
 
         public static string ToString(this IntPtr strPtr, Encoding encoding)
         {
-            if (encoding == null)
-            {
-                encoding = Encoding.Default;
-            }
+            encoding ??= Encoding.Default;
 
             int len = LstrlenA(strPtr);   //获取指针中数据的长度
             if (len == 0)
@@ -40,9 +38,11 @@ namespace Another_Mirai_Native.Export
         public static InvokeResult Invoke(string function, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
+
             Client.Instance.Send(new InvokeBody { GUID = guid, Function = "InvokeCQP_" + function, Args = args }.ToJson());
+
             Client.Instance.WaitingMessage.Add(guid, new InvokeResult());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout; i++)
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
             {
                 if (Client.Instance.WaitingMessage.ContainsKey(guid) && Client.Instance.WaitingMessage[guid].Success)
                 {
@@ -50,6 +50,7 @@ namespace Another_Mirai_Native.Export
                     Client.Instance.WaitingMessage.Remove(guid);
                     return result;
                 }
+                Thread.Sleep(100);
             }
             LogHelper.Error("CQPInvoke", "Timeout");
             return new InvokeResult() { Message = "Timeout" };

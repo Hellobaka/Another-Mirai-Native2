@@ -176,6 +176,7 @@ namespace Another_Mirai_Native.Native
                 }
             }
             AuthCode = new Random().Next();
+            AppInfo.AuthCode = AuthCode;
             Initialize(AuthCode);
         }
 

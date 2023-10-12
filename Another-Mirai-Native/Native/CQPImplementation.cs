@@ -4,6 +4,7 @@
     {
         public static int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
         {
+            ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
             return 0;
         }
 

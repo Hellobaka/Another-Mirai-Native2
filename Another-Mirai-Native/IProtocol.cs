@@ -13,68 +13,68 @@
 
         public bool Disconnect();
 
-        public void AddLog(int authCode, int priority, string type, string msg);
+        public void AddLog(int priority, string type, string msg);
 
-        public int CanSendImage(int authCode);
+        public int CanSendImage();
 
-        public int CanSendRecord(int authCode);
+        public int CanSendRecord();
 
-        public int DeleteMsg(int authCode, long msgId);
+        public int DeleteMsg(long msgId);
 
-        public string GetAppDirectory(int authCode);
+        public string GetAppDirectory();
 
-        public string GetCookiesV2(int authCode, string domain);
+        public string GetCookiesV2(string domain);
 
-        public string GetCsrfToken(int authCode);
+        public string GetCsrfToken();
 
-        public string GetFriendList(int authCode, bool reserved);
+        public string GetFriendList(bool reserved);
 
-        public string GetGroupInfo(int authCode, long groupId, bool notCache);
+        public string GetGroupInfo(long groupId, bool notCache);
 
-        public string GetGroupList(int authCode);
+        public string GetGroupList();
 
-        public string GetGroupMemberInfoV2(int authCode, long groupId, long qqId, bool isCache);
+        public string GetGroupMemberInfoV2(long groupId, long qqId, bool isCache);
 
-        public string GetGroupMemberList(int authCode, long groupId);
+        public string GetGroupMemberList(long groupId);
 
-        public string GetImage(int authCode, string file);
+        public string GetImage(string file);
 
-        public string GetLoginNick(int authCode);
+        public string GetLoginNick();
 
-        public long GetLoginQQ(int authCode);
+        public long GetLoginQQ();
 
-        public string GetRecordV2(int authCode, string file, string format);
+        public string GetRecordV2(string file, string format);
 
-        public string GetStrangerInfo(int authCode, long qqId, bool notCache);
+        public string GetStrangerInfo(long qqId, bool notCache);
 
-        public int SendGroupMessage(int authCode, long groupId, string msg, int msgId = 0);
+        public int SendGroupMessage(long groupId, string msg, int msgId = 0);
 
-        public int SendLikeV2(int authCode, long qqId, int count);
+        public int SendLikeV2(long qqId, int count);
 
-        public int SendPrivateMessage(int authCode, long qqId, string msg);
+        public int SendPrivateMessage(long qqId, string msg);
 
-        public int SetDiscussLeave(int authCode, long discussId);
+        public int SetDiscussLeave(long discussId);
 
-        public int SetFriendAddRequest(int authCode, long identifying, int requestType, string appendMsg);
+        public int SetFriendAddRequest(long identifying, int requestType, string appendMsg);
 
-        public int SetGroupAddRequestV2(int authCode, long identifying, int requestType, int responseType, string appendMsg);
+        public int SetGroupAddRequestV2(long identifying, int requestType, int responseType, string appendMsg);
 
-        public int SetGroupAdmin(int authCode, long groupId, long qqId, bool isSet);
+        public int SetGroupAdmin(long groupId, long qqId, bool isSet);
 
-        public int SetGroupAnonymous(int authCode, long groupId, bool isOpen);
+        public int SetGroupAnonymous(long groupId, bool isOpen);
 
-        public int SetGroupAnonymousBan(int authCode, long groupId, string anonymous, long banTime);
+        public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime);
 
-        public int SetGroupBan(int authCode, long groupId, long qqId, long time);
+        public int SetGroupBan(long groupId, long qqId, long time);
 
-        public int SetGroupCard(int authCode, long groupId, long qqId, string newCard);
+        public int SetGroupCard(long groupId, long qqId, string newCard);
 
-        public int SetGroupKick(int authCode, long groupId, long qqId, bool refuses);
+        public int SetGroupKick(long groupId, long qqId, bool refuses);
 
-        public int SetGroupLeave(int authCode, long groupId, bool isDisband);
+        public int SetGroupLeave(long groupId, bool isDisband);
 
-        public int SetGroupSpecialTitle(int authCode, long groupId, long qqId, string title);
+        public int SetGroupSpecialTitle(long groupId, long qqId, string title);
 
-        public int SetGroupWholeBan(int authCode, long groupId, bool isOpen);
+        public int SetGroupWholeBan(long groupId, bool isOpen);
     }
 }

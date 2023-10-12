@@ -4,6 +4,8 @@ namespace Another_Mirai_Native.Model
 {
     public class AppInfo
     {
+        public int AuthCode { get; set; }
+
         public int ret { get; set; }
 
         public int apiver { get; set; }

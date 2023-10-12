@@ -1,11 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Fleck;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
 
 namespace Another_Mirai_Native.WebSocket
 {
@@ -25,6 +22,7 @@ namespace Another_Mirai_Native.WebSocket
         public void Start()
         {
             WebSocketServer = new WebSocketServer(AppConfig.WebSocketURL);
+            WebSocketServer.RestartAfterListenError = true;
             WebSocketServer.Start(Handler);
         }
 
@@ -43,7 +41,8 @@ namespace Another_Mirai_Native.WebSocket
             };
             connection.OnMessage = (message) =>
             {
-                HandleClientMessage(message, connection);
+                LogHelper.Info("ReceiveFromClient", message);
+                Task.Run(() => HandleClientMessage(message, connection));
             };
         }
 
@@ -51,7 +50,6 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                LogHelper.Info("ReceiveClient", message);
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {
@@ -87,6 +85,7 @@ namespace Another_Mirai_Native.WebSocket
                         proxy.AppInfo = appInfo;
                     }
                     LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
+                    PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.StartUp);
                     break;
 
                 default:
