@@ -32,6 +32,8 @@ namespace Another_Mirai_Native.Config
 
         public static int PluginInvokeTimeout { get; set; } = 120 * 1000;
 
+        public static int HeartBeatInterval { get; set; } = 30 * 1000;
+
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", true);
@@ -42,6 +44,7 @@ namespace Another_Mirai_Native.Config
             ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", 5000);
             RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", false);
             PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", 120 * 1000);
+            HeartBeatInterval = ConfigHelper.GetConfig("HeartBeatInterval", 30 * 1000);
         }
     }
 }

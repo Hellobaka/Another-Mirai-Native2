@@ -44,6 +44,14 @@ namespace Another_Mirai_Native.WebSocket
                 LogHelper.Info("ReceiveFromClient", message);
                 Task.Run(() => HandleClientMessage(message, connection));
             };
+            Task.Run(() =>
+            {
+                while (connection != null && connection.IsAvailable)
+                {
+                    connection.SendPing(new byte[0]);
+                    Thread.Sleep(AppConfig.HeartBeatInterval);
+                }
+            });
         }
 
         private void HandleClientMessage(string message, IWebSocketConnection connection)

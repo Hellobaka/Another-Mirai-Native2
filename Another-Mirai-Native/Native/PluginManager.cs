@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.Native
         public int CallEvent(PluginEventType eventName, object[] args)
         {
             int result = -1;
-            var methodInfo = typeof(PluginManager).GetMethods().FirstOrDefault(x => x.Name == "Event_On" + eventName.ToString());
+            var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());
             if (methodInfo == null)
             {
                 LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 未找到对应实现");
