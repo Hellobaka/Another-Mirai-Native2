@@ -36,15 +36,15 @@ namespace Another_Mirai_Native.Config
 
         public static void LoadConfig()
         {
-            PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", true);
-            StartUI = ConfigHelper.GetConfig("StartUI", false);
-            AutoConnect = ConfigHelper.GetConfig("AutoConnect", false);
-            AutoProtocol = ConfigHelper.GetConfig("AutoProtocol", "MiraiAPIHttp");
-            WebSocketURL = ConfigHelper.GetConfig("WebSocketURL", "ws://127.0.0.1:30303");
-            ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", 5000);
-            RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", false);
-            PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", 120 * 1000);
-            HeartBeatInterval = ConfigHelper.GetConfig("HeartBeatInterval", 30 * 1000);
+            PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", defaultValue: true);
+            StartUI = ConfigHelper.GetConfig("StartUI", defaultValue: false);
+            AutoConnect = ConfigHelper.GetConfig("AutoConnect", defaultValue: false);
+            AutoProtocol = ConfigHelper.GetConfig("AutoProtocol", defaultValue: "MiraiAPIHttp");
+            WebSocketURL = ConfigHelper.GetConfig("WebSocketURL", defaultValue: "ws://127.0.0.1:30303");
+            ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", defaultValue: 5000);
+            RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", defaultValue: false);
+            PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", defaultValue: 120 * 1000);
+            HeartBeatInterval = ConfigHelper.GetConfig("HeartBeatInterval", defaultValue: 30 * 1000);
         }
     }
 }
