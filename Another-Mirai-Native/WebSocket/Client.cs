@@ -20,8 +20,6 @@ namespace Another_Mirai_Native.WebSocket
 
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
-        private object SendLock { get; set; } = new();
-
         public Client()
         {
             Instance = this;
@@ -127,7 +125,7 @@ namespace Another_Mirai_Native.WebSocket
         private int HandleEvent(string function, object[] args)
         {
             PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);
-            return PluginManager.LoadedPlugin.CallEvent(eventType, args);
+            return PluginManager.Instance.CallEvent(eventType, args);
         }
     }
 }

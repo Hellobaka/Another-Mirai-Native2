@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace Another_Mirai_Native.Native
 {
@@ -19,7 +20,7 @@ namespace Another_Mirai_Native.Native
             int logId = 0;
             try
             {
-                var methodInfo = typeof(CQPImplementation).GetMethods().FirstOrDefault(x => x.Name == functionName);
+                var methodInfo = typeof(CQPImplementation).GetMethod(functionName, BindingFlags.NonPublic | BindingFlags.Instance);
                 if (methodInfo == null)
                 {
                     LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 未找到对应实现");
@@ -109,6 +110,11 @@ namespace Another_Mirai_Native.Native
             return ProtocolManager.Instance.CurrentProtocol.GetCookies(domain);
         }
 
+        private string CQ_getImage(int authCode, string file)
+        {
+            return "";// TODO
+        }
+
         private string CQ_getRecordV2(int authCode, string file, string format)
         {
             // TODO
@@ -122,8 +128,10 @@ namespace Another_Mirai_Native.Native
 
         private string CQ_getAppDirectory(int authCode)
         {
-            // TODO
-            return "";
+            string appId = CurrentPlugin.PluginId;
+            string path = $@"data\app\{appId}";
+            Directory.CreateDirectory(path);
+            return new DirectoryInfo(path).FullName;
         }
 
         private long CQ_getLoginQQ(int authCode)
@@ -244,11 +252,6 @@ namespace Another_Mirai_Native.Native
         private int CQ_canSendRecord(int authCode)
         {
             return ProtocolManager.Instance.CurrentProtocol.CanSendRecord();
-        }
-
-        private string CQ_getImage(int authCode, string file)
-        {
-            return "";// TODO
         }
     }
 }

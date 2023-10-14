@@ -74,7 +74,7 @@ namespace Another_Mirai_Native.WebSocket
             {
                 case "PluginInfo":
                     AppInfo appInfo = JObject.FromObject(result.Result).ToObject<AppInfo>();
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.ID == connection.ConnectionInfo.Id);
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.ConnectionID == connection.ConnectionInfo.Id);
                     if (proxy == null)
                     {
                         proxy = new CQPluginProxy(appInfo, connection);
@@ -85,6 +85,7 @@ namespace Another_Mirai_Native.WebSocket
                         proxy.AppInfo = appInfo;
                     }
                     LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
+                    // TODO: Delete
                     PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.StartUp);
                     break;
 
@@ -113,7 +114,7 @@ namespace Another_Mirai_Native.WebSocket
             try
             {
                 string name = caller.Function.Replace("InvokeCQP_", "");
-                var plugin = PluginManagerProxy.GetProxy(Convert.ToInt32(caller.Args[0]))
+                var plugin = PluginManagerProxy.GetProxyByAuthCode(Convert.ToInt32(caller.Args[0]))
                     ?? throw new Exception("无法获取调用插件实例");
                 var impl = new CQPImplementation(plugin);
 

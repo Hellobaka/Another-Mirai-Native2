@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 using Fleck;
+using System.Runtime.InteropServices;
 
 namespace Another_Mirai_Native.Native
 {
@@ -12,14 +13,31 @@ namespace Another_Mirai_Native.Native
         {
             AppInfo = appInfo;
             Connection = connection;
-            ID = connection.ConnectionInfo.Id;
+            ConnectionID = connection.ConnectionInfo.Id;
         }
 
         public AppInfo AppInfo { get; set; }
 
-        public Guid ID { get; set; }
+        public Guid ConnectionID { get; set; }
+
+        public bool Enabled { get; set; }
+
+        public string PluginName => AppInfo.name;
+
+        public string PluginId => AppInfo.AppId;
 
         private IWebSocketConnection Connection { get; set; }
+
+        private List<string> APIAuthWhiteList { get; set; } = new()
+        {
+            "getImage",
+            "getRecordV2",
+            "addLog",
+            "setFatal",
+            "getAppDirectory",
+            "getLoginQQ",
+            "getLoginNick",
+        };
 
         public InvokeResult Invoke(InvokeBody caller)
         {
@@ -41,8 +59,17 @@ namespace Another_Mirai_Native.Native
 
         public bool CheckPluginCanInvoke(string invokeName)
         {
-            PluginAPIType plugin = (PluginAPIType)Enum.Parse(typeof(PluginAPIType), invokeName.Replace("CQ_", ""));
-            return CheckPluginCanInvoke(plugin);
+            invokeName = invokeName.Replace("CQ_", "");
+            if (APIAuthWhiteList.Any(x => x == invokeName))
+            {
+                return true;
+            }
+            if (!Enum.TryParse(invokeName, out PluginAPIType authEnum))
+            {
+                LogHelper.Error("CheckPluginCanInvoke", $"{invokeName} 无法转换为权限枚举");
+                return false;
+            }
+            return CheckPluginCanInvoke(authEnum);
         }
 
         public bool CheckPluginCanInvoke(PluginAPIType apiType)

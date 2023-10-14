@@ -1,7 +1,9 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Another_Mirai_Native.Native
 {
@@ -21,13 +23,13 @@ namespace Another_Mirai_Native.Native
 
         public static void RemoveProxy(Guid id)
         {
-            if (Proxies.Any(x => x.ID == id))
+            if (Proxies.Any(x => x.ConnectionID == id))
             {
-                Proxies.Remove(Proxies.First(x => x.ID == id));
+                Proxies.Remove(Proxies.First(x => x.ConnectionID == id));
             }
         }
 
-        public static CQPluginProxy GetProxy(int authCode)
+        public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
         }
@@ -61,7 +63,82 @@ namespace Another_Mirai_Native.Native
         public int InvokeEvent(CQPluginProxy proxy, PluginEventType eventType, params object[] args)
         {
             var r = Invoke(proxy, $"InvokeEvent_{eventType}", args);
-            return !r.Success ? 0 : (int)r.Result;
+            return !r.Success ? 0 : Convert.ToInt32(r.Result);
+        }
+
+        public int Event_OnPrivateMsg(CQPluginProxy proxy, int subType, int msgId, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(proxy, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
+        }
+
+        public int Event_OnGroupMsg(CQPluginProxy proxy, int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
+        {
+            return InvokeEvent(proxy, PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
+        }
+
+        public int Event_OnDiscussMsg(CQPluginProxy proxy, int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(proxy, PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
+        }
+
+        public int Event_OnUpload(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        {
+            return InvokeEvent(proxy, PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
+        }
+
+        public int Event_OnAdminChange(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long beingOperateQQ)
+        {
+            return InvokeEvent(proxy, PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
+        }
+
+        public int Event_OnGroupMemberDecrease(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(proxy, PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public int Event_OnGroupMemberIncrease(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(proxy, PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public int Event_OnGroupBan(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        {
+            return InvokeEvent(proxy, PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
+        }
+
+        public int Event_OnFriendAdded(CQPluginProxy proxy, int subType, int sendTime, long fromQQ)
+        {
+            return InvokeEvent(proxy, PluginEventType.FriendAdded, subType, sendTime, fromQQ);
+        }
+
+        public int Event_OnFriendAddRequest(CQPluginProxy proxy, int subType, int sendTime, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(proxy, PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
+        }
+
+        public int Event_OnGroupAddRequest(CQPluginProxy proxy, int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(proxy, PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
+        }
+
+        public int Event_OnStartUp(CQPluginProxy proxy)
+        {
+            return InvokeEvent(proxy, PluginEventType.StartUp);
+        }
+
+        public int Event_OnExit(CQPluginProxy proxy)
+        {
+            return InvokeEvent(proxy, PluginEventType.Exit);
+        }
+
+        public int Event_OnEnable(CQPluginProxy proxy)
+        {
+            return InvokeEvent(proxy, PluginEventType.Enable);
+        }
+
+        public int Event_OnDisable(CQPluginProxy proxy)
+        {
+            return InvokeEvent(proxy, PluginEventType.Disable);
         }
 
         private static Process? StartPluginProcess(int pid, string item)

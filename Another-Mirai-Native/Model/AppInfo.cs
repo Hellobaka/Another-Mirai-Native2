@@ -6,6 +6,8 @@ namespace Another_Mirai_Native.Model
     {
         public int AuthCode { get; set; }
 
+        public string AppId { get; set; } = "";
+
         public int ret { get; set; }
 
         public int apiver { get; set; }

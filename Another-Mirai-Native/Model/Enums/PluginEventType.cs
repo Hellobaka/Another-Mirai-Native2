@@ -13,6 +13,11 @@
         GroupMsg = 2,
 
         /// <summary>
+        /// 群聊消息事件
+        /// </summary>
+        DiscussMsg = 3,
+
+        /// <summary>
         /// 文件上传事件
         /// </summary>
         Upload = 4,

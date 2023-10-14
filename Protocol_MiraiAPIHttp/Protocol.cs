@@ -88,7 +88,7 @@
 
         public long GetLoginQQ()
         {
-            throw new System.NotImplementedException();
+            return 10001;
         }
 
         public string GetRecord(string file, string format)

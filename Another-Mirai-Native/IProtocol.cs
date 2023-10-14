@@ -13,15 +13,11 @@
 
         public bool Disconnect();
 
-        public void AddLog(int priority, string type, string msg);
-
         public int CanSendImage();
 
         public int CanSendRecord();
 
         public int DeleteMsg(long msgId);
-
-        public string GetAppDirectory();
 
         public string GetCookies(string domain);
 
@@ -37,13 +33,9 @@
 
         public string GetGroupMemberList(long groupId);
 
-        public string GetImage(string file);
-
         public string GetLoginNick();
 
         public long GetLoginQQ();
-
-        public string GetRecord(string file, string format);
 
         public string GetStrangerInfo(long qqId, bool notCache);
 
