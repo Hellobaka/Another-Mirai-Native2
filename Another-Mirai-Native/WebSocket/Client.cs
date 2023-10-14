@@ -60,31 +60,23 @@ namespace Another_Mirai_Native.WebSocket
 
         private async void StartReceiveMessage()
         {
-            try
+            byte[] buffer = new byte[1024 * 4];
+            while (true)
             {
-                byte[] buffer = new byte[1024 * 4];
-                while (true)
+                if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
                 {
-                    if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
-                    {
-                        break;
-                    }
-                    WebSocketReceiveResult result;
-                    List<byte> data = new();
-                    do
-                    {
-                        result = await WebSocketClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                        data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
-                    }
-                    while (!result.EndOfMessage);
-                    string message = Encoding.UTF8.GetString(data.ToArray());
-                    new Thread(() => HandleMessage(message)).Start();
+                    break;
                 }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error("ClientError", ex);
-                throw ex;
+                WebSocketReceiveResult result;
+                List<byte> data = new();
+                do
+                {
+                    result = await WebSocketClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                    data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
+                }
+                while (!result.EndOfMessage);
+                string message = Encoding.UTF8.GetString(data.ToArray());
+                new Thread(() => HandleMessage(message)).Start();
             }
         }
 
