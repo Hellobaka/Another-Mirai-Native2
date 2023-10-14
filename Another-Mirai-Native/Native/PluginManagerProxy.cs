@@ -1,9 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 
 namespace Another_Mirai_Native.Native
 {

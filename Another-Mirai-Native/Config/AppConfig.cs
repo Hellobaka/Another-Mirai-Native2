@@ -8,6 +8,8 @@ namespace Another_Mirai_Native.Config
 {
     public static class AppConfig
     {
+        public static bool IsCore { get; set; }
+
         public static bool AutoConnect { get; set; }
 
         public static string AutoProtocol { get; set; } = "MiraiAPIHttp";

@@ -48,8 +48,8 @@ namespace Another_Mirai_Native.WebSocket
             {
                 while (connection != null && connection.IsAvailable)
                 {
-                    connection.SendPing(new byte[0]);
                     Thread.Sleep(AppConfig.HeartBeatInterval);
+                    connection.SendPing(new byte[0]);
                 }
             });
         }
@@ -95,6 +95,7 @@ namespace Another_Mirai_Native.WebSocket
                     LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
                     // TODO: Delete
                     PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.StartUp);
+                    PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.Menu, "控制台");
                     break;
 
                 default:

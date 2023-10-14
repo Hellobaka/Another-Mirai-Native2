@@ -69,7 +69,13 @@ namespace Another_Mirai_Native.Native
                         break;
                 }
             }
+
             return (int)methodInfo.Invoke(this, transformedArgs);
+        }
+
+        public int Event_OnMenu(string menuName)
+        {
+            return LoadedPlugin.CallMenu(menuName);
         }
 
         public int Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
