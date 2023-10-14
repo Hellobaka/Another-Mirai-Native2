@@ -1,8 +1,10 @@
 ﻿using Another_Mirai_Native;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Protocol_NoConnection
 {
@@ -11,6 +13,91 @@ namespace Protocol_NoConnection
         public string Name { get; set; } = "NoConnection";
 
         public bool IsConnected { get; set; } = false;
+
+        private List<FriendInfo> FriendInfos { get; set; } = new();
+
+        private List<GroupInfo> GroupInfos { get; set; } = new();
+
+        private List<GroupMemberInfo> GroupMemberInfos { get; set; } = new();
+
+        private Random Random { get; set; } = new();
+
+        public void BuildMockData()
+        {
+            FriendInfos.Add(new FriendInfo
+            {
+                Nick = "琪露诺",
+                Postscript = "Baka",
+                QQ = 1145141919
+            });
+            for (int i = 0; i < Random.Next(1, 10); i++)
+            {
+                FriendInfos.Add(new FriendInfo
+                {
+                    Nick = $"Nick{i + 1}",
+                    Postscript = $"Remark{i + 1}",
+                    QQ = Random.Next(20000, int.MaxValue)
+                });
+            }
+            GroupInfos.Add(new GroupInfo
+            {
+                CurrentMemberCount = 1,
+                Group = 1919810,
+                MaxMemberCount = 30,
+                Name = "幻♂想乡"
+            });
+            GroupMemberInfos.Add(new GroupMemberInfo
+            {
+                Age = 18,
+                Area = "霓虹",
+                Card = "头脑很好",
+                ExclusiveTitle = "BA☆KA",
+                ExclusiveTitleExpirationTime = null,
+                Group = 1919810,
+                IsAllowEditorCard = true,
+                IsBadRecord = false,
+                JoinGroupDateTime = new DateTime(2018, 9, 9),
+                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
+                Level = "九十九",
+                MemberType = QQGroupMemberType.Manage,
+                Nick = "琪露诺",
+                QQ = 1145141919,
+                Sex = QQSex.Woman
+            });
+            for (int i = 0; i < Random.Next(1, 5); i++)
+            {
+                GroupInfos.Add(new GroupInfo
+                {
+                    CurrentMemberCount = Random.Next(5, 100),
+                    Group = Random.Next(20000, int.MaxValue),
+                    Name = $"Group{i + 1}"
+                });
+                GroupInfos.Last().MaxMemberCount = GroupInfos.Last().CurrentMemberCount * 2;
+                for (int j = 0; j < GroupInfos.Last().CurrentMemberCount; j++)
+                {
+                    GroupMemberInfos.Add(new GroupMemberInfo
+                    {
+                        Age = Random.Next(0, 99),
+                        Area = $"Area{Random.Next()}",
+                        Card = $"Card{Random.Next()}",
+                        ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
+                        ExclusiveTitleExpirationTime = null,
+                        Group = GroupInfos.Last().Group,
+                        IsAllowEditorCard = true,
+                        IsBadRecord = Random.NextDouble() > 0.5,
+                        JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
+                        LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
+                        Level = $"Level{Random.Next()}",
+                        MemberType = QQGroupMemberType.Member,
+                        Nick = $"Nick{Random.Next()}",
+                        QQ = Random.Next(20000, int.MaxValue),
+                        Sex = Random.NextDouble() > 0.3 ? QQSex.Man : Random.NextDouble() > 0.1 ? QQSex.Woman : QQSex.Unknown
+                    });
+                }
+                GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).First().MemberType = QQGroupMemberType.Creator;
+                GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).Skip(1).First().MemberType = QQGroupMemberType.Manage;
+            }
+        }
 
         public int CanSendImage()
         {
@@ -25,6 +112,7 @@ namespace Protocol_NoConnection
         public bool Connect()
         {
             IsConnected = true;
+            BuildMockData();
             return true;
         }
 
@@ -51,55 +139,29 @@ namespace Protocol_NoConnection
 
         public string GetFriendList(bool reserved)
         {
-            return FriendInfo.CollectionToList(new List<FriendInfo>()
-            {
-                new FriendInfo
-                {
-                    Nick = "琪露诺",
-                    Postscript = "Baka",
-                    QQ = 1145141919
-                }
-            });
+            return reserved ? FriendInfo.CollectionToList(FriendInfos.OrderBy(x => x.QQ).ToList())
+                : FriendInfo.CollectionToList(FriendInfos.OrderByDescending(x => x.QQ).ToList());
         }
 
         public string GetGroupInfo(long groupId, bool notCache)
         {
-            return new GroupInfo
-            {
-                CurrentMemberCount = 15,
-                Group = 1919810,
-                MaxMemberCount = 30,
-                Name = "幻♂想乡"
-            }.ToNativeBase64(false);
+            return GroupInfos.FirstOrDefault(x => x.Group == groupId).ToNativeBase64(false) ?? "";
         }
 
         public string GetGroupList()
         {
-            return GroupInfo.CollectionToList(new List<GroupInfo>
-            {
-                new GroupInfo
-                {
-                    CurrentMemberCount = 3,
-                    Group = 1919810,
-                    MaxMemberCount = 30,
-                    Name = "幻♂想乡"
-                }
-            });
+            return GroupInfo.CollectionToList(GroupInfos);
         }
 
         public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
-            return new GroupMemberInfo()
-            {
-                Age = 18,
-                Area = "霓虹",
-                Card = ""
-            }.ToNativeBase64();
+            return GroupMemberInfos.FirstOrDefault(x => x.Group == groupId && x.QQ == qqId).ToNativeBase64() ?? "";
         }
 
         public string GetGroupMemberList(long groupId)
         {
-            throw new NotImplementedException();
+            return GroupMemberInfos.Any(x => x.Group == groupId) ? GroupMemberInfo.CollectionToList(GroupMemberInfos.Where(x => x.Group == groupId).ToList())
+                 : "";
         }
 
         public string GetLoginNick()
@@ -114,87 +176,93 @@ namespace Protocol_NoConnection
 
         public string GetStrangerInfo(long qqId, bool notCache)
         {
-            throw new NotImplementedException();
+            return new StrangerInfo
+            {
+                Age = Random.Next(0, 99),
+                Nick = $"Stranger{Random.Next()}",
+                QQ = qqId,
+                Sex = Random.NextDouble() > 0.5 ? QQSex.Man : QQSex.Woman
+            }.ToNativeBase64();
         }
 
         public int SendDiscussMsg(long discussId, string msg)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SendLike(long qqId, int count)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SendPrivateMessage(long qqId, string msg)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetDiscussLeave(long discussId)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetFriendAddRequest(long identifying, int requestType, string appendMsg)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupAnonymous(long groupId, bool isOpen)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupBan(long groupId, long qqId, long time)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupCard(long groupId, long qqId, string newCard)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupKick(long groupId, long qqId, bool refuses)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupLeave(long groupId, bool isDisband)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public int SetGroupWholeBan(long groupId, bool isOpen)
         {
-            throw new NotImplementedException();
+            return 1;
         }
     }
 }
