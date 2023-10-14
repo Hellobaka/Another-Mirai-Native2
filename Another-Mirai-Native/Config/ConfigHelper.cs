@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.Config
 
             if (defaultValue != null)
             {
-                SetConfig<T>(sectionName, defaultValue);
+                SetConfig<T>(sectionName, defaultValue, configPath);
                 return defaultValue;
             }
             if (typeof(T) == typeof(string))

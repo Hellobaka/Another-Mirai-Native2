@@ -30,7 +30,7 @@ namespace Protocol_NoConnection
                 Postscript = "Baka",
                 QQ = 1145141919
             });
-            for (int i = 0; i < Random.Next(1, 10); i++)
+            for (int i = 0; i < Random.Next(2, 30); i++)
             {
                 FriendInfos.Add(new FriendInfo
                 {
@@ -64,7 +64,7 @@ namespace Protocol_NoConnection
                 QQ = 1145141919,
                 Sex = QQSex.Woman
             });
-            for (int i = 0; i < Random.Next(1, 5); i++)
+            for (int i = 0; i < Random.Next(2, 25); i++)
             {
                 GroupInfos.Add(new GroupInfo
                 {
