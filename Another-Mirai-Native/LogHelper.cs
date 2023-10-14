@@ -27,5 +27,9 @@ namespace Another_Mirai_Native
         {
             Console.WriteLine($"[-][Error][{DateTime.Now:G}][{type}] {e.Message}\n{e.StackTrace}");
         }
+
+        public static void UpdateLogStatus(int logId, string msg)
+        {
+        }
     }
 }

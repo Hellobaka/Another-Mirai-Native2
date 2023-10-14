@@ -41,7 +41,7 @@
             throw new System.NotImplementedException();
         }
 
-        public string GetCookiesV2(string domain)
+        public string GetCookies(string domain)
         {
             throw new System.NotImplementedException();
         }
@@ -66,7 +66,7 @@
             throw new System.NotImplementedException();
         }
 
-        public string GetGroupMemberInfoV2(long groupId, long qqId, bool isCache)
+        public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
             throw new System.NotImplementedException();
         }
@@ -91,7 +91,7 @@
             throw new System.NotImplementedException();
         }
 
-        public string GetRecordV2(string file, string format)
+        public string GetRecord(string file, string format)
         {
             throw new System.NotImplementedException();
         }
@@ -101,12 +101,17 @@
             throw new System.NotImplementedException();
         }
 
+        public int SendDiscussMsg(long discussId, string msg)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
             throw new System.NotImplementedException();
         }
 
-        public int SendLikeV2(long qqId, int count)
+        public int SendLike(long qqId, int count)
         {
             throw new System.NotImplementedException();
         }
@@ -126,7 +131,7 @@
             throw new System.NotImplementedException();
         }
 
-        public int SetGroupAddRequestV2(long identifying, int requestType, int responseType, string appendMsg)
+        public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg)
         {
             throw new System.NotImplementedException();
         }
@@ -166,7 +171,7 @@
             throw new System.NotImplementedException();
         }
 
-        public int SetGroupSpecialTitle(long groupId, long qqId, string title)
+        public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
         {
             throw new System.NotImplementedException();
         }

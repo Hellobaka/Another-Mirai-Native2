@@ -3,11 +3,6 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 using Fleck;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Native
 {
@@ -42,6 +37,18 @@ namespace Another_Mirai_Native.Native
                 Thread.Sleep(100);
             }
             return new InvokeResult() { Message = "Timeout" };
+        }
+
+        public bool CheckPluginCanInvoke(string invokeName)
+        {
+            PluginAPIType plugin = (PluginAPIType)Enum.Parse(typeof(PluginAPIType), invokeName.Replace("CQ_", ""));
+            return CheckPluginCanInvoke(plugin);
+        }
+
+        public bool CheckPluginCanInvoke(PluginAPIType apiType)
+        {
+            int id = (int)apiType;
+            return AppInfo.auth.Any(x => x == id);
         }
     }
 }

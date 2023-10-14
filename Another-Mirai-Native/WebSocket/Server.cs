@@ -113,40 +113,11 @@ namespace Another_Mirai_Native.WebSocket
             try
             {
                 string name = caller.Function.Replace("InvokeCQP_", "");
-                object result = 0;
-                var methodInfo = typeof(CQPImplementation).GetMethods().FirstOrDefault(x => x.Name == name);
-                if (methodInfo == null)
-                {
-                    return null;
-                }
-                var argumentList = methodInfo.GetParameters();
-                if (caller.Args.Length != argumentList.Length)
-                {
-                    return null;
-                }
-                object[] args = new object[argumentList.Length];
-                for (int i = 0; i < caller.Args.Length; i++)
-                {
-                    switch (argumentList[i].ParameterType.Name)
-                    {
-                        case "Int64":
-                            args[i] = Convert.ToInt64(caller.Args[i]);
-                            break;
+                var plugin = PluginManagerProxy.GetProxy(Convert.ToInt32(caller.Args[0]))
+                    ?? throw new Exception("无法获取调用插件实例");
+                var impl = new CQPImplementation(plugin);
 
-                        case "Int32":
-                            args[i] = Convert.ToInt32(caller.Args[i]);
-                            break;
-
-                        case "String":
-                            args[i] = caller.Args[i].ToString();
-                            break;
-
-                        case "Boolean":
-                            args[i] = Convert.ToBoolean(caller.Args[i]);
-                            break;
-                    }
-                }
-                return methodInfo.Invoke(null, args);
+                return impl.Invoke(name, caller.Args);
             }
             catch (Exception e)
             {

@@ -1,176 +1,254 @@
-﻿namespace Another_Mirai_Native.Native
+﻿using System.Diagnostics;
+
+namespace Another_Mirai_Native.Native
 {
-    public static class CQPImplementation
+    public class CQPImplementation
     {
-        public static int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
+        public CQPluginProxy CurrentPlugin { get; set; } = null;
+
+        public Stopwatch Stopwatch { get; set; } = new();
+
+        public CQPImplementation(CQPluginProxy plugin)
         {
-            ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
-            return 0;
+            CurrentPlugin = plugin;
         }
 
-        public static int CQ_sendGroupMsg(int authCode, long groupId, string msg)
+        public object Invoke(string functionName, object[] args)
         {
-            return 0;
+            Stopwatch.Restart();
+            int logId = 0;
+            try
+            {
+                var methodInfo = typeof(CQPImplementation).GetMethods().FirstOrDefault(x => x.Name == functionName);
+                if (methodInfo == null)
+                {
+                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 未找到对应实现");
+                    return null;
+                }
+                if (!CurrentPlugin.CheckPluginCanInvoke(functionName))
+                {
+                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 未定义权限");
+                    return null;
+                }
+                var argumentList = methodInfo.GetParameters();
+                if (args.Length != argumentList.Length)
+                {
+                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 参数表数量不对应");
+                    return null;
+                }
+                object[] transformedArgs = new object[argumentList.Length];
+                for (int i = 0; i < args.Length; i++)
+                {
+                    switch (argumentList[i].ParameterType.Name)
+                    {
+                        case "Int64":
+                            transformedArgs[i] = Convert.ToInt64(args[i]);
+                            break;
+
+                        case "Int32":
+                            transformedArgs[i] = Convert.ToInt32(args[i]);
+                            break;
+
+                        case "String":
+                            transformedArgs[i] = args[i].ToString();
+                            break;
+
+                        case "Boolean":
+                            transformedArgs[i] = Convert.ToBoolean(args[i]);
+                            break;
+                    }
+                }
+                LogHelper.Info("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
+                object result = methodInfo.Invoke(this, transformedArgs);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", ex);
+                return null;
+            }
+            finally
+            {
+                Stopwatch.Stop();
+                LogHelper.UpdateLogStatus(logId, $"√ {Stopwatch.ElapsedMilliseconds / 1000:f2}s");
+            }
         }
 
-        public static int CQ_sendDiscussMsg(int authCode, long discussId, string msg)
+        private int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
         }
 
-        public static int CQ_deleteMsg(int authCode, long msgId)
+        private int CQ_sendGroupMsg(int authCode, long groupId, string msg)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg);
         }
 
-        public static int CQ_sendLikeV2(int authCode, long qqId, int count)
+        private int CQ_sendGroupQuoteMsg(int authCode, long groupId, int msgId, string msg)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
         }
 
-        public static string CQ_getCookiesV2(int authCode, string domain)
+        private int CQ_sendDiscussMsg(int authCode, long discussId, string msg)
         {
+            return ProtocolManager.Instance.CurrentProtocol.SendDiscussMsg(discussId, msg);
+        }
+
+        private int CQ_deleteMsg(int authCode, long msgId)
+        {
+            return ProtocolManager.Instance.CurrentProtocol.DeleteMsg(msgId);
+        }
+
+        private int CQ_sendLikeV2(int authCode, long qqId, int count)
+        {
+            return ProtocolManager.Instance.CurrentProtocol.SendLike(qqId, count);
+        }
+
+        private string CQ_getCookiesV2(int authCode, string domain)
+        {
+            return ProtocolManager.Instance.CurrentProtocol.GetCookies(domain);
+        }
+
+        private string CQ_getRecordV2(int authCode, string file, string format)
+        {
+            // TODO
             return "";
         }
 
-        public static string CQ_getRecordV2(int authCode, string file, string format)
+        private string CQ_getCsrfToken(int authCode)
         {
+            return ProtocolManager.Instance.CurrentProtocol.GetCsrfToken();
+        }
+
+        private string CQ_getAppDirectory(int authCode)
+        {
+            // TODO
             return "";
         }
 
-        public static int CQ_getCsrfToken(int authCode)
+        private long CQ_getLoginQQ(int authCode)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
         }
 
-        public static string CQ_getAppDirectory(int authCode)
+        private string CQ_getLoginNick(int authCode)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.GetLoginNick();
         }
 
-        public static long CQ_getLoginQQ(int authCode)
+        private int CQ_setGroupKick(int authCode, long groupId, long qqId, bool refuses)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupKick(groupId, qqId, refuses);
         }
 
-        public static string CQ_getLoginNick(int authCode)
+        private int CQ_setGroupBan(int authCode, long groupId, long qqId, long time)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupBan(groupId, qqId, time);
         }
 
-        public static int CQ_setGroupKick(int authCode, long groupId, long qqId, bool refuses)
+        private int CQ_setGroupAdmin(int authCode, long groupId, long qqId, bool isSet)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupAdmin(groupId, qqId, isSet);
         }
 
-        public static int CQ_setGroupBan(int authCode, long groupId, long qqId, long time)
+        private int CQ_setGroupSpecialTitle(int authCode, long groupId, long qqId, string title, long durationTime)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupSpecialTitle(groupId, qqId, title, durationTime);
         }
 
-        public static int CQ_setGroupAdmin(int authCode, long groupId, long qqId, bool isSet)
+        private int CQ_setGroupWholeBan(int authCode, long groupId, bool isOpen)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupWholeBan(groupId, isOpen);
         }
 
-        public static int CQ_setGroupSpecialTitle(int authCode, long groupId, long qqId, string title, long durationTime)
+        private int CQ_setGroupAnonymousBan(int authCode, long groupId, string anonymous, long banTime)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymousBan(groupId, anonymous, banTime);
         }
 
-        public static int CQ_setGroupWholeBan(int authCode, long groupId, bool isOpen)
+        private int CQ_setGroupAnonymous(int authCode, long groupId, bool isOpen)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymous(groupId, isOpen);
         }
 
-        public static int CQ_setGroupAnonymousBan(int authCode, long groupId, string anonymous, long banTime)
+        private int CQ_setGroupCard(int authCode, long groupId, long qqId, string newCard)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupCard(groupId, qqId, newCard);
         }
 
-        public static int CQ_setGroupAnonymous(int authCode, long groupId, bool isOpen)
+        private int CQ_setGroupLeave(int authCode, long groupId, bool isDisband)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupLeave(groupId, isDisband);
         }
 
-        public static int CQ_setGroupCard(int authCode, long groupId, long qqId, string newCard)
+        private int CQ_setDiscussLeave(int authCode, long discussId)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetDiscussLeave(discussId);
         }
 
-        public static int CQ_setGroupLeave(int authCode, long groupId, bool isDisband)
+        private int CQ_setFriendAddRequest(int authCode, string identifying, int requestType, string appendMsg)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(Convert.ToInt64(identifying), requestType, appendMsg);
         }
 
-        public static int CQ_setDiscussLeave(int authCode, long discussId)
+        private int CQ_setGroupAddRequestV2(int authCode, string identifying, int requestType, int responseType, string appendMsg)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(Convert.ToInt64(identifying), requestType, responseType, appendMsg);
         }
 
-        public static int CQ_setFriendAddRequest(int authCode, string identifying, int requestType, string appendMsg)
+        private int CQ_addLog(int authCode, int priority, string type, string msg)
         {
-            return 0;
+            return 1; // TODO
         }
 
-        public static int CQ_setGroupAddRequestV2(int authCode, string identifying, int requestType, int responseType, string appendMsg)
+        private int CQ_setFatal(int authCode, string errorMsg)
         {
-            return 0;
+            return 1; // TODO
         }
 
-        public static int CQ_addLog(int authCode, int priority, string type, string msg)
+        private string CQ_getGroupMemberInfoV2(int authCode, long groupId, long qqId, bool isCache)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.GetGroupMemberInfo(groupId, qqId, isCache);
         }
 
-        public static int CQ_setFatal(int authCode, string errorMsg)
+        private string CQ_getGroupMemberList(int authCode, long groupId)
         {
-            return 0;
+            return ProtocolManager.Instance.CurrentProtocol.GetGroupMemberList(groupId);
         }
 
-        public static string CQ_getGroupMemberInfoV2(int authCode, long groupId, long qqId, bool isCache)
+        private string CQ_getGroupList(int authCode)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.GetGroupList();
         }
 
-        public static string CQ_getGroupMemberList(int authCode, long groupId)
+        private string CQ_getStrangerInfo(int authCode, long qqId, bool notCache)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.GetStrangerInfo(qqId, notCache);
         }
 
-        public static string CQ_getGroupList(int authCode)
+        private string CQ_getGroupInfo(int authCode, long groupId, bool notCache)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.GetGroupInfo(groupId, notCache);
         }
 
-        public static string CQ_getStrangerInfo(int authCode, long qqId, bool notCache)
+        private string CQ_getFriendList(int authCode, bool reserved)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.GetFriendList(reserved);
         }
 
-        public static string CQ_getGroupInfo(int authCode, long groupId, bool notCache)
+        private int CQ_canSendImage(int authCode)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.CanSendImage();
         }
 
-        public static string CQ_getFriendList(int authCode, bool reserved)
+        private int CQ_canSendRecord(int authCode)
         {
-            return "";
+            return ProtocolManager.Instance.CurrentProtocol.CanSendRecord();
         }
 
-        public static int CQ_canSendImage(int authCode)
+        private string CQ_getImage(int authCode, string file)
         {
-            return 0;
-        }
-
-        public static int CQ_canSendRecord(int authCode)
-        {
-            return 0;
-        }
-
-        public static string CQ_getImage(int authCode, string file)
-        {
-            return "";
+            return "";// TODO
         }
     }
 }

@@ -23,7 +23,7 @@
 
         public string GetAppDirectory();
 
-        public string GetCookiesV2(string domain);
+        public string GetCookies(string domain);
 
         public string GetCsrfToken();
 
@@ -33,7 +33,7 @@
 
         public string GetGroupList();
 
-        public string GetGroupMemberInfoV2(long groupId, long qqId, bool isCache);
+        public string GetGroupMemberInfo(long groupId, long qqId, bool isCache);
 
         public string GetGroupMemberList(long groupId);
 
@@ -43,21 +43,23 @@
 
         public long GetLoginQQ();
 
-        public string GetRecordV2(string file, string format);
+        public string GetRecord(string file, string format);
 
         public string GetStrangerInfo(long qqId, bool notCache);
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0);
 
-        public int SendLikeV2(long qqId, int count);
+        public int SendLike(long qqId, int count);
 
         public int SendPrivateMessage(long qqId, string msg);
+
+        public int SendDiscussMsg(long discussId, string msg);
 
         public int SetDiscussLeave(long discussId);
 
         public int SetFriendAddRequest(long identifying, int requestType, string appendMsg);
 
-        public int SetGroupAddRequestV2(long identifying, int requestType, int responseType, string appendMsg);
+        public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg);
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet);
 
@@ -73,7 +75,7 @@
 
         public int SetGroupLeave(long groupId, bool isDisband);
 
-        public int SetGroupSpecialTitle(long groupId, long qqId, string title);
+        public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime);
 
         public int SetGroupWholeBan(long groupId, bool isOpen);
     }

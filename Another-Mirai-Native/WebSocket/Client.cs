@@ -88,6 +88,7 @@ namespace Another_Mirai_Native.WebSocket
             catch (Exception ex)
             {
                 LogHelper.Error("ClientError", ex);
+                throw ex;
             }
         }
 

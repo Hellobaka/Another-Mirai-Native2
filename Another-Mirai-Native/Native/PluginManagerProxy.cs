@@ -27,6 +27,11 @@ namespace Another_Mirai_Native.Native
             }
         }
 
+        public static CQPluginProxy GetProxy(int authCode)
+        {
+            return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
+        }
+
         public bool LoadPlugins()
         {
             int pid = Process.GetCurrentProcess().Id;
