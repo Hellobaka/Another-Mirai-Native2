@@ -177,7 +177,7 @@ namespace Another_Mirai_Native.Native
                         break;
                 }
             }
-            AuthCode = new Random().Next();
+            AuthCode = new Random(Helper.MakeRandomID()).Next();
             AppInfo.AuthCode = AuthCode;
             AppInfo.AppId = GetAppId().Value;
             Initialize(AuthCode);
@@ -213,6 +213,24 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("Error", $"{Path} fail, GetLastError={GetLastError()}");
             }
             return Handle != IntPtr.Zero;
+        }
+
+        public int CallMenu(string menuName)
+        {
+            var function = AppInfo.menu.FirstOrDefault(x => x.name == menuName)?.function;
+            if (function == null)
+            {
+                LogHelper.Error("CallMenu", $"AppInfo未找到 {menuName}");
+                return -1;
+            }
+            var menuMethod = CreateDelegateFromUnmanaged(function, typeof(Type_Menu));
+            if (menuMethod == null)
+            {
+                LogHelper.Error("CallMenu", $"{function} 创建方法失败");
+                return -1;
+            }
+            menuMethod.DynamicInvoke(null);
+            return 1;
         }
 
         [DllImport("kernel32.dll")]

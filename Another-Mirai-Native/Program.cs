@@ -22,6 +22,7 @@ namespace Another_Mirai_Native
             InitExceptionCapture();
             // 加载配置
             AppConfig.LoadConfig();
+            AppConfig.IsCore = args.Length == 0;
             if (args.Length == 0)
             {
                 // 启动WS服务器

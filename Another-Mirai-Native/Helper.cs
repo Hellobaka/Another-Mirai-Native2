@@ -43,5 +43,30 @@ namespace Another_Mirai_Native
             Marshal.Copy(strPtr, buffer, 0, len);
             return encoding.GetString(buffer);
         }
+
+        public static int MakeRandomID()
+        {
+            string guid = Guid.NewGuid().ToString();
+            string result = "";
+            for (int i = 0; i < guid.Length; i++)
+            {
+                if (result.Length > 10)
+                {
+                    break;
+                }
+                if (guid[i] >= '0' && guid[i] <= '9')
+                {
+                    result += guid[i];
+                }
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                return MakeRandomID();
+            }
+            else
+            {
+                return int.TryParse(result, out int value) ? value : MakeRandomID();
+            }
+        }
     }
 }
