@@ -5,6 +5,7 @@
     <RootNamespace>Another_Mirai_Native.Protocol.MiraiAPIHttp</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
     <AssemblyName>MiraiAPIHttp</AssemblyName>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
+    <Folder Include="MiraiAPIRequest\" />
   </ItemGroup>
 
 </Project>
