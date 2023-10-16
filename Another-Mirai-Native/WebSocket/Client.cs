@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
@@ -94,6 +95,10 @@ namespace Another_Mirai_Native.WebSocket
                     {
                         result = HandleEvent(caller.Function.Replace("InvokeEvent_", ""), caller.Args);
                         Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
+                    }
+                    else if (caller.Function == "KillProcess")
+                    {
+                        Environment.Exit(0);
                     }
                 }
                 else

@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
@@ -76,6 +77,11 @@ namespace Another_Mirai_Native.Native
         {
             int id = (int)apiType;
             return AppInfo.auth.Any(x => x == id);
+        }
+
+        public void KillProcess()
+        {
+            Invoke(new InvokeBody { Function = "KillProcess" });
         }
     }
 }
