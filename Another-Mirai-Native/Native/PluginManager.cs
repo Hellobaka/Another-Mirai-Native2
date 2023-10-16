@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 
@@ -34,7 +35,7 @@ namespace Another_Mirai_Native.Native
 
         public int CallEvent(PluginEventType eventName, object[] args)
         {
-            int result = -1;
+            int result = 0;
             var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());
             if (methodInfo == null)
             {
@@ -80,12 +81,12 @@ namespace Another_Mirai_Native.Native
 
         public int Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
         {
-            return LoadedPlugin.PrivateMsg == null ? -1 : LoadedPlugin.PrivateMsg(subType, msgId, fromQQ, msg.ToNativeV2(), font);
+            return LoadedPlugin.PrivateMsg == null ? 0 : LoadedPlugin.PrivateMsg(subType, msgId, fromQQ, msg.ToNativeV2(), font);
         }
 
         public int Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
-            return LoadedPlugin.GroupMsg == null ? -1 : LoadedPlugin.GroupMsg(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg.ToNativeV2(), font);
+            return LoadedPlugin.GroupMsg == null ? 0 : LoadedPlugin.GroupMsg(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg.ToNativeV2(), font);
         }
 
         public int Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
@@ -95,68 +96,68 @@ namespace Another_Mirai_Native.Native
 
         public int Event_OnUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
         {
-            return LoadedPlugin.Upload == null ? -1 : LoadedPlugin.Upload(subType, sendTime, fromGroup, fromQQ, file);
+            return LoadedPlugin.Upload == null ? 0 : LoadedPlugin.Upload(subType, sendTime, fromGroup, fromQQ, file);
         }
 
         public int Event_OnAdminChange(int subType, int sendTime, long fromGroup, long beingOperateQQ)
         {
-            return LoadedPlugin.AdminChange == null ? -1 : LoadedPlugin.AdminChange(subType, sendTime, fromGroup, beingOperateQQ);
+            return LoadedPlugin.AdminChange == null ? 0 : LoadedPlugin.AdminChange(subType, sendTime, fromGroup, beingOperateQQ);
         }
 
         public int Event_OnGroupMemberDecrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return LoadedPlugin.GroupMemberDecrease == null
-                ? -1
+                ? 0
                 : LoadedPlugin.GroupMemberDecrease(subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
         public int Event_OnGroupMemberIncrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return LoadedPlugin.GroupMemberIncrease == null
-                ? -1
+                ? 0
                 : LoadedPlugin.GroupMemberIncrease(subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
         public int Event_OnGroupBan(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
-            return LoadedPlugin.GroupBan == null ? -1 : LoadedPlugin.GroupBan(subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
+            return LoadedPlugin.GroupBan == null ? 0 : LoadedPlugin.GroupBan(subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
         public int Event_OnFriendAdded(int subType, int sendTime, long fromQQ)
         {
-            return LoadedPlugin.FriendAdded == null ? -1 : LoadedPlugin.FriendAdded(subType, sendTime, fromQQ);
+            return LoadedPlugin.FriendAdded == null ? 0 : LoadedPlugin.FriendAdded(subType, sendTime, fromQQ);
         }
 
         public int Event_OnFriendAddRequest(int subType, int sendTime, long fromQQ, string msg, string responseFlag)
         {
-            return LoadedPlugin.FriendAddRequest == null ? -1 : LoadedPlugin.FriendAddRequest(subType, sendTime, fromQQ, msg.ToNativeV2(), responseFlag);
+            return LoadedPlugin.FriendAddRequest == null ? 0 : LoadedPlugin.FriendAddRequest(subType, sendTime, fromQQ, msg.ToNativeV2(), responseFlag);
         }
 
         public int Event_OnGroupAddRequest(int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return LoadedPlugin.GroupAddRequest == null
-                ? -1
+                ? 0
                 : LoadedPlugin.GroupAddRequest(subType, sendTime, fromGroup, fromQQ, msg.ToNativeV2(), responseFlag);
         }
 
         public int Event_OnStartUp()
         {
-            return LoadedPlugin.StartUp == null ? -1 : LoadedPlugin.StartUp();
+            return LoadedPlugin.StartUp == null ? 0 : LoadedPlugin.StartUp();
         }
 
         public int Event_OnExit()
         {
-            return LoadedPlugin.Exit == null ? -1 : LoadedPlugin.Exit();
+            return LoadedPlugin.Exit == null ? 0 : LoadedPlugin.Exit();
         }
 
         public int Event_OnEnable()
         {
-            return LoadedPlugin.Enable == null ? -1 : LoadedPlugin.Enable();
+            return LoadedPlugin.Enable == null ? 0 : LoadedPlugin.Enable();
         }
 
         public int Event_OnDisable()
         {
-            return LoadedPlugin.Disable == null ? -1 : LoadedPlugin.Disable();
+            return LoadedPlugin.Disable == null ? 0 : LoadedPlugin.Disable();
         }
     }
 }

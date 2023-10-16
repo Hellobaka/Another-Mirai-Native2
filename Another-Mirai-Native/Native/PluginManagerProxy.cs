@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using System.Diagnostics;
@@ -19,6 +20,8 @@ namespace Another_Mirai_Native.Native
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
+        private static int PID => Process.GetCurrentProcess().Id;
+
         public static void RemoveProxy(Guid id)
         {
             if (Proxies.Any(x => x.ConnectionID == id))
@@ -34,10 +37,9 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadPlugins()
         {
-            int pid = Process.GetCurrentProcess().Id;
             foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {
-                Process? pluginProcess = StartPluginProcess(pid, item);
+                Process? pluginProcess = StartPluginProcess(item);
                 if (pluginProcess != null)
                 {
                     PluginProcess.Add(pluginProcess.Id, item);
@@ -52,7 +54,6 @@ namespace Another_Mirai_Native.Native
             var r = target.Invoke(new InvokeBody { GUID = guid, Function = function, Args = args });
             if (!r.Success)
             {
-                // Invoke Fail
                 LogHelper.Error("InvokeFail", $"Function: {function}, Message: {r.Message}");
             }
             return r;
@@ -60,9 +61,38 @@ namespace Another_Mirai_Native.Native
 
         public int InvokeEvent(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
-            var r = Invoke(target, $"InvokeEvent_{eventType}", args);
-            return !r.Success ? 0 : Convert.ToInt32(r.Result);
+            if (target.AppInfo._event.Any(x => x.id == (int)eventType))
+            {
+                var r = Invoke(target, $"InvokeEvent_{eventType}", args);
+                return !r.Success ? 0 : Convert.ToInt32(r.Result);
+            }
+            else
+            {
+                return 0;
+            }
         }
+
+        /// <summary>
+        /// 向所有 Enabled 的插件按优先级发送事件，当某个插件返回 1 时阻塞后续调用
+        /// </summary>
+        /// <param name="eventType">事件类型</param>
+        /// <param name="args">参数</param>
+        /// <returns>阻塞的插件</returns>
+        public CQPluginProxy InvokeEvent(PluginEventType eventType, params object[] args)
+        {
+            foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.id == (int)eventType))
+                .OrderByDescending(x => x.AppInfo._event.First(o => o.id == (int)eventType).priority))
+            {
+                int ret = InvokeEvent(item, eventType, args);
+                if (ret == 1)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        #region 测试事件调用
 
         public int Event_OnPrivateMsg(CQPluginProxy target, int subType, int msgId, long fromQQ, string msg, int font)
         {
@@ -139,9 +169,11 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(target, PluginEventType.Disable);
         }
 
-        private static Process? StartPluginProcess(int pid, string item)
+        #endregion 测试事件调用
+
+        public Process? StartPluginProcess(string item)
         {
-            string arguments = $"-PID {pid} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
+            string arguments = $"-PID {PluginManagerProxy.PID} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
             Process? pluginProcess = Process.Start(new ProcessStartInfo
             {
                 Arguments = arguments,
@@ -183,7 +215,7 @@ namespace Another_Mirai_Native.Native
                                 if (AppConfig.RestartPluginIfDead)
                                 {
                                     LogHelper.Info("StartPluginMonitor", $"{plugin.Value} 重启");
-                                    Process? pluginProcess = StartPluginProcess(Process.GetCurrentProcess().Id, plugin.Value);
+                                    Process? pluginProcess = StartPluginProcess(plugin.Value);
                                     if (pluginProcess != null)
                                     {
                                         PluginProcess.Add(pluginProcess.Id, plugin.Value);

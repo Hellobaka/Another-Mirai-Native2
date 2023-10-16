@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protocols", "Protocols", "{2D9E67CC-6EDC-495E-876E-50DD65E6B28B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol_NoConnection", "Protocol_NoConnection\Protocol_NoConnection.csproj", "{D1C15118-1FBC-4FD6-BE22-A85EDABB7321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_NoConnection", "Protocol_NoConnection\Protocol_NoConnection.csproj", "{D1C15118-1FBC-4FD6-BE22-A85EDABB7321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

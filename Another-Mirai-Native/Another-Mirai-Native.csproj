@@ -16,9 +16,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DB\" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <PackageReference Include="SqlSugar" Version="5.1.4.110" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="SqlSugarCore">
+      <Version>5.1.4.110</Version>
+    </PackageReference>
+  </ItemGroup>
 </Project>

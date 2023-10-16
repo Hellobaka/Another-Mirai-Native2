@@ -1,5 +1,5 @@
-﻿using Another_Mirai_Native.Model;
-using Another_Mirai_Native;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;

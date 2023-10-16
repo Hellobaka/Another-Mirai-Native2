@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model.Enums;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Another_Mirai_Native.Native
@@ -206,12 +208,14 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_addLog(int authCode, int priority, string type, string msg)
         {
-            return 1; // TODO
+            LogHelper.WriteLog(CurrentPlugin, (LogLevel)priority, type, msg, "");
+            return 1;
         }
 
         private int CQ_setFatal(int authCode, string errorMsg)
         {
-            return 1; // TODO
+            LogHelper.WriteLog(CurrentPlugin, LogLevel.Fatal, "致命错误", errorMsg, "");
+            return 1;
         }
 
         private string CQ_getGroupMemberInfoV2(int authCode, long groupId, long qqId, bool isCache)
