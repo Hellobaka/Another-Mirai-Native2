@@ -1,15 +1,12 @@
-﻿namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
+﻿using System.Collections.Generic;
+
+namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 {
     public class Protocol : IProtocol
     {
         public string Name { get; set; } = "MiraiAPIHttp";
 
         public bool IsConnected { get; set; }
-
-        public void AddLog(int priority, string type, string msg)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public int CanSendImage()
         {
@@ -23,7 +20,7 @@
 
         public bool Connect()
         {
-            return true;
+            throw new System.NotImplementedException();
         }
 
         public int DeleteMsg(long msgId)
@@ -36,7 +33,7 @@
             throw new System.NotImplementedException();
         }
 
-        public string GetAppDirectory()
+        public Dictionary<string, string> GetConnectionConfig()
         {
             throw new System.NotImplementedException();
         }
@@ -76,22 +73,12 @@
             throw new System.NotImplementedException();
         }
 
-        public string GetImage(string file)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public string GetLoginNick()
         {
             throw new System.NotImplementedException();
         }
 
         public long GetLoginQQ()
-        {
-            return 10001;
-        }
-
-        public string GetRecord(string file, string format)
         {
             throw new System.NotImplementedException();
         }
@@ -121,12 +108,17 @@
             throw new System.NotImplementedException();
         }
 
+        public bool SetConnectionConfig(Dictionary<string, string> config)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public int SetDiscussLeave(long discussId)
         {
             throw new System.NotImplementedException();
         }
 
-        public int SetFriendAddRequest(long identifying, int requestType, string appendMsg)
+        public int SetFriendAddRequest(long identifying, int responseType, string appendMsg)
         {
             throw new System.NotImplementedException();
         }
@@ -151,7 +143,7 @@
             throw new System.NotImplementedException();
         }
 
-        public int SetGroupBan(long groupId, long qqId, long time)
+        public int SetGroupBan(long groupId, long qqId, long banTime)
         {
             throw new System.NotImplementedException();
         }

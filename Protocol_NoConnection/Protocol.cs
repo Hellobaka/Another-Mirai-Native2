@@ -127,6 +127,11 @@ namespace Protocol_NoConnection
             return true;
         }
 
+        public Dictionary<string, string> GetConnectionConfig()
+        {
+            return new();
+        }
+
         public string GetCookies(string domain)
         {
             return "";
@@ -203,6 +208,11 @@ namespace Protocol_NoConnection
         public int SendPrivateMessage(long qqId, string msg)
         {
             return 1;
+        }
+
+        public bool SetConnectionConfig(Dictionary<string, string> config)
+        {
+            return true;
         }
 
         public int SetDiscussLeave(long discussId)
