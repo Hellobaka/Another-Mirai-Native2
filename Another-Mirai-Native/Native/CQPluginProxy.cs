@@ -51,7 +51,10 @@ namespace Another_Mirai_Native.Native
 
         public InvokeResult Invoke(InvokeBody caller)
         {
-            LogHelper.Info("ServerSend", caller.ToJson());
+            if (AppConfig.DebugMode)
+            {
+                LogHelper.Info("ServerSend", caller.ToJson());
+            }
             Connection.Send(caller.ToJson());
             Server.Instance.WaitingMessage.Add(caller.GUID, new InvokeResult());
             for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)

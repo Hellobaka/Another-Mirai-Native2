@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using System.Diagnostics;
 using System.Reflection;
@@ -61,7 +62,10 @@ namespace Another_Mirai_Native.Native
                             break;
                     }
                 }
-                LogHelper.Info("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
+                if (AppConfig.DebugMode)
+                {
+                    LogHelper.Info("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
+                }
                 object result = methodInfo.Invoke(this, transformedArgs);
                 return result;
             }

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Newtonsoft.Json;
@@ -110,7 +111,10 @@ namespace Another_Mirai_Native.Native
             Name = AppInfo.name;
             foreach (var item in AppInfo._event)
             {
-                LogHelper.Debug("Init", $"{item.id}: {item.function}");
+                if (AppConfig.DebugMode)
+                {
+                    LogHelper.Debug("Init", $"{item.id}: {item.function}");
+                }
                 if (!FindEventEnum(item.id))
                 {
                     LogHelper.Error("Load", $"EventID: {item.id} 无效");

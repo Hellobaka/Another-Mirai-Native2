@@ -64,7 +64,10 @@ namespace Another_Mirai_Native.WebSocket
         {
             if (WebSocketClient != null && WebSocketClient.State == WebSocketState.Open)
             {
-                Console.WriteLine("[SendToServer]\t" + message);
+                if (AppConfig.DebugMode)
+                {
+                    Console.WriteLine("[SendToServer]\t" + message);
+                }
                 ArraySegment<byte> buffer = new(Encoding.UTF8.GetBytes(message));
                 WebSocketClient.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None).Wait();
             }
@@ -96,7 +99,10 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                Console.WriteLine("[ReceiveFromServer]\t" + message);
+                if (AppConfig.DebugMode)
+                {
+                    Console.WriteLine("[ReceiveFromServer]\t" + message);
+                }
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {

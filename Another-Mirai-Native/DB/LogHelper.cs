@@ -27,7 +27,7 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static event UpdateLogStatusHandler LogStatusUpdated;
 
-        private static long QQ => ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
+        private static long QQ => ProtocolManager.Instance.CurrentProtocol?.GetLoginQQ() ?? 10001;
 
         /// <summary>
         /// 初始化日志数据库

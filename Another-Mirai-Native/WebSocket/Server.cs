@@ -36,7 +36,7 @@ namespace Another_Mirai_Native.WebSocket
                 {
                     if (connection.IsAvailable)
                     {
-                        // connection.Send(invoke.ToJson());
+                        connection.Send(invoke.ToJson());
                     }
                 }
             }
@@ -207,7 +207,7 @@ namespace Another_Mirai_Native.WebSocket
                     {
                         PluginManagerProxy.PluginProcess[appInfo.PID] = appInfo;
                     }
-                    LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
+                    // LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
                     if (AppConfig.PluginAutoEnable)
                     {
                         PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.Enable);
@@ -242,7 +242,10 @@ namespace Another_Mirai_Native.WebSocket
             };
             connection.OnMessage = (message) =>
             {
-                LogHelper.Info("ReceiveFromClient", message);
+                if (AppConfig.DebugMode)
+                {
+                    LogHelper.Info("ReceiveFromClient", message);
+                }
                 Task.Run(() => HandleClientMessage(message, connection));
             };
             // 心跳
