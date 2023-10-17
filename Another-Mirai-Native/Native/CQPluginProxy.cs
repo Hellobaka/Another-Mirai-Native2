@@ -10,6 +10,11 @@ namespace Another_Mirai_Native.Native
 {
     public class CQPluginProxy
     {
+        public CQPluginProxy()
+        {
+            
+        }
+
         public CQPluginProxy(AppInfo appInfo, IWebSocketConnection connection)
         {
             AppInfo = appInfo;
@@ -27,7 +32,11 @@ namespace Another_Mirai_Native.Native
 
         public string PluginId => AppInfo.AppId;
 
-        private IWebSocketConnection Connection { get; set; }
+        public string PluginPath { get; set; } = "";
+
+        public bool HasConnection { get; set; }
+
+        public IWebSocketConnection Connection { get; set; }
 
         private List<string> APIAuthWhiteList { get; set; } = new()
         {

@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.Native
 
         public static PluginManagerProxy Instance { get; private set; }
 
-        public static Dictionary<int, string> PluginProcess { get; private set; } = new();
+        public static Dictionary<int, AppInfo> PluginProcess { get; private set; } = new();
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.Native
         {
             if (Proxies.Any(x => x.ConnectionID == id))
             {
-                Proxies.Remove(Proxies.First(x => x.ConnectionID == id));
+                Proxies.First(x => x.ConnectionID == id).HasConnection = false;
             }
         }
 
@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.Native
                 Process? pluginProcess = StartPluginProcess(item);
                 if (pluginProcess != null)
                 {
-                    PluginProcess.Add(pluginProcess.Id, item);
+                    PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = item });
                 }
             }
             return true;
@@ -173,7 +173,7 @@ namespace Another_Mirai_Native.Native
 
         public Process? StartPluginProcess(string item)
         {
-            string arguments = $"-PID {PluginManagerProxy.PID} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
+            string arguments = $"-PID {PID} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
             Process? pluginProcess = Process.Start(new ProcessStartInfo
             {
                 Arguments = arguments,
@@ -210,12 +210,12 @@ namespace Another_Mirai_Native.Native
                             }
                             catch
                             {
-                                LogHelper.Info("StartPluginMonitor", $"{plugin.Value} 进程不存在");
+                                LogHelper.Info("StartPluginMonitor", $"{plugin.Value.name} 进程不存在");
                                 PluginProcess.Remove(plugin.Key);
                                 if (AppConfig.RestartPluginIfDead)
                                 {
-                                    LogHelper.Info("StartPluginMonitor", $"{plugin.Value} 重启");
-                                    Process? pluginProcess = StartPluginProcess(plugin.Value);
+                                    LogHelper.Info("StartPluginMonitor", $"{plugin.Value.name} 重启");
+                                    Process? pluginProcess = StartPluginProcess(plugin.Value.PluginPath);
                                     if (pluginProcess != null)
                                     {
                                         PluginProcess.Add(pluginProcess.Id, plugin.Value);

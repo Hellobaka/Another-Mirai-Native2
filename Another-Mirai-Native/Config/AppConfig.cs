@@ -38,6 +38,8 @@ namespace Another_Mirai_Native.Config
 
         public static bool UseDatabase { get; set; } = true;
 
+        public static bool PluginAutoEnable { get; set; } = false;
+
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", defaultValue: true);
@@ -54,6 +56,7 @@ namespace Another_Mirai_Native.Config
             PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", defaultValue: 120 * 1000);
             HeartBeatInterval = ConfigHelper.GetConfig("HeartBeatInterval", defaultValue: 30 * 1000);
             UseDatabase = ConfigHelper.GetConfig("UseDatabase", defaultValue: true);
+            PluginAutoEnable = ConfigHelper.GetConfig("PluginAutoEnable", defaultValue: false);
         }
     }
 }

@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Fleck;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native.WebSocket
 {
@@ -80,8 +81,7 @@ namespace Another_Mirai_Native.WebSocket
                         {
                             return null;
                         }
-                        LogHelper.WriteLog(log);
-                        return 1;
+                        return LogHelper.WriteLog(log);
 
                     case "GetCoreVersion":
                         return GetType().Assembly.GetName().Version.ToString();
@@ -95,31 +95,41 @@ namespace Another_Mirai_Native.WebSocket
                     case "EnablePlugin":
                     case "DisablePlugin":
                         int authCode = Convert.ToInt32(caller.Args[0]);
-                        var pluginProcess = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
+                        var pluginProxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
                         if (name == "Restart")
                         {
-                            pluginProcess?.KillProcess();
+                            pluginProxy?.KillProcess();
+                            Thread.Sleep(100);
+                            if (!AppConfig.RestartPluginIfDead)
+                            {
+                                LogHelper.Info("RestartPlugin", $"{pluginProxy.PluginName} 重启");
+                                Process? pluginProcess = PluginManagerProxy.Instance.StartPluginProcess(pluginProxy.AppInfo.PluginPath);
+                                if (pluginProcess != null)
+                                {
+                                    PluginManagerProxy.PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = pluginProxy.AppInfo.PluginPath });
+                                }
+                            }
                             return 1;
                         }
                         else if (name == "EnablePlugin")
                         {
-                            if (pluginProcess.Enabled)
+                            if (pluginProxy.Enabled)
                             {
                                 return 1;
                             }
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProcess, PluginEventType.Enable);
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProcess, PluginEventType.StartUp);
-                            pluginProcess.Enabled = true;
+                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Enable);
+                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.StartUp);
+                            pluginProxy.Enabled = true;
                         }
                         else if (name == "")
                         {
-                            if (!pluginProcess.Enabled)
+                            if (!pluginProxy.Enabled)
                             {
                                 return 1;
                             }
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProcess, PluginEventType.Disable);
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProcess, PluginEventType.Exit);
-                            pluginProcess.Enabled = false;
+                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Disable);
+                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Exit);
+                            pluginProxy.Enabled = false;
                         }
                         break;
                 }
@@ -170,7 +180,7 @@ namespace Another_Mirai_Native.WebSocket
             {
                 case "PluginInfo":
                     AppInfo appInfo = JObject.FromObject(result.Result).ToObject<AppInfo>();
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.ConnectionID == connection.ConnectionInfo.Id);
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.ConnectionID == connection.ConnectionInfo.Id || x.PluginId == appInfo.AppId);
                     if (proxy == null)
                     {
                         proxy = new CQPluginProxy(appInfo, connection);
@@ -178,11 +188,21 @@ namespace Another_Mirai_Native.WebSocket
                     }
                     else
                     {
+                        proxy.ConnectionID = connection.ConnectionInfo.Id;
+                        proxy.Connection = connection;
                         proxy.AppInfo = appInfo;
                     }
+                    proxy.HasConnection = true;
+                    if (PluginManagerProxy.PluginProcess.ContainsKey(appInfo.PID))
+                    {
+                        PluginManagerProxy.PluginProcess[appInfo.PID] = appInfo;
+                    }
                     LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
-                    // TODO: Delete
-                    PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.StartUp);
+                    if (AppConfig.PluginAutoEnable)
+                    {
+                        PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.Enable);
+                        PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.StartUp);
+                    }
                     break;
 
                 default:
@@ -216,6 +236,7 @@ namespace Another_Mirai_Native.WebSocket
                 LogHelper.Info("ReceiveFromClient", message);
                 Task.Run(() => HandleClientMessage(message, connection));
             };
+            // 心跳
             Task.Run(() =>
             {
                 while (connection != null && connection.IsAvailable)
