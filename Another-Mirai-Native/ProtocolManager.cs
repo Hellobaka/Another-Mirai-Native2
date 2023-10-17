@@ -1,10 +1,5 @@
 ﻿using Another_Mirai_Native.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Another_Mirai_Native
 {
@@ -32,11 +27,11 @@ namespace Another_Mirai_Native
                 return false;
             }
             bool flag = protocol.Connect();
-            LogHelper.Info("Connect", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             if (flag)
             {
                 CurrentProtocol = protocol;
             }
+            LogHelper.Info("Connect", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             return flag;
         }
 

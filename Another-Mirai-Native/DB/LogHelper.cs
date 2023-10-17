@@ -163,15 +163,8 @@ namespace Another_Mirai_Native.DB
             }
             else
             {
-                var result = Client.Instance.Invoke("AddLog", model);
-                if (result.Success)
-                {
-                    return Convert.ToInt32(result.Result);
-                }
-                else
-                {
-                    return 0;
-                }
+                Client.Instance.Invoke("InvokeCore_AddLog", false, model);
+                return 0;
             }
         }
 
@@ -191,6 +184,10 @@ namespace Another_Mirai_Native.DB
                 using var db = GetInstance();
                 logId = db.Insertable(model).ExecuteReturnIdentity();
                 model.id = logId;
+            }
+            else
+            {
+                Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}]\t[{model.name}]{model.detail}");
             }
             LogAdded?.Invoke(logId, model);
             return logId;

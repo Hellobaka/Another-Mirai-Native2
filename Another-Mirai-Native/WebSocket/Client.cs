@@ -26,6 +26,7 @@ namespace Another_Mirai_Native.WebSocket
 
         public bool Connect(string url)
         {
+            bool connectFlag = false;
             Task.Run(() =>
             {
                 while (WebSocketClient == null || WebSocketClient.State == WebSocketState.Aborted || WebSocketClient.State == WebSocketState.Closed)
@@ -34,7 +35,9 @@ namespace Another_Mirai_Native.WebSocket
                     {
                         WebSocketClient = new ClientWebSocket();
                         WebSocketClient.ConnectAsync(new Uri(url), CancellationToken.None).Wait();
+                        connectFlag = true;
                         StartReceiveMessage();
+                        LogHelper.Info("ConnectServer", "连接成功");
                     }
                     catch (Exception ex)
                     {
@@ -46,14 +49,22 @@ namespace Another_Mirai_Native.WebSocket
                 }
             });
 
-            return true;
+            for (int i = 0; i < 10000 / 100; i++)
+            {
+                if (connectFlag)
+                {
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+            return connectFlag;
         }
 
         public void Send(string message)
         {
             if (WebSocketClient != null && WebSocketClient.State == WebSocketState.Open)
             {
-                LogHelper.Info("ClientSend", message);
+                Console.WriteLine("[SendToServer]\t" + message);
                 ArraySegment<byte> buffer = new(Encoding.UTF8.GetBytes(message));
                 WebSocketClient.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None).Wait();
             }
@@ -85,7 +96,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                LogHelper.Info("ReceiveServer", message);
+                Console.WriteLine("[ReceiveFromServer]\t" + message);
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {
@@ -117,12 +128,15 @@ namespace Another_Mirai_Native.WebSocket
             }
         }
 
-        public InvokeResult Invoke(string function, params object[] args)
+        public InvokeResult Invoke(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
 
             Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-
+            if (!waiting)
+            {
+                return null;
+            }
             WaitingMessage.Add(guid, new InvokeResult());
             for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
             {

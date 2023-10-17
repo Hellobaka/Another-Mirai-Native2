@@ -240,6 +240,11 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             if (success)
             {
                 WsURL = config["Ws"];
+                if (WsURL.EndsWith("/"))
+                {
+                    WsURL = WsURL.Substring(0, WsURL.Length - 1);
+                    ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
+                }
                 AuthKey = config["AuthKey"];
                 QQ = value;
             }

@@ -42,6 +42,7 @@ namespace Another_Mirai_Native
             }
             else
             {
+                Console.ReadKey();
                 // 解析参数
                 ParseArg(args);
                 // 监控核心进程

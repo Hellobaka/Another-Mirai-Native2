@@ -21,18 +21,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 {
     public partial class Protocol
     {
-        public Protocol(string url, string qq, string authKey)
-        {
-            if (url.EndsWith("/"))
-            {
-                url = url.Substring(0, url.Length - 1);
-            }
-
-            WsURL = url;
-            AuthKey = authKey;
-            QQ = long.TryParse(qq, out long value) ? value : -1;
-        }
-
         /// <summary>
         /// 退出Flag
         /// </summary>
@@ -129,6 +117,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
 
             string event_ConnectUrl = $"{WsURL}/event?verifyKey={AuthKey}&qq={QQ}";
+            bool connectFlag = false;
             Task.Run(() =>
             {
                 while (!ExitFlag || EventConnection == null || EventConnection.State == WebSocketState.Aborted || EventConnection.State == WebSocketState.Closed)
@@ -138,11 +127,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         EventConnection = new ClientWebSocket();
                         EventConnection.Options.KeepAliveInterval = TimeSpan.FromSeconds(30);
                         EventConnection.ConnectAsync(new Uri(event_ConnectUrl), CancellationToken.None).Wait();
+                        connectFlag = true;
                         ReconnectCount = 0;
                         StartReceiveMessage(EventConnection);
                     }
                     catch (Exception ex)
                     {
+                        connectFlag = false;
                         ReconnectCount++;
                         LogHelper.Error("事件服务器连接断开", ex);
                         LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
@@ -155,7 +146,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                 }
             });
-            return true;
+            for (int i = 0; i < 10000 / 100; i++)
+            {
+                if (connectFlag)
+                {
+                    break;
+                }
+            }
+            return connectFlag;
         }
 
         private bool ConnectMessageServer()
@@ -166,6 +164,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return false;
             }
             string message_ConnectUrl = $"{WsURL}/message?verifyKey={AuthKey}&qq={QQ}";
+            bool connectFlag = false;
             Task.Run(() =>
             {
                 while (!ExitFlag || MessageConnection == null || MessageConnection.State == WebSocketState.Aborted || MessageConnection.State == WebSocketState.Closed)
@@ -176,10 +175,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         MessageConnection.Options.KeepAliveInterval = TimeSpan.FromSeconds(30);
                         MessageConnection.ConnectAsync(new Uri(message_ConnectUrl), CancellationToken.None).Wait();
                         ReconnectCount = 0;
+                        connectFlag = true;
                         StartReceiveMessage(MessageConnection);
                     }
                     catch (Exception ex)
                     {
+                        connectFlag = false;
                         ReconnectCount++;
                         LogHelper.Error("消息服务器连接断开", ex);
                         LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
@@ -192,7 +193,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                 }
             });
-            return true;
+            for (int i = 0; i < 10000 / 100; i++)
+            {
+                if (connectFlag)
+                {
+                    break;
+                }
+            }
+            return connectFlag;
         }
 
         private void HandleEvent(string message)

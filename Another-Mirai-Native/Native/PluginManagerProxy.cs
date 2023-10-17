@@ -174,22 +174,31 @@ namespace Another_Mirai_Native.Native
         public Process? StartPluginProcess(string item)
         {
             string arguments = $"-PID {PID} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
-            Process? pluginProcess = Process.Start(new ProcessStartInfo
+            Process? pluginProcess = null;
+            var startConfig = new ProcessStartInfo
             {
                 Arguments = arguments,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
                 FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}",
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
-            });
-            Task.Run(() =>
+            };
+            if (!AppConfig.DebugMode)
             {
-                while (pluginProcess?.StandardOutput != null && !pluginProcess.StandardOutput.EndOfStream)
+                startConfig.UseShellExecute = false;
+                startConfig.CreateNoWindow = true;
+                startConfig.RedirectStandardOutput = true;
+                pluginProcess = Process.Start(startConfig);
+                Task.Run(() =>
                 {
-                    Console.WriteLine(pluginProcess.StandardOutput.ReadLine());
-                }
-            });
+                    while (pluginProcess?.StandardOutput != null && !pluginProcess.StandardOutput.EndOfStream)
+                    {
+                        Console.WriteLine(pluginProcess.StandardOutput.ReadLine());
+                    }
+                });
+            }
+            else
+            {
+                pluginProcess = Process.Start(startConfig);
+            }
             return pluginProcess;
         }
 

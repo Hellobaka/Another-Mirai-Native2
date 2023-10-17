@@ -30,10 +30,20 @@ namespace Another_Mirai_Native.WebSocket
 
         public void Broadcast(InvokeBody invoke)
         {
-            foreach (var connection in WebSocketConnections)
+            try
             {
-                connection.Send(invoke.ToJson());
+                foreach (var connection in WebSocketConnections)
+                {
+                    if (connection.IsAvailable)
+                    {
+                        // connection.Send(invoke.ToJson());
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                LogHelper.Error("Broadcast", ex);
+            }            
         }
 
         public void Start()
@@ -217,7 +227,6 @@ namespace Another_Mirai_Native.WebSocket
 
         private void Handler(IWebSocketConnection connection)
         {
-            WebSocketConnections.Add(connection);
             LogHelper.Info("WebSocket", $"连接已建立, ID={connection.ConnectionInfo.Id}");
             connection.OnClose = () =>
             {
@@ -239,10 +248,12 @@ namespace Another_Mirai_Native.WebSocket
             // 心跳
             Task.Run(() =>
             {
+                Thread.Sleep(100);
+                WebSocketConnections.Add(connection);
                 while (connection != null && connection.IsAvailable)
                 {
-                    Thread.Sleep(AppConfig.HeartBeatInterval);
                     connection.SendPing(Array.Empty<byte>());
+                    Thread.Sleep(AppConfig.HeartBeatInterval);
                 }
             });
         }
