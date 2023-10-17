@@ -117,6 +117,27 @@ namespace Another_Mirai_Native.WebSocket
             }
         }
 
+        public InvokeResult Invoke(string function, params object[] args)
+        {
+            string guid = Guid.NewGuid().ToString();
+
+            Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
+
+            WaitingMessage.Add(guid, new InvokeResult());
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
+            {
+                if (WaitingMessage.ContainsKey(guid) && WaitingMessage[guid].Success)
+                {
+                    var result = WaitingMessage[guid];
+                    WaitingMessage.Remove(guid);
+                    return result;
+                }
+                Thread.Sleep(100);
+            }
+            LogHelper.Error("ClientInvoke", "Timeout");
+            return new InvokeResult() { Message = "Timeout" };
+        }
+
         private int HandleEvent(string function, object[] args)
         {
             PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);

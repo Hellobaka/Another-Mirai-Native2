@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.WebSocket;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -254,7 +255,7 @@ namespace Another_Mirai_Native.Export
             if (stackFrames.Length > 1)
             {
                 string functionName = stackFrames[1].GetMethod().Name;
-                var r = Static.Invoke(functionName, args);
+                var r = Client.Instance.Invoke("InvokeCQP_" + functionName, args);
                 if (r != null && string.IsNullOrEmpty(r.Message))
                 {
                     return r.Result;

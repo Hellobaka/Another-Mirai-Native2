@@ -114,12 +114,18 @@ namespace Another_Mirai_Native.Native
 
         private string CQ_getImage(int authCode, string file)
         {
-            return "";// TODO
+            string url = Helper.GetPicUrlFromCQImg(file);
+            string imgFileName = file + ".jpg";
+            string imgDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image");
+            var downloadTask = Helper.DownloadFile(url, imgFileName, imgDir);
+            downloadTask.Wait();
+
+            return Path.Combine(imgDir, imgFileName);
         }
 
         private string CQ_getRecordV2(int authCode, string file, string format)
         {
-            // TODO
+            // 将不会实现
             return "";
         }
 

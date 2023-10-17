@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -139,5 +140,49 @@ namespace Another_Mirai_Native
         }
 
         public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        
+        /// <summary>
+        /// 从cqimg中获取图片URL
+        /// </summary>
+        /// <param name="cqimg"></param>
+        /// <returns></returns>
+        public static string GetPicUrlFromCQImg(string cqimg)
+        {
+            string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", cqimg);
+            if (!File.Exists(picPath))
+            {
+                string picUrl = File.ReadAllText(picPath + ".cqimg");
+                picUrl = picUrl.Split('\n').Last().Replace("url=", "");
+                return picUrl;
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url">网址</param>
+        /// <param name="path">目标文件夹</param>
+        /// <param name="overwrite">重复时是否覆写</param>
+        /// <returns></returns>
+        public static async Task<bool> DownloadFile(string url, string fileName, string path, bool overwrite = false)
+        {
+            using var http = new HttpClient();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(url)) return false;
+                if (!overwrite && File.Exists(Path.Combine(path, fileName))) return true;
+                var r = await http.GetAsync(url);
+                byte[] buffer = await r.Content.ReadAsByteArrayAsync();
+                Directory.CreateDirectory(path);
+                File.WriteAllBytes(Path.Combine(path, fileName), buffer);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return false;
+            }
+        }
     }
 }

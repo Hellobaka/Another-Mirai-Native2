@@ -2,6 +2,7 @@
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.WebSocket;
 using SqlSugar;
 using System.Text;
 
@@ -156,7 +157,22 @@ namespace Another_Mirai_Native.DB
                 time = Helper.TimeStamp,
                 status = status
             };
-            return WriteLog(model);
+            if (AppConfig.IsCore)
+            {
+                return WriteLog(model);
+            }
+            else
+            {
+                var result = Client.Instance.Invoke("AddLog", model);
+                if (result.Success)
+                {
+                    return Convert.ToInt32(result.Result);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
 
         public static int WriteLog(LogModel model)
