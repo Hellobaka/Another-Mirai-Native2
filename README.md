@@ -8,7 +8,11 @@
 - [x] 接入数据库
 - [x] Log如果是客户端调用需要走通信协议给核心
 - [x] 实现CQP.dll
-- [ ] 画UI
+- [ ] 调试日志另外显示
+- [ ] 核心API添加 获取协议列表、获取设置协议配置
+- [ ] 崩溃捕获以及崩溃事件上抛/处理
+- [ ] UI使用.net7/net48
+- [ ] 自动更新
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [ ] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
 - [ ] 实现[RedProtocol](https://github.com/nonebot/adapter-red/blob/main/nonebot/adapters/red/adapter.py)协议
