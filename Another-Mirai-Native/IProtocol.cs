@@ -186,7 +186,7 @@
         /// 处理群组添加请求
         /// </summary>
         /// <param name="identifying">请求标识</param>
-        /// <param name="requestType">添加类型: 1 为主动进群; 1 为邀请进群</param>
+        /// <param name="requestType">添加类型: 1 为主动进群; 2 为邀请进群</param>
         /// <param name="responseType">处理结果: 1 为通过; 2 为拒绝</param>
         /// <param name="appendMsg">备注消息</param>
         /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>

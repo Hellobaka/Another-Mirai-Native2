@@ -8,22 +8,22 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前的账号的实例
         /// </summary>
-        public long QQ { get; set; }
+        public long QQ { get; set; } = 10001;
 
         /// <summary>
         /// 获取一个值, 指示当前的QQ昵称
         /// </summary>
-        public string Nick { get; set; }
+        public string Nick { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前QQ的性别
         /// </summary>
-        public QQSex Sex { get; set; }
+        public QQSex Sex { get; set; } = QQSex.Unknown;
 
         /// <summary>
         /// 获取一个值, 指示当前的年龄
         /// </summary>
-        public int Age { get; set; }
+        public int Age { get; set; } = 0;
 
         public byte[] ToNative()
         {

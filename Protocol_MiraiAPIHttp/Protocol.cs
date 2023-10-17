@@ -9,7 +9,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,30 +77,47 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         public string WsURL { get; set; }
 
-        public T CallAPI<T>(JObject json) where T : class
+        public JObject CallMiraiAPI(MiraiApiType type, object data)
+        {
+            string apiType = Enum.GetName(typeof(MiraiApiType), type);
+            string command = apiType, subCommand = "";
+            if (apiType.Contains("_"))// 子命令
+            {
+                var c = apiType.Split('_');
+                command = c[0];
+                subCommand = c[1];
+            }
+            object body = new
+            {
+                syncId = -1,
+                command,
+                subCommand,
+                content = data
+            };
+            return CallMiraiAPI(body);
+        }
+
+        public JObject CallMiraiAPI(object obj)
         {
             string syncId;
             do
             {
                 syncId = Helper.MakeRandomID().ToString();
             } while (WaitingMessages.ContainsKey(syncId));
-            var msg = new WaitingMessage
-            {
-                Type = typeof(T),
-            };
+            var msg = new WaitingMessage();
             WaitingMessages.Add(syncId, msg);
-            MessageConnection.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(json.ToString(Formatting.None)))
+            MessageConnection.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(obj.ToJson()))
                 , WebSocketMessageType.Text, true, CancellationToken.None).Wait();
             for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
             {
                 if (msg.Finished)
                 {
-                    return msg.Result == null ? default : msg.Result as T;
+                    return msg.Result;
                 }
                 Thread.Sleep(100);
             }
             LogHelper.Debug("MiraiAPI", "Timeout");
-            return default;
+            return null;
         }
 
         private bool ConnectEventServer()
@@ -111,7 +131,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             string event_ConnectUrl = $"{WsURL}/event?verifyKey={AuthKey}&qq={QQ}";
             Task.Run(() =>
             {
-                while (EventConnection == null || EventConnection.State == WebSocketState.Aborted || EventConnection.State == WebSocketState.Closed)
+                while (!ExitFlag || EventConnection == null || EventConnection.State == WebSocketState.Aborted || EventConnection.State == WebSocketState.Closed)
                 {
                     try
                     {
@@ -129,6 +149,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         EventConnection = null;
                         Thread.Sleep(AppConfig.ReconnectTime);
                     }
+                    finally
+                    {
+                        IsConnected = MessageConnection.State == WebSocketState.Open && EventConnection.State == WebSocketState.Open;
+                    }
                 }
             });
             return true;
@@ -144,7 +168,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             string message_ConnectUrl = $"{WsURL}/message?verifyKey={AuthKey}&qq={QQ}";
             Task.Run(() =>
             {
-                while (MessageConnection == null || MessageConnection.State == WebSocketState.Aborted || MessageConnection.State == WebSocketState.Closed)
+                while (!ExitFlag || MessageConnection == null || MessageConnection.State == WebSocketState.Aborted || MessageConnection.State == WebSocketState.Closed)
                 {
                     try
                     {
@@ -161,6 +185,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
                         MessageConnection = null;
                         Thread.Sleep(AppConfig.ReconnectTime);
+                    }
+                    finally
+                    {
+                        IsConnected = MessageConnection.State == WebSocketState.Open && EventConnection.State == WebSocketState.Open;
                     }
                 }
             });
@@ -218,14 +246,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     if (WaitingMessages.ContainsKey(api.syncId))
                     {
                         var waiting = WaitingMessages[api.syncId];
-                        if (waiting.Type == null)
-                        {
-                            waiting.Result = null;
-                        }
-                        else
-                        {
-                            waiting.Result = data.ToObject(waiting.Type);
-                        }
+                        waiting.Result = data;
                         waiting.Finished = true;
                     }
                 }
@@ -488,9 +509,84 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             LogHelper.UpdateLogStatus(logId, updateMsg);
         }
 
-        private void ParseAndDispatchMessage(JObject data)
+        private void ParseAndDispatchMessage(JObject msg)
         {
-            throw new NotImplementedException();
+            Stopwatch sw = new();
+            sw.Start();
+            MiraiMessageEvents events = Helper.String2Enum<MiraiMessageEvents>(msg["type"].ToString());
+
+            MiraiMessageTypeDetail.Source source = null;
+            var chainMsg = CQCodeBuilder.ParseJArray2MiraiMessageBaseList(msg["messageChain"] as JArray);
+            source = (MiraiMessageTypeDetail.Source)chainMsg.First(x => x.messageType == MiraiMessageType.Source);
+            string parsedMsg = CQCodeBuilder.Parse(chainMsg);
+            if (source == null)
+            {
+                LogHelper.WriteLog(LogLevel.Info, "AMN框架", "参数缺失", $"", "");
+                return;
+            }
+
+            // 文件上传优先处理
+            if (chainMsg.Any(x => x.messageType == MiraiMessageType.File))
+            {
+                var group = msg.ToObject<GroupMessage>();
+                var file = (MiraiMessageTypeDetail.File)chainMsg.First(x => x.messageType == MiraiMessageType.File);
+                MemoryStream stream = new();
+                BinaryWriter binaryWriter = new(stream);
+                BinaryWriterExpand.Write_Ex(binaryWriter, file.id);
+                BinaryWriterExpand.Write_Ex(binaryWriter, file.name);
+                BinaryWriterExpand.Write_Ex(binaryWriter, file.size);
+                BinaryWriterExpand.Write_Ex(binaryWriter, 0);
+                PluginManagerProxy.Instance.InvokeEvent(PluginEventType.Upload, 1, Helper.TimeStamp, group.sender.group.id, group.sender.id, Convert.ToBase64String(stream.ToArray()));
+                sw.Stop();
+                LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传", $"来源群:{group.sender.group.id}({group.sender.group.name}) 来源QQ:{group.sender.id}({group.sender.memberName}) " +
+                    $"文件名:{file.name} 大小:{file.size / 1000}KB FileID:{file.id}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");
+                return;
+            }
+
+            var messageIntptr = parsedMsg.ToNativeV2();
+            int logId = 0;
+            CQPluginProxy handledPlugin = null;
+            switch (events)
+            {
+                case MiraiMessageEvents.FriendMessage:
+                    var friend = msg.ToObject<FriendMessage>();
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{friend.sender.id}({friend.sender.nickname}) {msg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 11, source.id, friend.sender.id, messageIntptr, 0);
+                    break;
+
+                case MiraiMessageEvents.GroupMessage:
+                    var group = msg.ToObject<GroupMessage>();
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{group.sender.group.id}({group.sender.group.name}) QQ:{group.sender.id}({group.sender.memberName}) {msg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMsg, 1, source.id, group.sender.group.id, group.sender.id, "", messageIntptr, 0);
+                    break;
+
+                case MiraiMessageEvents.TempMessage:
+                    var temp = msg.ToObject<TempMessage>();
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{temp.sender.group.id}({temp.sender.group.name}) QQ:{temp.sender.id}({temp.sender.memberName}) {msg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 2, source.id, temp.sender.id, messageIntptr, 0);
+                    break;
+
+                case MiraiMessageEvents.StrangerMessage:
+                    var stranger = msg.ToObject<StrangerMessage>();
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{stranger.sender.id}({stranger.sender.nickname}) {msg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 1, source.id, stranger.sender.id, messageIntptr, 0);
+                    break;
+
+                case MiraiMessageEvents.OtherClientMessage:
+                    var other = msg.ToObject<OtherClientMessage>();
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到其他设备消息", $"QQ:{other.sender.id}({other.sender.platform}) {msg}", "x 不处理");
+                    break;
+
+                default:
+                    break;
+            }
+            sw.Stop();
+            string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
+            if (handledPlugin != null)
+            {
+                updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
+            }
+            LogHelper.UpdateLogStatus(logId, updateMsg);
         }
 
         private async void StartReceiveMessage(ClientWebSocket connection)

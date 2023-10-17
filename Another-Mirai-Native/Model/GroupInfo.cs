@@ -7,22 +7,22 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前QQ群对象
         /// </summary>
-        public long Group { get; set; }
+        public long Group { get; set; } = 10001;
 
         /// <summary>
         /// 获取当前QQ群的名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "Err";
 
         /// <summary>
         /// 获取一个值, 指示QQ群的当前人数;
         /// </summary>
-        public int CurrentMemberCount { get; set; }
+        public int CurrentMemberCount { get; set; } = 1;
 
         /// <summary>
         /// 获取一个值, 指示当前QQ群最大可容纳的人数;
         /// </summary>
-        public int MaxMemberCount { get; set; }
+        public int MaxMemberCount { get; set; } = 10;
 
         public byte[] ToNative(bool isGroupList)
         {

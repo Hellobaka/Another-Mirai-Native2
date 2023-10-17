@@ -8,7 +8,7 @@ namespace Another_Mirai_Native
 {
     public static class Helper
     {
-        public static Encoding GB18030 = Encoding.GetEncoding("GB18030");
+        public static Encoding GB18030 { get; set; } = Encoding.GetEncoding("GB18030");
 
         public static long TimeStamp => (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
 
@@ -78,7 +78,7 @@ namespace Another_Mirai_Native
                 }
                 else if (tmp.EndsWith(pattern))// 消息以CQ码结尾
                 {
-                    p.Add(tmp[..^pattern.Length]);// 记录文本位置
+                    p.Add(tmp.Substring(0, tmp.Length - pattern.Length));// 记录文本位置
                     p.Add(pattern);// 记录CQ码位置
                     tmp = "";
                 }
