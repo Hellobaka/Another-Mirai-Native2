@@ -28,6 +28,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public bool Connect()
         {
+            GetConnectionConfig();
             return ConnectEventServer() && ConnectMessageServer();
         }
 
@@ -46,18 +47,21 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public bool Disconnect()
         {
             ExitFlag = true;
-            EventConnection.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Active Drop", CancellationToken.None).Wait();
-            MessageConnection.CloseAsync(System.Net.WebSockets.WebSocketCloseStatus.NormalClosure, "Active Drop", CancellationToken.None).Wait();
+            EventConnection.Close();
+            MessageConnection.Close();
             return IsConnected == false;
         }
 
         public Dictionary<string, string> GetConnectionConfig()
         {
+            WsURL = ConfigHelper.GetConfig("WebSocketURL", @"conf\MiraiAPIHttp.json", "");
+            AuthKey = ConfigHelper.GetConfig("AuthKey", @"conf\MiraiAPIHttp.json", "");
+            QQ = ConfigHelper.GetConfig("QQ", @"conf\MiraiAPIHttp.json", (long)0);
             return new Dictionary<string, string>
             {
-                { "Ws", ConfigHelper.GetConfig("WebSocketURL", @"conf\MiraiAPIHttp.json", "") },
-                { "AuthKey", ConfigHelper.GetConfig("AuthKey", @"conf\MiraiAPIHttp.json", "") },
-                { "QQ", ConfigHelper.GetConfig("QQ", @"conf\MiraiAPIHttp.json", "0") },
+                { "Ws", WsURL },
+                { "AuthKey", AuthKey },
+                { "QQ", QQ.ToString() },
             };
         }
 

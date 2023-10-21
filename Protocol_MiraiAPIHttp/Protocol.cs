@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -31,9 +30,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         public string AuthKey { get; set; }
 
-        public ClientWebSocket EventConnection { get; set; } = new();
+        public WebSocketSharp.WebSocket EventConnection { get; set; }
 
-        public ClientWebSocket MessageConnection { get; set; } = new();
+        public WebSocketSharp.WebSocket MessageConnection { get; set; }
 
         /// <summary>
         /// Mirai框架中登录中 且 希望控制逻辑的QQ号
@@ -94,8 +93,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             } while (WaitingMessages.ContainsKey(syncId));
             var msg = new WaitingMessage();
             WaitingMessages.Add(syncId, msg);
-            MessageConnection.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(obj.ToJson()))
-                , WebSocketMessageType.Text, true, CancellationToken.None).Wait();
+            MessageConnection.Send(obj.ToJson());
             for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
             {
                 if (msg.Finished)
@@ -117,43 +115,37 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
 
             string event_ConnectUrl = $"{WsURL}/event?verifyKey={AuthKey}&qq={QQ}";
-            bool connectFlag = false;
-            Task.Run(() =>
+            EventConnection = new(event_ConnectUrl);
+            EventConnection.OnOpen += EventConnection_OnOpen;
+            EventConnection.OnClose += EventConnection_OnClose;
+            EventConnection.OnMessage += EventConnection_OnMessage;
+            EventConnection.Connect();
+
+            return EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+        }
+
+        private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
+        {
+            Console.WriteLine($"[Event]\t" + e.Data);
+            HandleEvent(e.Data);
+        }
+
+        private void EventConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
+        {
+            if (ExitFlag)
             {
-                while (!ExitFlag || EventConnection == null || EventConnection.State == WebSocketState.Aborted || EventConnection.State == WebSocketState.Closed)
-                {
-                    try
-                    {
-                        EventConnection = new ClientWebSocket();
-                        EventConnection.Options.KeepAliveInterval = TimeSpan.FromSeconds(30);
-                        EventConnection.ConnectAsync(new Uri(event_ConnectUrl), CancellationToken.None).Wait();
-                        connectFlag = true;
-                        ReconnectCount = 0;
-                        StartReceiveMessage(EventConnection);
-                    }
-                    catch (Exception ex)
-                    {
-                        connectFlag = false;
-                        ReconnectCount++;
-                        LogHelper.Error("事件服务器连接断开", ex);
-                        LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
-                        EventConnection = null;
-                        Thread.Sleep(AppConfig.ReconnectTime);
-                    }
-                    finally
-                    {
-                        IsConnected = MessageConnection.State == WebSocketState.Open && EventConnection.State == WebSocketState.Open;
-                    }
-                }
-            });
-            for (int i = 0; i < 10000 / 100; i++)
-            {
-                if (connectFlag)
-                {
-                    break;
-                }
+                return;
             }
-            return connectFlag;
+            ReconnectCount++;
+            LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            Thread.Sleep(AppConfig.ReconnectTime);
+            ConnectEventServer();
+        }
+
+        private void EventConnection_OnOpen(object sender, EventArgs e)
+        {
+            ReconnectCount = 0;
+            LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
         }
 
         private bool ConnectMessageServer()
@@ -163,50 +155,46 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 LogHelper.Error("ConnectMessageServer", "参数无效");
                 return false;
             }
+
             string message_ConnectUrl = $"{WsURL}/message?verifyKey={AuthKey}&qq={QQ}";
-            bool connectFlag = false;
-            Task.Run(() =>
+            MessageConnection = new(message_ConnectUrl);
+            MessageConnection.OnOpen += MessageConnection_OnOpen;
+            MessageConnection.OnClose += MessageConnection_OnClose;
+            MessageConnection.OnMessage += MessageConnection_OnMessage;
+            MessageConnection.Connect();
+
+            return MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+        }
+
+        private void MessageConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
+        {
+            Console.WriteLine($"[Message]\t" + e.Data);
+            HandleMessage(e.Data);
+        }
+
+        private void MessageConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
+        {
+            if (ExitFlag)
             {
-                while (!ExitFlag || MessageConnection == null || MessageConnection.State == WebSocketState.Aborted || MessageConnection.State == WebSocketState.Closed)
-                {
-                    try
-                    {
-                        MessageConnection = new ClientWebSocket();
-                        MessageConnection.Options.KeepAliveInterval = TimeSpan.FromSeconds(30);
-                        MessageConnection.ConnectAsync(new Uri(message_ConnectUrl), CancellationToken.None).Wait();
-                        ReconnectCount = 0;
-                        connectFlag = true;
-                        StartReceiveMessage(MessageConnection);
-                    }
-                    catch (Exception ex)
-                    {
-                        connectFlag = false;
-                        ReconnectCount++;
-                        LogHelper.Error("消息服务器连接断开", ex);
-                        LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
-                        MessageConnection = null;
-                        Thread.Sleep(AppConfig.ReconnectTime);
-                    }
-                    finally
-                    {
-                        IsConnected = MessageConnection.State == WebSocketState.Open && EventConnection.State == WebSocketState.Open;
-                    }
-                }
-            });
-            for (int i = 0; i < 10000 / 100; i++)
-            {
-                if (connectFlag)
-                {
-                    break;
-                }
+                return;
             }
-            return connectFlag;
+            ReconnectCount++;
+            LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            Thread.Sleep(AppConfig.ReconnectTime);
+            ConnectMessageServer();
+        }
+
+        private void MessageConnection_OnOpen(object sender, EventArgs e)
+        {
+            ReconnectCount = 0;
+            LogHelper.WriteLog(LogLevel.Debug, "消息服务器", "连接到消息服务器");
         }
 
         private void HandleEvent(string message)
         {
             try
             {
+                Console.WriteLine(message);
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
                 var data = JObject.FromObject(api.data);
                 if (string.IsNullOrEmpty(SessionKey_Event))
@@ -234,6 +222,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             try
             {
+                Console.WriteLine(message);
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
                 var data = JObject.FromObject(api.data);
                 if (string.IsNullOrEmpty(SessionKey_Message))
@@ -595,38 +584,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
             }
             LogHelper.UpdateLogStatus(logId, updateMsg);
-        }
-
-        private async void StartReceiveMessage(ClientWebSocket connection)
-        {
-            byte[] buffer = new byte[1024 * 4];
-            while (true)
-            {
-                if (connection == null || connection.State != WebSocketState.Open)
-                {
-                    break;
-                }
-                WebSocketReceiveResult result;
-                List<byte> data = new();
-                do
-                {
-                    result = await connection.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
-                }
-                while (!result.EndOfMessage);
-                string message = Encoding.UTF8.GetString(data.ToArray());
-                new Thread(() =>
-                {
-                    if (connection.Equals(MessageConnection))
-                    {
-                        HandleMessage(message);
-                    }
-                    else
-                    {
-                        HandleEvent(message);
-                    }
-                }).Start();
-            }
         }
     }
 }
