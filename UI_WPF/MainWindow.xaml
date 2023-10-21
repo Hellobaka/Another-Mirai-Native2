@@ -6,10 +6,82 @@
     xmlns:local="clr-namespace:Another_Mirai_Native.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
-    Title="MainWindow"
-    Width="800"
-    Height="450"
+    Title="Another-Mirai-Native"
+    Width="900"
+    Height="600"
     ui:WindowHelper.UseModernWindowStyle="True"
+    Loaded="MainWindow_Loaded"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid />
+    <Grid>
+        <ui:NavigationView
+            ExpandedModeThresholdWidth="1115"
+            IsBackButtonVisible="Collapsed"
+            IsBackEnabled="False"
+            IsPaneOpen="False"
+            IsSettingsVisible="False"
+            OpenPaneLength="200"
+            SelectionChanged="NavigationView_SelectionChanged">
+            <ui:NavigationView.PaneCustomContent>
+                <StackPanel>
+                    <Menu>
+                        <MenuItem Click="ThemeToggle_Click">
+                            <MenuItem.Header>
+                                <ui:PathIcon
+                                    Width="16"
+                                    Height="16"
+                                    Style="{StaticResource PathIconDataThemeLightDark}" />
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
+                </StackPanel>
+            </ui:NavigationView.PaneCustomContent>
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="文本" Tag="AnnouncementPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataBullhornOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    x:Name="RoomListPageNavigationViewItem"
+                    Content="文本"
+                    IsEnabled="False"
+                    Tag="RoomListPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataHomeOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem
+                    x:Name="AdvancedSettingsPageItem"
+                    Content="文本"
+                    Tag="AdvancedSettingsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataCogs}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    x:Name="SettingsPageNavigationViewItem"
+                    Content="文本"
+                    IsEnabled="False"
+                    Tag="SettingsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="文本" Tag="LogPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="文本" Tag="AboutPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataInformationOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+            <ui:Frame x:Name="MainFrame" Style="{DynamicResource CascadeDataContextFrame}" />
+        </ui:NavigationView>
+    </Grid>
 </Window>

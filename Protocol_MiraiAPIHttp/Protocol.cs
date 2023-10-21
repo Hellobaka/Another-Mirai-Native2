@@ -222,7 +222,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             try
             {
-                Console.WriteLine(message);
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
                 var data = JObject.FromObject(api.data);
                 if (string.IsNullOrEmpty(SessionKey_Message))

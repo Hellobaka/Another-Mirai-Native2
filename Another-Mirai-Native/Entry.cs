@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Another_Mirai_Native
 {
-    internal class Program
+    public class Entry
     {
         // 定义启动参数:
         // 无参时作为框架主体启动
@@ -13,7 +13,7 @@ namespace Another_Mirai_Native
         // -AutoExit 核心进程退出时主动退出
         // -Path 欲加载的插件路径
         // -WS 核心WS路径
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine($"Args: {string.Join(" ", args)}");
             // 创建初始文件夹
@@ -79,11 +79,11 @@ namespace Another_Mirai_Native
             }
         }
 
-        private static void InitExceptionCapture()
+        public static void InitExceptionCapture()
         {
         }
 
-        private static void CreateInitFolders()
+        public static void CreateInitFolders()
         {
             Directory.CreateDirectory(@"data\app");
             Directory.CreateDirectory(@"data\plugins");
@@ -93,7 +93,7 @@ namespace Another_Mirai_Native
             Directory.CreateDirectory("protocols");
         }
 
-        private static void MonitorCoreProcess(int pid)
+        public static void MonitorCoreProcess(int pid)
         {
             if (AppConfig.Core_AutoExit)
             {

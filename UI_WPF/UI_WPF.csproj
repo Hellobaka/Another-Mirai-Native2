@@ -8,10 +8,15 @@
     <AssemblyName>Another-Mirai-Native-UI</AssemblyName>
     <RootNamespace>Another_Mirai_Native.UI</RootNamespace>
     <LangVersion>11</LangVersion>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
   </ItemGroup>
 
 </Project>

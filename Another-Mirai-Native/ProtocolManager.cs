@@ -52,16 +52,23 @@ namespace Another_Mirai_Native
         {
             foreach (var item in Directory.GetFiles("protocols", "*.dll"))
             {
-                Assembly assembly = Assembly.LoadFrom(item);
-                foreach (var type in assembly.GetTypes())
+                try
                 {
-                    if (typeof(IProtocol).IsAssignableFrom(type) && !type.IsInterface)
+                    Assembly assembly = Assembly.LoadFrom(item);
+                    foreach (var type in assembly.GetTypes())
                     {
-                        if (Activator.CreateInstance(type) is IProtocol protocol)
+                        if (typeof(IProtocol).IsAssignableFrom(type) && !type.IsInterface)
                         {
-                            Protocols.Add(protocol);
+                            if (Activator.CreateInstance(type) is IProtocol protocol)
+                            {
+                                Protocols.Add(protocol);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error("LoadProtocol", $"无法加载协议: {ex.Message} {ex.StackTrace}");
                 }
             }
         }
