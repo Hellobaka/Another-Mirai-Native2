@@ -37,45 +37,31 @@
                 </StackPanel>
             </ui:NavigationView.PaneCustomContent>
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="文本" Tag="AnnouncementPage">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:PathIcon Style="{StaticResource PathIconDataBullhornOutline}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
-                    x:Name="RoomListPageNavigationViewItem"
-                    Content="文本"
-                    IsEnabled="False"
-                    Tag="RoomListPage">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:PathIcon Style="{StaticResource PathIconDataHomeOutline}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
+                    Content="插件管理"
+                    Icon="59212"
+                    Tag="PluginPage" />
+
+                <ui:NavigationViewItem
+                    Content="测试"
+                    Icon="59634"
+                    Tag="TestPage" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem
-                    x:Name="AdvancedSettingsPageItem"
-                    Content="文本"
-                    Tag="AdvancedSettingsPage">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:PathIcon Style="{StaticResource PathIconDataCogs}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-                <ui:NavigationViewItem
-                    x:Name="SettingsPageNavigationViewItem"
-                    Content="文本"
-                    IsEnabled="False"
-                    Tag="SettingsPage">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="文本" Tag="LogPage">
+                    Content="日志"
+                    IsSelected="True"
+                    Tag="LogPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="文本" Tag="AboutPage">
+                <ui:NavigationViewItem Content="设置" Tag="SettingsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="关于" Tag="AboutPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataInformationOutline}" />
                     </ui:NavigationViewItem.Icon>

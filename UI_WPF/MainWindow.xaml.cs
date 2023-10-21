@@ -1,21 +1,13 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using ModernWpf;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI
 {
@@ -57,7 +49,7 @@ namespace Another_Mirai_Native.UI
                 }
                 else
                 {
-                    Type pageType = typeof(MainWindow).Assembly.GetType("Another_Mirai_Native.UI.Pages" + selectedItemTag);
+                    Type pageType = typeof(MainWindow).Assembly.GetType("Another_Mirai_Native.UI.Pages." + selectedItemTag);
                     var obj = Activator.CreateInstance(pageType);
                     PageCache.Add(selectedItemTag, obj);
                     MainFrame.Navigate(obj);
@@ -84,14 +76,30 @@ namespace Another_Mirai_Native.UI
             {
                 Environment.Exit(0);
             }
+            LoadPlugins();
+        }
+
+        private void LoadPlugins()
+        {
+            Task.Run(() =>
+            {
+                var manager = new PluginManagerProxy();
+                manager.LoadPlugins();
+                EnablePluginByConfig();
+            });
+        }
+
+        private void EnablePluginByConfig()
+        {
         }
 
         private void InitCore()
         {
-            Entry.CreateInitFolders();
-            Entry.InitExceptionCapture();
+            Another_Mirai_Native.Entry.CreateInitFolders();
+            Another_Mirai_Native.Entry.InitExceptionCapture();
             AppConfig.LoadConfig();
             AppConfig.IsCore = true;
+            new Another_Mirai_Native.WebSocket.Server().Start();
         }
     }
 }
