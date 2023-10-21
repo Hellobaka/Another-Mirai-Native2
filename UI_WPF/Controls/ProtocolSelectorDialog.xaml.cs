@@ -1,19 +1,10 @@
 ﻿using Another_Mirai_Native.Config;
 using ModernWpf.Controls;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI.Controls
 {
@@ -51,12 +42,13 @@ namespace Another_Mirai_Native.UI.Controls
         {
             Connecting = false;
             HasProtocolContent = false;
+            AutoConnectSelector.IsOn = ConfigHelper.GetConfig("AutoConnect", MainWindow.DefaultConfigPath, false);
             foreach (var item in ProtocolManager.Protocols)
             {
                 ProtocolList.Items.Add(item.Name);
             }
             ProtocolList.Text = AppConfig.AutoProtocol;
-            if (ConfigHelper.GetConfig("AutoConnect", MainWindow.DefaultConfigPath, false))
+            if (AutoConnectSelector.IsOn)
             {
                 ConnectButton_Click(sender, e);
             }
@@ -116,7 +108,7 @@ namespace Another_Mirai_Native.UI.Controls
             Connecting = true;
             Task.Run(() =>
             {
-                bool ret = CurrentProtocol.Connect();
+                bool ret = ProtocolManager.Instance.Start(CurrentProtocol);
                 Dispatcher.Invoke(() =>
                 {
                     Connecting = false;
