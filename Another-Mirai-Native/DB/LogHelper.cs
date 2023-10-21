@@ -29,6 +29,8 @@ namespace Another_Mirai_Native.DB
 
         private static long QQ => ProtocolManager.Instance.CurrentProtocol?.GetLoginQQ() ?? 10001;
 
+        private static int NoDBLogID { get; set; }
+
         /// <summary>
         /// 初始化日志数据库
         /// </summary>
@@ -178,7 +180,7 @@ namespace Another_Mirai_Native.DB
             {
                 model.name = "";
             }
-            int logId = 1;
+            int logId = NoDBLogID++;
             if (AppConfig.UseDatabase)
             {
                 using var db = GetInstance();
