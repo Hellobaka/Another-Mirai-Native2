@@ -1,14 +1,188 @@
-﻿<Page x:Class="Another_Mirai_Native.UI.Pages.PluginPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="PluginPage">
-
+﻿<Page
+    x:Class="Another_Mirai_Native.UI.Pages.PluginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="PluginPage"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converter:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <converter:ObjectVisibilityInvertConverter x:Key="ObjectVisibilityInvertConverter" />
+        <converter:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
+    </Page.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border
+            Grid.Column="0"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
+            BorderThickness="1"
+            CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="24">已加载插件</TextBlock>
+                <ListView
+                    x:Name="PluginListContainer"
+                    Grid.Row="1"
+                    ItemsSource="{Binding CQPlugins}"
+                    SelectionChanged="PluginListContainer_SelectionChanged">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PluginName}">插件名称</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding AppInfo.author}">作者</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding AppInfo.version}">版本</GridViewColumn>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        x:Name="ReloadAllBtn"
+                        Grid.Column="0"
+                        Margin="5,0"
+                        HorizontalAlignment="Stretch"
+                        Click="ReloadAllBtn_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        重载插件
+                    </Button>
+                    <Button
+                        x:Name="OpenPluginPathBtn"
+                        Grid.Column="1"
+                        Margin="5,0"
+                        HorizontalAlignment="Stretch"
+                        Click="OpenPluginPathBtn_Click">
+                        插件路径
+                    </Button>
+                    <Button
+                        x:Name="OpenAllDataBtn"
+                        Grid.Column="2"
+                        Margin="5,0"
+                        HorizontalAlignment="Stretch"
+                        Click="OpenAllDataBtn_Click">
+                        数据路径
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+        <Border
+            Grid.Column="1"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
+            BorderThickness="1"
+            CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="NoPluginErrorDisplay"
+                    Grid.Row="0"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Visibility="{Binding SelectedItem, Converter={StaticResource ObjectVisibilityInvertConverter}, ElementName=PluginListContainer}">
+                    从左侧点击一个插件以浏览信息
+                </TextBlock>
+                <Grid
+                    x:Name="AppInfoDisplay"
+                    Grid.Row="0"
+                    Visibility="{Binding SelectedItem, Converter={StaticResource ObjectVisibilityConverter}, ElementName=PluginListContainer}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="0">
+                        <TextBlock FontSize="24">插件信息</TextBlock>
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.PluginId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,5">
+                        <TextBlock FontSize="24">插件描述</TextBlock>
+                        <TextBlock
+                            x:Name="DescriptionDisplay"
+                            Margin="0,4"
+                            Text="{Binding SelectedItem.AppInfo.description, ElementName=PluginListContainer}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Grid Grid.Row="2" Margin="0,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" FontSize="24">插件权限</TextBlock>
+                        <ListView
+                            x:Name="AuthDisplay"
+                            Grid.Row="1"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible" />
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            x:Name="ToggleEnableBtn"
+                            Grid.Column="0"
+                            Margin="5,0"
+                            HorizontalAlignment="Stretch"
+                            Click="ToggleEnableBtn_Click"
+                            Style="{StaticResource AccentButtonStyle}">
+                            停用
+                        </Button>
+                        <Button
+                            x:Name="OpenMenuBtn"
+                            Grid.Column="1"
+                            Margin="5,0"
+                            HorizontalAlignment="Stretch"
+                            Click="OpenMenuBtn_Click">
+                            菜单
+                        </Button>
+                        <Button
+                            x:Name="OpenDataBtn"
+                            Grid.Column="2"
+                            Margin="5,0"
+                            HorizontalAlignment="Stretch"
+                            Click="OpenDataBtn_Click">
+                            数据
+                        </Button>
+                        <Button
+                            x:Name="ReloadBtn"
+                            Grid.Column="3"
+                            Margin="5,0"
+                            HorizontalAlignment="Stretch"
+                            Click="ReloadBtn_Click">
+                            重载
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

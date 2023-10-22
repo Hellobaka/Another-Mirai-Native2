@@ -5,6 +5,7 @@ using ModernWpf;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -91,6 +92,25 @@ namespace Another_Mirai_Native.UI
 
         private void EnablePluginByConfig()
         {
+            List<string> enablePlugins = ConfigHelper.GetConfig("EnablePlugins", DefaultConfigPath, new List<string>());
+            foreach (var item in PluginManagerProxy.PluginProcess)
+            {
+                if (!PluginManagerProxy.Instance.WaitAppInfo(item.Key))
+                {
+                    return;
+                }
+                string appId = item.Value.AppId;
+                if (enablePlugins.Any(x => x == appId))
+                {
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AppId == appId);
+                    if (proxy == null)
+                    {
+                        return;
+                    }
+                    PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.Enable);
+                    PluginManagerProxy.Instance.InvokeEvent(proxy, Model.Enums.PluginEventType.StartUp);
+                }
+            }
         }
 
         private void InitCore()

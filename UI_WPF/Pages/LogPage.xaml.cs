@@ -16,6 +16,12 @@ namespace Another_Mirai_Native.UI.Pages
         {
             InitializeComponent();
             DataContext = this;
+            // TODO: 日志等级、内容、来源筛选
+            // TODO: 实时刷新
+            // TODO: 更好看的颜色
+            // TODO: 未选中时单行显示；选中后多行
+            // TODO: 右键复制
+            // TODO: 某些列自动宽度
         }
 
         public ObservableCollection<LogModel> LogCollections { get; set; } = new();
