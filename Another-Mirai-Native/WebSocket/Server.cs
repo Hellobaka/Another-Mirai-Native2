@@ -43,7 +43,7 @@ namespace Another_Mirai_Native.WebSocket
             catch (Exception ex)
             {
                 LogHelper.Error("Broadcast", ex);
-            }            
+            }
         }
 
         public void Start()
@@ -129,7 +129,7 @@ namespace Another_Mirai_Native.WebSocket
                             }
                             PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Enable);
                             PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.StartUp);
-                            pluginProxy.Enabled = true;
+                            PluginManagerProxy.SetProxyEnabled(pluginProxy, true);
                         }
                         else if (name == "")
                         {
@@ -139,7 +139,7 @@ namespace Another_Mirai_Native.WebSocket
                             }
                             PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Disable);
                             PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Exit);
-                            pluginProxy.Enabled = false;
+                            PluginManagerProxy.SetProxyEnabled(pluginProxy, false);
                         }
                         break;
                 }
@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.WebSocket
                     if (proxy == null)
                     {
                         proxy = new CQPluginProxy(appInfo, connection);
-                        PluginManagerProxy.Proxies.Add(proxy);
+                        PluginManagerProxy.AddProxy(proxy);
                     }
                     else
                     {

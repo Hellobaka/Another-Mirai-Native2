@@ -20,14 +20,37 @@ namespace Another_Mirai_Native.Native
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
+        public static event Action<CQPluginProxy> OnPluginProxyAdded;
+
+        public static event Action<CQPluginProxy> OnPluginProxyRemoved;
+
+        public static event Action<CQPluginProxy> OnPluginEnableChanged;
+
         private static int PID => Process.GetCurrentProcess().Id;
 
         public static void RemoveProxy(Guid id)
         {
             if (Proxies.Any(x => x.ConnectionID == id))
             {
-                Proxies.First(x => x.ConnectionID == id).HasConnection = false;
+                var proxy = Proxies.First(x => x.ConnectionID == id);
+                proxy.HasConnection = false;
+                OnPluginProxyRemoved?.Invoke(proxy);
             }
+        }
+
+        public static void AddProxy(CQPluginProxy proxy)
+        {
+            if (!Proxies.Any(x => x.ConnectionID == proxy.ConnectionID))
+            {
+                Proxies.Add(proxy);
+                OnPluginProxyAdded?.Invoke(proxy);
+            }
+        }
+
+        public static void SetProxyEnabled(CQPluginProxy proxy, bool enabled)
+        {
+            proxy.Enabled = enabled;
+            OnPluginEnableChanged?.Invoke(proxy);
         }
 
         public static CQPluginProxy GetProxyByAuthCode(int authCode)
@@ -46,6 +69,26 @@ namespace Another_Mirai_Native.Native
                 }
             }
             return true;
+        }
+
+        public bool WaitAppInfo(int pid)
+        {
+            bool result = false;
+            for (int i = 0; i < AppConfig.LoadTimeout / 100; i++)
+            {
+                if (!PluginProcess.ContainsKey(pid))
+                {
+                    result = false;
+                    break;
+                }
+                if (!string.IsNullOrEmpty(PluginProcess[pid].AppId))
+                {
+                    result = true;
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+            return result;
         }
 
         public InvokeResult Invoke(CQPluginProxy target, string function, params object[] args)
