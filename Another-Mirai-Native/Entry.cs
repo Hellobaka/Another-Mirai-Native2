@@ -7,6 +7,8 @@ namespace Another_Mirai_Native
 {
     public class Entry
     {
+        private static readonly ManualResetEvent _quitEvent = new(false);
+
         // 定义启动参数:
         // 无参时作为框架主体启动
         // -PID 核心进程PID
@@ -15,6 +17,11 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         public static void Main(string[] args)
         {
+            Console.CancelKeyPress += (sender, eArgs) =>
+            {
+                _quitEvent.Set();
+                eArgs.Cancel = true;
+            };
             Console.WriteLine($"Args: {string.Join(" ", args)}");
             // 创建初始文件夹
             CreateInitFolders();
@@ -58,25 +65,7 @@ namespace Another_Mirai_Native
                     return;
                 }
             }
-            while (true)
-            {
-                string command = Console.ReadLine();
-                if (args.Length != 0)
-                {
-                    continue;
-                }
-                switch (command.ToLower())
-                {
-                    case "connect":
-                        string protocol = command.ToLower().Replace("connect", "");
-                        if (string.IsNullOrEmpty(protocol))
-                        {
-                            protocol = AppConfig.AutoProtocol;
-                        }
-                        _ = new ProtocolManager().Start(protocol) && (PluginManagerProxy.Instance ?? new PluginManagerProxy()).LoadPlugins();
-                        break;
-                }
-            }
+            _quitEvent.WaitOne();
         }
 
         public static void InitExceptionCapture()
