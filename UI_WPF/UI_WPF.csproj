@@ -10,6 +10,7 @@
     <LangVersion>11</LangVersion>
     <Platforms>AnyCPU;x86</Platforms>
     <StartupObject>Another_Mirai_Native.UI.Entry</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
