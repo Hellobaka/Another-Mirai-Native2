@@ -2,18 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -25,6 +19,8 @@ namespace Another_Mirai_Native.UI.Pages
         public PluginPage()
         {
             InitializeComponent();
+            // TODO: 失去连接状态
+            // TODO: 未启用状态
         }
 
         public ObservableCollection<CQPluginProxy> CQPlugins { get; set; } = new();
@@ -57,8 +53,11 @@ namespace Another_Mirai_Native.UI.Pages
             {180, "撤回消息"},
         };
 
+        private CQPluginProxy SelectedPlugin { get; set; }
+
         private void PluginListContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            SelectedPlugin = PluginListContainer.SelectedItem as CQPluginProxy;
             UpdateAuthList();
         }
 
@@ -80,30 +79,85 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void ReloadAllBtn_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: 确认窗口
+            // TODO: 按钮进度显示
+            Task.Run(() =>
+            {
+                PluginManagerProxy.Instance.ReloadAllPlugins();
+                MainWindow.Instance.EnablePluginByConfig();
+            });
         }
 
         private void OpenPluginPathBtn_Click(object sender, RoutedEventArgs e)
         {
+            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
         }
 
         private void OpenAllDataBtn_Click(object sender, RoutedEventArgs e)
         {
+            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "app"));
         }
 
         private void ToggleEnableBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            if (SelectedPlugin.HasConnection is false)
+            {
+                // TODO: 自定义错误窗口
+                return;
+            }
+            PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+            // TODO: 更新自动启用表
         }
 
         private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: ContextMenu
         }
 
         private void OpenDataBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
+            if (Directory.Exists(path))
+            {
+                Process.Start(path);
+            }
+            else
+            {
+                // TODO: 自定义错误窗口
+            }
         }
 
         private void ReloadBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            if (SelectedPlugin.HasConnection is false)
+            {
+                // TODO: 自定义错误窗口
+                return;
+            }
+            // TODO: 确认窗口
+            // TODO: 按钮进度显示
+            Task.Run(() =>
+            {
+                bool enable = SelectedPlugin.Enabled;
+                string id = SelectedPlugin.PluginId;
+                PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
+                if (enable)
+                {
+                    PluginManagerProxy.Instance.SetPluginEnabled(PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginId == id), true);
+                }
+            });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -116,6 +170,7 @@ namespace Another_Mirai_Native.UI.Pages
             PluginManagerProxy.OnPluginProxyRemoved += PluginManagerProxy_OnPluginProxyRemoved;
 
             DataContext = this;
+            CQPlugins.Clear();
             foreach (var item in PluginManagerProxy.Proxies)
             {
                 CQPlugins.Add(item);
