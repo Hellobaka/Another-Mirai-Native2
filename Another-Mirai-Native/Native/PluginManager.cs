@@ -36,42 +36,50 @@ namespace Another_Mirai_Native.Native
         public int CallEvent(PluginEventType eventName, object[] args)
         {
             int result = 0;
-            var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());
-            if (methodInfo == null)
+            try
             {
-                LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 未找到对应实现");
-                return result;
-            }
-            var argumentList = methodInfo.GetParameters();
-            if (args.Length != argumentList.Length)
-            {
-                LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 参数表数量不对应");
-                return result;
-            }
-            object[] transformedArgs = new object[argumentList.Length];
-            for (int i = 0; i < args.Length; i++)
-            {
-                switch (argumentList[i].ParameterType.Name)
+                var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());
+                if (methodInfo == null)
                 {
-                    case "Int64":
-                        transformedArgs[i] = Convert.ToInt64(args[i]);
-                        break;
-
-                    case "Int32":
-                        transformedArgs[i] = Convert.ToInt32(args[i]);
-                        break;
-
-                    case "String":
-                        transformedArgs[i] = args[i].ToString();
-                        break;
-
-                    case "Boolean":
-                        transformedArgs[i] = Convert.ToBoolean(args[i]);
-                        break;
+                    LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 未找到对应实现");
+                    return result;
                 }
-            }
+                var argumentList = methodInfo.GetParameters();
+                if (args.Length != argumentList.Length)
+                {
+                    LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 参数表数量不对应");
+                    return result;
+                }
+                object[] transformedArgs = new object[argumentList.Length];
+                for (int i = 0; i < args.Length; i++)
+                {
+                    switch (argumentList[i].ParameterType.Name)
+                    {
+                        case "Int64":
+                            transformedArgs[i] = Convert.ToInt64(args[i]);
+                            break;
 
-            return (int)methodInfo.Invoke(this, transformedArgs);
+                        case "Int32":
+                            transformedArgs[i] = Convert.ToInt32(args[i]);
+                            break;
+
+                        case "String":
+                            transformedArgs[i] = args[i].ToString();
+                            break;
+
+                        case "Boolean":
+                            transformedArgs[i] = Convert.ToBoolean(args[i]);
+                            break;
+                    }
+                }
+
+                return (int)methodInfo.Invoke(this, transformedArgs);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("Invoke_Client", ex);
+            }
+            return result;
         }
 
         public int Event_OnMenu(string menuName)
