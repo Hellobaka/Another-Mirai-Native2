@@ -127,9 +127,7 @@ namespace Another_Mirai_Native.WebSocket
                             {
                                 return 1;
                             }
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Enable);
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.StartUp);
-                            PluginManagerProxy.SetProxyEnabled(pluginProxy, true);
+                            PluginManagerProxy.Instance.SetPluginEnabled(pluginProxy, true);
                         }
                         else if (name == "")
                         {
@@ -137,9 +135,7 @@ namespace Another_Mirai_Native.WebSocket
                             {
                                 return 1;
                             }
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Disable);
-                            PluginManagerProxy.Instance.InvokeEvent(pluginProxy, PluginEventType.Exit);
-                            PluginManagerProxy.SetProxyEnabled(pluginProxy, false);
+                            PluginManagerProxy.Instance.SetPluginEnabled(pluginProxy, false);
                         }
                         break;
                 }
@@ -205,7 +201,9 @@ namespace Another_Mirai_Native.WebSocket
                     proxy.HasConnection = true;
                     if (PluginManagerProxy.PluginProcess.ContainsKey(appInfo.PID))
                     {
+                        string path = PluginManagerProxy.PluginProcess[appInfo.PID].PluginPath;
                         PluginManagerProxy.PluginProcess[appInfo.PID] = appInfo;
+                        PluginManagerProxy.PluginProcess[appInfo.PID].PluginPath = path;
                     }
                     // LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
                     if (AppConfig.PluginAutoEnable)
