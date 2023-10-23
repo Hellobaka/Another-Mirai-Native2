@@ -3,6 +3,7 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -185,6 +186,8 @@ namespace Another_Mirai_Native.Native
             AuthCode = new Random(Helper.MakeRandomID()).Next();
             AppInfo.AuthCode = AuthCode;
             AppInfo.AppId = GetAppId().Value;
+            AppInfo.PID = Process.GetCurrentProcess().Id;
+            Directory.CreateDirectory(System.IO.Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
             Initialize(AuthCode);
         }
 
