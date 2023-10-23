@@ -47,12 +47,6 @@ namespace Another_Mirai_Native.Native
             }
         }
 
-        public static void SetProxyEnabled(CQPluginProxy proxy, bool enabled)
-        {
-            proxy.Enabled = enabled;
-            OnPluginEnableChanged?.Invoke(proxy);
-        }
-
         public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
@@ -111,7 +105,7 @@ namespace Another_Mirai_Native.Native
             }
             else
             {
-                return 0;
+                return 1;
             }
         }
 
@@ -245,6 +239,73 @@ namespace Another_Mirai_Native.Native
             return pluginProcess;
         }
 
+        public void ReloadAllPlugins()
+        {
+            foreach (var item in Proxies)
+            {
+                ReloadPlugin(item);
+            }
+        }
+
+        public void ReloadPlugin(CQPluginProxy plugin)
+        {
+            InvokeEvent(plugin, PluginEventType.Disable);
+            plugin.KillProcess();
+            if (!AppConfig.RestartPluginIfDead)
+            {
+                LogHelper.Info("RestartPlugin", $"{plugin.PluginName} 重启");
+                Process? pluginProcess = StartPluginProcess(plugin.AppInfo.PluginPath);
+                if (pluginProcess != null)
+                {
+                    PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = plugin.AppInfo.PluginPath });
+                    WaitAppInfo(pluginProcess.Id);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < AppConfig.LoadTimeout / 100; i++)
+                {
+                    if (PluginProcess.Any(x => x.Value.AppId == plugin.PluginId))
+                    {
+                        break;
+                    }
+                    Thread.Sleep(100);
+                }
+            }
+        }
+
+        public void SetPluginEnabled(CQPluginProxy plugin, bool enabled)
+        {
+            if (plugin == null || plugin.HasConnection == false)
+            {
+                return;
+            }
+            bool success = false;
+            if (enabled)
+            {
+                if (plugin.Enabled)
+                {
+                    return;
+                }
+                success = InvokeEvent(plugin, PluginEventType.Enable) == 1;
+                success = success && (InvokeEvent(plugin, PluginEventType.StartUp) == 1);
+            }
+            else
+            {
+                if (!plugin.Enabled)
+                {
+                    return;
+                }
+                success = InvokeEvent(plugin, PluginEventType.Disable) == 1;
+                success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 1);
+            }
+            if (success)
+            {
+                plugin.Enabled = enabled;
+                OnPluginEnableChanged?.Invoke(plugin);
+            }
+        }
+
         private void StartPluginMonitor()
         {
             try
@@ -262,11 +323,11 @@ namespace Another_Mirai_Native.Native
                             }
                             catch
                             {
-                                LogHelper.Info("StartPluginMonitor", $"{plugin.Value.name} 进程不存在");
+                                LogHelper.Debug("StartPluginMonitor", $"[{plugin.Key}]{plugin.Value.name} 进程不存在");
                                 PluginProcess.Remove(plugin.Key);
                                 if (AppConfig.RestartPluginIfDead)
                                 {
-                                    LogHelper.Info("StartPluginMonitor", $"{plugin.Value.name} 重启");
+                                    LogHelper.Debug("StartPluginMonitor", $"{plugin.Value.name} 重启");
                                     Process? pluginProcess = StartPluginProcess(plugin.Value.PluginPath);
                                     if (pluginProcess != null)
                                     {
