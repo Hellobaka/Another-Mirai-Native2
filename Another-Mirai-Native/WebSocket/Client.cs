@@ -115,6 +115,7 @@ namespace Another_Mirai_Native.WebSocket
                     }
                     else if (caller.Function == "KillProcess")
                     {
+                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = 1 }.ToJson());
                         Environment.Exit(0);
                     }
                 }
