@@ -12,6 +12,7 @@
 - [x] 核心API添加 获取协议列表、获取设置协议配置
 - [ ] 崩溃捕获以及崩溃事件上抛/处理
 - [x] UI使用.net7/net48
+- [ ] UI需要DPI自适应
 - [ ] 自动更新
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [ ] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
