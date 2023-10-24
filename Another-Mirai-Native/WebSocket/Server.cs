@@ -56,6 +56,11 @@ namespace Another_Mirai_Native.WebSocket
             WebSocketServer.Start(Handler);
         }
 
+        public void ActiveShowErrorDialog(InvokeBody caller)
+        {
+            OnShowErrorDialogCalled?.Invoke(caller);
+        }
+
         private void HandleClientMessage(string message, IWebSocketConnection connection)
         {
             try

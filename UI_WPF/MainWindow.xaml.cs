@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI
 {
@@ -118,12 +119,19 @@ namespace Another_Mirai_Native.UI
 
         private void InitCore()
         {
-            Server.OnShowErrorDialogCalled += ErrorDialogHelper.ShowErrorDialog;
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
             Another_Mirai_Native.Entry.CreateInitFolders();
             Another_Mirai_Native.Entry.InitExceptionCapture();
             AppConfig.LoadConfig();
             AppConfig.IsCore = true;
             new Another_Mirai_Native.WebSocket.Server().Start();
+        }
+
+        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception.StackTrace);
         }
     }
 }

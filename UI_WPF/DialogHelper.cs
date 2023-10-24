@@ -5,24 +5,26 @@ using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.UI
 {
-    public class ErrorDialogHelper
+    public class DialogHelper
     {
         private static SimpleMessageBox CurrentDialog { get; set; }
 
         private static Queue<DialogQueueObject> ErrorDialogQueue { get; set; } = new();
 
-        private class DialogQueueObject
+        public static async Task<bool> ShowConfirmDialog(string title, string message)
         {
-            public SimpleMessageBox Dialog { get; set; }
-
-            public CQPluginProxy Plugin { get; set; }
-
-            public string GUID { get; set; }
-
-            public ContentDialogResult DialogResult { get; set; } = ContentDialogResult.None;
+            ContentDialog dialog = new()
+            {
+                Title = title,
+                Content = message,
+                PrimaryButtonText = "确认",
+                SecondaryButtonText = "取消",
+            };
+            return await dialog.ShowAsync() == ContentDialogResult.Primary;
         }
 
         public static void ShowErrorDialog(InvokeBody caller)
@@ -35,34 +37,42 @@ namespace Another_Mirai_Native.UI
             ShowErrorDialog(plugin, caller.GUID, caller.Args[1].ToString(), caller.Args[2].ToString(), caller.Args[3].ToString() == "1");
         }
 
+        public static void ShowErrorDialog(string message, string detail, bool canIgnore = true)
+        {
+            ShowErrorDialog(null, "", message, detail, canIgnore);
+        }
+
         public static void ShowErrorDialog(CQPluginProxy proxy, string guid, string message, string detail, bool canIgnore = true)
         {
-            SimpleMessageBox dialog = new()
+            MainWindow.Instance.Dispatcher.BeginInvoke(() =>
             {
-                ErrorDetail = detail,
-                ErrorMessage = message,
-                IsPrimaryButtonEnabled = canIgnore,
-                DefaultButton = canIgnore ? ContentDialogButton.Primary : ContentDialogButton.Secondary,
-            };
-            if (canIgnore)
-            {
-                dialog.ErrorHint += "，但是这个错误可以被忽略";
-            }
-            else
-            {
-                dialog.ErrorHint += "，插件需要重启";
-            }
-            if (proxy != null)
-            {
-                dialog.ErrorMessage = $"插件 {proxy.PluginName}:";
-            }
-            var queue = new DialogQueueObject { Dialog = dialog, Plugin = proxy, GUID = guid };
-            ErrorDialogQueue.Enqueue(queue);
-            if (CurrentDialog != null)
-            {
-                CurrentDialog.Title = $"异常捕获 ({ErrorDialogQueue.Count + 1}条)";
-            }
-            HandleDialogQueue();
+                SimpleMessageBox dialog = new()
+                {
+                    ErrorDetail = detail,
+                    ErrorMessage = message,
+                    IsPrimaryButtonEnabled = canIgnore,
+                    DefaultButton = canIgnore ? ContentDialogButton.Primary : ContentDialogButton.Secondary,
+                };
+                if (canIgnore)
+                {
+                    dialog.ErrorHint += "，但是这个错误可以被忽略";
+                }
+                else
+                {
+                    dialog.ErrorHint += "，插件需要重启";
+                }
+                if (proxy != null)
+                {
+                    dialog.ErrorMessage = $"插件 {proxy.PluginName}:";
+                }
+                var queue = new DialogQueueObject { Dialog = dialog, Plugin = proxy, GUID = guid };
+                ErrorDialogQueue.Enqueue(queue);
+                if (CurrentDialog != null)
+                {
+                    CurrentDialog.Title = $"异常捕获 ({ErrorDialogQueue.Count + 1}条)";
+                }
+                HandleDialogQueue();
+            });
         }
 
         private static async void HandleDialogQueue()
@@ -92,6 +102,17 @@ namespace Another_Mirai_Native.UI
             }
             CurrentDialog = null;
             HandleDialogQueue();
+        }
+
+        private class DialogQueueObject
+        {
+            public SimpleMessageBox Dialog { get; set; }
+
+            public ContentDialogResult DialogResult { get; set; } = ContentDialogResult.None;
+
+            public string GUID { get; set; }
+
+            public CQPluginProxy Plugin { get; set; }
         }
     }
 }

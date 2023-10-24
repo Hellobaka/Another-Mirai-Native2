@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebSocket;
 using System.Diagnostics;
@@ -70,6 +71,15 @@ namespace Another_Mirai_Native
 
         public static void InitExceptionCapture()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                Helper.ShowErrorDialog(ex, false);
+            }
         }
 
         public static void CreateInitFolders()

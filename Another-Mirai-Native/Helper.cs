@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Native;
+using Another_Mirai_Native.WebSocket;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -140,7 +144,7 @@ namespace Another_Mirai_Native
         }
 
         public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-        
+
         /// <summary>
         /// 从cqimg中获取图片URL
         /// </summary>
@@ -182,6 +186,44 @@ namespace Another_Mirai_Native
             {
                 Debug.WriteLine(e.Message);
                 return false;
+            }
+        }
+
+        public static void ShowErrorDialog(Exception ex, bool canIgnore)
+        {
+            string guid = Guid.NewGuid().ToString();
+            if (AppConfig.IsCore)
+            {
+                Server.Instance.ActiveShowErrorDialog(new InvokeBody
+                {
+                    GUID = guid,
+                    Args = new object[]
+                    {
+                        0,
+                        $"框架发生异常，错误窗口关闭后，框架将会退出：{ex.Message}",
+                        ex.StackTrace ?? "",
+                        canIgnore ? 1 : 0
+                    }
+                });
+            }
+            else
+            {
+                Client.Instance.Send(new InvokeBody
+                {
+                    GUID = guid,
+                    Args = new object[]
+                    {
+                        PluginManager.LoadedPlugin.AuthCode,
+                        ex.Message,
+                        ex.StackTrace ?? "",
+                        canIgnore ? 1 : 0
+                    },
+                    Function = "ShowErrorDialog"
+                }.ToJson());
+            }
+            while (!Server.Instance.WaitingMessage[guid].Success)
+            {
+                Thread.Sleep(100);
             }
         }
     }
