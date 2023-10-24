@@ -11,6 +11,7 @@ namespace Another_Mirai_Native.WebSocket
 {
     public class Server
     {
+        // 务必实现ShowErrorDialog回调，否则错误上抛时将会无限等待
         public Server()
         {
             Instance = this;
@@ -25,6 +26,8 @@ namespace Another_Mirai_Native.WebSocket
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
         public WebSocketServer WebSocketServer { get; set; }
+
+        public static event Action<InvokeBody> OnShowErrorDialogCalled;
 
         private List<IWebSocketConnection> WebSocketConnections { get; set; } = new();
 
@@ -175,6 +178,17 @@ namespace Another_Mirai_Native.WebSocket
             else if (caller.Function.StartsWith("InvokeCore"))
             {
                 result = HandleCoreAPI(caller);
+            }
+            else if (caller.Function == "ShowErrorDialog")
+            {
+                WaitingMessage.Add(caller.GUID, new InvokeResult());
+                OnShowErrorDialogCalled?.Invoke(caller);
+                while (!WaitingMessage[caller.GUID].Success)
+                {
+                    Thread.Sleep(100);
+                }
+                result = WaitingMessage[caller.GUID];
+                WaitingMessage.Remove(caller.GUID);
             }
             string message = "InvokeFail";
             connection.Send(new InvokeResult { GUID = caller.GUID, Message = result == null ? message : "", Result = result, Type = caller.Function }.ToJson());

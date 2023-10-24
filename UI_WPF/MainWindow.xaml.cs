@@ -1,6 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.WebSocket;
 using ModernWpf;
 using ModernWpf.Controls;
 using System;
@@ -116,6 +118,7 @@ namespace Another_Mirai_Native.UI
 
         private void InitCore()
         {
+            Server.OnShowErrorDialogCalled += ErrorDialogHelper.ShowErrorDialog;
             Another_Mirai_Native.Entry.CreateInitFolders();
             Another_Mirai_Native.Entry.InitExceptionCapture();
             AppConfig.LoadConfig();
