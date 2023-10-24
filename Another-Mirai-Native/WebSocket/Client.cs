@@ -4,7 +4,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Newtonsoft.Json.Linq;
-using System.Net.WebSockets;
+using System.Security.Policy;
 using System.Text;
 
 namespace Another_Mirai_Native.WebSocket
@@ -15,9 +15,11 @@ namespace Another_Mirai_Native.WebSocket
 
         public static bool ExitFlag { get; private set; }
 
-        public ClientWebSocket WebSocketClient { get; private set; }
+        public WebSocketSharp.WebSocket WebSocketClient { get; private set; }
 
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
+
+        public int ReconnectCount { get; private set; }
 
         public Client()
         {
@@ -26,72 +28,42 @@ namespace Another_Mirai_Native.WebSocket
 
         public bool Connect(string url)
         {
-            bool connectFlag = false;
-            Task.Run(() =>
+            if (string.IsNullOrEmpty(url))
             {
-                while (WebSocketClient == null || WebSocketClient.State == WebSocketState.Aborted || WebSocketClient.State == WebSocketState.Closed)
-                {
-                    try
-                    {
-                        WebSocketClient = new ClientWebSocket();
-                        WebSocketClient.ConnectAsync(new Uri(url), CancellationToken.None).Wait();
-                        connectFlag = true;
-                        StartReceiveMessage();
-                        LogHelper.Info("ConnectServer", "连接成功");
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.Error("WebSocket客户端", ex);
-                        LogHelper.Error("WebSocket客户端", $"{AppConfig.ReconnectTime} ms后重新连接...");
-                        WebSocketClient = null;
-                        Thread.Sleep(AppConfig.ReconnectTime);
-                    }
-                }
-            });
-
-            for (int i = 0; i < 10000 / 100; i++)
-            {
-                if (connectFlag)
-                {
-                    break;
-                }
-                Thread.Sleep(100);
+                LogHelper.Error("ConnectServer", "参数无效");
+                return false;
             }
-            return connectFlag;
+
+            WebSocketClient = new(url);
+            WebSocketClient.OnClose += WebSocketClient_OnClose;
+            WebSocketClient.OnMessage += WebSocketClient_OnMessage;
+            WebSocketClient.Connect();
+            LogHelper.Info("ConnectServer", "连接成功");
+            return WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+        }
+
+        private void WebSocketClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
+        {
+            new Thread(() => HandleMessage(e.Data)).Start();
+        }
+
+        private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
+        {
+            ReconnectCount++;
+            LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            Thread.Sleep(AppConfig.ReconnectTime);
+            Connect(AppConfig.Core_WSURL);
         }
 
         public void Send(string message)
         {
-            if (WebSocketClient != null && WebSocketClient.State == WebSocketState.Open)
+            if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
             {
                 if (AppConfig.DebugMode)
                 {
                     Console.WriteLine("[SendToServer]\t" + message);
                 }
-                ArraySegment<byte> buffer = new(Encoding.UTF8.GetBytes(message));
-                WebSocketClient.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None).Wait();
-            }
-        }
-
-        private async void StartReceiveMessage()
-        {
-            byte[] buffer = new byte[1024 * 4];
-            while (true)
-            {
-                if (WebSocketClient == null || WebSocketClient.State != WebSocketState.Open)
-                {
-                    break;
-                }
-                WebSocketReceiveResult result;
-                List<byte> data = new();
-                do
-                {
-                    result = await WebSocketClient.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                    data.AddRange(new ArraySegment<byte>(buffer, 0, result.Count));
-                }
-                while (!result.EndOfMessage);
-                string message = Encoding.UTF8.GetString(data.ToArray());
-                new Thread(() => HandleMessage(message)).Start();
+                WebSocketClient.Send(message);
             }
         }
 
@@ -132,7 +104,6 @@ namespace Another_Mirai_Native.WebSocket
             catch (Exception ex)
             {
                 LogHelper.Error("Invoke", ex);
-                throw;
             }
         }
 
