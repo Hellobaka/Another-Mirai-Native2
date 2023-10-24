@@ -109,7 +109,11 @@ namespace Another_Mirai_Native.UI.Pages
                 // TODO: 自定义错误窗口
                 return;
             }
-            PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+            // TODO: 进度按钮
+            Task.Run(() =>
+            {
+                PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+            });
             // TODO: 更新自动启用表
         }
 

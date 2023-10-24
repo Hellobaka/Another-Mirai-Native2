@@ -205,6 +205,11 @@ namespace Another_Mirai_Native
                         canIgnore ? 1 : 0
                     }
                 });
+                Server.Instance.WaitingMessage.Add(guid, new InvokeResult());
+                while (!Server.Instance.WaitingMessage[guid].Success)
+                {
+                    Thread.Sleep(100);
+                }
             }
             else
             {
@@ -220,10 +225,11 @@ namespace Another_Mirai_Native
                     },
                     Function = "ShowErrorDialog"
                 }.ToJson());
-            }
-            while (!Server.Instance.WaitingMessage[guid].Success)
-            {
-                Thread.Sleep(100);
+                Client.Instance.WaitingMessage.Add(guid, new InvokeResult());
+                while (!Client.Instance.WaitingMessage[guid].Success)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
     }

@@ -96,9 +96,9 @@ namespace Another_Mirai_Native.UI
                 Server.Instance.WaitingMessage[dialog.GUID].Result = true;
                 Server.Instance.WaitingMessage[dialog.GUID].Success = true;
             }
-            if (dialog.DialogResult == ContentDialogResult.Primary && dialog.Plugin != null)
+            if (dialog.DialogResult == ContentDialogResult.Secondary && dialog.Plugin != null)
             {
-                PluginManagerProxy.Instance.ReloadPlugin(dialog.Plugin);
+                Task.Run(() => PluginManagerProxy.Instance.ReloadPlugin(dialog.Plugin));
             }
             CurrentDialog = null;
             HandleDialogQueue();

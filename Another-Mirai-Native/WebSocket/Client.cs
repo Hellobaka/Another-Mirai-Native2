@@ -132,6 +132,7 @@ namespace Another_Mirai_Native.WebSocket
             catch (Exception ex)
             {
                 LogHelper.Error("Invoke", ex);
+                throw;
             }
         }
 
