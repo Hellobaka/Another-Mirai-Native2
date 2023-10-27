@@ -1,5 +1,4 @@
 ﻿using Another_Mirai_Native.Config;
-using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.WebSocket;
@@ -47,11 +46,15 @@ namespace Another_Mirai_Native.UI
             {
                 ThemeManager.Current.AccentColor = null;
             }
+            Width = Math.Max(MinWidth, UIConfig.Width);
+            Height = Math.Max(MinHeight, UIConfig.Height);
         }
 
         public static MainWindow Instance { get; set; }
 
         private Dictionary<string, object> PageCache { get; set; } = new();
+
+        private DispatcherTimer ResizeTimer { get; set; }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
@@ -85,6 +88,8 @@ namespace Another_Mirai_Native.UI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
+            ResizeTimer.Tick += ResizeTimer_Tick;
             InitCore();
             _ = new ProtocolManager();
             ProtocolSelectorDialog dialog = new();
@@ -94,6 +99,13 @@ namespace Another_Mirai_Native.UI
                 Environment.Exit(0);
             }
             LoadPlugins();
+        }
+
+        private void ResizeTimer_Tick(object? sender, EventArgs e)
+        {
+            ResizeTimer.Stop();
+            ConfigHelper.SetConfig("Window_Width", Width, UIConfig.DefaultConfigPath);
+            ConfigHelper.SetConfig("Window_Height", Height, UIConfig.DefaultConfigPath);
         }
 
         private void LoadPlugins()
@@ -143,6 +155,16 @@ namespace Another_Mirai_Native.UI
         {
             e.Handled = true;
             DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception.StackTrace);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (ResizeTimer == null)
+            {
+                return;
+            }
+            ResizeTimer.Stop();
+            ResizeTimer.Start();
         }
     }
 }

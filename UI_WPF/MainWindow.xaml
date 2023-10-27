@@ -9,8 +9,11 @@
     Title="Another-Mirai-Native"
     Width="900"
     Height="600"
+    MinWidth="660"
+    MinHeight="420"
     ui:WindowHelper.UseModernWindowStyle="True"
     Loaded="MainWindow_Loaded"
+    SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
