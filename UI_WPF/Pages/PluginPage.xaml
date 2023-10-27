@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="PluginPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -13,6 +14,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <converter:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <converter:BoolVisibilityRevertConverter x:Key="BoolVisibilityRevertConverter" />
         <converter:ObjectVisibilityInvertConverter x:Key="ObjectVisibilityInvertConverter" />
         <converter:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
         <converter:ProxyEnabledConverter x:Key="ProxyEnabledConverter" />
@@ -68,7 +70,18 @@
                         HorizontalAlignment="Stretch"
                         Click="ReloadAllBtn_Click"
                         Style="{StaticResource AccentButtonStyle}">
-                        重载插件
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>重载插件</TextBlock>
+                            <ui:ProgressRing
+                                x:Name="ReloadAllStatus"
+                                Margin="5,0,0,0"
+                                IsActive="True"
+                                Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
+                                <ui:ProgressRing.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
+                                </ui:ProgressRing.Foreground>
+                            </ui:ProgressRing>
+                        </StackPanel>
                     </Button>
                     <Button
                         x:Name="OpenPluginPathBtn"
@@ -158,7 +171,21 @@
                             HorizontalAlignment="Stretch"
                             Click="ToggleEnableBtn_Click"
                             Style="{StaticResource AccentButtonStyle}">
-                            停用
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Visibility="{Binding SelectedItem.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityConverter}, ElementName=PluginListContainer}">
+                                    停用
+                                </TextBlock>
+                                <TextBlock Visibility="{Binding SelectedItem.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityRevertConverter}, ElementName=PluginListContainer}">启用</TextBlock>
+                                <ui:ProgressRing
+                                    x:Name="EnableStatus"
+                                    Margin="5,0,0,0"
+                                    IsActive="True"
+                                    Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
+                                    <ui:ProgressRing.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
+                                    </ui:ProgressRing.Foreground>
+                                </ui:ProgressRing>
+                            </StackPanel>
                         </Button>
                         <Button
                             x:Name="OpenMenuBtn"
@@ -182,7 +209,18 @@
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
                             Click="ReloadBtn_Click">
-                            重载
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>重载</TextBlock>
+                                <ui:ProgressRing
+                                    x:Name="ReloadStatus"
+                                    Margin="5,0,0,0"
+                                    IsActive="True"
+                                    Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
+                                    <ui:ProgressRing.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
+                                    </ui:ProgressRing.Foreground>
+                                </ui:ProgressRing>
+                            </StackPanel>
                         </Button>
                     </Grid>
                 </Grid>

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Native;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,14 @@ namespace Another_Mirai_Native.UI.Pages
 
         private CQPluginProxy SelectedPlugin { get; set; }
 
+        private bool ReloadAllRunningStatus { set => Dispatcher.Invoke(() => ReloadAllStatus.IsActive = value); }
+
+        private bool ReloadRunningStatus { set => Dispatcher.Invoke(() => ReloadStatus.IsActive = value); }
+
+        private bool ToggleEnableRunningStatus { set => Dispatcher.Invoke(() => EnableStatus.IsActive = value); }
+
+        private bool FormLoaded { get; set; }
+
         private void PluginListContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedPlugin = (PluginListContainer.SelectedItem as CQPluginProxyWrapper)?.TargetPlugin;
@@ -78,15 +87,16 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void ReloadAllBtn_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: 按钮进度显示
             if (!await DialogHelper.ShowConfirmDialog("重载插件", "确定要重载所有插件吗？这可能会需要一些时间"))
             {
                 return;
             }
+            ReloadAllRunningStatus = true;
             await Task.Run(() =>
             {
                 PluginManagerProxy.Instance.ReloadAllPlugins();
                 MainWindow.Instance.EnablePluginByConfig();
+                ReloadAllRunningStatus = false;
             });
         }
 
@@ -111,12 +121,21 @@ namespace Another_Mirai_Native.UI.Pages
                 DialogHelper.ShowSimpleDialog("嗯哼", "插件进程不存在或失去连接，尝试点击重载");
                 return;
             }
-            // TODO: 进度按钮
+            ToggleEnableRunningStatus = true;
             Task.Run(() =>
             {
                 PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+                ToggleEnableRunningStatus = false;
+                if (SelectedPlugin.Enabled)
+                {
+                    UIConfig.AutoEnablePlugins.Add(SelectedPlugin.PluginId);
+                }
+                else
+                {
+                    UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginId);
+                }
+                ConfigHelper.SetConfig("AutoEnablePlugins", UIConfig.AutoEnablePlugins, UIConfig.DefaultConfigPath);
             });
-            // TODO: 更新自动启用表
         }
 
         private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
@@ -151,7 +170,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            // TODO: 按钮进度显示
+            ReloadRunningStatus = true;
             await Task.Run(() =>
             {
                 bool enable = SelectedPlugin.Enabled;
@@ -161,11 +180,19 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     PluginManagerProxy.Instance.SetPluginEnabled(PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginId == id), true);
                 }
+                ReloadRunningStatus = false;
             });
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            if (FormLoaded)
+            {
+                return;
+            }
+            ReloadAllRunningStatus = false;
+            ReloadRunningStatus = false;
+            ToggleEnableRunningStatus = false;
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
             PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
@@ -179,6 +206,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(item));
             }
+            FormLoaded = true;
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)

@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.UI.Controls
         {
             Connecting = false;
             HasProtocolContent = false;
-            AutoConnectSelector.IsOn = ConfigHelper.GetConfig("AutoConnect", MainWindow.DefaultConfigPath, false);
+            AutoConnectSelector.IsOn = UIConfig.AutoConnect;
             foreach (var item in ProtocolManager.Protocols)
             {
                 ProtocolList.Items.Add(item.Name);
@@ -129,7 +129,8 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void AutoConnectSelector_Toggled(object sender, RoutedEventArgs e)
         {
-            ConfigHelper.SetConfig("AutoConnect", AutoConnectSelector.IsOn, MainWindow.DefaultConfigPath);
+            UIConfig.AutoConnect = AutoConnectSelector.IsOn;
+            ConfigHelper.SetConfig("AutoConnect", UIConfig.AutoConnect, UIConfig.DefaultConfigPath);
         }
     }
 }
