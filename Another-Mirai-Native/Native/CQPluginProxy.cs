@@ -71,7 +71,7 @@ namespace Another_Mirai_Native.Native
                     Server.Instance.WaitingMessage.Remove(caller.GUID);
                     return result;
                 }
-                if (!PluginManagerProxy.Proxies.Contains(this))
+                if (!HasConnection)
                 {
                     break;
                 }
