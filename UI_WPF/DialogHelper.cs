@@ -21,10 +21,23 @@ namespace Another_Mirai_Native.UI
             {
                 Title = title,
                 Content = message,
+                DefaultButton = ContentDialogButton.Primary,
                 PrimaryButtonText = "确认",
                 SecondaryButtonText = "取消",
             };
             return await dialog.ShowAsync() == ContentDialogResult.Primary;
+        }
+
+        public static async void ShowSimpleDialog(string title, string message)
+        {
+            ContentDialog dialog = new()
+            {
+                Title = title,
+                Content = message,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = "确认"
+            };
+            await dialog.ShowAsync();
         }
 
         public static void ShowErrorDialog(InvokeBody caller)
