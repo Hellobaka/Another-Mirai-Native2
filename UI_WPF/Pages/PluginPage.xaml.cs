@@ -147,12 +147,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 MenuItem menuItem = new();
                 menuItem.Header = item.name;
-                menuItem.Tag = new KeyValuePair<CQPluginProxy, string>(SelectedPlugin, item.function);
                 menuItem.Click += (a, b) =>
                 {
-                    var item = a as MenuItem;
-                    var target = (KeyValuePair<CQPluginProxy, string>)item.Tag;
-                    PluginManagerProxy.Instance.InvokeEvent(target.Key, PluginEventType.Menu, target.Value);
+                    PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function);
                 };
                 menu.Items.Add(menuItem);
             }
