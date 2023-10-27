@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 using Fleck;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Another_Mirai_Native.Native
@@ -12,7 +13,6 @@ namespace Another_Mirai_Native.Native
     {
         public CQPluginProxy()
         {
-            
         }
 
         public CQPluginProxy(AppInfo appInfo, IWebSocketConnection connection)
@@ -49,11 +49,17 @@ namespace Another_Mirai_Native.Native
             "getLoginNick",
         };
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public InvokeResult Invoke(InvokeBody caller)
         {
             if (AppConfig.DebugMode)
             {
                 LogHelper.Info("ServerSend", caller.ToJson());
+            }
+            if (HasConnection is false)
+            {
+                return null;
             }
             Connection.Send(caller.ToJson());
             Server.Instance.WaitingMessage.Add(caller.GUID, new InvokeResult());
@@ -64,6 +70,10 @@ namespace Another_Mirai_Native.Native
                     var result = Server.Instance.WaitingMessage[caller.GUID];
                     Server.Instance.WaitingMessage.Remove(caller.GUID);
                     return result;
+                }
+                if (!PluginManagerProxy.Proxies.Contains(this))
+                {
+                    break;
                 }
                 Thread.Sleep(100);
             }

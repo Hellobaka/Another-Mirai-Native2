@@ -217,7 +217,7 @@ namespace Another_Mirai_Native.WebSocket
                         proxy.Connection = connection;
                         proxy.AppInfo = appInfo;
                     }
-                    proxy.HasConnection = true;
+                    PluginManagerProxy.SetProxyConnected(proxy.ConnectionID);
                     if (PluginManagerProxy.PluginProcess.ContainsKey(appInfo.PID))
                     {
                         string path = PluginManagerProxy.PluginProcess[appInfo.PID].PluginPath;
@@ -248,13 +248,13 @@ namespace Another_Mirai_Native.WebSocket
             connection.OnClose = () =>
             {
                 LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
-                PluginManagerProxy.RemoveProxy(connection.ConnectionInfo.Id);
+                PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
             };
             connection.OnError = (e) =>
             {
                 LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
-                PluginManagerProxy.RemoveProxy(connection.ConnectionInfo.Id);
+                PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
             };
             connection.OnMessage = (message) =>

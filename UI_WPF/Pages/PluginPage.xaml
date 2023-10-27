@@ -15,6 +15,7 @@
         <converter:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
         <converter:ObjectVisibilityInvertConverter x:Key="ObjectVisibilityInvertConverter" />
         <converter:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
+        <converter:ProxyEnabledConverter x:Key="ProxyEnabledConverter" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,27 +32,30 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock FontSize="24">已加载插件</TextBlock>
+                <TextBlock Grid.Row="1">❌表示插件未启用 🚫表示与插件失去通讯</TextBlock>
                 <ListView
                     x:Name="PluginListContainer"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     ItemsSource="{Binding CQPlugins}"
                     SelectionChanged="PluginListContainer_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PluginName}">插件名称</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding AppInfo.author}">作者</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding AppInfo.version}">版本</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin, Converter={StaticResource ProxyEnabledConverter}}" />
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.PluginName}">插件名称</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.author}">作者</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.version}">版本</GridViewColumn>
                             </GridView.Columns>
                         </GridView>
                     </ListView.View>
                 </ListView>
 
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -116,16 +120,16 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Margin="0">
                         <TextBlock FontSize="24">插件信息</TextBlock>
-                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.PluginId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
-                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
-                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.TargetPlugin.PluginId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.TargetPlugin.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
+                        <TextBlock Margin="0,4" Text="{Binding SelectedItem.TargetPlugin.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="0,5">
                         <TextBlock FontSize="24">插件描述</TextBlock>
                         <TextBlock
                             x:Name="DescriptionDisplay"
                             Margin="0,4"
-                            Text="{Binding SelectedItem.AppInfo.description, ElementName=PluginListContainer}"
+                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.description, ElementName=PluginListContainer}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                     <Grid Grid.Row="2" Margin="0,5">

@@ -22,19 +22,29 @@ namespace Another_Mirai_Native.Native
 
         public static event Action<CQPluginProxy> OnPluginProxyAdded;
 
-        public static event Action<CQPluginProxy> OnPluginProxyRemoved;
+        public static event Action<CQPluginProxy> OnPluginProxyConnectStatusChanged;
 
         public static event Action<CQPluginProxy> OnPluginEnableChanged;
 
         private static int PID => Process.GetCurrentProcess().Id;
 
-        public static void RemoveProxy(Guid id)
+        public static void SetProxyConnected(Guid id)
+        {
+            if (Proxies.Any(x => x.ConnectionID == id))
+            {
+                var proxy = Proxies.First(x => x.ConnectionID == id);
+                proxy.HasConnection = true;
+                OnPluginProxyConnectStatusChanged?.Invoke(proxy);
+            }
+        }
+
+        public static void SetProxyDisconnected(Guid id)
         {
             if (Proxies.Any(x => x.ConnectionID == id))
             {
                 var proxy = Proxies.First(x => x.ConnectionID == id);
                 proxy.HasConnection = false;
-                OnPluginProxyRemoved?.Invoke(proxy);
+                OnPluginProxyConnectStatusChanged?.Invoke(proxy);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Native;
+using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,11 +20,9 @@ namespace Another_Mirai_Native.UI.Pages
         public PluginPage()
         {
             InitializeComponent();
-            // TODO: 失去连接状态
-            // TODO: 未启用状态
         }
 
-        public ObservableCollection<CQPluginProxy> CQPlugins { get; set; } = new();
+        public ObservableCollection<CQPluginProxyWrapper> CQPlugins { get; set; } = new();
 
         private Dictionary<int, string> AuthChineseName { get; set; } = new() {
             {20, "[敏感]取Cookies"},
@@ -57,7 +56,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginListContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedPlugin = PluginListContainer.SelectedItem as CQPluginProxy;
+            SelectedPlugin = (PluginListContainer.SelectedItem as CQPluginProxyWrapper)?.TargetPlugin;
             UpdateAuthList();
         }
 
@@ -68,7 +67,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             AuthDisplay.Items.Clear();
-            foreach (var item in ((CQPluginProxy)PluginListContainer.SelectedItem).AppInfo.auth.OrderBy(x => x))
+            foreach (var item in ((CQPluginProxyWrapper)PluginListContainer.SelectedItem).TargetPlugin.AppInfo.auth.OrderBy(x => x))
             {
                 if (AuthChineseName.ContainsKey(item))
                 {
@@ -77,11 +76,14 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void ReloadAllBtn_Click(object sender, RoutedEventArgs e)
+        private async void ReloadAllBtn_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: 确认窗口
             // TODO: 按钮进度显示
-            Task.Run(() =>
+            if (!await DialogHelper.ShowConfirmDialog("重载插件", "确定要重载所有插件吗？这可能会需要一些时间"))
+            {
+                return;
+            }
+            await Task.Run(() =>
             {
                 PluginManagerProxy.Instance.ReloadAllPlugins();
                 MainWindow.Instance.EnablePluginByConfig();
@@ -106,7 +108,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (SelectedPlugin.HasConnection is false)
             {
-                // TODO: 自定义错误窗口
+                DialogHelper.ShowSimpleDialog("嗯哼", "插件进程不存在或失去连接，尝试点击重载");
                 return;
             }
             // TODO: 进度按钮
@@ -135,24 +137,22 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
-                // TODO: 自定义错误窗口
+                DialogHelper.ShowSimpleDialog("嗯哼", "插件数据目录不存在");
             }
         }
 
-        private void ReloadBtn_Click(object sender, RoutedEventArgs e)
+        private async void ReloadBtn_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlugin == null)
             {
                 return;
             }
-            if (SelectedPlugin.HasConnection is false)
+            if (!await DialogHelper.ShowConfirmDialog("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？"))
             {
-                // TODO: 自定义错误窗口
                 return;
             }
-            // TODO: 确认窗口
             // TODO: 按钮进度显示
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 bool enable = SelectedPlugin.Enabled;
                 string id = SelectedPlugin.PluginId;
@@ -168,52 +168,34 @@ namespace Another_Mirai_Native.UI.Pages
         {
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
-            PluginManagerProxy.OnPluginProxyRemoved -= PluginManagerProxy_OnPluginProxyRemoved;
+            PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
             PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
-            PluginManagerProxy.OnPluginProxyRemoved += PluginManagerProxy_OnPluginProxyRemoved;
+            PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
             DataContext = this;
             CQPlugins.Clear();
             foreach (var item in PluginManagerProxy.Proxies)
             {
-                CQPlugins.Add(item);
+                CQPlugins.Add(new CQPluginProxyWrapper(item));
             }
         }
 
-        private void PluginManagerProxy_OnPluginProxyRemoved(CQPluginProxy plugin)
+        private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
         {
-            UpdatePluginList(plugin);
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
         }
 
         private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)
         {
-            Dispatcher.Invoke(() => CQPlugins.Add(plugin));
+            Dispatcher.Invoke(() => CQPlugins.Add(new CQPluginProxyWrapper(plugin)));
         }
 
         private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
         {
-            UpdatePluginList(plugin);
-        }
-
-        private void UpdatePluginList(CQPluginProxy plugin)
-        {
-            if (plugin == null)
-            {
-                return;
-            }
-            Dispatcher.Invoke(() =>
-            {
-                for (int i = 0; i < CQPlugins.Count; i++)
-                {
-                    var p = CQPlugins[i];
-                    if (p.PluginId == plugin.PluginId)
-                    {
-                        CQPlugins[i] = plugin;
-                        return;
-                    }
-                }
-            });
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
     }
 }
