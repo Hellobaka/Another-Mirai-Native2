@@ -21,21 +21,21 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 日志来源
         /// </summary>
-        public string source { get; set; }
+        public string source { get; set; } = "";
 
         /// <summary>
         /// 日志处理状态
         /// </summary>
-        public string status { get; set; }
+        public string status { get; set; } = "";
 
         /// <summary>
         /// 日志类型
         /// </summary>
-        public string name { get; set; }
+        public string name { get; set; } = "";
 
         /// <summary>
         /// 日志内容
         /// </summary>
-        public string detail { get; set; }
+        public string detail { get; set; } = "";
     }
 }
