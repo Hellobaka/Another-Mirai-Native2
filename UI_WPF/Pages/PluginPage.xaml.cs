@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -140,7 +142,23 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: ContextMenu
+            var menu = new ContextMenu();
+            foreach (var item in SelectedPlugin.AppInfo.menu)
+            {
+                MenuItem menuItem = new();
+                menuItem.Header = item.name;
+                menuItem.Tag = new KeyValuePair<CQPluginProxy, string>(SelectedPlugin, item.function);
+                menuItem.Click += (a, b) =>
+                {
+                    var item = a as MenuItem;
+                    var target = (KeyValuePair<CQPluginProxy, string>)item.Tag;
+                    PluginManagerProxy.Instance.InvokeEvent(target.Key, PluginEventType.Menu, target.Value);
+                };
+                menu.Items.Add(menuItem);
+            }
+            menu.PlacementTarget = (UIElement)sender;
+            menu.Placement = PlacementMode.MousePoint;
+            menu.IsOpen = true;
         }
 
         private void OpenDataBtn_Click(object sender, RoutedEventArgs e)

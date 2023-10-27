@@ -76,7 +76,7 @@ namespace Another_Mirai_Native.UI
                 }
                 if (proxy != null)
                 {
-                    dialog.ErrorMessage = $"插件 {proxy.PluginName}:";
+                    dialog.ErrorMessage = $"插件 {proxy.PluginName}: {message}";
                 }
                 var queue = new DialogQueueObject { Dialog = dialog, Plugin = proxy, GUID = guid };
                 ErrorDialogQueue.Enqueue(queue);

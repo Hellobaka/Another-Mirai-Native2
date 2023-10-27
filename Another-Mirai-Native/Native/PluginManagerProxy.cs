@@ -108,7 +108,7 @@ namespace Another_Mirai_Native.Native
 
         public int InvokeEvent(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
-            if (target.AppInfo._event.Any(x => x.id == (int)eventType))
+            if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.id == (int)eventType))
             {
                 var r = Invoke(target, $"InvokeEvent_{eventType}", args);
                 return !r.Success ? 0 : Convert.ToInt32(r.Result);

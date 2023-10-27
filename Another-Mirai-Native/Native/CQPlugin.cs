@@ -225,7 +225,7 @@ namespace Another_Mirai_Native.Native
 
         public int CallMenu(string menuName)
         {
-            var function = AppInfo.menu.FirstOrDefault(x => x.name == menuName)?.function;
+            var function = AppInfo.menu.FirstOrDefault(x => x.function == menuName)?.function;
             if (function == null)
             {
                 LogHelper.Error("CallMenu", $"AppInfo未找到 {menuName}");
