@@ -1,19 +1,16 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.UI;
-using Another_Mirai_Native.Model.Enums;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -33,9 +30,26 @@ namespace Another_Mirai_Native.UI.Pages
                 var descriptor = DependencyPropertyDescriptor.FromProperty(GridViewColumn.WidthProperty, typeof(GridViewColumn));
                 descriptor.AddValueChanged(item, ColumnWidthChanged);
             }
+            // TODO: 若使用数据库则从数据库拉取指定数量的项目
         }
 
+        public ObservableCollection<LogModel> LogCollections { get; set; }
+
+        public List<LogModel> RawLogCollections { get; set; } = new();
+
         private DispatcherTimer ResizeTimer { get; set; }
+
+        private LogModel SelectedLog { get; set; }
+
+        private void AutoScroll_Toggled(object sender, RoutedEventArgs e)
+        {
+            ConfigHelper.SetConfig("LogAutoScroll", AutoScroll.IsOn, UIConfig.DefaultConfigPath);
+            if (AutoScroll.IsOn && LogCollections != null && LogCollections.Count > 0)
+            {
+                LogView.SelectedItem = LogCollections.Last();
+                LogView.ScrollIntoView(SelectedLog);
+            }
+        }
 
         private void ColumnWidthChanged(object? sender, EventArgs e)
         {
@@ -47,21 +61,24 @@ namespace Another_Mirai_Native.UI.Pages
             ResizeTimer.Start();
         }
 
-        public List<LogModel> RawLogCollections { get; set; } = new();
-
-        public ObservableCollection<LogModel> LogCollections { get; set; }
-
-        private LogModel SelectedLog { get; set; }
-
-        private void LogPage_Loaded(object sender, RoutedEventArgs e)
+        private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
-            ResizeTimer.Tick += ResizeTimer_Tick;
-            LogHelper.LogAdded -= LogHelper_LogAdded;
-            LogHelper.LogAdded += LogHelper_LogAdded;
-            LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
-            LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
-            AutoScroll.IsOn = UIConfig.LogAutoScroll;
+            RefilterLogCollection();
+            if (LogCollections != null && LogCollections.Count > 0)
+            {
+                LogView.SelectedItem = LogCollections.Last();
+                LogView.ScrollIntoView(SelectedLog);
+            }
+        }
+
+        private void FilterTextValue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RefilterLogCollection();
+            if (LogCollections != null && LogCollections.Count > 0)
+            {
+                LogView.SelectedItem = LogCollections.Last();
+                LogView.ScrollIntoView(SelectedLog);
+            }
         }
 
         private void InitColumnWidth()
@@ -73,25 +90,24 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void ResizeTimer_Tick(object? sender, EventArgs e)
+        private void ListViewItem_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ResizeTimer.Stop();
-            for (int i = 0; i < LogGridView.Columns.Count; i++)
+            if (e.RightButton == System.Windows.Input.MouseButtonState.Pressed && SelectedLog != null)
             {
-                var column = LogGridView.Columns[i];
-                ConfigHelper.SetConfig($"LogColumn{i + 1}_Width", column.Width, UIConfig.DefaultConfigPath);
+                var thread = new Thread(() =>
+                {
+                    Thread.Sleep(100);
+                    try
+                    {
+                        Clipboard.SetText(SelectedLog.detail.ToString());
+                    }
+                    catch
+                    {
+                    }
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
             }
-        }
-
-        private void LogHelper_LogStatusUpdated(int logId, string status)
-        {
-            var log = RawLogCollections.FirstOrDefault(x => x.id == logId);
-            if (log != null)
-            {
-                log.status = status;
-            }
-            RefilterLogCollection();
-            LogView.SelectedItem = SelectedLog;
         }
 
         private void LogHelper_LogAdded(int logId, LogModel log)
@@ -110,6 +126,33 @@ namespace Another_Mirai_Native.UI.Pages
                     LogView.SelectedItem = SelectedLog;
                 }
             });
+        }
+
+        private void LogHelper_LogStatusUpdated(int logId, string status)
+        {
+            var log = RawLogCollections.FirstOrDefault(x => x.id == logId);
+            if (log != null)
+            {
+                log.status = status;
+            }
+            RefilterLogCollection();
+            LogView.SelectedItem = SelectedLog;
+        }
+
+        private void LogPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
+            ResizeTimer.Tick += ResizeTimer_Tick;
+            LogHelper.LogAdded -= LogHelper_LogAdded;
+            LogHelper.LogAdded += LogHelper_LogAdded;
+            LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
+            LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
+            AutoScroll.IsOn = UIConfig.LogAutoScroll;
+        }
+
+        private void LogView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedLog = LogView.SelectedItem as LogModel;
         }
 
         private void RefilterLogCollection()
@@ -139,58 +182,13 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
-        private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ResizeTimer_Tick(object? sender, EventArgs e)
         {
-            RefilterLogCollection();
-            if (LogCollections != null && LogCollections.Count > 0)
+            ResizeTimer.Stop();
+            for (int i = 0; i < LogGridView.Columns.Count; i++)
             {
-                LogView.SelectedItem = LogCollections.Last();
-                LogView.ScrollIntoView(SelectedLog);
-            }
-        }
-
-        private void FilterTextValue_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            RefilterLogCollection();
-            if (LogCollections != null && LogCollections.Count > 0)
-            {
-                LogView.SelectedItem = LogCollections.Last();
-                LogView.ScrollIntoView(SelectedLog);
-            }
-        }
-
-        private void AutoScroll_Toggled(object sender, RoutedEventArgs e)
-        {
-            ConfigHelper.SetConfig("LogAutoScroll", AutoScroll.IsOn, UIConfig.DefaultConfigPath);
-            if (AutoScroll.IsOn && LogCollections != null && LogCollections.Count > 0)
-            {
-                LogView.SelectedItem = LogCollections.Last();
-                LogView.ScrollIntoView(SelectedLog);
-            }
-        }
-
-        private void LogView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedLog = LogView.SelectedItem as LogModel;
-        }
-
-        private void ListViewItem_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.RightButton == System.Windows.Input.MouseButtonState.Pressed && SelectedLog != null)
-            {
-                var thread = new Thread(() =>
-                {
-                    Thread.Sleep(100);
-                    try
-                    {
-                        Clipboard.SetText(SelectedLog.detail.ToString());
-                    }
-                    catch
-                    {
-                    }
-                });
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
+                var column = LogGridView.Columns[i];
+                ConfigHelper.SetConfig($"LogColumn{i + 1}_Width", column.Width, UIConfig.DefaultConfigPath);
             }
         }
     }
