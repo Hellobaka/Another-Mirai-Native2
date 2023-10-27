@@ -149,6 +149,11 @@ namespace Another_Mirai_Native.UI.Pages
                 menuItem.Header = item.name;
                 menuItem.Click += (a, b) =>
                 {
+                    if (SelectedPlugin.Enabled is false)
+                    {
+                        DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
+                        return;
+                    }
                     PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function);
                 };
                 menu.Items.Add(menuItem);

@@ -6,60 +6,145 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="LogPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Loaded="LogPage_Loaded"
     mc:Ignorable="d">
     <Page.Resources>
-        <converter:PriorityConverter x:Key="PriorityConverter" />
         <converter:TimestampConverter x:Key="TimestampConverter" />
+        <converter:BoolTextWrapConverter x:Key="BoolTextWrapConverter" />
+        <converter:SelectHeightConverter x:Key="SelectHeightConverter" />
+        <Style x:Key="LogItemStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding priority}" Value="20">
+                    <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="30">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="40">
+                    <Setter Property="Foreground" Value="DarkRed" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="0">
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="12">
+                    <Setter Property="Foreground" Value="DodgerBlue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="13">
+                    <Setter Property="Foreground" Value="#FF31C279" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                x:Name="FilterLogLevelSelector"
+                Grid.Column="0"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                SelectedIndex="1"
+                SelectionChanged="FilterLogLevelSelector_SelectionChanged">
+                <ComboBoxItem>Debug 调试</ComboBoxItem>
+                <ComboBoxItem>Info 消息</ComboBoxItem>
+                <ComboBoxItem>Warning 警告</ComboBoxItem>
+                <ComboBoxItem>Error 错误</ComboBoxItem>
+                <ComboBoxItem>Fatal 致命</ComboBoxItem>
+            </ComboBox>
+            <TextBox
+                x:Name="FilterTextValue"
+                Grid.Column="1"
+                Margin="5"
+                ui:ControlHelper.PlaceholderText="搜点什么？"
+                TextChanged="FilterTextValue_TextChanged" />
+            <ui:ToggleSwitch
+                x:Name="AutoScroll"
+                Grid.Column="2"
+                OffContent="自动滚动"
+                OnContent="自动滚动"
+                Toggled="AutoScroll_Toggled" />
+        </Grid>
         <ListView
             x:Name="LogView"
-            Grid.Row="0"
+            Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Stretch"
-            ItemsSource="{Binding LogCollections}"
+            ItemsSource="{Binding LogCollections, Mode=TwoWay}"
+            SelectionChanged="LogView_SelectionChanged"
             VirtualizingPanel.VirtualizationMode="Recycling">
             <ListView.View>
-                <GridView>
+                <GridView x:Name="LogGridView">
                     <GridViewColumn Width="Auto" Header="时间">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding priority, Converter={StaticResource PriorityConverter}}" Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource LogItemStyle}"
+                                    Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="插件">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding priority, Converter={StaticResource PriorityConverter}}" Text="{Binding source}" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource LogItemStyle}"
+                                    Text="{Binding source}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="来源">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding priority, Converter={StaticResource PriorityConverter}}" Text="{Binding name}" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource LogItemStyle}"
+                                    Text="{Binding name}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="消息">
+                    <GridViewColumn Width="400" Header="消息">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding priority, Converter={StaticResource PriorityConverter}}" Text="{Binding detail}" />
+                                <TextBlock
+                                    MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected, Converter={StaticResource SelectHeightConverter}}"
+                                    VerticalAlignment="Center"
+                                    MouseRightButtonDown="ListViewItem_MouseRightButtonDown"
+                                    Style="{StaticResource LogItemStyle}"
+                                    Text="{Binding detail}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="Wrap">
+                                    <ui:ContextFlyoutService.ContextFlyout>
+                                        <ui:Flyout AreOpenCloseAnimationsEnabled="True">
+                                            <StackPanel>
+                                                <TextBlock Margin="5" Text="复制成功" />
+                                            </StackPanel>
+                                        </ui:Flyout>
+                                    </ui:ContextFlyoutService.ContextFlyout>
+                                </TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="结果">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="{Binding priority, Converter={StaticResource PriorityConverter}}" Text="{Binding status}" />
+                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding status}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
