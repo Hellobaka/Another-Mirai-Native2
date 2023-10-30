@@ -74,23 +74,23 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 command = c[0];
                 subCommand = c[1];
             }
-            object body = new
-            {
-                syncId = -1,
-                command,
-                subCommand,
-                content = data
-            };
-            return CallMiraiAPI(body);
-        }
-
-        public JObject CallMiraiAPI(object obj)
-        {
             string syncId;
             do
             {
                 syncId = Helper.MakeRandomID().ToString();
             } while (WaitingMessages.ContainsKey(syncId));
+            object body = new
+            {
+                syncId,
+                command,
+                subCommand,
+                content = data
+            };
+            return CallMiraiAPI(syncId, body);
+        }
+
+        public JObject CallMiraiAPI(string syncId, object obj)
+        {
             var msg = new WaitingMessage();
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
@@ -127,7 +127,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
             Console.WriteLine($"[Event]\t" + e.Data);
-            HandleEvent(e.Data);
+            Task.Run(() => HandleEvent(e.Data));
         }
 
         private void EventConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
@@ -169,7 +169,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void MessageConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
             Console.WriteLine($"[Message]\t" + e.Data);
-            HandleMessage(e.Data);
+            Task.Run(() => HandleMessage(e.Data));
         }
 
         private void MessageConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
@@ -237,7 +237,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                     return;
                 }
-                if (data.ContainsKey("type")) // 为API调用结果，根据 syncID 查询转换类型
+                if (data.ContainsKey("code")) // 为API调用结果，根据 syncID 查询转换类型
                 {
                     if (WaitingMessages.ContainsKey(api.syncId))
                     {
@@ -539,38 +539,37 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return;
             }
 
-            var messageIntptr = parsedMsg.ToNativeV2();
             int logId = 0;
             CQPluginProxy handledPlugin = null;
             switch (events)
             {
                 case MiraiMessageEvents.FriendMessage:
                     var friend = msg.ToObject<FriendMessage>();
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{friend.sender.id}({friend.sender.nickname}) {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 11, source.id, friend.sender.id, messageIntptr, 0);
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{friend.sender.id}({friend.sender.nickname}) {parsedMsg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 11, source.id, friend.sender.id, parsedMsg, 0);
                     break;
 
                 case MiraiMessageEvents.GroupMessage:
                     var group = msg.ToObject<GroupMessage>();
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{group.sender.group.id}({group.sender.group.name}) QQ:{group.sender.id}({group.sender.memberName}) {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMsg, 1, source.id, group.sender.group.id, group.sender.id, "", messageIntptr, 0);
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{group.sender.group.id}({group.sender.group.name}) QQ:{group.sender.id}({group.sender.memberName}) {parsedMsg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMsg, 1, source.id, group.sender.group.id, group.sender.id, "", parsedMsg, 0);
                     break;
 
                 case MiraiMessageEvents.TempMessage:
                     var temp = msg.ToObject<TempMessage>();
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{temp.sender.group.id}({temp.sender.group.name}) QQ:{temp.sender.id}({temp.sender.memberName}) {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 2, source.id, temp.sender.id, messageIntptr, 0);
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{temp.sender.group.id}({temp.sender.group.name}) QQ:{temp.sender.id}({temp.sender.memberName}) {parsedMsg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 2, source.id, temp.sender.id, parsedMsg, 0);
                     break;
 
                 case MiraiMessageEvents.StrangerMessage:
                     var stranger = msg.ToObject<StrangerMessage>();
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{stranger.sender.id}({stranger.sender.nickname}) {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 1, source.id, stranger.sender.id, messageIntptr, 0);
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{stranger.sender.id}({stranger.sender.nickname}) {parsedMsg}", "处理中...");
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 1, source.id, stranger.sender.id, parsedMsg, 0);
                     break;
 
                 case MiraiMessageEvents.OtherClientMessage:
                     var other = msg.ToObject<OtherClientMessage>();
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到其他设备消息", $"QQ:{other.sender.id}({other.sender.platform}) {msg}", "x 不处理");
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到其他设备消息", $"QQ:{other.sender.id}({other.sender.platform}) {parsedMsg}", "x 不处理");
                     break;
 
                 default:

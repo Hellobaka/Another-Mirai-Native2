@@ -111,11 +111,11 @@ namespace Another_Mirai_Native.Native
             if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.id == (int)eventType))
             {
                 var r = Invoke(target, $"InvokeEvent_{eventType}", args);
-                return !r.Success ? 0 : Convert.ToInt32(r.Result);
+                return !r.Success ? -1 : Convert.ToInt32(r.Result);
             }
             else
             {
-                return 1;
+                return 0;
             }
         }
 
@@ -286,6 +286,7 @@ namespace Another_Mirai_Native.Native
 
         public void SetPluginEnabled(CQPluginProxy plugin, bool enabled)
         {
+            // TODO: return bool
             if (plugin == null || plugin.HasConnection == false)
             {
                 return;
@@ -297,8 +298,8 @@ namespace Another_Mirai_Native.Native
                 {
                     return;
                 }
-                success = InvokeEvent(plugin, PluginEventType.Enable) == 1;
-                success = success && (InvokeEvent(plugin, PluginEventType.StartUp) == 1);
+                success = InvokeEvent(plugin, PluginEventType.Enable) == 0;
+                success = success && (InvokeEvent(plugin, PluginEventType.StartUp) == 0);
             }
             else
             {
@@ -306,8 +307,8 @@ namespace Another_Mirai_Native.Native
                 {
                     return;
                 }
-                success = InvokeEvent(plugin, PluginEventType.Disable) == 1;
-                success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 1);
+                success = InvokeEvent(plugin, PluginEventType.Disable) == 0;
+                success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 0);
             }
             if (success)
             {

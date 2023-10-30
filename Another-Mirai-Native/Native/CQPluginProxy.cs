@@ -87,6 +87,7 @@ namespace Another_Mirai_Native.Native
             {
                 return true;
             }
+            invokeName = invokeName.Replace("sendGroupQuoteMsg", "sendGroupMsg");
             if (!Enum.TryParse(invokeName, out PluginAPIType authEnum))
             {
                 LogHelper.Error("CheckPluginCanInvoke", $"{invokeName} 无法转换为权限枚举");

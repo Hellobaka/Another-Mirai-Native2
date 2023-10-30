@@ -205,13 +205,26 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
             MiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg).ToArray();
-            object request = new
+            object request;
+            if (msgId > 0)
             {
-                sessionKey = SessionKey_Message,
-                target = groupId,
-                quote = msgId,
-                messageChain = msgChains
-            };
+                request = new
+                {
+                    sessionKey = SessionKey_Message,
+                    target = groupId,
+                    quote = msgId,
+                    messageChain = msgChains
+                };
+            }
+            else
+            {
+                request = new
+                {
+                    sessionKey = SessionKey_Message,
+                    target = groupId,
+                    messageChain = msgChains
+                };
+            }
             JObject json = CallMiraiAPI(MiraiApiType.sendGroupMessage, request);
             return json == null || ((int)json["code"]) != 0 ? 0 : (int)json["messageId"];
         }
