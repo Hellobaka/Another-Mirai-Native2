@@ -59,7 +59,7 @@
                         <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="设置" Tag="SettingsPage">
+                <ui:NavigationViewItem Content="设置" Tag="SettingPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />
                     </ui:NavigationViewItem.Icon>

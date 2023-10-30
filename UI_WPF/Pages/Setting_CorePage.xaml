@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="Another_Mirai_Native.UI.Pages.Setting_CorePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Setting_CorePage"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
+
+    <StackPanel x:Name="Container" Margin="20">
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">协议自动连接</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="AutoConnect"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">自动连接协议</TextBlock>
+        <ComboBox
+            x:Name="AutoProtocol"
+            Margin="0,10"
+            HorizontalAlignment="Stretch" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">框架退出时 插件自动退出</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="PluginExitWhenCoreExit"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件崩溃时自动重启</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="RestartPluginIfDead"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">失去连接时 每次重新连接的间隔时间(ms)</TextBlock>
+        <TextBox Name="ReconnectTime" Margin="0,10" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">核心与插件的心跳间隔(ms)</TextBlock>
+        <TextBox Name="HeartBeatInterval" Margin="0,10" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">调用插件方法的超时时长(ms)</TextBlock>
+        <TextBox Name="PluginInvokeTimeout" Margin="0,10" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件载入超时时长(ms)</TextBlock>
+        <TextBox Name="LoadTimeout" Margin="0,10" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">日志使用数据库</TextBlock>
+        <ui:ToggleSwitch
+            Name="UseDatabase"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件载入后自动启用</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="PluginAutoEnable"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">调试模式</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="DebugMode"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" />
+    </StackPanel>
+</Page>

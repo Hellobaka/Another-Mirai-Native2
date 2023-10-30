@@ -104,6 +104,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 ErrorDisplay.Text = "配置校验失败，请修改后重试";
             }
+            AppConfig.AutoProtocol = CurrentProtocol.Name;
             ConfigHelper.SetConfig("AutoProtocol", CurrentProtocol.Name);
             Connecting = true;
             Task.Run(() =>
@@ -130,7 +131,7 @@ namespace Another_Mirai_Native.UI.Controls
         private void AutoConnectSelector_Toggled(object sender, RoutedEventArgs e)
         {
             AppConfig.AutoConnect = AutoConnectSelector.IsOn;
-            ConfigHelper.SetConfig("AutoConnect", AppConfig.AutoConnect, UIConfig.DefaultConfigPath);
+            ConfigHelper.SetConfig("AutoConnect", AppConfig.AutoConnect);
         }
     }
 }

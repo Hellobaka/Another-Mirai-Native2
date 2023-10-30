@@ -14,8 +14,6 @@ namespace Another_Mirai_Native.Config
 
         public static string AutoProtocol { get; set; } = "MiraiAPIHttp";
 
-        public static bool StartUI { get; set; }
-
         public static bool PluginExitWhenCoreExit { get; set; }
 
         public static int ReconnectTime { get; set; }
@@ -47,7 +45,6 @@ namespace Another_Mirai_Native.Config
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", defaultValue: true);
-            StartUI = ConfigHelper.GetConfig("StartUI", defaultValue: false);
             AutoConnect = ConfigHelper.GetConfig("AutoConnect", defaultValue: false);
             AutoProtocol = ConfigHelper.GetConfig("AutoProtocol", defaultValue: "NoConnection");
             if (string.IsNullOrEmpty(AutoProtocol))

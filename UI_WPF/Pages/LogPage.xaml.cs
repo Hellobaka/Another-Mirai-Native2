@@ -30,19 +30,52 @@ namespace Another_Mirai_Native.UI.Pages
                 var descriptor = DependencyPropertyDescriptor.FromProperty(GridViewColumn.WidthProperty, typeof(GridViewColumn));
                 descriptor.AddValueChanged(item, ColumnWidthChanged);
             }
+            Instance = this;
             // TODO: 若使用数据库则从数据库拉取指定数量的项目
         }
+
+        public static LogPage Instance { get; private set; }
 
         public ObservableCollection<LogModel> LogCollections { get; set; }
 
         public List<LogModel> RawLogCollections { get; set; } = new();
 
+        public bool FormLoaded { get; private set; }
+
         private DispatcherTimer ResizeTimer { get; set; }
 
         private LogModel SelectedLog { get; set; }
 
+        public void RefilterLogCollection()
+        {
+            if (LogCollections == null)
+            {
+                return;
+            }
+            Dispatcher.Invoke(() =>
+            {
+                int targetPriority = FilterLogLevelSelector.SelectedIndex * 10;
+                string search = FilterTextValue?.Text;
+                var ls = RawLogCollections.Where(x => x.priority >= targetPriority).Where(x =>
+                {
+                    if (string.IsNullOrEmpty(search))
+                    {
+                        return true;
+                    }
+                    string dateTime = Helper.TimeStamp2DateTime(x.time).ToString("G");
+                    return dateTime.Contains(search) || x.detail.Contains(search) || x.name.Contains(search) || x.source.Contains(search) || x.status.Contains(search);
+                });
+                LogCollections.Clear();
+                foreach (var item in ls)
+                {
+                    LogCollections.Add(item);
+                }
+            });
+        }
+
         private void AutoScroll_Toggled(object sender, RoutedEventArgs e)
         {
+            UIConfig.LogAutoScroll = AutoScroll.IsOn;
             ConfigHelper.SetConfig("LogAutoScroll", AutoScroll.IsOn, UIConfig.DefaultConfigPath);
             if (AutoScroll.IsOn && LogCollections != null && LogCollections.Count > 0)
             {
@@ -141,6 +174,10 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogPage_Loaded(object sender, RoutedEventArgs e)
         {
+            if (FormLoaded)
+            {
+                return;
+            }
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
             LogHelper.LogAdded -= LogHelper_LogAdded;
@@ -148,38 +185,12 @@ namespace Another_Mirai_Native.UI.Pages
             LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
             LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
             AutoScroll.IsOn = UIConfig.LogAutoScroll;
+            FormLoaded = true;
         }
 
         private void LogView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedLog = LogView.SelectedItem as LogModel;
-        }
-
-        private void RefilterLogCollection()
-        {
-            if (LogCollections == null)
-            {
-                return;
-            }
-            Dispatcher.Invoke(() =>
-            {
-                int targetPriority = FilterLogLevelSelector.SelectedIndex * 10;
-                string search = FilterTextValue?.Text;
-                var ls = RawLogCollections.Where(x => x.priority >= targetPriority).Where(x =>
-                {
-                    if (string.IsNullOrEmpty(search))
-                    {
-                        return true;
-                    }
-                    string dateTime = Helper.TimeStamp2DateTime(x.time).ToString("G");
-                    return dateTime.Contains(search) || x.detail.Contains(search) || x.name.Contains(search) || x.source.Contains(search) || x.status.Contains(search);
-                });
-                LogCollections.Clear();
-                foreach (var item in ls)
-                {
-                    LogCollections.Add(item);
-                }
-            });
         }
 
         private void ResizeTimer_Tick(object? sender, EventArgs e)
