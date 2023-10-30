@@ -48,7 +48,7 @@
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin, Converter={StaticResource ProxyEnabledConverter}}" />
+                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding TargetPlugin, Converter={StaticResource ProxyEnabledConverter}}" />
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.PluginName}">插件名称</GridViewColumn>
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.author}">作者</GridViewColumn>
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.version}">版本</GridViewColumn>

@@ -151,7 +151,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 if (AutoScroll.IsOn)
                 {
-                    LogView.SelectedItem = LogCollections.Last();
+                    LogView.SelectedItem = LogCollections.Count > 0 ? LogCollections.Last() : null;
                     LogView.ScrollIntoView(SelectedLog);
                 }
                 else
@@ -168,8 +168,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 log.status = status;
             }
-            RefilterLogCollection();
-            LogView.SelectedItem = SelectedLog;
+            Dispatcher.Invoke(() =>
+            {
+                RefilterLogCollection();
+                LogView.SelectedItem = SelectedLog;
+            });
         }
 
         private void LogPage_Loaded(object sender, RoutedEventArgs e)
