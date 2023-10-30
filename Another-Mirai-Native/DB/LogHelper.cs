@@ -189,6 +189,7 @@ namespace Another_Mirai_Native.DB
             }
             else
             {
+                model.id = logId;
                 Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}]\t[{model.name}]{model.detail}");
             }
             LogAdded?.Invoke(logId, model);
