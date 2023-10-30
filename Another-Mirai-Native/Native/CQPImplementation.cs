@@ -83,17 +83,32 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qqId} 消息:{msg}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_sendGroupMsg(int authCode, long groupId, string msg)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_sendGroupQuoteMsg(int authCode, long groupId, int msgId, string msg)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_sendDiscussMsg(int authCode, long discussId, string msg)
@@ -103,7 +118,17 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_deleteMsg(int authCode, long msgId)
         {
-            return ProtocolManager.Instance.CurrentProtocol.DeleteMsg(msgId);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            string msg = "";
+            if (RequestCache.Message.ContainsKey(msgId))
+            {
+                msg = RequestCache.Message[msgId];
+            }
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "撤回消息", $"消息ID: {msgId} 内容: {(string.IsNullOrEmpty(msg) ? "未捕获到" : msg)}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.DeleteMsg(msgId);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_sendLikeV2(int authCode, long qqId, int count)
@@ -158,47 +183,98 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_setGroupKick(int authCode, long groupId, long qqId, bool refuses)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupKick(groupId, qqId, refuses);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "踢出群成员", $"移除群{groupId} 成员{qqId}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupKick(groupId, qqId, refuses);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupBan(int authCode, long groupId, long qqId, long time)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupBan(groupId, qqId, time);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = time > 0
+                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "禁言群成员", $"禁言群{groupId} 成员{qqId} {time}秒", "处理中...")
+                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "解除禁言群成员", $"解除禁言群{groupId} 成员{qqId}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupBan(groupId, qqId, time);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupAdmin(int authCode, long groupId, long qqId, bool isSet)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupAdmin(groupId, qqId, isSet);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"{(isSet ? "设置" : "取消")}群成员管理", $"{(isSet ? "设置" : "取消")}群{groupId} 成员{qqId}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAdmin(groupId, qqId, isSet);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupSpecialTitle(int authCode, long groupId, long qqId, string title, long durationTime)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupSpecialTitle(groupId, qqId, title, durationTime);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "设置群成员头衔", $"设置群{groupId} 成员{qqId} 头衔 {title}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupSpecialTitle(groupId, qqId, title, durationTime);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupWholeBan(int authCode, long groupId, bool isOpen)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupWholeBan(groupId, isOpen);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = isOpen
+                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "群全体禁言", $"禁言群{groupId}", "处理中...")
+                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "解除群全体禁言", $"解除禁言群{groupId}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupWholeBan(groupId, isOpen);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupAnonymousBan(int authCode, long groupId, string anonymous, long banTime)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymousBan(groupId, anonymous, banTime);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = banTime > 0
+                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "禁言匿名", $"群{groupId} 成员{anonymous} {banTime}秒", "处理中...")
+                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "解除禁言匿名", $"群{groupId} 成员{anonymous}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymousBan(groupId, anonymous, banTime);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupAnonymous(int authCode, long groupId, bool isOpen)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymous(groupId, isOpen);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "设置群匿名状态", $"群{groupId} {(isOpen ? "开启" : "关闭")}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAnonymous(groupId, isOpen);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupCard(int authCode, long groupId, long qqId, string newCard)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupCard(groupId, qqId, newCard);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "设置群成员名片", $"设置群{groupId} 成员{qqId} 名片 {newCard}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupCard(groupId, qqId, newCard);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupLeave(int authCode, long groupId, bool isDisband)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupLeave(groupId, isDisband);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "退出群", $"退出群{groupId}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupLeave(groupId, isDisband);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setDiscussLeave(int authCode, long discussId)
@@ -208,12 +284,50 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_setFriendAddRequest(int authCode, string identifying, int requestType, string appendMsg)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(Convert.ToInt64(identifying), requestType, appendMsg);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            if (!long.TryParse(identifying, out long requestId))
+            {
+                return 0;
+            }
+            long fromId = 0; string nick = "";
+            if (RequestCache.FriendRequest.ContainsKey(requestId))
+            {
+                fromId = RequestCache.FriendRequest[requestId].Item1;
+                nick = RequestCache.FriendRequest[requestId].Item2;
+                RequestCache.FriendRequest.Remove(requestId);
+            }
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 0 ? "同意" : "拒绝")}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(requestId, requestType, appendMsg);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_setGroupAddRequestV2(int authCode, string identifying, int requestType, int responseType, string appendMsg)
         {
-            return ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(Convert.ToInt64(identifying), requestType, responseType, appendMsg);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            if (!long.TryParse(identifying, out long requestId))
+            {
+                return 0;
+            }
+            int logId;
+            long fromId = 0, groupId = 0;
+            string nick = "", groupName = "";
+            if (RequestCache.GroupRequest.ContainsKey(requestId))
+            {
+                fromId = RequestCache.GroupRequest[requestId].Item1;
+                nick = RequestCache.GroupRequest[requestId].Item2;
+                groupId = RequestCache.GroupRequest[requestId].Item3;
+                groupName = RequestCache.GroupRequest[requestId].Item4;
+                RequestCache.GroupRequest.Remove(requestId);
+            }
+            logId = requestType == 2
+                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群邀请添加申请", $"来源群: {groupId}({groupName}) 来源人: {fromId}({nick}) 操作: {appendMsg}", "处理中...")
+                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群添加申请", $"来源: {fromId}({nick}) 目标群: {groupId}({groupName}) 操作: {appendMsg}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(requestId, requestType, responseType, appendMsg);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
 
         private int CQ_addLog(int authCode, int priority, string type, string msg)
