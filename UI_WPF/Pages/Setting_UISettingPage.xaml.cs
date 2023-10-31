@@ -80,5 +80,25 @@ namespace Another_Mirai_Native.UI.Pages
                     break;
             }
         }
+
+        private void ShowBalloonTip_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.ShowBalloonTip = ShowBalloonTip.IsOn;
+            ConfigHelper.SetConfig("ShowBalloonTip", ShowBalloonTip.IsOn, UIConfig.DefaultConfigPath);
+        }
+
+        private void ShowWhenError_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.PopWindowWhenError = ShowWhenError.IsOn;
+            ConfigHelper.SetConfig("PopWindowWhenError", ShowWhenError.IsOn, UIConfig.DefaultConfigPath);
+        }
     }
 }

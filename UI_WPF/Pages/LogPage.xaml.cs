@@ -1,6 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
+using Hardcodet.Wpf.TaskbarNotification;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -146,6 +148,19 @@ namespace Another_Mirai_Native.UI.Pages
         private void LogHelper_LogAdded(int logId, LogModel log)
         {
             RawLogCollections.Add(log);
+            BalloonIcon tipIcon = BalloonIcon.Warning;
+            if (log.priority == (int)LogLevel.Warning)
+            {
+                tipIcon = BalloonIcon.Warning;
+            }
+            else if (log.priority >= (int)LogLevel.Error)
+            {
+                tipIcon = BalloonIcon.Error;
+            }
+            if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
+            {
+                MainWindow.Instance.TaskbarIcon.ShowBalloonTip(log.name, log.detail, tipIcon);
+            }
             RefilterLogCollection();
             Dispatcher.Invoke(() =>
             {

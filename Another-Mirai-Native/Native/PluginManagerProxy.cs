@@ -341,7 +341,7 @@ namespace Another_Mirai_Native.Native
                             }
                             catch
                             {
-                                LogHelper.Info("插件进程监控", $"[{plugin.Key}]{plugin.Value.name} 进程不存在");
+                                LogHelper.Error("插件进程监控", $"[{plugin.Key}]{plugin.Value.name} 进程不存在");
                                 PluginProcess.Remove(plugin.Key);
                                 if (AppConfig.RestartPluginIfDead)
                                 {

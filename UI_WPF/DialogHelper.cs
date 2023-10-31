@@ -89,6 +89,10 @@ namespace Another_Mirai_Native.UI
         {
             MainWindow.Instance.Dispatcher.BeginInvoke(() =>
             {
+                if (UIConfig.PopWindowWhenError)
+                {
+                    MainWindow.Instance.Show();
+                }
                 SimpleMessageBox dialog = new()
                 {
                     ErrorDetail = detail,

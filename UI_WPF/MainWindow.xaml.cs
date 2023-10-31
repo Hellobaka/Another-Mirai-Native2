@@ -59,7 +59,7 @@ namespace Another_Mirai_Native.UI
 
         private DispatcherTimer ResizeTimer { get; set; }
 
-        private TaskbarIcon TaskbarIcon { get; set; }
+        public TaskbarIcon TaskbarIcon { get; set; }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
@@ -142,6 +142,10 @@ namespace Another_Mirai_Native.UI
                        PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menu);
                    },
                    updateAction: () => { });// TODO: 检查更新
+                TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
+                {
+                    Show();
+                };
             });
         }
 

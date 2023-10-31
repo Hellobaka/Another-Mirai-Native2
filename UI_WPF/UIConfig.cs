@@ -27,6 +27,10 @@ namespace Another_Mirai_Native.UI
 
         public static bool LogAutoScroll { get; set; } = true;
 
+        public static bool ShowBalloonTip { get; set; } = true;
+
+        public static bool PopWindowWhenError { get; set; } = true;
+
         public static void InitConfigs()
         {
             Theme = ConfigHelper.GetConfig("Theme", DefaultConfigPath, "Light");
@@ -36,6 +40,8 @@ namespace Another_Mirai_Native.UI
             Height = ConfigHelper.GetConfig("Window_Height", DefaultConfigPath, 600);
             LogItemsCount = ConfigHelper.GetConfig("LogItemsCount", DefaultConfigPath, 500);
             LogAutoScroll = ConfigHelper.GetConfig("LogAutoScroll", DefaultConfigPath, true);
+            ShowBalloonTip = ConfigHelper.GetConfig("ShowBalloonTip", DefaultConfigPath, true);
+            PopWindowWhenError = ConfigHelper.GetConfig("PopWindowWhenError", DefaultConfigPath, true);
         }
 
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> List)
