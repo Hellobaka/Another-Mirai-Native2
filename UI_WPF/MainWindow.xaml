@@ -12,6 +12,7 @@
     MinWidth="660"
     MinHeight="420"
     ui:WindowHelper.UseModernWindowStyle="True"
+    Closing="Window_Closing"
     Loaded="MainWindow_Loaded"
     SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"
@@ -42,7 +43,8 @@
                             <MenuItem.Header>
                                 <ui:FontIcon
                                     Width="16"
-                                    Height="16" Glyph="&#xEB5E;" />
+                                    Height="16"
+                                    Glyph="&#xEB5E;" />
                             </MenuItem.Header>
                         </MenuItem>
                     </Menu>
@@ -50,11 +52,12 @@
             </ui:NavigationView.PaneCustomContent>
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
-                    Content="插件管理"
+                    Content="插件管理" x:Name="PluginMenuItem"
                     Icon="59212"
                     Tag="PluginPage" />
 
                 <ui:NavigationViewItem
+                    x:Name="LogMenuItem"
                     Content="日志"
                     IsSelected="True"
                     Tag="LogPage">

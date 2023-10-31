@@ -1,11 +1,14 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.WebSocket;
+using Hardcodet.Wpf.TaskbarNotification;
 using ModernWpf;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,6 +59,8 @@ namespace Another_Mirai_Native.UI
 
         private DispatcherTimer ResizeTimer { get; set; }
 
+        private TaskbarIcon TaskbarIcon { get; set; }
+
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var selectedItem = (NavigationViewItem)args.SelectedItem;
@@ -98,7 +103,46 @@ namespace Another_Mirai_Native.UI
             {
                 Environment.Exit(0);
             }
-            LoadPlugins();
+            else
+            {
+                LoadPlugins();
+            }
+        }
+
+        private void InitNotifyIcon()
+        {
+            if (TaskbarIcon != null)
+            {
+                return;
+            }
+            Dispatcher.Invoke(() =>
+            {
+                TaskbarIcon = new();
+                TaskbarIcon.Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)));
+                TaskbarIcon.ContextMenu = DialogHelper.BuildNotifyIconContextMenu(PluginManagerProxy.Proxies,
+                   exitAction: () => Environment.Exit(0),
+                   reloadAction: PluginManagerProxy.Instance.ReloadAllPlugins,
+                   pluginManageAction: () =>
+                   {
+                       Show();
+                       PluginMenuItem.IsSelected = true;
+                   },
+                   logAction: () =>
+                   {
+                       Show();
+                       LogMenuItem.IsSelected = true;
+                   },
+                   menuAction: (plugin, menu) =>
+                   {
+                       if (plugin.Enabled is false)
+                       {
+                           DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
+                           return;
+                       }
+                       PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menu);
+                   },
+                   updateAction: () => { });// TODO: 检查更新
+            });
         }
 
         private void ResizeTimer_Tick(object? sender, EventArgs e)
@@ -115,6 +159,7 @@ namespace Another_Mirai_Native.UI
                 var manager = new PluginManagerProxy();
                 manager.LoadPlugins();
                 Thread.Sleep(500);
+                InitNotifyIcon();
                 EnablePluginByConfig();
             });
         }
@@ -188,6 +233,12 @@ namespace Another_Mirai_Native.UI
                     DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
                 }
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

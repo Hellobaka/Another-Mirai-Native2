@@ -5,7 +5,6 @@ using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -16,6 +15,47 @@ namespace Another_Mirai_Native.UI
         private static SimpleMessageBox CurrentDialog { get; set; }
 
         private static Queue<DialogQueueObject> ErrorDialogQueue { get; set; } = new();
+
+        public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
+        {
+            var menu = new ContextMenu();
+            menu.Items.Add(new MenuItem { Header = ProtocolManager.Instance.CurrentProtocol.GetLoginNick() });
+            menu.Items.Add(new Separator());
+            menu.Items.Add(new MenuItem { Header = $"框架版本: {Server.Instance.GetType().Assembly.GetName().Version}" });
+            menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
+            MenuItem updateItem = new() { Header = "检查更新" };
+            updateItem.Click += (a, b) => updateAction?.Invoke();
+            menu.Items.Add(updateItem);
+            menu.Items.Add(new Separator());
+            MenuItem menuParentItem = new() { Header = "应用" };
+            foreach (var item in plugins)
+            {
+                MenuItem menuItem = new() { Header = item.PluginName };
+                foreach (var subMenu in item.AppInfo.menu)
+                {
+                    MenuItem subMenuItem = new() { Header = subMenu.name };
+                    subMenuItem.Click += (a, b) => menuAction?.Invoke(item, subMenu.function);
+                    menuItem.Items.Add(subMenuItem);
+                }
+                menuParentItem.Items.Add(menuItem);
+            }
+            menuParentItem.Items.Add(new Separator());
+            MenuItem pluginManageItem = new() { Header = "插件管理" };
+            pluginManageItem.Click += (_, _) => pluginManageAction?.Invoke();
+            menuParentItem.Items.Add(pluginManageItem);
+            menu.Items.Add(menuParentItem);
+            MenuItem logItem = new() { Header = "日志" };
+            logItem.Click += (a, b) => logAction?.Invoke();
+            menu.Items.Add(logItem);
+            menu.Items.Add(new Separator());
+            MenuItem reloadItem = new() { Header = "重载插件" };
+            reloadItem.Click += (a, b) => reloadAction?.Invoke();
+            menu.Items.Add(reloadItem);
+            MenuItem exitItem = new() { Header = "退出" };
+            exitItem.Click += (a, b) => exitAction?.Invoke();
+            menu.Items.Add(exitItem);
+            return menu;
+        }
 
         public static async Task<bool> ShowConfirmDialog(string title, string message)
         {
@@ -28,18 +68,6 @@ namespace Another_Mirai_Native.UI
                 SecondaryButtonText = "取消",
             };
             return await dialog.ShowAsync() == ContentDialogResult.Primary;
-        }
-
-        public static async void ShowSimpleDialog(string title, string message)
-        {
-            ContentDialog dialog = new()
-            {
-                Title = title,
-                Content = message,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = "确认"
-            };
-            await dialog.ShowAsync();
         }
 
         public static void ShowErrorDialog(InvokeBody caller)
@@ -90,41 +118,16 @@ namespace Another_Mirai_Native.UI
             });
         }
 
-        public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action reloadAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
+        public static async void ShowSimpleDialog(string title, string message)
         {
-            var menu = new ContextMenu();
-            menu.Items.Add(new MenuItem { Header = ProtocolManager.Instance.CurrentProtocol.GetLoginNick() });
-            menu.Items.Add(new Separator());
-            menu.Items.Add(new MenuItem { Header = $"框架版本: {Server.Instance.GetType().Assembly.GetName().Version}" });
-            menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
-            MenuItem updateItem = new() { Header = "检查更新" };
-            updateItem.Click += (a, b) => updateAction?.Invoke();
-            menu.Items.Add(updateItem);
-            menu.Items.Add(new Separator());
-            MenuItem menuParentItem = new() { Header = "应用" };
-            foreach (var item in plugins)
+            ContentDialog dialog = new()
             {
-                MenuItem menuItem = new() { Header = item.PluginName };
-                foreach (var subMenu in item.AppInfo.menu)
-                {
-                    MenuItem subMenuItem = new() { Header = subMenu.name };
-                    subMenuItem.Click += (a, b) => menuAction?.Invoke(item, subMenu.function);
-                    menuItem.Items.Add(subMenuItem);
-                }
-                menuParentItem.Items.Add(menuItem);
-            }
-            menu.Items.Add(menuParentItem);
-            MenuItem logItem = new() { Header = "日志" };
-            logItem.Click += (a, b) => logAction?.Invoke();
-            menu.Items.Add(logItem);
-            menu.Items.Add(new Separator());
-            MenuItem reloadItem = new() { Header = "重载插件" };
-            reloadItem.Click += (a, b) => reloadAction?.Invoke();
-            menu.Items.Add(reloadItem);
-            MenuItem exitItem = new() { Header = "退出" };
-            exitItem.Click += (a, b) => exitAction?.Invoke();
-            menu.Items.Add(exitItem);
-            return menu;
+                Title = title,
+                Content = message,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = "确认"
+            };
+            await dialog.ShowAsync();
         }
 
         private static async void HandleDialogQueue()
