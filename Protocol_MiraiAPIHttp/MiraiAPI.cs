@@ -432,7 +432,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 sessionKey = SessionKey_Message,
             };
             JObject json = CallMiraiAPI(MiraiApiType.botProfile, request);
-            return json["data"].ToObject<ProfilerResponse>();
+            return json.ToObject<ProfilerResponse>();
         }
 
         private List<GroupListResponse> GetGroupListInternal()

@@ -86,12 +86,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 subCommand,
                 content = data
             };
-            return CallMiraiAPI(syncId, body);
+            return CallMiraiAPI(syncId, body, type == MiraiApiType.botProfile);
         }
 
-        public JObject CallMiraiAPI(string syncId, object obj)
+        public JObject CallMiraiAPI(string syncId, object obj, bool isProfilerRequest = false)
         {
             var msg = new WaitingMessage();
+            msg.ProfilerRequest = isProfilerRequest;
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
             for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
@@ -248,6 +249,16 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
                 else
                 {
+                    if (data.ContainsKey("nickname"))
+                    {
+                        var profilerRequest = WaitingMessages.FirstOrDefault(x => x.Value.ProfilerRequest);
+                        if (!string.IsNullOrEmpty(profilerRequest.Key))
+                        {
+                            profilerRequest.Value.Result = data;
+                            profilerRequest.Value.Finished = true;
+                            return;
+                        }
+                    }
                     ParseAndDispatchMessage(data);
                 }
             }

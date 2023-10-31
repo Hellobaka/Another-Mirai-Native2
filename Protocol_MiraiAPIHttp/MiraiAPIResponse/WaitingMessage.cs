@@ -8,5 +8,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
         public bool Finished { get; set; }
 
         public JObject Result { get; set; }
+
+        public bool ProfilerRequest { get; set; }
     }
 }
