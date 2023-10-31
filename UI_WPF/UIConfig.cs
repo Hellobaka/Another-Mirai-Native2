@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.UI
 
         public static double Height { get; set; } = 600;
 
-        public static double LogItemsCount { get; set; } = 500;
+        public static int LogItemsCount { get; set; } = 500;
 
         public static bool LogAutoScroll { get; set; } = true;
 

@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.Native
         {
             if (AppConfig.DebugMode)
             {
-                LogHelper.Info("ServerSend", caller.ToJson());
+                LogHelper.Info("服务端发送", caller.ToJson());
             }
             if (HasConnection is false)
             {
@@ -90,7 +90,7 @@ namespace Another_Mirai_Native.Native
             invokeName = invokeName.Replace("sendGroupQuoteMsg", "sendGroupMsg");
             if (!Enum.TryParse(invokeName, out PluginAPIType authEnum))
             {
-                LogHelper.Error("CheckPluginCanInvoke", $"{invokeName} 无法转换为权限枚举");
+                LogHelper.Error("调用权限检查", $"{invokeName} 无法转换为权限枚举");
                 return false;
             }
             return CheckPluginCanInvoke(authEnum);

@@ -260,12 +260,12 @@ namespace Another_Mirai_Native.Export
                 {
                     return r.Result;
                 }
-                LogHelper.Error("CallCore", "调用错误");
+                LogHelper.Error("请求服务端", "调用错误");
                 return null;
             }
             else
             {
-                LogHelper.Error("CallCore", "无法获取方法名称");
+                LogHelper.Error("请求服务端", "无法获取方法名称");
                 return null;
             }
         }

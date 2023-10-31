@@ -26,18 +26,18 @@ namespace Another_Mirai_Native.Native
                 var methodInfo = typeof(CQPImplementation).GetMethod(functionName, BindingFlags.NonPublic | BindingFlags.Instance);
                 if (methodInfo == null)
                 {
-                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 未找到对应实现");
+                    LogHelper.Error("调用前置检查", $"调用 {functionName} 未找到对应实现");
                     return null;
                 }
                 if (!CurrentPlugin.CheckPluginCanInvoke(functionName))
                 {
-                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 未定义权限");
+                    LogHelper.Error("调用前置检查", $"调用 {functionName} 未定义权限");
                     return null;
                 }
                 var argumentList = methodInfo.GetParameters();
                 if (args.Length != argumentList.Length)
                 {
-                    LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName} 参数表数量不对应");
+                    LogHelper.Error("调用前置检查", $"调用 {functionName} 参数表数量不对应");
                     return null;
                 }
                 object[] transformedArgs = new object[argumentList.Length];
@@ -62,16 +62,13 @@ namespace Another_Mirai_Native.Native
                             break;
                     }
                 }
-                if (AppConfig.DebugMode)
-                {
-                    LogHelper.Info("CQPImplementation.CheckPluginCanInvoke", $"调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
-                }
+                LogHelper.Debug("调用前置检查", $"调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
                 object result = methodInfo.Invoke(this, transformedArgs);
                 return result;
             }
             catch (Exception ex)
             {
-                LogHelper.Error("CQPImplementation.CheckPluginCanInvoke", ex);
+                LogHelper.Error("调用前置检查", ex);
                 return null;
             }
             finally

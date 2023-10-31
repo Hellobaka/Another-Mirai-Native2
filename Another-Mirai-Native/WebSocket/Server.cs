@@ -45,7 +45,7 @@ namespace Another_Mirai_Native.WebSocket
             }
             catch (Exception ex)
             {
-                LogHelper.Error("Broadcast", ex);
+                LogHelper.Error("广播消息", ex);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Another_Mirai_Native.WebSocket
             }
             catch (Exception ex)
             {
-                LogHelper.Error("WebSocket处理消息", ex);
+                LogHelper.Error("处理插件消息", ex);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Another_Mirai_Native.WebSocket
                             Thread.Sleep(100);
                             if (!AppConfig.RestartPluginIfDead)
                             {
-                                LogHelper.Info("RestartPlugin", $"{pluginProxy.PluginName} 重启");
+                                LogHelper.Info("重启插件", $"{pluginProxy.PluginName} 重启");
                                 Process? pluginProcess = PluginManagerProxy.Instance.StartPluginProcess(pluginProxy.AppInfo.PluginPath);
                                 if (pluginProcess != null)
                                 {
@@ -150,7 +150,7 @@ namespace Another_Mirai_Native.WebSocket
             }
             catch (Exception e)
             {
-                LogHelper.Error("HandleCoreAPI", e);
+                LogHelper.Error("调用核心方法", e);
             }
             return null;
         }
@@ -168,7 +168,7 @@ namespace Another_Mirai_Native.WebSocket
             }
             catch (Exception e)
             {
-                LogHelper.Error("HandleCQPAPI", e);
+                LogHelper.Error("调用CQP方法", e);
                 return null;
             }
         }
@@ -244,25 +244,22 @@ namespace Another_Mirai_Native.WebSocket
 
         private void Handler(IWebSocketConnection connection)
         {
-            LogHelper.Info("WebSocket", $"连接已建立, ID={connection.ConnectionInfo.Id}");
+            LogHelper.Debug("客户端连接", $"连接已建立, ID={connection.ConnectionInfo.Id}");
             connection.OnClose = () =>
             {
-                LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
+                LogHelper.Debug("客户端连接", $"连接已断开, ID={connection.ConnectionInfo.Id}");
                 PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
             };
             connection.OnError = (e) =>
             {
-                LogHelper.Info("WebSocket", $"连接已断开, ID={connection.ConnectionInfo.Id}");
+                LogHelper.Debug("客户端连接", $"连接已断开, ID={connection.ConnectionInfo.Id}");
                 PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
             };
             connection.OnMessage = (message) =>
             {
-                if (AppConfig.DebugMode)
-                {
-                    LogHelper.Info("ReceiveFromClient", message);
-                }
+                LogHelper.Debug("收到客户端消息", message);
                 Task.Run(() => HandleClientMessage(message, connection));
             };
             // 心跳

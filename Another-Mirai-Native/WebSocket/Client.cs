@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             if (string.IsNullOrEmpty(url))
             {
-                LogHelper.Error("ConnectServer", "参数无效");
+                LogHelper.Error("连接服务端", "参数无效");
                 return false;
             }
 
@@ -38,7 +38,7 @@ namespace Another_Mirai_Native.WebSocket
             WebSocketClient.OnClose += WebSocketClient_OnClose;
             WebSocketClient.OnMessage += WebSocketClient_OnMessage;
             WebSocketClient.Connect();
-            LogHelper.Info("ConnectServer", "连接成功");
+            LogHelper.Debug("连接服务端", "连接成功");
             return WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
@@ -59,10 +59,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
             {
-                if (AppConfig.DebugMode)
-                {
-                    Console.WriteLine("[SendToServer]\t" + message);
-                }
+                LogHelper.Debug("向服务端发送", message);
                 WebSocketClient.Send(message);
             }
         }
@@ -71,10 +68,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                if (AppConfig.DebugMode)
-                {
-                    Console.WriteLine("[ReceiveFromServer]\t" + message);
-                }
+                LogHelper.Debug("来自服务端的消息", message);
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {
@@ -103,7 +97,7 @@ namespace Another_Mirai_Native.WebSocket
             }
             catch (Exception ex)
             {
-                LogHelper.Error("Invoke", ex);
+                LogHelper.Error("处理服务器消息", ex);
             }
         }
 
@@ -127,7 +121,7 @@ namespace Another_Mirai_Native.WebSocket
                 }
                 Thread.Sleep(100);
             }
-            LogHelper.Error("ClientInvoke", "Timeout");
+            LogHelper.Error("调用超时", "Timeout");
             return new InvokeResult() { Message = "Timeout" };
         }
 

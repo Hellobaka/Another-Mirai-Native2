@@ -104,7 +104,7 @@ namespace Another_Mirai_Native.Native
             AppInfo = JsonConvert.DeserializeObject<AppInfo>(json);
             if (AppInfo == null)
             {
-                LogHelper.Error("Load", "Json格式错误，无法解析");
+                LogHelper.Error("加载插件", "Json格式错误，无法解析");
                 return;
             }
             Initialize = (Type_Initialize)CreateDelegateFromUnmanaged("Initialize", typeof(Type_Initialize));
@@ -112,13 +112,10 @@ namespace Another_Mirai_Native.Native
             Name = AppInfo.name;
             foreach (var item in AppInfo._event)
             {
-                if (AppConfig.DebugMode)
-                {
-                    LogHelper.Debug("Init", $"{item.id}: {item.function}");
-                }
+                LogHelper.Debug("加载插件", $"{item.id}: {item.function}");
                 if (!FindEventEnum(item.id))
                 {
-                    LogHelper.Error("Load", $"EventID: {item.id} 无效");
+                    LogHelper.Error("加载插件", $"事件ID: {item.id} 无效");
                     continue;
                 }
                 switch ((PluginEventType)item.id)
@@ -218,7 +215,7 @@ namespace Another_Mirai_Native.Native
             }
             catch
             {
-                LogHelper.Error("Error", $"{Path} fail, GetLastError={GetLastError()}");
+                LogHelper.Error("加载插件", $"{Path} 加载失败, GetLastError={GetLastError()}");
             }
             return Handle != IntPtr.Zero;
         }
@@ -228,13 +225,13 @@ namespace Another_Mirai_Native.Native
             var function = AppInfo.menu.FirstOrDefault(x => x.function == menuName)?.function;
             if (function == null)
             {
-                LogHelper.Error("CallMenu", $"AppInfo未找到 {menuName}");
+                LogHelper.Error("调用Menu事件", $"在AppInfo中未找到 {menuName}");
                 return -1;
             }
             var menuMethod = CreateDelegateFromUnmanaged(function, typeof(Type_Menu));
             if (menuMethod == null)
             {
-                LogHelper.Error("CallMenu", $"{function} 创建方法失败");
+                LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
                 return -1;
             }
             menuMethod.DynamicInvoke(null);

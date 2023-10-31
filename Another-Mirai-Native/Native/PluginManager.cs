@@ -41,13 +41,13 @@ namespace Another_Mirai_Native.Native
                 var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());
                 if (methodInfo == null)
                 {
-                    LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 未找到对应实现");
+                    LogHelper.Error("调用事件", $"调用 {eventName} 未找到对应实现");
                     return result;
                 }
                 var argumentList = methodInfo.GetParameters();
                 if (args.Length != argumentList.Length)
                 {
-                    LogHelper.Error("PluginManager.CallEvent", $"调用 {eventName} 参数表数量不对应");
+                    LogHelper.Error("调用事件", $"调用 {eventName} 参数表数量不对应");
                     return result;
                 }
                 object[] transformedArgs = new object[argumentList.Length];
@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.Native
             }
             catch (Exception ex)
             {
-                LogHelper.Error("Invoke_Client", ex);
+                LogHelper.Error("调用插件方法", ex);
             }
             return result;
         }

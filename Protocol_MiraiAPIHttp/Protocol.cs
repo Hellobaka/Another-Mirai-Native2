@@ -102,7 +102,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
                 Thread.Sleep(100);
             }
-            LogHelper.Debug("MiraiAPI", "Timeout");
+            LogHelper.Debug("调用MiraiAPI", "Timeout");
             return null;
         }
 
@@ -110,7 +110,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             if (string.IsNullOrEmpty(WsURL) || string.IsNullOrEmpty(AuthKey) || QQ < 0)
             {
-                LogHelper.Error("ConnectMessageServer", "参数无效");
+                LogHelper.Error("连接事件服务器", "参数无效");
                 return false;
             }
 
@@ -152,7 +152,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             if (string.IsNullOrEmpty(WsURL) || string.IsNullOrEmpty(AuthKey) || QQ < 0)
             {
-                LogHelper.Error("ConnectMessageServer", "参数无效");
+                LogHelper.Error("连接消息服务器", "参数无效");
                 return false;
             }
 
@@ -206,7 +206,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                     else
                     {
-                        LogHelper.Error("SessionKey_Event", $"code: {sessionKey.code} msg: {sessionKey.msg}");
+                        LogHelper.Error("事件SessionKey", $"code: {sessionKey.code} msg: {sessionKey.msg}");
                     }
                     return;
                 }
@@ -214,7 +214,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             catch (Exception ex)
             {
-                LogHelper.Error("HandleMessage", ex);
+                LogHelper.Error("处理事件", ex);
             }
         }
 
@@ -233,7 +233,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                     else
                     {
-                        LogHelper.Error("SessionKey_Message", $"code: {sessionKey.code} msg: {sessionKey.msg}");
+                        LogHelper.Error("消息SessionKey", $"code: {sessionKey.code} msg: {sessionKey.msg}");
                     }
                     return;
                 }
@@ -253,7 +253,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             catch (Exception ex)
             {
-                LogHelper.Error("HandleMessage", ex);
+                LogHelper.Error("处理消息", ex);
             }
         }
 

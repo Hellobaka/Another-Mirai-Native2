@@ -31,7 +31,7 @@ namespace Another_Mirai_Native
             {
                 CurrentProtocol = protocol;
             }
-            LogHelper.Info("Connect", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
+            LogHelper.Info("加载协议", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             return flag;
         }
 
@@ -43,7 +43,7 @@ namespace Another_Mirai_Native
             }
             else
             {
-                LogHelper.Error("Connect", $"未找到 {protocolName} 协议");
+                LogHelper.Error("加载协议", $"未找到 {protocolName} 协议");
             }
             return false;
         }
@@ -68,7 +68,7 @@ namespace Another_Mirai_Native
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error("LoadProtocol", $"无法加载协议: {ex.Message} {ex.StackTrace}");
+                    LogHelper.Error("加载协议", $"无法加载协议: {ex.Message} {ex.StackTrace}");
                 }
             }
         }

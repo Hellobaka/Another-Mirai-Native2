@@ -223,7 +223,14 @@ namespace Another_Mirai_Native.DB
 
         public static int Debug(string type, string message)
         {
-            return WriteLog(LogLevel.Debug, type, message);
+            if (AppConfig.DebugMode)
+            {
+                return WriteLog(LogLevel.Debug, type, message);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public static int Info(string type, string message)
