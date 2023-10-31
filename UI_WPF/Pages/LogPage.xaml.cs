@@ -31,7 +31,6 @@ namespace Another_Mirai_Native.UI.Pages
                 descriptor.AddValueChanged(item, ColumnWidthChanged);
             }
             Instance = this;
-            // TODO: 若使用数据库则从数据库拉取指定数量的项目
         }
 
         public static LogPage Instance { get; private set; }
@@ -65,6 +64,7 @@ namespace Another_Mirai_Native.UI.Pages
                     string dateTime = Helper.TimeStamp2DateTime(x.time).ToString("G");
                     return dateTime.Contains(search) || x.detail.Contains(search) || x.name.Contains(search) || x.source.Contains(search) || x.status.Contains(search);
                 });
+                ls = ls.Skip(Math.Max(0, ls.Count() - UIConfig.LogItemsCount));
                 LogCollections.Clear();
                 foreach (var item in ls)
                 {
@@ -180,6 +180,11 @@ namespace Another_Mirai_Native.UI.Pages
             if (FormLoaded)
             {
                 return;
+            }
+            if (AppConfig.UseDatabase)
+            {
+                int targetPriority = FilterLogLevelSelector.SelectedIndex * 10;
+                RawLogCollections = LogHelper.GetDisplayLogs(targetPriority, UIConfig.LogItemsCount);
             }
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
