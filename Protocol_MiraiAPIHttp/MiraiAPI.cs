@@ -29,6 +29,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public bool Connect()
         {
+            ExitFlag = false;
             GetConnectionConfig();
             return ConnectEventServer() && ConnectMessageServer();
         }
@@ -48,6 +49,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public bool Disconnect()
         {
             ExitFlag = true;
+            SessionKey_Event = "";
+            SessionKey_Message = "";
             EventConnection.Close();
             MessageConnection.Close();
             return IsConnected == false;

@@ -37,6 +37,15 @@
                             </MenuItem.Header>
                         </MenuItem>
                     </Menu>
+                    <Menu>
+                        <MenuItem Click="DisconnectProtocol_Click">
+                            <MenuItem.Header>
+                                <ui:FontIcon
+                                    Width="16"
+                                    Height="16" Glyph="&#xEB5E;" />
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
                 </StackPanel>
             </ui:NavigationView.PaneCustomContent>
             <ui:NavigationView.MenuItems>
@@ -46,12 +55,6 @@
                     Tag="PluginPage" />
 
                 <ui:NavigationViewItem
-                    Content="测试"
-                    Icon="59634"
-                    Tag="TestPage" />
-            </ui:NavigationView.MenuItems>
-            <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem
                     Content="日志"
                     IsSelected="True"
                     Tag="LogPage">
@@ -59,6 +62,12 @@
                         <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    Content="测试"
+                    Icon="59634"
+                    Tag="TestPage" />
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置" Tag="SettingPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />

@@ -166,5 +166,28 @@ namespace Another_Mirai_Native.UI
             ResizeTimer.Stop();
             ResizeTimer.Start();
         }
+
+        private async void DisconnectProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            if (await DialogHelper.ShowConfirmDialog("协议切换", "确定要切换协议吗，操作会导致与机器人断开连接，无法处理消息"))
+            {
+                AppConfig.AutoConnect = false;
+                ConfigHelper.SetConfig("AutoConnect", false);
+                bool success = ProtocolManager.Instance.CurrentProtocol.Disconnect();
+                if (success)
+                {
+                    ProtocolSelectorDialog dialog = new();
+                    await dialog.ShowAsync();
+                    if (dialog.DialogResult == ContentDialogResult.Secondary)
+                    {
+                        Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
+                }
+            }
+        }
     }
 }
