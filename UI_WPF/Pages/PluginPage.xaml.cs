@@ -126,8 +126,13 @@ namespace Another_Mirai_Native.UI.Pages
             ToggleEnableRunningStatus = true;
             Task.Run(() =>
             {
-                PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+                bool success = PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
                 ToggleEnableRunningStatus = false;
+                if (!success)
+                {
+                    DialogHelper.ShowSimpleDialog("哎呀", "切换插件状态失败了");
+                    return;
+                }
                 if (SelectedPlugin.Enabled)
                 {
                     UIConfig.AutoEnablePlugins.Add(SelectedPlugin.PluginId);
