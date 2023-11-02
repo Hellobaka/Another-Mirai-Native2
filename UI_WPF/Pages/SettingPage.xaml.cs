@@ -54,6 +54,10 @@ namespace Another_Mirai_Native.UI.Pages
                     continue;
                 }
                 string name = item.Replace(@"conf\", "").Replace(".json", "");
+                if (SettingContainer.MenuItems.IndexOf(name) > 0)
+                {
+                    continue;
+                }
                 SettingContainer.MenuItems.Add(new ModernWpf.Controls.NavigationViewItem
                 {
                     Content = name,

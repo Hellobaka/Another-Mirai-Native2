@@ -78,7 +78,10 @@
                         <ui:PathIcon Style="{StaticResource PathIconDataCogOutline}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="关于" Tag="AboutPage">
+                <ui:NavigationViewItem
+                    x:Name="AboutMenuItem"
+                    Content="关于"
+                    Tag="AboutPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataInformationOutline}" />
                     </ui:NavigationViewItem.Icon>

@@ -141,7 +141,11 @@ namespace Another_Mirai_Native.UI
                        }
                        PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menu);
                    },
-                   updateAction: () => { });// TODO: 检查更新
+                   updateAction: () =>
+                   {
+                       Show();
+                       AboutMenuItem.IsSelected = true;
+                   });
                 TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
                 {
                     Show();
