@@ -148,6 +148,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             groupMessage.ParsedMessage = CQCode.Parse(groupMessage.raw_message);
             SaveCQCodeCache(groupMessage.ParsedMessage);
+            groupMessage.raw_message = UnescapeRawMessage(groupMessage.raw_message);
+            RequestCache.Message.Add((groupMessage.message_id, groupMessage.raw_message));
+            while (RequestCache.Message.Count > AppConfig.MessageCache)
+            {
+                RequestCache.Message.RemoveAt(0);
+            }
             Stopwatch sw = new();
             sw.Start();
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id} QQ:{groupMessage.user_id}({groupMessage.sender?.nickname}) {groupMessage.raw_message}", "处理中...");
@@ -158,6 +164,16 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
             }
             LogHelper.UpdateLogStatus(logId, updateMsg);
+        }
+
+        private string UnescapeRawMessage(string msg)
+        {
+            return msg.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&#44;", ",").Replace("&amp;", "&");
+        }
+
+        private string EscapeRawMessage(string msg)
+        {
+            return msg.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
         }
 
         private void DispatchMessage(JObject message)
@@ -279,8 +295,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.group_recall:
-                    GroupMessageRecall groupMessageRecall = notice.ToObject<GroupMessageRecall>(); //TODO: messageId
-                    logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群消息撤回", $"群:{groupMessageRecall.group_id} 内容:{groupMessageRecall.message_id}", "处理中...");
+                    GroupMessageRecall groupMessageRecall = notice.ToObject<GroupMessageRecall>();
+                    string msg = "内容未捕获";
+                    var msgCache = RequestCache.Message.FirstOrDefault(x => x.Item1 == groupMessageRecall.message_id);
+                    if (string.IsNullOrEmpty(msgCache.Item2))
+                    {
+                        msg = msgCache.Item2;
+                    }
+                    logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群消息撤回", $"群:{groupMessageRecall.group_id} 内容:{msg}", "处理中...");
                     break;
 
                 case NoticeType.friend_recall:
@@ -305,7 +327,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             privateMessage.ParsedMessage = CQCode.Parse(privateMessage.raw_message);
+            privateMessage.raw_message = UnescapeRawMessage(privateMessage.raw_message);
             SaveCQCodeCache(privateMessage.ParsedMessage);
+            RequestCache.Message.Add((privateMessage.message_id, privateMessage.raw_message));
+            while (RequestCache.Message.Count > AppConfig.MessageCache)
+            {
+                RequestCache.Message.RemoveAt(0);
+            }
             Stopwatch sw = new();
             sw.Start();
             int logId = 0;

@@ -1,6 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
 
@@ -148,7 +150,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
-            var r = CallOneBotAPI(APIType.get_group_info, new Dictionary<string, object>
+            var r = CallOneBotAPI(APIType.get_group_member_info, new Dictionary<string, object>
             {
                 {"group_id", groupId},
                 {"user_id", qqId},
@@ -159,7 +161,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string GetGroupMemberList(long groupId)
         {
-            var r = CallOneBotAPI(APIType.get_group_member_info, new Dictionary<string, object>
+            var r = CallOneBotAPI(APIType.get_group_member_list, new Dictionary<string, object>
             {
                 {"group_id", groupId},
             });
@@ -203,8 +205,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 ? new StrangerInfo
                 {
                     Age = (int)r["age"],
-                    Nick = r[""].ToString(),
-                    QQ = (long)r[""],
+                    Nick = r["nickname"].ToString(),
+                    QQ = (long)r["user_id"],
                     Sex = ParseString2QQSex(r["sex"].ToString())
                 }.ToNativeBase64()
                 : new StrangerInfo().ToNativeBase64();
@@ -217,11 +219,15 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
-            // TODO: quote
+            if (msgId > 0)
+            {
+                msg = $"[CQ:reply,id={msgId}]" + msg;
+            }
+            msg = RepackCQCode(msg);
             var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
             {
                 {"group_id", groupId },
-                {"message", msg },
+                {"message", EscapeRawMessage(msg) },
                 {"auto_escape", false },
             });
             return r != null ? (int)r["message_id"] : 0;
@@ -238,10 +244,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SendPrivateMessage(long qqId, string msg)
         {
+            msg = RepackCQCode(msg);
             var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
             {
                 {"user_id", qqId },
-                {"message", msg },
+                {"message", EscapeRawMessage(msg) },
                 {"auto_escape", false },
             });
             return r != null ? (int)r["message_id"] : 0;
@@ -422,6 +429,98 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             return sex == "male" ? QQSex.Man : sex == "female"
                 ? QQSex.Woman : QQSex.Unknown;
+        }
+
+        private string RepackCQCode(string msg)
+        {
+            foreach (var item in CQCode.Parse(msg))
+            {
+                CQCode newCQcode;
+                if (item.IsImageCQCode)
+                {
+                    string picPath = item.Items["file"];
+                    // 以下为两个纠错路径, 防止拼接路径时出现以下两种情况
+                    // basePath + "\foo.jpg"
+                    // basePath + "foo.jpg"
+                    string picPathA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image") + picPath;
+                    string picPathB = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", picPath);
+                    if (File.Exists(picPathA))
+                    {
+                        picPath = picPathA;
+                    }
+                    else if (File.Exists(picPathB))
+                    {
+                        picPath = picPathB;
+                    }
+                    else
+                    {
+                        // 若以上两个路径均不存在, 判断对应的 cqimg 文件是否存在
+                        picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", picPath + ".cqimg");
+                        if (!File.Exists(picPath))
+                        {
+                            LogHelper.WriteLog(LogLevel.Warning, "发送图片", "文件不存在", "");
+                            continue;
+                        }
+                        string picTmp = File.ReadAllText(picPath);
+                        // 分离 cqimg 文件中的 url
+                        picTmp = picTmp.Split('\n').Last().Replace("url=", "");
+                        newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", picTmp));
+                        if (item.Items.ContainsKey("flash"))
+                        {
+                            newCQcode.Items.Add("type", "flash");
+                        }
+                        msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
+                        continue;
+                    }
+                    // 将图片转换为 base64
+                    string picBase64 = Helper.ParsePic2Base64(picPath);
+                    if (string.IsNullOrEmpty(picBase64))
+                    {
+                        continue;
+                    }
+                    newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", "base64://" + picBase64));
+                    if (item.Items.ContainsKey("flash"))
+                    {
+                        newCQcode.Items.Add("type", "flash");
+                    }
+                    msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
+                }
+                else if (item.IsRecordCQCode)
+                {
+                    newCQcode = new CQCode(CQCodeType.Record);
+                    string recordPath = item.Items["file"];
+                    recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordPath);
+                    if (File.Exists(recordPath))
+                    {
+                        string extension = new FileInfo(recordPath).Extension;
+                        if (extension != ".silk")
+                        {
+                            if (SilkConverter.SilkEncode(recordPath, extension))
+                            {
+                                recordPath = recordPath.Replace(extension, ".silk");
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        recordPath = new FileInfo(recordPath).FullName;
+                        newCQcode.Items.Add("file", $"base64://{Helper.ParsePic2Base64(recordPath)}");
+                        msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
+                    }
+                    else if (File.Exists(recordPath + ".cqrecord"))
+                    {
+                        string recordUrl = File.ReadAllText(recordPath + ".cqrecord").Replace("[record]\nurl=", "");
+                        newCQcode.Items.Add("file", recordUrl);
+                        msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+            return msg;
         }
     }
 }

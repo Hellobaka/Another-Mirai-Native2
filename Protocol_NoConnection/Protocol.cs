@@ -24,6 +24,9 @@ namespace Protocol_NoConnection
 
         public void BuildMockData()
         {
+            FriendInfos.Clear();
+            GroupInfos.Clear();
+            GroupMemberInfos.Clear();
             FriendInfos.Add(new FriendInfo
             {
                 Nick = "琪露诺",
@@ -220,12 +223,12 @@ namespace Protocol_NoConnection
             return 1;
         }
 
-        public int SetFriendAddRequest(long identifying, int requestType, string appendMsg)
+        public int SetFriendAddRequest(string identifying, int requestType, string appendMsg)
         {
             return 1;
         }
 
-        public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg)
+        public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
             return 1;
         }
