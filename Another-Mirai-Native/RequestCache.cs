@@ -9,6 +9,6 @@
         /// </summary>
         public static Dictionary<string, (long, string, long, string)> GroupRequest { get; set; } = new();
 
-        public static Dictionary<long, string> Message { get; set; } = new();
+        public static List<(long, string)> Message { get; set; } = new();
     }
 }

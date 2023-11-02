@@ -117,9 +117,10 @@ namespace Another_Mirai_Native.Native
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             string msg = "";
-            if (RequestCache.Message.ContainsKey(msgId))
+            var msgCache = RequestCache.Message.FirstOrDefault(x => x.Item1 == msgId);
+            if (string.IsNullOrEmpty(msgCache.Item2))
             {
-                msg = RequestCache.Message[msgId];
+                msg = msgCache.Item2;
             }
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "撤回消息", $"消息ID: {msgId} 内容: {(string.IsNullOrEmpty(msg) ? "未捕获到" : msg)}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.DeleteMsg(msgId);

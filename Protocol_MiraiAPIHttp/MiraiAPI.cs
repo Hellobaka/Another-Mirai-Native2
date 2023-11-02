@@ -40,7 +40,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             object request = new
             {
                 sessionKey = SessionKey_Message,
-                target = 0, // TODO: ?
+                target = 0, // 似乎没问题
                 messageId = msgId
             };
             JObject json = CallMiraiAPI(MiraiApiType.recall, request);

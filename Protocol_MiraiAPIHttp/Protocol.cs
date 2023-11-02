@@ -557,7 +557,11 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
 
             int logId = 0;
-            RequestCache.Message.Add(source.id, parsedMsg);
+            RequestCache.Message.Add((source.id, parsedMsg));
+            while (RequestCache.Message.Count > AppConfig.MessageCache)
+            {
+                RequestCache.Message.RemoveAt(0);
+            }
             CQPluginProxy handledPlugin = null;
             switch (events)
             {
