@@ -282,19 +282,15 @@ namespace Another_Mirai_Native.Native
         private int CQ_setFriendAddRequest(int authCode, string identifying, int requestType, string appendMsg)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            if (!long.TryParse(identifying, out long requestId))
-            {
-                return 0;
-            }
             long fromId = 0; string nick = "";
-            if (RequestCache.FriendRequest.ContainsKey(requestId))
+            if (RequestCache.FriendRequest.ContainsKey(identifying))
             {
-                fromId = RequestCache.FriendRequest[requestId].Item1;
-                nick = RequestCache.FriendRequest[requestId].Item2;
-                RequestCache.FriendRequest.Remove(requestId);
+                fromId = RequestCache.FriendRequest[identifying].Item1;
+                nick = RequestCache.FriendRequest[identifying].Item2;
+                RequestCache.FriendRequest.Remove(identifying);
             }
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 0 ? "同意" : "拒绝")}", "处理中...");
-            int ret = ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(requestId, requestType, appendMsg);
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(identifying, requestType, appendMsg);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
             return ret;
@@ -303,25 +299,21 @@ namespace Another_Mirai_Native.Native
         private int CQ_setGroupAddRequestV2(int authCode, string identifying, int requestType, int responseType, string appendMsg)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            if (!long.TryParse(identifying, out long requestId))
-            {
-                return 0;
-            }
             int logId;
             long fromId = 0, groupId = 0;
             string nick = "", groupName = "";
-            if (RequestCache.GroupRequest.ContainsKey(requestId))
+            if (RequestCache.GroupRequest.ContainsKey(identifying))
             {
-                fromId = RequestCache.GroupRequest[requestId].Item1;
-                nick = RequestCache.GroupRequest[requestId].Item2;
-                groupId = RequestCache.GroupRequest[requestId].Item3;
-                groupName = RequestCache.GroupRequest[requestId].Item4;
-                RequestCache.GroupRequest.Remove(requestId);
+                fromId = RequestCache.GroupRequest[identifying].Item1;
+                nick = RequestCache.GroupRequest[identifying].Item2;
+                groupId = RequestCache.GroupRequest[identifying].Item3;
+                groupName = RequestCache.GroupRequest[identifying].Item4;
+                RequestCache.GroupRequest.Remove(identifying);
             }
             logId = requestType == 2
                 ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群邀请添加申请", $"来源群: {groupId}({groupName}) 来源人: {fromId}({nick}) 操作: {appendMsg}", "处理中...")
                 : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群添加申请", $"来源: {fromId}({nick}) 目标群: {groupId}({groupName}) 操作: {appendMsg}", "处理中...");
-            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(requestId, requestType, responseType, appendMsg);
+            int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(identifying, requestType, responseType, appendMsg);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
             return ret;

@@ -180,7 +180,7 @@
         /// <param name="responseType">处理结果: 1 为通过; 2 为拒绝</param>
         /// <param name="appendMsg">备注消息</param>
         /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
-        public int SetFriendAddRequest(long identifying, int responseType, string appendMsg);
+        public int SetFriendAddRequest(string identifying, int responseType, string appendMsg);
 
         /// <summary>
         /// 处理群组添加请求
@@ -190,7 +190,7 @@
         /// <param name="responseType">处理结果: 1 为通过; 2 为拒绝</param>
         /// <param name="appendMsg">备注消息</param>
         /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
-        public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg);
+        public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg);
 
         /// <summary>
         /// 设置群管理

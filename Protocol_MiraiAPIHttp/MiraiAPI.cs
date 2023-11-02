@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -277,12 +278,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             return 0;
         }
 
-        public int SetFriendAddRequest(long identifying, int responseType, string appendMsg)
+        public int SetFriendAddRequest(string identifying, int responseType, string appendMsg)
         {
             object request = new
             {
                 sessionKey = SessionKey_Message,
-                eventId = identifying,
+                eventId = Convert.ToInt64(identifying),
                 operate = responseType == 1 ? 0 : 1,
                 message = appendMsg
             };
@@ -290,12 +291,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             return json == null ? 0 : 1;
         }
 
-        public int SetGroupAddRequest(long identifying, int requestType, int responseType, string appendMsg)
+        public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
             object request = new
             {
                 sessionKey = SessionKey_Message,
-                eventId = identifying,
+                eventId = Convert.ToInt64(identifying),
                 operate = responseType == 1 ? 0 : 1,
                 message = appendMsg
             };
