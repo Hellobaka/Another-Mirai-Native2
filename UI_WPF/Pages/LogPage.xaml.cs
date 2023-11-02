@@ -159,7 +159,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
             {
-                MainWindow.Instance.TaskbarIcon.ShowBalloonTip(log.source, log.detail, tipIcon);
+                MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
             }
             RefilterLogCollection();
             Dispatcher.Invoke(() =>

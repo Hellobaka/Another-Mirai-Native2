@@ -27,7 +27,24 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static event UpdateLogStatusHandler LogStatusUpdated;
 
-        private static long QQ => ProtocolManager.Instance.CurrentProtocol?.GetLoginQQ() ?? 10001;
+        private static long QQ
+        {
+            get
+            {
+                try
+                {
+                    if (ProtocolManager.Instance.CurrentProtocol != null)
+                    {
+                        return ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
+                    }
+                    return 10001;
+                }
+                catch
+                {
+                    return 10001;
+                }
+            }
+        }
 
         private static int NoDBLogID { get; set; }
 
@@ -172,7 +189,7 @@ namespace Another_Mirai_Native.DB
 
         public static int WriteLog(LogModel model)
         {
-            if (File.Exists(GetLogFilePath()) is false && AppConfig.UseDatabase)
+            if (AppConfig.UseDatabase && File.Exists(GetLogFilePath()) is false)
             {
                 CreateDB();
             }
