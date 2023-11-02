@@ -502,13 +502,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     string imgId = item.Items["file"].Split('.').First();
                     Directory.CreateDirectory("data\\image");
-                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={item.Items["url"]}");
+                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.ContainsKey("url") ? item.Items["url"] : "")}");
                 }
                 else if (item.IsRecordCQCode)
                 {
                     string voiceId = item.Items["file"].Replace(".amr", "");
                     Directory.CreateDirectory("data\\record");
-                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={item.Items["url"]}");
+                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={(item.Items.ContainsKey("url") ? item.Items["url"] : "")}");
                 }
             }
         }
