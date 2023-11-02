@@ -474,14 +474,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.NewFriendRequestEvent:
                     var newFriendRequestEvent = msg.ToObject<NewFriendRequestEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加好友请求", $"QQ:{newFriendRequestEvent.fromId}({newFriendRequestEvent.nick}) 备注:{newFriendRequestEvent.message} 来源群:{newFriendRequestEvent.groupId}", "处理中...");
-                    RequestCache.FriendRequest.Add(newFriendRequestEvent.eventId, (newFriendRequestEvent.fromId, newFriendRequestEvent.nick));
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.FriendRequest, 1, Helper.TimeStamp, newFriendRequestEvent.fromId, newFriendRequestEvent.nick, newFriendRequestEvent.eventId.ToString());
+                    RequestCache.FriendRequest.Add(newFriendRequestEvent.eventId.ToString(), (newFriendRequestEvent.fromId, newFriendRequestEvent.nick));
+                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.FriendRequest, 1, Helper.TimeStamp, newFriendRequestEvent.fromId, newFriendRequestEvent.message, newFriendRequestEvent.eventId.ToString());
                     break;
 
                 case MiraiEvents.MemberJoinRequestEvent:
                     var memberJoinRequestEvent = msg.ToObject<MemberJoinRequestEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{memberJoinRequestEvent.groupId}({memberJoinRequestEvent.groupName}) QQ:{memberJoinRequestEvent.fromId}({memberJoinRequestEvent.nick}) 备注:{memberJoinRequestEvent.message}", "处理中...");
-                    RequestCache.GroupRequest.Add(memberJoinRequestEvent.eventId, (memberJoinRequestEvent.fromId, memberJoinRequestEvent.nick, memberJoinRequestEvent.groupId, memberJoinRequestEvent.groupName));
+                    RequestCache.GroupRequest.Add(memberJoinRequestEvent.eventId.ToString(), (memberJoinRequestEvent.fromId, memberJoinRequestEvent.nick, memberJoinRequestEvent.groupId, memberJoinRequestEvent.groupName));
                     handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupAddRequest, 1, Helper.TimeStamp, memberJoinRequestEvent.groupId, memberJoinRequestEvent.fromId, memberJoinRequestEvent.message, memberJoinRequestEvent.eventId.ToString());
                     break;
 
