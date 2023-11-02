@@ -24,10 +24,58 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int ReconnectCount { get; private set; }
 
+        public Dictionary<int, WaitingMessage> WaitingMessages { get; set; } = new();
+
         /// <summary>
         /// 与OneBot通信的连接, 通常以ws开头
         /// </summary>
         public string WsURL { get; set; } = "";
+
+        public JToken CallOneBotAPI(APIType type, Dictionary<string, object> param)
+        {
+            int syncId;
+            do
+            {
+                syncId = Helper.MakeRandomID();
+            } while (WaitingMessages.ContainsKey(syncId));
+            object body = new
+            {
+                action = type.ToString(),
+                echo = syncId,
+                @params = param
+            };
+            return CallOneBotAPI(syncId, body);
+        }
+
+        public JToken CallOneBotAPI(int syncId, object obj)
+        {
+            var msg = new WaitingMessage();
+            WaitingMessages.Add(syncId, msg);
+            APIClient.Send(obj.ToJson());
+            JObject result = null;
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
+            {
+                if (msg.Finished)
+                {
+                    result = msg.Result;
+                    break;
+                }
+                Thread.Sleep(10);
+            }
+            if (result == null)
+            {
+                LogHelper.Debug("OneBotAPI", "Timeout");
+            }
+            else
+            {
+                if (result["retcode"].ToString() != "200")
+                {
+                    LogHelper.Debug("OneBotAPI", $"retcode: {result["retcode"]}");
+                    result = null;
+                }
+            }
+            return result["data"];
+        }
 
         public bool ConnectAPIServer()
         {
@@ -70,6 +118,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
+            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
+              EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
             LogHelper.Error("API服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
@@ -85,6 +135,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "API服务器", "连接到API服务器");
+            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
+              EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void DispatchGroupMessage(JObject message)
@@ -333,6 +385,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
+            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
+               EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
@@ -348,15 +402,28 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
+            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                   EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void HandleAPI(string data)
         {
             try
             {
+                JObject json = JObject.Parse(data);
+                if (json.ContainsKey("echo"))
+                {
+                    int echo = int.TryParse(json["echo"].ToString(), out int value) ? value : 0;
+                    if (WaitingMessages.ContainsKey(echo))
+                    {
+                        WaitingMessages[echo].Result = json;
+                        WaitingMessages[echo].Finished = true;
+                    }
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                LogHelper.Error("处理API", ex);
             }
         }
 
@@ -415,5 +482,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 }
             }
         }
+    }
+
+    public class WaitingMessage
+    {
+        public bool Finished { get; set; }
+
+        public JObject Result { get; set; }
     }
 }

@@ -95,13 +95,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             msg.ProfilerRequest = isProfilerRequest;
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
             {
                 if (msg.Finished)
                 {
                     return msg.Result;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
             LogHelper.Debug("调用MiraiAPI", "Timeout");
             return null;
@@ -139,6 +139,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             ReconnectCount++;
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                         MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
         }
@@ -146,6 +148,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void EventConnection_OnOpen(object sender, EventArgs e)
         {
             ReconnectCount = 0;
+            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                        MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
         }
 
@@ -163,7 +167,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection.OnClose += MessageConnection_OnClose;
             MessageConnection.OnMessage += MessageConnection_OnMessage;
             MessageConnection.Connect();
-
             return MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
@@ -181,6 +184,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             ReconnectCount++;
             LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
+              MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectMessageServer();
         }
@@ -189,6 +194,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "消息服务器", "连接到消息服务器");
+            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                 MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void HandleEvent(string message)
