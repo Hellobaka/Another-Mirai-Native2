@@ -30,9 +30,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         public string AuthKey { get; set; }
 
-        public WebSocketSharp.WebSocket EventConnection { get; set; }
+        public WebSocketSharp.WebSocket EventConnection { get; set; } = new("ws://127.0.0.1");
 
-        public WebSocketSharp.WebSocket MessageConnection { get; set; }
+        public WebSocketSharp.WebSocket MessageConnection { get; set; } = new("ws://127.0.0.1");
 
         /// <summary>
         /// Mirai框架中登录中 且 希望控制逻辑的QQ号
