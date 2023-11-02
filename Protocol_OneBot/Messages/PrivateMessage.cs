@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public int message_id { get; set; }
 
-        public int user_id { get; set; }
+        public long user_id { get; set; }
 
         public long target_id { get; set; }
 

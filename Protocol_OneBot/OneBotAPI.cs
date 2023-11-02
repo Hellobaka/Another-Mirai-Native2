@@ -227,7 +227,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
             {
                 {"group_id", groupId },
-                {"message", EscapeRawMessage(msg) },
+                {"message", msg },
                 {"auto_escape", false },
             });
             return r != null ? (int)r["message_id"] : 0;
@@ -248,7 +248,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
             {
                 {"user_id", qqId },
-                {"message", EscapeRawMessage(msg) },
+                {"message", msg },
                 {"auto_escape", false },
             });
             return r != null ? (int)r["message_id"] : 0;
@@ -256,9 +256,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
         {
-            bool success = config != null && config.ContainsKey("Ws") && config.ContainsKey("AuthKey") && config.ContainsKey("QQ");
+            bool success = config != null && config.ContainsKey("Ws") && config.ContainsKey("AuthKey");
             success = success && !string.IsNullOrEmpty(config["Ws"]);
-            success = success && !string.IsNullOrEmpty(config["AuthKey"]);
             if (success)
             {
                 WsURL = config["Ws"];

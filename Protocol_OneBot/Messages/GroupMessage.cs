@@ -18,13 +18,13 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public int font { get; set; }
 
-        public int group_id { get; set; }
+        public long group_id { get; set; }
 
         public object message { get; set; }
 
         public Sender? sender { get; set; }
 
-        public int user_id { get; set; }
+        public long user_id { get; set; }
 
         public int message_id { get; set; }
 

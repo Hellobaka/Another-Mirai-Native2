@@ -14,11 +14,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
 {
     public partial class OneBotAPI // 需实现Header
     {
-        public WebSocketSharp.WebSocket APIClient { get; set; }
+        public WebSocketSharp.WebSocket APIClient { get; set; } = new("ws://127.0.0.1");
 
         public string AuthKey { get; set; } = "";
 
-        public WebSocketSharp.WebSocket EventClient { get; set; }
+        public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
 
         public bool ExitFlag { get; private set; }
 
@@ -68,7 +68,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             else
             {
-                if (result["retcode"].ToString() != "200")
+                if (result.ContainsKey("retcode") && result["retcode"].ToString() != "0")
                 {
                     LogHelper.Debug("OneBotAPI", $"retcode: {result["retcode"]}");
                     result = null;
@@ -79,7 +79,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public bool ConnectAPIServer()
         {
-            if (string.IsNullOrEmpty(WsURL) || string.IsNullOrEmpty(AuthKey))
+            if (string.IsNullOrEmpty(WsURL))
             {
                 LogHelper.Error("连接API服务器", "参数无效");
                 return false;
@@ -96,7 +96,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public bool ConnectEventServer()
         {
-            if (string.IsNullOrEmpty(WsURL) || string.IsNullOrEmpty(AuthKey))
+            if (string.IsNullOrEmpty(WsURL))
             {
                 LogHelper.Error("连接事件服务器", "参数无效");
                 return false;
@@ -203,7 +203,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             NoticeType subType = NoticeType.notify;
             if (notice.ContainsKey("sub_type"))
             {
-                subType = (NoticeType)Enum.Parse(typeof(NoticeType), notice["sub_type"].ToString());
+                subType = Enum.TryParse<NoticeType>(notice["sub_type"].ToString(), out NoticeType value) ? value : NoticeType.notify;
             }
             Stopwatch sw = new();
             sw.Start();
@@ -297,8 +297,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 case NoticeType.group_recall:
                     GroupMessageRecall groupMessageRecall = notice.ToObject<GroupMessageRecall>();
                     string msg = "内容未捕获";
-                    var msgCache = RequestCache.Message.FirstOrDefault(x => x.Item1 == groupMessageRecall.message_id);
-                    if (string.IsNullOrEmpty(msgCache.Item2))
+                    var msgCache = RequestCache.Message.Last(x => x.Item1 == groupMessageRecall.message_id);
+                    if (!string.IsNullOrEmpty(msgCache.Item2))
                     {
                         msg = msgCache.Item2;
                     }
@@ -438,6 +438,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             try
             {
+                // data = data.Replace("msgId", "message_id").Replace("Id", "_id").Replace("retCode", "retcode").Replace("Type", "_type").Replace("Message", "_message");
                 JObject json = JObject.Parse(data);
                 if (json.ContainsKey("echo"))
                 {
@@ -459,6 +460,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             try
             {
+                // data = data.Replace("msgId", "message_id").Replace("Id", "_id").Replace("retCode", "retcode").Replace("Type", "_type").Replace("Message", "_message");
                 JObject e = JObject.Parse(data);
                 if (e.ContainsKey("post_type") is false)
                 {
