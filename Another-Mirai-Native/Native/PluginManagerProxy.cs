@@ -78,7 +78,7 @@ namespace Another_Mirai_Native.Native
         public bool WaitAppInfo(int pid)
         {
             bool result = false;
-            for (int i = 0; i < AppConfig.LoadTimeout / 100; i++)
+            for (int i = 0; i < AppConfig.LoadTimeout / 10; i++)
             {
                 if (!PluginProcess.ContainsKey(pid))
                 {
@@ -90,7 +90,7 @@ namespace Another_Mirai_Native.Native
                     result = true;
                     break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
             return result;
         }
@@ -273,13 +273,13 @@ namespace Another_Mirai_Native.Native
             }
             else
             {
-                for (int i = 0; i < AppConfig.LoadTimeout / 100; i++)
+                for (int i = 0; i < AppConfig.LoadTimeout / 10; i++)
                 {
                     if (PluginProcess.Any(x => x.Value.AppId == plugin.PluginId))
                     {
                         break;
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(10);
                 }
             }
         }

@@ -111,7 +111,7 @@ namespace Another_Mirai_Native.WebSocket
                 return null;
             }
             WaitingMessage.Add(guid, new InvokeResult());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
             {
                 if (WaitingMessage.ContainsKey(guid) && WaitingMessage[guid].Success)
                 {
@@ -119,7 +119,7 @@ namespace Another_Mirai_Native.WebSocket
                     WaitingMessage.Remove(guid);
                     return result;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
             LogHelper.Error("调用超时", "Timeout");
             return new InvokeResult() { Message = "Timeout" };

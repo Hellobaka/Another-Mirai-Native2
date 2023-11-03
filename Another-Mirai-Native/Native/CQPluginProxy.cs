@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.Native
             }
             Connection.Send(caller.ToJson());
             Server.Instance.WaitingMessage.Add(caller.GUID, new InvokeResult());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 100; i++)
+            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
             {
                 if (Server.Instance.WaitingMessage[caller.GUID].Success)
                 {
@@ -75,7 +75,7 @@ namespace Another_Mirai_Native.Native
                 {
                     break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
             return new InvokeResult() { Message = "Timeout" };
         }
