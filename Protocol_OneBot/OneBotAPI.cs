@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
+using System.Numerics;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {

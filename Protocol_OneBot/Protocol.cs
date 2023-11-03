@@ -12,11 +12,11 @@ using System.Diagnostics;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
-    public partial class OneBotAPI // 需实现Header
+    public partial class OneBotAPI
     {
         public WebSocketSharp.WebSocket APIClient { get; set; } = new("ws://127.0.0.1");
 
-        public string AuthKey { get; set; } = "";
+        public static string AuthKey { get; set; } = "";
 
         public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
 
@@ -84,8 +84,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 LogHelper.Error("连接API服务器", "参数无效");
                 return false;
             }
-            string event_ConnectUrl = $"{WsURL}/api?access_token={AuthKey}";
+            string event_ConnectUrl = $"{WsURL}/api";
             APIClient = new(event_ConnectUrl);
+            if (!string.IsNullOrEmpty(AuthKey))
+            {
+                APIClient.CustomHeader.Add("Authorization", $"Bearer {AuthKey}");
+            }
             APIClient.OnOpen += APIClient_OnOpen;
             APIClient.OnClose += APIClient_OnClose;
             APIClient.OnMessage += APIClient_OnMessage;
@@ -101,8 +105,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 LogHelper.Error("连接事件服务器", "参数无效");
                 return false;
             }
-            string event_ConnectUrl = $"{WsURL}/event?access_token={AuthKey}";
+            string event_ConnectUrl = $"{WsURL}/event";
             EventClient = new(event_ConnectUrl);
+            if (!string.IsNullOrEmpty(AuthKey))
+            {
+                EventClient.CustomHeader.Add("Authorization", $"Bearer {AuthKey}");
+            }
             EventClient.OnOpen += EventClient_OnOpen;
             EventClient.OnClose += EventClient_OnClose;
             EventClient.OnMessage += EventClient_OnMessage;
