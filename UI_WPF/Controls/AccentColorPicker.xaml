@@ -146,7 +146,7 @@
             <Button
                 Margin="0,12,0,0"
                 Click="ResetAccentColor"
-                Content="Reset" />
+                Content="重置" />
         </StackPanel>
     </GroupBox>
 </UserControl>

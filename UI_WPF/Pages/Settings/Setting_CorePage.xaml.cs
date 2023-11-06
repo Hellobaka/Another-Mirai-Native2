@@ -39,8 +39,8 @@ namespace Another_Mirai_Native.UI.Pages
             }
             AutoConnect.IsOn = AppConfig.AutoConnect;
             AutoProtocol.Text = AppConfig.AutoProtocol;
-            PluginExitWhenCoreExit.IsOn = AppConfig.AutoConnect;
-            RestartPluginIfDead.IsOn = AppConfig.AutoConnect;
+            PluginExitWhenCoreExit.IsOn = AppConfig.PluginExitWhenCoreExit;
+            RestartPluginIfDead.IsOn = AppConfig.RestartPluginIfDead;
             ReconnectTime.Text = AppConfig.ReconnectTime.ToString();
             HeartBeatInterval.Text = AppConfig.HeartBeatInterval.ToString();
             PluginInvokeTimeout.Text = AppConfig.PluginInvokeTimeout.ToString();
@@ -48,6 +48,7 @@ namespace Another_Mirai_Native.UI.Pages
             UseDatabase.IsOn = AppConfig.UseDatabase;
             PluginAutoEnable.IsOn = AppConfig.PluginAutoEnable;
             DebugMode.IsOn = AppConfig.DebugMode;
+            MessageCacheSize.Text = AppConfig.MessageCacheSize.ToString();
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
             {
                 var child = VisualTreeHelper.GetChild(Container, i);
