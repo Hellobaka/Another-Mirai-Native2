@@ -5,6 +5,8 @@ using Another_Mirai_Native.WebSocket;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;

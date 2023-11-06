@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 
 namespace Another_Mirai_Native.Native
@@ -188,7 +189,7 @@ namespace Another_Mirai_Native.Native
             string appId = CurrentPlugin.PluginId;
             string path = $@"data\app\{appId}";
             Directory.CreateDirectory(path);
-            return new DirectoryInfo(path).FullName;
+            return new DirectoryInfo(path).FullName + "\\";
         }
 
         private long CQ_getLoginQQ(int authCode)

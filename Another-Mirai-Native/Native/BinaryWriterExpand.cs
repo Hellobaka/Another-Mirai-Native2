@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
 namespace Another_Mirai_Native.Native
 {
@@ -8,6 +9,7 @@ namespace Another_Mirai_Native.Native
     public static class BinaryWriterExpand
     {
         #region --公开方法--
+
         /// <summary>
         /// 将写入基础流的 <see cref="short"/> 数值
         /// </summary>
@@ -77,9 +79,11 @@ namespace Another_Mirai_Native.Native
             binary.BaseStream.Position = position;          // 还原原指针位置
             return buffer;
         }
-        #endregion
+
+        #endregion --公开方法--
 
         #region --私有方法--
+
         private static void SetBinary(BinaryWriter binary, byte[] buffer, bool isReverse)
         {
             if (isReverse)
@@ -88,6 +92,7 @@ namespace Another_Mirai_Native.Native
             }
             binary.Write(buffer);
         }
-        #endregion
+
+        #endregion --私有方法--
     }
 }

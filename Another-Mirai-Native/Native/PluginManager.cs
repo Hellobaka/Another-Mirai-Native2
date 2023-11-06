@@ -2,6 +2,8 @@
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
+using System.Runtime.ExceptionServices;
+using System.IO;
 
 namespace Another_Mirai_Native.Native
 {
@@ -33,9 +35,10 @@ namespace Another_Mirai_Native.Native
             return ret;
         }
 
+        [HandleProcessCorruptedStateExceptions]
         public int CallEvent(PluginEventType eventName, object[] args)
         {
-            int result = 0;
+            int result = -1;
             try
             {
                 var methodInfo = typeof(PluginManager).GetMethod("Event_On" + eventName.ToString());

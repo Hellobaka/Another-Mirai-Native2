@@ -4,9 +4,12 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.Native
 {
@@ -95,12 +98,38 @@ namespace Another_Mirai_Native.Native
 
         public string Path { get; set; } = "";
 
+        private static Thread UIThread { get; set; }
+
+        private static Dispatcher UIThreadDispatcher { get; set; }
+
         private Array EventArray { get; set; }
 
         private IntPtr Handle { get; set; }
 
+        public int CallMenu(string menuName)
+        {
+            var function = AppInfo.menu.FirstOrDefault(x => x.function == menuName)?.function;
+            if (function == null)
+            {
+                LogHelper.Error("调用Menu事件", $"在AppInfo中未找到 {menuName}");
+                return -1;
+            }
+            var menuMethod = CreateDelegateFromUnmanaged(function, typeof(Type_Menu));
+            if (menuMethod == null)
+            {
+                LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
+                return -1;
+            }
+            UIThreadDispatcher.Invoke(() =>
+            {
+                menuMethod.DynamicInvoke(null);
+            });
+            return 1;
+        }
+
         public void Init(string json)
         {
+            BuildMenuThread();
             AppInfo = JsonConvert.DeserializeObject<AppInfo>(json);
             if (AppInfo == null)
             {
@@ -192,6 +221,7 @@ namespace Another_Mirai_Native.Native
         [SecurityCritical]
         public bool Load()
         {
+            LoadLibrary("CQP.dll");
             string fileName = new FileInfo(Path).Name;
             try
             {
@@ -220,24 +250,6 @@ namespace Another_Mirai_Native.Native
             return Handle != IntPtr.Zero;
         }
 
-        public int CallMenu(string menuName)
-        {
-            var function = AppInfo.menu.FirstOrDefault(x => x.function == menuName)?.function;
-            if (function == null)
-            {
-                LogHelper.Error("调用Menu事件", $"在AppInfo中未找到 {menuName}");
-                return -1;
-            }
-            var menuMethod = CreateDelegateFromUnmanaged(function, typeof(Type_Menu));
-            if (menuMethod == null)
-            {
-                LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
-                return -1;
-            }
-            menuMethod.DynamicInvoke(null);
-            return 1;
-        }
-
         [DllImport("kernel32.dll")]
         private static extern int GetLastError();
 
@@ -246,6 +258,25 @@ namespace Another_Mirai_Native.Native
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr LoadLibrary(string path);
+
+        private static void StartUIThread()
+        {
+            // Create a Dispatcher for this thread, which starts a new message loop
+            UIThreadDispatcher = Dispatcher.CurrentDispatcher;
+
+            // Run the message loop
+            Dispatcher.Run();
+        }
+
+        private void BuildMenuThread()
+        {
+            if (UIThread == null)
+            {
+                UIThread = new Thread(StartUIThread);
+                UIThread.SetApartmentState(ApartmentState.STA);
+                UIThread.Start();
+            }
+        }
 
         private Delegate CreateDelegateFromUnmanaged(string apiName, Type t)
         {

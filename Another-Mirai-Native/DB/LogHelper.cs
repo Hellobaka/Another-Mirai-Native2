@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebSocket;
 using SqlSugar;
+using System.IO;
 using System.Text;
 
 namespace Another_Mirai_Native.DB
@@ -262,6 +263,10 @@ namespace Another_Mirai_Native.DB
 
         public static int Error(string type, Exception e)
         {
+            if (e.InnerException != null)
+            {
+                Error("调用插件方法", e.InnerException);
+            }
             return WriteLog(LogLevel.Error, type, e.Message + "\n" + e.StackTrace);
         }
 

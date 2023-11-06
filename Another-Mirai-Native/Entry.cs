@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebSocket;
 using System.Diagnostics;
+using System.IO;
 
 namespace Another_Mirai_Native
 {

@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net7.0;net48</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
+	<UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Another_Mirai_Native</RootNamespace>
@@ -21,7 +22,7 @@
     <PackageReference Include="SqlSugar" Version="5.1.4.110" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="SqlSugarCore">
       <Version>5.1.4.110</Version>
     </PackageReference>
@@ -33,4 +34,8 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd ..&#xD;&#xA;call copy.bat" />
+  </Target>
 </Project>

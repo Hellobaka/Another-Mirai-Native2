@@ -3,6 +3,7 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using System.Diagnostics;
+using System.IO;
 
 namespace Another_Mirai_Native.Native
 {
@@ -106,7 +107,7 @@ namespace Another_Mirai_Native.Native
         {
             string guid = Guid.NewGuid().ToString();
             var r = target.Invoke(new InvokeBody { GUID = guid, Function = function, Args = args });
-            if (!r.Success)
+            if (r != null && !r.Success)
             {
                 LogHelper.Error("调用失败", $"调用方法: {function}, 错误信息: {r.Message}");
             }
@@ -118,7 +119,7 @@ namespace Another_Mirai_Native.Native
             if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.id == (int)eventType))
             {
                 var r = Invoke(target, $"InvokeEvent_{eventType}", args);
-                return !r.Success ? -1 : Convert.ToInt32(r.Result);
+                return r == null || !r.Success ? -1 : Convert.ToInt32(r.Result);
             }
             else
             {
@@ -384,8 +385,8 @@ namespace Another_Mirai_Native.Native
                 {
                     return true;
                 }
-                success = InvokeEvent(plugin, PluginEventType.Enable) == 0;
-                success = success && (InvokeEvent(plugin, PluginEventType.StartUp) == 0);
+                success = InvokeEvent(plugin, PluginEventType.StartUp) == 0;
+                success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
             }
             else
             {
