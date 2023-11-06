@@ -347,8 +347,10 @@ namespace Another_Mirai_Native.Native
 
         public void ReloadPlugin(CQPluginProxy plugin)
         {
+            bool currentEnable = plugin.Enabled;
             InvokeEvent(plugin, PluginEventType.Disable);
             plugin.KillProcess();
+            plugin.Enabled = false;
             if (!AppConfig.RestartPluginIfDead)
             {
                 LogHelper.Info("重启插件", $"{plugin.PluginName} 重启");
@@ -357,6 +359,10 @@ namespace Another_Mirai_Native.Native
                 {
                     PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = plugin.AppInfo.PluginPath });
                     WaitAppInfo(pluginProcess.Id);
+                    if (currentEnable)
+                    {
+                        SetPluginEnabled(plugin, true);
+                    }
                 }
             }
             else
