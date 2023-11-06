@@ -55,15 +55,90 @@ namespace Another_Mirai_Native.UI.Pages
             {180, "撤回消息"},
         };
 
-        private CQPluginProxy SelectedPlugin { get; set; }
+        private bool FormLoaded { get; set; }
 
         private bool ReloadAllRunningStatus { set => Dispatcher.Invoke(() => ReloadAllStatus.IsActive = value); }
 
         private bool ReloadRunningStatus { set => Dispatcher.Invoke(() => ReloadStatus.IsActive = value); }
 
+        private CQPluginProxy SelectedPlugin { get; set; }
+
         private bool ToggleEnableRunningStatus { set => Dispatcher.Invoke(() => EnableStatus.IsActive = value); }
 
-        private bool FormLoaded { get; set; }
+        private void OpenAllDataBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "app"));
+        }
+
+        private void OpenDataBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
+            if (Directory.Exists(path))
+            {
+                Process.Start(path);
+            }
+            else
+            {
+                DialogHelper.ShowSimpleDialog("嗯哼", "插件数据目录不存在");
+            }
+        }
+
+        private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var menu = new ContextMenu();
+            foreach (var item in SelectedPlugin.AppInfo.menu)
+            {
+                MenuItem menuItem = new();
+                menuItem.Header = item.name;
+                menuItem.Click += (a, b) =>
+                {
+                    if (SelectedPlugin.Enabled is false)
+                    {
+                        DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
+                        return;
+                    }
+                    PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function);
+                };
+                menu.Items.Add(menuItem);
+            }
+            menu.PlacementTarget = (UIElement)sender;
+            menu.Placement = PlacementMode.MousePoint;
+            menu.IsOpen = true;
+        }
+
+        private void OpenPluginPathBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (FormLoaded)
+            {
+                return;
+            }
+            ReloadAllRunningStatus = false;
+            ReloadRunningStatus = false;
+            ToggleEnableRunningStatus = false;
+            PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
+            PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
+            PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
+            PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
+            PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
+            PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
+
+            DataContext = this;
+            CQPlugins.Clear();
+            foreach (var item in PluginManagerProxy.Proxies)
+            {
+                CQPlugins.Add(new CQPluginProxyWrapper(item));
+            }
+            FormLoaded = true;
+        }
 
         private void PluginListContainer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -71,20 +146,21 @@ namespace Another_Mirai_Native.UI.Pages
             UpdateAuthList();
         }
 
-        private void UpdateAuthList()
+        private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
         {
-            if (PluginListContainer.SelectedItem == null)
-            {
-                return;
-            }
-            AuthDisplay.Items.Clear();
-            foreach (var item in ((CQPluginProxyWrapper)PluginListContainer.SelectedItem).TargetPlugin.AppInfo.auth.OrderBy(x => x))
-            {
-                if (AuthChineseName.ContainsKey(item))
-                {
-                    AuthDisplay.Items.Add(AuthChineseName[item]);
-                }
-            }
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
+        }
+
+        private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)
+        {
+            Dispatcher.Invoke(() => CQPlugins.Add(new CQPluginProxyWrapper(plugin)));
+        }
+
+        private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
+        {
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
         }
 
         private async void ReloadAllBtn_Click(object sender, RoutedEventArgs e)
@@ -102,14 +178,52 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
-        private void OpenPluginPathBtn_Click(object sender, RoutedEventArgs e)
+        private async void ReloadBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            if (!await DialogHelper.ShowConfirmDialog("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？"))
+            {
+                return;
+            }
+            ReloadRunningStatus = true;
+            await Task.Run(() =>
+            {
+                bool enable = SelectedPlugin.Enabled;
+                string id = SelectedPlugin.PluginId;
+                PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
+                if (enable)
+                {
+                    PluginManagerProxy.Instance.SetPluginEnabled(PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginId == id), true);
+                }
+                ReloadRunningStatus = false;
+            });
         }
 
-        private void OpenAllDataBtn_Click(object sender, RoutedEventArgs e)
+        private async void TestBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "app"));
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
+            {
+                return;
+            }
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode)
+            {
+                AppConfig.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
+                MainWindow.Instance.TestMenuItem.IsSelected = true;
+            }
+            else
+            {
+                AppConfig.TestingAuthCode = 0;
+                DialogHelper.ShowSimpleDialog("测试已停止", "");
+            }
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == SelectedPlugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
 
         private void ToggleEnableBtn_Click(object sender, RoutedEventArgs e)
@@ -145,133 +259,20 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
-        private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
+        private void UpdateAuthList()
         {
-            var menu = new ContextMenu();
-            foreach (var item in SelectedPlugin.AppInfo.menu)
+            if (PluginListContainer.SelectedItem == null)
             {
-                MenuItem menuItem = new();
-                menuItem.Header = item.name;
-                menuItem.Click += (a, b) =>
+                return;
+            }
+            AuthDisplay.Items.Clear();
+            foreach (var item in ((CQPluginProxyWrapper)PluginListContainer.SelectedItem).TargetPlugin.AppInfo.auth.OrderBy(x => x))
+            {
+                if (AuthChineseName.ContainsKey(item))
                 {
-                    if (SelectedPlugin.Enabled is false)
-                    {
-                        DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
-                        return;
-                    }
-                    PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function);
-                };
-                menu.Items.Add(menuItem);
-            }
-            menu.PlacementTarget = (UIElement)sender;
-            menu.Placement = PlacementMode.MousePoint;
-            menu.IsOpen = true;
-        }
-
-        private void OpenDataBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedPlugin == null)
-            {
-                return;
-            }
-            string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
-            if (Directory.Exists(path))
-            {
-                Process.Start(path);
-            }
-            else
-            {
-                DialogHelper.ShowSimpleDialog("嗯哼", "插件数据目录不存在");
-            }
-        }
-
-        private async void ReloadBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedPlugin == null)
-            {
-                return;
-            }
-            if (!await DialogHelper.ShowConfirmDialog("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？"))
-            {
-                return;
-            }
-            ReloadRunningStatus = true;
-            await Task.Run(() =>
-            {
-                bool enable = SelectedPlugin.Enabled;
-                string id = SelectedPlugin.PluginId;
-                PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
-                if (enable)
-                {
-                    PluginManagerProxy.Instance.SetPluginEnabled(PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginId == id), true);
+                    AuthDisplay.Items.Add(AuthChineseName[item]);
                 }
-                ReloadRunningStatus = false;
-            });
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (FormLoaded)
-            {
-                return;
             }
-            ReloadAllRunningStatus = false;
-            ReloadRunningStatus = false;
-            ToggleEnableRunningStatus = false;
-            PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
-            PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
-            PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
-            PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
-            PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
-            PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
-
-            DataContext = this;
-            CQPlugins.Clear();
-            foreach (var item in PluginManagerProxy.Proxies)
-            {
-                CQPlugins.Add(new CQPluginProxyWrapper(item));
-            }
-            FormLoaded = true;
-        }
-
-        private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
-        {
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
-        }
-
-        private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)
-        {
-            Dispatcher.Invoke(() => CQPlugins.Add(new CQPluginProxyWrapper(plugin)));
-        }
-
-        private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
-        {
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
-        }
-
-        private async void TestBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedPlugin == null)
-            {
-                return;
-            }
-            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
-            {
-                return;
-            }
-            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode)
-            {
-                AppConfig.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
-                MainWindow.Instance.TestMenuItem.IsSelected = true;
-            }
-            else
-            {
-                AppConfig.TestingAuthCode = 0;
-            }
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == SelectedPlugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
     }
 }

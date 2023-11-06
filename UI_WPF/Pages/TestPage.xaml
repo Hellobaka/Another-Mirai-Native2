@@ -5,100 +5,39 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="TestPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
-
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <CheckBox
-                x:Name="GroupMessageSelector"
-                VerticalAlignment="Center"
-                IsChecked="True">
-                群组
-            </CheckBox>
-            <TextBlock
-                Grid.Column="1"
-                Margin="0,0,10,0"
-                VerticalAlignment="Center">
-                群:
-            </TextBlock>
-            <TextBox
-                x:Name="GroupDisplay"
-                Grid.Column="2"
-                HorizontalAlignment="Stretch" />
-            <TextBlock
-                Grid.Column="3"
-                Margin="10,0,10,0"
-                VerticalAlignment="Center">
-                QQ:
-            </TextBlock>
-            <TextBox
-                x:Name="QQDisplay"
-                Grid.Column="4"
-                HorizontalAlignment="Stretch" />
-        </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-            <Button
-                x:Name="ClearBtn"
-                Grid.Column="0"
-                Margin="0,0,10,0"
-                Click="ClearBtn_Click"
-                Style="{StaticResource AccentButtonStyle}">
-                清空
-            </Button>
-            <Button
-                Name="ImageBtn"
-                Grid.Column="1"
-                Margin="0,0,10,0"
-                Click="ImageBtn_Click">
-                图
-            </Button>
-            <Button
-                Name="AtBtn"
-                Grid.Column="2"
-                Margin="0,0,10,0"
-                Click="AtBtn_Click">
-                @
-            </Button>
-            <TextBox
-                x:Name="SendMessage"
-                Grid.Column="3"
-                PreviewKeyDown="SendMessage_KeyDown" />
-            <Button
-                x:Name="SendBtn"
-                Grid.Column="4"
-                Margin="10,0,0,0"
-                Click="SendBtn_Click"
-                Style="{StaticResource AccentButtonStyle}">
-                发送
-            </Button>
-        </Grid>
-        <Border Grid.Row="1" Margin="0,10">
-            <ScrollViewer x:Name="TestMessageScrollViewer" Padding="10">
-                <StackPanel x:Name="TestMessageContainer" />
+        <TextBlock
+            x:Name="PageTitle"
+            Margin="10"
+            FontSize="15" />
+        <ui:NavigationView
+            x:Name="MainContainer"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            PaneDisplayMode="Top"
+            SelectionChanged="NavigationView_SelectionChanged">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem
+                    Content="消息测试"
+                    IsSelected="True"
+                    Tag="Test_MessagePage" />
+                <ui:NavigationViewItem Content="事件测试" Tag="Test_EventPage" />
+                <ui:NavigationViewItem Content="API测试" Tag="Test_APIPage" />
+            </ui:NavigationView.MenuItems>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ui:Frame x:Name="MainFrame" Style="{DynamicResource CascadeDataContextFrame}" />
             </ScrollViewer>
-        </Border>
+        </ui:NavigationView>
     </Grid>
 </Page>

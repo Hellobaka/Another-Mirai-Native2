@@ -208,7 +208,8 @@
                             x:Name="TestBtn"
                             Grid.Column="3"
                             Margin="5,0"
-                            HorizontalAlignment="Stretch" Click="TestBtn_Click">
+                            HorizontalAlignment="Stretch"
+                            Click="TestBtn_Click">
                             测试
                         </Button>
                         <Button
