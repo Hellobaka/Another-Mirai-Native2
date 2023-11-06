@@ -59,6 +59,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             PageTitle.Text = $"当前测试插件: {CurrentPlugin.PluginName}";
+            MessageMenuItem.IsSelected = true;
         }
     }
 }
