@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using System.IO;
 
 namespace Another_Mirai_Native.Model
 {
@@ -18,12 +19,12 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前成员的QQ昵称
         /// </summary>
-        public string Nick { get; set; }
+        public string Nick { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前成员在此群的群名片
         /// </summary>
-        public string Card { get; set; }
+        public string Card { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前群成员的性别
@@ -38,7 +39,7 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前成员所在地区
         /// </summary>
-        public string Area { get; set; }
+        public string Area { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前成员加入群的日期和时间
@@ -53,7 +54,7 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前群成员的等级
         /// </summary>
-        public string Level { get; set; }
+        public string Level { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前的群成员类型
@@ -63,7 +64,7 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前群成员在此群获得的专属头衔
         /// </summary>
-        public string ExclusiveTitle { get; set; }
+        public string ExclusiveTitle { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前群成员在此群的专属头衔过期时间, 若本属性为 null 则表示无期限

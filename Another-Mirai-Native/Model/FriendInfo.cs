@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Native;
+using System.IO;
 
 namespace Another_Mirai_Native.Model
 {
@@ -12,12 +13,12 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前的QQ昵称
         /// </summary>
-        public string Nick { get; set; }
+        public string Nick { get; set; } = "";
 
         /// <summary>
         /// 获取一个值, 指示当前的备注信息
         /// </summary>
-        public string Postscript { get; set; }
+        public string Postscript { get; set; } = "";
 
         public byte[] ToNative()
         {
