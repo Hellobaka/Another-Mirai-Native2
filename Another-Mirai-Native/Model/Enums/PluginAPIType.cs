@@ -7,6 +7,10 @@
         /// </summary>
         getCookies = 20,
 
+        getCsrfToken = 20,
+
+        getCookiesV2 = 20,
+
         /// <summary>
         /// 接收语音
         /// </summary>
