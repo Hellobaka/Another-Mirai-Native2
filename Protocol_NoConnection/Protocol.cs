@@ -67,6 +67,7 @@ namespace Protocol_NoConnection
                 QQ = 1145141919,
                 Sex = QQSex.Woman
             });
+            GroupMemberInfos.Add(BuildSelfMockData(1919810));
             for (int i = 0; i < Random.Next(2, 25); i++)
             {
                 GroupInfos.Add(new GroupInfo
@@ -97,9 +98,32 @@ namespace Protocol_NoConnection
                         Sex = Random.NextDouble() > 0.3 ? QQSex.Man : Random.NextDouble() > 0.1 ? QQSex.Woman : QQSex.Unknown
                     });
                 }
+                GroupMemberInfos.Add(BuildSelfMockData(GroupInfos.Last().Group));
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).First().MemberType = QQGroupMemberType.Creator;
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).Skip(1).First().MemberType = QQGroupMemberType.Manage;
             }
+        }
+
+        private GroupMemberInfo BuildSelfMockData(long groupId)
+        {
+            return new GroupMemberInfo
+            {
+                Age = Random.Next(0, 99),
+                Area = $"Area{Random.Next()}",
+                Card = $"Card{Random.Next()}",
+                ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
+                ExclusiveTitleExpirationTime = null,
+                Group = groupId,
+                IsAllowEditorCard = true,
+                IsBadRecord = Random.NextDouble() > 0.5,
+                JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
+                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
+                Level = $"Level{Random.Next()}",
+                MemberType = QQGroupMemberType.Member,
+                Nick = $"Nick{Random.Next()}",
+                QQ = GetLoginQQ(),
+                Sex = QQSex.Man
+            };
         }
 
         public int CanSendImage()
@@ -153,7 +177,7 @@ namespace Protocol_NoConnection
 
         public string GetGroupInfo(long groupId, bool notCache)
         {
-            return GroupInfos.FirstOrDefault(x => x.Group == groupId).ToNativeBase64(false) ?? "";
+            return GroupInfos.FirstOrDefault(x => x.Group == groupId)?.ToNativeBase64(false) ?? "";
         }
 
         public string GetGroupList()
@@ -163,7 +187,7 @@ namespace Protocol_NoConnection
 
         public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
-            return GroupMemberInfos.FirstOrDefault(x => x.Group == groupId && x.QQ == qqId).ToNativeBase64() ?? "";
+            return GroupMemberInfos.FirstOrDefault(x => x.Group == groupId && x.QQ == qqId)?.ToNativeBase64() ?? "";
         }
 
         public string GetGroupMemberList(long groupId)
