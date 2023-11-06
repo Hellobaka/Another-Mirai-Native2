@@ -12,6 +12,8 @@ namespace Another_Mirai_Native.Native
 
         public Stopwatch Stopwatch { get; set; } = new();
 
+        public bool Testing => CurrentPlugin?.AppInfo.AuthCode == AppConfig.TestingAuthCode;
+
         public CQPImplementation(CQPluginProxy plugin)
         {
             CurrentPlugin = plugin;
@@ -80,6 +82,11 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
         {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendPrivateMsg", new() { { "qqId", qqId }, { "msg", msg } });
+                return 1;
+            }
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qqId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
@@ -90,6 +97,11 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_sendGroupMsg(int authCode, long groupId, string msg)
         {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendGroupMsg", new() { { "groupId", groupId }, { "msg", msg } });
+                return 1;
+            }
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg);
@@ -100,6 +112,11 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_sendGroupQuoteMsg(int authCode, long groupId, int msgId, string msg)
         {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendGroupQuoteMsg", new() { { "groupId", groupId }, { "msgId", msgId }, { "msg", msg } });
+                return 1;
+            }
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
@@ -110,6 +127,11 @@ namespace Another_Mirai_Native.Native
 
         private int CQ_sendDiscussMsg(int authCode, long discussId, string msg)
         {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendDiscussMsg", new() { { "discussId", discussId }, { "msg", msg } });
+                return 1;
+            }
             return ProtocolManager.Instance.CurrentProtocol.SendDiscussMsg(discussId, msg);
         }
 

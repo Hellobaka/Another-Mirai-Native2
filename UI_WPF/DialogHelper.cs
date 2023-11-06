@@ -124,14 +124,17 @@ namespace Another_Mirai_Native.UI
 
         public static async void ShowSimpleDialog(string title, string message)
         {
-            ContentDialog dialog = new()
+            await MainWindow.Instance.Dispatcher.Invoke(async () =>
             {
-                Title = title,
-                Content = message,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = "确认"
-            };
-            await dialog.ShowAsync();
+                ContentDialog dialog = new()
+                {
+                    Title = title,
+                    Content = message,
+                    DefaultButton = ContentDialogButton.Primary,
+                    PrimaryButtonText = "确认"
+                };
+                await dialog.ShowAsync();
+            });
         }
 
         private static async void HandleDialogQueue()

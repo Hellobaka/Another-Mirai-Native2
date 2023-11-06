@@ -68,6 +68,7 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem
+                    x:Name="TestMenuItem"
                     Content="测试"
                     Icon="59634"
                     Tag="TestPage" />

@@ -42,7 +42,11 @@ namespace Another_Mirai_Native.Config
 
         public static int LoadTimeout { get; set; } = 5 * 1000;
 
-        public static int MessageCache { get; set; } = 4096;
+        public static int MessageCacheSize { get; set; } = 4096;
+
+        public static int TestingAuthCode { get; set; } = 0;
+
+        public static long TestQQ { get; set; } = 10001;
 
         public static void LoadConfig()
         {
@@ -62,7 +66,7 @@ namespace Another_Mirai_Native.Config
             PluginAutoEnable = ConfigHelper.GetConfig("PluginAutoEnable", defaultValue: false);
             DebugMode = ConfigHelper.GetConfig("DebugMode", defaultValue: false);
             LoadTimeout = ConfigHelper.GetConfig("LoadTimeout", defaultValue: 5 * 1000);
-            MessageCache = ConfigHelper.GetConfig("MessageCache", defaultValue: 4096);
+            MessageCacheSize = ConfigHelper.GetConfig("MessageCacheSize", defaultValue: 4096);
         }
     }
 }

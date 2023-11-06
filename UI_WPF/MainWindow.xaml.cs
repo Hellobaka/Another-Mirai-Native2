@@ -136,6 +136,7 @@ namespace Another_Mirai_Native.UI
                    {
                        if (plugin.Enabled is false)
                        {
+                           Show();
                            DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
                            return;
                        }

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Native;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +15,10 @@ namespace Another_Mirai_Native.UI.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             CQPluginProxy proxy = (CQPluginProxy)value;
+            if (proxy.AppInfo.AuthCode == AppConfig.TestingAuthCode)
+            {
+                return "🧪";
+            }
             if (proxy == null || (proxy.HasConnection && proxy.Enabled))
             {
                 return "";

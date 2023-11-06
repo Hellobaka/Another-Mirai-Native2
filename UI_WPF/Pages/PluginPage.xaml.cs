@@ -250,5 +250,28 @@ namespace Another_Mirai_Native.UI.Pages
             var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
             target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
+
+        private async void TestBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
+            {
+                return;
+            }
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode)
+            {
+                AppConfig.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
+                MainWindow.Instance.TestMenuItem.IsSelected = true;
+            }
+            else
+            {
+                AppConfig.TestingAuthCode = 0;
+            }
+            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == SelectedPlugin);
+            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
+        }
     }
 }
