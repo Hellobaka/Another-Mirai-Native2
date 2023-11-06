@@ -437,6 +437,13 @@ namespace Another_Mirai_Native.Native
                             {
                                 LogHelper.Error("插件进程监控", $"[{plugin.Key}]{plugin.Value.name} 进程不存在");
                                 PluginProcess.Remove(plugin.Key);
+                                var instance = Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == plugin.Value.AuthCode);
+                                bool currentEnable = false;
+                                if (instance != null)
+                                {
+                                    currentEnable = instance.Enabled;
+                                    instance.Enabled = false;
+                                }
                                 if (AppConfig.RestartPluginIfDead)
                                 {
                                     LogHelper.Info("插件进程监控", $"{plugin.Value.name} 重启");
@@ -444,6 +451,11 @@ namespace Another_Mirai_Native.Native
                                     if (pluginProcess != null)
                                     {
                                         PluginProcess.Add(pluginProcess.Id, plugin.Value);
+                                    }
+                                    WaitAppInfo(pluginProcess.Id);
+                                    if (currentEnable || AppConfig.PluginAutoEnable)
+                                    {
+                                        SetPluginEnabled(instance, true);
                                     }
                                 }
                             }
