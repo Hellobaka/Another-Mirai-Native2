@@ -81,6 +81,7 @@ namespace Another_Mirai_Native.Native
             catch (Exception ex)
             {
                 LogHelper.Error("调用插件方法", ex);
+                ExceptionDispatchInfo.Capture(ex);
             }
             return result;
         }

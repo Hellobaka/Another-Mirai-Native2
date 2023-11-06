@@ -126,8 +126,11 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             string fileName = Path.GetFileName(path);
-            File.Copy(path, $@"data\image\{fileName}");
-            SendMessage.Text += $"[CQ:image,file={fileName}]";
+            if (!File.Exists($@"data\image\{fileName}"))
+            {
+                File.Copy(path, $@"data\image\{fileName}");
+            }
+            SendMessage.Text += $"[CQ:image,file={fileName.Replace(".cqimg", "")}]";
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -175,14 +178,15 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             AddChatBlock(msg, true);
-            ConfigHelper.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text));
+            ConfigHelper.SetConfig("TesterGroup", Convert.ToInt64(QQDisplay.Text), @"conf\test.json");
+            ConfigHelper.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\test.json");
             SendMessage.Text = "";
             if (MessageHistories.Contains(msg))
             {
                 MessageHistories.Remove(msg);
             }
             MessageHistories.Add(msg);
-            ConfigHelper.SetConfig("MessageHistories", MessageHistories);
+            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf\test.json");
             MessageHistoryIndex = 0;
             bool useGroup = GroupMessageSelector.IsChecked.Value;
             Thread thread = new(() =>
