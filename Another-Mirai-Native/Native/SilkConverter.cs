@@ -12,17 +12,17 @@ namespace Another_Mirai_Native.Native
         {
             if (!Directory.Exists("tools"))
             {
-                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "工具丢失", "tools目录丢失，无法继续");
+                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "tools目录丢失，无法继续");
                 return false;
             }
             if (!File.Exists(@"tools\silk_v3_encoder.exe"))
             {
-                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "工具丢失", "tools\\silk_v3_encoder.exe 文件丢失，无法继续");
+                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "tools\\silk_v3_encoder.exe 文件丢失，无法继续");
                 return false;
             }
             if (!File.Exists(@"tools\ffmpeg.exe"))
             {
-                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "工具丢失", "tools\\ffmpeg.exe 文件丢失，无法继续");
+                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "tools\\ffmpeg.exe 文件丢失，无法继续");
                 return false;
             }
             string output = RunCMDCommand($"tools\\ffmpeg.exe -y -i \"{voicePath}\" -f s16le -ar 24000 -ac 1 \"{voicePath.Replace(extension, ".pcm")}\"");
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.Native
 
             if (output.Contains("Invalid data found when processing input"))
             {
-                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "格式错误", "接受的音频可能不是FFmpeg可转换的格式");
+                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "接受的音频可能不是FFmpeg可转换的格式");
                 return false;
             }
             if (!output.Contains("video:0kB"))
@@ -41,7 +41,7 @@ namespace Another_Mirai_Native.Native
                 string logPath = $"{DateTime.Now:yyyyMMddHHmmss}.log";
                 Directory.CreateDirectory("logs\\audio");
                 File.WriteAllText(Path.Combine("logs\\audio", logPath), output);
-                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", "未知错误", $"FFmpeg输出已保存至{logPath}");
+                LogHelper.WriteLog(LogLevel.Error, "音频格式转换", $"FFmpeg错误输出已保存至{logPath}");
                 return false;
             }
             string filePath = voicePath.Replace(extension, ".pcm");
