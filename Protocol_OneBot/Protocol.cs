@@ -65,6 +65,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             if (result == null)
             {
                 LogHelper.Debug("OneBotAPI", "Timeout");
+                return null;
             }
             else
             {

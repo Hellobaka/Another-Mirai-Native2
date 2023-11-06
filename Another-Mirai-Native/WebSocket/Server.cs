@@ -35,8 +35,13 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                foreach (var connection in WebSocketConnections)
+                for (int i = 0; i < WebSocketConnections.Count; i++)
                 {
+                    if (i > WebSocketConnections.Count)
+                    {
+                        continue;
+                    }
+                    var connection = WebSocketConnections[i];
                     if (connection.IsAvailable)
                     {
                         connection.Send(invoke.ToJson());

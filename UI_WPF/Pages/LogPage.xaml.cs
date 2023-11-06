@@ -21,6 +21,8 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class LogPage : Page
     {
+        private object syncLock = new();
+
         public LogPage()
         {
             InitializeComponent();
@@ -147,21 +149,29 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogHelper_LogAdded(int logId, LogModel log)
         {
-            RawLogCollections.Add(log);
-            BalloonIcon tipIcon = BalloonIcon.Warning;
-            if (log.priority == (int)LogLevel.Warning)
+            lock (syncLock)
             {
-                tipIcon = BalloonIcon.Warning;
+                RawLogCollections.Add(log);
+                BalloonIcon tipIcon = BalloonIcon.Warning;
+                if (log.priority == (int)LogLevel.Warning)
+                {
+                    tipIcon = BalloonIcon.Warning;
+                }
+                else if (log.priority >= (int)LogLevel.Error)
+                {
+                    tipIcon = BalloonIcon.Error;
+                }
+                if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
+                {
+                    MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
+                }
+                RefilterLogCollection();
+                SelectLastLog();
             }
-            else if (log.priority >= (int)LogLevel.Error)
-            {
-                tipIcon = BalloonIcon.Error;
-            }
-            if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
-            {
-                MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
-            }
-            RefilterLogCollection();
+        }
+
+        private void SelectLastLog()
+        {
             Dispatcher.Invoke(() =>
             {
                 if (AutoScroll.IsOn)
@@ -192,6 +202,10 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogPage_Loaded(object sender, RoutedEventArgs e)
         {
+            if (AutoScroll.IsOn)
+            {
+                SelectLastLog();
+            }
             if (FormLoaded)
             {
                 return;

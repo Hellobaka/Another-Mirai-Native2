@@ -39,7 +39,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock FontSize="24">已加载插件</TextBlock>
-                <TextBlock Grid.Row="1">❌表示插件未启用 🚫表示与插件失去通讯</TextBlock>
+                <TextBlock Grid.Row="1" Margin="0,5">❌表示插件未启用 🚫表示与插件失去通讯</TextBlock>
                 <ListView
                     x:Name="PluginListContainer"
                     Grid.Row="2"

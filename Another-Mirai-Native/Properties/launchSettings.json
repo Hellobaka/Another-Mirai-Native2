@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Another-Mirai-Native": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": false
     }
   }
 }

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "UI_WPF": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": false
     }
   }
 }
