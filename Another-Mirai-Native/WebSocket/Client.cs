@@ -59,7 +59,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
             {
-                LogHelper.Debug("向服务端发送", message);
+                // LogHelper.Debug("向服务端发送", message);
                 WebSocketClient.Send(message);
             }
         }
@@ -68,7 +68,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                LogHelper.Debug("来自服务端的消息", message);
+                //LogHelper.Debug("来自服务端的消息", message);
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {

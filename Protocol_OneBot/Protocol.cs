@@ -157,11 +157,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             groupMessage.ParsedMessage = CQCode.Parse(groupMessage.raw_message);
             SaveCQCodeCache(groupMessage.ParsedMessage);
             groupMessage.raw_message = UnescapeRawMessage(groupMessage.raw_message);
-            RequestCache.Message.Add((groupMessage.message_id, groupMessage.raw_message));
-            while (RequestCache.Message.Count > AppConfig.MessageCache)
-            {
-                RequestCache.Message.RemoveAt(0);
-            }
+            RequestCache.AddMessageCache(groupMessage.message_id, groupMessage.raw_message);
             Stopwatch sw = new();
             sw.Start();
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id} QQ:{groupMessage.user_id}({groupMessage.sender?.nickname}) {groupMessage.raw_message}", "处理中...");
@@ -337,11 +333,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             privateMessage.ParsedMessage = CQCode.Parse(privateMessage.raw_message);
             privateMessage.raw_message = UnescapeRawMessage(privateMessage.raw_message);
             SaveCQCodeCache(privateMessage.ParsedMessage);
-            RequestCache.Message.Add((privateMessage.message_id, privateMessage.raw_message));
-            while (RequestCache.Message.Count > AppConfig.MessageCache)
-            {
-                RequestCache.Message.RemoveAt(0);
-            }
+            RequestCache.AddMessageCache(privateMessage.message_id, privateMessage.raw_message);
             Stopwatch sw = new();
             sw.Start();
             int logId = 0;
