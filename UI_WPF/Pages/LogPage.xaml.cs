@@ -67,10 +67,9 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                     string dateTime = Helper.TimeStamp2DateTime(x.time).ToString("G");
                     return dateTime.Contains(search) || x.detail.Contains(search) || x.name.Contains(search) || x.source.Contains(search) || x.status.Contains(search);
-                });
-                ls = ls.Skip(Math.Max(0, ls.Count() - UIConfig.LogItemsCount));
+                }).OrderBy(x => x.time).ToList();
                 LogCollections.Clear();
-                foreach (var item in ls)
+                foreach (var item in ls.Skip(Math.Max(0, ls.Count - UIConfig.LogItemsCount)))
                 {
                     LogCollections.Add(item);
                 }
