@@ -124,6 +124,8 @@ namespace Another_Mirai_Native.UI
 
         public static void ShowSimpleDialog(string title, string message)
         {
+            MainWindow.Instance.Show();
+            MainWindow.Instance.Focus();
             ContentDialog dialog = new()
             {
                 Title = title,
