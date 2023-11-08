@@ -12,12 +12,13 @@ namespace Another_Mirai_Native.Native
         public PluginManagerProxy()
         {
             Instance = this;
-            StartPluginMonitor();
         }
 
         public static PluginManagerProxy Instance { get; private set; }
 
-        public static Dictionary<int, AppInfo> PluginProcess { get; private set; } = new();
+        public static Dictionary<Process, AppInfo> PluginProcess { get; private set; } = new();
+
+        public static Dictionary<int, Process> PluginProcessMap { get; private set; } = new();
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
@@ -77,29 +78,28 @@ namespace Another_Mirai_Native.Native
                 Process? pluginProcess = StartPluginProcess(item);
                 if (pluginProcess != null)
                 {
-                    PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = item });
+                    PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = item });
+                    PluginProcessMap.Add(pluginProcess.Id, pluginProcess);
                 }
             }
             return true;
         }
 
-        public bool WaitAppInfo(int pid)
+        public bool WaitAppInfo(Process process)
         {
             bool result = false;
-            for (int i = 0; i < AppConfig.LoadTimeout / 10; i++)
+            if (!string.IsNullOrEmpty(PluginProcess[process].AppId))
             {
-                if (!PluginProcess.ContainsKey(pid))
-                {
-                    result = false;
-                    break;
-                }
-                if (!string.IsNullOrEmpty(PluginProcess[pid].AppId))
-                {
-                    result = true;
-                    break;
-                }
-                Thread.Sleep(10);
+                return true;
             }
+            ManualResetEvent resetEvent = new(false);
+            RequestWaiter.CommonWaiter.TryAdd($"AppInfo_{process.Id}", new WaiterInfo
+            {
+                CurrentProcess = process,
+                WaitSignal = resetEvent
+            });
+            resetEvent.WaitOne(TimeSpan.FromMilliseconds(AppConfig.LoadTimeout));
+            result = !string.IsNullOrEmpty(PluginProcess[process].AppId);
             return result;
         }
 
@@ -334,7 +334,55 @@ namespace Another_Mirai_Native.Native
             {
                 pluginProcess = Process.Start(startConfig);
             }
+            pluginProcess.EnableRaisingEvents = true;
+            pluginProcess.Exited += PluginProcess_Exited;
             return pluginProcess;
+        }
+
+        private void PluginProcess_Exited(object sender, EventArgs e)
+        {
+            if (sender is not Process pluginProcess || !PluginProcess.ContainsKey(pluginProcess))
+            {
+                return;
+            }
+            var appInfo = PluginProcess[pluginProcess];
+            LogHelper.Error("插件进程监控", $"{appInfo.name} 进程不存在");
+            PluginProcess.Remove(pluginProcess);
+            PluginProcessMap.Remove(pluginProcess.Id);
+
+            foreach (var key in RequestWaiter.CommonWaiter.Keys)
+            {
+                if (RequestWaiter.CommonWaiter.TryGetValue(key, out var value)
+                    && value.CurrentProcess.Id == pluginProcess.Id)
+                {
+                    if (RequestWaiter.CommonWaiter.TryRemove(key, out var removedValue))
+                    {
+                        removedValue.WaitSignal.Set();// 由于进程退出，中断所有由此进程等待的请求
+                    }
+                }
+            }
+            var instance = Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == appInfo.AuthCode);
+            bool currentEnable = false;
+            if (instance != null)
+            {
+                currentEnable = instance.Enabled;
+                instance.Enabled = false;
+            }
+            if (AppConfig.RestartPluginIfDead)
+            {
+                LogHelper.Info("插件进程监控", $"{appInfo.name} 重启");
+                Process? newProcess = StartPluginProcess(appInfo.PluginPath);
+                if (newProcess != null)
+                {
+                    PluginProcess.Add(newProcess, new AppInfo { PluginPath = appInfo.PluginPath });
+                    PluginProcessMap.Add(newProcess.Id, newProcess);
+                }
+                WaitAppInfo(newProcess);
+                if (currentEnable || AppConfig.PluginAutoEnable)
+                {
+                    SetPluginEnabled(instance, true);
+                }
+            }
         }
 
         public void ReloadAllPlugins()
@@ -350,16 +398,17 @@ namespace Another_Mirai_Native.Native
             bool currentEnable = plugin.Enabled;
             InvokeEvent(plugin, PluginEventType.Disable);
             plugin.KillProcess();
-            plugin.Enabled = false;
             if (!AppConfig.RestartPluginIfDead)
             {
+                plugin.Enabled = false;
                 LogHelper.Info("重启插件", $"{plugin.PluginName} 重启");
                 Process? pluginProcess = StartPluginProcess(plugin.AppInfo.PluginPath);
                 if (pluginProcess != null)
                 {
-                    PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = plugin.AppInfo.PluginPath });
-                    WaitAppInfo(pluginProcess.Id);
-                    if (currentEnable)
+                    PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = plugin.AppInfo.PluginPath });
+                    PluginProcessMap.Add(pluginProcess.Id, pluginProcess);
+                    WaitAppInfo(pluginProcess);
+                    if (currentEnable && !AppConfig.PluginAutoEnable)
                     {
                         SetPluginEnabled(plugin, true);
                     }
@@ -416,61 +465,6 @@ namespace Another_Mirai_Native.Native
             }
             LogHelper.WriteLog(LogLevel.InfoSuccess, "改变插件状态", logMessage);
             return success;
-        }
-
-        private void StartPluginMonitor()
-        {
-            try
-            {
-                var monitor = Task.Run(() =>
-                {
-                    while (true)
-                    {
-                        for (int i = 0; i < PluginProcess.Count; i++)
-                        {
-                            var plugin = PluginProcess.ElementAt(i);
-                            try
-                            {
-                                _ = Process.GetProcessById(plugin.Key);
-                            }
-                            catch
-                            {
-                                LogHelper.Error("插件进程监控", $"[{plugin.Key}]{plugin.Value.name} 进程不存在");
-                                PluginProcess.Remove(plugin.Key);
-                                var instance = Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == plugin.Value.AuthCode);
-                                bool currentEnable = false;
-                                if (instance != null)
-                                {
-                                    currentEnable = instance.Enabled;
-                                    instance.Enabled = false;
-                                }
-                                if (AppConfig.RestartPluginIfDead)
-                                {
-                                    LogHelper.Info("插件进程监控", $"{plugin.Value.name} 重启");
-                                    Process? pluginProcess = StartPluginProcess(plugin.Value.PluginPath);
-                                    if (pluginProcess != null)
-                                    {
-                                        PluginProcess.Add(pluginProcess.Id, plugin.Value);
-                                    }
-                                    WaitAppInfo(pluginProcess.Id);
-                                    if (currentEnable || AppConfig.PluginAutoEnable)
-                                    {
-                                        SetPluginEnabled(instance, true);
-                                    }
-                                }
-                            }
-                        }
-                        Thread.Sleep(1000);
-                    }
-                });
-            }
-            catch (AggregateException ex)
-            {
-                foreach (var item in ex.InnerExceptions)
-                {
-                    LogHelper.Error("插件进程监控", ex);
-                }
-            }
         }
     }
 }

@@ -18,6 +18,10 @@ namespace Another_Mirai_Native.Config
 
         public static int ReconnectTime { get; set; }
 
+        /// <summary>
+        /// 插件自动重启，若启用进程Exit时会自动重启插件，并根据之前的启用状态更新插件的Enable状态
+        /// 若不启用，在重载时更新插件的Enable状态
+        /// </summary>
         public static bool RestartPluginIfDead { get; set; }
 
         public static string WebSocketURL { get; set; } = "";

@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Fleck;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Diagnostics;
 
 namespace Another_Mirai_Native.WebSocket
@@ -129,7 +130,7 @@ namespace Another_Mirai_Native.WebSocket
                                 Process? pluginProcess = PluginManagerProxy.Instance.StartPluginProcess(pluginProxy.AppInfo.PluginPath);
                                 if (pluginProcess != null)
                                 {
-                                    PluginManagerProxy.PluginProcess.Add(pluginProcess.Id, new AppInfo { PluginPath = pluginProxy.AppInfo.PluginPath });
+                                    PluginManagerProxy.PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = pluginProxy.AppInfo.PluginPath });
                                 }
                             }
                             return 1;
@@ -223,17 +224,20 @@ namespace Another_Mirai_Native.WebSocket
                         proxy.AppInfo = appInfo;
                     }
                     PluginManagerProxy.SetProxyConnected(proxy.ConnectionID);
-                    if (PluginManagerProxy.PluginProcess.ContainsKey(appInfo.PID))
+                    if (PluginManagerProxy.PluginProcessMap.TryGetValue(appInfo.PID, out Process pluginProcess))
                     {
-                        string path = PluginManagerProxy.PluginProcess[appInfo.PID].PluginPath;
-                        PluginManagerProxy.PluginProcess[appInfo.PID] = appInfo;
-                        PluginManagerProxy.PluginProcess[appInfo.PID].PluginPath = path;
+                        string path = PluginManagerProxy.PluginProcess[pluginProcess].PluginPath;
+                        PluginManagerProxy.PluginProcess[pluginProcess] = appInfo;
+                        PluginManagerProxy.PluginProcess[pluginProcess].PluginPath = path;
+                    }
+                    if (RequestWaiter.CommonWaiter.TryRemove($"AppInfo_{appInfo.PID}", out var waitInfo))
+                    {
+                        waitInfo.WaitSignal.Set();
                     }
                     // LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
                     if (AppConfig.PluginAutoEnable)
                     {
-                        PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.Enable);
-                        PluginManagerProxy.Instance.InvokeEvent(proxy, PluginEventType.StartUp);
+                        PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
                     }
                     break;
 

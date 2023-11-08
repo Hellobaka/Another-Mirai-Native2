@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 using Fleck;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native.Native
 {
@@ -97,7 +98,17 @@ namespace Another_Mirai_Native.Native
 
         public void KillProcess()
         {
-            Invoke(new InvokeBody { Function = "KillProcess" });
+            if(HasConnection)
+            {
+                Invoke(new InvokeBody { Function = "KillProcess" });
+            }
+            else
+            {
+                if(PluginManagerProxy.PluginProcessMap.TryGetValue(AppInfo.PID, out Process process))
+                {
+                    process.Kill();
+                }
+            }
         }
     }
 }

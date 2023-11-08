@@ -174,7 +174,6 @@ namespace Another_Mirai_Native.UI.Pages
             await Task.Run(() =>
             {
                 PluginManagerProxy.Instance.ReloadAllPlugins();
-                MainWindow.Instance.EnablePluginByConfig();
                 ReloadAllRunningStatus = false;
             });
         }
@@ -189,16 +188,10 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            ReloadRunningStatus = true;
+            ReloadStatus.IsActive = true;
             await Task.Run(() =>
             {
-                bool enable = SelectedPlugin.Enabled;
-                string id = SelectedPlugin.PluginId;
                 PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
-                if (enable)
-                {
-                    PluginManagerProxy.Instance.SetPluginEnabled(PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginId == id), true);
-                }
                 ReloadRunningStatus = false;
             });
         }
