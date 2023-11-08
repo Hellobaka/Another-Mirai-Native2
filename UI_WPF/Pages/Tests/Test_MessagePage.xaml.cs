@@ -178,15 +178,15 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             AddChatBlock(msg, true);
-            ConfigHelper.SetConfig("TesterGroup", Convert.ToInt64(QQDisplay.Text), @"conf\test.json");
-            ConfigHelper.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\test.json");
+            ConfigHelper.SetConfig("TesterGroup", Convert.ToInt64(GroupDisplay.Text), @"conf\Test.json");
+            ConfigHelper.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\Test.json");
             SendMessage.Text = "";
             if (MessageHistories.Contains(msg))
             {
                 MessageHistories.Remove(msg);
             }
             MessageHistories.Add(msg);
-            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf\test.json");
+            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf\Test.json");
             MessageHistoryIndex = 0;
             bool useGroup = GroupMessageSelector.IsChecked.Value;
             Thread thread = new(() =>
