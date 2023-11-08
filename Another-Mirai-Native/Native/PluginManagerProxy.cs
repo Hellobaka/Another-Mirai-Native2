@@ -74,15 +74,16 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadPlugins()
         {
-            foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
+            Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
             {
                 Process? pluginProcess = StartPluginProcess(item);
                 if (pluginProcess != null)
                 {
                     PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = item });
                     PluginProcessMap.Add(pluginProcess.Id, pluginProcess);
+                    WaitAppInfo(pluginProcess);
                 }
-            }
+            });
             return true;
         }
 

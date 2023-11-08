@@ -94,9 +94,9 @@ namespace Another_Mirai_Native.UI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
-            InitCore();
             _ = new ProtocolManager();
             ProtocolSelectorDialog dialog = new();
             await dialog.ShowAsync();
@@ -168,21 +168,16 @@ namespace Another_Mirai_Native.UI
             {
                 var manager = new PluginManagerProxy();
                 manager.LoadPlugins();
-                Thread.Sleep(500);
                 InitNotifyIcon();
                 EnablePluginByConfig();
             });
         }
 
-        public void EnablePluginByConfig()
+        private void EnablePluginByConfig()
         {
-            foreach (var item in PluginManagerProxy.PluginProcess)
+            Parallel.ForEach(PluginManagerProxy.Proxies, item =>
             {
-                if (!PluginManagerProxy.Instance.WaitAppInfo(item.Key))
-                {
-                    return;
-                }
-                string appId = item.Value.AppId;
+                string appId = item.AppInfo.AppId;
                 if (UIConfig.AutoEnablePlugins.Any(x => x == appId))
                 {
                     var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AppId == appId);
@@ -192,20 +187,7 @@ namespace Another_Mirai_Native.UI
                     }
                     PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
                 }
-            }
-        }
-
-        private void InitCore()
-        {
-            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-            Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
-            Another_Mirai_Native.Entry.CreateInitFolders();
-            Another_Mirai_Native.Entry.InitExceptionCapture();
-            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
-            {
-                LogHelper.CreateDB();
-            }
-            new Another_Mirai_Native.WebSocket.Server().Start();
+            });
         }
 
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
