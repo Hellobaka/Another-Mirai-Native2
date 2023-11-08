@@ -74,6 +74,7 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadPlugins()
         {
+            Stopwatch sw = Stopwatch.StartNew();
             Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
             {
                 Process? pluginProcess = StartPluginProcess(item);
@@ -84,6 +85,7 @@ namespace Another_Mirai_Native.Native
                     WaitAppInfo(pluginProcess);
                 }
             });
+            LogHelper.WriteLog("加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
         }
 
