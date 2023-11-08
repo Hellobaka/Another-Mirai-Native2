@@ -39,6 +39,12 @@
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
+                    <Setter Property="Text" Value="{Binding detail}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="False">
+                    <Setter Property="Text" Value="{Binding detailNoWrap}" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </Page.Resources>
@@ -92,20 +98,14 @@
                     <GridViewColumn Width="Auto" Header="时间">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource LogItemStyle}"
-                                    Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="插件">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource LogItemStyle}"
-                                    Text="{Binding source}" />
+                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding source}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -123,13 +123,10 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock
-                                    MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected, Converter={StaticResource SelectHeightConverter}}"
-                                    VerticalAlignment="Center"
                                     MouseRightButtonDown="ListViewItem_MouseRightButtonDown"
                                     Style="{StaticResource LogItemStyle}"
-                                    Text="{Binding detail}"
                                     TextTrimming="CharacterEllipsis"
-                                    TextWrapping="Wrap">
+                                    TextWrapping="{Binding IsSelected, Converter={StaticResource BoolTextWrapConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
                                     <ui:ContextFlyoutService.ContextFlyout>
                                         <ui:Flyout AreOpenCloseAnimationsEnabled="True">
                                             <StackPanel>

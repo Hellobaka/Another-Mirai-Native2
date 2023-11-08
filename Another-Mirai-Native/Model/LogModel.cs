@@ -37,5 +37,14 @@ namespace Another_Mirai_Native.Model
         /// 日志内容
         /// </summary>
         public string detail { get; set; } = "";
+
+        [SugarColumn(IsIgnore = true)]
+        public string detailNoWrap
+        {
+            get
+            {
+                return detail.Replace("\r", " ").Replace("\n", " ");
+            }
+        }
     }
 }
