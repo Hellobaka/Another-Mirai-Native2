@@ -104,17 +104,15 @@ namespace Another_Mirai_Native
             {
                 Task.Run(() =>
                 {
-                    while (!Client.ExitFlag)
+                    try
                     {
-                        try
-                        {
-                            _ = Process.GetProcessById(pid);
-                        }
-                        catch
-                        {
-                            Environment.Exit(0);
-                        }
-                        Thread.Sleep(1000);
+                        var core = Process.GetProcessById(pid);
+                        core.WaitForExit();
+                        Environment.Exit(0);
+                    }
+                    catch
+                    {
+                        Environment.Exit(0);
                     }
                 });
             }
