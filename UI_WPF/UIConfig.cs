@@ -43,5 +43,15 @@ namespace Another_Mirai_Native.UI
             ShowBalloonTip = ConfigHelper.GetConfig("ShowBalloonTip", DefaultConfigPath, true);
             PopWindowWhenError = ConfigHelper.GetConfig("PopWindowWhenError", DefaultConfigPath, true);
         }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            ObservableCollection<T> list = new();
+            foreach (T item in source)
+            {
+                list.Add(item);
+            }
+            return list;
+        }
     }
 }

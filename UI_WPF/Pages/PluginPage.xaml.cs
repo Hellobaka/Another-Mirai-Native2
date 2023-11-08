@@ -155,7 +155,11 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)
         {
-            Dispatcher.Invoke(() => CQPlugins.Add(new CQPluginProxyWrapper(plugin)));
+            Dispatcher.Invoke(() =>
+            {
+                CQPlugins.Add(new CQPluginProxyWrapper(plugin));
+                CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
+            });
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
