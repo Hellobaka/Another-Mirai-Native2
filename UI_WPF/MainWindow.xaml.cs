@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
@@ -202,6 +203,10 @@ namespace Another_Mirai_Native.UI
             Another_Mirai_Native.Entry.InitExceptionCapture();
             AppConfig.LoadConfig();
             AppConfig.IsCore = true;
+            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            {
+                LogHelper.CreateDB();
+            }
             new Another_Mirai_Native.WebSocket.Server().Start();
         }
 

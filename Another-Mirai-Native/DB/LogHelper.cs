@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.DB
         /// <returns></returns>
         public static string GetLogFileName()
         {
-            var fileInfo = new DirectoryInfo($@"logs\{QQ}").GetFiles("*.db");
+            var fileInfo = new DirectoryInfo("logs").GetFiles("*.db");
             string filename = "";
             foreach (var item in fileInfo)
             {
@@ -133,12 +133,12 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static string GetLogFilePath()
         {
-            if (Directory.Exists($@"logs\{QQ}") is false)
+            if (Directory.Exists("logs") is false)
             {
-                Directory.CreateDirectory($@"logs\{QQ}");
+                Directory.CreateDirectory("logs");
             }
 
-            return Path.Combine(Environment.CurrentDirectory, $@"logs\{QQ}", GetLogFileName());
+            return Path.Combine(Environment.CurrentDirectory, "logs", GetLogFileName());
         }
 
         /// <summary>

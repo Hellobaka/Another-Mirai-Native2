@@ -13,7 +13,6 @@
     MinHeight="420"
     ui:WindowHelper.UseModernWindowStyle="True"
     Closing="Window_Closing"
-    Icon="/icon.ico"
     Loaded="MainWindow_Loaded"
     SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"

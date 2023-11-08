@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebSocket;
@@ -32,6 +33,10 @@ namespace Another_Mirai_Native
             // 加载配置
             AppConfig.LoadConfig();
             AppConfig.IsCore = args.Length == 0;
+            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            {
+                LogHelper.CreateDB();
+            }
             if (args.Length == 0)
             {
                 // 启动WS服务器
