@@ -138,6 +138,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(item));
             }
+            CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
             FormLoaded = true;
         }
 
