@@ -268,17 +268,18 @@ namespace Another_Mirai_Native.WebSocket
                 LogHelper.Debug("收到客户端消息", message);
                 Task.Run(() => HandleClientMessage(message, connection));
             };
+            WebSocketConnections.Add(connection);
             // 心跳
-            Task.Run(() =>
-            {
-                Thread.Sleep(100);
-                WebSocketConnections.Add(connection);
-                while (connection != null && connection.IsAvailable)
-                {
-                    connection.SendPing(Array.Empty<byte>());
-                    Thread.Sleep(AppConfig.HeartBeatInterval);
-                }
-            });
+            //Task.Run(() =>
+            //{
+            //    Thread.Sleep(100);
+            //    WebSocketConnections.Add(connection);
+            //    while (connection != null && connection.IsAvailable)
+            //    {
+            //        connection.SendPing(Array.Empty<byte>());
+            //        Thread.Sleep(AppConfig.HeartBeatInterval);
+            //    }
+            //});
         }
 
         private void LogHelper_LogAdded(int logId, LogModel log)
