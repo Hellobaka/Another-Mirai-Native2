@@ -99,6 +99,10 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (AppConfig.UseDatabase)
+            {
+                RawLogCollections = LogHelper.GetDisplayLogs(FilterLogLevelSelector.SelectedIndex * 10, UIConfig.LogItemsCount);
+            }
             RefilterLogCollection();
             if (LogCollections != null && LogCollections.Count > 0)
             {
