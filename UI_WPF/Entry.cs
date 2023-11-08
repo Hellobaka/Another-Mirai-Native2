@@ -1,7 +1,9 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
+using Another_Mirai_Native.WebSocket;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,14 +16,27 @@ namespace Another_Mirai_Native.UI
         {
             if (args.Length == 0)
             {
-                AppConfig.LoadConfig();
-                AppConfig.IsCore = true;
+                InitCore();
                 App.Main();
             }
             else
             {
                 Another_Mirai_Native.Entry.Main(args);
             }
+        }
+
+        private static void InitCore()
+        {
+            AppConfig.LoadConfig();
+            AppConfig.IsCore = true;
+            Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
+            Another_Mirai_Native.Entry.CreateInitFolders();
+            Another_Mirai_Native.Entry.InitExceptionCapture();
+            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            {
+                LogHelper.CreateDB();
+            }
+            new Server().Start();
         }
     }
 }

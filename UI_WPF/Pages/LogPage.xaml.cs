@@ -126,7 +126,13 @@ namespace Another_Mirai_Native.UI.Pages
             for (int i = 0; i < LogGridView.Columns.Count; i++)
             {
                 var column = LogGridView.Columns[i];
-                column.Width = ConfigHelper.GetConfig($"LogColumn{i + 1}_Width", UIConfig.DefaultConfigPath, 200);
+                try
+                {
+                    column.Width = ConfigHelper.GetConfig($"LogColumn{i + 1}_Width", UIConfig.DefaultConfigPath, 200);
+                }
+                catch
+                {
+                }
             }
         }
 
