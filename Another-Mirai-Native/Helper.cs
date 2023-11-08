@@ -208,10 +208,6 @@ namespace Another_Mirai_Native
                     }
                 });
                 Server.Instance.WaitingMessage.Add(guid, new InvokeResult());
-                while (!Server.Instance.WaitingMessage[guid].Success)
-                {
-                    Thread.Sleep(100);
-                }
             }
             else
             {
@@ -228,11 +224,13 @@ namespace Another_Mirai_Native
                     Function = "ShowErrorDialog"
                 }.ToJson());
                 Client.Instance.WaitingMessage.Add(guid, new InvokeResult());
-                while (!Client.Instance.WaitingMessage[guid].Success)
-                {
-                    Thread.Sleep(100);
-                }
             }
+            ManualResetEvent waitEvent = new(false);
+            RequestWaiter.CommonWaiter.TryAdd(guid, new WaiterInfo
+            {
+                WaitSignal = waitEvent,
+            });
+            waitEvent.WaitOne();
         }
     }
 }

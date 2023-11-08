@@ -1,11 +1,9 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Fleck;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Diagnostics;
 
 namespace Another_Mirai_Native.WebSocket
@@ -22,15 +20,20 @@ namespace Another_Mirai_Native.WebSocket
             LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
         }
 
+        public static event Action<InvokeBody> OnShowErrorDialogCalled;
+
         public static Server Instance { get; set; }
 
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
         public WebSocketServer WebSocketServer { get; set; }
 
-        public static event Action<InvokeBody> OnShowErrorDialogCalled;
-
         private List<IWebSocketConnection> WebSocketConnections { get; set; } = new();
+
+        public void ActiveShowErrorDialog(InvokeBody caller)
+        {
+            OnShowErrorDialogCalled?.Invoke(caller);
+        }
 
         public void Broadcast(InvokeBody invoke)
         {
@@ -43,7 +46,7 @@ namespace Another_Mirai_Native.WebSocket
                         continue;
                     }
                     var connection = WebSocketConnections[i];
-                    if (connection.IsAvailable)
+                    if (connection != null && connection.IsAvailable)
                     {
                         connection.Send(invoke.ToJson());
                     }
@@ -57,14 +60,11 @@ namespace Another_Mirai_Native.WebSocket
 
         public void Start()
         {
-            WebSocketServer = new(AppConfig.WebSocketURL);
-            WebSocketServer.RestartAfterListenError = true;
+            WebSocketServer = new(AppConfig.WebSocketURL)
+            {
+                RestartAfterListenError = true
+            };
             WebSocketServer.Start(Handler);
-        }
-
-        public void ActiveShowErrorDialog(InvokeBody caller)
-        {
-            OnShowErrorDialogCalled?.Invoke(caller);
         }
 
         private void HandleClientMessage(string message, IWebSocketConnection connection)
@@ -194,10 +194,7 @@ namespace Another_Mirai_Native.WebSocket
             {
                 WaitingMessage.Add(caller.GUID, new InvokeResult());
                 OnShowErrorDialogCalled?.Invoke(caller);
-                while (!WaitingMessage[caller.GUID].Success)
-                {
-                    Thread.Sleep(100);
-                }
+                RequestWaiter.Wait(caller.GUID, -1);
                 result = WaitingMessage[caller.GUID];
                 WaitingMessage.Remove(caller.GUID);
             }
@@ -230,10 +227,7 @@ namespace Another_Mirai_Native.WebSocket
                         PluginManagerProxy.PluginProcess[pluginProcess] = appInfo;
                         PluginManagerProxy.PluginProcess[pluginProcess].PluginPath = path;
                     }
-                    if (RequestWaiter.CommonWaiter.TryRemove($"AppInfo_{appInfo.PID}", out var waitInfo))
-                    {
-                        waitInfo.WaitSignal.Set();
-                    }
+                    RequestWaiter.TriggerByKey($"AppInfo_{appInfo.PID}");
                     // LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
                     if (AppConfig.PluginAutoEnable)
                     {
@@ -248,6 +242,7 @@ namespace Another_Mirai_Native.WebSocket
             {
                 WaitingMessage[result.GUID] = result;
                 WaitingMessage[result.GUID].Success = true;
+                RequestWaiter.TriggerByKey(result.GUID);
             }
         }
 
@@ -259,12 +254,14 @@ namespace Another_Mirai_Native.WebSocket
                 LogHelper.Debug("客户端连接", $"连接已断开, ID={connection.ConnectionInfo.Id}");
                 PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
+                RequestWaiter.ResetSignalByConnectionID(connection.ConnectionInfo.Id.ToString());
             };
             connection.OnError = (e) =>
             {
                 LogHelper.Debug("客户端连接", $"连接已断开, ID={connection.ConnectionInfo.Id}");
                 PluginManagerProxy.SetProxyDisconnected(connection.ConnectionInfo.Id);
                 WebSocketConnections.Remove(connection);
+                RequestWaiter.ResetSignalByConnectionID(connection.ConnectionInfo.Id.ToString());
             };
             connection.OnMessage = (message) =>
             {

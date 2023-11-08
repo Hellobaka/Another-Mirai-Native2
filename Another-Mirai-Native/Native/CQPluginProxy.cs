@@ -37,7 +37,7 @@ namespace Another_Mirai_Native.Native
 
         public IWebSocketConnection Connection { get; set; }
 
-        private List<string> APIAuthWhiteList { get; set; } = new()
+        private static List<string> APIAuthWhiteList { get; set; } = new()
         {
             "getImage",
             "getRecordV2",
@@ -57,21 +57,16 @@ namespace Another_Mirai_Native.Native
             }
             Connection.Send(caller.ToJson());
             Server.Instance.WaitingMessage.Add(caller.GUID, new InvokeResult());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
+            if (RequestWaiter.Wait(caller.GUID, this, AppConfig.PluginInvokeTimeout)
+                && Server.Instance.WaitingMessage.TryGetValue(caller.GUID, out InvokeResult result))
             {
-                if (Server.Instance.WaitingMessage[caller.GUID].Success)
-                {
-                    var result = Server.Instance.WaitingMessage[caller.GUID];
-                    Server.Instance.WaitingMessage.Remove(caller.GUID);
-                    return result;
-                }
-                if (!HasConnection)
-                {
-                    break;
-                }
-                Thread.Sleep(10);
+                Server.Instance.WaitingMessage.Remove(caller.GUID);
+                return result;
             }
-            return new InvokeResult() { Message = "Timeout" };
+            else
+            {
+                return new InvokeResult() { Message = "Timeout" };
+            }
         }
 
         public bool CheckPluginCanInvoke(string invokeName)
@@ -98,13 +93,13 @@ namespace Another_Mirai_Native.Native
 
         public void KillProcess()
         {
-            if(HasConnection)
+            if (HasConnection)
             {
                 Invoke(new InvokeBody { Function = "KillProcess" });
             }
             else
             {
-                if(PluginManagerProxy.PluginProcessMap.TryGetValue(AppInfo.PID, out Process process))
+                if (PluginManagerProxy.PluginProcessMap.TryGetValue(AppInfo.PID, out Process process))
                 {
                     process.Kill();
                 }

@@ -95,13 +95,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             msg.ProfilerRequest = isProfilerRequest;
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
+            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.PluginInvokeTimeout))
             {
-                if (msg.Finished)
-                {
-                    return msg.Result;
-                }
-                Thread.Sleep(10);
+                WaitingMessages.Remove(syncId);
+                return msg.Result;
             }
             LogHelper.Debug("调用MiraiAPI", "Timeout");
             return null;
@@ -139,6 +136,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             ReconnectCount++;
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            RequestWaiter.ResetSignalByWebSocket(EventConnection);
             IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
                          MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
@@ -184,6 +182,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             ReconnectCount++;
             LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            RequestWaiter.ResetSignalByWebSocket(MessageConnection);
             IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
               MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
@@ -252,6 +251,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         var waiting = WaitingMessages[api.syncId];
                         waiting.Result = data;
                         waiting.Finished = true;
+                        RequestWaiter.TriggerByKey(api.syncId);
                     }
                 }
                 else

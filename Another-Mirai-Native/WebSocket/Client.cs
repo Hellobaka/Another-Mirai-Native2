@@ -51,6 +51,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             ReconnectCount++;
             LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
             Thread.Sleep(AppConfig.ReconnectTime);
             Connect(AppConfig.Core_WSURL);
         }
@@ -92,6 +93,7 @@ namespace Another_Mirai_Native.WebSocket
                     {
                         WaitingMessage[result.GUID] = result;
                         WaitingMessage[result.GUID].Success = true;
+                        RequestWaiter.TriggerByKey(result.GUID);
                     }
                 }
             }
@@ -111,18 +113,25 @@ namespace Another_Mirai_Native.WebSocket
                 return null;
             }
             WaitingMessage.Add(guid, new InvokeResult());
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
+            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
             {
-                if (WaitingMessage.ContainsKey(guid) && WaitingMessage[guid].Success)
+                var result = WaitingMessage[guid];
+                WaitingMessage.Remove(guid);
+                if (result.Success)
                 {
-                    var result = WaitingMessage[guid];
-                    WaitingMessage.Remove(guid);
                     return result;
                 }
-                Thread.Sleep(10);
+                else
+                {
+                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
+                    return new InvokeResult() { Message = result.Message };
+                }
             }
-            LogHelper.Error("调用超时", "Timeout");
-            return new InvokeResult() { Message = "Timeout" };
+            else
+            {
+                LogHelper.Error("调用超时", "Timeout");
+                return new InvokeResult() { Message = "Timeout" };
+            }
         }
 
         private int HandleEvent(string function, object[] args)

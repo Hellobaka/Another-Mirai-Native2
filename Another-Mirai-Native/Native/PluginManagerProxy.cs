@@ -54,6 +54,7 @@ namespace Another_Mirai_Native.Native
                 var proxy = Proxies.First(x => x.ConnectionID == id);
                 proxy.HasConnection = false;
                 OnPluginProxyConnectStatusChanged?.Invoke(proxy);
+                RequestWaiter.ResetSignalByPluginProxy(proxy);
             }
         }
 
@@ -350,17 +351,8 @@ namespace Another_Mirai_Native.Native
             PluginProcess.Remove(pluginProcess);
             PluginProcessMap.Remove(pluginProcess.Id);
 
-            foreach (var key in RequestWaiter.CommonWaiter.Keys)
-            {
-                if (RequestWaiter.CommonWaiter.TryGetValue(key, out var value)
-                    && value.CurrentProcess.Id == pluginProcess.Id)
-                {
-                    if (RequestWaiter.CommonWaiter.TryRemove(key, out var removedValue))
-                    {
-                        removedValue.WaitSignal.Set();// 由于进程退出，中断所有由此进程等待的请求
-                    }
-                }
-            }
+            RequestWaiter.ResetSignalByProcess(pluginProcess);// 由于进程退出，中断所有由此进程等待的请求
+
             var instance = Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == appInfo.AuthCode);
             bool currentEnable = false;
             if (instance != null)

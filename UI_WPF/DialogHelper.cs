@@ -157,6 +157,7 @@ namespace Another_Mirai_Native.UI
             {
                 Server.Instance.WaitingMessage[dialog.GUID].Result = true;
                 Server.Instance.WaitingMessage[dialog.GUID].Success = true;
+                RequestWaiter.TriggerByKey(dialog.GUID);
             }
             if (dialog.DialogResult == ContentDialogResult.Secondary && dialog.Plugin != null)
             {

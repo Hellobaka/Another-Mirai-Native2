@@ -53,14 +53,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             WaitingMessages.Add(syncId, msg);
             APIClient.Send(obj.ToJson());
             JObject result = null;
-            for (int i = 0; i < AppConfig.PluginInvokeTimeout / 10; i++)
+            if (RequestWaiter.Wait(syncId, APIClient, AppConfig.PluginInvokeTimeout))
             {
-                if (msg.Finished)
-                {
-                    result = msg.Result;
-                    break;
-                }
-                Thread.Sleep(10);
+                WaitingMessages.Remove(syncId);
+                result = msg.Result;
             }
             if (result == null)
             {
@@ -129,6 +125,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             ReconnectCount++;
             IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
               EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            RequestWaiter.ResetSignalByWebSocket(APIClient);
             LogHelper.Error("API服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
@@ -416,6 +413,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             ReconnectCount++;
             IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
                EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            RequestWaiter.ResetSignalByWebSocket(EventClient);
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
@@ -448,6 +446,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {
                         WaitingMessages[echo].Result = json;
                         WaitingMessages[echo].Finished = true;
+                        RequestWaiter.TriggerByKey(echo);
                     }
                 }
             }
