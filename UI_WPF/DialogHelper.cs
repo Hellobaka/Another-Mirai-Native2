@@ -122,19 +122,20 @@ namespace Another_Mirai_Native.UI
             });
         }
 
-        public static async void ShowSimpleDialog(string title, string message)
+        public static void ShowSimpleDialog(string title, string message)
         {
-            await MainWindow.Instance.Dispatcher.Invoke(async () =>
+            ContentDialog dialog = new()
             {
-                ContentDialog dialog = new()
-                {
-                    Title = title,
-                    Content = message,
-                    DefaultButton = ContentDialogButton.Primary,
-                    PrimaryButtonText = "确认"
-                };
-                await dialog.ShowAsync();
+                Title = title,
+                Content = message,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = "确认"
+            };
+            ErrorDialogQueue.Enqueue(new DialogQueueObject
+            {
+                ContentDialog = dialog,
             });
+            HandleDialogQueue();
         }
 
         private static async void HandleDialogQueue()
@@ -151,7 +152,14 @@ namespace Another_Mirai_Native.UI
             }
             await MainWindow.Instance.Dispatcher.Invoke(async () =>
             {
-                dialog.DialogResult = await dialog.Dialog.ShowAsync();
+                if (dialog.Dialog != null)
+                {
+                    dialog.DialogResult = await dialog.Dialog.ShowAsync();
+                }
+                else if (dialog.ContentDialog != null)
+                {
+                    dialog.DialogResult = await dialog.ContentDialog.ShowAsync();
+                }
             });
             if (Server.Instance.WaitingMessage.ContainsKey(dialog.GUID))
             {
@@ -171,9 +179,11 @@ namespace Another_Mirai_Native.UI
         {
             public SimpleMessageBox Dialog { get; set; }
 
+            public ContentDialog ContentDialog { get; set; }
+
             public ContentDialogResult DialogResult { get; set; } = ContentDialogResult.None;
 
-            public string GUID { get; set; }
+            public string GUID { get; set; } = "";
 
             public CQPluginProxy Plugin { get; set; }
         }
