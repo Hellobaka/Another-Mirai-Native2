@@ -201,8 +201,6 @@ namespace Another_Mirai_Native.UI
             Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
             Another_Mirai_Native.Entry.CreateInitFolders();
             Another_Mirai_Native.Entry.InitExceptionCapture();
-            AppConfig.LoadConfig();
-            AppConfig.IsCore = true;
             if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();

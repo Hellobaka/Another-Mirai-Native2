@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Another_Mirai_Native.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace Another_Mirai_Native.UI
         {
             if (args.Length == 0)
             {
+                AppConfig.LoadConfig();
+                AppConfig.IsCore = true;
                 App.Main();
             }
             else
