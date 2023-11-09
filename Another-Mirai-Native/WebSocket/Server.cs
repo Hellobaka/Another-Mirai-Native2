@@ -270,16 +270,20 @@ namespace Another_Mirai_Native.WebSocket
             };
             WebSocketConnections.Add(connection);
             // 心跳
-            //Task.Run(() =>
-            //{
-            //    Thread.Sleep(100);
-            //    WebSocketConnections.Add(connection);
-            //    while (connection != null && connection.IsAvailable)
-            //    {
-            //        connection.SendPing(Array.Empty<byte>());
-            //        Thread.Sleep(AppConfig.HeartBeatInterval);
-            //    }
-            //});
+            new Thread(() =>
+            {
+                try
+                {
+                    while (connection != null && connection.IsAvailable)
+                    {
+                        Thread.Sleep(AppConfig.HeartBeatInterval);
+                        connection.SendPing(Array.Empty<byte>());
+                    }
+                }
+                catch
+                {
+                }
+            }).Start();
         }
 
         private void LogHelper_LogAdded(int logId, LogModel log)
