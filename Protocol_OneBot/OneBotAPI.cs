@@ -5,13 +5,24 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
-using System.Numerics;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
     public partial class OneBotAPI : IProtocol
     {
-        public bool IsConnected { get; set; }
+        public bool IsConnected
+        {
+            get
+            {
+                return APIClient != null && APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                         EventClient != null && EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            }
+
+            set
+            {
+                _ = value;
+            }
+        }
 
         public string Name { get; set; } = "OneBot v11";
 
@@ -264,10 +275,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 WsURL = config["Ws"];
                 if (WsURL.EndsWith("/"))
                 {
-                    WsURL = WsURL.Substring(0, WsURL.Length - 1);
-                    ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
+                    WsURL = WsURL[..^1];
                 }
                 AuthKey = config["AuthKey"];
+                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
+                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\MiraiAPIHttp.json");
             }
             return success;
         }

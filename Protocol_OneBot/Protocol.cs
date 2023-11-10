@@ -123,8 +123,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
-            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
-              EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
             RequestWaiter.ResetSignalByWebSocket(APIClient);
             LogHelper.Error("API服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
@@ -141,8 +139,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "API服务器", "连接到API服务器");
-            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
-              EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void DispatchGroupMessage(JObject message)
@@ -411,8 +407,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
-            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
-               EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
             RequestWaiter.ResetSignalByWebSocket(EventClient);
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.ReconnectTime);
@@ -429,8 +423,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
-            IsConnected = APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                   EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void HandleAPI(string data)
