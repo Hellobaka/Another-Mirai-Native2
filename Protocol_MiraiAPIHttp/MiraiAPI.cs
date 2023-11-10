@@ -14,7 +14,18 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 {
     public partial class Protocol : IProtocol
     {
-        public bool IsConnected { get; set; }
+        public bool IsConnected
+        {
+            get
+            {
+                return MessageConnection != null && MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
+                        EventConnection != null && EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+            }
+            set
+            {
+                _ = value;
+            }
+        }
 
         public string Name { get; set; } = "MiraiAPIHttp";
 
@@ -265,10 +276,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 if (WsURL.EndsWith("/"))
                 {
                     WsURL = WsURL.Substring(0, WsURL.Length - 1);
-                    ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
                 }
                 AuthKey = config["AuthKey"];
                 QQ = value;
+                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
+                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\MiraiAPIHttp.json");
+                ConfigHelper.SetConfig("QQ", QQ, @"conf\MiraiAPIHttp.json");
             }
             return success;
         }
