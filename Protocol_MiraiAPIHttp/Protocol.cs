@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +31,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public WebSocketSharp.WebSocket EventConnection { get; set; } = new("ws://127.0.0.1");
 
         public WebSocketSharp.WebSocket MessageConnection { get; set; } = new("ws://127.0.0.1");
+
+        private Task HeartBeatTask { get; set; }
 
         /// <summary>
         /// Mirai框架中登录中 且 希望控制逻辑的QQ号
@@ -91,8 +91,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public JObject CallMiraiAPI(string syncId, object obj, bool isProfilerRequest = false)
         {
-            var msg = new WaitingMessage();
-            msg.ProfilerRequest = isProfilerRequest;
+            var msg = new WaitingMessage
+            {
+                ProfilerRequest = isProfilerRequest
+            };
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
             if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.PluginInvokeTimeout))
@@ -118,8 +120,27 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             EventConnection.OnClose += EventConnection_OnClose;
             EventConnection.OnMessage += EventConnection_OnMessage;
             EventConnection.Connect();
+            StartHeartBeatTask();
 
             return EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+        }
+
+        private void StartHeartBeatTask()
+        {
+            if (HeartBeatTask != null)
+            {
+                return;
+            }
+            HeartBeatTask = Task.Factory.StartNew(() =>
+            {
+                while (IsConnected)
+                {
+                    Thread.Sleep(AppConfig.HeartBeatInterval);
+                    EventConnection.Ping();
+                    MessageConnection.Ping();
+                }
+                HeartBeatTask = null;
+            });
         }
 
         private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
@@ -137,8 +158,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             ReconnectCount++;
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(EventConnection);
-            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                         MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectEventServer();
         }
@@ -146,8 +165,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void EventConnection_OnOpen(object sender, EventArgs e)
         {
             ReconnectCount = 0;
-            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                        MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
         }
 
@@ -165,6 +182,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection.OnClose += MessageConnection_OnClose;
             MessageConnection.OnMessage += MessageConnection_OnMessage;
             MessageConnection.Connect();
+            StartHeartBeatTask();
             return MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
@@ -183,8 +201,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             ReconnectCount++;
             LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(MessageConnection);
-            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
-              MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
             Thread.Sleep(AppConfig.ReconnectTime);
             ConnectMessageServer();
         }
@@ -193,8 +209,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             ReconnectCount = 0;
             LogHelper.WriteLog(LogLevel.Debug, "消息服务器", "连接到消息服务器");
-            IsConnected = MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                 MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void HandleEvent(string message)
@@ -318,7 +332,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     var botGroupPermissionChange = msg.ToObject<BotGroupPermissionChangeEvent>();
                     int botGroupPermissionChangeStatus = 1;
                     if (botGroupPermissionChange.origin == "MEMBER")
+                    {
                         botGroupPermissionChangeStatus = 2;
+                    }
+
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot权限变更", $"群:{botGroupPermissionChange.group.id}({botGroupPermissionChange.group.name}) 新权限为:{botGroupPermissionChange.current}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.AdminChange, botGroupPermissionChangeStatus, Helper.TimeStamp, botGroupPermissionChange.group.id, QQ);
                     break;
@@ -368,28 +385,29 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.GroupRecallEvent:
                     var groupRecall = msg.ToObject<GroupRecallEvent>();
                     string groupRecallMsg = GetMessageByMsgId(groupRecall.messageId, groupRecall.group.id);
-                    if (string.IsNullOrEmpty(groupRecallMsg)) groupRecallMsg = "消息拉取失败";
+                    if (string.IsNullOrEmpty(groupRecallMsg))
+                    {
+                        groupRecallMsg = "消息拉取失败";
+                    }
+
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群撤回", $"群:{groupRecall.group.id}({groupRecall.group.name}) QQ:{groupRecall.authorId} 内容:{groupRecallMsg}", "处理中...");
                     break;
 
                 case MiraiEvents.FriendRecallEvent:
                     var friendRecall = msg.ToObject<FriendRecallEvent>();
                     string friendRecallMsg = GetMessageByMsgId(friendRecall.messageId, friendRecall.authorId);
-                    if (string.IsNullOrEmpty(friendRecallMsg)) friendRecallMsg = "消息拉取失败";
+                    if (string.IsNullOrEmpty(friendRecallMsg))
+                    {
+                        friendRecallMsg = "消息拉取失败";
+                    }
+
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "私聊撤回", $"QQ:{friendRecall.authorId} 内容:{friendRecallMsg}", "处理中...");
                     break;
 
                 case MiraiEvents.NudgeEvent:
                     var nudge = msg.ToObject<NudgeEvent>();
                     string nudgeMsg = "";
-                    if (nudge.subject.kind == "Group")
-                    {
-                        nudgeMsg = $"群:{nudge.subject.id} QQ:{nudge.fromId}";
-                    }
-                    else
-                    {
-                        nudgeMsg = $"QQ:{nudge.fromId}";
-                    }
+                    nudgeMsg = nudge.subject.kind == "Group" ? $"群:{nudge.subject.id} QQ:{nudge.fromId}" : $"QQ:{nudge.fromId}";
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "戳一戳", $"{nudgeMsg} 内容:{nudge.action} {nudge.target} {nudge.suffix}", "处理中...");
                     break;
 
@@ -456,7 +474,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     var memberPermissionChangeEvent = msg.ToObject<MemberPermissionChangeEvent>();
                     int memberPermissionChangeStatus = 1;
                     if (memberPermissionChangeEvent.origin == "MEMBER")
+                    {
                         memberPermissionChangeStatus = 2;
+                    }
+
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{memberPermissionChangeEvent.member.group.id}({memberPermissionChangeEvent.member.group.name}) QQ:{memberPermissionChangeEvent.member.id}({memberPermissionChangeEvent.member.memberName}) 新权限为:{memberPermissionChangeEvent.current}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.AdminChange, memberPermissionChangeStatus, Helper.TimeStamp, memberPermissionChangeEvent.member.group.id, memberPermissionChangeEvent.member.id);
                     break;
