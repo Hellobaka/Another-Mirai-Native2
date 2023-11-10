@@ -254,6 +254,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginId);
                 }
+                UIConfig.AutoEnablePlugins = UIConfig.AutoEnablePlugins.Distinct().ToList();
                 ConfigHelper.SetConfig("AutoEnablePlugins", UIConfig.AutoEnablePlugins, UIConfig.DefaultConfigPath);
             });
         }
