@@ -47,7 +47,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private DispatcherTimer ResizeTimer { get; set; }
 
-        private LogModel SelectedLog { get; set; }
+        private LogModel SelectedLog => LogView.SelectedItem as LogModel;
 
         public void RefilterLogCollection()
         {
@@ -186,11 +186,7 @@ namespace Another_Mirai_Native.UI.Pages
                 if (AutoScroll.IsOn)
                 {
                     LogView.SelectedItem = LogCollections.Count > 0 ? LogCollections.Last() : null;
-                    LogView.ScrollIntoView(SelectedLog);
-                }
-                else
-                {
-                    LogView.SelectedItem = SelectedLog;
+                    LogView.ScrollIntoView(LogView.SelectedItem);
                 }
             });
         }
@@ -237,7 +233,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedLog = LogView.SelectedItem as LogModel;
+            // SelectedLog = LogView.SelectedItem as LogModel;
         }
 
         private void ResizeTimer_Tick(object? sender, EventArgs e)
