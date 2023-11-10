@@ -231,6 +231,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+            if (AppConfig.PluginAutoEnable)
+            {
+                DialogHelper.ShowSimpleDialog("啊...", "由于插件自动启用已开启，无法切换插件运行状态");
+                return;
+            }
             if (SelectedPlugin.HasConnection is false)
             {
                 DialogHelper.ShowSimpleDialog("嗯哼", "插件进程不存在或失去连接，尝试点击重载");
@@ -253,6 +258,7 @@ namespace Another_Mirai_Native.UI.Pages
                 else
                 {
                     UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginId);
+                    PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
                 }
                 UIConfig.AutoEnablePlugins = UIConfig.AutoEnablePlugins.Distinct().ToList();
                 ConfigHelper.SetConfig("AutoEnablePlugins", UIConfig.AutoEnablePlugins, UIConfig.DefaultConfigPath);
