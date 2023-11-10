@@ -5,6 +5,7 @@ using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -28,7 +29,7 @@ namespace Another_Mirai_Native.UI
             menu.Items.Add(updateItem);
             menu.Items.Add(new Separator());
             MenuItem menuParentItem = new() { Header = "应用" };
-            foreach (var item in plugins)
+            foreach (var item in plugins.OrderBy(x => x.PluginId))
             {
                 MenuItem menuItem = new() { Header = item.PluginName };
                 foreach (var subMenu in item.AppInfo.menu)
