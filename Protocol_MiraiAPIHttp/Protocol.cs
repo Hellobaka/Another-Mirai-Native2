@@ -116,12 +116,16 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
             string event_ConnectUrl = $"{WsURL}/event?verifyKey={AuthKey}&qq={QQ}";
             EventConnection = new(event_ConnectUrl);
+            var waitTask = Task.Run(() =>
+            {
+                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.LoadTimeout);
+            });
             EventConnection.OnOpen += EventConnection_OnOpen;
             EventConnection.OnClose += EventConnection_OnClose;
             EventConnection.OnMessage += EventConnection_OnMessage;
             EventConnection.Connect();
             StartHeartBeatTask();
-
+            waitTask.Wait();
             return EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
@@ -145,7 +149,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
-            Console.WriteLine($"[Event]\t" + e.Data);
+            Debug.WriteLine($"[Event]\t" + e.Data);
             Task.Run(() => HandleEvent(e.Data));
         }
 
@@ -178,17 +182,22 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
             string message_ConnectUrl = $"{WsURL}/message?verifyKey={AuthKey}&qq={QQ}";
             MessageConnection = new(message_ConnectUrl);
+            var waitTask = Task.Run(() =>
+            {
+                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.LoadTimeout);
+            });
             MessageConnection.OnOpen += MessageConnection_OnOpen;
             MessageConnection.OnClose += MessageConnection_OnClose;
             MessageConnection.OnMessage += MessageConnection_OnMessage;
             MessageConnection.Connect();
             StartHeartBeatTask();
+            waitTask.Wait();
             return MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
         private void MessageConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
-            Console.WriteLine($"[Message]\t" + e.Data);
+            Debug.WriteLine($"[Message]\t" + e.Data);
             Task.Run(() => HandleMessage(e.Data));
         }
 
@@ -224,6 +233,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     if (sessionKey.code == 0)
                     {
                         SessionKey_Event = sessionKey.session;
+                        RequestWaiter.TriggerByKey("MAH_EventAuthKey");
                     }
                     else
                     {
@@ -251,6 +261,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     if (sessionKey.code == 0)
                     {
                         SessionKey_Message = sessionKey.session;
+                        RequestWaiter.TriggerByKey("MAH_MessageAuthKey");
                     }
                     else
                     {
@@ -277,6 +288,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         {
                             profilerRequest.Value.Result = data;
                             profilerRequest.Value.Finished = true;
+                            RequestWaiter.TriggerByKey(profilerRequest.Key);
                             return;
                         }
                     }
@@ -291,6 +303,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         private void ParseAndDispatchEvent(JObject msg)
         {
+            if (PluginManagerProxy.Instance == null)
+            {
+                return;
+            }
             Stopwatch sw = new();
             sw.Start();
             MiraiEvents events = Helper.String2Enum<MiraiEvents>(msg["type"].ToString());
@@ -545,6 +561,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         private void ParseAndDispatchMessage(JObject msg)
         {
+            if (PluginManagerProxy.Instance == null)
+            {
+                return;
+            }
             Stopwatch sw = new();
             sw.Start();
             MiraiMessageEvents events = Helper.String2Enum<MiraiMessageEvents>(msg["type"].ToString());
