@@ -11,9 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -56,11 +58,149 @@ namespace Another_Mirai_Native.UI
 
         public static MainWindow Instance { get; set; }
 
+        public TaskbarIcon TaskbarIcon { get; set; }
+
         private Dictionary<string, object> PageCache { get; set; } = new();
 
         private DispatcherTimer ResizeTimer { get; set; }
 
-        public TaskbarIcon TaskbarIcon { get; set; }
+        public void BuildTaskbarIconMenu()
+        {
+            if (TaskbarIcon == null)
+            {
+                return;
+            }
+            TaskbarIcon.ContextMenu = DialogHelper.BuildNotifyIconContextMenu(PluginManagerProxy.Proxies,
+                   exitAction: () => Environment.Exit(0),
+                   reloadAction: PluginManagerProxy.Instance.ReloadAllPlugins,
+                   pluginManageAction: () =>
+                   {
+                       Show();
+                       SetForegroundWindow();
+                       PluginMenuItem.IsSelected = true;
+                   },
+                   logAction: () =>
+                   {
+                       Show();
+                       SetForegroundWindow();
+                       LogMenuItem.IsSelected = true;
+                   },
+                   menuAction: (plugin, menu) =>
+                   {
+                       if (plugin.Enabled is false)
+                       {
+                           Show();
+                           SetForegroundWindow();
+                           DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
+                           return;
+                       }
+                       PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menu);
+                   },
+                   updateAction: () =>
+                   {
+                       Show();
+                       SetForegroundWindow();
+                       AboutMenuItem.IsSelected = true;
+                   });
+        }
+
+        public void InitNotifyIcon()
+        {
+            if (TaskbarIcon != null)
+            {
+                return;
+            }
+            Dispatcher.Invoke(() =>
+            {
+                TaskbarIcon = new();
+                TaskbarIcon.Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)));
+                TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
+                {
+                    Show();
+                    SetForegroundWindow();
+                };
+                BuildTaskbarIconMenu();
+            });
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception.StackTrace);
+        }
+
+        private async void DisconnectProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            if (await DialogHelper.ShowConfirmDialog("协议切换", "确定要切换协议吗，操作会导致与机器人断开连接，无法处理消息"))
+            {
+                AppConfig.AutoConnect = false;
+                ConfigHelper.SetConfig("AutoConnect", false);
+                bool success = ProtocolManager.Instance.CurrentProtocol.Disconnect();
+                if (success)
+                {
+                    ProtocolSelectorDialog dialog = new();
+                    await dialog.ShowAsync();
+                    if (dialog.DialogResult == ContentDialogResult.Secondary)
+                    {
+                        Environment.Exit(0);
+                    }
+                    BuildTaskbarIconMenu();
+                }
+                else
+                {
+                    DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
+                }
+            }
+        }
+
+        private void EnablePluginByConfig()
+        {
+            Parallel.ForEach(PluginManagerProxy.Proxies, item =>
+            {
+                string appId = item.AppInfo.AppId;
+                if (UIConfig.AutoEnablePlugins.Any(x => x == appId))
+                {
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AppId == appId);
+                    if (proxy == null)
+                    {
+                        return;
+                    }
+                    PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
+                }
+            });
+        }
+
+        private void LoadPlugins()
+        {
+            Task.Run(() =>
+            {
+                var manager = new PluginManagerProxy();
+                manager.LoadPlugins();
+                InitNotifyIcon();
+                EnablePluginByConfig();
+            });
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
+            ResizeTimer.Tick += ResizeTimer_Tick;
+            _ = new ProtocolManager();
+            ProtocolSelectorDialog dialog = new();
+            await dialog.ShowAsync();
+            if (dialog.DialogResult == ContentDialogResult.Secondary)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                LoadPlugins();
+            }
+        }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
@@ -82,6 +222,27 @@ namespace Another_Mirai_Native.UI
             }
         }
 
+        private void ResizeTimer_Tick(object? sender, EventArgs e)
+        {
+            ResizeTimer.Stop();
+            ConfigHelper.SetConfig("Window_Width", Width, UIConfig.DefaultConfigPath);
+            ConfigHelper.SetConfig("Window_Height", Height, UIConfig.DefaultConfigPath);
+        }
+
+        private bool SetForegroundWindow()
+        {
+            // 通过SetForegroundWindow来激活窗口
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            if (hwnd == IntPtr.Zero)
+            {
+                return false;
+            }
+            else
+            {
+                return SetForegroundWindow(hwnd);
+            }
+        }
+
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)
         {
             ThemeManager.Current.ApplicationTheme =
@@ -92,108 +253,10 @@ namespace Another_Mirai_Native.UI
             ConfigHelper.SetConfig("Theme", UIConfig.Theme, UIConfig.DefaultConfigPath);
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-            ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
-            ResizeTimer.Tick += ResizeTimer_Tick;
-            _ = new ProtocolManager();
-            ProtocolSelectorDialog dialog = new();
-            await dialog.ShowAsync();
-            if (dialog.DialogResult == ContentDialogResult.Secondary)
-            {
-                Environment.Exit(0);
-            }
-            else
-            {
-                LoadPlugins();
-            }
-        }
-
-        private void InitNotifyIcon()
-        {
-            if (TaskbarIcon != null)
-            {
-                return;
-            }
-            Dispatcher.Invoke(() =>
-            {
-                TaskbarIcon = new();
-                TaskbarIcon.Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)));
-                TaskbarIcon.ContextMenu = DialogHelper.BuildNotifyIconContextMenu(PluginManagerProxy.Proxies,
-                   exitAction: () => Environment.Exit(0),
-                   reloadAction: PluginManagerProxy.Instance.ReloadAllPlugins,
-                   pluginManageAction: () =>
-                   {
-                       Show();
-                       PluginMenuItem.IsSelected = true;
-                   },
-                   logAction: () =>
-                   {
-                       Show();
-                       LogMenuItem.IsSelected = true;
-                   },
-                   menuAction: (plugin, menu) =>
-                   {
-                       if (plugin.Enabled is false)
-                       {
-                           Show();
-                           DialogHelper.ShowSimpleDialog("嗯哼", "当前插件未启用，无法调用窗口事件");
-                           return;
-                       }
-                       PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menu);
-                   },
-                   updateAction: () =>
-                   {
-                       Show();
-                       AboutMenuItem.IsSelected = true;
-                   });
-                TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
-                {
-                    Show();
-                };
-            });
-        }
-
-        private void ResizeTimer_Tick(object? sender, EventArgs e)
-        {
-            ResizeTimer.Stop();
-            ConfigHelper.SetConfig("Window_Width", Width, UIConfig.DefaultConfigPath);
-            ConfigHelper.SetConfig("Window_Height", Height, UIConfig.DefaultConfigPath);
-        }
-
-        private void LoadPlugins()
-        {
-            Task.Run(() =>
-            {
-                var manager = new PluginManagerProxy();
-                manager.LoadPlugins();
-                InitNotifyIcon();
-                EnablePluginByConfig();
-            });
-        }
-
-        private void EnablePluginByConfig()
-        {
-            Parallel.ForEach(PluginManagerProxy.Proxies, item =>
-            {
-                string appId = item.AppInfo.AppId;
-                if (UIConfig.AutoEnablePlugins.Any(x => x == appId))
-                {
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AppId == appId);
-                    if (proxy == null)
-                    {
-                        return;
-                    }
-                    PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
-                }
-            });
-        }
-
-        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            e.Handled = true;
-            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception.StackTrace);
+            e.Cancel = true;
+            Hide();
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -204,35 +267,6 @@ namespace Another_Mirai_Native.UI
             }
             ResizeTimer.Stop();
             ResizeTimer.Start();
-        }
-
-        private async void DisconnectProtocol_Click(object sender, RoutedEventArgs e)
-        {
-            if (await DialogHelper.ShowConfirmDialog("协议切换", "确定要切换协议吗，操作会导致与机器人断开连接，无法处理消息"))
-            {
-                AppConfig.AutoConnect = false;
-                ConfigHelper.SetConfig("AutoConnect", false);
-                bool success = ProtocolManager.Instance.CurrentProtocol.Disconnect();
-                if (success)
-                {
-                    ProtocolSelectorDialog dialog = new();
-                    await dialog.ShowAsync();
-                    if (dialog.DialogResult == ContentDialogResult.Secondary)
-                    {
-                        Environment.Exit(0);
-                    }
-                }
-                else
-                {
-                    DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
-                }
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
         }
     }
 }
