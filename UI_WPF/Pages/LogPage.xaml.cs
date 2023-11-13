@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -183,7 +184,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.Invoke(() =>
             {
-                if (AutoScroll.IsOn)
+                if (AutoScroll.IsOn && MainWindow.Instance.LogMenuItem.IsSelected)
                 {
                     LogView.SelectedItem = LogCollections.Count > 0 ? LogCollections.Last() : null;
                     LogView.ScrollIntoView(LogView.SelectedItem);
@@ -207,10 +208,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (AutoScroll.IsOn)
-            {
-                SelectLastLog();
-            }
+            SelectLastLog();
             if (FormLoaded)
             {
                 return;

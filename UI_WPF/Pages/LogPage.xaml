@@ -85,68 +85,72 @@
                 OnContent="自动滚动"
                 Toggled="AutoScroll_Toggled" />
         </Grid>
-        <ListView
-            x:Name="LogView"
+        <ui:ScrollViewerEx
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Stretch"
-            ItemsSource="{Binding LogCollections, Mode=TwoWay}"
-            SelectionChanged="LogView_SelectionChanged"
-            VirtualizingPanel.VirtualizationMode="Recycling">
-            <ListView.View>
-                <GridView x:Name="LogGridView">
-                    <GridViewColumn Width="Auto" Header="时间">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="插件">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding source}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="来源">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource LogItemStyle}"
-                                    Text="{Binding name}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="400" Header="消息">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    MouseRightButtonDown="ListViewItem_MouseRightButtonDown"
-                                    Style="{StaticResource LogItemStyle}"
-                                    TextTrimming="CharacterEllipsis"
-                                    TextWrapping="{Binding IsSelected, Converter={StaticResource BoolTextWrapConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
-                                    <ui:ContextFlyoutService.ContextFlyout>
-                                        <ui:Flyout AreOpenCloseAnimationsEnabled="True">
-                                            <StackPanel>
-                                                <TextBlock Margin="5" Text="复制成功" />
-                                            </StackPanel>
-                                        </ui:Flyout>
-                                    </ui:ContextFlyoutService.ContextFlyout>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="结果">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding status}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+            <ListView
+                x:Name="LogView"
+                ItemsSource="{Binding LogCollections, Mode=TwoWay}"
+                SelectionChanged="LogView_SelectionChanged"
+                VirtualizingPanel.VirtualizationMode="Recycling">
+                <ListView.View>
+                    <GridView x:Name="LogGridView">
+                        <GridViewColumn Width="Auto" Header="时间">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding time, Mode=OneTime, Converter={StaticResource TimestampConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="Auto" Header="插件">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding source}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="Auto" Header="来源">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource LogItemStyle}"
+                                        Text="{Binding name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="400" Header="消息">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        MouseRightButtonDown="ListViewItem_MouseRightButtonDown"
+                                        Style="{StaticResource LogItemStyle}"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="{Binding IsSelected, Converter={StaticResource BoolTextWrapConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
+                                        <ui:ContextFlyoutService.ContextFlyout>
+                                            <ui:Flyout AreOpenCloseAnimationsEnabled="True">
+                                                <StackPanel>
+                                                    <TextBlock Margin="5" Text="复制成功" />
+                                                </StackPanel>
+                                            </ui:Flyout>
+                                        </ui:ContextFlyoutService.ContextFlyout>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="Auto" Header="结果">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource LogItemStyle}" Text="{Binding status}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </ui:ScrollViewerEx>
     </Grid>
 </Page>
