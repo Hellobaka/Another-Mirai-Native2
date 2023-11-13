@@ -139,6 +139,7 @@ namespace Another_Mirai_Native.UI.Pages
                 CQPlugins.Add(new CQPluginProxyWrapper(item));
             }
             CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
+            MainWindow.Instance.BuildTaskbarIconMenu();
             FormLoaded = true;
         }
 
@@ -161,6 +162,7 @@ namespace Another_Mirai_Native.UI.Pages
                 CQPlugins.Add(new CQPluginProxyWrapper(plugin));
                 CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
             });
+            MainWindow.Instance.BuildTaskbarIconMenu();
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
