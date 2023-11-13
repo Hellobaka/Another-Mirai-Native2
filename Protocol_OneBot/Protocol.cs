@@ -458,6 +458,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     return;
                 }
+                if (PluginManagerProxy.Instance == null)
+                {
+                    return;
+                }
                 EventType eventTypes = (EventType)Enum.Parse(typeof(EventType), e["post_type"].ToString());
                 switch (eventTypes)
                 {

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.WebSocket;
@@ -20,7 +21,7 @@ namespace Another_Mirai_Native.UI
         public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
         {
             var menu = new ContextMenu();
-            menu.Items.Add(new MenuItem { Header = ProtocolManager.Instance.CurrentProtocol.GetLoginNick() });
+            menu.Items.Add(new MenuItem { Header = $"{AppConfig.CurrentNickName}({AppConfig.CurrentQQ})" });
             menu.Items.Add(new Separator());
             menu.Items.Add(new MenuItem { Header = $"框架版本: {Server.Instance.GetType().Assembly.GetName().Version}" });
             menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
@@ -31,7 +32,7 @@ namespace Another_Mirai_Native.UI
             MenuItem menuParentItem = new() { Header = "应用" };
             foreach (var item in plugins.OrderBy(x => x.PluginId))
             {
-                MenuItem menuItem = new() { Header = item.PluginName };
+                MenuItem menuItem = new() { Header = $"{item.PluginName}" };
                 foreach (var subMenu in item.AppInfo.menu)
                 {
                     MenuItem subMenuItem = new() { Header = subMenu.name };

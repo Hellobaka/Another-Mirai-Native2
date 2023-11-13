@@ -113,7 +113,7 @@ namespace Another_Mirai_Native.Native
             var r = target.Invoke(new InvokeBody { GUID = guid, Function = function, Args = args });
             if (r != null && !r.Success)
             {
-                LogHelper.Error("调用失败", $"调用方法: {function}, 错误信息: {r.Message}");
+                LogHelper.Error("调用失败", $"调用方法: {function}, 错误插件: {target.PluginName}, 错误信息: {r.Message}");
             }
             return r;
         }
