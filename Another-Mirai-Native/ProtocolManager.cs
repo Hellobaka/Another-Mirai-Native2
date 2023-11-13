@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using System.IO;
 using System.Reflection;
 
@@ -28,6 +29,8 @@ namespace Another_Mirai_Native
                 return false;
             }
             bool flag = protocol.Connect();
+            RefreshBotInfo(protocol);
+            flag = flag && !string.IsNullOrEmpty(AppConfig.CurrentNickName);
             if (flag)
             {
                 CurrentProtocol = protocol;
@@ -71,6 +74,15 @@ namespace Another_Mirai_Native
                 {
                     LogHelper.Error("加载协议", $"无法加载协议: {ex.Message} {ex.StackTrace}");
                 }
+            }
+        }
+
+        public void RefreshBotInfo(IProtocol protocol)
+        {
+            if (protocol != null && protocol.IsConnected)
+            {
+                AppConfig.CurrentNickName = protocol.GetLoginNick();
+                AppConfig.CurrentQQ = protocol.GetLoginQQ();
             }
         }
     }
