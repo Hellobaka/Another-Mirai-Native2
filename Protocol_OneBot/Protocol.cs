@@ -36,7 +36,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             int syncId;
             do
             {
-                syncId = Helper.MakeRandomID();
+                syncId = Helper.MakeUniqueID();
             } while (WaitingMessages.ContainsKey(syncId));
             object body = new
             {

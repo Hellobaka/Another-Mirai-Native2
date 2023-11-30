@@ -124,15 +124,6 @@ namespace Another_Mirai_Native.WebSocket
                         {
                             pluginProxy?.KillProcess();
                             Thread.Sleep(100);
-                            if (!AppConfig.RestartPluginIfDead)
-                            {
-                                LogHelper.Info("重启插件", $"{pluginProxy.PluginName} 重启");
-                                Process? pluginProcess = PluginManagerProxy.Instance.StartPluginProcess(pluginProxy.AppInfo.PluginPath);
-                                if (pluginProcess != null)
-                                {
-                                    PluginManagerProxy.PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = pluginProxy.AppInfo.PluginPath });
-                                }
-                            }
                             return 1;
                         }
                         else if (name == "EnablePlugin")
@@ -204,31 +195,23 @@ namespace Another_Mirai_Native.WebSocket
 
         private void HandleInvokeResult(InvokeResult result, IWebSocketConnection connection)
         {
-            switch (result.Type)// 独立处理
+            string command = result.Type.Split('_').First();
+            string id = result.Type.Split('_').Last();
+            switch (command)
             {
-                case "PluginInfo":
-                    AppInfo appInfo = JObject.FromObject(result.Result).ToObject<AppInfo>();
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.ConnectionID == connection.ConnectionInfo.Id || x.PluginId == appInfo.AppId);
-                    if (proxy == null)
-                    {
-                        proxy = new CQPluginProxy(appInfo, connection);
-                        PluginManagerProxy.AddProxy(proxy);
-                    }
-                    else
+                case "ClientStartUp":
+                    string appId = result.Result.ToString();
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess != null && x.PluginProcess.Id.ToString() == id);
+                    if (proxy != null)
                     {
                         proxy.ConnectionID = connection.ConnectionInfo.Id;
                         proxy.Connection = connection;
-                        proxy.AppInfo = appInfo;
+                        proxy.AppInfo.AppId = appId;
                     }
                     PluginManagerProxy.SetProxyConnected(proxy.ConnectionID);
-                    if (PluginManagerProxy.PluginProcessMap.TryGetValue(appInfo.PID, out Process pluginProcess))
-                    {
-                        string path = PluginManagerProxy.PluginProcess[pluginProcess].PluginPath;
-                        PluginManagerProxy.PluginProcess[pluginProcess] = appInfo;
-                        PluginManagerProxy.PluginProcess[pluginProcess].PluginPath = path;
-                    }
-                    RequestWaiter.TriggerByKey($"AppInfo_{appInfo.PID}");
+                    RequestWaiter.TriggerByKey(result.Type);
                     // LogHelper.Info("HandleClientMessage", $"Load: {appInfo.name}");
+                    // Reasonable?
                     if (AppConfig.PluginAutoEnable)
                     {
                         PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);

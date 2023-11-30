@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.UI
             menu.Items.Add(updateItem);
             menu.Items.Add(new Separator());
             MenuItem menuParentItem = new() { Header = "应用" };
-            foreach (var item in plugins.OrderBy(x => x.PluginId))
+            foreach (var item in plugins.OrderBy(x => x.PluginName))
             {
                 MenuItem menuItem = new() { Header = $"{item.PluginName}" };
                 foreach (var subMenu in item.AppInfo.menu)
@@ -126,18 +126,21 @@ namespace Another_Mirai_Native.UI
 
         public static void ShowSimpleDialog(string title, string message)
         {
-            MainWindow.Instance.Show();
-            MainWindow.Instance.Focus();
-            ContentDialog dialog = new()
+            MainWindow.Instance.Dispatcher.Invoke(() =>
             {
-                Title = title,
-                Content = message,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = "确认"
-            };
-            ErrorDialogQueue.Enqueue(new DialogQueueObject
-            {
-                ContentDialog = dialog,
+                MainWindow.Instance.Show();
+                MainWindow.Instance.Focus();
+                ContentDialog dialog = new()
+                {
+                    Title = title,
+                    Content = message,
+                    DefaultButton = ContentDialogButton.Primary,
+                    PrimaryButtonText = "确认"
+                };
+                ErrorDialogQueue.Enqueue(new DialogQueueObject
+                {
+                    ContentDialog = dialog,
+                });
             });
             HandleDialogQueue();
         }

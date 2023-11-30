@@ -127,14 +127,14 @@ namespace Another_Mirai_Native.Native
             return 1;
         }
 
-        public void Init(string json)
+        public bool Init(string json)
         {
             BuildMenuThread();
             AppInfo = JsonConvert.DeserializeObject<AppInfo>(json);
             if (AppInfo == null)
             {
                 LogHelper.Error("加载插件", "Json格式错误，无法解析");
-                return;
+                return false;
             }
             Initialize = (Type_Initialize)CreateDelegateFromUnmanaged("Initialize", typeof(Type_Initialize));
             AppInfoFunction = (Type_AppInfo)CreateDelegateFromUnmanaged("AppInfo", typeof(Type_AppInfo));
@@ -209,12 +209,12 @@ namespace Another_Mirai_Native.Native
                         break;
                 }
             }
-            AuthCode = new Random(Helper.MakeRandomID()).Next();
-            AppInfo.AuthCode = AuthCode;
+            AuthCode = AppConfig.Core_AuthCode;
+            AppInfo.AuthCode = AppConfig.Core_AuthCode;
             AppInfo.AppId = GetAppId().Value;
-            AppInfo.PID = Process.GetCurrentProcess().Id;
             Directory.CreateDirectory(System.IO.Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
-            Initialize(AuthCode);
+            Initialize(AppInfo.AuthCode);
+            return true;
         }
 
         [HandleProcessCorruptedStateExceptions]
@@ -232,9 +232,8 @@ namespace Another_Mirai_Native.Native
                     return false;
                 }
                 LogHelper.Info("加载插件", $"{fileName}, 加载成功, 开始初始化...");
-                if (File.Exists(Path.Replace(".dll", ".json")))
+                if (File.Exists(Path.Replace(".dll", ".json")) && Init(File.ReadAllText(Path.Replace(".dll", ".json"))))
                 {
-                    Init(File.ReadAllText(Path.Replace(".dll", ".json")));
                     LogHelper.Info("加载插件", $"{Name}, 初始化完成");
                 }
                 else

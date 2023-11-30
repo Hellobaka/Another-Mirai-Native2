@@ -9,6 +9,7 @@ using ModernWpf;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -158,12 +159,13 @@ namespace Another_Mirai_Native.UI
 
         private void EnablePluginByConfig()
         {
+            Stopwatch sw = Stopwatch.StartNew();
             Parallel.ForEach(PluginManagerProxy.Proxies, item =>
             {
-                string appId = item.AppInfo.AppId;
-                if (UIConfig.AutoEnablePlugins.Any(x => x == appId))
+                string appName = item.AppInfo.name;
+                if (UIConfig.AutoEnablePlugins.Any(x => x == appName))
                 {
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AppId == appId);
+                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.name == appName);
                     if (proxy == null)
                     {
                         return;
@@ -171,6 +173,7 @@ namespace Another_Mirai_Native.UI
                     PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
                 }
             });
+            LogHelper.WriteLog("插件启用完成...", $"√ {sw.ElapsedMilliseconds} ms");
         }
 
         private void LoadPlugins()

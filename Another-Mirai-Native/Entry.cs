@@ -126,6 +126,10 @@ namespace Another_Mirai_Native
                 {
                     AppConfig.Core_PID = int.Parse(args[i + 1]);
                 }
+                if (args[i].ToLower() == "-authcode")
+                {
+                    AppConfig.Core_AuthCode = int.Parse(args[i + 1]);
+                }
                 if (args[i].ToLower() == "-autoexit")
                 {
                     AppConfig.Core_AutoExit = args[i + 1] == "True";

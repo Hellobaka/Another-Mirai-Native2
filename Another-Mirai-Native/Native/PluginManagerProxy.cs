@@ -16,10 +16,6 @@ namespace Another_Mirai_Native.Native
 
         public static PluginManagerProxy Instance { get; private set; }
 
-        public static Dictionary<Process, AppInfo> PluginProcess { get; private set; } = new();
-
-        public static Dictionary<int, Process> PluginProcessMap { get; private set; } = new();
-
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
         public static event Action<CQPluginProxy> OnPluginProxyAdded;
@@ -58,53 +54,87 @@ namespace Another_Mirai_Native.Native
             }
         }
 
-        public static void AddProxy(CQPluginProxy proxy)
-        {
-            if (!Proxies.Any(x => x.ConnectionID == proxy.ConnectionID))
-            {
-                Proxies.Add(proxy);
-                OnPluginProxyAdded?.Invoke(proxy);
-            }
-        }
-
         public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
         }
+
+        private void Plugin_OnPluginProcessExited(CQPluginProxy plugin)
+        {
+            if (plugin == null)
+            {
+                return;
+            }
+            plugin.Enabled = false;
+            OnPluginEnableChanged?.Invoke(plugin);
+            LogHelper.Error("插件进程监控", $"{plugin.PluginName} 进程不存在");
+            RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
+
+            if (AppConfig.RestartPluginIfDead)
+            {
+                if (SetPluginEnabled(plugin, true))
+                {
+                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启成功");
+                }
+                else
+                {
+                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启失败");
+                }
+            }
+        }
+
+        public void ReloadAllPlugins()
+        {
+            foreach (var item in Proxies.Where(x => x.Enabled))
+            {
+                ReloadPlugin(item);
+            }
+        }
+
+        public void ReloadPlugin(CQPluginProxy plugin)
+        {
+            if (plugin.Enabled == false)
+            {
+                LogHelper.Error("插件重启", $"{plugin.AppInfo.name} 处于禁用状态，无法重启");
+                return;
+            }
+            plugin.KillProcess();
+            if (!AppConfig.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
+            {
+                if (SetPluginEnabled(plugin, true))
+                {
+                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启成功");
+                }
+                else
+                {
+                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启失败");
+                }
+            }
+            else
+            {
+                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.LoadTimeout);
+            }
+        }
+
+        public static int MakeAuthCode() => Helper.MakeUniqueID();
 
         public bool LoadPlugins()
         {
             Stopwatch sw = Stopwatch.StartNew();
             Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
             {
-                Process? pluginProcess = StartPluginProcess(item);
-                if (pluginProcess != null)
+                if (File.Exists(item.Replace(".dll", ".json")))
                 {
-                    PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = item });
-                    PluginProcessMap.Add(pluginProcess.Id, pluginProcess);
-                    WaitAppInfo(pluginProcess);
+                    CQPluginProxy plugin = new(item);
+                    if (plugin.LoadAppInfo())
+                    {
+                        Proxies.Add(plugin);
+                        plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
+                    }
                 }
             });
             LogHelper.WriteLog("加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
-        }
-
-        public bool WaitAppInfo(Process process)
-        {
-            bool result = false;
-            if (!string.IsNullOrEmpty(PluginProcess[process].AppId))
-            {
-                return true;
-            }
-            ManualResetEvent resetEvent = new(false);
-            RequestWaiter.CommonWaiter.TryAdd($"AppInfo_{process.Id}", new WaiterInfo
-            {
-                CurrentProcess = process,
-                WaitSignal = resetEvent
-            });
-            resetEvent.WaitOne(TimeSpan.FromMilliseconds(AppConfig.LoadTimeout));
-            result = !string.IsNullOrEmpty(PluginProcess[process].AppId);
-            return result;
         }
 
         public InvokeResult Invoke(CQPluginProxy target, string function, params object[] args)
@@ -310,133 +340,30 @@ namespace Another_Mirai_Native.Native
 
         #endregion 测试事件调用
 
-        public Process? StartPluginProcess(string item)
-        {
-            string arguments = $"-PID {PID} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {item} -WS {AppConfig.WebSocketURL}";
-            Process? pluginProcess = null;
-            var startConfig = new ProcessStartInfo
-            {
-                Arguments = arguments,
-                FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}",
-                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
-            };
-            if (!AppConfig.DebugMode)
-            {
-                startConfig.UseShellExecute = false;
-                startConfig.CreateNoWindow = true;
-                startConfig.RedirectStandardOutput = true;
-                pluginProcess = Process.Start(startConfig);
-                Task.Run(() =>
-                {
-                    while (pluginProcess?.StandardOutput != null && !pluginProcess.StandardOutput.EndOfStream)
-                    {
-                        Console.WriteLine(pluginProcess.StandardOutput.ReadLine());
-                    }
-                });
-            }
-            else
-            {
-                pluginProcess = Process.Start(startConfig);
-            }
-            pluginProcess.EnableRaisingEvents = true;
-            pluginProcess.Exited += PluginProcess_Exited;
-            return pluginProcess;
-        }
-
         private void PluginProcess_Exited(object sender, EventArgs e)
         {
-            if (sender is not Process pluginProcess || !PluginProcess.ContainsKey(pluginProcess))
-            {
-                return;
-            }
-            var appInfo = PluginProcess[pluginProcess];
-            LogHelper.Error("插件进程监控", $"{appInfo.name} 进程不存在");
-            PluginProcess.Remove(pluginProcess);
-            PluginProcessMap.Remove(pluginProcess.Id);
-
-            RequestWaiter.ResetSignalByProcess(pluginProcess);// 由于进程退出，中断所有由此进程等待的请求
-
-            var instance = Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == appInfo.AuthCode);
-            bool currentEnable = false;
-            if (instance != null)
-            {
-                currentEnable = instance.Enabled;
-                instance.Enabled = false;
-            }
-            if (AppConfig.RestartPluginIfDead)
-            {
-                LogHelper.Info("插件进程监控", $"{appInfo.name} 重启");
-                Process? newProcess = StartPluginProcess(appInfo.PluginPath);
-                if (newProcess != null)
-                {
-                    PluginProcess.Add(newProcess, new AppInfo { PluginPath = appInfo.PluginPath });
-                    PluginProcessMap.Add(newProcess.Id, newProcess);
-                }
-                WaitAppInfo(newProcess);
-                if (currentEnable || AppConfig.PluginAutoEnable)
-                {
-                    SetPluginEnabled(instance, true);
-                }
-            }
-        }
-
-        public void ReloadAllPlugins()
-        {
-            foreach (var item in Proxies)
-            {
-                ReloadPlugin(item);
-            }
-        }
-
-        public void ReloadPlugin(CQPluginProxy plugin)
-        {
-            bool currentEnable = plugin.Enabled;
-            InvokeEvent(plugin, PluginEventType.Disable);
-            plugin.KillProcess();
-            if (!AppConfig.RestartPluginIfDead)
-            {
-                plugin.Enabled = false;
-                LogHelper.Info("重启插件", $"{plugin.PluginName} 重启");
-                Process? pluginProcess = StartPluginProcess(plugin.AppInfo.PluginPath);
-                if (pluginProcess != null)
-                {
-                    PluginProcess.Add(pluginProcess, new AppInfo { PluginPath = plugin.AppInfo.PluginPath });
-                    PluginProcessMap.Add(pluginProcess.Id, pluginProcess);
-                    WaitAppInfo(pluginProcess);
-                    if (currentEnable && !AppConfig.PluginAutoEnable)
-                    {
-                        SetPluginEnabled(plugin, true);
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < AppConfig.LoadTimeout / 10; i++)
-                {
-                    if (PluginProcess.Any(x => x.Value.AppId == plugin.PluginId))
-                    {
-                        break;
-                    }
-                    Thread.Sleep(10);
-                }
-            }
         }
 
         public bool SetPluginEnabled(CQPluginProxy plugin, bool enabled)
         {
-            if (plugin == null || plugin.HasConnection == false)
+            if (plugin == null)
             {
                 return false;
             }
-            bool success = false;
+            bool success = true;
             if (enabled)
             {
                 if (plugin.Enabled)
                 {
                     return true;
                 }
-                success = InvokeEvent(plugin, PluginEventType.StartUp) == 0;
+                if (plugin.PluginProcess == null || plugin.PluginProcess.HasExited)
+                {
+                    success = plugin.Load();
+                }
+                success = success && InvokeEvent(plugin, PluginEventType.StartUp) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
+                RequestWaiter.TriggerByKey($"PluginEnabled_{plugin.AppInfo.name}");
             }
             else
             {
@@ -446,6 +373,8 @@ namespace Another_Mirai_Native.Native
                 }
                 success = InvokeEvent(plugin, PluginEventType.Disable) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 0);
+                plugin.KillProcess();
+                RequestWaiter.TriggerByKey($"PluginDisabled_{plugin.AppInfo.name}");
             }
             string logMessage = $"插件 {plugin.PluginName} {{0}}";
             if (success)

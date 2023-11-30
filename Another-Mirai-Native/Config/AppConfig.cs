@@ -30,6 +30,8 @@ namespace Another_Mirai_Native.Config
 
         public static bool Core_AutoExit { get; set; }
 
+        public static int Core_AuthCode { get; set; }
+
         public static string Core_PluginPath { get; set; } = "";
 
         public static string Core_WSURL { get; set; } = "";

@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebSocket;
 using System.Runtime.ExceptionServices;
 using System.IO;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native.Native
 {
@@ -18,6 +19,8 @@ namespace Another_Mirai_Native.Native
 
         public static CQPlugin LoadedPlugin { get; private set; }
 
+        private static int PID => Process.GetCurrentProcess().Id;
+
         public bool Load(string pluginPath)
         {
             if (!File.Exists(pluginPath))
@@ -30,7 +33,7 @@ namespace Another_Mirai_Native.Native
             if (ret)
             {
                 LoadedPlugin = plugin;
-                Client.Instance.Send(new InvokeResult() { Type = "PluginInfo", Result = LoadedPlugin.AppInfo }.ToJson());
+                Client.Instance.Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = LoadedPlugin.AppInfo.AppId }.ToJson());
             }
             return ret;
         }

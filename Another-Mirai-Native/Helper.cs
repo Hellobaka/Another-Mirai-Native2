@@ -17,6 +17,12 @@ namespace Another_Mirai_Native
     {
         public static Encoding GB18030 { get; set; } = Encoding.GetEncoding("GB18030");
 
+        public static Random Random { get; set; } = new Random();
+
+        private static int Number { get; set; } = 10000;
+
+        private static object LockObject { get; set; } = new object();
+
         public static long TimeStamp => (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
 
         /// <summary>
@@ -39,22 +45,17 @@ namespace Another_Mirai_Native
         [DllImport("kernel32.dll", EntryPoint = "lstrlenA", CharSet = CharSet.Ansi)]
         public static extern int LstrlenA(IntPtr ptr);
 
-        public static int MakeRandomID()
+        public static int MakeUniqueID()
         {
-            string guid = Guid.NewGuid().ToString();
-            string result = "";
-            for (int i = 0; i < guid.Length; i++)
+            lock (LockObject)
             {
-                if (result.Length > 10)
+                Number++;
+                if (Number > int.MaxValue - 10)
                 {
-                    break;
+                    Number = 10000;
                 }
-                if (guid[i] is >= '0' and <= '9')
-                {
-                    result += guid[i];
-                }
+                return Number;
             }
-            return string.IsNullOrEmpty(result) ? MakeRandomID() : int.TryParse(result, out int value) ? value : MakeRandomID();
         }
 
         /// <summary>

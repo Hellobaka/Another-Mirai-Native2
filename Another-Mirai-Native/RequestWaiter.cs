@@ -14,12 +14,12 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, Process process, int timeout)
+        public static bool Wait(object key, int processId, int timeout)
         {
             ManualResetEvent signal = new(false);
             CommonWaiter.TryAdd(key, new WaiterInfo()
             {
-                CurrentProcess = process,
+                CurrentProcessId = processId,
                 WaitSignal = signal,
             });
             if (timeout > 0)
@@ -127,20 +127,21 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static void TriggerByKey(object key)
+        public static void TriggerByKey(object key, object result = null)
         {
             if (CommonWaiter.TryRemove(key, out WaiterInfo waiterInfo))
             {
+                waiterInfo.Result = result;
                 waiterInfo.WaitSignal.Set();
             }
         }
 
-        public static void ResetSignalByProcess(Process process)
+        public static void ResetSignalByProcess(int proecessId)
         {
             foreach (var key in CommonWaiter.Keys)
             {
                 if (CommonWaiter.TryGetValue(key, out var value)
-                    && value.CurrentProcess.Id == process.Id)
+                    && value.CurrentProcessId == proecessId)
                 {
                     if (CommonWaiter.TryRemove(key, out var removedValue))
                     {
@@ -198,7 +199,7 @@ namespace Another_Mirai_Native
 
     public class WaiterInfo
     {
-        public Process CurrentProcess { get; set; }
+        public int CurrentProcessId { get; set; }
 
         public CQPluginProxy CurrentPluginProxy { get; set; }
 
@@ -207,5 +208,7 @@ namespace Another_Mirai_Native
         public string ConnectionID { get; set; }
 
         public ManualResetEvent WaitSignal { get; set; }
+
+        public object Result { get; set; }
     }
 }

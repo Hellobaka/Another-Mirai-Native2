@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             string syncId;
             do
             {
-                syncId = Helper.MakeRandomID().ToString();
+                syncId = Helper.MakeUniqueID().ToString();
             } while (WaitingMessages.ContainsKey(syncId));
             object body = new
             {

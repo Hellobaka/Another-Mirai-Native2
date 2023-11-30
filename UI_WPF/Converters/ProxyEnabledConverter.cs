@@ -23,10 +23,6 @@ namespace Another_Mirai_Native.UI.Converters
             {
                 return "";
             }
-            if (proxy.HasConnection is false)
-            {
-                return "🚫";
-            }
             else if (proxy.Enabled is false)
             {
                 return "❌";

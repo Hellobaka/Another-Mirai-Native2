@@ -138,7 +138,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(item));
             }
-            CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
+            CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToObservableCollection();
             MainWindow.Instance.BuildTaskbarIconMenu();
             FormLoaded = true;
         }
@@ -160,7 +160,7 @@ namespace Another_Mirai_Native.UI.Pages
             Dispatcher.Invoke(() =>
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(plugin));
-                CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginId).ToObservableCollection();
+                CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToObservableCollection();
             });
             MainWindow.Instance.BuildTaskbarIconMenu();
         }
@@ -189,6 +189,11 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (SelectedPlugin == null)
             {
+                return;
+            }
+            if (SelectedPlugin.Enabled == false)
+            {
+                DialogHelper.ShowSimpleDialog("嗯？", $"{SelectedPlugin.PluginName} 处于禁用状态，无法重启");
                 return;
             }
             if (!await DialogHelper.ShowConfirmDialog("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？"))
@@ -238,11 +243,6 @@ namespace Another_Mirai_Native.UI.Pages
                 DialogHelper.ShowSimpleDialog("啊...", "由于插件自动启用已开启，无法切换插件运行状态");
                 return;
             }
-            if (SelectedPlugin.HasConnection is false)
-            {
-                DialogHelper.ShowSimpleDialog("嗯哼", "插件进程不存在或失去连接，尝试点击重载");
-                return;
-            }
             ToggleEnableRunningStatus = true;
             Task.Run(() =>
             {
@@ -255,12 +255,11 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 if (SelectedPlugin.Enabled)
                 {
-                    UIConfig.AutoEnablePlugins.Add(SelectedPlugin.PluginId);
+                    UIConfig.AutoEnablePlugins.Add(SelectedPlugin.PluginName);
                 }
                 else
                 {
-                    UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginId);
-                    PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
+                    UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginName);
                 }
                 UIConfig.AutoEnablePlugins = UIConfig.AutoEnablePlugins.Distinct().ToList();
                 ConfigHelper.SetConfig("AutoEnablePlugins", UIConfig.AutoEnablePlugins, UIConfig.DefaultConfigPath);
