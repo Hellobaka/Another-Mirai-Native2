@@ -11,20 +11,20 @@ namespace Another_Mirai_Native.WebSocket
 {
     public class Client
     {
-        public static Client Instance { get; private set; }
-
-        public static bool ExitFlag { get; private set; }
-
-        public WebSocketSharp.WebSocket WebSocketClient { get; private set; }
-
-        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
-
-        public int ReconnectCount { get; private set; }
-
         public Client()
         {
             Instance = this;
         }
+
+        public static bool ExitFlag { get; private set; }
+
+        public static Client Instance { get; private set; }
+
+        public int ReconnectCount { get; private set; }
+
+        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
+
+        public WebSocketSharp.WebSocket WebSocketClient { get; private set; }
 
         public bool Connect(string url)
         {
@@ -42,18 +42,35 @@ namespace Another_Mirai_Native.WebSocket
             return WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
-        private void WebSocketClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
+        public InvokeResult Invoke(string function, bool waiting, params object[] args)
         {
-            new Thread(() => HandleMessage(e.Data)).Start();
-        }
+            string guid = Guid.NewGuid().ToString();
 
-        private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
-        {
-            ReconnectCount++;
-            LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
-            RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
-            Thread.Sleep(AppConfig.ReconnectTime);
-            Connect(AppConfig.Core_WSURL);
+            Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
+            if (!waiting)
+            {
+                return null;
+            }
+            WaitingMessage.Add(guid, new InvokeResult());
+            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
+            {
+                var result = WaitingMessage[guid];
+                WaitingMessage.Remove(guid);
+                if (result.Success)
+                {
+                    return result;
+                }
+                else
+                {
+                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
+                    return new InvokeResult() { Message = result.Message };
+                }
+            }
+            else
+            {
+                LogHelper.Error("调用超时", "Timeout");
+                return new InvokeResult() { Message = "Timeout" };
+            }
         }
 
         public void Send(string message)
@@ -63,6 +80,12 @@ namespace Another_Mirai_Native.WebSocket
                 // LogHelper.Debug("向服务端发送", message);
                 WebSocketClient.Send(message);
             }
+        }
+
+        private int HandleEvent(string function, object[] args)
+        {
+            PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);
+            return PluginManager.Instance.CallEvent(eventType, args);
         }
 
         private void HandleMessage(string message)
@@ -103,41 +126,18 @@ namespace Another_Mirai_Native.WebSocket
             }
         }
 
-        public InvokeResult Invoke(string function, bool waiting, params object[] args)
+        private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
         {
-            string guid = Guid.NewGuid().ToString();
-
-            Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-            if (!waiting)
-            {
-                return null;
-            }
-            WaitingMessage.Add(guid, new InvokeResult());
-            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
-            {
-                var result = WaitingMessage[guid];
-                WaitingMessage.Remove(guid);
-                if (result.Success)
-                {
-                    return result;
-                }
-                else
-                {
-                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
-                    return new InvokeResult() { Message = result.Message };
-                }
-            }
-            else
-            {
-                LogHelper.Error("调用超时", "Timeout");
-                return new InvokeResult() { Message = "Timeout" };
-            }
+            ReconnectCount++;
+            LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
+            Thread.Sleep(AppConfig.ReconnectTime);
+            Connect(AppConfig.Core_WSURL);
         }
 
-        private int HandleEvent(string function, object[] args)
+        private void WebSocketClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
         {
-            PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);
-            return PluginManager.Instance.CallEvent(eventType, args);
+            new Thread(() => HandleMessage(e.Data)).Start();
         }
     }
 }

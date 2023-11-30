@@ -14,24 +14,26 @@ namespace Another_Mirai_Native.Native
             Instance = this;
         }
 
-        public static PluginManagerProxy Instance { get; private set; }
-
-        public static List<CQPluginProxy> Proxies { get; private set; } = new();
+        public static event Action<CQPluginProxy> OnPluginEnableChanged;
 
         public static event Action<CQPluginProxy> OnPluginProxyAdded;
 
         public static event Action<CQPluginProxy> OnPluginProxyConnectStatusChanged;
 
-        public static event Action<CQPluginProxy> OnPluginEnableChanged;
-
         public static event Action<string, Dictionary<string, object>> OnTestInvoked;
+
+        public static PluginManagerProxy Instance { get; private set; }
+
+        public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
         private static int PID => Process.GetCurrentProcess().Id;
 
-        public static void TriggerTestInvoke(string methodName, Dictionary<string, object> args)
+        public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
-            OnTestInvoked?.Invoke(methodName, args);
+            return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
         }
+
+        public static int MakeAuthCode() => Helper.MakeUniqueID();
 
         public static void SetProxyConnected(Guid id)
         {
@@ -54,87 +56,9 @@ namespace Another_Mirai_Native.Native
             }
         }
 
-        public static CQPluginProxy GetProxyByAuthCode(int authCode)
+        public static void TriggerTestInvoke(string methodName, Dictionary<string, object> args)
         {
-            return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
-        }
-
-        private void Plugin_OnPluginProcessExited(CQPluginProxy plugin)
-        {
-            if (plugin == null)
-            {
-                return;
-            }
-            plugin.Enabled = false;
-            OnPluginEnableChanged?.Invoke(plugin);
-            LogHelper.Error("插件进程监控", $"{plugin.PluginName} 进程不存在");
-            RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
-
-            if (AppConfig.RestartPluginIfDead)
-            {
-                if (SetPluginEnabled(plugin, true))
-                {
-                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启成功");
-                }
-                else
-                {
-                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启失败");
-                }
-            }
-        }
-
-        public void ReloadAllPlugins()
-        {
-            foreach (var item in Proxies.Where(x => x.Enabled))
-            {
-                ReloadPlugin(item);
-            }
-        }
-
-        public void ReloadPlugin(CQPluginProxy plugin)
-        {
-            if (plugin.Enabled == false)
-            {
-                LogHelper.Error("插件重启", $"{plugin.AppInfo.name} 处于禁用状态，无法重启");
-                return;
-            }
-            plugin.KillProcess();
-            if (!AppConfig.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
-            {
-                if (SetPluginEnabled(plugin, true))
-                {
-                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启成功");
-                }
-                else
-                {
-                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启失败");
-                }
-            }
-            else
-            {
-                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.LoadTimeout);
-            }
-        }
-
-        public static int MakeAuthCode() => Helper.MakeUniqueID();
-
-        public bool LoadPlugins()
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
-            {
-                if (File.Exists(item.Replace(".dll", ".json")))
-                {
-                    CQPluginProxy plugin = new(item);
-                    if (plugin.LoadAppInfo())
-                    {
-                        Proxies.Add(plugin);
-                        plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
-                    }
-                }
-            });
-            LogHelper.WriteLog("加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
-            return true;
+            OnTestInvoked?.Invoke(methodName, args);
         }
 
         public InvokeResult Invoke(CQPluginProxy target, string function, params object[] args)
@@ -185,163 +109,56 @@ namespace Another_Mirai_Native.Native
             return null;
         }
 
-        #region 测试事件调用
-
-        public int Event_OnPrivateMsg(CQPluginProxy target, int subType, int msgId, long fromQQ, string msg, int font)
+        public bool LoadPlugins()
         {
-            return InvokeEvent(target, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
+            Stopwatch sw = Stopwatch.StartNew();
+            Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
+            {
+                if (File.Exists(item.Replace(".dll", ".json")))
+                {
+                    CQPluginProxy plugin = new(item);
+                    if (plugin.LoadAppInfo())
+                    {
+                        Proxies.Add(plugin);
+                        plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
+                    }
+                }
+            });
+            LogHelper.WriteLog("加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
+            return true;
         }
 
-        public int Event_OnGroupMsg(CQPluginProxy target, int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
+        public void ReloadAllPlugins()
         {
-            return InvokeEvent(target, PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
+            foreach (var item in Proxies.Where(x => x.Enabled))
+            {
+                ReloadPlugin(item);
+            }
         }
 
-        public int Event_OnDiscussMsg(CQPluginProxy target, int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
+        public void ReloadPlugin(CQPluginProxy plugin)
         {
-            return InvokeEvent(target, PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
-        }
-
-        public int Event_OnUpload(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string file)
-        {
-            return InvokeEvent(target, PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
-        }
-
-        public int Event_OnAdminChange(CQPluginProxy target, int subType, int sendTime, long fromGroup, long beingOperateQQ)
-        {
-            return InvokeEvent(target, PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
-        }
-
-        public int Event_OnGroupMemberDecrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
-        {
-            return InvokeEvent(target, PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
-        }
-
-        public int Event_OnGroupMemberIncrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
-        {
-            return InvokeEvent(target, PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
-        }
-
-        public int Event_OnGroupBan(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
-        {
-            return InvokeEvent(target, PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
-        }
-
-        public int Event_OnFriendAdded(CQPluginProxy target, int subType, int sendTime, long fromQQ)
-        {
-            return InvokeEvent(target, PluginEventType.FriendAdded, subType, sendTime, fromQQ);
-        }
-
-        public int Event_OnFriendAddRequest(CQPluginProxy target, int subType, int sendTime, long fromQQ, string msg, string responseFlag)
-        {
-            return InvokeEvent(target, PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
-        }
-
-        public int Event_OnGroupAddRequest(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
-        {
-            return InvokeEvent(target, PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
-        }
-
-        public int Event_OnStartUp(CQPluginProxy target)
-        {
-            return InvokeEvent(target, PluginEventType.StartUp);
-        }
-
-        public int Event_OnExit(CQPluginProxy target)
-        {
-            return InvokeEvent(target, PluginEventType.Exit);
-        }
-
-        public int Event_OnEnable(CQPluginProxy target)
-        {
-            return InvokeEvent(target, PluginEventType.Enable);
-        }
-
-        public int Event_OnDisable(CQPluginProxy target)
-        {
-            return InvokeEvent(target, PluginEventType.Disable);
-        }
-
-        // 以下是封装好参数的调用，协议请调用这个
-        public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
-        {
-            return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
-        }
-
-        public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
-        {
-            return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
-        }
-
-        public CQPluginProxy Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
-        {
-            return InvokeEvent(PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
-        }
-
-        public CQPluginProxy Event_OnUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
-        {
-            return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
-        }
-
-        public CQPluginProxy Event_OnAdminChange(int subType, int sendTime, long fromGroup, long beingOperateQQ)
-        {
-            return InvokeEvent(PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
-        }
-
-        public CQPluginProxy Event_OnGroupMemberDecrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
-        {
-            return InvokeEvent(PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
-        }
-
-        public CQPluginProxy Event_OnGroupMemberIncrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
-        {
-            return InvokeEvent(PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
-        }
-
-        public CQPluginProxy Event_OnGroupBan(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
-        {
-            return InvokeEvent(PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
-        }
-
-        public CQPluginProxy Event_OnFriendAdded(int subType, int sendTime, long fromQQ)
-        {
-            return InvokeEvent(PluginEventType.FriendAdded, subType, sendTime, fromQQ);
-        }
-
-        public CQPluginProxy Event_OnFriendAddRequest(int subType, int sendTime, long fromQQ, string msg, string responseFlag)
-        {
-            return InvokeEvent(PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
-        }
-
-        public CQPluginProxy Event_OnGroupAddRequest(int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
-        {
-            return InvokeEvent(PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
-        }
-
-        public CQPluginProxy Event_OnStartUp()
-        {
-            return InvokeEvent(PluginEventType.StartUp);
-        }
-
-        public CQPluginProxy Event_OnExit()
-        {
-            return InvokeEvent(PluginEventType.Exit);
-        }
-
-        public CQPluginProxy Event_OnEnable()
-        {
-            return InvokeEvent(PluginEventType.Enable);
-        }
-
-        public CQPluginProxy Event_OnDisable()
-        {
-            return InvokeEvent(PluginEventType.Disable);
-        }
-
-        #endregion 测试事件调用
-
-        private void PluginProcess_Exited(object sender, EventArgs e)
-        {
+            if (plugin.Enabled == false)
+            {
+                LogHelper.Error("插件重启", $"{plugin.AppInfo.name} 处于禁用状态，无法重启");
+                return;
+            }
+            plugin.KillProcess();
+            if (!AppConfig.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
+            {
+                if (SetPluginEnabled(plugin, true))
+                {
+                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启成功");
+                }
+                else
+                {
+                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启失败");
+                }
+            }
+            else
+            {
+                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.LoadTimeout);
+            }
         }
 
         public bool SetPluginEnabled(CQPluginProxy plugin, bool enabled)
@@ -389,6 +206,189 @@ namespace Another_Mirai_Native.Native
             }
             LogHelper.WriteLog(LogLevel.InfoSuccess, "改变插件状态", logMessage);
             return success;
+        }
+
+        private void Plugin_OnPluginProcessExited(CQPluginProxy plugin)
+        {
+            if (plugin == null)
+            {
+                return;
+            }
+            plugin.Enabled = false;
+            OnPluginEnableChanged?.Invoke(plugin);
+            LogHelper.Error("插件进程监控", $"{plugin.PluginName} 进程不存在");
+            RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
+
+            if (AppConfig.RestartPluginIfDead)
+            {
+                if (SetPluginEnabled(plugin, true))
+                {
+                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启成功");
+                }
+                else
+                {
+                    LogHelper.Info("插件重启", $"{plugin.PluginName} 重启失败");
+                }
+            }
+        }
+
+        #region 测试事件调用
+
+        public int Event_OnAdminChange(CQPluginProxy target, int subType, int sendTime, long fromGroup, long beingOperateQQ)
+        {
+            return InvokeEvent(target, PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
+        }
+
+        public CQPluginProxy Event_OnAdminChange(int subType, int sendTime, long fromGroup, long beingOperateQQ)
+        {
+            return InvokeEvent(PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
+        }
+
+        public int Event_OnDisable(CQPluginProxy target)
+        {
+            return InvokeEvent(target, PluginEventType.Disable);
+        }
+
+        public CQPluginProxy Event_OnDisable()
+        {
+            return InvokeEvent(PluginEventType.Disable);
+        }
+
+        public int Event_OnDiscussMsg(CQPluginProxy target, int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(target, PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
+        }
+
+        public CQPluginProxy Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
+        }
+
+        public int Event_OnEnable(CQPluginProxy target)
+        {
+            return InvokeEvent(target, PluginEventType.Enable);
+        }
+
+        public CQPluginProxy Event_OnEnable()
+        {
+            return InvokeEvent(PluginEventType.Enable);
+        }
+
+        public int Event_OnExit(CQPluginProxy target)
+        {
+            return InvokeEvent(target, PluginEventType.Exit);
+        }
+
+        public CQPluginProxy Event_OnExit()
+        {
+            return InvokeEvent(PluginEventType.Exit);
+        }
+
+        public int Event_OnFriendAdded(CQPluginProxy target, int subType, int sendTime, long fromQQ)
+        {
+            return InvokeEvent(target, PluginEventType.FriendAdded, subType, sendTime, fromQQ);
+        }
+
+        public CQPluginProxy Event_OnFriendAdded(int subType, int sendTime, long fromQQ)
+        {
+            return InvokeEvent(PluginEventType.FriendAdded, subType, sendTime, fromQQ);
+        }
+
+        public int Event_OnFriendAddRequest(CQPluginProxy target, int subType, int sendTime, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(target, PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
+        }
+
+        public CQPluginProxy Event_OnFriendAddRequest(int subType, int sendTime, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
+        }
+
+        public int Event_OnGroupAddRequest(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(target, PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
+        }
+
+        public CQPluginProxy Event_OnGroupAddRequest(int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        {
+            return InvokeEvent(PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
+        }
+
+        public int Event_OnGroupBan(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        {
+            return InvokeEvent(target, PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
+        }
+
+        public CQPluginProxy Event_OnGroupBan(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        {
+            return InvokeEvent(PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
+        }
+
+        public int Event_OnGroupMemberDecrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(target, PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public CQPluginProxy Event_OnGroupMemberDecrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public int Event_OnGroupMemberIncrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(target, PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public CQPluginProxy Event_OnGroupMemberIncrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        {
+            return InvokeEvent(PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
+        }
+
+        public int Event_OnGroupMsg(CQPluginProxy target, int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
+        {
+            return InvokeEvent(target, PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
+        }
+
+        public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
+        {
+            return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
+        }
+
+        public int Event_OnPrivateMsg(CQPluginProxy target, int subType, int msgId, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(target, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
+        }
+
+        // 以下是封装好参数的调用，协议请调用这个
+        public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
+        {
+            return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
+        }
+
+        public int Event_OnStartUp(CQPluginProxy target)
+        {
+            return InvokeEvent(target, PluginEventType.StartUp);
+        }
+
+        public CQPluginProxy Event_OnStartUp()
+        {
+            return InvokeEvent(PluginEventType.StartUp);
+        }
+
+        public int Event_OnUpload(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        {
+            return InvokeEvent(target, PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
+        }
+
+        public CQPluginProxy Event_OnUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        {
+            return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
+        }
+
+        #endregion 测试事件调用
+
+        private void PluginProcess_Exited(object sender, EventArgs e)
+        {
         }
     }
 }

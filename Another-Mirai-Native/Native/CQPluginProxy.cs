@@ -29,27 +29,25 @@ namespace Another_Mirai_Native.Native
             ConnectionID = connection.ConnectionInfo.Id;
         }
 
+        public event Action<CQPluginProxy> OnPluginProcessExited;
+
         public AppInfo AppInfo { get; set; }
+
+        public IWebSocketConnection Connection { get; set; }
 
         public Guid ConnectionID { get; set; }
 
         public bool Enabled { get; set; }
 
-        public string PluginName => AppInfo.name;
+        public bool HasConnection { get; set; }
 
         public string PluginId => AppInfo.AppId;
 
+        public string PluginName => AppInfo.name;
+
         public string PluginPath { get; set; } = "";
 
-        public bool HasConnection { get; set; }
-
-        public IWebSocketConnection Connection { get; set; }
-
         public Process PluginProcess { get; set; }
-
-        public event Action<CQPluginProxy> OnPluginProcessExited;
-
-        private static int PID => Process.GetCurrentProcess().Id;
 
         private static List<string> APIAuthWhiteList { get; set; } = new()
         {
@@ -61,6 +59,30 @@ namespace Another_Mirai_Native.Native
             "getLoginQQ",
             "getLoginNick",
         };
+
+        private static int PID => Process.GetCurrentProcess().Id;
+
+        public bool CheckPluginCanInvoke(string invokeName)
+        {
+            invokeName = invokeName.Replace("CQ_", "");
+            if (APIAuthWhiteList.Any(x => x == invokeName))
+            {
+                return true;
+            }
+            invokeName = invokeName.Replace("sendGroupQuoteMsg", "sendGroupMsg");
+            if (!Enum.TryParse(invokeName, out PluginAPIType authEnum))
+            {
+                LogHelper.Error("调用权限检查", $"{invokeName} 无法转换为权限枚举");
+                return false;
+            }
+            return CheckPluginCanInvoke(authEnum);
+        }
+
+        public bool CheckPluginCanInvoke(PluginAPIType apiType)
+        {
+            int id = (int)apiType;
+            return AppInfo.auth.Any(x => x == id);
+        }
 
         public InvokeResult Invoke(InvokeBody caller)
         {
@@ -83,26 +105,32 @@ namespace Another_Mirai_Native.Native
             }
         }
 
-        public bool CheckPluginCanInvoke(string invokeName)
+        public void KillProcess()
         {
-            invokeName = invokeName.Replace("CQ_", "");
-            if (APIAuthWhiteList.Any(x => x == invokeName))
-            {
-                return true;
-            }
-            invokeName = invokeName.Replace("sendGroupQuoteMsg", "sendGroupMsg");
-            if (!Enum.TryParse(invokeName, out PluginAPIType authEnum))
-            {
-                LogHelper.Error("调用权限检查", $"{invokeName} 无法转换为权限枚举");
-                return false;
-            }
-            return CheckPluginCanInvoke(authEnum);
+            PluginProcess?.Kill();
+            PluginProcess.WaitForExit();
         }
 
-        public bool CheckPluginCanInvoke(PluginAPIType apiType)
+        public bool Load()
         {
-            int id = (int)apiType;
-            return AppInfo.auth.Any(x => x == id);
+            if (PluginProcess != null && PluginProcess.HasExited is false)
+            {
+                LogHelper.Error("加载插件", $"{PluginPath} 进程已启动，请先禁用插件");
+                return false;
+            }
+            if (!StartPluginProcess() || PluginProcess.HasExited)
+            {
+                LogHelper.Error("加载插件", $"{PluginPath} 进程拉起失败");
+                return false;
+            }
+            if (!WaitClientResponse())
+            {
+                LogHelper.Error("加载插件", $"{PluginPath} 等待客户端发送插件信息失败");
+                KillProcess();
+                return false;
+            }
+            LogHelper.Info("加载插件", $"{PluginName} 插件启动成功");
+            return true;
         }
 
         public bool LoadAppInfo()
@@ -134,31 +162,9 @@ namespace Another_Mirai_Native.Native
             }
         }
 
-        public bool Load()
+        private void PluginProcess_Exited(object? sender, EventArgs e)
         {
-            if (PluginProcess != null && PluginProcess.HasExited is false)
-            {
-                LogHelper.Error("加载插件", $"{PluginPath} 进程已启动，请先禁用插件");
-                return false;
-            }
-            if (!StartPluginProcess() || PluginProcess.HasExited)
-            {
-                LogHelper.Error("加载插件", $"{PluginPath} 进程拉起失败");
-                return false;
-            }
-            if (!WaitClientResponse())
-            {
-                LogHelper.Error("加载插件", $"{PluginPath} 等待客户端发送插件信息失败");
-                KillProcess();
-                return false;
-            }
-            LogHelper.Info("加载插件", $"{PluginName} 插件启动成功");
-            return true;
-        }
-
-        private bool WaitClientResponse()
-        {
-            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.LoadTimeout);
+            OnPluginProcessExited?.Invoke(this);
         }
 
         private bool StartPluginProcess()
@@ -196,15 +202,9 @@ namespace Another_Mirai_Native.Native
             return PluginProcess != null;
         }
 
-        public void KillProcess()
+        private bool WaitClientResponse()
         {
-            PluginProcess?.Kill();
-            PluginProcess.WaitForExit();
-        }
-
-        private void PluginProcess_Exited(object? sender, EventArgs e)
-        {
-            OnPluginProcessExited?.Invoke(this);
+            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.LoadTimeout);
         }
     }
 }
