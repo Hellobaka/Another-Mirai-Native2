@@ -125,7 +125,7 @@ namespace Another_Mirai_Native.Native
             }
             if (!WaitClientResponse())
             {
-                LogHelper.Error("加载插件", $"{PluginPath} 等待客户端发送插件信息失败");
+                LogHelper.Error("加载插件", $"{PluginPath} 等待客户端发送插件信息失败，进程已结束");
                 KillProcess();
                 return false;
             }
