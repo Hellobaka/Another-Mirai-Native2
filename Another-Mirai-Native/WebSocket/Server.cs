@@ -134,7 +134,7 @@ namespace Another_Mirai_Native.WebSocket
                             }
                             PluginManagerProxy.Instance.SetPluginEnabled(pluginProxy, true);
                         }
-                        else if (name == "")
+                        else if (name == "DisablePlugin")
                         {
                             if (!pluginProxy.Enabled)
                             {

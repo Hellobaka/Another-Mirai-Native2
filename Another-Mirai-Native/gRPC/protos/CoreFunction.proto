@@ -1,0 +1,61 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Another_Mirai_Native.gRPC";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+package Core_gRPC;
+
+service CoreFunctions {
+    // 定义双向流方法为 Server 调用 Client 方法所用
+    // Server通过写入StreamResponse通知Client, 调用结束后Client写入StreamRequest返回调用结果
+    // 需要保持流启用状态 故需要发送心跳消息
+    rpc InvokeCQPEvents (stream StreamRequest) returns (stream StreamResponse);
+    rpc ClientStartup(ClientStartupRequest) returns (google.protobuf.Empty);
+    rpc AddLog(AddLogRequest) returns (google.protobuf.Int32Value);
+    rpc GetCoreVersion(google.protobuf.Empty) returns (google.protobuf.StringValue);
+    rpc Restart(google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
+    rpc EnablePlugin(google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
+    rpc DisablePlugin(google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
+    rpc GetAppConfig(google.protobuf.StringValue) returns (AppConfigResponse);
+    rpc GetAllPlugins(google.protobuf.Empty) returns (PluginResponse);
+}
+
+message StreamRequest {  
+    int32 waitID = 1;
+    int32 request = 2;
+}
+
+message StreamResponse {  
+    int32 waitID = 1;
+    google.protobuf.Any response = 2;
+}
+
+message AddLogRequest{
+    int32 id = 1;
+    int64 time = 2;
+    int32 priority = 3;
+    string source = 4;
+    string status = 5;
+    string name = 6;
+    string detail = 7;
+}
+
+message AppConfigResponse{
+    string configType = 1;
+    string configValue = 2;
+}
+
+message HeartBeatRequest{
+    int64 timestamp = 1;
+}
+
+message ClientStartupRequest{
+    int32 pid = 1;
+    string appId = 2;
+}
+
+message PluginResponse{
+	
+}

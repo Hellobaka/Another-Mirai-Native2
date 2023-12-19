@@ -217,7 +217,7 @@ namespace Another_Mirai_Native
                     GUID = guid,
                     Args = new object[]
                     {
-                        PluginManager.LoadedPlugin.AuthCode,
+                        AppConfig.Core_AuthCode,
                         ex.Message,
                         ex.StackTrace ?? "",
                         canIgnore ? 1 : 0

@@ -13,11 +13,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="gRPC\CQPEvents.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fleck" Version="1.2.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.Core" Version="2.46.6" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <Protobuf Include="gRPC\protos\CQPEvents.proto" GrpcServices="Both" />
+	<Protobuf Include="gRPC\protos\CQPFunction.proto" GrpcServices="Both" />
+	<Protobuf Include="gRPC\protos\CoreFunction.proto" GrpcServices="Both" />
+
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <PackageReference Include="SqlSugar" Version="5.1.4.110" />

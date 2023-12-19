@@ -1,0 +1,134 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Another_Mirai_Native.gRPC";
+
+package CQPEvents_gRPC;
+
+service CQPEvents {
+  rpc Event_OnAdminChange (Event_OnAdminChange_Parameters) returns (CQPEventResult);
+  rpc Event_OnDisable (Event_OnDisable_Parameters) returns (CQPEventResult);
+  rpc Event_OnDiscussMsg (Event_OnDiscussMsg_Parameters) returns (CQPEventResult);
+  rpc Event_OnEnable (Event_OnEnable_Parameters) returns (CQPEventResult);
+  rpc Event_OnExit (Event_OnExit_Parameters) returns (CQPEventResult);
+  rpc Event_OnFriendAdded (Event_OnFriendAdded_Parameters) returns (CQPEventResult);
+  rpc Event_OnFriendAddRequest (Event_OnFriendAddRequest_Parameters) returns (CQPEventResult);
+  rpc Event_OnGroupAddRequest (Event_OnGroupAddRequest_Parameters) returns (CQPEventResult);
+  rpc Event_OnGroupBan (Event_OnGroupBan_Parameters) returns (CQPEventResult);
+  rpc Event_OnGroupMemberDecrease (Event_OnGroupMemberDecrease_Parameters) returns (CQPEventResult);
+  rpc Event_OnGroupMemberIncrease (Event_OnGroupMemberIncrease_Parameters) returns (CQPEventResult);
+  rpc Event_OnGroupMsg (Event_OnGroupMsg_Parameters) returns (CQPEventResult);
+  rpc Event_OnMenu (Event_OnMenu_Parameters) returns (CQPEventResult);
+  rpc Event_OnPrivateMsg (Event_OnPrivateMsg_Parameters) returns (CQPEventResult);
+  rpc Event_OnStartUp (Event_OnStartUp_Parameters) returns (CQPEventResult);
+  rpc Event_OnUpload (Event_OnUpload_Parameters) returns (CQPEventResult);
+}
+
+message Event_OnAdminChange_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 beingOperateQQ = 4;
+}
+
+message Event_OnDisable_Parameters {
+}
+
+message Event_OnDiscussMsg_Parameters {
+  int32 subType = 1;
+  int32 msgId = 2;
+  int64 fromNative = 3;
+  int64 fromQQ = 4;
+  string msg = 5;
+  int32 font = 6;
+}
+
+message Event_OnEnable_Parameters {
+}
+
+message Event_OnExit_Parameters {
+}
+
+message Event_OnFriendAdded_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromQQ = 3;
+}
+
+message Event_OnFriendAddRequest_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromQQ = 3;
+  string msg = 4;
+  string responseFlag = 5;
+}
+
+message Event_OnGroupAddRequest_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  string msg = 5;
+  string responseFlag = 6;
+}
+
+message Event_OnGroupBan_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  int64 beingOperateQQ = 5;
+  int64 duration = 6;
+}
+
+message Event_OnGroupMemberDecrease_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  int64 beingOperateQQ = 5;
+}
+
+message Event_OnGroupMemberIncrease_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  int64 beingOperateQQ = 5;
+}
+
+message Event_OnGroupMsg_Parameters {
+  int32 subType = 1;
+  int32 msgId = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  string fromAnonymous = 5;
+  string msg = 6;
+  int32 font = 7;
+}
+
+message Event_OnMenu_Parameters {
+  string menuName = 1;
+}
+
+message Event_OnPrivateMsg_Parameters {
+  int32 subType = 1;
+  int32 msgId = 2;
+  int64 fromQQ = 3;
+  string msg = 4;
+  int32 font = 5;
+}
+
+message Event_OnStartUp_Parameters {
+}
+
+message Event_OnUpload_Parameters {
+  int32 subType = 1;
+  int32 sendTime = 2;
+  int64 fromGroup = 3;
+  int64 fromQQ = 4;
+  string file = 5;
+}
+
+message CQPEventResult {
+  int32 result = 1;
+}

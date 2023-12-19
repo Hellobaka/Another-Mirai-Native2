@@ -58,6 +58,10 @@ namespace Another_Mirai_Native.Config
 
         public static long CurrentQQ { get; set; } = 10001;
 
+        public static ushort gRPCListenPort { get; set; } = 30303;
+
+        public static string gRPCListenIP { get; set; } = "127.0.0.1";
+
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", defaultValue: true);
@@ -69,6 +73,8 @@ namespace Another_Mirai_Native.Config
             }
             WebSocketURL = ConfigHelper.GetConfig("WebSocketURL", defaultValue: "ws://127.0.0.1:30303");
             ReconnectTime = ConfigHelper.GetConfig("ReconnectTime", defaultValue: 5000);
+            gRPCListenPort = ConfigHelper.GetConfig("gRPCListenPort", defaultValue: (ushort)30303);
+            gRPCListenIP = ConfigHelper.GetConfig("gRPCListenIP", defaultValue: "127.0.0.1");
             RestartPluginIfDead = ConfigHelper.GetConfig("RestartPluginIfDead", defaultValue: false);
             PluginInvokeTimeout = ConfigHelper.GetConfig("PluginInvokeTimeout", defaultValue: 120 * 1000);
             HeartBeatInterval = ConfigHelper.GetConfig("HeartBeatInterval", defaultValue: 30 * 1000);
