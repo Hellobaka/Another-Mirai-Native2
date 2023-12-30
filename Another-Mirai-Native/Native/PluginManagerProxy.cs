@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.RPC;
 using System.Diagnostics;
 using System.IO;
 
@@ -26,8 +27,6 @@ namespace Another_Mirai_Native.Native
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
-        private static int PID => Process.GetCurrentProcess().Id;
-
         public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
@@ -35,25 +34,17 @@ namespace Another_Mirai_Native.Native
 
         public static int MakeAuthCode() => Helper.MakeUniqueID();
 
-        public static void SetProxyConnected(Guid id)
+        public static void SetProxyConnected(CQPluginProxy proxy)
         {
-            if (Proxies.Any(x => x.ConnectionID == id))
-            {
-                var proxy = Proxies.First(x => x.ConnectionID == id);
-                proxy.HasConnection = true;
-                OnPluginProxyConnectStatusChanged?.Invoke(proxy);
-            }
+            proxy.HasConnection = true;
+            OnPluginProxyConnectStatusChanged?.Invoke(proxy);
         }
 
-        public static void SetProxyDisconnected(Guid id)
+        public static void SetProxyDisconnected(CQPluginProxy proxy)
         {
-            if (Proxies.Any(x => x.ConnectionID == id))
-            {
-                var proxy = Proxies.First(x => x.ConnectionID == id);
-                proxy.HasConnection = false;
-                OnPluginProxyConnectStatusChanged?.Invoke(proxy);
-                RequestWaiter.ResetSignalByPluginProxy(proxy);
-            }
+            proxy.HasConnection = false;
+            OnPluginProxyConnectStatusChanged?.Invoke(proxy);
+            RequestWaiter.ResetSignalByPluginProxy(proxy);
         }
 
         public static void TriggerTestInvoke(string methodName, Dictionary<string, object> args)
@@ -61,23 +52,12 @@ namespace Another_Mirai_Native.Native
             OnTestInvoked?.Invoke(methodName, args);
         }
 
-        public InvokeResult Invoke(CQPluginProxy target, string function, params object[] args)
-        {
-            string guid = Guid.NewGuid().ToString();
-            var r = target.Invoke(new InvokeBody { GUID = guid, Function = function, Args = args });
-            if (r != null && !r.Success)
-            {
-                LogHelper.Error("调用失败", $"调用方法: {function}, 错误插件: {target.PluginName}, 错误信息: {r.Message}");
-            }
-            return r;
-        }
-
         public int InvokeEvent(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
             if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.id == (int)eventType))
             {
-                var r = Invoke(target, $"InvokeEvent_{eventType}", args);
-                return r == null || !r.Success ? -1 : Convert.ToInt32(r.Result);
+                var r = ServerManager.Server.InvokeEvents(target, eventType, args);
+                return r ?? -1;
             }
             else
             {
@@ -178,6 +158,7 @@ namespace Another_Mirai_Native.Native
                 {
                     success = plugin.Load();
                 }
+                Console.ReadLine();
                 success = success && InvokeEvent(plugin, PluginEventType.StartUp) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
                 RequestWaiter.TriggerByKey($"PluginEnabled_{plugin.AppInfo.name}");

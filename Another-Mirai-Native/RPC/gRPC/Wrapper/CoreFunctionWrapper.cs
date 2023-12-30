@@ -1,26 +1,22 @@
 ﻿using Another_Mirai_Native.Config;
-using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using System.Collections.Concurrent;
-using System.Reflection;
 
 namespace Another_Mirai_Native.gRPC
 {
     public class CoreFunctionWrapper : CoreFunctions.CoreFunctionsBase
     {
+        private static object writeLock = new object();
+
         public static ConcurrentDictionary<int, IAsyncStreamReader<StreamRequest>> ClientStreams { get; set; } = new();
 
         public static ConcurrentDictionary<int, IServerStreamWriter<StreamResponse>> ServerStreams { get; set; } = new();
 
         public static ConcurrentDictionary<int, HeartBeatInfo> ConnectionAliveStatus { get; set; } = new();
-
-        public static ConcurrentDictionary<int, int> WaitingResults { get; set; } = new();
-
-        private static int SyncID { get; set; } = 1;
 
         private static System.Timers.Timer HeartBeatTimer { get; set; }
 
@@ -29,12 +25,13 @@ namespace Another_Mirai_Native.gRPC
         {
             if (HeartBeatTimer == null)
             {
+                HeartBeatTimer = new System.Timers.Timer();
                 HeartBeatTimer.Interval = AppConfig.HeartBeatInterval;
                 HeartBeatTimer.Elapsed += HeartBeatTimer_Elapsed;
                 HeartBeatTimer.Enabled = true;
                 HeartBeatTimer.Start();
             }
-            var authCodeHeader = context.RequestHeaders.FirstOrDefault(x => x.Key == "authCode");
+            var authCodeHeader = context.RequestHeaders.FirstOrDefault(x => x.Key == "authcode");
             if (authCodeHeader != null && int.TryParse(authCodeHeader.Value, out int authCode))
             {
                 ClientStreams.AddOrUpdate(authCode, requestStream, (key, oldValue) => requestStream);
@@ -75,7 +72,7 @@ namespace Another_Mirai_Native.gRPC
                     }
                     else
                     {
-                        WaitingResults.AddOrUpdate(request.WaitID, request.Request, (key, oldValue) => request.Request);
+                        Server.WaitingResults.AddOrUpdate(request.WaitID, request.Request, (key, oldValue) => request.Request);
                         RequestWaiter.TriggerByKey(request.WaitID);
                     }
                 }
@@ -98,54 +95,12 @@ namespace Another_Mirai_Native.gRPC
                 if (item.Value.CurrentErrorCount > 5)
                 {
                     item.Value.Alive = false;
-
+                    var proxy = PluginManagerProxy.GetProxyByAuthCode(item.Key);
+                    if (proxy != null)
+                    {
+                        ServerManager.Server.ClientDisconnect(proxy);
+                    }
                 }
-            }
-        }
-
-        public static int Invoke(CQPluginProxy target, PluginEventType eventType, object[] args)
-        {
-            StreamResponse response = new()
-            {
-                WaitID = ++SyncID
-            };
-            var argumentType = typeof(Event_OnAdminChange_Parameters).Assembly.GetType($"Another_Mirai_Native.gRPC.Event_On{eventType}_Parameters");
-            if (argumentType == null)
-            {
-                // log
-                return 0;
-            }
-            try
-            {
-                var instance = Activator.CreateInstance(argumentType);
-                int index = 0;
-                foreach (var item in instance.GetType().GetProperties().Where(x => x.CanWrite))
-                {
-                    item.SetValue(instance, args[index]);
-                    index++;
-                }
-
-                MethodInfo unpackMethodInfo = typeof(Any).GetMethod("Pack");
-                MethodInfo genericUnpackMethod = unpackMethodInfo.MakeGenericMethod(argumentType);
-
-                Any any = (Any)genericUnpackMethod.Invoke(null, new object[] { instance }); // 调用Pack
-                response.Response = any;
-                if (Send(target.AppInfo.AuthCode, response)
-                    && RequestWaiter.Wait(response.WaitID, target, AppConfig.PluginInvokeTimeout)
-                    && WaitingResults.TryRemove(response.WaitID, out int result))
-                {
-                    return result;
-                }
-                else
-                {
-                    // log
-                    return 0;
-                }
-            }
-            catch
-            {
-                // log
-                return 0;
             }
         }
 
@@ -158,7 +113,10 @@ namespace Another_Mirai_Native.gRPC
             }
             try
             {
-                serverStream.WriteAsync(response).Wait();
+                lock (writeLock)
+                {
+                    serverStream.WriteAsync(response).Wait();
+                }
             }
             catch
             {
@@ -169,57 +127,115 @@ namespace Another_Mirai_Native.gRPC
 
         public override Task<Empty> ClientStartup(ClientStartupRequest request, ServerCallContext context)
         {
-            var authCodeHeader = context.RequestHeaders.FirstOrDefault(x => x.Key == "authCode");
+            var authCodeHeader = context.RequestHeaders.FirstOrDefault(x => x.Key == "authcode");
             if (authCodeHeader != null && int.TryParse(authCodeHeader.Value, out int authCode))
             {
-                // 实现
+                ServerManager.Server.ClientStartup(request.Pid, request.AppId);
             }
             return Task.FromResult(new Empty());
         }
 
         public override Task<Int32Value> AddLog(AddLogRequest request, ServerCallContext context)
         {
+            var result = ServerManager.Server.AddLog(new LogModel
+            {
+                id = request.Id,
+                detail = request.Detail,
+                name = request.Name,
+                priority = request.Priority,
+                source = request.Source,
+                status = request.Status,
+                time = request.Time
+            });
             return Task.FromResult(new Int32Value()
             {
-                Value = LogHelper.WriteLog(new LogModel
-                {
-                    id = request.Id,
-                    detail = request.Detail,
-                    name = request.Name,
-                    priority = request.Priority,
-                    source = request.Source,
-                    status = request.Status,
-                    time = request.Time
-                })
+                Value = result ?? 0
             });
         }
 
         public override Task<StringValue> GetCoreVersion(Empty request, ServerCallContext context)
         {
-            return Task.FromResult(new StringValue() { Value = GetType().Assembly.GetName().Version.ToString() });
+            var result = ServerManager.Server.GetCoreVersion();
+            if (string.IsNullOrEmpty(result))
+            {
+                result = "";
+            }
+            return Task.FromResult(new StringValue() { Value = result });
         }
 
         public override Task<Int32Value> DisablePlugin(Int32Value request, ServerCallContext context)
         {
-            return base.DisablePlugin(request, context);
+            return Task.FromResult(new Int32Value() { Value = ServerManager.Server.DisablePlugin(request.Value) ? 1 : 0 });
         }
 
         public override Task<Int32Value> EnablePlugin(Int32Value request, ServerCallContext context)
         {
-            return base.EnablePlugin(request, context);
+            return Task.FromResult(new Int32Value() { Value = ServerManager.Server.EnablePlugin(request.Value) ? 1 : 0 });
         }
 
         public override Task<Int32Value> Restart(Int32Value request, ServerCallContext context)
         {
-            return base.Restart(request, context);
+            return Task.FromResult(new Int32Value() { Value = ServerManager.Server.RestartPlugin(request.Value) ? 1 : 0 });
         }
 
         public override Task<PluginResponse> GetAllPlugins(Empty request, ServerCallContext context)
         {
-            return Task.FromResult(new PluginResponse()
+            var r = new PluginResponse();
+            foreach (var item in ServerManager.Server.GetAllPlugins())
             {
-                
+                var plugin = new PluginResponse_AppInfo
+                {
+                    Apiver = item.AppInfo.apiver,
+                    AppId = item.AppInfo.AppId,
+                    AuthCode = item.AppInfo.AuthCode,
+                    Author = item.AppInfo.author,
+                    Description = item.AppInfo.description,
+                    Name = item.AppInfo.name,
+                    Ret = item.AppInfo.ret,
+                    Version = item.AppInfo.version,
+                    VersionId = item.AppInfo.version_id,
+                };
+                foreach (var auth in item.AppInfo.auth)
+                {
+                    plugin.Auth.Add(auth);
+                }
+                foreach (var menu in item.AppInfo.menu)
+                {
+                    plugin.Menu.Add(new PluginResponse_Menu
+                    {
+                        Function = menu.function,
+                        Name = menu.name
+                    });
+                }
+                foreach (var @event in item.AppInfo._event)
+                {
+                    plugin.Event.Add(new PluginResponse_Event
+                    {
+                        Name = @event.name,
+                        Function = @event.function,
+                        Id = @event.id,
+                        Priority = @event.priority,
+                        Type = @event.type
+                    });
+                }
+            }
+            return Task.FromResult(r);
+        }
+
+        public override Task<AppConfigResponse> GetAppConfig(StringValue request, ServerCallContext context)
+        {
+            var config = ServerManager.Server.GetAppConfig(request.Value);
+            return Task.FromResult(new AppConfigResponse
+            {
+                ConfigType = config.GetType().Name,
+                ConfigValue = config.ToString()
             });
+        }
+
+        public override Task<Empty> ShowErrorDialog(ErrorDialog request, ServerCallContext context)
+        {
+            ServerManager.Server.ShowErrorDialog(request.Guid, request.AuthCode, request.Title, request.Content, request.CanIgnore);
+            return Task.FromResult(new Empty());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Another_Mirai_Native.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,6 +63,8 @@ namespace Another_Mirai_Native.Config
 
         public static string gRPCListenIP { get; set; } = "127.0.0.1";
 
+        public static ServerType ServerType { get; set; } = ServerType.WebSocket;
+
         public static void LoadConfig()
         {
             PluginExitWhenCoreExit = ConfigHelper.GetConfig("PluginExitWhenCoreExit", defaultValue: true);
@@ -83,6 +86,7 @@ namespace Another_Mirai_Native.Config
             DebugMode = ConfigHelper.GetConfig("DebugMode", defaultValue: false);
             LoadTimeout = ConfigHelper.GetConfig("LoadTimeout", defaultValue: 10 * 1000);
             MessageCacheSize = ConfigHelper.GetConfig("MessageCacheSize", defaultValue: 4096);
+            ServerType = (ServerType)ConfigHelper.GetConfig("ServerType", defaultValue: 0);
         }
     }
 }

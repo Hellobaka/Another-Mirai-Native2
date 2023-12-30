@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.WebSocket;
 using System;
 using System.Diagnostics;
@@ -255,10 +256,10 @@ namespace Another_Mirai_Native.Export
             if (stackFrames.Length > 1)
             {
                 string functionName = stackFrames[1].GetMethod().Name;
-                var r = Client.Instance.Invoke("InvokeCQP_" + functionName, true, args);
-                if (r != null && string.IsNullOrEmpty(r.Message))
+                var r = ClientManager.Client.InvokeCQPFuntcion(functionName, true, args);
+                if (r != null)
                 {
-                    return r.Result;
+                    return r;
                 }
                 LogHelper.Error("请求服务端", "调用错误");
                 return null;

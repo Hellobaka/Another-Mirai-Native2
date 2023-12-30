@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
@@ -23,7 +24,7 @@ namespace Another_Mirai_Native.UI
             var menu = new ContextMenu();
             menu.Items.Add(new MenuItem { Header = $"{AppConfig.CurrentNickName}({AppConfig.CurrentQQ})" });
             menu.Items.Add(new Separator());
-            menu.Items.Add(new MenuItem { Header = $"框架版本: {Server.Instance.GetType().Assembly.GetName().Version}" });
+            menu.Items.Add(new MenuItem { Header = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
             menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
             MenuItem updateItem = new() { Header = "检查更新" };
             updateItem.Click += (a, b) => updateAction?.Invoke();
@@ -72,14 +73,10 @@ namespace Another_Mirai_Native.UI
             return await dialog.ShowAsync() == ContentDialogResult.Primary;
         }
 
-        public static void ShowErrorDialog(InvokeBody caller)
+        public static void ShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {
-            if (caller == null || caller.Args.Length != 4)
-            {
-                return;
-            }
-            var plugin = PluginManagerProxy.GetProxyByAuthCode(Convert.ToInt32(caller.Args[0]));
-            ShowErrorDialog(plugin, caller.GUID, caller.Args[1].ToString(), caller.Args[2].ToString(), caller.Args[3].ToString() == "1");
+            var plugin = PluginManagerProxy.GetProxyByAuthCode(authCode);
+            ShowErrorDialog(plugin, guid, title, content, canIgnore);
         }
 
         public static void ShowErrorDialog(string message, string detail, bool canIgnore = true)
@@ -168,10 +165,11 @@ namespace Another_Mirai_Native.UI
                     dialog.DialogResult = await dialog.ContentDialog.ShowAsync();
                 }
             });
-            if (Server.Instance.WaitingMessage.ContainsKey(dialog.GUID))
+            if (ServerManager.Server.WaitingMessage.TryGetValue(dialog.GUID, out InvokeResult value)
+                && value != null)
             {
-                Server.Instance.WaitingMessage[dialog.GUID].Result = true;
-                Server.Instance.WaitingMessage[dialog.GUID].Success = true;
+                value.Result = true;
+                value.Success = true;
                 RequestWaiter.TriggerByKey(dialog.GUID);
             }
             if (dialog.DialogResult == ContentDialogResult.Secondary && dialog.Plugin != null)

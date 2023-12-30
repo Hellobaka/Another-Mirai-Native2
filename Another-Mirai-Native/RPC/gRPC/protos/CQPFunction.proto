@@ -1,45 +1,50 @@
 ﻿syntax = "proto3";
 
 option csharp_namespace = "Another_Mirai_Native.gRPC";
+import "google/protobuf/wrappers.proto";
 
 package CQP_gRPC;
 
 service CQPFunctions {
-  rpc CQ_sendPrivateMsg (CQ_sendPrivateMsg_Parameters) returns (CQPFuntionResult);
-  rpc CQ_sendGroupMsg (CQ_sendGroupMsg_Parameters) returns (CQPFuntionResult);
-  rpc CQ_sendGroupQuoteMsg (CQ_sendGroupQuoteMsg_Parameters) returns (CQPFuntionResult);
-  rpc CQ_sendDiscussMsg (CQ_sendDiscussMsg_Parameters) returns (CQPFuntionResult);
-  rpc CQ_deleteMsg (CQ_deleteMsg_Parameters) returns (CQPFuntionResult);
-  rpc CQ_sendLikeV2 (CQ_sendLikeV2_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getCookiesV2 (CQ_getCookiesV2_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getImage (CQ_getImage_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getRecordV2 (CQ_getRecordV2_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getCsrfToken (CQ_getCsrfToken_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getAppDirectory (CQ_getAppDirectory_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getLoginQQ (CQ_getLoginQQ_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getLoginNick (CQ_getLoginNick_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupKick (CQ_setGroupKick_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupBan (CQ_setGroupBan_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupAdmin (CQ_setGroupAdmin_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupSpecialTitle (CQ_setGroupSpecialTitle_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupWholeBan (CQ_setGroupWholeBan_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupAnonymousBan (CQ_setGroupAnonymousBan_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupAnonymous (CQ_setGroupAnonymous_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupCard (CQ_setGroupCard_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupLeave (CQ_setGroupLeave_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setDiscussLeave (CQ_setDiscussLeave_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setFriendAddRequest (CQ_setFriendAddRequest_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setGroupAddRequestV2 (CQ_setGroupAddRequestV2_Parameters) returns (CQPFuntionResult);
-  rpc CQ_addLog (CQ_addLog_Parameters) returns (CQPFuntionResult);
-  rpc CQ_setFatal (CQ_setFatal_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getGroupMemberInfoV2 (CQ_getGroupMemberInfoV2_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getGroupMemberList (CQ_getGroupMemberList_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getGroupList (CQ_getGroupList_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getStrangerInfo (CQ_getStrangerInfo_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getGroupInfo (CQ_getGroupInfo_Parameters) returns (CQPFuntionResult);
-  rpc CQ_getFriendList (CQ_getFriendList_Parameters) returns (CQPFuntionResult);
-  rpc CQ_canSendImage (CQ_canSendImage_Parameters) returns (CQPFuntionResult);
-  rpc CQ_canSendRecord (CQ_canSendRecord_Parameters) returns (CQPFuntionResult);
+  rpc CQ_sendPrivateMsg (CQ_sendPrivateMsg_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_sendGroupMsg (CQ_sendGroupMsg_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_sendGroupQuoteMsg (CQ_sendGroupQuoteMsg_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_sendDiscussMsg (CQ_sendDiscussMsg_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_deleteMsg (CQ_deleteMsg_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_sendLikeV2 (CQ_sendLikeV2_Parameters) returns (google.protobuf.Int32Value);
+
+  rpc CQ_getCookiesV2 (CQ_getCookiesV2_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getImage (CQ_getImage_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getRecordV2 (CQ_getRecordV2_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getCsrfToken (CQ_getCsrfToken_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getAppDirectory (CQ_getAppDirectory_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getLoginNick (CQ_getLoginNick_Parameters) returns (google.protobuf.StringValue);
+
+  rpc CQ_getLoginQQ (CQ_getLoginQQ_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupKick (CQ_setGroupKick_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupBan (CQ_setGroupBan_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupAdmin (CQ_setGroupAdmin_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupSpecialTitle (CQ_setGroupSpecialTitle_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupWholeBan (CQ_setGroupWholeBan_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupAnonymousBan (CQ_setGroupAnonymousBan_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupAnonymous (CQ_setGroupAnonymous_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupCard (CQ_setGroupCard_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupLeave (CQ_setGroupLeave_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setDiscussLeave (CQ_setDiscussLeave_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setFriendAddRequest (CQ_setFriendAddRequest_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setGroupAddRequestV2 (CQ_setGroupAddRequestV2_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_addLog (CQ_addLog_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_setFatal (CQ_setFatal_Parameters) returns (google.protobuf.Int32Value);
+
+  rpc CQ_getGroupMemberInfoV2 (CQ_getGroupMemberInfoV2_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getGroupMemberList (CQ_getGroupMemberList_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getGroupList (CQ_getGroupList_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getStrangerInfo (CQ_getStrangerInfo_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getGroupInfo (CQ_getGroupInfo_Parameters) returns (google.protobuf.StringValue);
+  rpc CQ_getFriendList (CQ_getFriendList_Parameters) returns (google.protobuf.StringValue);
+
+  rpc CQ_canSendImage (CQ_canSendImage_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_canSendRecord (CQ_canSendRecord_Parameters) returns (google.protobuf.Int32Value);
 }
 
 message CQ_sendPrivateMsg_Parameters {
@@ -242,8 +247,4 @@ message CQ_canSendImage_Parameters {
 
 message CQ_canSendRecord_Parameters {
   int32 authCode = 1;
-}
-
-message CQPFuntionResult {
-  int32 result = 1;
 }

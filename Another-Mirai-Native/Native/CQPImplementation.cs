@@ -20,34 +20,6 @@ namespace Another_Mirai_Native.Native
             CurrentPlugin = plugin;
         }
 
-        public static CQPImplementation GetCQPImplementation(object gRPCParameters)
-        {
-            string typeName = gRPCParameters.GetType().Name;
-            if (typeName.Contains("_Parameters"))
-            {
-                var plugin = PluginManagerProxy.GetProxyByAuthCode((int)gRPCParameters.GetType().GetProperty("AuthCode").GetValue(gRPCParameters))
-                    ?? throw new Exception("无法获取调用插件实例");
-                return new CQPImplementation(plugin);
-            }
-            else
-            {
-                throw new Exception("无法从参数获取调用信息");
-            }
-        }
-
-        public static string GetFunctionName(object gRPCParameters)
-        {
-            string typeName = gRPCParameters.GetType().Name;
-            if (typeName.Contains("_Parameters"))
-            {
-                return typeName.Replace("_Parameters", "");
-            }
-            else
-            {
-                throw new Exception("无法从参数获取调用信息");
-            }
-        }
-
         public object Invoke(string functionName, params object[] args)
         {
             Stopwatch.Restart();

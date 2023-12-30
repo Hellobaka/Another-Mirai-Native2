@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.WebSocket;
 using Newtonsoft.Json;
 using System.ComponentModel;
@@ -197,41 +198,32 @@ namespace Another_Mirai_Native
             string guid = Guid.NewGuid().ToString();
             if (AppConfig.IsCore)
             {
-                Server.Instance.ActiveShowErrorDialog(new InvokeBody
-                {
-                    GUID = guid,
-                    Args = new object[]
-                    {
+                ServerManager.Server.ActiveShowErrorDialog(guid,
                         0,
                         $"框架发生异常，错误窗口关闭后，框架将会退出：{ex.Message}",
                         ex.StackTrace ?? "",
-                        canIgnore ? 1 : 0
-                    }
-                });
-                Server.Instance.WaitingMessage.Add(guid, new InvokeResult());
+                        canIgnore);
+                ServerManager.Server.WaitingMessage.Add(guid, new InvokeResult());
             }
             else
             {
-                Client.Instance.Send(new InvokeBody
-                {
-                    GUID = guid,
-                    Args = new object[]
-                    {
-                        AppConfig.Core_AuthCode,
-                        ex.Message,
-                        ex.StackTrace ?? "",
-                        canIgnore ? 1 : 0
-                    },
-                    Function = "ShowErrorDialog"
-                }.ToJson());
-                Client.Instance.WaitingMessage.Add(guid, new InvokeResult());
+                ClientManager.Client.ShowErrorDialog(guid, ex.Message, ex.StackTrace, canIgnore);
             }
-            ManualResetEvent waitEvent = new(false);
-            RequestWaiter.CommonWaiter.TryAdd(guid, new WaiterInfo
+            if (QueryEventDescribed(ServerManager.Server, nameof(ServerManager.Server.OnShowErrorDialogCalled)))
             {
-                WaitSignal = waitEvent,
-            });
-            waitEvent.WaitOne();
+                ManualResetEvent waitEvent = new(false);
+                RequestWaiter.CommonWaiter.TryAdd(guid, new WaiterInfo
+                {
+                    WaitSignal = waitEvent,
+                });
+                waitEvent.WaitOne();
+            }
+        }
+
+        public static bool QueryEventDescribed(object instance, string eventName)
+        {
+            FieldInfo field = instance.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic);
+            return ((Delegate)field.GetValue(instance)).GetInvocationList().Length > 0;
         }
     }
 }

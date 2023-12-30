@@ -5,6 +5,7 @@ using Another_Mirai_Native.WebSocket;
 using System.Runtime.ExceptionServices;
 using System.IO;
 using System.Diagnostics;
+using Another_Mirai_Native.RPC;
 
 namespace Another_Mirai_Native.Native
 {
@@ -18,8 +19,6 @@ namespace Another_Mirai_Native.Native
         public static PluginManager Instance { get; private set; }
 
         public static CQPlugin LoadedPlugin { get; private set; }
-
-        private static int PID => Process.GetCurrentProcess().Id;
 
         [HandleProcessCorruptedStateExceptions]
         public int CallEvent(PluginEventType eventName, object[] args)
@@ -170,7 +169,7 @@ namespace Another_Mirai_Native.Native
             if (ret)
             {
                 LoadedPlugin = plugin;
-                Client.Instance.Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = LoadedPlugin.AppInfo.AppId }.ToJson());
+                ClientManager.Client.ClientStartUp();
             }
             return ret;
         }

@@ -22,20 +22,9 @@ namespace Another_Mirai_Native.Native
             PluginPath = dllPath;
         }
 
-        public CQPluginProxy(AppInfo appInfo, IWebSocketConnection connection)
-        {
-            AppInfo = appInfo;
-            Connection = connection;
-            ConnectionID = connection.ConnectionInfo.Id;
-        }
-
         public event Action<CQPluginProxy> OnPluginProcessExited;
 
         public AppInfo AppInfo { get; set; }
-
-        public IWebSocketConnection Connection { get; set; }
-
-        public Guid ConnectionID { get; set; }
 
         public bool Enabled { get; set; }
 
@@ -82,27 +71,6 @@ namespace Another_Mirai_Native.Native
         {
             int id = (int)apiType;
             return AppInfo.auth.Any(x => x == id);
-        }
-
-        public InvokeResult Invoke(InvokeBody caller)
-        {
-            //LogHelper.Debug("服务端发送", caller.ToJson());
-            if (HasConnection is false)
-            {
-                return null;
-            }
-            Connection.Send(caller.ToJson());
-            Server.Instance.WaitingMessage.Add(caller.GUID, new InvokeResult());
-            if (RequestWaiter.Wait(caller.GUID, this, AppConfig.PluginInvokeTimeout)
-                && Server.Instance.WaitingMessage.TryGetValue(caller.GUID, out InvokeResult result))
-            {
-                Server.Instance.WaitingMessage.Remove(caller.GUID);
-                return result;
-            }
-            else
-            {
-                return new InvokeResult() { Message = "Timeout" };
-            }
         }
 
         public void KillProcess()

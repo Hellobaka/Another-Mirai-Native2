@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.WebSocket;
 using System.Diagnostics;
 using System.IO;
@@ -39,8 +40,23 @@ namespace Another_Mirai_Native
             }
             if (args.Length == 0)
             {
-                // 启动WS服务器
-                new Server().Start();
+                // 启动服务器
+                ServerManager serverManager = new();
+                if (serverManager.Build(AppConfig.ServerType) is false)
+                {
+                    LogHelper.Debug("初始化", "构建服务器失败");
+                    return;
+                }
+                if (ServerManager.Server.SetConnectionConfig() is false)
+                {
+                    LogHelper.Debug("初始化", "初始化连接参数失败，请检查配置内容");
+                    return;
+                }
+                if (!ServerManager.Server.Start())
+                {
+                    LogHelper.Debug("初始化", "构建服务器失败");
+                    return;
+                }
                 // 若配置无需UI则自动连接之后加载插件
                 if (AppConfig.AutoConnect)
                 {
@@ -52,6 +68,13 @@ namespace Another_Mirai_Native
                     {
                         return;
                     }
+                    if (AppConfig.PluginAutoEnable)
+                    {
+                        foreach (var item in PluginManagerProxy.Proxies)
+                        {
+                            PluginManagerProxy.Instance.SetPluginEnabled(item, true);
+                        }
+                    }
                 }
             }
             else
@@ -62,8 +85,20 @@ namespace Another_Mirai_Native
                 // 监控核心进程
                 MonitorCoreProcess(AppConfig.Core_PID);
                 // 连接核心服务器
-                if (!new Client().Connect(AppConfig.Core_WSURL))
+                ClientManager clientManager = new();
+                if (!clientManager.Build(AppConfig.ServerType))
                 {
+                    LogHelper.Debug("初始化", "构建客户端失败");
+                    return;
+                }
+                if (ClientManager.Client.SetConnectionConfig() is false)
+                {
+                    LogHelper.Debug("初始化", "初始化连接参数失败，请检查配置内容");
+                    return;
+                }
+                if (!ClientManager.Client.Connect())
+                {
+                    LogHelper.Debug("初始化", "连接服务器失败");
                     return;
                 }
                 // 加载插件

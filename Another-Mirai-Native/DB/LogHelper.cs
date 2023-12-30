@@ -2,8 +2,10 @@
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.WebSocket;
 using SqlSugar;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -183,7 +185,8 @@ namespace Another_Mirai_Native.DB
             }
             else
             {
-                Client.Instance.Invoke("InvokeCore_AddLog", false, model);
+                Console.WriteLine($"[{level}][{DateTime.Now:G}]\t[{type}]\t{messages}");
+                ClientManager.Client.AddLog(model);
                 return 0;
             }
         }

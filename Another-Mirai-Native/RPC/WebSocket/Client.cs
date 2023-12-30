@@ -3,49 +3,52 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC.Interface;
 using Newtonsoft.Json.Linq;
-using System.Security.Policy;
-using System.Text;
 
 namespace Another_Mirai_Native.WebSocket
 {
-    public class Client
+    public class Client : ClientBase
     {
-        public Client()
+        public WebSocketSharp.WebSocket WebSocketClient { get; set; }
+
+        private string ConnectUrl { get; set; } = AppConfig.Core_WSURL;
+
+        private int ReconnectCount { get; set; }
+
+        public override void AddLog(LogModel model)
         {
-            Instance = this;
+            InvokeCQPFuntcion("InvokeCore_AddLog", false, model);
         }
 
-        public static bool ExitFlag { get; private set; }
-
-        public static Client Instance { get; private set; }
-
-        public int ReconnectCount { get; private set; }
-
-        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
-
-        public WebSocketSharp.WebSocket WebSocketClient { get; private set; }
-
-        public bool Connect(string url)
+        public override void ClientStartUp()
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                LogHelper.Error("连接服务端", "参数无效");
-                return false;
-            }
+            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo.AppId }.ToJson());
+        }
 
-            WebSocketClient = new(url);
+        public override void Close()
+        {
+            WebSocketClient?.Close();
+        }
+
+        public override bool Connect()
+        {
+            WebSocketClient = new(ConnectUrl);
             WebSocketClient.OnClose += WebSocketClient_OnClose;
             WebSocketClient.OnMessage += WebSocketClient_OnMessage;
             WebSocketClient.Connect();
             LogHelper.Debug("连接服务端", "连接成功");
+            HeartBeatLostCount = 0;
             return WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open;
         }
 
-        public InvokeResult Invoke(string function, bool waiting, params object[] args)
+        public override object InvokeCQPFuntcion(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
-
+            if (function.StartsWith("CQ_"))
+            {
+                function = "InvokeCQP_" + function;
+            }
             Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
             if (!waiting)
             {
@@ -58,34 +61,49 @@ namespace Another_Mirai_Native.WebSocket
                 WaitingMessage.Remove(guid);
                 if (result.Success)
                 {
-                    return result;
+                    return result.Result;
                 }
                 else
                 {
                     LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
-                    return new InvokeResult() { Message = result.Message };
+                    return null;
                 }
             }
             else
             {
                 LogHelper.Error("调用超时", "Timeout");
-                return new InvokeResult() { Message = "Timeout" };
+                return null;
             }
         }
 
-        public void Send(string message)
+        public override void SendHeartBeat()
         {
-            if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
+            Send(new InvokeBody()
             {
-                // LogHelper.Debug("向服务端发送", message);
-                WebSocketClient.Send(message);
-            }
+                Function = "HeartBeat"
+            }.ToJson());
         }
 
-        private int HandleEvent(string function, object[] args)
+        public override bool SetConnectionConfig()
         {
-            PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), function);
-            return PluginManager.Instance.CallEvent(eventType, args);
+            return !string.IsNullOrEmpty(ConnectUrl);
+        }
+
+        public override void ShowErrorDialog(string guid, string title, string content, bool canIgnore)
+        {
+            Send(new InvokeBody
+            {
+                GUID = guid,
+                Args = new object[]
+                {
+                    AppConfig.Core_AuthCode,
+                    title,
+                    content ?? "",
+                    canIgnore
+                },
+                Function = "ShowErrorDialog"
+            }.ToJson());
+            WaitingMessage.Add(guid, new InvokeResult());
         }
 
         private void HandleMessage(string message)
@@ -100,13 +118,18 @@ namespace Another_Mirai_Native.WebSocket
                     object result = null;
                     if (caller.Function.StartsWith("InvokeEvent"))
                     {
-                        result = HandleEvent(caller.Function.Replace("InvokeEvent_", ""), caller.Args);
+                        PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), caller.Function.Replace("InvokeEvent_", ""));
+                        result = InvokeEvent(eventType, caller.Args);
                         Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
                     }
                     else if (caller.Function == "KillProcess")
                     {
                         Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = 1 }.ToJson());
-                        Environment.Exit(0);
+                        KillProcess();
+                    }
+                    else if (caller.Function == "HeartBeat")
+                    {
+                        HeartBeatLostCount = 0;
                     }
                 }
                 else
@@ -126,13 +149,22 @@ namespace Another_Mirai_Native.WebSocket
             }
         }
 
+        private void Send(string message)
+        {
+            if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
+            {
+                // LogHelper.Debug("向服务端发送", message);
+                WebSocketClient.Send(message);
+            }
+        }
+
         private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
         {
             ReconnectCount++;
             LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
             Thread.Sleep(AppConfig.ReconnectTime);
-            Connect(AppConfig.Core_WSURL);
+            Connect();
         }
 
         private void WebSocketClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)

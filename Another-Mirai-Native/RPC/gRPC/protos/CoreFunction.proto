@@ -20,6 +20,7 @@ service CoreFunctions {
     rpc DisablePlugin(google.protobuf.Int32Value) returns (google.protobuf.Int32Value);
     rpc GetAppConfig(google.protobuf.StringValue) returns (AppConfigResponse);
     rpc GetAllPlugins(google.protobuf.Empty) returns (PluginResponse);
+    rpc ShowErrorDialog(ErrorDialog) returns (google.protobuf.Empty);
 }
 
 message StreamRequest {  
@@ -56,6 +57,42 @@ message ClientStartupRequest{
     string appId = 2;
 }
 
+message PluginResponse_Event {
+  int32 id = 1;
+  int32 type = 2;
+  string name = 3;
+  string function = 4;
+  int32 priority = 5;
+}
+
+message PluginResponse_Menu {
+  string name = 1;
+  string function = 2;
+}
+
+message PluginResponse_AppInfo {
+  int32 AuthCode = 1;
+  string AppId = 2;
+  int32 ret = 3;
+  int32 apiver = 4;
+  string name = 5;
+  string version = 6;
+  int32 version_id = 7;
+  string author = 8;
+  string description = 9;
+  repeated PluginResponse_Event _event = 10;
+  repeated PluginResponse_Menu menu = 11;
+  repeated int32 auth = 12;
+}
+
 message PluginResponse{
-	
+	repeated PluginResponse_AppInfo plugins = 1;
+}
+
+message ErrorDialog{
+	string guid = 1;
+    int32 authCode = 2;
+    string title = 3;
+    string content = 4;
+    bool canIgnore = 5;
 }
