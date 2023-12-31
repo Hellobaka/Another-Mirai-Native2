@@ -72,7 +72,7 @@ namespace Another_Mirai_Native
                     {
                         foreach (var item in PluginManagerProxy.Proxies)
                         {
-                            PluginManagerProxy.Instance.SetPluginEnabled(item, true);
+                            item.Load();
                         }
                     }
                 }
