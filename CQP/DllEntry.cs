@@ -261,7 +261,7 @@ namespace Another_Mirai_Native.Export
                 {
                     return r;
                 }
-                LogHelper.Error("请求服务端", "调用错误");
+                LogHelper.Error("请求服务端", $"调用 {functionName} 错误，参数: {string.Join(",", args)}");
                 return null;
             }
             else
