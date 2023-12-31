@@ -20,7 +20,7 @@ service CQPFunctions {
   rpc CQ_getAppDirectory (CQ_getAppDirectory_Parameters) returns (google.protobuf.StringValue);
   rpc CQ_getLoginNick (CQ_getLoginNick_Parameters) returns (google.protobuf.StringValue);
 
-  rpc CQ_getLoginQQ (CQ_getLoginQQ_Parameters) returns (google.protobuf.Int32Value);
+  rpc CQ_getLoginQQ (CQ_getLoginQQ_Parameters) returns (google.protobuf.Int64Value);
   rpc CQ_setGroupKick (CQ_setGroupKick_Parameters) returns (google.protobuf.Int32Value);
   rpc CQ_setGroupBan (CQ_setGroupBan_Parameters) returns (google.protobuf.Int32Value);
   rpc CQ_setGroupAdmin (CQ_setGroupAdmin_Parameters) returns (google.protobuf.Int32Value);

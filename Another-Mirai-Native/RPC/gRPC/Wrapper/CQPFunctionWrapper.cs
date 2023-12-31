@@ -94,11 +94,11 @@ namespace Another_Mirai_Native.gRPC
             });
         }
 
-        public override Task<Int32Value> CQ_getLoginQQ(CQ_getLoginQQ_Parameters request, ServerCallContext context)
+        public override Task<Int64Value> CQ_getLoginQQ(CQ_getLoginQQ_Parameters request, ServerCallContext context)
         {
-            return Task.FromResult(new Int32Value
+            return Task.FromResult(new Int64Value
             {
-                Value = (int)(Server.GetCQPImplementation(request).Invoke(Server.GetFunctionName(request), request.AuthCode) ?? 0)
+                Value = (long)(Server.GetCQPImplementation(request).Invoke(Server.GetFunctionName(request), request.AuthCode) ?? 0)
             });
         }
 

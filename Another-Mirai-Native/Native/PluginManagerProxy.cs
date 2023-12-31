@@ -158,7 +158,7 @@ namespace Another_Mirai_Native.Native
                 {
                     success = plugin.Load();
                 }
-                Console.ReadLine();
+                // Console.ReadLine();
                 success = success && InvokeEvent(plugin, PluginEventType.StartUp) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
                 RequestWaiter.TriggerByKey($"PluginEnabled_{plugin.AppInfo.name}");
