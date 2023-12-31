@@ -3,7 +3,6 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
-using Another_Mirai_Native.WebSocket;
 using Hardcodet.Wpf.TaskbarNotification;
 using ModernWpf;
 using ModernWpf.Controls;
@@ -13,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -59,7 +57,11 @@ namespace Another_Mirai_Native.UI
 
         public static MainWindow Instance { get; set; }
 
-        public TaskbarIcon TaskbarIcon { get; set; }
+        public TaskbarIcon TaskbarIcon { get; set; } = new()
+        {
+            Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)))
+        };
+
 
         private Dictionary<string, object> PageCache { get; set; } = new();
 
@@ -107,21 +109,7 @@ namespace Another_Mirai_Native.UI
 
         public void InitNotifyIcon()
         {
-            if (TaskbarIcon != null)
-            {
-                return;
-            }
-            Dispatcher.Invoke(() =>
-            {
-                TaskbarIcon = new();
-                TaskbarIcon.Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)));
-                TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
-                {
-                    Show();
-                    SetForegroundWindow();
-                };
-                BuildTaskbarIconMenu();
-            });
+            Dispatcher.BeginInvoke(BuildTaskbarIconMenu);
         }
 
         [DllImport("user32.dll")]
@@ -160,19 +148,14 @@ namespace Another_Mirai_Native.UI
         private void EnablePluginByConfig()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            Parallel.ForEach(PluginManagerProxy.Proxies, item =>
+            foreach (var item in PluginManagerProxy.Proxies)
             {
                 string appName = item.AppInfo.name;
                 if (UIConfig.AutoEnablePlugins.Any(x => x == appName))
                 {
-                    var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.name == appName);
-                    if (proxy == null)
-                    {
-                        return;
-                    }
-                    PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
+                    PluginManagerProxy.Instance.SetPluginEnabled(item, true);
                 }
-            });
+            };
             LogHelper.WriteLog("插件启用完成...", $"√ {sw.ElapsedMilliseconds} ms");
         }
 
@@ -189,6 +172,11 @@ namespace Another_Mirai_Native.UI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
+            {
+                Show();
+                SetForegroundWindow();
+            };
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
@@ -236,14 +224,7 @@ namespace Another_Mirai_Native.UI
         {
             // 通过SetForegroundWindow来激活窗口
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
-            if (hwnd == IntPtr.Zero)
-            {
-                return false;
-            }
-            else
-            {
-                return SetForegroundWindow(hwnd);
-            }
+            return hwnd != IntPtr.Zero && SetForegroundWindow(hwnd);
         }
 
         private void ThemeToggle_Click(object sender, RoutedEventArgs e)

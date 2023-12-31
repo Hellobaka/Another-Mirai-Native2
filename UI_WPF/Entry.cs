@@ -1,12 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.RPC;
-using Another_Mirai_Native.WebSocket;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.UI
 {
@@ -30,9 +26,7 @@ namespace Another_Mirai_Native.UI
         {
             AppConfig.LoadConfig();
             AppConfig.IsCore = true;
-            ServerManager.Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
             Another_Mirai_Native.Entry.CreateInitFolders();
-            Another_Mirai_Native.Entry.InitExceptionCapture();
             if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();
@@ -53,6 +47,8 @@ namespace Another_Mirai_Native.UI
                 LogHelper.Debug("初始化", "构建服务器失败");
                 return;
             }
+            ServerManager.Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
+            Another_Mirai_Native.Entry.InitExceptionCapture();
         }
     }
 }
