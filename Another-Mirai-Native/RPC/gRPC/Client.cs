@@ -89,18 +89,48 @@ namespace Another_Mirai_Native.gRPC
 
         public override object InvokeCQPFuntcion(string function, bool waiting, params object[] args)
         {
-            // 由于调用参数并非简单排列，需重新实现CQP实现类构造
-            MethodInfo method = CQPClient.GetType().GetMethod(function, BindingFlags.Instance | BindingFlags.Public);
+            var argumentType = typeof(CQ_addLog_Parameters).Assembly.GetType($"Another_Mirai_Native.gRPC.{function}_Parameters");
+            if (argumentType == null)
+            {
+                LogHelper.Error("InvokeCQPFuntcion", $"反射参数 {function} 类型失败");
+                return 0;
+            }
+            var instance = Activator.CreateInstance(argumentType);
+            var ls = argumentType.GetProperties().Where(x => x.CanWrite);
+            var outList = ls.Where(x => argumentType.GetField($"{x.Name}FieldNumber") != null)
+                .OrderBy(x => (int)(argumentType.GetField($"{x.Name}FieldNumber").GetValue(instance))).ToList();
+            if(args.Length != outList.Count)
+            {
+                LogHelper.Error("InvokeCQPFuntcion", $"校验反射参数 {function} 参数数量失败。目标数量: {args.Length}，实际数量: {outList.Count}");
+                return 0;
+            }
+            for (int i = 0; i < outList.Count; i++)
+            {
+                outList[i].SetValue(instance, args[i]);
+            }
+
+            MethodInfo method = CQPClient.GetType().GetMethod(function, new System.Type[]
+            {
+                argumentType,
+                typeof(Metadata),
+                typeof(DateTime?),
+                typeof(CancellationToken)
+            });
             if (method == null)
             {
-                return null;
+                LogHelper.Error("InvokeCQPFuntcion", $"获取方法 {function} 类型失败");
+                return 0;
             }
             try
             {
-                var result = method.Invoke(CQPClient, args);
+                var result = method.Invoke(CQPClient, new object[] { instance, Headers, null, null });
                 if (result != null && result is Int32Value int32Value)
                 {
                     return int32Value.Value;
+                }
+                if (result != null && result is Int64Value int64Value)
+                {
+                    return int64Value.Value;
                 }
                 else if (result != null && result is StringValue stringValue)
                 {
@@ -183,11 +213,11 @@ namespace Another_Mirai_Native.gRPC
                 {
                     MethodInfo unpackMethodInfo = typeof(Any).GetMethod("Unpack", System.Type.EmptyTypes);
                     MethodInfo genericUnpackMethod = unpackMethodInfo.MakeGenericMethod(argumentType);
-                    
+
                     object argument = genericUnpackMethod.Invoke(response.Response, null); // 调用UnPack
                     object[] args = argument.GetType().GetProperties().Where(x => x.CanWrite).Select(x => x.GetValue(argument)).ToArray();
 
-                    if(typeName == "HeartBeatRequest")
+                    if (typeName == "HeartBeatRequest")
                     {
                         return;
                     }
@@ -204,7 +234,7 @@ namespace Another_Mirai_Native.gRPC
                         }).Wait();
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     LogHelper.Error("InvokeEvents", e);
                     lock (writeLock)
