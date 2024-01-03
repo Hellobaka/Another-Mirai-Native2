@@ -10,7 +10,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
 
             public MiraiMessageType messageType { get; set; } = MiraiMessageType.Source;
 
-            public long id { get; set; }
+            public int id { get; set; }
 
             public long time { get; set; }
         }
