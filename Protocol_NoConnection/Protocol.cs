@@ -5,14 +5,23 @@ using Another_Mirai_Native.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Protocol_NoConnection
 {
     public class Protocol : IProtocol
     {
+        public Protocol()
+        {
+            Instance = this;   
+        }
+
         public string Name { get; set; } = "NoConnection";
 
         public bool IsConnected { get; set; } = false;
+
+        public static Protocol Instance { get; set; }
 
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
@@ -21,6 +30,8 @@ namespace Protocol_NoConnection
         private List<GroupMemberInfo> GroupMemberInfos { get; set; } = new();
 
         private Random Random { get; set; } = new();
+
+        private Tester TesterForm { get; set; }
 
         public void BuildMockData()
         {
@@ -101,6 +112,16 @@ namespace Protocol_NoConnection
                 GroupMemberInfos.Add(BuildSelfMockData(GroupInfos.Last().Group));
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).First().MemberType = QQGroupMemberType.Creator;
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).Skip(1).First().MemberType = QQGroupMemberType.Manage;
+            }
+            if(TesterForm == null)
+            {
+                TesterForm = new Tester();
+                Task.Run(() =>
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(true);
+                    Application.Run(TesterForm);
+                });
             }
         }
 

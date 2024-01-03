@@ -227,7 +227,7 @@ namespace Another_Mirai_Native.UI.Pages
             if (e.Key == System.Windows.Input.Key.Up)
             {
                 MessageHistoryIndex = Math.Min(MessageHistories.Count, MessageHistoryIndex + 1);
-                if (MessageHistories.Count > MessageHistoryIndex - 1)
+                if (MessageHistories.Count > 0 && MessageHistories.Count > MessageHistoryIndex - 1)
                 {
                     // SendMessage.Text = MessageHistories[MessageHistories.Count - MessageHistoryIndex];
                     SendMessage.Text = MessageHistories[MessageHistories.Count - MessageHistoryIndex];
