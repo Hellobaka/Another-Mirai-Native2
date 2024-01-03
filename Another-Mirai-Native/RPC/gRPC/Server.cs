@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
@@ -73,11 +74,19 @@ namespace Another_Mirai_Native.gRPC
             try
             {
                 var instance = Activator.CreateInstance(argumentType);
-                int index = 0;
-                foreach (var item in instance.GetType().GetProperties().Where(x => x.CanWrite))
+
+                var ls = argumentType.GetProperties().Where(x => x.CanWrite);
+                var outList = ls.Where(x => argumentType.GetField($"{x.Name}FieldNumber") != null)
+                    .OrderBy(x => (int)(argumentType.GetField($"{x.Name}FieldNumber").GetValue(instance))).ToList();
+                if (args.Length != outList.Count)
                 {
-                    item.SetValue(instance, args[index]);
-                    index++;
+                    LogHelper.Error("InvokeCQPFuntcion", $"校验反射参数 {eventType} 参数数量失败。目标数量: {args.Length}，实际数量: {outList.Count}");
+                    return 0;
+                }
+
+                for (int i = 0; i < outList.Count; i++)
+                {
+                    outList[i].SetValue(instance, args[i]);
                 }
 
                 MethodInfo packMethodInfo = typeof(Any).GetMethod("Pack", new System.Type[] { typeof(IMessage) });
