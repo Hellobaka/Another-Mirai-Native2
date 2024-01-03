@@ -279,7 +279,7 @@ namespace Another_Mirai_Native.DB
             {
                 ConnectionString = $"data source={GetLogFilePath()}",
                 DbType = DbType.Sqlite,
-                IsAutoCloseConnection = true,
+                IsAutoCloseConnection = false,
                 InitKeyType = InitKeyType.Attribute,
             });
             return db;
