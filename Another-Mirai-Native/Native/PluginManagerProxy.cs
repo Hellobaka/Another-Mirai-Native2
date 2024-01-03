@@ -92,7 +92,7 @@ namespace Another_Mirai_Native.Native
         public bool LoadPlugins()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            Parallel.ForEach(Directory.GetFiles(@"data\plugins", "*.dll"), new ParallelOptions { MaxDegreeOfParallelism = 16 }, item =>
+            foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {
                 if (File.Exists(item.Replace(".dll", ".json")))
                 {
@@ -103,7 +103,7 @@ namespace Another_Mirai_Native.Native
                         plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
                     }
                 }
-            });
+            };
             LogHelper.Info("加载插件", "加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
         }
