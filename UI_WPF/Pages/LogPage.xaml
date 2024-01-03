@@ -36,6 +36,9 @@
                 <DataTrigger Binding="{Binding priority}" Value="13">
                     <Setter Property="Foreground" Value="#FF31C279" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding priority}" Value="11">
+                    <Setter Property="Foreground" Value="#FFB402B4" />
+                </DataTrigger>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
                 </DataTrigger>
