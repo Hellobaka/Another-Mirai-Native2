@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.gRPC
             {
                 lock (writeLock)
                 {
-                    serverStream.WriteAsync(response).Wait();
+                    serverStream.WriteAsync(response);
                 }
             }
             catch
