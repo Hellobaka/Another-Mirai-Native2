@@ -156,7 +156,7 @@ namespace Another_Mirai_Native.UI
                     PluginManagerProxy.Instance.SetPluginEnabled(item, true);
                 }
             };
-            LogHelper.WriteLog("插件启用完成...", $"√ {sw.ElapsedMilliseconds} ms");
+            LogHelper.Info("启用插件", "插件启用完成...", $"√ {sw.ElapsedMilliseconds} ms");
         }
 
         private void LoadPlugins()

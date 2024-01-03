@@ -234,7 +234,7 @@ namespace Another_Mirai_Native.DB
         /// <param name="messages">日志内容</param>
         public static int WriteLog(string messages, string status = "")
         {
-            return WriteLog(LogLevel.Info, "AMN框架", "提示", messages, status);
+            return WriteLog(LogLevel.InfoSuccess, "AMN框架", "提示", messages, status);
         }
 
         public static int WriteLog(CQPluginProxy plugin, LogLevel level, string type, string message, string status)
@@ -254,9 +254,9 @@ namespace Another_Mirai_Native.DB
             }
         }
 
-        public static int Info(string type, string message)
+        public static int Info(string type, string message, string status = "")
         {
-            return WriteLog(LogLevel.Info, type, message);
+            return WriteLog(LogLevel.InfoSuccess, type, message, status);
         }
 
         public static int Error(string type, string message)

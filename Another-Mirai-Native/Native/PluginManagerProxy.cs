@@ -104,7 +104,7 @@ namespace Another_Mirai_Native.Native
                     }
                 }
             });
-            LogHelper.WriteLog("加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
+            LogHelper.Info("加载插件", "加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
         }
 
@@ -185,7 +185,7 @@ namespace Another_Mirai_Native.Native
             {
                 logMessage = string.Format(logMessage, enabled ? "启用失败" : "停用失败");
             }
-            LogHelper.WriteLog(LogLevel.InfoSuccess, "改变插件状态", logMessage);
+            LogHelper.Info("改变插件状态", logMessage);
             return success;
         }
 
@@ -367,9 +367,5 @@ namespace Another_Mirai_Native.Native
         }
 
         #endregion 测试事件调用
-
-        private void PluginProcess_Exited(object sender, EventArgs e)
-        {
-        }
     }
 }
