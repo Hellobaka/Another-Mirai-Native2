@@ -130,7 +130,7 @@ namespace Another_Mirai_Native
 
         public static void TriggerByKey(object key, object result = null)
         {
-            LogHelper.Info("TriggerByKey", $"{key}");
+            LogHelper.Debug("TriggerByKey", $"{key}");
             if (CommonWaiter.TryRemove(key, out WaiterInfo waiterInfo))
             {
                 waiterInfo.Result = result;

@@ -46,5 +46,10 @@ namespace Another_Mirai_Native.Model
                 return detail.Replace("\r", " ").Replace("\n", " ");
             }
         }
+
+        public override string ToString()
+        {
+            return $"{detail} [{source}]";
+        }
     }
 }

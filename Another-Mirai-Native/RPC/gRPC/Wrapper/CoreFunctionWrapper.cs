@@ -1,10 +1,14 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {
@@ -50,6 +54,7 @@ namespace Another_Mirai_Native.gRPC
             }
             else// 未包含Header的请求 忽略
             {
+                LogHelper.WriteLog(LogLevel.Debug, "AMN框架", "调用事件", messages: "Header为空", "");
                 return;
             }
             try
@@ -57,8 +62,9 @@ namespace Another_Mirai_Native.gRPC
                 while (await requestStream.MoveNext())
                 {
                     var request = requestStream.Current;
-                    if (request.WaitID == 0)
+                    if (request.WaitID == 0) // 心跳信息
                     {
+                        // 发送心跳反馈
                         Send(authCode, new StreamResponse
                         {
                             WaitID = 0,
@@ -73,13 +79,13 @@ namespace Another_Mirai_Native.gRPC
                     else
                     {
                         Server.WaitingResults.AddOrUpdate(request.WaitID, request.Request, (key, oldValue) => request.Request);
-                        RequestWaiter.TriggerByKey(request.WaitID);
+                        RequestWaiter.TriggerByKey($"EventID_{request.WaitID}");
                     }
                 }
             }
             catch (Exception e)
             {
-                // TODO: log
+                LogHelper.Error("服务端流异常", e);
                 // 考虑是否需要重置插件来源等待
             }
             finally
@@ -115,7 +121,7 @@ namespace Another_Mirai_Native.gRPC
             {
                 lock (writeLock)
                 {
-                    serverStream.WriteAsync(response);
+                    serverStream.WriteAsync(response).Wait();
                 }
             }
             catch
