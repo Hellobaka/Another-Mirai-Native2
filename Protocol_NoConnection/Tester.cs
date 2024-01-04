@@ -62,6 +62,7 @@ namespace Protocol_NoConnection
                 MessageHistories.Remove(msg);
             }
             MessageHistories.Add(msg);
+            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf/Test.json");
             MessageHistoryIndex = 0;
             Task.Run(() =>
             {
