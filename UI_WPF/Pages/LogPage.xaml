@@ -96,9 +96,9 @@
             VerticalScrollBarVisibility="Auto">
             <ListView
                 x:Name="LogView"
-                ItemsSource="{Binding LogCollections, Mode=TwoWay}"
-                SelectionChanged="LogView_SelectionChanged"
-                VirtualizingPanel.VirtualizationMode="Recycling">
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding LogCollections}"
+                SelectionMode="Single">
                 <ListView.View>
                     <GridView x:Name="LogGridView">
                         <GridViewColumn Width="Auto" Header="时间">
