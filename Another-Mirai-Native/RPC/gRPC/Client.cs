@@ -190,6 +190,7 @@ namespace Another_Mirai_Native.gRPC
                 }
                 catch (Exception e)
                 {
+                    StartStream();
                     LogHelper.WriteLog(LogLevel.Debug, PluginManager.LoadedPlugin.Name, "事件流异常", messages: $"{e.Message} {e.StackTrace}");
                 }
                 finally
@@ -207,7 +208,7 @@ namespace Another_Mirai_Native.gRPC
             var argumentType = typeof(Event_OnAdminChange_Parameters).Assembly.GetType($"Another_Mirai_Native.gRPC.{typeName}");
             if (argumentType == null)
             {
-                // log
+                LogHelper.WriteLog(LogLevel.Error, PluginManager.LoadedPlugin.Name, "调用事件", messages: $"事件名称: {typeName}, WaitID: {response.WaitID}, 反射参数类型失败");
                 return;
             }
             Task.Run(() =>
@@ -223,6 +224,7 @@ namespace Another_Mirai_Native.gRPC
 
                     if (typeName == "HeartBeatRequest")
                     {
+                        HeartBeatLostCount = 0;
                         return;
                     }
 
