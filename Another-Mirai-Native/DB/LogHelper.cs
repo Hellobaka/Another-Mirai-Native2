@@ -173,6 +173,14 @@ namespace Another_Mirai_Native.DB
                 db.Updateable<LogModel>().SetColumns(x => x.status == status).Where(x => x.id == id)
                   .ExecuteCommand();
             }
+            else
+            {
+                var r = NoDatabaseLogs.FirstOrDefault(x => x.id == id);
+                if (r != null)
+                {
+                    r.status = status;
+                }
+            }
             LogStatusUpdated?.Invoke(id, status);
         }
 
