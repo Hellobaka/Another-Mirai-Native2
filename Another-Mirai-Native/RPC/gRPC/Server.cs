@@ -8,7 +8,6 @@ using Google.Protobuf.WellKnownTypes;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {
@@ -70,7 +69,7 @@ namespace Another_Mirai_Native.gRPC
             var argumentType = typeof(Event_OnAdminChange_Parameters).Assembly.GetType($"Another_Mirai_Native.gRPC.Event_On{eventType}_Parameters");
             if (argumentType == null)
             {
-                // log
+                LogHelper.WriteLog(LogLevel.Error, PluginManager.LoadedPlugin.Name, "服务端调用事件", messages: $"事件名称: {argumentType}, WaitID: {response.WaitID}, 反射参数类型失败");
                 return 0;
             }
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -83,7 +82,7 @@ namespace Another_Mirai_Native.gRPC
                     .OrderBy(x => (int)(argumentType.GetField($"{x.Name}FieldNumber").GetValue(instance))).ToList();
                 if (args.Length != outList.Count)
                 {
-                    LogHelper.Error("InvokeCQPFuntcion", $"校验反射参数 {eventType} 参数数量失败。目标数量: {args.Length}，实际数量: {outList.Count}");
+                    LogHelper.Error("服务端调用事件", $"校验反射参数 {eventType} 参数数量失败。目标数量: {args.Length}，实际数量: {outList.Count}");
                     return 0;
                 }
 
@@ -96,21 +95,35 @@ namespace Another_Mirai_Native.gRPC
 
                 Any any = (Any)packMethodInfo.Invoke(null, new object[] { instance }); // 调用Pack
                 response.Response = any;
-                if (CoreFunctionWrapper.Send(target.AppInfo.AuthCode, response)
-                    && RequestWaiter.Wait(response.WaitID, target, AppConfig.PluginInvokeTimeout)
+                ManualResetEvent signal = new(false);
+                RequestWaiter.CommonWaiter.TryAdd($"EventID_{response.WaitID}", new WaiterInfo()
+                {
+                    CurrentPluginProxy = target,
+                    WaitSignal = signal,
+                });
+                Task.Run(() =>
+                {
+                    if (CoreFunctionWrapper.Send(target.AppInfo.AuthCode, response) is false)
+                    {
+                        WaitingResults.TryAdd(response.WaitID, -1);
+                        RequestWaiter.TriggerByKey($"EventID_{response.WaitID}");
+                    }
+                });
+                ;
+                if (signal.WaitOne(AppConfig.PluginInvokeTimeout)
                     && WaitingResults.TryRemove(response.WaitID, out int result))
                 {
                     return result;
                 }
                 else
                 {
-                    // log
+                    LogHelper.Error("服务端调用事件", $"插件名称: {target.PluginName}, 事件名称: {eventType}, WaitID: {response.WaitID}, 写入流失败");
                     return 0;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                LogHelper.Error("调用事件", $"插件名称: {target.PluginName}, 事件名称: {eventType}, WaitID: {response.WaitID}, {e.Message} {e.StackTrace}");
+                LogHelper.Error("服务端调用事件", $"插件名称: {target.PluginName}, 事件名称: {eventType}, WaitID: {response.WaitID}, {e.Message} {e.StackTrace}");
                 return 0;
             }
             finally
