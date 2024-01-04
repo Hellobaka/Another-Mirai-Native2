@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Native;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Native;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
@@ -129,6 +130,7 @@ namespace Another_Mirai_Native
 
         public static void TriggerByKey(object key, object result = null)
         {
+            LogHelper.Info("TriggerByKey", $"{key}");
             if (CommonWaiter.TryRemove(key, out WaiterInfo waiterInfo))
             {
                 waiterInfo.Result = result;

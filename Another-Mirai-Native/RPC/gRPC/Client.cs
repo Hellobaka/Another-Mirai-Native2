@@ -6,7 +6,9 @@ using Another_Mirai_Native.Native;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using SqlSugar;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {
@@ -186,13 +188,14 @@ namespace Another_Mirai_Native.gRPC
                         InvokeEvents(response);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
+                    LogHelper.WriteLog(LogLevel.Debug, PluginManager.LoadedPlugin.Name, "事件流异常", messages: $"{e.Message} {e.StackTrace}");
                 }
                 finally
                 {
-                    ResponseStream = null;
-                    RequestStream = null;
+                    //ResponseStream = null;
+                    //RequestStream = null;
                 }
             });
         }
@@ -209,6 +212,7 @@ namespace Another_Mirai_Native.gRPC
             }
             Task.Run(() =>
             {
+                Stopwatch stopwatch = Stopwatch.StartNew();
                 try
                 {
                     MethodInfo unpackMethodInfo = typeof(Any).GetMethod("Unpack", System.Type.EmptyTypes);
@@ -236,7 +240,7 @@ namespace Another_Mirai_Native.gRPC
                 }
                 catch (Exception e)
                 {
-                    LogHelper.Error("InvokeEvents", e);
+                    LogHelper.WriteLog(LogLevel.Error, PluginManager.LoadedPlugin.Name, "调用事件", messages: $"事件名称: {typeName}, WaitID: {response.WaitID}, {e.Message} {e.StackTrace}");
                     lock (writeLock)
                     {
                         RequestStream.WriteAsync(new StreamRequest
@@ -245,6 +249,11 @@ namespace Another_Mirai_Native.gRPC
                             Request = 0
                         }).Wait();
                     }
+                }
+                finally
+                {
+                    stopwatch.Stop();
+                    LogHelper.WriteLog(LogLevel.Debug, PluginManager.LoadedPlugin.Name, "调用事件", messages: $"事件名称: {typeName}, WaitID: {response.WaitID}, {stopwatch.ElapsedMilliseconds}ms");
                 }
             });
         }

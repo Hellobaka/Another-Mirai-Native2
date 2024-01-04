@@ -6,7 +6,9 @@ using Another_Mirai_Native.RPC.Interface;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {
@@ -71,6 +73,7 @@ namespace Another_Mirai_Native.gRPC
                 // log
                 return 0;
             }
+            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
                 var instance = Activator.CreateInstance(argumentType);
@@ -105,10 +108,15 @@ namespace Another_Mirai_Native.gRPC
                     return 0;
                 }
             }
-            catch
+            catch(Exception e)
             {
-                // log
+                LogHelper.Error("调用事件", $"插件名称: {target.PluginName}, 事件名称: {eventType}, WaitID: {response.WaitID}, {e.Message} {e.StackTrace}");
                 return 0;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                LogHelper.WriteLog(LogLevel.Debug, target.PluginName, "服务器调用事件", messages: $"事件名称: {eventType}, WaitID: {response.WaitID}, 耗时: {stopwatch.ElapsedMilliseconds}ms");
             }
         }
 

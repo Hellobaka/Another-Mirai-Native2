@@ -50,13 +50,15 @@ namespace Another_Mirai_Native.UI.Pages
 
         private LogModel SelectedLog => LogView.SelectedItem as LogModel;
 
+        private int FilterLogLevel { get; set; } = 0;
+
         public void RefilterLogCollection()
         {
             if (LogCollections == null)
             {
                 return;
             }
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(() =>
             {
                 int targetPriority = FilterLogLevelSelector.SelectedIndex * 10;
                 string search = FilterTextValue?.Text;
@@ -100,6 +102,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            FilterLogLevel = FilterLogLevelSelector.SelectedIndex * 10;
             if (AppConfig.UseDatabase)
             {
                 RawLogCollections = LogHelper.GetDisplayLogs(FilterLogLevelSelector.SelectedIndex * 10, UIConfig.LogItemsCount);
@@ -159,30 +162,44 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogHelper_LogAdded(int logId, LogModel log)
         {
-            lock (syncLock)
+            Task.Run(() =>
             {
-                RawLogCollections.Add(log);
-                BalloonIcon tipIcon = BalloonIcon.Warning;
-                if (log.priority == (int)LogLevel.Warning)
+                lock (syncLock)
                 {
-                    tipIcon = BalloonIcon.Warning;
+                    RawLogCollections.Add(log);
                 }
-                else if (log.priority >= (int)LogLevel.Error)
+                Dispatcher.BeginInvoke(() =>
                 {
-                    tipIcon = BalloonIcon.Error;
-                }
-                if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
-                {
-                    MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
-                }
-                RefilterLogCollection();
-                SelectLastLog();
-            }
+                    if (log.priority >= FilterLogLevel)
+                    {
+                        if (LogCollections.Count > UIConfig.LogItemsCount)
+                        {
+                            LogCollections.RemoveAt(0);
+                        }
+                        LogCollections.Add(log);
+                    }
+                    BalloonIcon tipIcon = BalloonIcon.Warning;
+                    if (log.priority == (int)LogLevel.Warning)
+                    {
+                        tipIcon = BalloonIcon.Warning;
+                    }
+                    else if (log.priority >= (int)LogLevel.Error)
+                    {
+                        tipIcon = BalloonIcon.Error;
+                    }
+                    if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
+                    {
+                        MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
+                    }
+                    // RefilterLogCollection();
+                    SelectLastLog();
+                });
+            });
         }
 
         private void SelectLastLog()
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(() =>
             {
                 if (AutoScroll.IsOn && MainWindow.Instance.LogMenuItem.IsSelected)
                 {
@@ -194,7 +211,11 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogHelper_LogStatusUpdated(int logId, string status)
         {
-            var log = RawLogCollections.FirstOrDefault(x => x.id == logId);
+            LogModel log;
+            lock (syncLock)
+            {
+                log = RawLogCollections.FirstOrDefault(x => x.id == logId);
+            }
             if (log != null)
             {
                 log.status = status;
