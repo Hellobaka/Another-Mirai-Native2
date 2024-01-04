@@ -23,9 +23,8 @@ namespace Another_Mirai_Native.WebSocket
         public override int? InvokeEvents(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
             if (target == null
-                || target.Enabled is false
                 || target.HasConnection is false
-                || WebSocketConnections.TryGetValue(target.AppInfo.AuthCode, out var connection))
+                || WebSocketConnections.TryGetValue(target.PluginProcess.Id, out var connection) is false)
             {
                 return null;
             }
