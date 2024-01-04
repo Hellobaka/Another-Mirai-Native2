@@ -73,6 +73,26 @@ namespace Another_Mirai_Native.UI.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private static ObservableCollection<T> ConvertListToObservableCollection<T>(List<T> list)
+        {
+            var result = new ObservableCollection<T>();
+            foreach (var item in list)
+            {
+                result.Add(item);
+            }
+            return result;
+        }
+
+        private static List<LogModelWrapper> PackLogModelWrapper(List<LogModel> ls)
+        {
+            List<LogModelWrapper> logs = new();
+            foreach (var log in ls)
+            {
+                logs.Add(new LogModelWrapper(log));
+            }
+            return logs;
+        }
+
         private void AutoScroll_Toggled(object sender, RoutedEventArgs e)
         {
             UIConfig.LogAutoScroll = AutoScroll.IsOn;
@@ -88,16 +108,6 @@ namespace Another_Mirai_Native.UI.Pages
             }
             ResizeTimer.Stop();
             ResizeTimer.Start();
-        }
-
-        private ObservableCollection<T> ConvertListToObservableCollection<T>(List<T> list)
-        {
-            var result = new ObservableCollection<T>();
-            foreach (var item in list)
-            {
-                result.Add(item);
-            }
-            return result;
         }
 
         private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -195,16 +205,6 @@ namespace Another_Mirai_Native.UI.Pages
             FormLoaded = true;
             RefilterLogCollection();
             SelectLastLog();
-        }
-
-        private List<LogModelWrapper> PackLogModelWrapper(List<LogModel> ls)
-        {
-            List<LogModelWrapper> logs = new();
-            foreach (var log in ls)
-            {
-                logs.Add(new LogModelWrapper(log));
-            }
-            return logs;
         }
 
         private void ResizeTimer_Tick(object? sender, EventArgs e)
