@@ -30,6 +30,8 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static event UpdateLogStatusHandler LogStatusUpdated;
 
+        private static List<LogModel> NoDatabaseLogs { get; set; } = new();
+
         private static long QQ
         {
             get
@@ -65,38 +67,45 @@ namespace Another_Mirai_Native.DB
             WriteLog(LogLevel.InfoSuccess, "运行日志", $"日志数据库初始化完毕{DateTime.Now:yyMMdd}。");
         }
 
-        /// <summary>
-        /// 日志键排序用
-        /// </summary>
-        /// <param name="arr">调用</param>
-        /// <param name="key">需要排序的键</param>
-        /// <param name="desc">是否降序</param>
-        /// <typeparam name="T">调用的T</typeparam>
-        public static ISugarQueryable<T> CustomOrderBy<T>(this ISugarQueryable<T> arr, string key, bool desc)
-            => arr.OrderByIF(!string.IsNullOrWhiteSpace(key), $"{key} {(desc ? "desc" : "asc")}");
-
-        public static (List<LogModel>, int) DetailQueryLogs(int priority, int pageSize, int pageIndex, string search, string sortName, bool desc, long dt1, long dt2)
+        public static List<LogModel> DetailQueryLogs(int priority, int pageSize, string search)
         {
-            using var db = GetInstance();
-            List<LogModel> r = db.Queryable<LogModel>()
-                .Where(x => x.priority >= priority)
-                .WhereIF(dt1 != 0, x => x.time >= dt1 && x.time <= dt2 + 86400)
-                .OrderByIF(string.IsNullOrEmpty(sortName), "time desc")
-                .CustomOrderBy(sortName, desc).ToList();
-            if (!string.IsNullOrWhiteSpace(search))
+            if (AppConfig.UseDatabase)
             {
-                r = r.Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
-                    x.name.Contains(search) || x.status.Contains(search)).ToList();
+                using var db = GetInstance();
+                List<LogModel> r = db.Queryable<LogModel>()
+                    .Where(x => x.priority >= priority)
+                    .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
+                        x.name.Contains(search) || x.status.Contains(search))
+                    .OrderBy(x => x.time)
+                    .Take(pageSize).ToList();
+                return r;
             }
-            return (r.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(), r.Count);
+            else
+            {
+                List<LogModel> r = NoDatabaseLogs
+                    .Where(x => x.priority >= priority)
+                    .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
+                        x.name.Contains(search) || x.status.Contains(search))
+                    .OrderBy(x => x.time)
+                    .Take(pageSize).ToList();
+                return r;
+
+            }
         }
 
         public static List<LogModel> GetDisplayLogs(int priority, int count)
         {
-            using var db = GetInstance();
-            var c = db.SqlQueryable<LogModel>($"select * from log where priority>= {priority} order by id desc limit {count}").ToList();
-            c.Reverse();
-            return c;
+            if (AppConfig.UseDatabase)
+            {
+                using var db = GetInstance();
+                var c = db.SqlQueryable<LogModel>($"select * from log where priority>= {priority} order by id desc limit {count}").ToList();
+                c.Reverse();
+                return c;
+            }
+            else
+            {
+                return DetailQueryLogs(priority, count, "");
+            }
         }
 
         public static LogModel GetLastLog()
@@ -211,6 +220,7 @@ namespace Another_Mirai_Native.DB
             else
             {
                 model.id = logId;
+                NoDatabaseLogs.Add(model);
                 Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}]\t[{model.name}]{model.detail}");
             }
             LogAdded?.Invoke(logId, model);
