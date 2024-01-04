@@ -45,7 +45,14 @@ namespace Another_Mirai_Native.UI
             }
             try
             {
-                ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.AccentColor);
+                if (string.IsNullOrEmpty(UIConfig.AccentColor) || UIConfig.AccentColor.StartsWith("#") is false)
+                {
+                    ThemeManager.Current.AccentColor = null;
+                }
+                else
+                {
+                    ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.AccentColor);
+                }
             }
             catch
             {
