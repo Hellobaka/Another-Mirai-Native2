@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
@@ -188,7 +189,7 @@ namespace Another_Mirai_Native
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                LogHelper.Error("下载文件", e);
                 return false;
             }
         }
