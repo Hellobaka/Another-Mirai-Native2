@@ -26,7 +26,6 @@ namespace Another_Mirai_Native
                 _quitEvent.Set();
                 eArgs.Cancel = true;
             };
-            Console.WriteLine($"Args: {string.Join(" ", args)}");
             // 创建初始文件夹
             CreateInitFolders();
             // 重定向异常
@@ -34,6 +33,11 @@ namespace Another_Mirai_Native
             // 加载配置
             AppConfig.LoadConfig();
             AppConfig.IsCore = args.Length == 0;
+            if (AppConfig.DebugMode && !AppConfig.IsCore)
+            {
+                Console.WriteLine($"Args: {string.Join(" ", args)}");
+            }
+
             if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();

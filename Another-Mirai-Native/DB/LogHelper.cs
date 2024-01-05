@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.WebSocket;
+using Google.Protobuf;
 using SqlSugar;
 using System.Diagnostics;
 using System.IO;
@@ -202,7 +203,6 @@ namespace Another_Mirai_Native.DB
             }
             else
             {
-                Console.WriteLine($"[{level}][{DateTime.Now:G}]\t[{type}]\t{messages}");
                 ClientManager.Client.AddLog(model);
                 return 0;
             }
@@ -231,6 +231,7 @@ namespace Another_Mirai_Native.DB
                 NoDatabaseLogs.Add(model);
                 Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}]\t[{model.name}]{model.detail}");
             }
+            Console.WriteLine($"[{(LogLevel)model.priority}][{DateTime.Now:G}]\t[{model.name}]\t{model.detail}");
             LogAdded?.Invoke(logId, model);
             return logId;
         }
