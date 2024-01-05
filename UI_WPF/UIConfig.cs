@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.UI
     {
         public static string DefaultConfigPath { get; set; } = @"conf/UIConfig.json";
 
-        public static string Theme { get; set; } = "Light";
+        public static string Theme { get; set; } = "System";
 
         public static string AccentColor { get; set; } = "";
 
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.UI
 
         public static void InitConfigs()
         {
-            Theme = ConfigHelper.GetConfig("Theme", DefaultConfigPath, "Light");
+            Theme = ConfigHelper.GetConfig("Theme", DefaultConfigPath, "System");
             AccentColor = ConfigHelper.GetConfig("AccentColor", DefaultConfigPath, "");
             AutoEnablePlugins = ConfigHelper.GetConfig("AutoEnablePlugins", DefaultConfigPath, new List<string>());
             Width = ConfigHelper.GetConfig("Window_Width", DefaultConfigPath, 900);
