@@ -32,7 +32,7 @@ namespace Another_Mirai_Native.RPC
             }
             catch(Exception e)
             {
-                LogHelper.Debug("BuildClient", e.Message + e.StackTrace);
+                LogHelper.Error("构建客户端", e.Message + e.StackTrace);
                 return false;
             }
         }

@@ -72,7 +72,6 @@ namespace Another_Mirai_Native.gRPC
                 LogHelper.WriteLog(LogLevel.Error, PluginManager.LoadedPlugin.Name, "服务端调用事件", messages: $"事件名称: {argumentType}, WaitID: {response.WaitID}, 反射参数类型失败");
                 return 0;
             }
-            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
                 var instance = Activator.CreateInstance(argumentType);
@@ -125,11 +124,6 @@ namespace Another_Mirai_Native.gRPC
             {
                 LogHelper.Error("服务端调用事件", $"插件名称: {target.PluginName}, 事件名称: {eventType}, WaitID: {response.WaitID}, {e.Message} {e.StackTrace}");
                 return 0;
-            }
-            finally
-            {
-                stopwatch.Stop();
-                LogHelper.WriteLog(LogLevel.Debug, target.PluginName, "服务器调用事件", messages: $"事件名称: {eventType}, WaitID: {response.WaitID}, 耗时: {stopwatch.ElapsedMilliseconds}ms");
             }
         }
 

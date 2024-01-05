@@ -185,7 +185,10 @@ namespace Another_Mirai_Native.Native
             {
                 logMessage = string.Format(logMessage, enabled ? "启用失败" : "停用失败");
             }
-            LogHelper.Info("改变插件状态", logMessage);
+            if (enabled is false)
+            {
+                LogHelper.Info("改变插件状态", logMessage);
+            }
             return success;
         }
 
@@ -197,7 +200,7 @@ namespace Another_Mirai_Native.Native
             }
             plugin.Enabled = false;
             OnPluginEnableChanged?.Invoke(plugin);
-            LogHelper.Error("插件进程监控", $"{plugin.PluginName} 进程不存在");
+            LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
             RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
 
             if (AppConfig.RestartPluginIfDead)

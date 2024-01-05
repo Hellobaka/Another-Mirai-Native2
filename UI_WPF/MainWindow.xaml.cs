@@ -160,10 +160,16 @@ namespace Another_Mirai_Native.UI
                 string appName = item.AppInfo.name;
                 if (UIConfig.AutoEnablePlugins.Any(x => x == appName))
                 {
-                    PluginManagerProxy.Instance.SetPluginEnabled(item, true);
+                    item.Load();
                 }
             };
-            LogHelper.Info("启用插件", "插件启用完成...", $"√ {sw.ElapsedMilliseconds} ms");
+            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {PluginManagerProxy.Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
+            sw = Stopwatch.StartNew();
+            foreach (var item in PluginManagerProxy.Proxies.Where(x => x.HasConnection))
+            {
+                PluginManagerProxy.Instance.SetPluginEnabled(item, true);
+            };
+            LogHelper.Info("启用插件", "插件启动完成，开始处理消息逻辑", $"√ {sw.ElapsedMilliseconds} ms");
         }
 
         private void LoadPlugins()

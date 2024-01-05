@@ -272,6 +272,18 @@ namespace Another_Mirai_Native.DB
             }
         }
 
+        public static int Debug(string type, string message, string origin = "AMN框架")
+        {
+            if (AppConfig.DebugMode)
+            {
+                return WriteLog(LogLevel.Debug, origin, type, message, "");
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public static int Info(string type, string message, string status = "")
         {
             return WriteLog(LogLevel.InfoSuccess, type, message, status);

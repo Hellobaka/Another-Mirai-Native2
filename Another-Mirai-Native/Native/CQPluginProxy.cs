@@ -97,7 +97,6 @@ namespace Another_Mirai_Native.Native
                 KillProcess();
                 return false;
             }
-            LogHelper.Info("加载插件", $"{PluginName} 插件启动成功");
             return true;
         }
 

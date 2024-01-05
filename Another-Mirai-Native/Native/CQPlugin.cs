@@ -231,10 +231,9 @@ namespace Another_Mirai_Native.Native
                     LogHelper.Error("加载插件", $"{fileName} 加载失败, GetLastError={GetLastError()}");
                     return false;
                 }
-                LogHelper.Info("加载插件", $"{fileName}, 加载成功, 开始初始化...");
                 if (File.Exists(Path.Replace(".dll", ".json")) && Init(File.ReadAllText(Path.Replace(".dll", ".json"))))
                 {
-                    LogHelper.Info("加载插件", $"{Name}, 初始化完成");
+                    LogHelper.Info("加载插件", $"{Name}, 加载成功");
                 }
                 else
                 {
@@ -260,10 +259,7 @@ namespace Another_Mirai_Native.Native
 
         private static void StartUIThread()
         {
-            // Create a Dispatcher for this thread, which starts a new message loop
             UIThreadDispatcher = Dispatcher.CurrentDispatcher;
-
-            // Run the message loop
             Dispatcher.Run();
         }
 
