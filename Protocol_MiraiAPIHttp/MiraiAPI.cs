@@ -256,7 +256,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             object request = new
             {
                 sessionKey = SessionKey_Message,
-                target = QQ,
+                target = qqId,
                 messageChain = msgChains
             };
             JObject json = CallMiraiAPI(MiraiApiType.sendFriendMessage, request);
