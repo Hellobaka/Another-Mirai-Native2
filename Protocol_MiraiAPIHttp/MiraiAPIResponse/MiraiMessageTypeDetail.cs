@@ -65,7 +65,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
 
             public int faceId { get; set; }
 
-            public string name { get; set; }
+            public string name { get; set; } = "";
+
+            public bool superFace { get; set; }
         }
 
         public class Plain : MiraiMessageBase
