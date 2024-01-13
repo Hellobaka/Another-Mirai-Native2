@@ -18,6 +18,7 @@ namespace Another_Mirai_Native.RPC
                     ServerType.WebSocket => new WebSocket.Server(),
                     _ => throw new NotImplementedException(),
                 };
+                LogHelper.Info("服务器构建", $"加载服务器 {serverType} 成功");
                 return true;
             }
             catch(Exception e)

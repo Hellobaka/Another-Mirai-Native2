@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.Native
         public object Invoke(string functionName, params object[] args)
         {
             Stopwatch.Restart();
-            int logId = 0;
+            int logId = -1;
             try
             {
                 var methodInfo = typeof(CQPImplementation).GetMethod(functionName, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -77,7 +77,10 @@ namespace Another_Mirai_Native.Native
             finally
             {
                 Stopwatch.Stop();
-                LogHelper.UpdateLogStatus(logId, $"√ {Stopwatch.ElapsedMilliseconds / 1000:f2}s");
+                if (logId > 0)
+                {
+                    LogHelper.UpdateLogStatus(logId, $"√ {Stopwatch.ElapsedMilliseconds / 1000:f2}s");
+                }
             }
         }
 
