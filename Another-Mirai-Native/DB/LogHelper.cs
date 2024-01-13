@@ -33,26 +33,9 @@ namespace Another_Mirai_Native.DB
 
         private static List<LogModel> NoDatabaseLogs { get; set; } = new();
 
-        private static long QQ
-        {
-            get
-            {
-                try
-                {
-                    if (ProtocolManager.Instance.CurrentProtocol != null)
-                    {
-                        return ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
-                    }
-                    return 10001;
-                }
-                catch
-                {
-                    return 10001;
-                }
-            }
-        }
-
         private static int NoDBLogID { get; set; }
+
+        private static object writeLock = new();
 
         /// <summary>
         /// 初始化日志数据库
@@ -77,8 +60,9 @@ namespace Another_Mirai_Native.DB
                     .Where(x => x.priority >= priority)
                     .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
                         x.name.Contains(search) || x.status.Contains(search))
-                    .OrderBy(x => x.time)
+                    .OrderByDescending(x => x.id)
                     .Take(pageSize).ToList();
+                r.Reverse();
                 return r;
             }
             else
@@ -87,10 +71,10 @@ namespace Another_Mirai_Native.DB
                     .Where(x => x.priority >= priority)
                     .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
                         x.name.Contains(search) || x.status.Contains(search))
-                    .OrderBy(x => x.time)
+                    .OrderByDescending(x => x.id)
                     .Take(pageSize).ToList();
+                r.Reverse();
                 return r;
-
             }
         }
 
@@ -221,8 +205,11 @@ namespace Another_Mirai_Native.DB
             int logId = NoDBLogID++;
             if (AppConfig.UseDatabase)
             {
-                using var db = GetInstance();
-                logId = db.Insertable(model).ExecuteReturnIdentity();
+                lock (writeLock)
+                {
+                    using var db = GetInstance();
+                    logId = db.Insertable(model).ExecuteReturnIdentity();
+                }
                 model.id = logId;
             }
             else
