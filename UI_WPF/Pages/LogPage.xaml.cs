@@ -203,7 +203,6 @@ namespace Another_Mirai_Native.UI.Pages
             LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
             AutoScroll.IsOn = UIConfig.LogAutoScroll;
             FormLoaded = true;
-            RefilterLogCollection();
             SelectLastLog();
         }
 

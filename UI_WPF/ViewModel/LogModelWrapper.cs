@@ -38,5 +38,10 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public override string ToString()
+        {
+            return $"{detail} [{source}]";
+        }
     }
 }
