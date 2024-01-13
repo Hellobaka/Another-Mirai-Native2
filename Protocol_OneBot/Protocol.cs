@@ -131,7 +131,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void APIClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
         {
-            Console.WriteLine($"[API]\t" + e.Data);
+            Debug.WriteLine($"[API]\t" + e.Data);
             Task.Run(() => HandleAPI(e.Data));
         }
 
@@ -415,7 +415,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void EventClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
         {
-            Console.WriteLine($"[Event]\t" + e.Data);
+            Debug.WriteLine($"[Event]\t" + e.Data);
             Task.Run(() => HandleEvent(e.Data));
         }
 

@@ -279,8 +279,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     WsURL = WsURL.Substring(0, WsURL.Length - 1);
                 }
                 AuthKey = config["AuthKey"];
-                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
-                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\MiraiAPIHttp.json");
+                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\OneBot_v11.json");
+                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\OneBot_v11.json");
             }
             return success;
         }
