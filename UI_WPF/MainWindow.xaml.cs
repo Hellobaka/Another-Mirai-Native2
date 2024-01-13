@@ -134,7 +134,10 @@ namespace Another_Mirai_Native.UI
             {
                 AppConfig.AutoConnect = false;
                 ConfigHelper.SetConfig("AutoConnect", false);
-                bool success = ProtocolManager.Instance.CurrentProtocol.Disconnect();
+                bool success = await Task.Run(() =>
+                {
+                    return Task.FromResult(ProtocolManager.Instance.CurrentProtocol.Disconnect());
+                });
                 if (success)
                 {
                     ProtocolSelectorDialog dialog = new();
@@ -149,6 +152,7 @@ namespace Another_Mirai_Native.UI
                 {
                     DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
                 }
+
             }
         }
 
