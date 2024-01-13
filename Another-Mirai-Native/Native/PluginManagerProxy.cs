@@ -91,12 +91,21 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadPlugins()
         {
+            string pluginTmpPath = Path.Combine("data", "plugins", "tmp");
+            if (Directory.Exists(pluginTmpPath))
+            {
+                Directory.Delete(pluginTmpPath, true);
+            }
+            Directory.CreateDirectory(pluginTmpPath);
             Stopwatch sw = Stopwatch.StartNew();
             foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {
                 if (File.Exists(item.Replace(".dll", ".json")))
                 {
-                    CQPluginProxy plugin = new(item);
+                    string newPath = Path.Combine(pluginTmpPath, Path.GetFileName(item));
+                    File.Copy(item, newPath, true);
+                    File.Copy(item.Replace(".dll", ".json"), newPath.Replace(".dll", ".json"), true);
+                    CQPluginProxy plugin = new(newPath);
                     if (plugin.LoadAppInfo())
                     {
                         Proxies.Add(plugin);
