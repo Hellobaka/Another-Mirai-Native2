@@ -59,12 +59,14 @@ namespace Another_Mirai_Native.UI.Pages
 
         private LogModelWrapper SelectedLog => LogView.SelectedItem as LogModelWrapper;
 
+        private string SearchText { get; set; } = "";
+
         public void RefilterLogCollection()
         {
+            var ls = ConvertListToObservableCollection(PackLogModelWrapper(LogHelper.DetailQueryLogs(FilterLogLevel, UIConfig.LogItemsCount, SearchText)));
             Dispatcher.BeginInvoke(() =>
             {
-                var ls = LogHelper.DetailQueryLogs(FilterLogLevel, UIConfig.LogItemsCount, FilterTextValue?.Text);
-                LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
+                LogCollections = ls;
             });
         }
 
@@ -113,7 +115,7 @@ namespace Another_Mirai_Native.UI.Pages
         private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FilterLogLevel = FilterLogLevelSelector.SelectedIndex * 10;
-            var ls = LogHelper.GetDisplayLogs(FilterLogLevelSelector.SelectedIndex * 10, UIConfig.LogItemsCount);
+            var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.LogItemsCount);
             LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
             RefilterLogCollection();
             SelectLastLog();
@@ -121,6 +123,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FilterTextValue_TextChanged(object sender, TextChangedEventArgs e)
         {
+            SearchText = FilterTextValue.Text;
             RefilterLogCollection();
             SelectLastLog();
         }
@@ -193,7 +196,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.LogItemsCount);
+            var ls = LogHelper.GetDisplayLogs(10, UIConfig.LogItemsCount);
             LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
