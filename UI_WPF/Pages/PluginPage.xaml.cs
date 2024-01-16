@@ -102,7 +102,9 @@ namespace Another_Mirai_Native.UI.Pages
                         return;
                     }
                     Task.Run(() =>
-                        PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function));
+                    {
+                        PluginManagerProxy.Instance.InvokeEvent(SelectedPlugin, PluginEventType.Menu, item.function);
+                    });
                 };
                 menu.Items.Add(menuItem);
             }
