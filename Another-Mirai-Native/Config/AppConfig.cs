@@ -68,8 +68,6 @@ namespace Another_Mirai_Native.Config
 
         public ServerType ServerType { get; set; } = ServerType.WebSocket;
 
-        public List<string> AutoEnablePlugins { get; set; } = new List<string>();
-
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -92,7 +90,6 @@ namespace Another_Mirai_Native.Config
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
             ServerType = (ServerType)GetConfig("ServerType", 0);
-            AutoEnablePlugins = GetConfig("AutoEnablePlugins", new List<string>());
         }
     }
 }
