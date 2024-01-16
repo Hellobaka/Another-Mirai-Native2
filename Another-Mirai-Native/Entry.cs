@@ -1,9 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
-using Another_Mirai_Native.WebSocket;
 using System.Diagnostics;
 using System.IO;
 
@@ -31,14 +29,14 @@ namespace Another_Mirai_Native
             // 重定向异常
             InitExceptionCapture();
             // 加载配置
-            AppConfig.LoadConfig();
-            AppConfig.IsCore = args.Length == 0;
-            if (AppConfig.DebugMode && !AppConfig.IsCore)
+            AppConfig.Instance.LoadConfig();
+            AppConfig.Instance.IsCore = args.Length == 0;
+            if (AppConfig.Instance.DebugMode && !AppConfig.Instance.IsCore)
             {
                 Console.WriteLine($"Args: {string.Join(" ", args)}");
             }
 
-            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();
             }
@@ -46,7 +44,7 @@ namespace Another_Mirai_Native
             {
                 // 启动服务器
                 ServerManager serverManager = new();
-                if (serverManager.Build(AppConfig.ServerType) is false)
+                if (serverManager.Build(AppConfig.Instance.ServerType) is false)
                 {
                     LogHelper.Debug("初始化", "构建服务器失败");
                     return;
@@ -62,9 +60,9 @@ namespace Another_Mirai_Native
                     return;
                 }
                 // 若配置无需UI则自动连接之后加载插件
-                if (AppConfig.AutoConnect)
+                if (AppConfig.Instance.AutoConnect)
                 {
-                    if (!new ProtocolManager().Start(AppConfig.AutoProtocol))
+                    if (!new ProtocolManager().Start(AppConfig.Instance.AutoProtocol))
                     {
                         return;
                     }
@@ -72,7 +70,7 @@ namespace Another_Mirai_Native
                     {
                         return;
                     }
-                    if (AppConfig.PluginAutoEnable)
+                    if (AppConfig.Instance.PluginAutoEnable)
                     {
                         foreach (var item in PluginManagerProxy.Proxies)
                         {
@@ -87,10 +85,10 @@ namespace Another_Mirai_Native
                 // 解析参数
                 ParseArg(args);
                 // 监控核心进程
-                MonitorCoreProcess(AppConfig.Core_PID);
+                MonitorCoreProcess(AppConfig.Instance.Core_PID);
                 // 连接核心服务器
                 ClientManager clientManager = new();
-                if (!clientManager.Build(AppConfig.ServerType))
+                if (!clientManager.Build(AppConfig.Instance.ServerType))
                 {
                     LogHelper.Debug("初始化", "构建客户端失败");
                     return;
@@ -106,7 +104,7 @@ namespace Another_Mirai_Native
                     return;
                 }
                 // 加载插件
-                if (!new PluginManager().Load(AppConfig.Core_PluginPath))
+                if (!new PluginManager().Load(AppConfig.Instance.Core_PluginPath))
                 {
                     return;
                 }
@@ -139,7 +137,7 @@ namespace Another_Mirai_Native
 
         public static void MonitorCoreProcess(int pid)
         {
-            if (AppConfig.Core_AutoExit)
+            if (AppConfig.Instance.Core_AutoExit)
             {
                 Task.Run(() =>
                 {
@@ -163,23 +161,23 @@ namespace Another_Mirai_Native
             {
                 if (args[i].ToLower() == "-pid")
                 {
-                    AppConfig.Core_PID = int.Parse(args[i + 1]);
+                    AppConfig.Instance.Core_PID = int.Parse(args[i + 1]);
                 }
                 if (args[i].ToLower() == "-authcode")
                 {
-                    AppConfig.Core_AuthCode = int.Parse(args[i + 1]);
+                    AppConfig.Instance.Core_AuthCode = int.Parse(args[i + 1]);
                 }
                 if (args[i].ToLower() == "-autoexit")
                 {
-                    AppConfig.Core_AutoExit = args[i + 1] == "True";
+                    AppConfig.Instance.Core_AutoExit = args[i + 1] == "True";
                 }
                 if (args[i].ToLower() == "-path")
                 {
-                    AppConfig.Core_PluginPath = args[i + 1];
+                    AppConfig.Instance.Core_PluginPath = args[i + 1];
                 }
                 if (args[i].ToLower() == "-ws")
                 {
-                    AppConfig.Core_WSURL = args[i + 1];
+                    AppConfig.Instance.Core_WSURL = args[i + 1];
                 }
             }
         }

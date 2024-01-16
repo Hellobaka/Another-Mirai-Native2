@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.gRPC
             if (HeartBeatTimer == null)
             {
                 HeartBeatTimer = new System.Timers.Timer();
-                HeartBeatTimer.Interval = AppConfig.HeartBeatInterval;
+                HeartBeatTimer.Interval = AppConfig.Instance.HeartBeatInterval;
                 HeartBeatTimer.Elapsed += HeartBeatTimer_Elapsed;
                 HeartBeatTimer.Enabled = true;
                 HeartBeatTimer.Start();

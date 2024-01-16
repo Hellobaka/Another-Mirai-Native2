@@ -214,18 +214,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
             {
                 return;
             }
-            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.TestingAuthCode)
+            if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode)
             {
-                AppConfig.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
+                AppConfig.Instance.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
                 MainWindow.Instance.TestMenuItem.IsSelected = true;
             }
             else
             {
-                AppConfig.TestingAuthCode = 0;
+                AppConfig.Instance.TestingAuthCode = 0;
                 DialogHelper.ShowSimpleDialog("测试已停止", "");
             }
             var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == SelectedPlugin);
@@ -238,7 +238,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            if (AppConfig.PluginAutoEnable)
+            if (AppConfig.Instance.PluginAutoEnable)
             {
                 DialogHelper.ShowSimpleDialog("啊...", "由于插件自动启用已开启，无法切换插件运行状态");
                 return;
@@ -255,14 +255,14 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 if (SelectedPlugin.Enabled)
                 {
-                    UIConfig.AutoEnablePlugins.Add(SelectedPlugin.PluginName);
+                    UIConfig.Instance.AutoEnablePlugins.Add(SelectedPlugin.PluginName);
                 }
                 else
                 {
-                    UIConfig.AutoEnablePlugins.Remove(SelectedPlugin.PluginName);
+                    UIConfig.Instance.AutoEnablePlugins.Remove(SelectedPlugin.PluginName);
                 }
-                UIConfig.AutoEnablePlugins = UIConfig.AutoEnablePlugins.Distinct().ToList();
-                ConfigHelper.SetConfig("AutoEnablePlugins", UIConfig.AutoEnablePlugins, UIConfig.DefaultConfigPath);
+                UIConfig.Instance.AutoEnablePlugins = UIConfig.Instance.AutoEnablePlugins.Distinct().ToList();
+                UIConfig.Instance.SetConfig("AutoEnablePlugins", UIConfig.Instance.AutoEnablePlugins);
             });
         }
 

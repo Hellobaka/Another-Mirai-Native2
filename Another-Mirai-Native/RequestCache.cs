@@ -16,7 +16,7 @@ namespace Another_Mirai_Native
         public static void AddMessageCache(long msgId, string message)
         {
             Message.Add((msgId, message));
-            if (Message.Count > 0 && Message.Count > AppConfig.MessageCacheSize)
+            if (Message.Count > 0 && Message.Count > AppConfig.Instance.MessageCacheSize)
             {
                 Message.RemoveAt(0);
             }

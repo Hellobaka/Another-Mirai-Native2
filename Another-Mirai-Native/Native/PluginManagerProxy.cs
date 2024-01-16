@@ -76,7 +76,7 @@ namespace Another_Mirai_Native.Native
             foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.id == (int)eventType))
                 .OrderByDescending(x => x.AppInfo._event.First(o => o.id == (int)eventType).priority))
             {
-                if (item.AppInfo.AuthCode == AppConfig.TestingAuthCode)
+                if (item.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
                 {
                     continue;
                 }
@@ -133,7 +133,7 @@ namespace Another_Mirai_Native.Native
                 return;
             }
             plugin.KillProcess();
-            if (!AppConfig.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
+            if (!AppConfig.Instance.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
             {
                 if (SetPluginEnabled(plugin, true))
                 {
@@ -146,7 +146,7 @@ namespace Another_Mirai_Native.Native
             }
             else
             {
-                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.LoadTimeout);
+                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.Instance.LoadTimeout);
             }
         }
 
@@ -212,7 +212,7 @@ namespace Another_Mirai_Native.Native
             LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
             RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
 
-            if (AppConfig.RestartPluginIfDead)
+            if (AppConfig.Instance.RestartPluginIfDead)
             {
                 if (SetPluginEnabled(plugin, true))
                 {

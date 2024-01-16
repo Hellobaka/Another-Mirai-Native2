@@ -18,12 +18,12 @@ namespace Another_Mirai_Native.gRPC
 
         public static Metadata Headers => new()
         {
-            { "authCode", AppConfig.Core_AuthCode.ToString() }
+            { "authCode", AppConfig.Instance.Core_AuthCode.ToString() }
         };
 
-        private string ConnectIP { get; set; } = AppConfig.gRPCListenIP;
+        private string ConnectIP { get; set; } = AppConfig.Instance.gRPCListenIP;
 
-        private int ConnectPort { get; set; } = AppConfig.gRPCListenPort;
+        private int ConnectPort { get; set; } = AppConfig.Instance.gRPCListenPort;
 
         private CoreFunctions.CoreFunctionsClient CoreClient { get; set; }
 

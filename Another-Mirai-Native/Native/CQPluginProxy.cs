@@ -136,7 +136,7 @@ namespace Another_Mirai_Native.Native
 
         private bool StartPluginProcess()
         {
-            string arguments = $"-PID {PID} -AuthCode {AppInfo.AuthCode} -AutoExit {AppConfig.PluginExitWhenCoreExit} -Path {PluginPath} -WS {AppConfig.WebSocketURL}";
+            string arguments = $"-PID {PID} -AuthCode {AppInfo.AuthCode} -AutoExit {AppConfig.Instance.PluginExitWhenCoreExit} -Path {PluginPath} -WS {AppConfig.Instance.WebSocketURL}";
             Process? pluginProcess = null;
             var startConfig = new ProcessStartInfo
             {
@@ -144,7 +144,7 @@ namespace Another_Mirai_Native.Native
                 FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}",
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
             };
-            if (!AppConfig.DebugMode)
+            if (!AppConfig.Instance.DebugMode)
             {
                 startConfig.UseShellExecute = false;
                 startConfig.CreateNoWindow = true;
@@ -171,7 +171,7 @@ namespace Another_Mirai_Native.Native
 
         private bool WaitClientResponse()
         {
-            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.LoadTimeout);
+            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.Instance.LoadTimeout);
         }
     }
 }

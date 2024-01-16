@@ -25,8 +25,8 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (int.TryParse(LogMaxCount.Text, out int count))
             {
-                UIConfig.LogItemsCount = count;
-                ConfigHelper.SetConfig("LogItemsCount", count, UIConfig.DefaultConfigPath);
+                UIConfig.Instance.LogItemsCount = count;
+                UIConfig.Instance.SetConfig("LogItemsCount", count);
                 LogPage.Instance.RefilterLogCollection();
             }
         }
@@ -38,7 +38,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             LogPage.Instance.AutoScroll.IsOn = LogAutoScroll.IsOn;
-            ConfigHelper.SetConfig("LogAutoScroll", LogAutoScroll.IsOn, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.SetConfig("LogAutoScroll", LogAutoScroll.IsOn);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -47,9 +47,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            LogMaxCount.Text = UIConfig.LogItemsCount.ToString();
-            LogAutoScroll.IsOn = UIConfig.LogAutoScroll;
-            ThemeSelector.SelectedIndex = UIConfig.Theme == "Dark" ? 0 : UIConfig.Theme == "Light" ? 1 : 2;
+            LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
+            LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
+            ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
             FormLoaded = true;
         }
 
@@ -63,17 +63,17 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 case 0:
                     ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-                    ConfigHelper.SetConfig("Theme", "Dark", UIConfig.DefaultConfigPath);
+                    UIConfig.Instance.SetConfig("Theme", "Dark");
                     break;
 
                 case 1:
                     ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-                    ConfigHelper.SetConfig("Theme", "Light", UIConfig.DefaultConfigPath);
+                    UIConfig.Instance.SetConfig("Theme", "Light");
                     break;
 
                 case 2:
                     ThemeManager.Current.ApplicationTheme = null;
-                    ConfigHelper.SetConfig("Theme", "FollowSystem", UIConfig.DefaultConfigPath);
+                    UIConfig.Instance.SetConfig("Theme", "FollowSystem");
                     break;
 
                 default:
@@ -87,8 +87,8 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            UIConfig.ShowBalloonTip = ShowBalloonTip.IsOn;
-            ConfigHelper.SetConfig("ShowBalloonTip", ShowBalloonTip.IsOn, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.ShowBalloonTip = ShowBalloonTip.IsOn;
+            UIConfig.Instance.SetConfig("ShowBalloonTip", ShowBalloonTip.IsOn);
         }
 
         private void ShowWhenError_Toggled(object sender, RoutedEventArgs e)
@@ -97,8 +97,8 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            UIConfig.PopWindowWhenError = ShowWhenError.IsOn;
-            ConfigHelper.SetConfig("PopWindowWhenError", ShowWhenError.IsOn, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.PopWindowWhenError = ShowWhenError.IsOn;
+            UIConfig.Instance.SetConfig("PopWindowWhenError", ShowWhenError.IsOn);
         }
     }
 }

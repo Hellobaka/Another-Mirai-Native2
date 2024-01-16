@@ -104,7 +104,7 @@ namespace Another_Mirai_Native.UI.Pages
                                 }
                                 if (success)
                                 {
-                                    ConfigHelper.SetConfig(item.Name, saveValue, CurrentConfigPath);
+                                    CommonConfig.SetConfig(item.Name, saveValue, CurrentConfigPath);
                                 }
                             };
                             Container.Children.Add(textBox);
@@ -120,7 +120,7 @@ namespace Another_Mirai_Native.UI.Pages
                             };
                             toggleSwitch.Toggled += (_, _) =>
                             {
-                                ConfigHelper.SetConfig(item.Name, toggleSwitch.IsOn, CurrentConfigPath);
+                                CommonConfig.SetConfig(item.Name, toggleSwitch.IsOn, CurrentConfigPath);
                             };
                             Container.Children.Add(toggleSwitch);
                             break;

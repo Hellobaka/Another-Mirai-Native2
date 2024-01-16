@@ -6,27 +6,34 @@ namespace Another_Mirai_Native.Config
     /// <summary>
     /// 配置读取帮助类
     /// </summary>
-    public static class ConfigHelper
+    public class ConfigBase
     {
+        public ConfigBase(string configPath)
+        {
+            ConfigPath = configPath;
+        }
+
+        public string ConfigPath { get; set; } = @"conf/Config.json";
+
         /// <summary>
         /// 读取配置
         /// </summary>
         /// <param name="sectionName">需要读取的配置键名</param>
         /// <typeparam name="T">类型</typeparam>
         /// <returns>目标类型的配置</returns>
-        public static T GetConfig<T>(string sectionName, string configPath = @"conf/Config.json", T defaultValue = default)
+        public T GetConfig<T>(string sectionName, T defaultValue = default)
         {
             if (Directory.Exists("conf") is false)
             {
                 Directory.CreateDirectory("conf");
             }
 
-            if (File.Exists(configPath) is false)
+            if (File.Exists(ConfigPath) is false)
             {
-                File.WriteAllText(configPath, "{}");
+                File.WriteAllText(ConfigPath, "{}");
             }
 
-            var o = JObject.Parse(File.ReadAllText(configPath));
+            var o = JObject.Parse(File.ReadAllText(ConfigPath));
             if (o.ContainsKey(sectionName))
             {
                 return o[sectionName]!.ToObject<T>();
@@ -34,7 +41,7 @@ namespace Another_Mirai_Native.Config
 
             if (defaultValue != null)
             {
-                SetConfig<T>(sectionName, defaultValue, configPath);
+                SetConfig<T>(sectionName, defaultValue);
                 return defaultValue;
             }
             if (typeof(T) == typeof(string))
@@ -60,14 +67,14 @@ namespace Another_Mirai_Native.Config
             return typeof(T) == typeof(object) ? (T)(object)new { } : throw new Exception("无法默认返回");
         }
 
-        public static void SetConfig<T>(string sectionName, T value, string configPath = @"conf/Config.json")
+        public void SetConfig<T>(string sectionName, T value)
         {
-            if (File.Exists(configPath) is false)
+            if (File.Exists(ConfigPath) is false)
             {
-                File.WriteAllText(configPath, "{}");
+                File.WriteAllText(ConfigPath, "{}");
             }
 
-            var o = JObject.Parse(File.ReadAllText(configPath));
+            var o = JObject.Parse(File.ReadAllText(ConfigPath));
             if (o.ContainsKey(sectionName))
             {
                 o[sectionName] = JToken.FromObject(value);
@@ -76,7 +83,7 @@ namespace Another_Mirai_Native.Config
             {
                 o.Add(sectionName, JToken.FromObject(value));
             }
-            File.WriteAllText(configPath, o.ToString(Newtonsoft.Json.Formatting.Indented));
+            File.WriteAllText(ConfigPath, o.ToString(Newtonsoft.Json.Formatting.Indented));
         }
     }
 }

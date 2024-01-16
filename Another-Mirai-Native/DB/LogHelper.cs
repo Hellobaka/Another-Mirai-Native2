@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.DB
 
         public static List<LogModel> DetailQueryLogs(int priority, int pageSize, string search)
         {
-            if (AppConfig.UseDatabase)
+            if (AppConfig.Instance.UseDatabase)
             {
                 using var db = GetInstance();
                 List<LogModel> r = db.Queryable<LogModel>()
@@ -80,7 +80,7 @@ namespace Another_Mirai_Native.DB
 
         public static List<LogModel> GetDisplayLogs(int priority, int count)
         {
-            if (AppConfig.UseDatabase)
+            if (AppConfig.Instance.UseDatabase)
             {
                 using var db = GetInstance();
                 var c = db.SqlQueryable<LogModel>($"select * from log where priority>= {priority} order by id desc limit {count}").ToList();
@@ -152,7 +152,7 @@ namespace Another_Mirai_Native.DB
 
         public static void UpdateLogStatus(int id, string status)
         {
-            if (AppConfig.UseDatabase)
+            if (AppConfig.Instance.UseDatabase)
             {
                 using var db = GetInstance();
                 db.Updateable<LogModel>().SetColumns(x => x.status == status).Where(x => x.id == id)
@@ -181,7 +181,7 @@ namespace Another_Mirai_Native.DB
                 time = Helper.TimeStamp,
                 status = status
             };
-            if (AppConfig.IsCore)
+            if (AppConfig.Instance.IsCore)
             {
                 return WriteLog(model);
             }
@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.DB
 
         public static int WriteLog(LogModel model)
         {
-            if (AppConfig.UseDatabase && File.Exists(GetLogFilePath()) is false)
+            if (AppConfig.Instance.UseDatabase && File.Exists(GetLogFilePath()) is false)
             {
                 CreateDB();
             }
@@ -203,7 +203,7 @@ namespace Another_Mirai_Native.DB
                 model.name = "";
             }
             int logId = NoDBLogID++;
-            if (AppConfig.UseDatabase)
+            if (AppConfig.Instance.UseDatabase)
             {
                 lock (writeLock)
                 {
@@ -250,7 +250,7 @@ namespace Another_Mirai_Native.DB
 
         public static int Debug(string type, string message)
         {
-            if (AppConfig.DebugMode)
+            if (AppConfig.Instance.DebugMode)
             {
                 return WriteLog(LogLevel.Debug, type, message);
             }
@@ -262,7 +262,7 @@ namespace Another_Mirai_Native.DB
 
         public static int Debug(string type, string message, string origin = "AMN框架")
         {
-            if (AppConfig.DebugMode)
+            if (AppConfig.Instance.DebugMode)
             {
                 return WriteLog(LogLevel.Debug, origin, type, message, "");
             }

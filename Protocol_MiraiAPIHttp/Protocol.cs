@@ -97,7 +97,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             };
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
-            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.PluginInvokeTimeout))
+            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout))
             {
                 WaitingMessages.Remove(syncId);
                 return msg.Result;
@@ -118,7 +118,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             EventConnection = new(event_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.LoadTimeout);
+                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.Instance.LoadTimeout);
             });
             EventConnection.OnOpen += EventConnection_OnOpen;
             EventConnection.OnClose += EventConnection_OnClose;
@@ -139,7 +139,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 while (IsConnected)
                 {
-                    Thread.Sleep(AppConfig.HeartBeatInterval);
+                    Thread.Sleep(AppConfig.Instance.HeartBeatInterval);
                     EventConnection.Ping();
                     MessageConnection.Ping();
                 }
@@ -160,9 +160,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return;
             }
             ReconnectCount++;
-            LogHelper.Error("事件服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(EventConnection);
-            Thread.Sleep(AppConfig.ReconnectTime);
+            Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();
         }
 
@@ -184,7 +184,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection = new(message_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.LoadTimeout);
+                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.Instance.LoadTimeout);
             });
             MessageConnection.OnOpen += MessageConnection_OnOpen;
             MessageConnection.OnClose += MessageConnection_OnClose;
@@ -208,9 +208,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return;
             }
             ReconnectCount++;
-            LogHelper.Error("消息服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            LogHelper.Error("消息服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(MessageConnection);
-            Thread.Sleep(AppConfig.ReconnectTime);
+            Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectMessageServer();
         }
 

@@ -28,9 +28,9 @@ namespace Another_Mirai_Native.UI
         public MainWindow()
         {
             InitializeComponent();
-            UIConfig.InitConfigs();
+            UIConfig.Instance.LoadConfig();
             Instance = this;
-            switch (UIConfig.Theme)
+            switch (UIConfig.Instance.Theme)
             {
                 case "Light":
                     ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
@@ -45,21 +45,21 @@ namespace Another_Mirai_Native.UI
             }
             try
             {
-                if (string.IsNullOrEmpty(UIConfig.AccentColor) || UIConfig.AccentColor.StartsWith("#") is false)
+                if (string.IsNullOrEmpty(UIConfig.Instance.AccentColor) || UIConfig.Instance.AccentColor.StartsWith("#") is false)
                 {
                     ThemeManager.Current.AccentColor = null;
                 }
                 else
                 {
-                    ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.AccentColor);
+                    ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.Instance.AccentColor);
                 }
             }
             catch
             {
                 ThemeManager.Current.AccentColor = null;
             }
-            Width = Math.Max(MinWidth, UIConfig.Width);
-            Height = Math.Max(MinHeight, UIConfig.Height);
+            Width = Math.Max(MinWidth, UIConfig.Instance.Width);
+            Height = Math.Max(MinHeight, UIConfig.Instance.Height);
         }
 
         public static MainWindow Instance { get; set; }
@@ -132,8 +132,8 @@ namespace Another_Mirai_Native.UI
         {
             if (await DialogHelper.ShowConfirmDialog("协议切换", "确定要切换协议吗，操作会导致与机器人断开连接，无法处理消息"))
             {
-                AppConfig.AutoConnect = false;
-                ConfigHelper.SetConfig("AutoConnect", false);
+                AppConfig.Instance.AutoConnect = false;
+                UIConfig.Instance.SetConfig("AutoConnect", false);
                 bool success = await Task.Run(() =>
                 {
                     return Task.FromResult(ProtocolManager.Instance.CurrentProtocol.Disconnect());
@@ -162,7 +162,7 @@ namespace Another_Mirai_Native.UI
             foreach (var item in PluginManagerProxy.Proxies)
             {
                 string appName = item.AppInfo.name;
-                if (UIConfig.AutoEnablePlugins.Any(x => x == appName))
+                if (UIConfig.Instance.AutoEnablePlugins.Any(x => x == appName))
                 {
                     item.Load();
                 }
@@ -233,8 +233,8 @@ namespace Another_Mirai_Native.UI
         private void ResizeTimer_Tick(object? sender, EventArgs e)
         {
             ResizeTimer.Stop();
-            ConfigHelper.SetConfig("Window_Width", Width, UIConfig.DefaultConfigPath);
-            ConfigHelper.SetConfig("Window_Height", Height, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.SetConfig("Window_Width", Width);
+            UIConfig.Instance.SetConfig("Window_Height", Height);
         }
 
         private bool SetForegroundWindow()
@@ -250,8 +250,8 @@ namespace Another_Mirai_Native.UI
                          ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark
                          ? ApplicationTheme.Light
                          : ApplicationTheme.Dark;
-            UIConfig.Theme = ThemeManager.Current.ActualApplicationTheme.ToString();
-            ConfigHelper.SetConfig("Theme", UIConfig.Theme, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.Theme = ThemeManager.Current.ActualApplicationTheme.ToString();
+            UIConfig.Instance.SetConfig("Theme", UIConfig.Instance.Theme);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

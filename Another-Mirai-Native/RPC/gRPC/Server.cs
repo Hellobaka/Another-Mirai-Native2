@@ -15,9 +15,9 @@ namespace Another_Mirai_Native.gRPC
     {
         public static Grpc.Core.Server ServerInstance { get; set; }
 
-        private string ListenIP { get; set; } = AppConfig.gRPCListenIP;
+        private string ListenIP { get; set; } = AppConfig.Instance.gRPCListenIP;
 
-        private ushort ListenPort { get; set; } = AppConfig.gRPCListenPort;
+        private ushort ListenPort { get; set; } = AppConfig.Instance.gRPCListenPort;
 
         private int SyncId { get; set; } = 1;
 
@@ -109,7 +109,7 @@ namespace Another_Mirai_Native.gRPC
                     }
                 });
                 ;
-                if (signal.WaitOne(AppConfig.PluginInvokeTimeout)
+                if (signal.WaitOne(AppConfig.Instance.PluginInvokeTimeout)
                     && WaitingResults.TryRemove(response.WaitID, out int result))
                 {
                     return result;

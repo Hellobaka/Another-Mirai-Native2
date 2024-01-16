@@ -19,15 +19,15 @@ namespace Another_Mirai_Native.UI.Controls
             MainWindow.Instance.Dispatcher.Invoke(() =>
             {
                 ThemeManager.Current.AccentColor = null;
-                UIConfig.AccentColor = "";
-                ConfigHelper.SetConfig("AccentColor", "", UIConfig.DefaultConfigPath);
+                UIConfig.Instance.AccentColor = "";
+                UIConfig.Instance.SetConfig("AccentColor", "");
             });
         }
 
         private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UIConfig.AccentColor = ThemeManager.Current.AccentColor?.ToString();
-            ConfigHelper.SetConfig("AccentColor", ThemeManager.Current.AccentColor.ToString(), UIConfig.DefaultConfigPath);
+            UIConfig.Instance.AccentColor = ThemeManager.Current.AccentColor?.ToString();
+            UIConfig.Instance.SetConfig("AccentColor", ThemeManager.Current.AccentColor.ToString());
         }
     }
 

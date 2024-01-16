@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace Protocol_NoConnection
 {
-    public class Protocol : IProtocol
+    public class Protocol : ConfigBase, IProtocol
     {
         public Protocol()
+            : base(@"conf\NoConnection_ProtocolConfig.json")
         {
-            Instance = this;   
+            LoadConfig();
+            Instance = this;
         }
 
         public string Name { get; set; } = "NoConnection";
@@ -22,6 +24,10 @@ namespace Protocol_NoConnection
         public bool IsConnected { get; set; } = false;
 
         public static Protocol Instance { get; set; }
+
+        public string TestNickName { get; set; } = "";
+
+        public long TestLoginQQ { get; set; } = 100000;
 
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
@@ -32,6 +38,12 @@ namespace Protocol_NoConnection
         private Random Random { get; set; } = new();
 
         private Tester TesterForm { get; set; }
+
+        public void LoadConfig()
+        {
+            TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
+            TestLoginQQ = GetConfig("NoConnection_QQ", 999999999);
+        }
 
         public void BuildMockData()
         {
@@ -113,16 +125,13 @@ namespace Protocol_NoConnection
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).First().MemberType = QQGroupMemberType.Creator;
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).Skip(1).First().MemberType = QQGroupMemberType.Manage;
             }
-            if(TesterForm == null)
+            TesterForm = new Tester();
+            Task.Run(() =>
             {
-                TesterForm = new Tester();
-                Task.Run(() =>
-                {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(true);
-                    Application.Run(TesterForm);
-                });
-            }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(true);
+                Application.Run(TesterForm);
+            });
         }
 
         private GroupMemberInfo BuildSelfMockData(long groupId)
@@ -219,12 +228,12 @@ namespace Protocol_NoConnection
 
         public string GetLoginNick()
         {
-            return ConfigHelper.GetConfig("NoConnection_Nick", @"conf\NoConnection_ProtocolConfig.json", "测试账号9");
+            return TestNickName;
         }
 
         public long GetLoginQQ()
         {
-            return ConfigHelper.GetConfig("NoConnection_QQ", @"conf\NoConnection_ProtocolConfig.json", (long)999999999);
+            return TestLoginQQ;
         }
 
         public string GetStrangerInfo(long qqId, bool notCache)

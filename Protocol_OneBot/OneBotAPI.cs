@@ -8,8 +8,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
-    public partial class OneBotAPI : IProtocol
+    public partial class OneBotAPI : ConfigBase, IProtocol
     {
+        public OneBotAPI()
+            : base(@"conf\OneBot_v11.json")
+        {
+            LoadConfig();
+        }
+
         public bool IsConnected
         {
             get
@@ -25,6 +31,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
         }
 
         public string Name { get; set; } = "OneBot v11";
+
+        public void LoadConfig()
+        {
+            WsURL = GetConfig("WebSocketURL", "");
+            AuthKey = GetConfig("AuthKey", "");
+        }
 
         public int CanSendImage()
         {
@@ -67,8 +79,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public Dictionary<string, string> GetConnectionConfig()
         {
-            WsURL = ConfigHelper.GetConfig("WebSocketURL", @"conf\OneBot_v11.json", "");
-            AuthKey = ConfigHelper.GetConfig("AuthKey", @"conf\OneBot_v11.json", "");
+            LoadConfig();
             return new Dictionary<string, string>
             {
                 { "Ws", WsURL },
@@ -275,12 +286,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 WsURL = config["Ws"];
                 if (WsURL.EndsWith("/"))
                 {
-                    // WsURL = WsURL.Substring(0, WsURL.Length - 1);
                     WsURL = WsURL.Substring(0, WsURL.Length - 1);
                 }
                 AuthKey = config["AuthKey"];
-                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\OneBot_v11.json");
-                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\OneBot_v11.json");
+                SetConfig("WebSocketURL", WsURL);
+                SetConfig("AuthKey", AuthKey);
             }
             return success;
         }

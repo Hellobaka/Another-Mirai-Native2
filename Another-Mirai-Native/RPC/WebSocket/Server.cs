@@ -17,7 +17,7 @@ namespace Another_Mirai_Native.WebSocket
 
         public override bool SetConnectionConfig()
         {
-            return !string.IsNullOrEmpty(AppConfig.WebSocketURL);
+            return !string.IsNullOrEmpty(AppConfig.Instance.WebSocketURL);
         }
 
         public override int? InvokeEvents(CQPluginProxy target, PluginEventType eventType, params object[] args)
@@ -32,7 +32,7 @@ namespace Another_Mirai_Native.WebSocket
             connection.Send(new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
             WaitingMessage.Add(guid, new InvokeResult());
 
-            if (RequestWaiter.Wait(guid, target, AppConfig.PluginInvokeTimeout)
+            if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout)
                     && WaitingMessage.TryGetValue(guid, out InvokeResult result))
             {
                 WaitingMessage.Remove(guid);
@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.WebSocket
         {
             try
             {
-                WebSocketServer = new(AppConfig.WebSocketURL)
+                WebSocketServer = new(AppConfig.Instance.WebSocketURL)
                 {
                     RestartAfterListenError = true
                 };

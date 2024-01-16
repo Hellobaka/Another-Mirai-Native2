@@ -15,7 +15,7 @@ namespace Another_Mirai_Native.UI.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             CQPluginProxy proxy = (CQPluginProxy)value;
-            if (proxy.AppInfo.AuthCode == AppConfig.TestingAuthCode)
+            if (proxy.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
             {
                 return "🧪";
             }

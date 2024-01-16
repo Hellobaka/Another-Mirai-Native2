@@ -1,6 +1,4 @@
-﻿using Another_Mirai_Native.Config;
-using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Enums;
+﻿using Another_Mirai_Native.Enums;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse;
@@ -8,7 +6,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 {
@@ -70,9 +67,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public Dictionary<string, string> GetConnectionConfig()
         {
-            WsURL = ConfigHelper.GetConfig("WebSocketURL", @"conf\MiraiAPIHttp.json", "");
-            AuthKey = ConfigHelper.GetConfig("AuthKey", @"conf\MiraiAPIHttp.json", "");
-            QQ = ConfigHelper.GetConfig("QQ", @"conf\MiraiAPIHttp.json", (long)0);
+            MAHConfig.Instance = new MAHConfig();
+            WsURL = MAHConfig.Instance.WebSocketURL;
+            AuthKey = MAHConfig.Instance.AuthKey;
+            QQ = MAHConfig.Instance.QQ;
             return new Dictionary<string, string>
             {
                 { "Ws", WsURL },
@@ -279,9 +277,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
                 AuthKey = config["AuthKey"];
                 QQ = value;
-                ConfigHelper.SetConfig("WebSocketURL", WsURL, @"conf\MiraiAPIHttp.json");
-                ConfigHelper.SetConfig("AuthKey", AuthKey, @"conf\MiraiAPIHttp.json");
-                ConfigHelper.SetConfig("QQ", QQ, @"conf\MiraiAPIHttp.json");
+                MAHConfig.Instance.SetConfig("WebSocketURL", WsURL);
+                MAHConfig.Instance.SetConfig("AuthKey", AuthKey);
+                MAHConfig.Instance.SetConfig("QQ", QQ);
             }
             return success;
         }
@@ -507,7 +505,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private GroupMemberInfo ParseGroupMemberInfoResponse2GroupMemberInfo(GroupMemberInfoResponse response)
         {
             ProfilerResponse appendInfo = null;
-            if (ConfigHelper.GetConfig("FullMemberInfo", @"conf\MiraiAPIHttp.json", false))
+            if (MAHConfig.Instance.FullMemberInfo)
             {
                 appendInfo = GetMemberProfilerInternal(response.group.id, response.id);
             }

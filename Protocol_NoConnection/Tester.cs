@@ -36,9 +36,9 @@ namespace Protocol_NoConnection
 
         private void Tester_Load(object sender, EventArgs e)
         {
-            GroupValue.Text = ConfigHelper.GetConfig("TesterGroup", @"conf/Test.json", 10001).ToString();
-            QQValue.Text = ConfigHelper.GetConfig("TesterQQ", @"conf/Test.json", 10001).ToString();
-            MessageHistories = ConfigHelper.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
+            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", 10001).ToString();
+            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", 10001).ToString();
+            MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -53,8 +53,8 @@ namespace Protocol_NoConnection
                 MessageBox.Show("QQId 无效");
                 return;
             }
-            ConfigHelper.SetConfig("TesterGroup", GroupId, @"conf/Test.json");
-            ConfigHelper.SetConfig("TesterQQ", QQId, @"conf/Test.json");
+            CommonConfig.SetConfig("TesterGroup", GroupId, @"conf/Test.json");
+            CommonConfig.SetConfig("TesterQQ", QQId, @"conf/Test.json");
             string msg = SendValue.Text;
             SendValue.Text = "";
             if (MessageHistories.Contains(msg))
@@ -62,7 +62,7 @@ namespace Protocol_NoConnection
                 MessageHistories.Remove(msg);
             }
             MessageHistories.Add(msg);
-            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf/Test.json");
+            CommonConfig.SetConfig("MessageHistories", MessageHistories, @"conf/Test.json");
             MessageHistoryIndex = 0;
             Task.Run(() =>
             {

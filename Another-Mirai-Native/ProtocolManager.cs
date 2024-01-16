@@ -30,7 +30,7 @@ namespace Another_Mirai_Native
             }
             bool flag = protocol.Connect();
             RefreshBotInfo(protocol);
-            flag = flag && !string.IsNullOrEmpty(AppConfig.CurrentNickName);
+            flag = flag && !string.IsNullOrEmpty(AppConfig.Instance.CurrentNickName);
             if (flag)
             {
                 CurrentProtocol = protocol;
@@ -81,8 +81,8 @@ namespace Another_Mirai_Native
         {
             if (protocol != null && protocol.IsConnected)
             {
-                AppConfig.CurrentNickName = protocol.GetLoginNick();
-                AppConfig.CurrentQQ = protocol.GetLoginQQ();
+                AppConfig.Instance.CurrentNickName = protocol.GetLoginNick();
+                AppConfig.Instance.CurrentQQ = protocol.GetLoginQQ();
             }
         }
     }

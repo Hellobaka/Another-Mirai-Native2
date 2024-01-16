@@ -44,7 +44,7 @@ namespace Another_Mirai_Native.RPC.Interface
             }
             PluginManagerProxy.SetProxyConnected(proxy);
             RequestWaiter.TriggerByKey($"ClientStartUp_{pid}");
-            if (AppConfig.PluginAutoEnable)
+            if (AppConfig.Instance.PluginAutoEnable)
             {
                 PluginManagerProxy.Instance.SetPluginEnabled(proxy, true);
             }

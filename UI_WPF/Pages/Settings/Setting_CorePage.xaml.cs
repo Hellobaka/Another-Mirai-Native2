@@ -37,18 +37,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 AutoProtocol.Items.Add(item.Name);
             }
-            AutoConnect.IsOn = AppConfig.AutoConnect;
-            AutoProtocol.Text = AppConfig.AutoProtocol;
-            PluginExitWhenCoreExit.IsOn = AppConfig.PluginExitWhenCoreExit;
-            RestartPluginIfDead.IsOn = AppConfig.RestartPluginIfDead;
-            ReconnectTime.Text = AppConfig.ReconnectTime.ToString();
-            HeartBeatInterval.Text = AppConfig.HeartBeatInterval.ToString();
-            PluginInvokeTimeout.Text = AppConfig.PluginInvokeTimeout.ToString();
-            LoadTimeout.Text = AppConfig.LoadTimeout.ToString();
-            UseDatabase.IsOn = AppConfig.UseDatabase;
-            PluginAutoEnable.IsOn = AppConfig.PluginAutoEnable;
-            DebugMode.IsOn = AppConfig.DebugMode;
-            MessageCacheSize.Text = AppConfig.MessageCacheSize.ToString();
+            AutoConnect.IsOn = AppConfig.Instance.AutoConnect;
+            AutoProtocol.Text = AppConfig.Instance.AutoProtocol;
+            PluginExitWhenCoreExit.IsOn = AppConfig.Instance.PluginExitWhenCoreExit;
+            RestartPluginIfDead.IsOn = AppConfig.Instance.RestartPluginIfDead;
+            ReconnectTime.Text = AppConfig.Instance.ReconnectTime.ToString();
+            HeartBeatInterval.Text = AppConfig.Instance.HeartBeatInterval.ToString();
+            PluginInvokeTimeout.Text = AppConfig.Instance.PluginInvokeTimeout.ToString();
+            LoadTimeout.Text = AppConfig.Instance.LoadTimeout.ToString();
+            UseDatabase.IsOn = AppConfig.Instance.UseDatabase;
+            PluginAutoEnable.IsOn = AppConfig.Instance.PluginAutoEnable;
+            DebugMode.IsOn = AppConfig.Instance.DebugMode;
+            MessageCacheSize.Text = AppConfig.Instance.MessageCacheSize.ToString();
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
             {
                 var child = VisualTreeHelper.GetChild(Container, i);
@@ -78,7 +78,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is ComboBox comboBox)
             {
-                ConfigHelper.SetConfig(comboBox.Name, e.AddedItems[0]?.ToString());
+                UIConfig.Instance.SetConfig(comboBox.Name, e.AddedItems[0]?.ToString());
                 UpdateAppConfig(comboBox.Name, e.AddedItems[0]?.ToString());
             }
         }
@@ -87,7 +87,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is ModernWpf.Controls.ToggleSwitch toggleSwitch)
             {
-                ConfigHelper.SetConfig(toggleSwitch.Name, toggleSwitch.IsOn);
+                UIConfig.Instance.SetConfig(toggleSwitch.Name, toggleSwitch.IsOn);
                 UpdateAppConfig(toggleSwitch.Name, toggleSwitch.IsOn);
             }
         }
@@ -96,7 +96,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is TextBox textBox && int.TryParse(textBox.Text, out int value))
             {
-                ConfigHelper.SetConfig(textBox.Name, value);
+                UIConfig.Instance.SetConfig(textBox.Name, value);
                 UpdateAppConfig(textBox.Name, value);
             }
         }

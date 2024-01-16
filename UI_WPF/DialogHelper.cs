@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.UI
         public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
         {
             var menu = new ContextMenu();
-            menu.Items.Add(new MenuItem { Header = $"{AppConfig.CurrentNickName}({AppConfig.CurrentQQ})" });
+            menu.Items.Add(new MenuItem { Header = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})" });
             menu.Items.Add(new Separator());
             menu.Items.Add(new MenuItem { Header = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
             menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
@@ -88,7 +88,7 @@ namespace Another_Mirai_Native.UI
         {
             MainWindow.Instance.Dispatcher.BeginInvoke(() =>
             {
-                if (UIConfig.PopWindowWhenError)
+                if (UIConfig.Instance.PopWindowWhenError)
                 {
                     MainWindow.Instance.Show();
                 }

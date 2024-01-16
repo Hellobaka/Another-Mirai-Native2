@@ -12,7 +12,7 @@ namespace Another_Mirai_Native.WebSocket
     {
         public WebSocketSharp.WebSocket WebSocketClient { get; set; }
 
-        private string ConnectUrl { get; set; } = AppConfig.Core_WSURL;
+        private string ConnectUrl { get; set; } = AppConfig.Instance.Core_WSURL;
 
         private int ReconnectCount { get; set; }
 
@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.WebSocket
                 return null;
             }
             WaitingMessage.Add(guid, new InvokeResult());
-            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
+            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.Instance.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
             {
                 var result = WaitingMessage[guid];
                 WaitingMessage.Remove(guid);
@@ -96,7 +96,7 @@ namespace Another_Mirai_Native.WebSocket
                 GUID = guid,
                 Args = new object[]
                 {
-                    AppConfig.Core_AuthCode,
+                    AppConfig.Instance.Core_AuthCode,
                     title,
                     content ?? "",
                     canIgnore
@@ -161,9 +161,9 @@ namespace Another_Mirai_Native.WebSocket
         private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
         {
             ReconnectCount++;
-            LogHelper.Error("与服务器连接断开", $"{AppConfig.ReconnectTime} ms后重新连接...");
+            LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
-            Thread.Sleep(AppConfig.ReconnectTime);
+            Thread.Sleep(AppConfig.Instance.ReconnectTime);
             Connect();
         }
 

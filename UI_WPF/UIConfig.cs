@@ -1,57 +1,47 @@
 ﻿using Another_Mirai_Native.Config;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.UI
 {
-    public static class UIConfig
+    public class UIConfig : ConfigBase
     {
-        public static string DefaultConfigPath { get; set; } = @"conf/UIConfig.json";
-
-        public static string Theme { get; set; } = "System";
-
-        public static string AccentColor { get; set; } = "";
-
-        public static List<string> AutoEnablePlugins { get; set; } = new();
-
-        public static double Width { get; set; } = 900;
-
-        public static double Height { get; set; } = 600;
-
-        public static int LogItemsCount { get; set; } = 500;
-
-        public static bool LogAutoScroll { get; set; } = true;
-
-        public static bool ShowBalloonTip { get; set; } = true;
-
-        public static bool PopWindowWhenError { get; set; } = true;
-
-        public static void InitConfigs()
+        public UIConfig()
+            : base(@"conf\UIConfig.Instance.json")
         {
-            Theme = ConfigHelper.GetConfig("Theme", DefaultConfigPath, "System");
-            AccentColor = ConfigHelper.GetConfig("AccentColor", DefaultConfigPath, "");
-            AutoEnablePlugins = ConfigHelper.GetConfig("AutoEnablePlugins", DefaultConfigPath, new List<string>());
-            Width = ConfigHelper.GetConfig("Window_Width", DefaultConfigPath, 900);
-            Height = ConfigHelper.GetConfig("Window_Height", DefaultConfigPath, 600);
-            LogItemsCount = ConfigHelper.GetConfig("LogItemsCount", DefaultConfigPath, 500);
-            LogAutoScroll = ConfigHelper.GetConfig("LogAutoScroll", DefaultConfigPath, true);
-            ShowBalloonTip = ConfigHelper.GetConfig("ShowBalloonTip", DefaultConfigPath, true);
-            PopWindowWhenError = ConfigHelper.GetConfig("PopWindowWhenError", DefaultConfigPath, true);
+            LoadConfig();
         }
 
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        public static UIConfig Instance { get; set; } = new UIConfig();
+
+        public string Theme { get; set; } = "System";
+
+        public string AccentColor { get; set; } = "";
+
+        public List<string> AutoEnablePlugins { get; set; } = new();
+
+        public double Width { get; set; } = 900;
+
+        public double Height { get; set; } = 600;
+
+        public int LogItemsCount { get; set; } = 500;
+
+        public bool LogAutoScroll { get; set; } = true;
+
+        public bool ShowBalloonTip { get; set; } = true;
+
+        public bool PopWindowWhenError { get; set; } = true;
+
+        public void LoadConfig()
         {
-            ObservableCollection<T> list = new();
-            foreach (T item in source)
-            {
-                list.Add(item);
-            }
-            return list;
+            Theme = GetConfig("Theme", "System");
+            AccentColor = GetConfig("AccentColor", "");
+            AutoEnablePlugins = GetConfig("AutoEnablePlugins", new List<string>());
+            Width = GetConfig("Window_Width", 900);
+            Height = GetConfig("Window_Height", 600);
+            LogItemsCount = GetConfig("LogItemsCount", 500);
+            LogAutoScroll = GetConfig("LogAutoScroll", true);
+            ShowBalloonTip = GetConfig("ShowBalloonTip", true);
+            PopWindowWhenError = GetConfig("PopWindowWhenError", true);
         }
     }
 }

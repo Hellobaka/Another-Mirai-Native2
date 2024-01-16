@@ -42,12 +42,12 @@ namespace Another_Mirai_Native.UI.Controls
         {
             Connecting = false;
             HasProtocolContent = false;
-            AutoConnectSelector.IsOn = AppConfig.AutoConnect;
+            AutoConnectSelector.IsOn = AppConfig.Instance.AutoConnect;
             foreach (var item in ProtocolManager.Protocols)
             {
                 ProtocolList.Items.Add(item.Name);
             }
-            ProtocolList.Text = AppConfig.AutoProtocol;
+            ProtocolList.Text = AppConfig.Instance.AutoProtocol;
             if (AutoConnectSelector.IsOn)
             {
                 ConnectButton_Click(sender, e);
@@ -104,8 +104,8 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 ErrorDisplay.Text = "配置校验失败，请修改后重试";
             }
-            AppConfig.AutoProtocol = CurrentProtocol.Name;
-            ConfigHelper.SetConfig("AutoProtocol", CurrentProtocol.Name);
+            AppConfig.Instance.AutoProtocol = CurrentProtocol.Name;
+            UIConfig.Instance.SetConfig("AutoProtocol", CurrentProtocol.Name);
             Connecting = true;
             Task.Run(() =>
             {
@@ -130,8 +130,8 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void AutoConnectSelector_Toggled(object sender, RoutedEventArgs e)
         {
-            AppConfig.AutoConnect = AutoConnectSelector.IsOn;
-            ConfigHelper.SetConfig("AutoConnect", AppConfig.AutoConnect);
+            AppConfig.Instance.AutoConnect = AutoConnectSelector.IsOn;
+            UIConfig.Instance.SetConfig("AutoConnect", AppConfig.Instance.AutoConnect);
         }
     }
 }

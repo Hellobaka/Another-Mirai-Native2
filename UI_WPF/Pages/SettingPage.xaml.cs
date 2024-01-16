@@ -49,7 +49,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             foreach (var item in Directory.GetFiles("conf", "*.json"))
             {
-                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json")
+                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.Instance.json")
                 {
                     continue;
                 }

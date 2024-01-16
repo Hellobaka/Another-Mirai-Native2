@@ -24,15 +24,15 @@ namespace Another_Mirai_Native.UI
 
         private static void InitCore()
         {
-            AppConfig.LoadConfig();
-            AppConfig.IsCore = true;
+            AppConfig.Instance.LoadConfig();
+            AppConfig.Instance.IsCore = true;
             Another_Mirai_Native.Entry.CreateInitFolders();
-            if (AppConfig.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();
             }
             ServerManager serverManager = new();
-            if (serverManager.Build(AppConfig.ServerType) is false)
+            if (serverManager.Build(AppConfig.Instance.ServerType) is false)
             {
                 LogHelper.Debug("初始化", "构建服务器失败");
                 return;

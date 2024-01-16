@@ -209,8 +209,8 @@ namespace Another_Mirai_Native.Native
                         break;
                 }
             }
-            AuthCode = AppConfig.Core_AuthCode;
-            AppInfo.AuthCode = AppConfig.Core_AuthCode;
+            AuthCode = AppConfig.Instance.Core_AuthCode;
+            AppInfo.AuthCode = AppConfig.Instance.Core_AuthCode;
             AppInfo.AppId = GetAppId().Value;
             Directory.CreateDirectory(System.IO.Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
             Initialize(AppInfo.AuthCode);

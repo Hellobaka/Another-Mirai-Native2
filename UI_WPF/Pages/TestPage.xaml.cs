@@ -51,7 +51,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            CurrentPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.TestingAuthCode);
+            CurrentPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode);
             if (CurrentPlugin == null)
             {
                 DialogHelper.ShowSimpleDialog("嗯？", "当前没有插件被标记为测试，请前往插件窗口选择测试插件");

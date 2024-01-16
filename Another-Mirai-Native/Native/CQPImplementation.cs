@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.Native
 
         public Stopwatch Stopwatch { get; set; } = new();
 
-        public bool Testing => CurrentPlugin?.AppInfo.AuthCode == AppConfig.TestingAuthCode;
+        public bool Testing => CurrentPlugin?.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode;
 
         public CQPImplementation(CQPluginProxy plugin)
         {

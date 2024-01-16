@@ -140,9 +140,9 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             FormLoaded = true;
-            GroupDisplay.Text = ConfigHelper.GetConfig("TesterGroup", @"conf/Test.json", 100000).ToString();
-            QQDisplay.Text = ConfigHelper.GetConfig("TesterQQ", @"conf/Test.json", 100000).ToString();
-            MessageHistories = ConfigHelper.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
+            GroupDisplay.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", 100000).ToString();
+            QQDisplay.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", 100000).ToString();
+            MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
             CurrentQQ = ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
             PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
             PluginManagerProxy.OnTestInvoked += PluginManagerProxy_OnTestInvoked;
@@ -178,15 +178,15 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             AddChatBlock(msg, true);
-            ConfigHelper.SetConfig("TesterGroup", Convert.ToInt64(GroupDisplay.Text), @"conf\Test.json");
-            ConfigHelper.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\Test.json");
+            CommonConfig.SetConfig("TesterGroup", Convert.ToInt64(GroupDisplay.Text), @"conf\Test.json");
+            CommonConfig.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\Test.json");
             SendMessage.Text = "";
             if (MessageHistories.Contains(msg))
             {
                 MessageHistories.Remove(msg);
             }
             MessageHistories.Add(msg);
-            ConfigHelper.SetConfig("MessageHistories", MessageHistories, @"conf\Test.json");
+            CommonConfig.SetConfig("MessageHistories", MessageHistories, @"conf\Test.json");
             MessageHistoryIndex = 0;
             bool useGroup = GroupMessageSelector.IsChecked.Value;
             Thread thread = new(() =>

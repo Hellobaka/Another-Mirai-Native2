@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public void RefilterLogCollection()
         {
-            var ls = ConvertListToObservableCollection(PackLogModelWrapper(LogHelper.DetailQueryLogs(FilterLogLevel, UIConfig.LogItemsCount, SearchText)));
+            var ls = ConvertListToObservableCollection(PackLogModelWrapper(LogHelper.DetailQueryLogs(FilterLogLevel, UIConfig.Instance.LogItemsCount, SearchText)));
             Dispatcher.BeginInvoke(() =>
             {
                 LogCollections = ls;
@@ -97,8 +97,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void AutoScroll_Toggled(object sender, RoutedEventArgs e)
         {
-            UIConfig.LogAutoScroll = AutoScroll.IsOn;
-            ConfigHelper.SetConfig("LogAutoScroll", AutoScroll.IsOn, UIConfig.DefaultConfigPath);
+            UIConfig.Instance.LogAutoScroll = AutoScroll.IsOn;
+            UIConfig.Instance.SetConfig("LogAutoScroll", AutoScroll.IsOn);
             SelectLastLog();
         }
 
@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.UI.Pages
         private void FilterLogLevelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FilterLogLevel = FilterLogLevelSelector.SelectedIndex * 10;
-            var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.LogItemsCount);
+            var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.Instance.LogItemsCount);
             LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
             RefilterLogCollection();
             SelectLastLog();
@@ -135,7 +135,7 @@ namespace Another_Mirai_Native.UI.Pages
                 var column = LogGridView.Columns[i];
                 try
                 {
-                    column.Width = ConfigHelper.GetConfig($"LogColumn{i + 1}_Width", UIConfig.DefaultConfigPath, 200);
+                    column.Width = UIConfig.Instance.GetConfig($"LogColumn{i + 1}_Width", 200);
                 }
                 catch
                 {
@@ -157,7 +157,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 if (log.priority >= FilterLogLevel)
                 {
-                    if (LogCollections.Count > 0 && LogCollections.Count > UIConfig.LogItemsCount)
+                    if (LogCollections.Count > 0 && LogCollections.Count > UIConfig.Instance.LogItemsCount)
                     {
                         LogCollections.RemoveAt(0);
                     }
@@ -173,7 +173,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     tipIcon = BalloonIcon.Error;
                 }
-                if (log.priority >= (int)LogLevel.Warning && UIConfig.ShowBalloonTip)
+                if (log.priority >= (int)LogLevel.Warning && UIConfig.Instance.ShowBalloonTip)
                 {
                     MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
                 }
@@ -196,7 +196,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var ls = LogHelper.GetDisplayLogs(10, UIConfig.LogItemsCount);
+            var ls = LogHelper.GetDisplayLogs(10, UIConfig.Instance.LogItemsCount);
             LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
@@ -204,7 +204,7 @@ namespace Another_Mirai_Native.UI.Pages
             LogHelper.LogAdded += LogHelper_LogAdded;
             LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
             LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
-            AutoScroll.IsOn = UIConfig.LogAutoScroll;
+            AutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             FormLoaded = true;
             SelectLastLog();
         }
@@ -215,7 +215,7 @@ namespace Another_Mirai_Native.UI.Pages
             for (int i = 0; i < LogGridView.Columns.Count; i++)
             {
                 var column = LogGridView.Columns[i];
-                ConfigHelper.SetConfig($"LogColumn{i + 1}_Width", column.Width, UIConfig.DefaultConfigPath);
+                UIConfig.Instance.SetConfig($"LogColumn{i + 1}_Width", column.Width);
             }
         }
 

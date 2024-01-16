@@ -197,7 +197,7 @@ namespace Another_Mirai_Native
         public static void ShowErrorDialog(Exception ex, bool canIgnore)
         {
             string guid = Guid.NewGuid().ToString();
-            if (AppConfig.IsCore)
+            if (AppConfig.Instance.IsCore)
             {
                 ServerManager.Server.ActiveShowErrorDialog(guid,
                         0,
