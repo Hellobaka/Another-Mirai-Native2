@@ -29,7 +29,6 @@ namespace Another_Mirai_Native
             // 重定向异常
             InitExceptionCapture();
             // 加载配置
-            AppConfig.Instance.LoadConfig();
             AppConfig.Instance.IsCore = args.Length == 0;
             if (AppConfig.Instance.DebugMode && !AppConfig.Instance.IsCore)
             {

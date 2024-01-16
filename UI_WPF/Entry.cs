@@ -24,7 +24,6 @@ namespace Another_Mirai_Native.UI
 
         private static void InitCore()
         {
-            AppConfig.Instance.LoadConfig();
             AppConfig.Instance.IsCore = true;
             Another_Mirai_Native.Entry.CreateInitFolders();
             if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
