@@ -99,7 +99,8 @@ namespace Another_Mirai_Native.Native
         private Array EventArray { get; set; }
 
         private IntPtr Handle { get; set; }
-        public static Form UIForm { get; private set; }
+
+        private static Form UIForm { get; set; }
 
         public int CallMenu(string menuName)
         {
