@@ -105,7 +105,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             var propertiesInfos = typeof(AppConfig).GetProperties();
             var property = propertiesInfos.FirstOrDefault(x => x.Name == key);
-            property?.SetValue(null, value);
+            property?.SetValue(AppConfig.Instance, value);
         }
     }
 }
