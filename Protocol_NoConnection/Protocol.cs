@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,7 +29,7 @@ namespace Protocol_NoConnection
         public string TestNickName { get; set; } = "";
 
         public long TestLoginQQ { get; set; } = 100000;
-
+        public bool ShowTestDialog { get; private set; }
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
         private List<GroupInfo> GroupInfos { get; set; } = new();
@@ -43,6 +44,7 @@ namespace Protocol_NoConnection
         {
             TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
             TestLoginQQ = GetConfig("NoConnection_QQ", 999999999);
+            ShowTestDialog = GetConfig("ShowTestDialog", true);
         }
 
         public void BuildMockData()
@@ -125,13 +127,18 @@ namespace Protocol_NoConnection
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).First().MemberType = QQGroupMemberType.Creator;
                 GroupMemberInfos.Where(x => x.Group == GroupInfos.Last().Group).Skip(1).First().MemberType = QQGroupMemberType.Manage;
             }
-            TesterForm = new Tester();
-            Task.Run(() =>
+            if (ShowTestDialog)
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(true);
-                Application.Run(TesterForm);
-            });
+                Thread uiThread = new(() =>
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    TesterForm = new Tester();
+                    Application.Run(TesterForm);
+                });
+                uiThread.SetApartmentState(ApartmentState.STA);
+                uiThread.Start();
+            }
         }
 
         private GroupMemberInfo BuildSelfMockData(long groupId)
