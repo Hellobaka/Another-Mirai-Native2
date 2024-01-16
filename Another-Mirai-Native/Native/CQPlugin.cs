@@ -3,13 +3,9 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace Another_Mirai_Native.Native
 {
@@ -100,11 +96,10 @@ namespace Another_Mirai_Native.Native
 
         private static Thread UIThread { get; set; }
 
-        private static Dispatcher UIThreadDispatcher { get; set; }
-
         private Array EventArray { get; set; }
 
         private IntPtr Handle { get; set; }
+        public static Form UIForm { get; private set; }
 
         public int CallMenu(string menuName)
         {
@@ -120,7 +115,7 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
                 return -1;
             }
-            UIThreadDispatcher.Invoke(() =>
+            UIForm?.BeginInvoke(() =>
             {
                 menuMethod.DynamicInvoke(null);
             });
@@ -259,8 +254,18 @@ namespace Another_Mirai_Native.Native
 
         private static void StartUIThread()
         {
-            UIThreadDispatcher = Dispatcher.CurrentDispatcher;
-            Dispatcher.Run();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            UIForm = new Form
+            {
+                Size = new Size(1, 1),
+                FormBorderStyle = FormBorderStyle.None,
+                ShowInTaskbar = false,
+                //WindowState = FormWindowState.Minimized
+            };
+            UIForm.Show();
+            UIForm.Visible = false;
+            Application.Run();
         }
 
         private void BuildMenuThread()

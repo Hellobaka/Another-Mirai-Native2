@@ -3,7 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
-	<UseWPF>true</UseWPF>
+	<UseWPF>false</UseWPF>
+	  <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Another_Mirai_Native</RootNamespace>

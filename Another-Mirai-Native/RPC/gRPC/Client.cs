@@ -8,7 +8,6 @@ using Grpc.Core;
 using SqlSugar;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {

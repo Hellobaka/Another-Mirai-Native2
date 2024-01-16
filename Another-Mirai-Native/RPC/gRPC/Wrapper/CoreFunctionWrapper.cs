@@ -8,7 +8,6 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Windows.Media;
 
 namespace Another_Mirai_Native.gRPC
 {
