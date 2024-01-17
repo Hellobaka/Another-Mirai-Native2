@@ -216,9 +216,8 @@ namespace Another_Mirai_Native.DB
             {
                 model.id = logId;
                 NoDatabaseLogs.Add(model);
-                Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}]\t[{model.name}]{model.detail}");
             }
-            Console.WriteLine($"[{(LogLevel)model.priority}][{DateTime.Now:G}]\t[{model.name}]\t{model.detail}");
+            Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}] [{model.name}]{model.detail}");
             LogAdded?.Invoke(logId, model);
             return logId;
         }

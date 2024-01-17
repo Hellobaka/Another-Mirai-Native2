@@ -17,8 +17,6 @@ namespace Another_Mirai_Native.UI
 
         public string AccentColor { get; set; } = "";
 
-        public List<string> AutoEnablePlugins { get; set; } = new();
-
         public double Width { get; set; } = 900;
 
         public double Height { get; set; } = 600;
@@ -35,7 +33,6 @@ namespace Another_Mirai_Native.UI
         {
             Theme = GetConfig("Theme", "System");
             AccentColor = GetConfig("AccentColor", "");
-            AutoEnablePlugins = GetConfig("AutoEnablePlugins", new List<string>());
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);
             LogItemsCount = GetConfig("LogItemsCount", 500);

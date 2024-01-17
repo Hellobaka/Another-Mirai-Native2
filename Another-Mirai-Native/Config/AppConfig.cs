@@ -46,8 +46,6 @@ namespace Another_Mirai_Native.Config
 
         public bool UseDatabase { get; set; } = true;
 
-        public bool PluginAutoEnable { get; set; } = false;
-
         public bool DebugMode { get; set; }
 
         public int LoadTimeout { get; set; } = 10 * 1000;
@@ -68,6 +66,8 @@ namespace Another_Mirai_Native.Config
 
         public ServerType ServerType { get; set; } = ServerType.WebSocket;
 
+        public List<string> AutoEnablePlugin { get; set; } = new();
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -85,7 +85,7 @@ namespace Another_Mirai_Native.Config
             PluginInvokeTimeout = GetConfig("PluginInvokeTimeout", 120 * 1000);
             HeartBeatInterval = GetConfig("HeartBeatInterval", 30 * 1000);
             UseDatabase = GetConfig("UseDatabase", true);
-            PluginAutoEnable = GetConfig("PluginAutoEnable", false);
+            AutoEnablePlugin = GetConfig("AutoEnablePlugin", new List<string>());
             DebugMode = GetConfig("DebugMode", false);
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);

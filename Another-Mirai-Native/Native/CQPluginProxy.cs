@@ -142,26 +142,15 @@ namespace Another_Mirai_Native.Native
             {
                 Arguments = arguments,
                 FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}",
-                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory
+                WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
             };
             if (!AppConfig.Instance.DebugMode)
             {
                 startConfig.UseShellExecute = false;
                 startConfig.CreateNoWindow = true;
-                startConfig.RedirectStandardOutput = true;
-                pluginProcess = Process.Start(startConfig);
-                Task.Run(() =>
-                {
-                    while (pluginProcess?.StandardOutput != null && !pluginProcess.StandardOutput.EndOfStream)
-                    {
-                        Console.WriteLine(pluginProcess.StandardOutput.ReadLine());
-                    }
-                });
+                startConfig.RedirectStandardOutput = false;
             }
-            else
-            {
-                pluginProcess = Process.Start(startConfig);
-            }
+            pluginProcess = Process.Start(startConfig);
             pluginProcess.EnableRaisingEvents = true;
             pluginProcess.Exited += PluginProcess_Exited;
 

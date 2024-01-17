@@ -165,7 +165,7 @@ namespace Another_Mirai_Native.UI
             foreach (var item in PluginManagerProxy.Proxies)
             {
                 string appName = item.AppInfo.name;
-                if (UIConfig.Instance.AutoEnablePlugins.Any(x => x == appName))
+                if (AppConfig.Instance.AutoEnablePlugin.Any(x => x == appName))
                 {
                     item.Load();
                 }

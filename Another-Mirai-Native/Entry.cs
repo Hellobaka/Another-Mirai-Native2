@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
+using Another_Mirai_Native.RPC.Interface;
 using System.Diagnostics;
 using System.IO;
 
@@ -28,6 +29,7 @@ namespace Another_Mirai_Native
             CreateInitFolders();
             // 重定向异常
             InitExceptionCapture();
+            PrintSystemInfo();
             // 加载配置
             AppConfig.Instance.IsCore = args.Length == 0;
             if (AppConfig.Instance.DebugMode && !AppConfig.Instance.IsCore)
@@ -65,22 +67,25 @@ namespace Another_Mirai_Native
                     {
                         return;
                     }
+                    LogHelper.Info("加载插件", $"配置中启动启用插件为 {AppConfig.Instance.AutoEnablePlugin.Count} 个，开始加载...");
                     if (!new PluginManagerProxy().LoadPlugins())
                     {
                         return;
                     }
-                    if (AppConfig.Instance.PluginAutoEnable)
+                    int count = 0;
+                    foreach (var item in PluginManagerProxy.Proxies)
                     {
-                        foreach (var item in PluginManagerProxy.Proxies)
+                        if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
                         {
                             item.Load();
+                            Console.Title = $"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件";
                         }
                     }
                 }
             }
             else
             {
-                // Console.ReadKey();
+                Console.Title = "Another-Mirai-Native2 控制台版本-插件";
                 // 解析参数
                 ParseArg(args);
                 // 监控核心进程
@@ -107,8 +112,15 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
+                Console.Title = $"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]";
             }
             _quitEvent.WaitOne();
+        }
+
+        private static void PrintSystemInfo()
+        {
+            Console.Title = "Another-Mirai-Native2 控制台版本";
+            Console.WriteLine($"框架版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}");
         }
 
         public static void InitExceptionCapture()

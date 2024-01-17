@@ -240,11 +240,6 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            if (AppConfig.Instance.PluginAutoEnable)
-            {
-                DialogHelper.ShowSimpleDialog("啊...", "由于插件自动启用已开启，无法切换插件运行状态");
-                return;
-            }
             ToggleEnableRunningStatus = true;
             Task.Run(() =>
             {
@@ -257,14 +252,14 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 if (SelectedPlugin.Enabled)
                 {
-                    UIConfig.Instance.AutoEnablePlugins.Add(SelectedPlugin.PluginName);
+                    AppConfig.Instance.AutoEnablePlugin.Add(SelectedPlugin.PluginName);
                 }
                 else
                 {
-                    UIConfig.Instance.AutoEnablePlugins.Remove(SelectedPlugin.PluginName);
+                    AppConfig.Instance.AutoEnablePlugin.Remove(SelectedPlugin.PluginName);
                 }
-                UIConfig.Instance.AutoEnablePlugins = UIConfig.Instance.AutoEnablePlugins.Distinct().ToList();
-                UIConfig.Instance.SetConfig("AutoEnablePlugins", UIConfig.Instance.AutoEnablePlugins);
+                AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
             });
         }
 

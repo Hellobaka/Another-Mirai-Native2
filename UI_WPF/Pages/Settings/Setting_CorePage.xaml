@@ -51,12 +51,6 @@
             Margin="0,10"
             OffContent="关闭"
             OnContent="开启" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件载入后自动启用</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="PluginAutoEnable"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">调试模式</TextBlock>
         <ui:ToggleSwitch
             x:Name="DebugMode"

@@ -46,7 +46,6 @@ namespace Another_Mirai_Native.UI.Pages
             PluginInvokeTimeout.Text = AppConfig.Instance.PluginInvokeTimeout.ToString();
             LoadTimeout.Text = AppConfig.Instance.LoadTimeout.ToString();
             UseDatabase.IsOn = AppConfig.Instance.UseDatabase;
-            PluginAutoEnable.IsOn = AppConfig.Instance.PluginAutoEnable;
             DebugMode.IsOn = AppConfig.Instance.DebugMode;
             MessageCacheSize.Text = AppConfig.Instance.MessageCacheSize.ToString();
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
