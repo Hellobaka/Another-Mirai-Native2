@@ -6,7 +6,7 @@ namespace Another_Mirai_Native.UI
     public class UIConfig : ConfigBase
     {
         public UIConfig()
-            : base(@"conf\UIConfig.Instance.json")
+            : base(@"conf\UIConfig.json")
         {
             LoadConfig();
         }
