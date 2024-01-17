@@ -78,14 +78,14 @@ namespace Another_Mirai_Native
                         if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
                         {
                             item.Load();
-                            Console.Title = $"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件";
+                            UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
                         }
                     }
                 }
             }
             else
             {
-                Console.Title = "Another-Mirai-Native2 控制台版本-插件";
+                UpdateConsoleTitle("Another-Mirai-Native2 控制台版本-插件");
                 // 解析参数
                 ParseArg(args);
                 // 监控核心进程
@@ -112,15 +112,23 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                Console.Title = $"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]";
+                UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]");
             }
             _quitEvent.WaitOne();
         }
 
         private static void PrintSystemInfo()
         {
-            Console.Title = "Another-Mirai-Native2 控制台版本";
+            UpdateConsoleTitle("Another-Mirai-Native2 控制台版本");
             Console.WriteLine($"框架版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}");
+        }
+
+        private static void UpdateConsoleTitle(string title)
+        {
+            if (Console.LargestWindowWidth > 0)
+            {
+                Console.Title = title;
+            }
         }
 
         public static void InitExceptionCapture()
