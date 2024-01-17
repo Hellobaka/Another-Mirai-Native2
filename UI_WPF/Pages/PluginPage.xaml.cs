@@ -155,6 +155,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
             target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
+            MainWindow.Instance.UpdateTrayToolTip();
         }
 
         private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)

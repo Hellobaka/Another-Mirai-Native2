@@ -14,6 +14,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -80,6 +81,7 @@ namespace Another_Mirai_Native.UI
             {
                 return;
             }
+            UpdateTrayToolTip();
             TaskbarIcon.ContextMenu = DialogHelper.BuildNotifyIconContextMenu(PluginManagerProxy.Proxies,
                    exitAction: () => Environment.Exit(0),
                    reloadAction: PluginManagerProxy.Instance.ReloadAllPlugins,
@@ -115,6 +117,14 @@ namespace Another_Mirai_Native.UI
                        SetForegroundWindow();
                        AboutMenuItem.IsSelected = true;
                    });
+        }
+
+        public void UpdateTrayToolTip()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                TaskbarIcon.ToolTipText = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})\n已启用 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件";
+            });
         }
 
         public void InitNotifyIcon()
