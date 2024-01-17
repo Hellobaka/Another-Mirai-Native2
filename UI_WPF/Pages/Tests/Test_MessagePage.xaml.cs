@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             OpenFileDialog dialog = new()
             {
-                Filter = "图片文件|*.png;*.jpg;*.jpeg;*.webp|所有文件|*.*",
+                Filter = "CoolQ Image|*.cqimg|图片文件|*.png;*.jpg;*.jpeg;*.webp|所有文件|*.*",
                 Title = "选择发送的图片",
                 Multiselect = false
             };
