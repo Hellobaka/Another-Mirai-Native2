@@ -85,7 +85,7 @@ namespace Another_Mirai_Native.Config
             PluginInvokeTimeout = GetConfig("PluginInvokeTimeout", 120 * 1000);
             HeartBeatInterval = GetConfig("HeartBeatInterval", 30 * 1000);
             UseDatabase = GetConfig("UseDatabase", true);
-            AutoEnablePlugin = GetConfig("AutoEnablePlugin", new List<string>());
+            AutoEnablePlugin = GetConfig("AutoEnablePlugins", new List<string>());
             DebugMode = GetConfig("DebugMode", false);
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
