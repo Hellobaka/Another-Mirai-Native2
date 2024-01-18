@@ -189,8 +189,8 @@ namespace Another_Mirai_Native.WebSocket
             switch (command)
             {
                 case "ClientStartUp":
-                    ClientStartup(Convert.ToInt32(id), result.Result.ToString());
                     WebSocketConnections.Add(Convert.ToInt32(id), connection);
+                    ClientStartup(Convert.ToInt32(id), result.Result.ToString());
                     break;
 
                 default:

@@ -1,16 +1,22 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.RPC.Interface;
 using System.Diagnostics;
-using System.IO;
 
 namespace Another_Mirai_Native
 {
     public class Entry
     {
         private static readonly ManualResetEvent _quitEvent = new(false);
+
+        private static Thread UIThread { get; set; }
+
+        private static NotifyIcon NotifyIcon { get; set; }
+
+        private static ToolStripMenuItem TaskBarMenuParent { get; set; }
 
         // 定义启动参数:
         // 无参时作为框架主体启动
@@ -77,10 +83,13 @@ namespace Another_Mirai_Native
                     {
                         if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
                         {
-                            item.Load();
-                            UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
+                            if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
+                            {
+                                UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
+                            }
                         }
                     }
+                    BuildTaskBar();
                 }
             }
             else
@@ -115,6 +124,135 @@ namespace Another_Mirai_Native
                 UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]");
             }
             _quitEvent.WaitOne();
+        }
+
+        private static void BuildTaskBar()
+        {
+            if (UIThread == null)
+            {
+                UIThread = new Thread(() =>
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+
+                    NotifyIcon = new NotifyIcon();
+                    NotifyIcon.Icon = new Icon(new MemoryStream(Convert.FromBase64String(Resources.TaskBarIconResources.IconBase64)));
+                    var menu = new ContextMenuStrip();
+                    NotifyIcon.ContextMenuStrip = menu;
+
+                    menu.Items.Add(new ToolStripMenuItem { Text = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})" });
+                    menu.Items.Add("-");
+                    menu.Items.Add(new ToolStripMenuItem { Text = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
+                    menu.Items.Add(new ToolStripMenuItem { Text = $"UI版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}" });
+                    menu.Items.Add("-");
+                    TaskBarMenuParent = new ToolStripMenuItem() { Text = "应用" };
+                    RebuildTaskBarMenu();
+                    menu.Items.Add(TaskBarMenuParent);
+                    menu.Items.Add("-");
+                    ToolStripMenuItem reloadItem = new() { Text = "重载插件" };
+                    reloadItem.Click += (a, b) =>
+                    {
+                        if (MessageBox.Show("确定要重载插件吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            PluginManagerProxy.Instance.ReloadAllPlugins();
+                        }
+                    };
+                    menu.Items.Add(reloadItem);
+                    ToolStripMenuItem exitItem = new() { Text = "退出" };
+                    exitItem.Click += (a, b) =>
+                    {
+                        if (MessageBox.Show("确定要退出框架吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            Environment.Exit(0);
+                        }
+                    };
+                    menu.Items.Add(exitItem);
+
+                    NotifyIcon.Text = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})\n已启用 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件";
+                    NotifyIcon.Visible = true;
+                    PluginManagerProxy.OnPluginEnableChanged -= (_) => RebuildTaskBarMenu();
+                    PluginManagerProxy.OnPluginEnableChanged += (_) => RebuildTaskBarMenu();
+                    Application.Run();
+                });
+                UIThread.SetApartmentState(ApartmentState.STA);
+                UIThread.Start();
+            }
+        }
+
+        private static void RebuildTaskBarMenu()
+        {
+            Invoke(TaskBarMenuParent.DropDownItems.Clear);
+            foreach (var item in PluginManagerProxy.Proxies.OrderBy(x => x.PluginName))
+            {
+                ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}" };
+                foreach (var subMenu in item.AppInfo.menu)
+                {
+                    ToolStripMenuItem subMenuItem = new() { Text = subMenu.name };
+                    subMenuItem.Click += (a, b) =>
+                    {
+                        if (item.Enabled is false)
+                        {
+                            MessageBox.Show("当前插件未启用，无法调用窗口事件", "嗯哼", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        Task.Run(() =>
+                        {
+                            PluginManagerProxy.Instance.InvokeEvent(item, PluginEventType.Menu, subMenu.function);
+                        });
+                    };
+                    ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用" };
+                    ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用" };
+                    enableItem.Click += (a, b) =>
+                    {
+                        if (PluginManagerProxy.Instance.SetPluginEnabled(item, true))
+                        {
+                            enableItem.Text = "√ 启用";
+                            disableItem.Text = "禁用";
+
+                            AppConfig.Instance.AutoEnablePlugin.Add(item.PluginName);
+                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                        }
+                        else
+                        {
+                            MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    };
+                    disableItem.Click += (a, b) =>
+                    {
+                        if (PluginManagerProxy.Instance.SetPluginEnabled(item, false))
+                        {
+                            enableItem.Text = "启用";
+                            disableItem.Text = "√ 禁用";
+
+                            AppConfig.Instance.AutoEnablePlugin.Remove(item.PluginName);
+                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                        }
+                        else
+                        {
+                            MessageBox.Show("插件禁用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    };
+                    menuItem.DropDownItems.Add(enableItem);
+                    menuItem.DropDownItems.Add(disableItem);
+                    menuItem.DropDownItems.Add("-");
+                    menuItem.DropDownItems.Add(subMenuItem);
+                }
+                Invoke(() => TaskBarMenuParent.DropDownItems.Add(menuItem));
+            }
+        }
+
+        private static void Invoke(Action action)
+        {
+            if (NotifyIcon.ContextMenuStrip != null && NotifyIcon.ContextMenuStrip.InvokeRequired)
+            {
+                NotifyIcon.ContextMenuStrip.BeginInvoke(action);
+            }
+            else
+            {
+                action.Invoke();
+            }
         }
 
         private static void PrintSystemInfo()
