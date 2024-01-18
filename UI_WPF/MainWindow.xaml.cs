@@ -67,7 +67,7 @@ namespace Another_Mirai_Native.UI
 
         public TaskbarIcon TaskbarIcon { get; set; } = new()
         {
-            Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(TaskBarIconResources.IconBase64)))
+            Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(Another_Mirai_Native.Resources.TaskBarIconResources.IconBase64)))
         };
 
 
