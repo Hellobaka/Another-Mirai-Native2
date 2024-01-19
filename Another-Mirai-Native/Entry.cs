@@ -185,6 +185,46 @@ namespace Another_Mirai_Native
             foreach (var item in PluginManagerProxy.Proxies.OrderBy(x => x.PluginName))
             {
                 ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}" };
+                ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用" };
+                ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用" };
+                enableItem.Click += (a, b) =>
+                {
+                    if (PluginManagerProxy.Instance.SetPluginEnabled(item, true))
+                    {
+                        enableItem.Text = "√ 启用";
+                        disableItem.Text = "禁用";
+
+                        AppConfig.Instance.AutoEnablePlugin.Add(item.PluginName);
+                        AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                        AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                    }
+                    else
+                    {
+                        MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                };
+                disableItem.Click += (a, b) =>
+                {
+                    if (PluginManagerProxy.Instance.SetPluginEnabled(item, false))
+                    {
+                        enableItem.Text = "启用";
+                        disableItem.Text = "√ 禁用";
+
+                        AppConfig.Instance.AutoEnablePlugin.Remove(item.PluginName);
+                        AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                        AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                    }
+                    else
+                    {
+                        MessageBox.Show("插件禁用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                };
+                menuItem.DropDownItems.Add(enableItem);
+                menuItem.DropDownItems.Add(disableItem);
+                if (item.AppInfo.menu.Length > 0)
+                {
+                    menuItem.DropDownItems.Add("-");
+                }
                 foreach (var subMenu in item.AppInfo.menu)
                 {
                     ToolStripMenuItem subMenuItem = new() { Text = subMenu.name };
@@ -199,44 +239,7 @@ namespace Another_Mirai_Native
                         {
                             PluginManagerProxy.Instance.InvokeEvent(item, PluginEventType.Menu, subMenu.function);
                         });
-                    };
-                    ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用" };
-                    ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用" };
-                    enableItem.Click += (a, b) =>
-                    {
-                        if (PluginManagerProxy.Instance.SetPluginEnabled(item, true))
-                        {
-                            enableItem.Text = "√ 启用";
-                            disableItem.Text = "禁用";
-
-                            AppConfig.Instance.AutoEnablePlugin.Add(item.PluginName);
-                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
-                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
-                        }
-                        else
-                        {
-                            MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    };
-                    disableItem.Click += (a, b) =>
-                    {
-                        if (PluginManagerProxy.Instance.SetPluginEnabled(item, false))
-                        {
-                            enableItem.Text = "启用";
-                            disableItem.Text = "√ 禁用";
-
-                            AppConfig.Instance.AutoEnablePlugin.Remove(item.PluginName);
-                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
-                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
-                        }
-                        else
-                        {
-                            MessageBox.Show("插件禁用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    };
-                    menuItem.DropDownItems.Add(enableItem);
-                    menuItem.DropDownItems.Add(disableItem);
-                    menuItem.DropDownItems.Add("-");
+                    };                    
                     menuItem.DropDownItems.Add(subMenuItem);
                 }
                 Invoke(() => TaskBarMenuParent.DropDownItems.Add(menuItem));
@@ -258,7 +261,13 @@ namespace Another_Mirai_Native
         private static void PrintSystemInfo()
         {
             UpdateConsoleTitle("Another-Mirai-Native2 控制台版本");
-            Console.WriteLine($"框架版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Another-Mirai-Native2 控制台版本 [https://github.com/Hellobaka/Another-Mirai-Native2]");
+            Console.WriteLine($"· 框架版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}");
+            Console.WriteLine($"· 调试模式: {AppConfig.Instance.DebugMode}");
+            Console.WriteLine($"· 服务类型: {AppConfig.Instance.ServerType}");
+            Console.WriteLine($"· 连接协议: {AppConfig.Instance.AutoProtocol}");
+            Console.WriteLine();
         }
 
         private static void UpdateConsoleTitle(string title)

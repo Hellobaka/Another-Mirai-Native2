@@ -7,6 +7,7 @@ using Another_Mirai_Native.WebSocket;
 using Google.Protobuf;
 using SqlSugar;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
 
@@ -217,9 +218,27 @@ namespace Another_Mirai_Native.DB
                 model.id = logId;
                 NoDatabaseLogs.Add(model);
             }
+            ChangeConsoleColor(model.priority);
             Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}] [{model.name}]{model.detail}");
             LogAdded?.Invoke(logId, model);
             return logId;
+        }
+
+        private static void ChangeConsoleColor(int priority)
+        {
+            ConsoleColor logColor = (LogLevel)priority switch
+            {
+                LogLevel.Debug => ConsoleColor.Gray,
+                LogLevel.Error => ConsoleColor.Red,
+                LogLevel.Info => ConsoleColor.White,
+                LogLevel.Fatal => ConsoleColor.DarkRed,
+                LogLevel.InfoSuccess => ConsoleColor.Magenta,
+                LogLevel.InfoSend => ConsoleColor.Green,
+                LogLevel.InfoReceive => ConsoleColor.Blue,
+                LogLevel.Warning => ConsoleColor.DarkYellow,
+                _ => ConsoleColor.White,
+            };
+            Console.ForegroundColor = logColor;
         }
 
         public static int WriteLog(int level, string logOrigin, string type, string messages, string status = "")
