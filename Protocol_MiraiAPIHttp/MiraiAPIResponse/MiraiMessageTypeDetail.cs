@@ -4,7 +4,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
 {
     public class MiraiMessageTypeDetail
     {
-        public class Source : MiraiMessageBase
+        public class Source : IMiraiMessageBase
         {
             public string type { get; set; } = "Source";
 
@@ -15,7 +15,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public long time { get; set; }
         }
 
-        public class Quote : MiraiMessageBase
+        public class Quote : IMiraiMessageBase
         {
             public string type { get; set; } = "Quote";
 
@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             }
         }
 
-        public class At : MiraiMessageBase
+        public class At : IMiraiMessageBase
         {
             public string type { get; set; } = "At";
 
@@ -50,14 +50,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string display { get; set; }
         }
 
-        public class AtAll : MiraiMessageBase
+        public class AtAll : IMiraiMessageBase
         {
             public string type { get; set; } = "AtAll";
 
             public MiraiMessageType messageType { get; set; } = MiraiMessageType.AtAll;
         }
 
-        public class Face : MiraiMessageBase
+        public class Face : IMiraiMessageBase
         {
             public string type { get; set; } = "Face";
 
@@ -70,7 +70,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public bool superFace { get; set; }
         }
 
-        public class Plain : MiraiMessageBase
+        public class Plain : IMiraiMessageBase
         {
             public string type { get; set; } = "Plain";
 
@@ -79,7 +79,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string text { get; set; }
         }
 
-        public class Image : MiraiMessageBase
+        public class Image : IMiraiMessageBase
         {
             public string type { get; set; } = "Image";
 
@@ -94,7 +94,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string base64 { get; set; }
         }
 
-        public class FlashImage : MiraiMessageBase
+        public class FlashImage : IMiraiMessageBase
         {
             public string type { get; set; } = "FlashImage";
 
@@ -109,7 +109,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string base64 { get; set; }
         }
 
-        public class Voice : MiraiMessageBase
+        public class Voice : IMiraiMessageBase
         {
             public string type { get; set; } = "Voice";
 
@@ -126,7 +126,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public long length { get; set; }
         }
 
-        public class Xml : MiraiMessageBase
+        public class Xml : IMiraiMessageBase
         {
             public string type { get; set; } = "Xml";
 
@@ -135,7 +135,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string xml { get; set; }
         }
 
-        public class Json : MiraiMessageBase
+        public class Json : IMiraiMessageBase
         {
             public string type { get; set; } = "Json";
 
@@ -144,7 +144,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string json { get; set; }
         }
 
-        public class App : MiraiMessageBase
+        public class App : IMiraiMessageBase
         {
             public string type { get; set; } = "App";
 
@@ -153,7 +153,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string content { get; set; }
         }
 
-        public class Poke : MiraiMessageBase
+        public class Poke : IMiraiMessageBase
         {
             public string type { get; set; } = "Poke";
 
@@ -162,7 +162,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string name { get; set; }
         }
 
-        public class Dice : MiraiMessageBase
+        public class Dice : IMiraiMessageBase
         {
             public string type { get; set; } = "Dice";
 
@@ -171,7 +171,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public long value { get; set; }
         }
 
-        public class MarketFace : MiraiMessageBase
+        public class MarketFace : IMiraiMessageBase
         {
             public string type { get; set; } = "MarketFace";
 
@@ -182,7 +182,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string name { get; set; }
         }
 
-        public class MusicShare : MiraiMessageBase
+        public class MusicShare : IMiraiMessageBase
         {
             public string type { get; set; } = "MusicShare";
 
@@ -203,7 +203,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string brief { get; set; }
         }
 
-        public class Forward : MiraiMessageBase
+        public class Forward : IMiraiMessageBase
         {
             public string type { get; set; } = "Forward";
 
@@ -225,7 +225,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             }
         }
 
-        public class File : MiraiMessageBase
+        public class File : IMiraiMessageBase
         {
             public string type { get; set; } = "File";
 
@@ -238,7 +238,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public long size { get; set; }
         }
 
-        public class MiraiCode : MiraiMessageBase
+        public class MiraiCode : IMiraiMessageBase
         {
             public string type { get; set; } = "MiraiCode";
 

@@ -68,7 +68,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             string apiType = Enum.GetName(typeof(MiraiApiType), type);
             string command = apiType, subCommand = "";
-            if (apiType.Contains("_"))// 子命令
+            if (apiType.Contains('_'))// 子命令
             {
                 var c = apiType.Split('_');
                 command = c[0];
@@ -271,9 +271,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
                 if (data.ContainsKey("code")) // 为API调用结果，根据 syncID 查询转换类型
                 {
-                    if (WaitingMessages.ContainsKey(api.syncId))
+                    if (WaitingMessages.TryGetValue(api.syncId, out var value))
                     {
-                        var waiting = WaitingMessages[api.syncId];
+                        var waiting = value;
                         waiting.Result = data;
                         waiting.Finished = true;
                         RequestWaiter.TriggerByKey(api.syncId);

@@ -310,10 +310,10 @@ namespace Another_Mirai_Native.Native
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             long fromId = 0; string nick = "";
-            if (RequestCache.FriendRequest.ContainsKey(identifying))
+            if (RequestCache.FriendRequest.TryGetValue(identifying, out (long, string) value))
             {
-                fromId = RequestCache.FriendRequest[identifying].Item1;
-                nick = RequestCache.FriendRequest[identifying].Item2;
+                fromId = value.Item1;
+                nick = value.Item2;
                 RequestCache.FriendRequest.Remove(identifying);
             }
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 0 ? "同意" : "拒绝")}", "处理中...");
@@ -329,12 +329,12 @@ namespace Another_Mirai_Native.Native
             int logId;
             long fromId = 0, groupId = 0;
             string nick = "", groupName = "";
-            if (RequestCache.GroupRequest.ContainsKey(identifying))
+            if (RequestCache.GroupRequest.TryGetValue(identifying, out (long, string, long, string) value))
             {
-                fromId = RequestCache.GroupRequest[identifying].Item1;
-                nick = RequestCache.GroupRequest[identifying].Item2;
-                groupId = RequestCache.GroupRequest[identifying].Item3;
-                groupName = RequestCache.GroupRequest[identifying].Item4;
+                fromId = value.Item1;
+                nick = value.Item2;
+                groupId = value.Item3;
+                groupName = value.Item4;
                 RequestCache.GroupRequest.Remove(identifying);
             }
             logId = requestType == 2

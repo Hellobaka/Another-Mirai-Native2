@@ -1,6 +1,6 @@
 ﻿namespace Another_Mirai_Native.Enums
 {
-    public interface MiraiMessageBase
+    public interface IMiraiMessageBase
     {
         string type { get; set; }
 

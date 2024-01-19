@@ -434,10 +434,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 if (json.ContainsKey("echo"))
                 {
                     int echo = int.TryParse(json["echo"].ToString(), out int value) ? value : 0;
-                    if (WaitingMessages.ContainsKey(echo))
+                    if (WaitingMessages.TryGetValue(echo, out WaitingMessage? message))
                     {
-                        WaitingMessages[echo].Result = json;
-                        WaitingMessages[echo].Finished = true;
+                        message.Result = json;
+                        message.Finished = true;
                         RequestWaiter.TriggerByKey(echo);
                     }
                 }
@@ -498,13 +498,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     string imgId = item.Items["file"].Split('.').First();
                     Directory.CreateDirectory("data\\image");
-                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.ContainsKey("url") ? item.Items["url"] : "")}");
+                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
                 }
                 else if (item.IsRecordCQCode)
                 {
                     string voiceId = item.Items["file"].Replace(".amr", "");
                     Directory.CreateDirectory("data\\record");
-                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={(item.Items.ContainsKey("url") ? item.Items["url"] : "")}");
+                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
                 }
             }
         }

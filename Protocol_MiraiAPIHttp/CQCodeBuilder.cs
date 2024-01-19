@@ -23,9 +23,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         /// <param name="message">CQ码文本</param>
         /// <returns>转换后的消息链数组</returns>
-        public static List<MiraiMessageBase> BuildMessageChains(string message)
+        public static List<IMiraiMessageBase> BuildMessageChains(string message)
         {
-            List<MiraiMessageBase> result = new();
+            List<IMiraiMessageBase> result = new();
             var list = CQCode.Parse(message);// 通过工具函数提取所有的CQ码
             foreach (var item in list)
             {
@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             int cqCode_index = 0;
             for (int i = 0; i < p.Length; i++)
             {
-                MiraiMessageBase messageBase;
+                IMiraiMessageBase messageBase;
                 if (p[i] == "<!cqCode!>")
                 {
                     messageBase = ParseCQCode2MiraiMessageBase(list[cqCode_index]);// 将CQ码转换为消息链对象
@@ -59,7 +59,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         /// <param name="chainMsg">从Mirai发送来的消息链</param>
         /// <returns>转换CQ码后的结果</returns>
-        public static string Parse(List<MiraiMessageBase> chainMsg)
+        public static string Parse(List<IMiraiMessageBase> chainMsg)
         {
             StringBuilder Result = new();
             foreach (var item in chainMsg)
@@ -164,9 +164,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// 将Mirai发送的 json 数组, 转换为消息链对象
         /// </summary>
         /// <param name="json">json数组</param>
-        public static List<MiraiMessageBase> ParseJArray2MiraiMessageBaseList(JArray json)
+        public static List<IMiraiMessageBase> ParseJArray2MiraiMessageBaseList(JArray json)
         {
-            List<MiraiMessageBase> chainMsg = new();
+            List<IMiraiMessageBase> chainMsg = new();
             foreach (var item in json)
             {
                 MiraiMessageType msgType = Helper.String2Enum<MiraiMessageType>(item["type"].ToString());
@@ -259,7 +259,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// 将CQ码转换为消息链对象
         /// </summary>
         /// <param name="cqCode">需要转换的CQ码对象</param>
-        private static MiraiMessageBase ParseCQCode2MiraiMessageBase(CQCode cqCode)
+        private static IMiraiMessageBase ParseCQCode2MiraiMessageBase(CQCode cqCode)
         {
             switch (cqCode.Function)
             {
