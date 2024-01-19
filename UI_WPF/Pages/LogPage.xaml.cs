@@ -57,6 +57,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private DispatcherTimer ResizeTimer { get; set; }
 
+        private DispatcherTimer SearchDebounceTimer { get; set; }
+
         private LogModelWrapper SelectedLog => LogView.SelectedItem as LogModelWrapper;
 
         private string SearchText { get; set; } = "";
@@ -123,9 +125,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FilterTextValue_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SearchText = FilterTextValue.Text;
-            RefilterLogCollection();
-            SelectLastLog();
+            SearchDebounceTimer.Stop();
+            SearchDebounceTimer.Start();
         }
 
         private void InitColumnWidth()
@@ -200,12 +201,21 @@ namespace Another_Mirai_Native.UI.Pages
             LogCollections = ConvertListToObservableCollection(PackLogModelWrapper(ls));
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
+            SearchDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
+            SearchDebounceTimer.Tick += SearchDebounceTimer_Tick;
             LogHelper.LogAdded -= LogHelper_LogAdded;
             LogHelper.LogAdded += LogHelper_LogAdded;
             LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
             LogHelper.LogStatusUpdated += LogHelper_LogStatusUpdated;
             AutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             FormLoaded = true;
+            SelectLastLog();
+        }
+
+        private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
+        {
+            SearchText = FilterTextValue.Text;
+            RefilterLogCollection();
             SelectLastLog();
         }
 
