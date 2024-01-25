@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public string AuthKey { get; private set; }
 
-        public int QQ { get; private set; }
+        public long QQ { get; private set; }
 
         public bool FullMemberInfo { get; private set; }
 
@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             WebSocketURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
-            QQ = GetConfig("QQ", 100000);
+            QQ = GetConfig("QQ", (long)100000);
             FullMemberInfo = GetConfig("FullMemberInfo", false);
         }
     }
