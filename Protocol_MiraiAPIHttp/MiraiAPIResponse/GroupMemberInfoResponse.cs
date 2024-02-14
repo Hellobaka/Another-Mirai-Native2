@@ -2,7 +2,7 @@
 {
     public class GroupMemberInfoResponse
     {
-        public int id { get; set; }
+        public long id { get; set; }
 
         public string memberName { get; set; }
 
@@ -20,7 +20,7 @@
 
         public class Group
         {
-            public int id { get; set; }
+            public long id { get; set; }
 
             public string name { get; set; }
 

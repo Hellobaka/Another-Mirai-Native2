@@ -509,6 +509,21 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 appendInfo = GetMemberProfilerInternal(response.group.id, response.id);
             }
+            int userPermission = 0;
+            switch (response.permission)
+            {
+                case "MEMBER":
+                    userPermission = 1;
+                    break;
+                case "ADMINISTRATOR":
+                    userPermission = 2;
+                    break;
+                case "OWNER":
+                    userPermission = 3;
+                    break;
+                default:
+                    break;
+            }
             return new GroupMemberInfo
             {
                 Age = appendInfo == null ? 0 : appendInfo.age,
@@ -522,7 +537,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 JoinGroupDateTime = Helper.TimeStamp2DateTime(response.joinTimestamp),
                 LastSpeakDateTime = Helper.TimeStamp2DateTime(response.lastSpeakTimestamp),
                 Level = appendInfo == null ? "0" : appendInfo.level.ToString(),
-                MemberType = (QQGroupMemberType)int.Parse(response.permission),
+                MemberType = (QQGroupMemberType)userPermission,
                 Nick = appendInfo == null ? "" : appendInfo.nickname,
                 QQ = response.id,
                 Sex = ParseMiraiSex2QQSex(appendInfo?.sex)
