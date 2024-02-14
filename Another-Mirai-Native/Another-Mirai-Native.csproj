@@ -35,12 +35,12 @@
 
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <PackageReference Include="SqlSugar" Version="5.1.4.110" />
+    <PackageReference Include="SqlSugar" Version="5.1.4.141" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="SqlSugarCore">
-      <Version>5.1.4.110</Version>
+      <Version>5.1.4.141</Version>
     </PackageReference>
   </ItemGroup>
 

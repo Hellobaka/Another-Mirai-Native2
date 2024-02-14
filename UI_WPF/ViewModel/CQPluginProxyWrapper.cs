@@ -12,6 +12,10 @@ namespace Another_Mirai_Native.UI.ViewModel
         public CQPluginProxyWrapper(CQPluginProxy proxy)
         {
             TargetPlugin = proxy;
+            if (string.IsNullOrEmpty(TargetPlugin.PluginId))
+            {
+                TargetPlugin.AppInfo.AppId = "启用插件以查看 AppId";
+            }
         }
 
         public void InvokePropertyChanged(string propertyName)

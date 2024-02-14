@@ -195,6 +195,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (FormLoaded)
             {
+                SelectLastLog();
                 return;
             }
             var ls = LogHelper.GetDisplayLogs(10, UIConfig.Instance.LogItemsCount);

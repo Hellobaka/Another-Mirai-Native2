@@ -5,6 +5,7 @@ using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,12 +19,14 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// PluginPage.xaml 的交互逻辑
     /// </summary>
-    public partial class PluginPage : Page
+    public partial class PluginPage : Page, INotifyPropertyChanged
     {
         public PluginPage()
         {
             InitializeComponent();
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<CQPluginProxyWrapper> CQPlugins { get; set; } = new();
 
@@ -64,6 +67,26 @@ namespace Another_Mirai_Native.UI.Pages
         private CQPluginProxy SelectedPlugin { get; set; }
 
         private bool ToggleEnableRunningStatus { set => Dispatcher.Invoke(() => EnableStatus.IsActive = value); }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void LoadPluginList()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                CQPlugins.Clear();
+                foreach (var item in PluginManagerProxy.Proxies)
+                {
+                    CQPlugins.Add(new CQPluginProxyWrapper(item));
+                }
+                CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToObservableCollection();
+                OnPropertyChanged(nameof(CQPlugins));
+                MainWindow.Instance.BuildTaskbarIconMenu();
+            });
+        }
 
         private void OpenAllDataBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -135,13 +158,7 @@ namespace Another_Mirai_Native.UI.Pages
             PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
             DataContext = this;
-            CQPlugins.Clear();
-            foreach (var item in PluginManagerProxy.Proxies)
-            {
-                CQPlugins.Add(new CQPluginProxyWrapper(item));
-            }
-            CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToObservableCollection();
-            MainWindow.Instance.BuildTaskbarIconMenu();
+            LoadPluginList();
             FormLoaded = true;
         }
 
@@ -184,6 +201,7 @@ namespace Another_Mirai_Native.UI.Pages
             await Task.Run(() =>
             {
                 PluginManagerProxy.Instance.ReloadAllPlugins();
+                LoadPluginList();
                 ReloadAllRunningStatus = false;
             });
         }

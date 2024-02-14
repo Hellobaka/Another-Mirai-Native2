@@ -38,6 +38,8 @@ namespace Another_Mirai_Native.Native
 
         public Process PluginProcess { get; set; }
 
+        public bool ExitFlag { get; set; }
+
         private static List<string> APIAuthWhiteList { get; set; } = new()
         {
             "getImage",

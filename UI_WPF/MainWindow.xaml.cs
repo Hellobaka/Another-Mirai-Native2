@@ -167,27 +167,7 @@ namespace Another_Mirai_Native.UI
                 }
 
             }
-        }
-
-        private void EnablePluginByConfig()
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            foreach (var item in PluginManagerProxy.Proxies)
-            {
-                string appName = item.AppInfo.name;
-                if (AppConfig.Instance.AutoEnablePlugin.Any(x => x == appName))
-                {
-                    item.Load();
-                }
-            };
-            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {PluginManagerProxy.Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
-            sw = Stopwatch.StartNew();
-            foreach (var item in PluginManagerProxy.Proxies.Where(x => x.HasConnection))
-            {
-                PluginManagerProxy.Instance.SetPluginEnabled(item, true);
-            };
-            LogHelper.Info("启用插件", "插件启动完成，开始处理消息逻辑", $"√ {sw.ElapsedMilliseconds} ms");
-        }
+        }        
 
         private void LoadPlugins()
         {
@@ -196,7 +176,7 @@ namespace Another_Mirai_Native.UI
                 var manager = new PluginManagerProxy();
                 manager.LoadPlugins();
                 InitNotifyIcon();
-                EnablePluginByConfig();
+                PluginManagerProxy.Instance.EnablePluginByConfig();
             });
         }
 
@@ -221,6 +201,14 @@ namespace Another_Mirai_Native.UI
             {
                 LoadPlugins();
             }
+
+            PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
+            PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
+        }
+
+        private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy _)
+        {
+            UpdateTrayToolTip();
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

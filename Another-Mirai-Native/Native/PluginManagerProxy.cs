@@ -119,10 +119,38 @@ namespace Another_Mirai_Native.Native
 
         public void ReloadAllPlugins()
         {
+            // 结束所有插件进程
             foreach (var item in Proxies.Where(x => x.Enabled))
             {
-                ReloadPlugin(item);
+                item.ExitFlag = true;
+                item.KillProcess();
             }
+            // 清空插件列表并重新加载
+            Proxies.Clear();
+            if (LoadPlugins())
+            {
+                EnablePluginByConfig();
+            }
+        }
+
+        public void EnablePluginByConfig()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            foreach (var item in Proxies)
+            {
+                string appName = item.AppInfo.name;
+                if (AppConfig.Instance.AutoEnablePlugin.Any(x => x == appName))
+                {
+                    item.Load();
+                }
+            };
+            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
+            sw = Stopwatch.StartNew();
+            foreach (var item in Proxies.Where(x => x.HasConnection))
+            {
+                SetPluginEnabled(item, true);
+            };
+            LogHelper.Info("启用插件", "插件启动完成，开始处理消息逻辑", $"√ {sw.ElapsedMilliseconds} ms");
         }
 
         public void ReloadPlugin(CQPluginProxy plugin)
@@ -211,7 +239,7 @@ namespace Another_Mirai_Native.Native
             LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
             RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
 
-            if (AppConfig.Instance.RestartPluginIfDead)
+            if (plugin.ExitFlag is false && AppConfig.Instance.RestartPluginIfDead)
             {
                 if (SetPluginEnabled(plugin, true))
                 {
