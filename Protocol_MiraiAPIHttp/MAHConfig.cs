@@ -18,14 +18,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public long QQ { get; private set; }
 
-        public bool FullMemberInfo { get; private set; }
+        public bool FullMemberInfo { get; private set; } = true;
 
         public void LoadConfig()
         {
             WebSocketURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
             QQ = GetConfig("QQ", (long)100000);
-            FullMemberInfo = GetConfig("FullMemberInfo", false);
+            FullMemberInfo = GetConfig("FullMemberInfo", true);
         }
     }
 }
