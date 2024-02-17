@@ -3,12 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
-using Another_Mirai_Native.WebSocket;
-using Google.Protobuf;
 using SqlSugar;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Text;
 
 namespace Another_Mirai_Native.DB
@@ -268,26 +263,12 @@ namespace Another_Mirai_Native.DB
 
         public static int Debug(string type, string message)
         {
-            if (AppConfig.Instance.DebugMode)
-            {
-                return WriteLog(LogLevel.Debug, type, message);
-            }
-            else
-            {
-                return 0;
-            }
+            return AppConfig.Instance.DebugMode ? WriteLog(LogLevel.Debug, type, message) : 0;
         }
 
         public static int Debug(string type, string message, string origin = "AMN框架")
         {
-            if (AppConfig.Instance.DebugMode)
-            {
-                return WriteLog(LogLevel.Debug, origin, type, message, "");
-            }
-            else
-            {
-                return 0;
-            }
+            return AppConfig.Instance.DebugMode ? WriteLog(LogLevel.Debug, origin, type, message, "") : 0;
         }
 
         public static int Info(string type, string message, string status = "")
