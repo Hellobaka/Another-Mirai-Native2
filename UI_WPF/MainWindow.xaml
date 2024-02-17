@@ -31,20 +31,36 @@
                     <Menu>
                         <MenuItem Click="ThemeToggle_Click">
                             <MenuItem.Header>
-                                <ui:PathIcon
-                                    Width="16"
-                                    Height="16"
-                                    Style="{StaticResource PathIconDataThemeLightDark}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:PathIcon
+                                        Width="16"
+                                        Height="16"
+                                        Style="{StaticResource PathIconDataThemeLightDark}" />
+                                    <TextBlock
+                                        Width="150"
+                                        Margin="12,0,0,0"
+                                        HorizontalAlignment="Stretch">
+                                        切换主题
+                                    </TextBlock>
+                                </StackPanel>
                             </MenuItem.Header>
                         </MenuItem>
                     </Menu>
                     <Menu>
                         <MenuItem Click="DisconnectProtocol_Click">
                             <MenuItem.Header>
-                                <ui:FontIcon
-                                    Width="16"
-                                    Height="16"
-                                    Glyph="&#xEB5E;" />
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon
+                                        Width="16"
+                                        Height="16"
+                                        Glyph="&#xEB5E;" />
+                                    <TextBlock
+                                        Width="150"
+                                        Margin="12,0,0,0"
+                                        HorizontalAlignment="Stretch">
+                                        更换协议
+                                    </TextBlock>
+                                </StackPanel>
                             </MenuItem.Header>
                         </MenuItem>
                     </Menu>
