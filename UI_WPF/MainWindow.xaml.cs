@@ -3,6 +3,7 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.UI.Pages;
 using Hardcodet.Wpf.TaskbarNotification;
 using ModernWpf;
 using ModernWpf.Controls;
@@ -184,8 +185,10 @@ namespace Another_Mirai_Native.UI
         {
             TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
             {
+                WindowState = WindowState.Normal;
                 Show();
                 SetForegroundWindow();
+                LogPage.Instance.SelectLastLog();
             };
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };

@@ -59,9 +59,9 @@ namespace Another_Mirai_Native.UI.Pages
 
         private DispatcherTimer SearchDebounceTimer { get; set; }
 
-        private LogModelWrapper SelectedLog => LogView.SelectedItem as LogModelWrapper;
-
         private string SearchText { get; set; } = "";
+
+        private LogModelWrapper SelectedLog => LogView.SelectedItem as LogModelWrapper;
 
         public void RefilterLogCollection()
         {
@@ -69,6 +69,19 @@ namespace Another_Mirai_Native.UI.Pages
             Dispatcher.BeginInvoke(() =>
             {
                 LogCollections = ls;
+            });
+        }
+
+        public void SelectLastLog()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (AutoScroll.IsOn && MainWindow.Instance.LogMenuItem.IsSelected && LogCollections.Count > 0)
+                {
+                    LogView.SelectedItem = LogCollections.Last();
+                    LogView.UpdateLayout();
+                    LogView.ScrollIntoView(LogView.SelectedItem);
+                }
             });
         }
 
@@ -213,13 +226,6 @@ namespace Another_Mirai_Native.UI.Pages
             SelectLastLog();
         }
 
-        private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
-        {
-            SearchText = FilterTextValue.Text;
-            RefilterLogCollection();
-            SelectLastLog();
-        }
-
         private void ResizeTimer_Tick(object? sender, EventArgs e)
         {
             ResizeTimer.Stop();
@@ -230,17 +236,11 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void SelectLastLog()
+        private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
         {
-            Dispatcher.BeginInvoke(() =>
-            {
-                if (AutoScroll.IsOn && MainWindow.Instance.LogMenuItem.IsSelected && LogCollections.Count > 0)
-                {
-                    LogView.SelectedItem = LogCollections.Last();
-                    LogView.UpdateLayout();
-                    LogView.ScrollIntoView(LogView.SelectedItem);
-                }
-            });
+            SearchText = FilterTextValue.Text;
+            RefilterLogCollection();
+            SelectLastLog();
         }
     }
 }
