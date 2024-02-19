@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -52,11 +53,14 @@ namespace Another_Mirai_Native.UI.Pages
 
         private Border BuildChatBlock(string text, bool right)
         {
-            TextBlock chatBlock = new()
+            TextBox chatBlock = new()
             {
                 Text = text,
                 Padding = new Thickness(10),
-                TextWrapping = TextWrapping.Wrap
+                TextWrapping = TextWrapping.Wrap,
+                IsReadOnly = true,
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0)
             };
             Border border = new()
             {
@@ -68,22 +72,22 @@ namespace Another_Mirai_Native.UI.Pages
             DynamicResourceExtension dynamicResource = new(right ? "SystemControlPageBackgroundChromeMediumLowBrush" : "SystemControlHighlightAltListAccentMediumBrush");
             border.SetResourceReference(Border.BackgroundProperty, dynamicResource.ResourceKey);
 
-            border.ContextMenu = new ContextMenu();
-            border.ContextMenu.Items.Add(new TextBlock() { Text = "复制", TextAlignment = TextAlignment.Center });
-            border.ContextMenu.Items.Add(new TextBlock() { Text = "+1", TextAlignment = TextAlignment.Center });
-            border.ContextMenu.Items.Add(new Separator());
-            border.ContextMenu.Items.Add(new TextBlock() { Text = "读取图片", TextAlignment = TextAlignment.Center });
+            var contextMenu = new ContextMenu();
+            contextMenu.Items.Add(new TextBlock() { Text = "复制", TextAlignment = TextAlignment.Center });
+            contextMenu.Items.Add(new TextBlock() { Text = "+1", TextAlignment = TextAlignment.Center });
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(new TextBlock() { Text = "读取图片", TextAlignment = TextAlignment.Center });
 
-            (border.ContextMenu.Items[0] as UIElement).MouseDown += (sender, _) =>
+            (contextMenu.Items[0] as UIElement).MouseDown += (sender, _) =>
             {
                 System.Windows.Clipboard.SetText(text);
             };
-            (border.ContextMenu.Items[1] as UIElement).MouseDown += (sender, e) =>
+            (contextMenu.Items[1] as UIElement).MouseDown += (sender, e) =>
             {
                 SendMessage.Text = text;
                 SendBtn_Click(sender, e);
             };
-            (border.ContextMenu.Items[3] as UIElement).MouseDown += (sender, _) =>
+            (contextMenu.Items[3] as UIElement).MouseDown += (sender, _) =>
             {
                 string img = text.ToString();
                 var c = Regex.Matches(img, "\\[CQ:image,file=(.*?)\\]");
@@ -103,6 +107,7 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             };
+            chatBlock.ContextMenu = contextMenu;
             return border;
         }
 
