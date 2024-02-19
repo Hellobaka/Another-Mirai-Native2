@@ -538,7 +538,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 LastSpeakDateTime = Helper.TimeStamp2DateTime(response.lastSpeakTimestamp),
                 Level = appendInfo == null ? "0" : appendInfo.level.ToString(),
                 MemberType = (QQGroupMemberType)userPermission,
-                Nick = appendInfo == null ? "" : appendInfo.nickname,
+                Nick = response.memberName,
                 QQ = response.id,
                 Sex = ParseMiraiSex2QQSex(appendInfo?.sex)
             };

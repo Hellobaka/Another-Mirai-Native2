@@ -86,7 +86,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 subCommand,
                 content = data
             };
-            return CallMiraiAPI(syncId, body, type == MiraiApiType.botProfile);
+            return CallMiraiAPI(syncId, body, type == MiraiApiType.botProfile 
+                || type == MiraiApiType.friendProfile 
+                || type == MiraiApiType.memberProfile 
+                || type == MiraiApiType.userProfile);
         }
 
         public JObject CallMiraiAPI(string syncId, object obj, bool isProfilerRequest = false)
