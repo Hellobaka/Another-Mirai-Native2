@@ -43,7 +43,7 @@ namespace Protocol_NoConnection
         public void LoadConfig()
         {
             TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
-            TestLoginQQ = GetConfig("NoConnection_QQ", 999999999);
+            TestLoginQQ = GetConfig("NoConnection_QQ", (long)999999999);
             ShowTestDialog = GetConfig("ShowTestDialog", true);
         }
 
