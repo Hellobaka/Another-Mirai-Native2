@@ -97,7 +97,6 @@
             SendValue.AcceptsReturn = true;
             SendValue.Location = new System.Drawing.Point(104, 92);
             SendValue.Name = "SendValue";
-            SendValue.ShortcutsEnabled = false;
             SendValue.Size = new System.Drawing.Size(358, 27);
             SendValue.TabIndex = 6;
             SendValue.KeyDown += SendValue_KeyDown;
