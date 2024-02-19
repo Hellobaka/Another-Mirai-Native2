@@ -90,6 +90,7 @@ namespace Another_Mirai_Native
                         }
                     }
                     BuildTaskBar();
+                    PluginManagerProxy.Instance.OnPluginLoaded();
                 }
             }
             else

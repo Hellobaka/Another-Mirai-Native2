@@ -178,6 +178,7 @@ namespace Another_Mirai_Native.UI
                 manager.LoadPlugins();
                 InitNotifyIcon();
                 PluginManagerProxy.Instance.EnablePluginByConfig();
+                PluginManagerProxy.Instance.OnPluginLoaded();
             });
         }
 

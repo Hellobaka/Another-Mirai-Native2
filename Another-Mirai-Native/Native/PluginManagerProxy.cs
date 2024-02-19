@@ -27,6 +27,8 @@ namespace Another_Mirai_Native.Native
 
         public static List<CQPluginProxy> Proxies { get; private set; } = new();
 
+        public bool PluginLoaded { get; set; }
+
         public static CQPluginProxy GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
@@ -73,6 +75,11 @@ namespace Another_Mirai_Native.Native
         /// <returns>阻塞的插件</returns>
         public CQPluginProxy InvokeEvent(PluginEventType eventType, params object[] args)
         {
+            if (PluginLoaded is false)
+            {
+                LogHelper.WriteLog(LogLevel.Warning, "AMN框架", "插件逻辑处理", "插件加载中...", "x 不处理");
+                return null;
+            }
             foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.id == (int)eventType))
                 .OrderByDescending(x => x.AppInfo._event.First(o => o.id == (int)eventType).priority))
             {
@@ -91,6 +98,7 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadPlugins()
         {
+            PluginLoaded = false;
             string pluginTmpPath = Path.Combine("data", "plugins", "tmp");
             if (Directory.Exists(pluginTmpPath))
             {
@@ -119,6 +127,7 @@ namespace Another_Mirai_Native.Native
 
         public void ReloadAllPlugins()
         {
+            PluginLoaded = false;
             // 结束所有插件进程
             foreach (var item in Proxies.Where(x => x.Enabled))
             {
@@ -130,7 +139,13 @@ namespace Another_Mirai_Native.Native
             if (LoadPlugins())
             {
                 EnablePluginByConfig();
+                OnPluginLoaded();
             }
+        }
+
+        public void OnPluginLoaded()
+        {
+            PluginLoaded = true;
         }
 
         public void EnablePluginByConfig()
