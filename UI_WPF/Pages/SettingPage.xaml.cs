@@ -19,7 +19,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private Dictionary<string, object> PageCache { get; set; } = new();
 
-        private List<string> MenuList { get; set; } = new();    
+        private List<string> MenuList { get; set; } = new();
 
         public static SettingPage Instance { get; private set; }
 
