@@ -3,6 +3,7 @@ using Another_Mirai_Native.Native;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// Test_MessagePage.xaml 的交互逻辑
     /// </summary>
-    public partial class Test_MessagePage : Page
+    public partial class Test_MessagePage : Page, INotifyPropertyChanged
     {
         public Test_MessagePage()
         {
@@ -28,9 +29,13 @@ namespace Another_Mirai_Native.UI.Pages
 
         public bool FormLoaded { get; private set; }
 
+        public bool PageEnabled { get; set; }
+
         private List<string> MessageHistories { get; set; } = new();
 
         private int MessageHistoryIndex { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void AddChatBlock(string text, bool right)
         {
@@ -140,6 +145,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            PageEnabled = TestPage.CurrentPlugin != null;
+            OnPropertyChanged(nameof(PageEnabled));
             if (FormLoaded)
             {
                 return;
@@ -151,6 +158,12 @@ namespace Another_Mirai_Native.UI.Pages
             CurrentQQ = ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
             PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
             PluginManagerProxy.OnTestInvoked += PluginManagerProxy_OnTestInvoked;
+            DataContext = this;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void PluginManagerProxy_OnTestInvoked(string functionName, Dictionary<string, object> obj)

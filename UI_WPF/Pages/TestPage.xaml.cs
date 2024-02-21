@@ -54,12 +54,13 @@ namespace Another_Mirai_Native.UI.Pages
             CurrentPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode);
             if (CurrentPlugin == null)
             {
-                DialogHelper.ShowSimpleDialog("嗯？", "当前没有插件被标记为测试，请前往插件窗口选择测试插件");
-                MainWindow.Instance.PluginMenuItem.IsSelected = true;
+                PageTitle.Text = $"未选择测试插件";
                 return;
             }
-            PageTitle.Text = $"当前测试插件: {CurrentPlugin.PluginName}";
-            MessageMenuItem.IsSelected = true;
+            else
+            {
+                PageTitle.Text = $"当前测试插件: {CurrentPlugin.PluginName}";
+            }
         }
     }
 }
