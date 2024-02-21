@@ -56,6 +56,12 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         break;
                     }
+                    if (item.Value.Type != JTokenType.Integer && item.Value.Type != JTokenType.Float
+                        && item.Value.Type != JTokenType.Date && item.Value.Type != JTokenType.String
+                        && item.Value.Type != JTokenType.Boolean)
+                    {
+                        continue;
+                    }
                     TextBlock textBlock = new()
                     {
                         Style = (Style)FindResource("TitleTextBlockStyle"),

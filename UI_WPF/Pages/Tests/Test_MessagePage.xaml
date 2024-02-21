@@ -109,10 +109,11 @@
             </Border>
         </ui:ThemeShadowChrome>
         <TextBlock
-            Grid.Row="1" Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityRevertConverter}}"
+            Grid.Row="1"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-            未选择从测试插件，请前往插件窗口选择测试插件
+            VerticalAlignment="Center"
+            Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityRevertConverter}}">
+            未选择测试插件，请前往插件窗口选择测试插件
         </TextBlock>
     </Grid>
 </Page>
