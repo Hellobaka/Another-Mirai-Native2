@@ -27,6 +27,11 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static event UpdateLogStatusHandler LogStatusUpdated;
 
+        /// <summary>
+        /// Origin Type Message
+        /// </summary>
+        public static event Action<string, string, string> DebugLogAdded;
+
         private static List<LogModel> NoDatabaseLogs { get; set; } = new();
 
         private static int NoDBLogID { get; set; }
@@ -261,14 +266,13 @@ namespace Another_Mirai_Native.DB
             return WriteLog(level, plugin.AppInfo.name, type, message, status);
         }
 
-        public static int Debug(string type, string message)
+        public static void Debug(string type, string message, string origin = "AMN框架")
         {
-            return AppConfig.Instance.DebugMode ? WriteLog(LogLevel.Debug, type, message) : 0;
-        }
-
-        public static int Debug(string type, string message, string origin = "AMN框架")
-        {
-            return AppConfig.Instance.DebugMode ? WriteLog(LogLevel.Debug, origin, type, message, "") : 0;
+            if (AppConfig.Instance.DebugMode is false)
+            {
+                return;
+            }
+            DebugLogAdded?.Invoke(origin, type, message);
         }
 
         public static int Info(string type, string message, string status = "")
