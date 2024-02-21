@@ -54,7 +54,7 @@ namespace Another_Mirai_Native.DB
             WriteLog(LogLevel.InfoSuccess, "运行日志", $"日志数据库初始化完毕{DateTime.Now:yyMMdd}。");
         }
 
-        public static void Debug(string type, string message, string origin = "AMN框架")
+        public static void Debug(string type, string message)
         {
             if (AppConfig.Instance.DebugMode is false)
             {
@@ -63,7 +63,6 @@ namespace Another_Mirai_Native.DB
             var logModel = new LogModel
             {
                 detail = message,
-                source = origin,
                 name = type,
                 time = Helper.TimeStamp
             };

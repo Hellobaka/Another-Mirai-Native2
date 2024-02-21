@@ -51,13 +51,6 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="Auto" Header="插件">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding source}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
                     <GridViewColumn Width="Auto" Header="来源">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -65,7 +58,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="600" Header="消息">
+                    <GridViewColumn Width="800" Header="消息">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock

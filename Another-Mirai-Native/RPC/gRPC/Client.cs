@@ -190,7 +190,7 @@ namespace Another_Mirai_Native.gRPC
                 catch (Exception e)
                 {
                     StartStream();
-                    LogHelper.Debug("事件流异常", $"{e.Message} {e.StackTrace}", PluginManager.LoadedPlugin.Name);
+                    LogHelper.Debug($"事件流异常_{PluginManager.LoadedPlugin.Name}", $"{e.Message} {e.StackTrace}");
                 }
             });
         }
