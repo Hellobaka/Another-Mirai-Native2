@@ -30,9 +30,11 @@ namespace Another_Mirai_Native.DB
         /// <summary>
         /// Origin Type Message
         /// </summary>
-        public static event Action<string, string, string> DebugLogAdded;
+        public static event Action<LogModel> DebugLogAdded;
 
         private static List<LogModel> NoDatabaseLogs { get; set; } = new();
+
+        public static List<LogModel> DebugLogs { get; set; } = new();
 
         private static int NoDBLogID { get; set; }
 
@@ -272,7 +274,15 @@ namespace Another_Mirai_Native.DB
             {
                 return;
             }
-            DebugLogAdded?.Invoke(origin, type, message);
+            var logModel = new LogModel
+            {
+                detail = message,
+                source = origin,
+                name = type,
+                time = Helper.TimeStamp
+            };
+            DebugLogs.Add(logModel);
+            DebugLogAdded?.Invoke(logModel);
         }
 
         public static int Info(string type, string message, string status = "")

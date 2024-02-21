@@ -34,6 +34,10 @@
                     IsSelected="True"
                     Tag="Test_MessagePage" />
                 <ui:NavigationViewItem
+                    x:Name="DebugLogMenuItem"
+                    Content="调试日志"
+                    Tag="Test_DebugLogPage" />
+                <ui:NavigationViewItem
                     Content="事件测试"
                     IsEnabled="False"
                     Tag="Test_EventPage" />
