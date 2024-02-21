@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace Another_Mirai_Native.UI.Pages
@@ -17,6 +18,8 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         private Dictionary<string, object> PageCache { get; set; } = new();
+
+        private List<string> MenuList { get; set; } = new();    
 
         public static SettingPage Instance { get; private set; }
 
@@ -49,12 +52,12 @@ namespace Another_Mirai_Native.UI.Pages
         {
             foreach (var item in Directory.GetFiles("conf", "*.json"))
             {
-                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.Instance.json")
+                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json")
                 {
                     continue;
                 }
                 string name = item.Replace(@"conf\", "").Replace(".json", "");
-                if (SettingContainer.MenuItems.IndexOf(name) > 0)
+                if (MenuList.Any(x => x == name))
                 {
                     continue;
                 }
@@ -63,6 +66,7 @@ namespace Another_Mirai_Native.UI.Pages
                     Content = name,
                     Tag = item
                 });
+                MenuList.Add(name);
             }
         }
     }
