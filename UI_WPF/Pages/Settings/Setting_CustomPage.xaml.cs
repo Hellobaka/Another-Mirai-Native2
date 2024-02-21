@@ -89,7 +89,7 @@ namespace Another_Mirai_Native.UI.Pages
                                 switch (item.Value.Type)
                                 {
                                     case JTokenType.Integer:
-                                        success = int.TryParse(textBox.Text, out int intValue);
+                                        success = long.TryParse(textBox.Text, out long intValue);
                                         saveValue = intValue;
                                         break;
 

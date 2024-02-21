@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is ComboBox comboBox)
             {
-                UIConfig.Instance.SetConfig(comboBox.Name, e.AddedItems[0]?.ToString());
+                AppConfig.Instance.SetConfig(comboBox.Name, e.AddedItems[0]?.ToString());
                 UpdateAppConfig(comboBox.Name, e.AddedItems[0]?.ToString());
             }
         }
@@ -86,7 +86,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is ModernWpf.Controls.ToggleSwitch toggleSwitch)
             {
-                UIConfig.Instance.SetConfig(toggleSwitch.Name, toggleSwitch.IsOn);
+                AppConfig.Instance.SetConfig(toggleSwitch.Name, toggleSwitch.IsOn);
                 UpdateAppConfig(toggleSwitch.Name, toggleSwitch.IsOn);
             }
         }
@@ -95,7 +95,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (sender is TextBox textBox && int.TryParse(textBox.Text, out int value))
             {
-                UIConfig.Instance.SetConfig(textBox.Name, value);
+                AppConfig.Instance.SetConfig(textBox.Name, value);
                 UpdateAppConfig(textBox.Name, value);
             }
         }
