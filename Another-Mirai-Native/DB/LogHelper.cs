@@ -13,9 +13,16 @@ namespace Another_Mirai_Native.DB
     /// </summary>
     public static class LogHelper
     {
+        private static object writeLock = new();
+
         public delegate void AddLogHandler(int logId, LogModel log);
 
         public delegate void UpdateLogStatusHandler(int logId, string status);
+
+        /// <summary>
+        /// Origin Type Message
+        /// </summary>
+        public static event Action<LogModel> DebugLogAdded;
 
         /// <summary>
         /// 日志添加事件
@@ -27,18 +34,11 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static event UpdateLogStatusHandler LogStatusUpdated;
 
-        /// <summary>
-        /// Origin Type Message
-        /// </summary>
-        public static event Action<LogModel> DebugLogAdded;
+        public static List<LogModel> DebugLogs { get; set; } = new();
 
         private static List<LogModel> NoDatabaseLogs { get; set; } = new();
 
-        public static List<LogModel> DebugLogs { get; set; } = new();
-
         private static int NoDBLogID { get; set; }
-
-        private static object writeLock = new();
 
         /// <summary>
         /// 初始化日志数据库
@@ -52,6 +52,23 @@ namespace Another_Mirai_Native.DB
                 db.CodeFirst.InitTables(typeof(LogModel));
             }
             WriteLog(LogLevel.InfoSuccess, "运行日志", $"日志数据库初始化完毕{DateTime.Now:yyMMdd}。");
+        }
+
+        public static void Debug(string type, string message, string origin = "AMN框架")
+        {
+            if (AppConfig.Instance.DebugMode is false)
+            {
+                return;
+            }
+            var logModel = new LogModel
+            {
+                detail = message,
+                source = origin,
+                name = type,
+                time = Helper.TimeStamp
+            };
+            DebugLogs.Add(logModel);
+            DebugLogAdded?.Invoke(logModel);
         }
 
         public static List<LogModel> DetailQueryLogs(int priority, int pageSize, string search)
@@ -79,6 +96,20 @@ namespace Another_Mirai_Native.DB
                 r.Reverse();
                 return r;
             }
+        }
+
+        public static int Error(string type, string message)
+        {
+            return WriteLog(LogLevel.Error, type, message);
+        }
+
+        public static int Error(string type, Exception e)
+        {
+            if (e.InnerException != null)
+            {
+                Error("调用插件方法", e.InnerException);
+            }
+            return WriteLog(LogLevel.Error, type, e.Message + "\n" + e.StackTrace);
         }
 
         public static List<LogModel> GetDisplayLogs(int priority, int count)
@@ -151,6 +182,11 @@ namespace Another_Mirai_Native.DB
             StringBuilder sb = new();
             sb.Append($"{time:MM/dd HH:mm:ss}");
             return sb.ToString();
+        }
+
+        public static int Info(string type, string message, string status = "")
+        {
+            return WriteLog(LogLevel.InfoSuccess, type, message, status);
         }
 
         public static void UpdateLogStatus(int id, string status)
@@ -226,23 +262,6 @@ namespace Another_Mirai_Native.DB
             return logId;
         }
 
-        private static void ChangeConsoleColor(int priority)
-        {
-            ConsoleColor logColor = (LogLevel)priority switch
-            {
-                LogLevel.Debug => ConsoleColor.Gray,
-                LogLevel.Error => ConsoleColor.Red,
-                LogLevel.Info => ConsoleColor.White,
-                LogLevel.Fatal => ConsoleColor.DarkRed,
-                LogLevel.InfoSuccess => ConsoleColor.Magenta,
-                LogLevel.InfoSend => ConsoleColor.Green,
-                LogLevel.InfoReceive => ConsoleColor.Blue,
-                LogLevel.Warning => ConsoleColor.DarkYellow,
-                _ => ConsoleColor.White,
-            };
-            Console.ForegroundColor = logColor;
-        }
-
         public static int WriteLog(int level, string logOrigin, string type, string messages, string status = "")
         {
             LogLevel logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), Enum.GetName(typeof(LogLevel), level));
@@ -268,40 +287,21 @@ namespace Another_Mirai_Native.DB
             return WriteLog(level, plugin.AppInfo.name, type, message, status);
         }
 
-        public static void Debug(string type, string message, string origin = "AMN框架")
+        private static void ChangeConsoleColor(int priority)
         {
-            if (AppConfig.Instance.DebugMode is false)
+            ConsoleColor logColor = (LogLevel)priority switch
             {
-                return;
-            }
-            var logModel = new LogModel
-            {
-                detail = message,
-                source = origin,
-                name = type,
-                time = Helper.TimeStamp
+                LogLevel.Debug => ConsoleColor.Gray,
+                LogLevel.Error => ConsoleColor.Red,
+                LogLevel.Info => ConsoleColor.White,
+                LogLevel.Fatal => ConsoleColor.DarkRed,
+                LogLevel.InfoSuccess => ConsoleColor.Magenta,
+                LogLevel.InfoSend => ConsoleColor.Green,
+                LogLevel.InfoReceive => ConsoleColor.Blue,
+                LogLevel.Warning => ConsoleColor.DarkYellow,
+                _ => ConsoleColor.White,
             };
-            DebugLogs.Add(logModel);
-            DebugLogAdded?.Invoke(logModel);
-        }
-
-        public static int Info(string type, string message, string status = "")
-        {
-            return WriteLog(LogLevel.InfoSuccess, type, message, status);
-        }
-
-        public static int Error(string type, string message)
-        {
-            return WriteLog(LogLevel.Error, type, message);
-        }
-
-        public static int Error(string type, Exception e)
-        {
-            if (e.InnerException != null)
-            {
-                Error("调用插件方法", e.InnerException);
-            }
-            return WriteLog(LogLevel.Error, type, e.Message + "\n" + e.StackTrace);
+            Console.ForegroundColor = logColor;
         }
 
         private static SqlSugarClient GetInstance()

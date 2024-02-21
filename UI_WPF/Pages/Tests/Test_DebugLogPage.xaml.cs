@@ -18,6 +18,8 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class Test_DebugLogPage : Page, INotifyPropertyChanged
     {
+        private ObservableCollection<LogModelWrapper> logCollections;
+
         public Test_DebugLogPage()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private ObservableCollection<LogModelWrapper> logCollections;
+        public bool FormLoaded { get; private set; }
 
         public ObservableCollection<LogModelWrapper> LogCollections
         {
@@ -38,12 +40,40 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        public bool FormLoaded { get; private set; }
         public bool PageEnabled { get; private set; }
+
+        public void SelectLastLog()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (LogCollections.Count > 0)
+                {
+                    LogView.SelectedItem = LogCollections.Last();
+                    LogView.UpdateLayout();
+                    LogView.ScrollIntoView(LogView.SelectedItem);
+                }
+            });
+        }
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ClearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LogHelper.DebugLogs.Clear();
+            LogCollections.Clear();
+        }
+
+        private void LogHelper_DebugLogAdded(LogModel logModel)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                LogCollections.Add(new LogModelWrapper(logModel));
+            });
+
+            SelectLastLog();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -64,35 +94,6 @@ namespace Another_Mirai_Native.UI.Pages
             }
             LogHelper.DebugLogAdded -= LogHelper_DebugLogAdded;
             LogHelper.DebugLogAdded += LogHelper_DebugLogAdded;
-        }
-
-        private void LogHelper_DebugLogAdded(LogModel logModel)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                LogCollections.Add(new LogModelWrapper(logModel));
-            });
-
-            SelectLastLog();
-        }
-
-        public void SelectLastLog()
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                if (LogCollections.Count > 0)
-                {
-                    LogView.SelectedItem = LogCollections.Last();
-                    LogView.UpdateLayout();
-                    LogView.ScrollIntoView(LogView.SelectedItem);
-                }
-            });
-        }
-
-        private void ClearBtn_Click(object sender, RoutedEventArgs e)
-        {
-            LogHelper.DebugLogs.Clear();
-            LogCollections.Clear();
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
