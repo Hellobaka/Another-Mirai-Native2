@@ -53,17 +53,17 @@ namespace Another_Mirai_Native
                 ServerManager serverManager = new();
                 if (serverManager.Build(AppConfig.Instance.ServerType) is false)
                 {
-                    LogHelper.Debug("初始化", "构建服务器失败");
+                    LogHelper.Error("初始化", "构建服务器失败");
                     return;
                 }
                 if (ServerManager.Server.SetConnectionConfig() is false)
                 {
-                    LogHelper.Debug("初始化", "初始化连接参数失败，请检查配置内容");
+                    LogHelper.Error("初始化", "初始化连接参数失败，请检查配置内容");
                     return;
                 }
                 if (!ServerManager.Server.Start())
                 {
-                    LogHelper.Debug("初始化", "构建服务器失败");
+                    LogHelper.Error("初始化", "构建服务器失败");
                     return;
                 }
                 // 若配置无需UI则自动连接之后加载插件
@@ -104,17 +104,17 @@ namespace Another_Mirai_Native
                 ClientManager clientManager = new();
                 if (!clientManager.Build(AppConfig.Instance.ServerType))
                 {
-                    LogHelper.Debug("初始化", "构建客户端失败");
+                    LogHelper.Error("初始化", "构建客户端失败");
                     return;
                 }
                 if (ClientManager.Client.SetConnectionConfig() is false)
                 {
-                    LogHelper.Debug("初始化", "初始化连接参数失败，请检查配置内容");
+                    LogHelper.Error("初始化", "初始化连接参数失败，请检查配置内容");
                     return;
                 }
                 if (!ClientManager.Client.Connect())
                 {
-                    LogHelper.Debug("初始化", "连接服务器失败");
+                    LogHelper.Error("初始化", "连接服务器失败");
                     return;
                 }
                 // 加载插件
