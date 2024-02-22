@@ -77,7 +77,6 @@
                 <ui:NavigationViewItem
                     x:Name="LogMenuItem"
                     Content="日志"
-                    IsSelected="True"
                     Tag="LogPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
@@ -88,6 +87,12 @@
                     Content="测试"
                     Icon="59634"
                     Tag="TestPage" />
+                <ui:NavigationViewItem
+                    x:Name="ChatMenuItem"
+                    Content="测试"
+                    Icon="59634"
+                    IsSelected="True"
+                    Tag="ChatPage" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置" Tag="SettingPage">

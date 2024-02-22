@@ -20,4 +20,29 @@ namespace Another_Mirai_Native.UI.Converters
             throw new NotImplementedException();
         }
     }
+
+    internal class DisplayTimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var time = (DateTime)value;
+            if((DateTime.Now - time).Days < 1)
+            {
+                return time.ToString("t");    
+            }
+            else if((DateTime.Now - time).Days <= 7)
+            {
+                return time.ToString("dddd");
+            }
+            else
+            {
+                return time.ToString("D");
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
