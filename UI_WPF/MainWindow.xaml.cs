@@ -184,6 +184,10 @@ namespace Another_Mirai_Native.UI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            RefreshFrame();
+            RefreshDarkMode();
+            ThemeManager.Current.ActualApplicationThemeChanged += (_, _) => RefreshDarkMode();
+
             TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
             {
                 WindowState = WindowState.Normal;

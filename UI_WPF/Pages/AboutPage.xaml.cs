@@ -24,5 +24,12 @@ namespace Another_Mirai_Native.UI.Pages
         {
             InitializeComponent();
         }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            int flag = int.Parse((string)((RadioButton)sender).Tag);
+            MainWindow.Instance.ChangeMaterial((MainWindow.Material)flag);
+            MainWindow.Instance.Background = Brushes.Transparent;
+        }
     }
 }

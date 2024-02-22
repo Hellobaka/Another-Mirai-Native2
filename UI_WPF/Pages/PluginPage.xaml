@@ -36,7 +36,6 @@
         <Border
             Grid.Column="0"
             Padding="10"
-            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
             BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
             BorderThickness="1"
             CornerRadius="5">
@@ -114,7 +113,6 @@
         <Border
             Grid.Column="1"
             Padding="10"
-            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
             BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
             BorderThickness="1"
             CornerRadius="5">
