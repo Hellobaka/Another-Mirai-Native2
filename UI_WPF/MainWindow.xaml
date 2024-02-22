@@ -16,6 +16,7 @@
     Loaded="MainWindow_Loaded"
     SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
         <ui:NavigationView

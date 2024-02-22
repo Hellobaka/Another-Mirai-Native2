@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Config;
 using ModernWpf;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -50,6 +51,14 @@ namespace Another_Mirai_Native.UI.Pages
             LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
+            MaterialSelector.SelectedIndex = UIConfig.Instance.WindowMaterial switch
+            {
+                "Mica" => 1,
+                "Acrylic" => 2,
+                "Tabbed" => 3,
+                "None" => 0,
+                _ => 0
+            };
             FormLoaded = true;
         }
 
@@ -99,6 +108,26 @@ namespace Another_Mirai_Native.UI.Pages
             }
             UIConfig.Instance.PopWindowWhenError = ShowWhenError.IsOn;
             UIConfig.Instance.SetConfig("PopWindowWhenError", ShowWhenError.IsOn);
+        }
+
+        private void MaterialSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+
+            var material = MaterialSelector.SelectedIndex switch
+            {
+                1 => MainWindow.Material.Mica,
+                2 => MainWindow.Material.Acrylic,
+                3 => MainWindow.Material.Tabbed,
+                _ => MainWindow.Material.None,
+            };
+            MainWindow.Instance.ChangeMaterial(material);
+
+            UIConfig.Instance.WindowMaterial = material.ToString();
+            UIConfig.Instance.SetConfig("WindowMaterial", material.ToString());
         }
     }
 }

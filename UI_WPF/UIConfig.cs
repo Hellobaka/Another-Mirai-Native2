@@ -29,9 +29,12 @@ namespace Another_Mirai_Native.UI
 
         public bool PopWindowWhenError { get; set; } = true;
 
+        public string WindowMaterial { get; set; } = "None";
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
+            WindowMaterial = GetConfig("WindowMaterial", "None");
             AccentColor = GetConfig("AccentColor", "");
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);

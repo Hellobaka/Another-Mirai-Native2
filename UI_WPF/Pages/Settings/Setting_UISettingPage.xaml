@@ -50,6 +50,17 @@
             <ComboBoxItem>浅色</ComboBoxItem>
             <ComboBoxItem>跟随系统</ComboBoxItem>
         </ComboBox>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">窗口材质（Windows11以上可用）</TextBlock>
+        <ComboBox
+            x:Name="MaterialSelector"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="MaterialSelector_SelectionChanged">
+            <ComboBoxItem Tag="0">默认</ComboBoxItem>
+            <ComboBoxItem Tag="2">云母/Mica</ComboBoxItem>
+            <ComboBoxItem Tag="3">亚克力/Acrylic</ComboBoxItem>
+            <ComboBoxItem Tag="4">Tabbed</ComboBoxItem>
+        </ComboBox>
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题颜色</TextBlock>
         <controls:AccentColorPicker />
     </StackPanel>

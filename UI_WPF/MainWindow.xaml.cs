@@ -187,6 +187,22 @@ namespace Another_Mirai_Native.UI
             RefreshFrame();
             RefreshDarkMode();
             ThemeManager.Current.ActualApplicationThemeChanged += (_, _) => RefreshDarkMode();
+            Material material = UIConfig.Instance.WindowMaterial switch
+            {
+                "Mica" => Material.Mica,
+                "Acrylic" => Material.Acrylic,
+                "Tabbed" => Material.Tabbed,
+                "None" => Material.None,
+                _ => Material.None
+            };
+            try
+            {
+                ChangeMaterial(material);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("切换窗口材质", ex.Message);
+            }
 
             TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
             {

@@ -10,9 +10,65 @@ namespace Another_Mirai_Native.UI
     {
         public enum Material
         {
+            None,
+
             Mica = 2,
+
             Acrylic = 3,
+
             Tabbed = 4
+        }
+
+        public static int ExtendFrame(IntPtr hwnd, ParameterTypes.MARGINS margins)
+        {
+            return DwmExtendFrameIntoClientArea(hwnd, ref margins);
+        }
+
+        public static OSVersion GetOSVersion()
+        {
+            OSVersion osVersionInfo = new OSVersion { dwOSVersionInfoSize = (uint)Marshal.SizeOf(typeof(OSVersion)) };
+            RtlGetVersion(ref osVersionInfo);
+            return osVersionInfo;
+        }
+
+        [DllImport("ntdll.dll")]
+        public static extern int RtlGetVersion(ref OSVersion osVersionInfo);
+
+        public static int SetWindowAttribute(IntPtr hwnd, ParameterTypes.DWMWINDOWATTRIBUTE attribute, int parameter)
+        {
+            return DwmSetWindowAttribute(hwnd, attribute, ref parameter, Marshal.SizeOf<int>());
+        }
+
+        public void ChangeMaterial(Material material)
+        {
+            var osVersion = GetOSVersion();
+            if (!(osVersion.dwMajorVersion >= 10 && osVersion.dwBuildNumber >= 22000))
+            {
+                throw new NotSupportedException("更换材质只支持Windows11 21H2版本以上。");
+            }
+            Background = Brushes.Transparent;
+
+            int value = (int)material;
+            SetWindowAttribute(new WindowInteropHelper(this).Handle, ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
+                value);
+        }
+
+        [DllImport("DwmApi.dll")]
+        private static extern int DwmExtendFrameIntoClientArea(
+            IntPtr hwnd,
+            ref ParameterTypes.MARGINS pMarInset);
+
+        [DllImport("DwmApi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, ParameterTypes.DWMWINDOWATTRIBUTE dwAttribute, ref int pvAttribute, int cbAttribute);
+
+        private void RefreshDarkMode()
+        {
+            var isDark = ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark;
+            int flag = isDark ? 1 : 0;
+            SetWindowAttribute(
+                new WindowInteropHelper(this).Handle,
+                ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                flag);
         }
 
         private void RefreshFrame()
@@ -32,40 +88,31 @@ namespace Another_Mirai_Native.UI
             ExtendFrame(mainWindowSrc.Handle, margins);
         }
 
-        private void RefreshDarkMode()
+        [StructLayout(LayoutKind.Sequential)]
+        public struct OSVersion
         {
-            var isDark = ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark;
-            int flag = isDark ? 1 : 0;
-            SetWindowAttribute(
-                new WindowInteropHelper(this).Handle,
-                ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                flag);
-        }
+            public uint dwOSVersionInfoSize;
 
-        public void ChangeMaterial(Material material)
-        {
-            SetWindowAttribute(
-                new WindowInteropHelper(this).Handle,
-                ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
-                (int)material);
-        }
+            public uint dwMajorVersion;
 
-        [DllImport("DwmApi.dll")]
-        private static extern int DwmExtendFrameIntoClientArea(
-            IntPtr hwnd,
-            ref ParameterTypes.MARGINS pMarInset);
+            public uint dwMinorVersion;
 
-        [DllImport("dwmapi.dll")]
-        private static extern int DwmSetWindowAttribute(IntPtr hwnd, ParameterTypes.DWMWINDOWATTRIBUTE dwAttribute, ref int pvAttribute, int cbAttribute);
+            public uint dwBuildNumber;
 
-        public static int ExtendFrame(IntPtr hwnd, ParameterTypes.MARGINS margins)
-        {
-            return DwmExtendFrameIntoClientArea(hwnd, ref margins);
-        }
+            public uint dwPlatformId;
 
-        public static int SetWindowAttribute(IntPtr hwnd, ParameterTypes.DWMWINDOWATTRIBUTE attribute, int parameter)
-        {
-            return DwmSetWindowAttribute(hwnd, attribute, ref parameter, Marshal.SizeOf<int>());
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            public string szCSDVersion;
+
+            public ushort wServicePackMajor;
+
+            public ushort wServicePackMinor;
+
+            public ushort wSuiteMask;
+
+            public byte wProductType;
+
+            public byte wReserved;
         }
     }
 
@@ -85,6 +132,7 @@ namespace Another_Mirai_Native.UI
         public enum DWMWINDOWATTRIBUTE
         {
             DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
+
             DWMWA_SYSTEMBACKDROP_TYPE = 38
         }
 
@@ -92,8 +140,11 @@ namespace Another_Mirai_Native.UI
         public struct MARGINS
         {
             public int cxLeftWidth;      // width of left border that retains its size
+
             public int cxRightWidth;     // width of right border that retains its size
+
             public int cyTopHeight;      // height of top border that retains its size
+
             public int cyBottomHeight;   // height of bottom border that retains its size
         };
     }
