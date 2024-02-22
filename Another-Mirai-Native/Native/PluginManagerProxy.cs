@@ -110,11 +110,8 @@ namespace Another_Mirai_Native.Native
             {
                 if (File.Exists(item.Replace(".dll", ".json")))
                 {
-                    string newPath = Path.Combine(pluginTmpPath, Path.GetFileName(item));
-                    File.Copy(item, newPath, true);
-                    File.Copy(item.Replace(".dll", ".json"), newPath.Replace(".dll", ".json"), true);
-                    CQPluginProxy plugin = new(newPath);
-                    if (plugin.LoadAppInfo())
+                    CQPluginProxy plugin = new(item);
+                    if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
                     {
                         Proxies.Add(plugin);
                         plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
@@ -176,6 +173,11 @@ namespace Another_Mirai_Native.Native
                 return;
             }
             plugin.KillProcess();
+            if (!(plugin.MovePluginToTmpDir() && plugin.LoadAppInfo()))
+            {
+                LogHelper.Error("插件重启", $"{plugin.AppInfo.name} 重启失败");
+                return;
+            }
             if (!AppConfig.Instance.RestartPluginIfDead)// 根据此配置不启用插件，插件由进程退出事件触发插件启用
             {
                 if (SetPluginEnabled(plugin, true))
@@ -184,7 +186,7 @@ namespace Another_Mirai_Native.Native
                 }
                 else
                 {
-                    LogHelper.Info("插件重启", $"{plugin.AppInfo.name} 重启失败");
+                    LogHelper.Error("插件重启", $"{plugin.AppInfo.name} 重启失败");
                 }
             }
             else

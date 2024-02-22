@@ -19,7 +19,7 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy(string dllPath)
         {
-            PluginPath = dllPath;
+            PluginBasePath = dllPath;
         }
 
         public event Action<CQPluginProxy> OnPluginProcessExited;
@@ -35,6 +35,8 @@ namespace Another_Mirai_Native.Native
         public string PluginName => AppInfo.name;
 
         public string PluginPath { get; set; } = "";
+
+        public string PluginBasePath { get; set; } = "";
 
         public Process PluginProcess { get; set; }
 
@@ -97,6 +99,25 @@ namespace Another_Mirai_Native.Native
             {
                 LogHelper.Error("加载插件", $"{PluginPath} 等待客户端发送插件信息失败，进程已结束");
                 KillProcess();
+                return false;
+            }
+            return true;
+        }
+
+        public bool MovePluginToTmpDir()
+        {
+            try
+            {
+                string pluginTmpPath = Path.Combine("data", "plugins", "tmp");
+                Directory.CreateDirectory(pluginTmpPath);
+                string newPath = Path.Combine(pluginTmpPath, Path.GetFileName(PluginBasePath));
+                File.Copy(PluginBasePath, newPath, true);
+                File.Copy(PluginBasePath.Replace(".dll", ".json"), newPath.Replace(".dll", ".json"), true);
+                PluginPath = newPath;
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error("移动至临时目录", e);
                 return false;
             }
             return true;
