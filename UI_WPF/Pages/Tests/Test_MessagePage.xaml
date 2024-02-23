@@ -99,7 +99,6 @@
             Depth="25"
             Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityConverter}}">
             <Border
-                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
                 BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
                 BorderThickness="1"
                 CornerRadius="5">

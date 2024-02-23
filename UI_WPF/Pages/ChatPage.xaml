@@ -16,6 +16,10 @@
     mc:Ignorable="d">
     <Page.Resources>
         <converter:WidthConverter x:Key="WidthConverter" />
+        <converter:ColorOpacityConverter x:Key="ColorOpacityConverter" />
+        <converter:DetailAlignLeftConverter x:Key="DetailAlignLeftConverter" />
+        <converter:DetailAlignRightConverter x:Key="DetailAlignRightConverter" />
+        <converter:DetailAlignCenterConverter x:Key="DetailAlignCenterConverter" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,31 +27,151 @@
             <ColumnDefinition Width="2.5*" />
         </Grid.ColumnDefinitions>
         <ui:ScrollViewerEx Grid.Column="0">
-            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}">
-                <StackPanel>
-                    <TextBlock
-                        x:Name="EmptyHint"
-                        Margin="10"
-                        TextAlignment="Center">
-                        空空如也喵~
-                    </TextBlock>
-                    <ListView
-                        x:Name="ChatListDisplay"
-                        HorizontalContentAlignment="Stretch"
-                        ItemsSource="{Binding ChatList}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <controls:ChatListItem
-                                    MaxWidth="{Binding ActualWidth, ElementName=ChatListDisplay, Converter={StaticResource WidthConverter}, ConverterParameter={x:Static SystemParameters.VerticalScrollBarWidth}}"
-                                    Margin="0,10"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    Item="{Binding}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
-            </Border>
+            <ui:ThemeShadowChrome Depth="10">
+                <Border>
+                    <StackPanel>
+                        <TextBlock
+                            x:Name="EmptyHint"
+                            Margin="10"
+                            TextAlignment="Center">
+                            空空如也喵~
+                        </TextBlock>
+                        <ListView
+                            x:Name="ChatListDisplay"
+                            Margin="0,10"
+                            HorizontalContentAlignment="Stretch"
+                            ItemsSource="{Binding ChatList}"
+                            SelectionChanged="ChatListDisplay_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:ChatListItem
+                                        MaxWidth="{Binding ActualWidth, ElementName=ChatListDisplay, Converter={StaticResource WidthConverter}, ConverterParameter={x:Static SystemParameters.VerticalScrollBarWidth}}"
+                                        Margin="0,10"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Item="{Binding}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </ui:ThemeShadowChrome>
         </ui:ScrollViewerEx>
+        <Grid
+            x:Name="DetailContainer"
+            Grid.Column="1"
+            Margin="10,10,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="6*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+            <Border>
+                <TextBlock
+                    x:Name="GroupNameDisplay"
+                    FontSize="18"
+                    Text="{Binding GroupName}" />
+            </Border>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Button
+                        x:Name="FaceBtn"
+                        Margin="0,0,5,8"
+                        Click="FaceBtn_Click">
+                        <ui:FontIcon
+                            Width="16"
+                            Height="16"
+                            FontSize="16"
+                            Glyph="&#xE76E;" />
+                    </Button>
+                    <Button
+                        x:Name="AtBtn"
+                        Margin="0,0,5,8"
+                        Click="AtBtn_Click">
+                        <ui:FontIcon
+                            Width="16"
+                            Height="16"
+                            FontSize="16"
+                            Glyph="&#xE716;" />
+                    </Button>
+                    <Button
+                        x:Name="PictureBtn"
+                        Margin="0,0,5,8"
+                        Click="PictureBtn_Click">
+                        <ui:FontIcon
+                            Width="16"
+                            Height="16"
+                            FontSize="16"
+                            Glyph="&#xEB9F;" />
+                    </Button>
+                    <Button
+                        x:Name="AudioBtn"
+                        Margin="0,0,5,8"
+                        Click="AudioBtn_Click">
+                        <ui:FontIcon
+                            Width="16"
+                            Height="16"
+                            FontSize="16"
+                            Glyph="&#xE720;" />
+                    </Button>
+                </StackPanel>
+                <TextBox
+                    x:Name="SendText"
+                    Grid.Row="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        x:Name="SendBtn"
+                        Grid.Column="1"
+                        Width="150"
+                        Margin="0,5,0,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Click="SendBtn_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        发送
+                    </Button>
+                </Grid>
+            </Grid>
+            <ui:ThemeShadowChrome
+                Grid.Row="1"
+                Margin="0,10"
+                Depth="25">
+                <Border
+                    BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                    <ScrollViewer x:Name="MessageScrollViewer" Padding="10">
+                        <ItemsControl x:Name="MessageContainer" ItemsSource="{Binding DetailList}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <controls:ChatDetailListItem_Left Item="{Binding}" Visibility="{Binding DetailItemType, RelativeSource={RelativeSource Self}, Converter={StaticResource DetailAlignLeftConverter}}" />
+                                        <controls:ChatDetailListItem_Right Item="{Binding}" Visibility="{Binding DetailItemType, RelativeSource={RelativeSource Self}, Converter={StaticResource DetailAlignRightConverter}}" />
+                                        <controls:ChatDetailListItem_Center Item="{Binding}" Visibility="{Binding DetailItemType, RelativeSource={RelativeSource Self}, Converter={StaticResource DetailAlignCenterConverter}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </ui:ThemeShadowChrome>
+        </Grid>
     </Grid>
 </Page>

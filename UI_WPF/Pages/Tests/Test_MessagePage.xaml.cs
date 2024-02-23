@@ -152,8 +152,8 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             FormLoaded = true;
-            GroupDisplay.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", 100000).ToString();
-            QQDisplay.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", 100000).ToString();
+            GroupDisplay.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)100000).ToString();
+            QQDisplay.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)100000).ToString();
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
             CurrentQQ = ProtocolManager.Instance.CurrentProtocol.GetLoginQQ();
             PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;

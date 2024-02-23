@@ -155,10 +155,5 @@ namespace Another_Mirai_Native.UI.Controls
                 FallbackDisplay.Visibility = Visibility.Collapsed;
             }
         }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
     }
 }

@@ -9,7 +9,6 @@
     Width="50"
     Height="50"
     d:DataContext="{d:DesignInstance Type=local:ChatAvatar}"
-    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <Border
         x:Name="Container"

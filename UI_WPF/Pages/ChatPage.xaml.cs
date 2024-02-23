@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.UI.Converters;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -29,17 +31,23 @@ namespace Another_Mirai_Native.UI.Pages
 
         public ObservableCollection<ChatListItemViewModel> ChatList { get; set; } = new();
 
+        public ObservableCollection<ChatDetailItemViewModel> DetailList { get; set; } = new();
+
+        public string GroupName { get; set; } = "BBB";
+
         private bool FormLoaded { get; set; }
 
-        private Dictionary<long, List<ChatDetailItemViewModel>> FriendChatHistory { get; set; } = new();
+        private Dictionary<long, ObservableCollection<ChatDetailItemViewModel>> FriendChatHistory { get; set; } = new();
 
         private Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
 
-        private Dictionary<long, List<ChatDetailItemViewModel>> GroupChatHistory { get; set; } = new();
+        private Dictionary<long, ObservableCollection<ChatDetailItemViewModel>> GroupChatHistory { get; set; } = new();
 
         private Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
         private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
+
+        private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -48,19 +56,20 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType)
         {
-            if (GroupChatHistory.TryGetValue(qq, out var chatHistory))
+            if (GroupChatHistory.TryGetValue(group, out var chatHistory))
             {
                 if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
                 {
                     chatHistory.RemoveAt(0);
                 }
-                chatHistory.Add(BuildChatDetailItem(qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
+                chatHistory.Add(BuildChatDetailItem(group, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
             }
             else
             {
-                GroupChatHistory.Add(qq, new List<ChatDetailItemViewModel>());
-                GroupChatHistory[qq].Add(BuildChatDetailItem(qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
+                GroupChatHistory.Add(group, new ObservableCollection<ChatDetailItemViewModel>());
+                GroupChatHistory[group].Add(BuildChatDetailItem(group, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
             }
+            OnPropertyChanged(nameof(DetailList));
         }
 
         private void AddPrivateChatItem(long qq, string msg, DetailItemType itemType)
@@ -75,9 +84,10 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
-                FriendChatHistory.Add(qq, new List<ChatDetailItemViewModel>());
+                FriendChatHistory.Add(qq, new ObservableCollection<ChatDetailItemViewModel>());
                 FriendChatHistory[qq].Add(BuildChatDetailItem(qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType));
             }
+            OnPropertyChanged(nameof(DetailList));
         }
 
         private ChatDetailItemViewModel BuildChatDetailItem(long qq, string msg, string nick, Controls.ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
@@ -188,6 +198,12 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+            //var converter = new ColorOpacityConverter();
+            //var brush = (Brush)FindResource("SystemControlBackgroundChromeMediumBrush");
+            //var convertedBrush = (Brush)converter.Convert(brush, typeof(Brush), 0.4, null);
+
+            //ChatContainer.Background = convertedBrush; 
+
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
             PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
             PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
@@ -307,6 +323,76 @@ namespace Another_Mirai_Native.UI.Pages
 
                 EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             });
+        }
+
+        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = SelectedItem;
+            if (item != null)
+            {
+                if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+                {
+                    if (FriendChatHistory.TryGetValue(item.Id, out var msg))
+                    {
+                        DetailList = msg;
+                    }
+                    else
+                    {
+                        FriendChatHistory.Add(item.Id, new());
+                        DetailList = FriendChatHistory[item.Id];
+                    }
+                }
+                else
+                {
+                    if (GroupChatHistory.TryGetValue(item.Id, out var msg))
+                    {
+                        DetailList = msg;
+                    }
+                    else
+                    {
+                        GroupChatHistory.Add(item.Id, new());
+                        DetailList = GroupChatHistory[item.Id];
+                    }
+                }
+            }
+            OnPropertyChanged(nameof(DetailList));
+        }
+
+        private void FaceBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AtBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PictureBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AudioBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+            {
+                AddPrivateChatItem(AppConfig.Instance.CurrentQQ, SendText.Text, DetailItemType.Send);
+            }
+            else
+            {
+                AddGroupChatItem(SelectedItem.Id, AppConfig.Instance.CurrentQQ, SendText.Text, DetailItemType.Send);
+            }
+            SendText.Text = "";
         }
     }
 }
