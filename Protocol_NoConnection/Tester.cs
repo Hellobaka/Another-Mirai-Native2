@@ -36,8 +36,8 @@ namespace Protocol_NoConnection
 
         private void Tester_Load(object sender, EventArgs e)
         {
-            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", 10001).ToString();
-            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", 10001).ToString();
+            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)10001).ToString();
+            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)10001).ToString();
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
         }
 
@@ -72,7 +72,7 @@ namespace Protocol_NoConnection
                 CQPluginProxy handledPlugin = null;
                 if (PrivateSelector.Checked)
                 {
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息 :{msg}", "处理中...");
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, MsgId++, QQId, msg, 0);
                 }
                 else

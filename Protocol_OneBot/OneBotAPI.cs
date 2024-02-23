@@ -32,12 +32,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string Name { get; set; } = "OneBot v11";
 
-        public void LoadConfig()
-        {
-            WsURL = GetConfig("WebSocketURL", "");
-            AuthKey = GetConfig("AuthKey", "");
-        }
-
         public int CanSendImage()
         {
             var r = CallOneBotAPI(APIType.can_send_image, new Dictionary<string, object>
@@ -106,99 +100,27 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string GetFriendList(bool reserved)
         {
-            var r = CallOneBotAPI(APIType.get_friend_list, new Dictionary<string, object>
-            {
-            });
-            if (r != null)
-            {
-                var arr = reserved ? (r as JArray).Reverse() : r as JArray;
-                List<FriendInfo> friendInfos = new();
-                foreach (var item in arr)
-                {
-                    friendInfos.Add(new FriendInfo
-                    {
-                        Nick = item["nickname"].ToString(),
-                        Postscript = item["remark"].ToString(),
-                        QQ = (long)item["user_id"]
-                    });
-                }
-                return FriendInfo.CollectionToList(friendInfos);
-            }
-            return FriendInfo.CollectionToList(new List<FriendInfo>());
+            return FriendInfo.CollectionToList(GetRawFriendList(reserved));
         }
 
         public string GetGroupInfo(long groupId, bool notCache)
         {
-            var r = CallOneBotAPI(APIType.get_group_info, new Dictionary<string, object>
-            {
-                {"group_id", groupId},
-                {"no_cache", notCache},
-            });
-            if (r != null)
-            {
-                new GroupInfo
-                {
-                    Group = (long)r["group_id"],
-                    Name = r["group_name"].ToString(),
-                    CurrentMemberCount = (int)r["member_count"],
-                    MaxMemberCount = (int)r["max_member_count"],
-                }.ToNativeBase64(false);
-            }
-            return new GroupInfo().ToNativeBase64(false);
+            return GetRawGroupInfo(groupId, notCache).ToNativeBase64(false);
         }
 
         public string GetGroupList()
         {
-            var r = CallOneBotAPI(APIType.get_group_list, new Dictionary<string, object>
-            {
-            });
-            if (r != null)
-            {
-                var arr = r as JArray;
-                List<GroupInfo> groupInfos = new();
-                foreach (var item in arr)
-                {
-                    groupInfos.Add(new GroupInfo
-                    {
-                        Group = (long)item["group_id"],
-                        Name = item["group_name"].ToString(),
-                        CurrentMemberCount = (int)item["member_count"],
-                        MaxMemberCount = (int)item["max_member_count"],
-                    });
-                }
-                return GroupInfo.CollectionToList(groupInfos);
-            }
-            return GroupInfo.CollectionToList(new List<GroupInfo>());
+            return GroupInfo.CollectionToList(GetRawGroupList());
         }
 
         public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
-            var r = CallOneBotAPI(APIType.get_group_member_info, new Dictionary<string, object>
-            {
-                {"group_id", groupId},
-                {"user_id", qqId},
-                {"no_cache", isCache},
-            });
-            return r != null ? ParseResult2GroupMemberInfo(r as JObject).ToNativeBase64() : new GroupMemberInfo().ToNativeBase64();
+            return GetRawGroupMemberInfo(groupId, qqId, isCache).ToNativeBase64();
         }
 
         public string GetGroupMemberList(long groupId)
         {
-            var r = CallOneBotAPI(APIType.get_group_member_list, new Dictionary<string, object>
-            {
-                {"group_id", groupId},
-            });
-            if (r != null)
-            {
-                var arr = r as JArray;
-                List<GroupMemberInfo> groupInfos = new();
-                foreach (var item in arr)
-                {
-                    groupInfos.Add(ParseResult2GroupMemberInfo(item as JObject));
-                }
-                return GroupMemberInfo.CollectionToList(groupInfos);
-            }
-            return new GroupMemberInfo().ToNativeBase64();
+            return GroupMemberInfo.CollectionToList(GetRawGroupMemberList(groupId));
         }
 
         public string GetLoginNick()
@@ -217,6 +139,103 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return r != null ? (long)r["user_id"] : 10001;
         }
 
+        public List<FriendInfo> GetRawFriendList(bool reserved)
+        {
+            var r = CallOneBotAPI(APIType.get_friend_list, new Dictionary<string, object>
+            {
+            });
+            if (r != null)
+            {
+                var arr = reserved ? (r as JArray).Reverse() : r as JArray;
+                List<FriendInfo> friendInfos = new();
+                foreach (var item in arr)
+                {
+                    friendInfos.Add(new FriendInfo
+                    {
+                        Nick = item["nickname"].ToString(),
+                        Postscript = item["remark"].ToString(),
+                        QQ = (long)item["user_id"]
+                    });
+                }
+                return friendInfos;
+            }
+            return new List<FriendInfo>();
+        }
+
+        public GroupInfo GetRawGroupInfo(long groupId, bool notCache)
+        {
+            var r = CallOneBotAPI(APIType.get_group_info, new Dictionary<string, object>
+            {
+                {"group_id", groupId},
+                {"no_cache", notCache},
+            });
+            if (r != null)
+            {
+                new GroupInfo
+                {
+                    Group = (long)r["group_id"],
+                    Name = r["group_name"].ToString(),
+                    CurrentMemberCount = (int)r["member_count"],
+                    MaxMemberCount = (int)r["max_member_count"],
+                };
+            }
+            return new GroupInfo();
+        }
+
+        public List<GroupInfo> GetRawGroupList()
+        {
+            var r = CallOneBotAPI(APIType.get_group_list, new Dictionary<string, object>
+            {
+            });
+            if (r != null)
+            {
+                var arr = r as JArray;
+                List<GroupInfo> groupInfos = new();
+                foreach (var item in arr)
+                {
+                    groupInfos.Add(new GroupInfo
+                    {
+                        Group = (long)item["group_id"],
+                        Name = item["group_name"].ToString(),
+                        CurrentMemberCount = (int)item["member_count"],
+                        MaxMemberCount = (int)item["max_member_count"],
+                    });
+                }
+                return groupInfos;
+            }
+            return new List<GroupInfo>();
+        }
+
+        public GroupMemberInfo GetRawGroupMemberInfo(long groupId, long qqId, bool isCache)
+        {
+            var r = CallOneBotAPI(APIType.get_group_member_info, new Dictionary<string, object>
+            {
+                {"group_id", groupId},
+                {"user_id", qqId},
+                {"no_cache", isCache},
+            });
+            return r != null ? ParseResult2GroupMemberInfo(r as JObject) : new GroupMemberInfo();
+        }
+
+        public List<GroupMemberInfo> GetRawGroupMemberList(long groupId)
+        {
+            var r = CallOneBotAPI(APIType.get_group_member_list, new Dictionary<string, object>
+            {
+                {"group_id", groupId},
+            });
+            if (r != null)
+            {
+                var arr = r as JArray;
+                List<GroupMemberInfo> groupInfos = new();
+                foreach (var item in arr)
+                {
+                    groupInfos.Add(ParseResult2GroupMemberInfo(item as JObject));
+                }
+                return groupInfos;
+            }
+            return new();
+        }
+
         public string GetStrangerInfo(long qqId, bool notCache)
         {
             var r = CallOneBotAPI(APIType.get_stranger_info, new Dictionary<string, object>
@@ -233,6 +252,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     Sex = ParseString2QQSex(r["sex"].ToString())
                 }.ToNativeBase64()
                 : new StrangerInfo().ToNativeBase64();
+        }
+
+        public void LoadConfig()
+        {
+            WsURL = GetConfig("WebSocketURL", "");
+            AuthKey = GetConfig("AuthKey", "");
         }
 
         public int SendDiscussMsg(long discussId, string msg)

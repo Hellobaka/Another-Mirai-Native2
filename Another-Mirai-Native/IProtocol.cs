@@ -1,4 +1,6 @@
-﻿namespace Another_Mirai_Native
+﻿using Another_Mirai_Native.Model;
+
+namespace Another_Mirai_Native
 {
     /// <summary>
     /// 协议需实现的接口
@@ -112,6 +114,43 @@
         /// <param name="groupId">群 ID</param>
         /// <returns>序列化后的群成员列表</returns>
         public string GetGroupMemberList(long groupId);
+
+        /// <summary>
+        /// 获取原始好友列表
+        /// </summary>
+        /// <param name="reserved">是否倒序</param>
+        /// <returns>好友列表</returns>
+        public List<FriendInfo> GetRawFriendList(bool reserved);
+
+        /// <summary>
+        /// 获取原始群组信息
+        /// </summary>
+        /// <param name="groupId">群 ID</param>
+        /// <param name="notCache">不使用缓存</param>
+        /// <returns>群组信息</returns>
+        public GroupInfo GetRawGroupInfo(long groupId, bool notCache);
+
+        /// <summary>
+        /// 获取原始群组列表
+        /// </summary>
+        /// <returns>群组列表</returns>
+        public List<GroupInfo> GetRawGroupList();
+
+        /// <summary>
+        /// 获取原始群成员信息
+        /// </summary>
+        /// <param name="groupId">群 ID</param>
+        /// <param name="qqId">成员 ID</param>
+        /// <param name="isCache">是否使用缓存</param>
+        /// <returns>群成员信息</returns>
+        public GroupMemberInfo GetRawGroupMemberInfo(long groupId, long qqId, bool isCache);
+
+        /// <summary>
+        /// 获取群成员列表
+        /// </summary>
+        /// <param name="groupId">群 ID</param>
+        /// <returns>原始群成员列表</returns>
+        public List<GroupMemberInfo> GetRawGroupMemberList(long groupId);
 
         /// <summary>
         /// 获取登录实例的账号昵称

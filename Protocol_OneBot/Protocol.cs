@@ -155,7 +155,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             Stopwatch sw = new();
             sw.Start();
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id} QQ:{groupMessage.user_id}({groupMessage.sender?.nickname}) {groupMessage.raw_message}", "处理中...");
-            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMsg, 1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.raw_message, 0);
+            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.raw_message, 0);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -231,7 +231,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     BinaryWriterExpand.Write_Ex(binaryWriter, fileUpload.file.name);
                     BinaryWriterExpand.Write_Ex(binaryWriter, fileUpload.file.size);
                     BinaryWriterExpand.Write_Ex(binaryWriter, fileUpload.file.busid);
-                    PluginManagerProxy.Instance.InvokeEvent(PluginEventType.Upload, 1, Helper.TimeStamp, fileUpload.group_id, fileUpload.user_id, Convert.ToBase64String(stream.ToArray()));
+                    PluginManagerProxy.Instance.Event_OnUpload(1, Helper.TimeStamp, fileUpload.group_id, fileUpload.user_id, Convert.ToBase64String(stream.ToArray()));
                     sw.Stop();
                     LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传", $"来源群:{fileUpload.group_id} 来源QQ:{fileUpload.user_id} " +
                         $"文件名:{fileUpload.file.name} 大小:{fileUpload.file.size / 1000}KB FileID:{fileUpload.file.id}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");
@@ -241,7 +241,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     AdminChange adminChange = notice.ToObject<AdminChange>();
                     int adminSet = adminChange.sub_type == "set" ? 2 : 1;
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{adminChange.group_id} QQ:{adminChange.user_id} 被{(adminSet == 2 ? "设置为" : "取消")}管理员", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.AdminChange, adminSet, adminChange.time, adminChange.group_id, adminChange.user_id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(adminSet, adminChange.time, adminChange.group_id, adminChange.user_id);
                     break;
 
                 case NoticeType.group_decrease:
@@ -260,14 +260,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot被踢出群聊", $"群:{leave.group_id} 操作人: {leave.operator_id}", "处理中...");
                             break;
                     }
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMemberDecrease, 1, Helper.TimeStamp, leave.group_id, leave.operator_id, leave.user_id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.TimeStamp, leave.group_id, leave.operator_id, leave.user_id);
                     break;
 
                 case NoticeType.group_increase:
                     GroupMemberJoin join = notice.ToObject<GroupMemberJoin>();
                     int groupInviteType = join.sub_type == "approve" ? 1 : 2;
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员增加", $"群:{join.group_id} QQ:{join.user_id} 操作人: {join.operator_id}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupMemberIncrease, groupInviteType, join.time, join.group_id, join.operator_id, join.user_id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(groupInviteType, join.time, join.group_id, join.operator_id, join.user_id);
                     break;
 
                 case NoticeType.group_ban:
@@ -283,13 +283,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员被解除禁言", $"群:{ban.group_id} QQ:{ban.user_id} 操作人:{ban.operator_id}", "处理中...");
                             break;
                     }
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupBan, banId, Helper.TimeStamp, ban.group_id, ban.operator_id, ban.user_id, ban.duration);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(banId, Helper.TimeStamp, ban.group_id, ban.operator_id, ban.user_id, ban.duration);
                     break;
 
                 case NoticeType.friend_add:
                     FriendAdd friendAdd = notice.ToObject<FriendAdd>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友添加", $"QQ:{friendAdd.user_id}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.FriendAdded, subType, friendAdd.time, friendAdd.user_id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAdded(1, friendAdd.time, friendAdd.user_id);
                     break;
 
                 case NoticeType.group_recall:
@@ -336,17 +336,17 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 case "friend":
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.raw_message}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 11, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
                     break;
 
                 case "group":
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{privateMessage.sender?.group_id} QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.raw_message}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 2, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
                     break;
 
                 case "other":
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.raw_message}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.PrivateMsg, 1, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, privateMessage.message_id, privateMessage.user_id, privateMessage.raw_message, 0);
                     break;
 
                 default:
@@ -378,14 +378,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     GroupRequest groupRequest = request.ToObject<GroupRequest>();
                     RequestCache.GroupRequest.Add(groupRequest.flag, (groupRequest.user_id, "", groupRequest.group_id, ""));
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{groupRequest.group_id} QQ:{groupRequest.user_id} 备注:{groupRequest.comment}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.GroupAddRequest, 1, groupRequest.time, groupRequest.group_id, groupRequest.user_id, groupRequest.comment, groupRequest.comment);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, groupRequest.time, groupRequest.group_id, groupRequest.user_id, groupRequest.comment, groupRequest.comment);
                     break;
 
                 case "friend":
                     FriendRequest friendRequest = request.ToObject<FriendRequest>();
                     RequestCache.FriendRequest.Add(friendRequest.flag, (friendRequest.user_id, ""));
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加好友请求", $"QQ:{friendRequest.user_id} 备注:{friendRequest.comment} 来源群:{friendRequest.group_id}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.InvokeEvent(PluginEventType.FriendRequest, 1, friendRequest.time, friendRequest.user_id, friendRequest.comment, friendRequest.flag);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, friendRequest.time, friendRequest.user_id, friendRequest.comment, friendRequest.flag);
                     break;
 
                 default:

@@ -91,6 +91,42 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public string GetFriendList(bool reserved)
         {
+            return FriendInfo.CollectionToList(GetRawFriendList(reserved));
+        }
+
+        public string GetGroupInfo(long groupId, bool notCache)
+        {
+            return GetRawGroupInfo(groupId, notCache).ToNativeBase64(false);
+        }
+
+        public string GetGroupList()
+        {
+            return GroupInfo.CollectionToList(GetRawGroupList());
+        }
+
+        public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
+        {
+            return GetRawGroupMemberInfo(groupId, qqId, isCache).ToNativeBase64();
+        }
+
+        public string GetGroupMemberList(long groupId)
+        {
+            return GroupMemberInfo.CollectionToList(GetRawGroupMemberList(groupId));
+        }
+
+        public string GetLoginNick()
+        {
+            var profiler = GetBotProfilerInternal();
+            return profiler == null ? "" : profiler.nickname;
+        }
+
+        public long GetLoginQQ()
+        {
+            return QQ;
+        }
+
+        public List<FriendInfo> GetRawFriendList(bool reserved)
+        {
             object request = new
             {
                 sessionKey = SessionKey_Message,
@@ -98,7 +134,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             JObject json = CallMiraiAPI(MiraiApiType.friendList, request);
             if (json == null)
             {
-                return FriendInfo.CollectionToList(new List<FriendInfo>());
+                return new List<FriendInfo>();
             }
             if (((int)json["code"]) == 0)
             {
@@ -113,20 +149,20 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         QQ = (long)item["id"]
                     });
                 }
-                return FriendInfo.CollectionToList(friendInfos);
+                return friendInfos;
             }
             else
             {
-                return FriendInfo.CollectionToList(new List<FriendInfo>());
+                return new List<FriendInfo>();
             }
         }
 
-        public string GetGroupInfo(long groupId, bool notCache)
+        public GroupInfo GetRawGroupInfo(long groupId, bool notCache)
         {
             var list = GetGroupListInternal();
             if (list == null && !list.Any(x => x.id == groupId))
             {
-                return new GroupInfo().ToNativeBase64(false);
+                return new GroupInfo();
             }
             var result = list.First(x => x.id == groupId);
             return new GroupInfo
@@ -134,15 +170,15 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 Group = result.id,
                 Name = result.name,
                 // 若需要则实现成员数量 需再拉取群成员列表
-            }.ToNativeBase64(false);
+            };
         }
 
-        public string GetGroupList()
+        public List<GroupInfo> GetRawGroupList()
         {
             var list = GetGroupListInternal();
             if (list == null)
             {
-                return GroupInfo.CollectionToList(new List<GroupInfo>());
+                return new List<GroupInfo>();
             }
             List<GroupInfo> result = new();
             foreach (var item in list)
@@ -154,41 +190,30 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     // 若需要则实现成员数量 需再拉取群成员列表
                 });
             }
-            return GroupInfo.CollectionToList(result);
+            return result;
         }
 
-        public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
+        public GroupMemberInfo GetRawGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
             var list = GetGroupMemberListInternal(groupId);
             return list == null && !list.Any(x => x.group.id == groupId && x.id == qqId)
-                ? GroupMemberInfo.CollectionToList(new List<GroupMemberInfo>())
-                : ParseGroupMemberInfoResponse2GroupMemberInfo(list.First(x => x.group.id == groupId && x.id == qqId)).ToNativeBase64();
+                ? new GroupMemberInfo()
+                : ParseGroupMemberInfoResponse2GroupMemberInfo(list.First(x => x.group.id == groupId && x.id == qqId));
         }
 
-        public string GetGroupMemberList(long groupId)
+        public List<GroupMemberInfo> GetRawGroupMemberList(long groupId)
         {
             var list = GetGroupMemberListInternal(groupId);
             if (list == null)
             {
-                return GroupMemberInfo.CollectionToList(new List<GroupMemberInfo>());
+                return new List<GroupMemberInfo>();
             }
             List<GroupMemberInfo> members = new();
             foreach (var item in list)
             {
                 members.Add(ParseGroupMemberInfoResponse2GroupMemberInfo(item));
             }
-            return GroupMemberInfo.CollectionToList(members);
-        }
-
-        public string GetLoginNick()
-        {
-            var profiler = GetBotProfilerInternal();
-            return profiler == null ? "" : profiler.nickname;
-        }
-
-        public long GetLoginQQ()
-        {
-            return QQ;
+            return members;
         }
 
         public string GetStrangerInfo(long qqId, bool notCache)

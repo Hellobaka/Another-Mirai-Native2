@@ -20,16 +20,18 @@ namespace Protocol_NoConnection
             Instance = this;
         }
 
-        public string Name { get; set; } = "NoConnection";
+        public static Protocol Instance { get; set; }
 
         public bool IsConnected { get; set; } = false;
 
-        public static Protocol Instance { get; set; }
+        public string Name { get; set; } = "NoConnection";
+
+        public bool ShowTestDialog { get; private set; }
+
+        public long TestLoginQQ { get; set; } = 100000;
 
         public string TestNickName { get; set; } = "";
 
-        public long TestLoginQQ { get; set; } = 100000;
-        public bool ShowTestDialog { get; private set; }
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
         private List<GroupInfo> GroupInfos { get; set; } = new();
@@ -39,13 +41,6 @@ namespace Protocol_NoConnection
         private Random Random { get; set; } = new();
 
         private Tester TesterForm { get; set; }
-
-        public void LoadConfig()
-        {
-            TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
-            TestLoginQQ = GetConfig("NoConnection_QQ", (long)999999999);
-            ShowTestDialog = GetConfig("ShowTestDialog", true);
-        }
 
         public void BuildMockData()
         {
@@ -141,28 +136,6 @@ namespace Protocol_NoConnection
             }
         }
 
-        private GroupMemberInfo BuildSelfMockData(long groupId)
-        {
-            return new GroupMemberInfo
-            {
-                Age = Random.Next(0, 99),
-                Area = $"Area{Random.Next()}",
-                Card = $"Card{Random.Next()}",
-                ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
-                ExclusiveTitleExpirationTime = null,
-                Group = groupId,
-                IsAllowEditorCard = true,
-                IsBadRecord = Random.NextDouble() > 0.5,
-                JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
-                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
-                Level = $"Level{Random.Next()}",
-                MemberType = QQGroupMemberType.Member,
-                Nick = $"Nick{Random.Next()}",
-                QQ = GetLoginQQ(),
-                Sex = QQSex.Man
-            };
-        }
-
         public int CanSendImage()
         {
             return 1;
@@ -208,29 +181,27 @@ namespace Protocol_NoConnection
 
         public string GetFriendList(bool reserved)
         {
-            return reserved ? FriendInfo.CollectionToList(FriendInfos.OrderBy(x => x.QQ).ToList())
-                : FriendInfo.CollectionToList(FriendInfos.OrderByDescending(x => x.QQ).ToList());
+            return FriendInfo.CollectionToList(GetRawFriendList(reserved));
         }
 
         public string GetGroupInfo(long groupId, bool notCache)
         {
-            return GroupInfos.FirstOrDefault(x => x.Group == groupId)?.ToNativeBase64(false) ?? "";
+            return GetRawGroupInfo(groupId, notCache)?.ToNativeBase64(false) ?? "";
         }
 
         public string GetGroupList()
         {
-            return GroupInfo.CollectionToList(GroupInfos);
+            return GroupInfo.CollectionToList(GetRawGroupList());
         }
 
         public string GetGroupMemberInfo(long groupId, long qqId, bool isCache)
         {
-            return GroupMemberInfos.FirstOrDefault(x => x.Group == groupId && x.QQ == qqId)?.ToNativeBase64() ?? "";
+            return GetRawGroupMemberInfo(groupId, qqId, isCache)?.ToNativeBase64() ?? "";
         }
 
         public string GetGroupMemberList(long groupId)
         {
-            return GroupMemberInfos.Any(x => x.Group == groupId) ? GroupMemberInfo.CollectionToList(GroupMemberInfos.Where(x => x.Group == groupId).ToList())
-                 : "";
+            return GroupMemberInfo.CollectionToList(GetRawGroupMemberList(groupId));
         }
 
         public string GetLoginNick()
@@ -243,6 +214,33 @@ namespace Protocol_NoConnection
             return TestLoginQQ;
         }
 
+        public List<FriendInfo> GetRawFriendList(bool reserved)
+        {
+            return reserved ? FriendInfos.OrderBy(x => x.QQ).ToList()
+                : FriendInfos.OrderByDescending(x => x.QQ).ToList();
+        }
+
+        public GroupInfo GetRawGroupInfo(long groupId, bool notCache)
+        {
+            return GroupInfos.FirstOrDefault(x => x.Group == groupId);
+        }
+
+        public List<GroupInfo> GetRawGroupList()
+        {
+            return GroupInfos;
+        }
+
+        public GroupMemberInfo GetRawGroupMemberInfo(long groupId, long qqId, bool isCache)
+        {
+            return GroupMemberInfos.FirstOrDefault(x => x.Group == groupId && x.QQ == qqId);
+        }
+
+        public List<GroupMemberInfo> GetRawGroupMemberList(long groupId)
+        {
+            return GroupMemberInfos.Any(x => x.Group == groupId) ? GroupMemberInfos.Where(x => x.Group == groupId).ToList()
+                 : new();
+        }
+
         public string GetStrangerInfo(long qqId, bool notCache)
         {
             return new StrangerInfo
@@ -252,6 +250,13 @@ namespace Protocol_NoConnection
                 QQ = qqId,
                 Sex = Random.NextDouble() > 0.5 ? QQSex.Man : QQSex.Woman
             }.ToNativeBase64();
+        }
+
+        public void LoadConfig()
+        {
+            TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
+            TestLoginQQ = GetConfig("NoConnection_QQ", (long)999999999);
+            ShowTestDialog = GetConfig("ShowTestDialog", true);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
@@ -337,6 +342,28 @@ namespace Protocol_NoConnection
         public int SetGroupWholeBan(long groupId, bool isOpen)
         {
             return 1;
+        }
+
+        private GroupMemberInfo BuildSelfMockData(long groupId)
+        {
+            return new GroupMemberInfo
+            {
+                Age = Random.Next(0, 99),
+                Area = $"Area{Random.Next()}",
+                Card = $"Card{Random.Next()}",
+                ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
+                ExclusiveTitleExpirationTime = null,
+                Group = groupId,
+                IsAllowEditorCard = true,
+                IsBadRecord = Random.NextDouble() > 0.5,
+                JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
+                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
+                Level = $"Level{Random.Next()}",
+                MemberType = QQGroupMemberType.Member,
+                Nick = $"Nick{Random.Next()}",
+                QQ = GetLoginQQ(),
+                Sex = QQSex.Man
+            };
         }
     }
 }
