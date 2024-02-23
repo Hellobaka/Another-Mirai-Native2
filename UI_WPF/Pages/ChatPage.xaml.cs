@@ -52,6 +52,26 @@ namespace Another_Mirai_Native.UI.Pages
                 GroupName = "Error: BindingExpression path error: 'Width' property not found on Project.CustomElement, Project.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'. BindingExpression: Path='Width' DataItem=Project.CustomElement, Project.WindowsPhone, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'; target element is 'Windows.UI.Xaml.Controls.Grid' (Name='null'); target property is 'Width' (type 'Double",
                 Id = 0
             });
+            ReorderChatList();
+        }
+
+        private void EditBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var item = ChatList.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+            item.Detail = "A";
+            item.GroupName = "B";
+            item.Time = DateTime.Now.AddDays(new Random().Next(30) * -1);
+            item.InvokePropertyChanged("");
+
+            ReorderChatList();
+        }
+
+        private void ReorderChatList()
+        {
+            ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
+            OnPropertyChanged(nameof(ChatList));
+
+            EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

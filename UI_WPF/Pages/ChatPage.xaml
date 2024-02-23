@@ -31,14 +31,6 @@
                         TextAlignment="Center">
                         空空如也喵~
                     </TextBlock>
-                    <Button
-                        x:Name="AddBtn"
-                        Margin="10"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Click="AddBtn_Click">
-                        添加
-                    </Button>
                     <ListView
                         x:Name="ChatListDisplay"
                         HorizontalContentAlignment="Stretch"
