@@ -1,10 +1,8 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.RPC;
 using System.Diagnostics;
-using System.IO;
 
 namespace Another_Mirai_Native.Native
 {
@@ -22,6 +20,45 @@ namespace Another_Mirai_Native.Native
         public static event Action<CQPluginProxy> OnPluginProxyConnectStatusChanged;
 
         public static event Action<string, Dictionary<string, object>> OnTestInvoked;
+
+        #region 事件外抛
+
+        /// <summary>
+        /// Group QQ GroupMemberType
+        /// </summary>
+        public static event Action<long, long, QQGroupMemberType> OnAdminChanged;
+
+        /// <summary>
+        /// QQ
+        /// </summary>
+        public static event Action<long> OnFriendAdded;
+
+        /// <summary>
+        /// Group QQ
+        /// </summary>
+        public static event Action<long, long> OnGroupAdded;
+
+        /// <summary>
+        /// Group OperatorQQ OperatedQQ time
+        /// </summary>
+        public static event Action<long, long, long, long> OnGroupBan;
+
+        /// <summary>
+        /// Group QQ
+        /// </summary>
+        public static event Action<long, long> OnGroupLeft;
+
+        /// <summary>
+        /// QQ Msg
+        /// </summary>
+        public static event Action<long, string> OnPrivateMsg;
+
+        /// <summary>
+        /// Group QQ Msg
+        /// </summary>
+        public static event Action<long, long, string> OnGroupMsg;
+
+        #endregion 事件外抛
 
         public static PluginManagerProxy Instance { get; private set; }
 
@@ -271,13 +308,16 @@ namespace Another_Mirai_Native.Native
 
         #region 测试事件调用
 
-        public int Event_OnAdminChange(CQPluginProxy target, int subType, int sendTime, long fromGroup, long beingOperateQQ)
+        // 以下是封装好参数的调用，协议请调用这个
+
+        public int Event_OnAdminChange(CQPluginProxy target, int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
         }
 
-        public CQPluginProxy Event_OnAdminChange(int subType, int sendTime, long fromGroup, long beingOperateQQ)
+        public CQPluginProxy Event_OnAdminChange(int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
+            OnAdminChanged?.Invoke(fromGroup, beingOperateQQ, subType == 1 ? QQGroupMemberType.Member : QQGroupMemberType.Manage);
             return InvokeEvent(PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
         }
 
@@ -321,63 +361,67 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.Exit);
         }
 
-        public int Event_OnFriendAdded(CQPluginProxy target, int subType, int sendTime, long fromQQ)
+        public int Event_OnFriendAdded(CQPluginProxy target, int subType, long sendTime, long fromQQ)
         {
             return InvokeEvent(target, PluginEventType.FriendAdded, subType, sendTime, fromQQ);
         }
 
-        public CQPluginProxy Event_OnFriendAdded(int subType, int sendTime, long fromQQ)
+        public CQPluginProxy Event_OnFriendAdded(int subType, long sendTime, long fromQQ)
         {
+            OnFriendAdded?.Invoke(fromQQ);
             return InvokeEvent(PluginEventType.FriendAdded, subType, sendTime, fromQQ);
         }
 
-        public int Event_OnFriendAddRequest(CQPluginProxy target, int subType, int sendTime, long fromQQ, string msg, string responseFlag)
+        public int Event_OnFriendAddRequest(CQPluginProxy target, int subType, long sendTime, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(target, PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
         }
 
-        public CQPluginProxy Event_OnFriendAddRequest(int subType, int sendTime, long fromQQ, string msg, string responseFlag)
+        public CQPluginProxy Event_OnFriendAddRequest(int subType, long sendTime, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
         }
 
-        public int Event_OnGroupAddRequest(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        public int Event_OnGroupAddRequest(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(target, PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
         }
 
-        public CQPluginProxy Event_OnGroupAddRequest(int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        public CQPluginProxy Event_OnGroupAddRequest(int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
         }
 
-        public int Event_OnGroupBan(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        public int Event_OnGroupBan(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
             return InvokeEvent(target, PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
-        public CQPluginProxy Event_OnGroupBan(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        public CQPluginProxy Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
+            OnGroupBan?.Invoke(fromGroup, fromQQ, beingOperateQQ, duration);
             return InvokeEvent(PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
-        public int Event_OnGroupMemberDecrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public int Event_OnGroupMemberDecrease(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
-        public CQPluginProxy Event_OnGroupMemberDecrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public CQPluginProxy Event_OnGroupMemberDecrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
+            OnGroupLeft?.Invoke(fromGroup, fromQQ);
             return InvokeEvent(PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
-        public int Event_OnGroupMemberIncrease(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public int Event_OnGroupMemberIncrease(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
-        public CQPluginProxy Event_OnGroupMemberIncrease(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public CQPluginProxy Event_OnGroupMemberIncrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
+            OnGroupAdded?.Invoke(fromGroup, fromQQ);
             return InvokeEvent(PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
@@ -388,6 +432,7 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
+            OnGroupMsg?.Invoke(fromGroup, fromQQ, msg);
             return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
@@ -396,9 +441,9 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(target, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
-        // 以下是封装好参数的调用，协议请调用这个
         public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
         {
+            OnPrivateMsg?.Invoke(fromQQ, msg);
             return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
@@ -412,12 +457,12 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.StartUp);
         }
 
-        public int Event_OnUpload(CQPluginProxy target, int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        public int Event_OnUpload(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(target, PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
         }
 
-        public CQPluginProxy Event_OnUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        public CQPluginProxy Event_OnUpload(int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
         }
