@@ -1,6 +1,8 @@
 ﻿using Another_Mirai_Native.UI.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -61,6 +63,12 @@ namespace Another_Mirai_Native.UI.Controls
             control.Id = newValue.Id;
             control.FallbackName = newValue.GroupName;
             control.AvatarType = newValue.AvatarType;
+            if (LoadedItems.Any(x => x == newValue.Id) is false)
+            {
+                LoadedItems.Add(newValue.Id);
+            }
+            control.GetDisplayImage(newValue.Id);
+            control.Init();
         }
 
         private static Color[] Colors { get; set; } = new Color[]
@@ -87,17 +95,33 @@ namespace Another_Mirai_Native.UI.Controls
             Color.FromRgb(44, 62, 80) // MidnightBlue
         };
 
-        private static Random Random { get; } = new Random();
+        private static List<long> LoadedItems { get; set; } = new();
 
-        private bool ControlLoaded { get; set; }
+        private static Dictionary<(long, AvatarTypes), BitmapImage> CachedImage { get; set; } = new();
 
         private void GetDisplayImage(long id)
         {
+            if (CachedImage.ContainsKey((id, AvatarType)))
+            {
+                return;
+            }
+
             BitmapImage = new BitmapImage();
             BitmapImage.DownloadCompleted += (_, _) =>
             {
-                Container.Background = new ImageBrush(BitmapImage);
-                FallbackDisplay.Visibility = Visibility.Collapsed;
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (CachedImage.ContainsKey((id, AvatarType)))
+                    {
+                        CachedImage[(id, AvatarType)] = BitmapImage;
+                    }
+                    else
+                    {
+                        CachedImage.Add((id, AvatarType), BitmapImage);
+                    }
+                    Container.Background = new ImageBrush(BitmapImage);
+                    FallbackDisplay.Visibility = Visibility.Collapsed;
+                });
             };
             BitmapImage.BeginInit();
             switch (AvatarType)
@@ -116,19 +140,25 @@ namespace Another_Mirai_Native.UI.Controls
             BitmapImage.EndInit();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        public void Init()
         {
-            if (ControlLoaded)
-            {
-                return;
-            }
-            ControlLoaded = true;
             Container.CornerRadius = IsRound ? new CornerRadius(double.MaxValue) : new CornerRadius(Width * 0.1);
-            FallbackBrush = new SolidColorBrush(Colors[Random.Next(Colors.Length)]);
+            FallbackBrush = new SolidColorBrush(Colors[new Random(Id.GetHashCode()).Next(Colors.Length)]);
             Container.Background = FallbackBrush;
             FallbackDisplay.FontSize = Width * 0.35;
             FallbackDisplay.Text = FallbackName.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName;
-            GetDisplayImage(Id);
+
+            if (CachedImage.ContainsKey((Id, AvatarType)))
+            {
+                BitmapImage = CachedImage[(Id, AvatarType)];
+                Container.Background = new ImageBrush(BitmapImage);
+                FallbackDisplay.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

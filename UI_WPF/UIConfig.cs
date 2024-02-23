@@ -31,6 +31,8 @@ namespace Another_Mirai_Native.UI
 
         public string WindowMaterial { get; set; } = "None";
 
+        public bool ChatEnabled { get; set; } = false;
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -42,6 +44,7 @@ namespace Another_Mirai_Native.UI
             LogAutoScroll = GetConfig("LogAutoScroll", true);
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
+            ChatEnabled = GetConfig("ChatEnabled", false);
         }
     }
 }
