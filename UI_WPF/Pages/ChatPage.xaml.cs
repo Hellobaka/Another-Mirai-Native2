@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
@@ -28,6 +29,8 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public static event Action<SizeChangedEventArgs> WindowSizeChanged;
 
         public ObservableCollection<ChatListItemViewModel> ChatList { get; set; } = new();
 
@@ -62,14 +65,18 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     chatHistory.RemoveAt(0);
                 }
-                chatHistory.Add(BuildChatDetailItem(group, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
+                chatHistory.Add(BuildChatDetailItem(qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
             }
             else
             {
                 GroupChatHistory.Add(group, new ObservableCollection<ChatDetailItemViewModel>());
-                GroupChatHistory[group].Add(BuildChatDetailItem(group, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
+                GroupChatHistory[group].Add(BuildChatDetailItem(qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType));
             }
             OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(false);
+            });
         }
 
         private void AddPrivateChatItem(long qq, string msg, DetailItemType itemType)
@@ -88,6 +95,135 @@ namespace Another_Mirai_Native.UI.Pages
                 FriendChatHistory[qq].Add(BuildChatDetailItem(qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType));
             }
             OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(false);
+            });
+        }
+
+        private void RefreshMessageContainer(bool refreshAll)
+        {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            if (refreshAll)
+            {
+                RefreshGroupName();
+                MessageContainer.Children.Clear();
+                GC.Collect();
+            }
+
+            foreach (var item in DetailList)
+            {
+                if (!CheckMessageContainerHasItem(item.GUID))
+                {
+                    switch (item.DetailItemType)
+                    {
+                        case DetailItemType.Notice:
+                            MessageContainer.Children.Add(BuildMiddleBlock(item));
+                            break;
+                        case DetailItemType.Receive:
+                            MessageContainer.Children.Add(BuildLeftBlock(item));
+                            break;
+                        default:
+                        case DetailItemType.Send:
+                            MessageContainer.Children.Add(BuildRightBlock(item));
+                            break;
+                    }
+                }
+            }
+            ScrollToBottom(MessageScrollViewer);
+        }
+
+        private void ScrollToBottom(ScrollViewer scrollViewer)
+        {
+            scrollViewer.ScrollToBottom();
+        }
+
+        private UIElement BuildRightBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Right()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                DisplayName = item.Nick,
+                Time = item.Time,
+                Id = item.Id,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private UIElement BuildLeftBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Left()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                DisplayName = item.Nick,
+                Time = item.Time,
+                Id = item.Id,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private UIElement BuildMiddleBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Center()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private bool CheckMessageContainerHasItem(string guid)
+        {
+            foreach (UIElement item in MessageContainer.Children)
+            {
+                if (item is ChatDetailListItem_Center center && center.GUID == guid)
+                {
+                    return true;
+                }
+                else if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                {
+                    return true;
+                }
+                else if (item is ChatDetailListItem_Left left && left.GUID == guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void RefreshGroupName()
+        {
+            switch (SelectedItem.AvatarType)
+            {
+                case ChatAvatar.AvatarTypes.QQGroup:
+                    GroupName = GetGroupName(SelectedItem.Id);
+                    break;
+
+                case ChatAvatar.AvatarTypes.Fallback:
+                case ChatAvatar.AvatarTypes.QQPrivate:
+                    GroupName = GetFriendNick(SelectedItem.Id);
+                    break;
+                default:
+                    break;
+            }
+            OnPropertyChanged(nameof(GroupName));
         }
 
         private ChatDetailItemViewModel BuildChatDetailItem(long qq, string msg, string nick, Controls.ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
@@ -198,11 +334,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            //var converter = new ColorOpacityConverter();
-            //var brush = (Brush)FindResource("SystemControlBackgroundChromeMediumBrush");
-            //var convertedBrush = (Brush)converter.Convert(brush, typeof(Brush), 0.4, null);
-
-            //ChatContainer.Background = convertedBrush; 
+            SizeChanged += (_, e) => WindowSizeChanged?.Invoke(e);
 
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
             PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
@@ -356,6 +488,10 @@ namespace Another_Mirai_Native.UI.Pages
                 }
             }
             OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(true);
+            });
         }
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
@@ -393,6 +529,15 @@ namespace Another_Mirai_Native.UI.Pages
                 AddGroupChatItem(SelectedItem.Id, AppConfig.Instance.CurrentQQ, SendText.Text, DetailItemType.Send);
             }
             SendText.Text = "";
+        }
+
+        private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
+            {
+                e.Handled = true;
+                SendBtn_Click(sender, e);
+            }
         }
     }
 }

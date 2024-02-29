@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="430"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Converters:DisplayTimeConverter x:Key="DisplayTimeConverter" />
@@ -42,13 +43,15 @@
                     x:Name="NameDisplay"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    FontSize="10"
                     Text="{Binding DisplayName}"
                     TextTrimming="CharacterEllipsis" />
             </Grid>
             <Border
                 x:Name="DetailBorder"
                 Grid.Row="1"
-                Margin="0,0,10,0"
+                MinHeight="38"
+                Margin="10,5,0,0"
                 HorizontalAlignment="Stretch"
                 Background="{StaticResource SystemControlHighlightAltListAccentMediumBrush}"
                 CornerRadius="10">
@@ -57,15 +60,16 @@
             <StackPanel
                 x:Name="ImageDisplay"
                 Grid.Row="1"
-                Margin="0,0,10,0"
+                Margin="10,5,0,0"
                 HorizontalAlignment="Stretch"
                 Visibility="Collapsed" />
             <TextBlock
                 x:Name="TimeDisplay"
                 Grid.Row="2"
-                Margin="0,0,10,0"
+                Margin="10,5,0,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
+                FontSize="10"
                 Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}" />
         </Grid>
     </Grid>

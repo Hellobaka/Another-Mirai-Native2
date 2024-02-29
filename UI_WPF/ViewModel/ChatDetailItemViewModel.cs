@@ -32,6 +32,8 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public DateTime Time { get; set; } = DateTime.Now;
 
+        public string GUID { get; set; } = Guid.NewGuid().ToString();
+
         public void InvokePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));

@@ -144,6 +144,11 @@ namespace Another_Mirai_Native.Model
             return codes;
         }
 
+        public static string RemoveAllCQCodes(string msg)
+        {
+            return _regices.Value[0].Replace(msg, "");
+        }
+
         /// <summary>
         /// 确定指定的对象是否等于当前对象
         /// </summary>

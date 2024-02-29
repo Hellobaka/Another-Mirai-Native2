@@ -6,8 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:Another_Mirai_Native.UI.Controls"
+    d:DataContext="{d:DesignInstance Type=viewmodel:ChatDetailListItem_Left}"
     d:DesignHeight="250"
     d:DesignWidth="430"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Converters:DisplayTimeConverter x:Key="DisplayTimeConverter" />
@@ -40,31 +43,39 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="NameDisplay"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
+                    FontSize="10"
                     Text="{Binding DisplayName}"
                     TextTrimming="CharacterEllipsis" />
             </Grid>
             <Border
                 x:Name="DetailBorder"
                 Grid.Row="1"
-                Margin="0,0,10,0"
+                MinHeight="38"
+                Margin="0,5,10,0"
                 HorizontalAlignment="Stretch"
-                Background="{StaticResource SystemControlHighlightAltListAccentMediumBrush}"
+                Background="{StaticResource SystemControlPageBackgroundChromeMediumLowBrush}"
                 CornerRadius="10">
                 <StackPanel x:Name="DetailContainer" />
             </Border>
-            <StackPanel
-                x:Name="ImageDisplay"
+            <Border
+                x:Name="ImageBorder"
                 Grid.Row="1"
-                Margin="0,0,10,0"
+                Margin="0,5,10,0"
                 HorizontalAlignment="Stretch"
-                Visibility="Collapsed" />
+                ClipToBounds="True"
+                CornerRadius="10"
+                Visibility="Collapsed">
+                <StackPanel x:Name="ImageDisplay" HorizontalAlignment="Stretch" />
+            </Border>
+
             <TextBlock
                 x:Name="TimeDisplay"
                 Grid.Row="2"
-                Margin="0,0,10,0"
+                Margin="0,5,10,0"
                 VerticalAlignment="Center"
+                FontSize="10"
                 Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}" />
         </Grid>
     </Grid>

@@ -1,20 +1,15 @@
 ﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.Controls
 {
@@ -26,69 +21,122 @@ namespace Another_Mirai_Native.UI.Controls
         public ChatDetailListItem_Left()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
-        public static readonly DependencyProperty ItemProperty =
-            DependencyProperty.Register(
-                "Item",
-                typeof(ChatDetailItemViewModel),
-                typeof(ChatDetailListItem_Left),
-                new PropertyMetadata(new ChatDetailItemViewModel(), OnItemChanged));
+        public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
 
-        public ChatDetailItemViewModel Item
-        {
-            get { return (ChatDetailItemViewModel)GetValue(ItemProperty); }
-            set { SetValue(ItemProperty, value); }
-        }
+        public bool ControlLoaded { get; set; }
+
+        public DetailItemType DetailItemType { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public string GUID { get; set; }
+
+        public long Id { get; set; }
 
         public string Message { get; set; } = "";
-        public DetailItemType DetailItemType { get; private set; }
-        public string DisplayName { get; private set; }
-        public DateTime Time { get; private set; }
-        public long Id { get; private set; }
 
-        private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public DateTime Time { get; set; }
+
+        private static Dictionary<string, BitmapImage> CachedImage { get; set; } = new();
+
+        private static double ImageMaxHeight { get; set; } = 450;
+
+        public static Border BuildImageElement(CQCode cqCode, double maxWidth)
         {
-            ChatDetailListItem_Left control = (ChatDetailListItem_Left)d;
-            ChatDetailItemViewModel newValue = (ChatDetailItemViewModel)e.NewValue;
-
-            control.Message = newValue.Content;
-            control.DetailItemType = newValue.DetailItemType;
-            control.DisplayName = newValue.Nick;
-            control.Time = newValue.Time;
-            control.Id = newValue.Id;
-            control.ParseAndBuildDetail();
-        }
-
-        public void ParseAndBuildDetail()
-        {
-            var ls = CQCode.Parse(Message);
-            Avatar.DataContext = new ChatListItemViewModel
+            ImageBrush CreateImageBrush(BitmapImage image)
             {
-                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
-                GroupName = DisplayName,
-                Id = Id
+                var brush = new ImageBrush(image)
+                {
+                    Stretch = Stretch.Uniform
+                };
+                return brush;
+            }
+            void SetBorderBackground(Dispatcher dispatcher, Border border, ModernWpf.Controls.ProgressRing progressRing, BitmapImage image)
+            {
+                dispatcher.BeginInvoke(() =>
+                {
+                    border.Background = CreateImageBrush(image);
+                    if (image.Height > ImageMaxHeight)
+                    {
+                        // 超长图居中问题
+                        border.Width = Math.Min(border.Width, image.Width * (ImageMaxHeight / image.Height));
+                        border.Height = Math.Min(border.Height, image.Height * (border.Width / image.Width));
+                    }
+                    else
+                    {
+                        border.Width = Math.Min(border.MaxWidth, border.Width * 1.2);
+                        border.Height = image.Height * (border.Width / image.Width);
+                    }
+                    progressRing.Visibility = Visibility.Collapsed;
+                });
+            }
+
+            var border = new Border()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                MinHeight = 100,
+                MinWidth = 100,
+                Height = ImageMaxHeight,
+                Width = maxWidth,
+                CornerRadius = new CornerRadius(3),
             };
-            DataContext = this;
-            foreach (var item in ls)
+            border.MouseLeftButtonDown += (_, e) =>
             {
-                if (item.Function == Model.Enums.CQCodeType.Image)
+                if (e.ClickCount == 2)
                 {
-
+                    Debug.WriteLine("DbClick");
                 }
-                else if (item.Function == Model.Enums.CQCodeType.Record)
-                {
+            };
+            DynamicResourceExtension dynamicResource = new("SystemControlPageBackgroundChromeMediumLowBrush");
+            border.SetResourceReference(Border.BackgroundProperty, dynamicResource.ResourceKey);
+            RenderOptions.SetBitmapScalingMode(border, BitmapScalingMode.Fant);
+            var progressRing = new ModernWpf.Controls.ProgressRing
+            {
+                IsActive = true,
+                Width = 30,
+                Height = 30,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+            border.Child = progressRing;
 
-                }
-                else if(item.Function == Model.Enums.CQCodeType.Rich)
-                {
+            string url = Extend.GetImageUrlOrPathFromCQCode(cqCode);
+            if (CachedImage.TryGetValue(url, out BitmapImage? img))
+            {
+                SetBorderBackground(border.Dispatcher, border, progressRing, img);
+                return border;
+            }
 
+            var bitmapImage = new BitmapImage();
+            bitmapImage.DownloadCompleted += (_, _) =>
+            {
+                if (CachedImage.ContainsKey(url))
+                {
+                    CachedImage[url] = bitmapImage;
                 }
                 else
                 {
-                    DetailContainer.Children.Add(BuildTextElement(item.ToSendString()));
+                    CachedImage.Add(url, bitmapImage);
                 }
+                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
+            };
+            bitmapImage.BeginInit();
+            if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
+            {
+                bitmapImage.UriSource = uri;
             }
+            bitmapImage.EndInit();
+
+            // local pic
+            if (!url.StartsWith("http"))
+            {
+                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
+            }
+            return border;
         }
 
         public static TextBox BuildTextElement(string text)
@@ -104,13 +152,79 @@ namespace Another_Mirai_Native.UI.Controls
             };
         }
 
-        public static Image BuildImageElement(CQCode cqCode)
+        public void ParseAndBuildDetail()
         {
-            var img = new Image();
-            img.BeginInit();
-            img.Source = new BitmapImage(new Uri(Extend.GetImageUrlOrPathFromCQCode(cqCode)));
-            img.EndInit();
-            return img;
+            var ls = CQCode.Parse(Message);
+            int imageCount = ls.Count(x => x.IsImageCQCode);
+            int recordCount = ls.Count(x => x.IsRecordCQCode);
+            StackPanel imgContainer = imageCount == 1 ? ImageDisplay : DetailContainer;
+            if (imageCount == 1)
+            {
+                ImageBorder.Visibility = Visibility.Visible;
+                DetailBorder.Visibility = Visibility.Collapsed;
+            }
+            if (recordCount == 1) // 不会与Image同时出现
+            {
+                DetailBorder.Visibility = Visibility.Collapsed;
+                ImageBorder.Visibility = Visibility.Collapsed;
+            }
+            string msg = Message;
+            foreach (var item in ls)
+            {
+                msg = msg.Replace(item.ToString(), "<!cqCode!>");
+            }
+            var p = msg.Split("<!cqCode!>");
+            int cqCode_index = 0;
+            for (int i = 0; i < p.Length; i++)
+            {
+                if (p[i] == "<!cqCode!>")
+                {
+                    var item = ls[cqCode_index];
+                    if (item.Function == Model.Enums.CQCodeType.Image)
+                    {
+                        imgContainer.Children.Add(BuildImageElement(item, MaxWidth * 0.5));
+                    }
+                    else if (item.Function == Model.Enums.CQCodeType.Record)
+                    {
+                    }
+                    else if (item.Function == Model.Enums.CQCodeType.Rich)
+                    {
+                    }
+                    else
+                    {
+                        DetailContainer.Children.Add(BuildTextElement(item.ToSendString()));
+                    }
+                    cqCode_index++;
+                }
+                else
+                {
+                    DetailContainer.Children.Add(BuildTextElement(p[i]));
+                }
+            }
+        }
+
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        {
+            MaxWidth = e.NewSize.Width * 0.6;
+            ImageBorder.MaxWidth = MaxWidth;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ControlLoaded)
+            {
+                return;
+            }
+            ControlLoaded = true;
+            ParseAndBuildDetail();
+            ImageDisplay.MaxWidth = MaxWidth * 0.6;
+            Avatar.Item = new ChatListItemViewModel
+            {
+                AvatarType = AvatarType,
+                GroupName = DisplayName,
+                Id = Id
+            };
+            ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
         }
     }
 }

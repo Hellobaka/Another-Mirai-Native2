@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,32 +26,27 @@ namespace Another_Mirai_Native.UI.Controls
         public ChatDetailListItem_Center()
         {
             InitializeComponent();
-        }
-
-
-        public static readonly DependencyProperty ItemProperty =
-            DependencyProperty.Register(
-                "Item",
-                typeof(ChatDetailItemViewModel),
-                typeof(ChatDetailListItem_Center),
-                new PropertyMetadata(new ChatDetailItemViewModel(), OnItemChanged));
-
-        public ChatDetailItemViewModel Item
-        {
-            get { return (ChatDetailItemViewModel)GetValue(ItemProperty); }
-            set { SetValue(ItemProperty, value); }
+            DataContext = this;
         }
 
         public string Message { get; set; } = "";
-        public DetailItemType DetailItemType { get; private set; }
+        public DetailItemType DetailItemType { get; set; }
+        public string GUID { get; set; }
+        public bool ControlLoaded { get; set; }
 
-        private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ChatDetailListItem_Center control = (ChatDetailListItem_Center)d;
-            ChatDetailItemViewModel newValue = (ChatDetailItemViewModel)e.NewValue;
+            if (ControlLoaded)
+            {
+                return;
+            }
+            ControlLoaded = true;
+            ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
+        }
 
-            control.Message = newValue.Content;
-            control.DetailItemType = newValue.DetailItemType;
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        {
+            MaxWidth = e.NewSize.Width * 0.6;
         }
     }
 }

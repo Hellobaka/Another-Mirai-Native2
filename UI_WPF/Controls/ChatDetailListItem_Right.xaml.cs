@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,70 +26,91 @@ namespace Another_Mirai_Native.UI.Controls
         public ChatDetailListItem_Right()
         {
             InitializeComponent();
-        }
-
-
-        public static readonly DependencyProperty ItemProperty =
-            DependencyProperty.Register(
-                "Item",
-                typeof(ChatDetailItemViewModel),
-                typeof(ChatDetailListItem_Right),
-                new PropertyMetadata(new ChatDetailItemViewModel(), OnItemChanged));
-
-        public ChatDetailItemViewModel Item
-        {
-            get { return (ChatDetailItemViewModel)GetValue(ItemProperty); }
-            set { SetValue(ItemProperty, value); }
+            DataContext = this;
         }
 
         public string Message { get; set; } = "";
-        public DetailItemType DetailItemType { get; private set; }
-        public string DisplayName { get; private set; }
-        public DateTime Time { get; private set; }
-        public long Id { get; private set; }
-
-        private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ChatDetailListItem_Right control = (ChatDetailListItem_Right)d;
-            ChatDetailItemViewModel newValue = (ChatDetailItemViewModel)e.NewValue;
-
-            control.Message = newValue.Content;
-            control.DetailItemType = newValue.DetailItemType;
-            control.DisplayName = newValue.Nick;
-            control.Time = newValue.Time;
-            control.Id = newValue.Id;
-            control.ParseAndBuildDetail();
-        }
+        public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
+        public DetailItemType DetailItemType { get; set; }
+        public string DisplayName { get; set; }
+        public DateTime Time { get; set; }
+        public long Id { get; set; }
+        public string GUID { get; set; }
+        public bool ControlLoaded { get; set; }
 
         public void ParseAndBuildDetail()
         {
-            var ls = CQCode.Parse(Message);
-            Avatar.DataContext = new ChatListItemViewModel
+            Avatar.Item = new ChatListItemViewModel
             {
-                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                AvatarType = AvatarType,
                 GroupName = DisplayName,
                 Id = Id
             };
-            DataContext = this;
+            var ls = CQCode.Parse(Message);
+            string msg = Message;
             foreach (var item in ls)
             {
-                if (item.Function == Model.Enums.CQCodeType.Image)
+                msg = msg.Replace(item.ToString(), "<!cqCode!>");// 将CQ码的位置使用占空文本替换
+            }
+            var p = msg.Split("<!cqCode!>");
+            int cqCode_index = 0;
+            for (int i = 0; i < p.Length; i++)
+            {
+                if (p[i] == "<!cqCode!>")
                 {
+                    var item = ls[cqCode_index];
+                    if (item.Function == Model.Enums.CQCodeType.Image)
+                    {
 
-                }
-                else if (item.Function == Model.Enums.CQCodeType.Record)
-                {
+                    }
+                    else if (item.Function == Model.Enums.CQCodeType.Record)
+                    {
 
-                }
-                else if (item.Function == Model.Enums.CQCodeType.Rich)
-                {
+                    }
+                    else if (item.Function == Model.Enums.CQCodeType.Rich)
+                    {
 
+                    }
+                    else
+                    {
+                        DetailContainer.Children.Add(BuildTextElement(item.ToSendString()));
+                    }
+                    cqCode_index++;
                 }
                 else
                 {
-                    DetailContainer.Children.Add(ChatDetailListItem_Left.BuildTextElement(item.ToSendString()));
+                    DetailContainer.Children.Add(BuildTextElement(p[i]));
                 }
             }
+        }
+
+        public static TextBox BuildTextElement(string text)
+        {
+            return new TextBox
+            {
+                Text = text,
+                Padding = new Thickness(10),
+                TextWrapping = TextWrapping.Wrap,
+                IsReadOnly = true,
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0)
+            };
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ControlLoaded)
+            {
+                return;
+            }
+            ControlLoaded = true;
+            ParseAndBuildDetail();
+            ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
+        }
+
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        {
+            MaxWidth = e.NewSize.Width * 0.6;
         }
     }
 }
