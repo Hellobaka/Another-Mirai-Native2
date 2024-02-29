@@ -26,6 +26,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,7 +37,9 @@ namespace Another_Mirai_Native.UI.Pages
 
         public ObservableCollection<ChatDetailItemViewModel> DetailList { get; set; } = new();
 
-        public string GroupName { get; set; } = "BBB";
+        public string GroupName { get; set; } = "";
+
+        public static ChatPage Instance {  get; private set; }  
 
         private bool FormLoaded { get; set; }
 
@@ -103,6 +106,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void RefreshMessageContainer(bool refreshAll)
         {
+            // TODO: 实现懒加载，每次读取消息条数可配置
+            // TODO: 添加滚动至底按钮
             if (SelectedItem == null)
             {
                 return;
@@ -275,7 +280,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private string GetGroupMemberNick(long group, long qq)
+        public string GetGroupMemberNick(long group, long qq)
         {
             try
             {

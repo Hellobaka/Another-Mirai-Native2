@@ -186,9 +186,16 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                     else if (item.Function == Model.Enums.CQCodeType.Record)
                     {
+                        // TODO: 创建音频元素
                     }
                     else if (item.Function == Model.Enums.CQCodeType.Rich)
                     {
+                        // TODO: 填充折叠框
+                    }
+                    else if(item.Function == Model.Enums.CQCodeType.At)
+                    {
+                        DetailContainer.Children.Add(BuildTextElement($" @{ChatPage.Instance.GetGroupMemberNick(0, Id)} "));
+                        // TODO: 实现昵称获取
                     }
                     else
                     {
@@ -225,6 +232,8 @@ namespace Another_Mirai_Native.UI.Controls
                 Id = Id
             };
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
+            // TODO: 每分钟刷新时间显示，添加 n分钟前 样式，评估性能
+            // TODO: 实现消息撤回
         }
     }
 }
