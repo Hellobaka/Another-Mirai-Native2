@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,123 +35,15 @@ namespace Another_Mirai_Native.UI.Controls
 
         public string GUID { get; set; }
 
+        public int MsgId { get; set; }
+
         public long Id { get; set; }
+
+        public long GroupId { get; set; }
 
         public string Message { get; set; } = "";
 
         public DateTime Time { get; set; }
-
-        private static Dictionary<string, BitmapImage> CachedImage { get; set; } = new();
-
-        private static double ImageMaxHeight { get; set; } = 450;
-
-        public static Border BuildImageElement(CQCode cqCode, double maxWidth)
-        {
-            ImageBrush CreateImageBrush(BitmapImage image)
-            {
-                var brush = new ImageBrush(image)
-                {
-                    Stretch = Stretch.Uniform
-                };
-                return brush;
-            }
-            void SetBorderBackground(Dispatcher dispatcher, Border border, ModernWpf.Controls.ProgressRing progressRing, BitmapImage image)
-            {
-                dispatcher.BeginInvoke(() =>
-                {
-                    border.Background = CreateImageBrush(image);
-                    if (image.Height > ImageMaxHeight)
-                    {
-                        // 超长图居中问题
-                        border.Width = Math.Min(border.Width, image.Width * (ImageMaxHeight / image.Height));
-                        border.Height = Math.Min(border.Height, image.Height * (border.Width / image.Width));
-                    }
-                    else
-                    {
-                        border.Width = Math.Min(border.MaxWidth, border.Width * 1.2);
-                        border.Height = image.Height * (border.Width / image.Width);
-                    }
-                    progressRing.Visibility = Visibility.Collapsed;
-                });
-            }
-
-            var border = new Border()
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                MinHeight = 100,
-                MinWidth = 100,
-                Height = ImageMaxHeight,
-                Width = maxWidth,
-                CornerRadius = new CornerRadius(3),
-            };
-            border.MouseLeftButtonDown += (_, e) =>
-            {
-                if (e.ClickCount == 2)
-                {
-                    Debug.WriteLine("DbClick");
-                }
-            };
-            DynamicResourceExtension dynamicResource = new("SystemControlPageBackgroundChromeMediumLowBrush");
-            border.SetResourceReference(Border.BackgroundProperty, dynamicResource.ResourceKey);
-            RenderOptions.SetBitmapScalingMode(border, BitmapScalingMode.Fant);
-            var progressRing = new ModernWpf.Controls.ProgressRing
-            {
-                IsActive = true,
-                Width = 30,
-                Height = 30,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-            border.Child = progressRing;
-
-            string url = Extend.GetImageUrlOrPathFromCQCode(cqCode);
-            if (CachedImage.TryGetValue(url, out BitmapImage? img))
-            {
-                SetBorderBackground(border.Dispatcher, border, progressRing, img);
-                return border;
-            }
-
-            var bitmapImage = new BitmapImage();
-            bitmapImage.DownloadCompleted += (_, _) =>
-            {
-                if (CachedImage.ContainsKey(url))
-                {
-                    CachedImage[url] = bitmapImage;
-                }
-                else
-                {
-                    CachedImage.Add(url, bitmapImage);
-                }
-                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
-            };
-            bitmapImage.BeginInit();
-            if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
-            {
-                bitmapImage.UriSource = uri;
-            }
-            bitmapImage.EndInit();
-
-            // local pic
-            if (!url.StartsWith("http"))
-            {
-                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
-            }
-            return border;
-        }
-
-        public static TextBox BuildTextElement(string text)
-        {
-            return new TextBox
-            {
-                Text = text,
-                Padding = new Thickness(10),
-                TextWrapping = TextWrapping.Wrap,
-                IsReadOnly = true,
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0)
-            };
-        }
 
         public void ParseAndBuildDetail()
         {
@@ -182,32 +75,47 @@ namespace Another_Mirai_Native.UI.Controls
                     var item = ls[cqCode_index];
                     if (item.Function == Model.Enums.CQCodeType.Image)
                     {
-                        imgContainer.Children.Add(BuildImageElement(item, MaxWidth * 0.5));
-                    }
-                    else if (item.Function == Model.Enums.CQCodeType.Record)
-                    {
-                        // TODO: 创建音频元素
+                        imgContainer.Children.Add(ChatDetailListItem_Common.BuildImageElement(item, MaxWidth * 0.5));
                     }
                     else if (item.Function == Model.Enums.CQCodeType.Rich)
                     {
-                        // TODO: 填充折叠框
+                        Expander expander = new()
+                        {
+                            Header = "富文本",
+                            Margin = new Thickness(10),
+                            Content = ChatDetailListItem_Common.BuildTextElement(item.ToSendString())
+                        };
+                        DetailContainer.Children.Add(expander);
                     }
-                    else if(item.Function == Model.Enums.CQCodeType.At)
+                    else if (item.Function == Model.Enums.CQCodeType.At)
                     {
-                        DetailContainer.Children.Add(BuildTextElement($" @{ChatPage.Instance.GetGroupMemberNick(0, Id)} "));
-                        // TODO: 实现昵称获取
+                        if (long.TryParse(item.Items["qq"], out long id))
+                        {
+                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildAtElement(AvatarType == ChatAvatar.AvatarTypes.QQGroup
+                                ? ChatPage.Instance.GetGroupMemberNick(GroupId, id)
+                                    : ChatPage.Instance.GetFriendNick(id)));
+                        }
+                        else
+                        {
+                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
+                        }
                     }
                     else
                     {
-                        DetailContainer.Children.Add(BuildTextElement(item.ToSendString()));
+                        DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
                     }
                     cqCode_index++;
                 }
                 else
                 {
-                    DetailContainer.Children.Add(BuildTextElement(p[i]));
+                    DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(p[i]));
                 }
             }
+        }
+
+        public void Recall()
+        {
+            RecallDisplay.Visibility = Visibility.Visible;
         }
 
         private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
@@ -227,13 +135,20 @@ namespace Another_Mirai_Native.UI.Controls
             ImageDisplay.MaxWidth = MaxWidth * 0.6;
             Avatar.Item = new ChatListItemViewModel
             {
-                AvatarType = AvatarType,
+                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
                 GroupName = DisplayName,
                 Id = Id
             };
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
-            // TODO: 每分钟刷新时间显示，添加 n分钟前 样式，评估性能
-            // TODO: 实现消息撤回
+            ChatPage.MsgRecalled += ChatPage_MsgRecalled;
+        }
+
+        private void ChatPage_MsgRecalled(int id)
+        {
+            if (id == MsgId)
+            {
+                Recall();
+            }
         }
     }
 }

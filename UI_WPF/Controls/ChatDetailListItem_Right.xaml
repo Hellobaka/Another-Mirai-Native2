@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     d:DesignHeight="450"
     d:DesignWidth="430"
     Loaded="UserControl_Loaded"
@@ -35,10 +36,6 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="NameDisplay"
                     HorizontalAlignment="Right"
@@ -57,20 +54,55 @@
                 CornerRadius="10">
                 <StackPanel x:Name="DetailContainer" />
             </Border>
-            <StackPanel
-                x:Name="ImageDisplay"
+            <Border
+                x:Name="ImageBorder"
                 Grid.Row="1"
-                Margin="10,5,0,0"
+                Margin="0,5,10,0"
                 HorizontalAlignment="Stretch"
-                Visibility="Collapsed" />
-            <TextBlock
-                x:Name="TimeDisplay"
+                ClipToBounds="True"
+                CornerRadius="10"
+                Visibility="Collapsed">
+                <StackPanel x:Name="ImageDisplay" HorizontalAlignment="Stretch" />
+            </Border>
+            <StackPanel
                 Grid.Row="2"
-                Margin="10,5,0,0"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                FontSize="10"
-                Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}" />
+                Orientation="Horizontal">
+                <TextBlock
+                    x:Name="RecallDisplay"
+                    Margin="0,5,5,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Visibility="Collapsed">
+                    已撤回
+                </TextBlock>
+                <TextBlock
+                    x:Name="TimeDisplay"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}"
+                    TextAlignment="Right" />
+            </StackPanel>
         </Grid>
+        <ui:ProgressRing
+            x:Name="SendStatus"
+            Cursor=""
+            IsActive="True"
+            Visibility="Collapsed" />
+        <ui:FontIcon
+            x:Name="ResendClick"
+            Grid.Row="1"
+            Width="16"
+            Height="16"
+            Margin="0,5"
+            Cursor="Hand"
+            FontSize="16"
+            Foreground="Red"
+            Glyph="&#xE72C;"
+            MouseDown="ResendClick_MouseDown"
+            Visibility="Collapsed" />
     </Grid>
 </UserControl>

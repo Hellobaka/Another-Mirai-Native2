@@ -2,19 +2,9 @@
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI.Controls
 {
@@ -29,28 +19,46 @@ namespace Another_Mirai_Native.UI.Controls
             DataContext = this;
         }
 
-        public string Message { get; set; } = "";
         public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
-        public DetailItemType DetailItemType { get; set; }
-        public string DisplayName { get; set; }
-        public DateTime Time { get; set; }
-        public long Id { get; set; }
-        public string GUID { get; set; }
+
         public bool ControlLoaded { get; set; }
+
+        public DetailItemType DetailItemType { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public long GroupId { get; set; }
+
+        public string GUID { get; set; }
+
+        public int MsgId { get; set; }
+
+        public long Id { get; set; }
+
+        public string Message { get; set; } = "";
+
+        public DateTime Time { get; set; }
 
         public void ParseAndBuildDetail()
         {
-            Avatar.Item = new ChatListItemViewModel
-            {
-                AvatarType = AvatarType,
-                GroupName = DisplayName,
-                Id = Id
-            };
             var ls = CQCode.Parse(Message);
+            int imageCount = ls.Count(x => x.IsImageCQCode);
+            int recordCount = ls.Count(x => x.IsRecordCQCode);
+            StackPanel imgContainer = imageCount == 1 ? ImageDisplay : DetailContainer;
+            if (imageCount == 1)
+            {
+                ImageBorder.Visibility = Visibility.Visible;
+                DetailBorder.Visibility = Visibility.Collapsed;
+            }
+            if (recordCount == 1) // 不会与Image同时出现
+            {
+                DetailBorder.Visibility = Visibility.Collapsed;
+                ImageBorder.Visibility = Visibility.Collapsed;
+            }
             string msg = Message;
             foreach (var item in ls)
             {
-                msg = msg.Replace(item.ToString(), "<!cqCode!>");// 将CQ码的位置使用占空文本替换
+                msg = msg.Replace(item.ToString(), "<!cqCode!>");
             }
             var p = msg.Split("<!cqCode!>");
             int cqCode_index = 0;
@@ -61,40 +69,65 @@ namespace Another_Mirai_Native.UI.Controls
                     var item = ls[cqCode_index];
                     if (item.Function == Model.Enums.CQCodeType.Image)
                     {
-
-                    }
-                    else if (item.Function == Model.Enums.CQCodeType.Record)
-                    {
-
+                        imgContainer.Children.Add(ChatDetailListItem_Common.BuildImageElement(item, MaxWidth * 0.5));
                     }
                     else if (item.Function == Model.Enums.CQCodeType.Rich)
                     {
-
+                        Expander expander = new()
+                        {
+                            Header = "富文本",
+                            Margin = new Thickness(10),
+                            Content = ChatDetailListItem_Common.BuildTextElement(item.ToSendString())
+                        };
+                        DetailContainer.Children.Add(expander);
+                    }
+                    else if (item.Function == Model.Enums.CQCodeType.At)
+                    {
+                        if (long.TryParse(item.Items["qq"], out long id))
+                        {
+                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildAtElement(AvatarType == ChatAvatar.AvatarTypes.QQGroup
+                                ? ChatPage.Instance.GetGroupMemberNick(GroupId, id)
+                                    : ChatPage.Instance.GetFriendNick(id)));
+                        }
+                        else
+                        {
+                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
+                        }
                     }
                     else
                     {
-                        DetailContainer.Children.Add(BuildTextElement(item.ToSendString()));
+                        DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
                     }
                     cqCode_index++;
                 }
                 else
                 {
-                    DetailContainer.Children.Add(BuildTextElement(p[i]));
+                    DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(p[i]));
                 }
             }
         }
 
-        public static TextBox BuildTextElement(string text)
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
         {
-            return new TextBox
-            {
-                Text = text,
-                Padding = new Thickness(10),
-                TextWrapping = TextWrapping.Wrap,
-                IsReadOnly = true,
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0)
-            };
+            MaxWidth = e.NewSize.Width * 0.6;
+            ImageBorder.MaxWidth = MaxWidth;
+        }
+
+        public void Recall()
+        {
+            RecallDisplay.Visibility = Visibility.Visible;
+        }
+
+        public void UpdateSendStatus(bool sending)
+        {
+            SendStatus.Visibility = sending ? Visibility.Visible : Visibility.Collapsed;
+            ResendClick.Visibility = Visibility.Collapsed;
+        }
+
+        public void SendFail()
+        {
+            SendStatus.Visibility = Visibility.Collapsed;
+            ResendClick.Visibility = Visibility.Visible;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -105,12 +138,57 @@ namespace Another_Mirai_Native.UI.Controls
             }
             ControlLoaded = true;
             ParseAndBuildDetail();
+            ImageDisplay.MaxWidth = MaxWidth * 0.6;
+            Avatar.Item = new ChatListItemViewModel
+            {
+                AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                GroupName = DisplayName,
+                Id = Id
+            };
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
+            ChatPage.MsgRecalled += ChatPage_MsgRecalled;
         }
 
-        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        private void ChatPage_MsgRecalled(int id)
         {
-            MaxWidth = e.NewSize.Width * 0.6;
+            if (id == MsgId)
+            {
+                Recall();
+            }
+        }
+
+        private void ResendClick_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            UpdateSendStatus(true);
+            switch (AvatarType)
+            {
+                case ChatAvatar.AvatarTypes.QQGroup:
+                    if (ChatPage.Instance.CallGroupMsgSend(GroupId, Message) > 0)
+                    {
+                        UpdateSendStatus(false);
+                    }
+                    else
+                    {
+                        SendFail();
+                    }
+                    break;
+
+                case ChatAvatar.AvatarTypes.QQPrivate:
+                    if (ChatPage.Instance.CallPrivateMsgSend(GroupId, Message) > 0)
+                    {
+                        UpdateSendStatus(false);
+                    }
+                    else
+                    {
+                        SendFail();
+                    }
+                    break;
+
+                case ChatAvatar.AvatarTypes.Fallback:
+                default:
+                    UpdateSendStatus(false);
+                    break;
+            }
         }
     }
 }

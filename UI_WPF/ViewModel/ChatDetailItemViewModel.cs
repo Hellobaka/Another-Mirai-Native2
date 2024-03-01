@@ -38,5 +38,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
+
+        public int MsgId { get; set; }
     }
 }
