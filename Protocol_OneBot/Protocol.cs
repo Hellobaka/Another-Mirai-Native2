@@ -300,12 +300,22 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {
                         msg = msgCache.Item2;
                     }
+
+                    PluginManagerProxy.Instance.Event_OnGroupMsgRecall((int)groupMessageRecall.message_id, groupMessageRecall.group_id, msg);
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群消息撤回", $"群:{groupMessageRecall.group_id} 内容:{msg}", "处理中...");
                     break;
 
                 case NoticeType.friend_recall:
                     FriendMessageRecall friendMessageRecall = notice.ToObject<FriendMessageRecall>();
-                    logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友消息撤回", $"QQ:{friendMessageRecall.user_id} 内容:{friendMessageRecall.message_id}", "处理中...");
+                    string friendRecallMsg = "内容未捕获";
+                    var friendRecallMsgCache = RequestCache.Message.Last(x => x.Item1 == friendMessageRecall.message_id);
+                    if (!string.IsNullOrEmpty(friendRecallMsgCache.Item2))
+                    {
+                        friendRecallMsg = friendRecallMsgCache.Item2;
+                    }
+
+                    PluginManagerProxy.Instance.Event_OnPrivateMsgRecall((int)friendMessageRecall.message_id, friendMessageRecall.user_id, friendRecallMsg);
+                    logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友消息撤回", $"QQ:{friendMessageRecall.user_id} 内容:{friendRecallMsg}", "处理中...");
                     break;
             }
             sw.Stop();

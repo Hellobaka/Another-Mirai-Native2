@@ -409,6 +409,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         groupRecallMsg = "消息拉取失败";
                     }
 
+                    PluginManagerProxy.Instance.Event_OnGroupMsgRecall(groupRecall.messageId, groupRecall.group.id, groupRecallMsg);
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群撤回", $"群:{groupRecall.group.id}({groupRecall.group.name}) QQ:{groupRecall.authorId} 内容:{groupRecallMsg}", "处理中...");
                     break;
 
@@ -420,6 +421,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         friendRecallMsg = "消息拉取失败";
                     }
 
+                    PluginManagerProxy.Instance.Event_OnGroupMsgRecall(friendRecall.messageId, friendRecall.authorId, friendRecallMsg);
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "私聊撤回", $"QQ:{friendRecall.authorId} 内容:{friendRecallMsg}", "处理中...");
                     break;
 

@@ -49,14 +49,18 @@ namespace Another_Mirai_Native.Native
         public static event Action<long, long> OnGroupLeft;
 
         /// <summary>
-        /// QQ Msg
+        /// MsgId QQ Msg
         /// </summary>
-        public static event Action<long, string> OnPrivateMsg;
+        public static event Action<int, long, string> OnPrivateMsg;
 
         /// <summary>
-        /// Group QQ Msg
+        /// MsgId Group QQ Msg
         /// </summary>
-        public static event Action<long, long, string> OnGroupMsg;
+        public static event Action<int, long, long, string> OnGroupMsg;
+
+        public static event Action<int, long, string> OnGroupMsgRecall;
+
+        public static event Action<int, long, string> OnPrivateMsgRecall;
 
         #endregion 事件外抛
 
@@ -432,7 +436,7 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
-            OnGroupMsg?.Invoke(fromGroup, fromQQ, msg);
+            OnGroupMsg?.Invoke(msgId, fromGroup, fromQQ, msg);
             return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
@@ -443,7 +447,7 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
         {
-            OnPrivateMsg?.Invoke(fromQQ, msg);
+            OnPrivateMsg?.Invoke(msgId, fromQQ, msg);
             return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
@@ -465,6 +469,16 @@ namespace Another_Mirai_Native.Native
         public CQPluginProxy Event_OnUpload(int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
+        }
+
+        public void Event_OnGroupMsgRecall(int msgId, long groupId, string msg)
+        {
+            OnGroupMsgRecall?.Invoke(msgId, groupId, msg);
+        }
+
+        public void Event_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        {
+            OnPrivateMsgRecall?.Invoke(msgId, qq, msg);
         }
 
         #endregion 测试事件调用
