@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Model;
+using Newtonsoft.Json.Linq;
 
 namespace Another_Mirai_Native.Protocol.OneBot.Messages
 {
@@ -26,9 +27,11 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public long target_id { get; set; }
 
-        public string message { get; set; }
+        public JToken message { get; set; }
 
-        public List<CQCode> ParsedMessage { get; set; } = new();
+        public List<CQCode> CQCodes { get; set; } = new();
+
+        public string ParsedMessage { get; set; } = "";
 
         public class Sender
         {

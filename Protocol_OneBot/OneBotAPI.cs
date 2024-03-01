@@ -32,6 +32,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string Name { get; set; } = "OneBot v11";
 
+        private List<FriendInfo> FriendInfoList { get; set; }
+
+        private List<GroupInfo> GroupInfoList { get; set; }
+
+        private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberInfoDict { get; set; }
+
         public int CanSendImage()
         {
             var r = CallOneBotAPI(APIType.can_send_image, new Dictionary<string, object>
@@ -258,6 +264,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             WsURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
+            MessageArrayType = GetConfig("MessageArrayType", true);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
@@ -443,6 +450,104 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"enable", isOpen },
             });
             return r != null ? 1 : 0;
+        }
+
+        private string? GetGroupName(long groupId, bool withBracket = false)
+        {
+            var groupInfo = GroupInfoList.FirstOrDefault(x => x.Group == groupId);
+            if (groupInfo == null)
+            {
+                groupInfo = GetRawGroupInfo(groupId, true);
+                if (groupInfo != null && groupInfo.Group > 0)
+                {
+                    GroupInfoList.Add(groupInfo);
+                }
+            }
+            return groupInfo == null ? "" : withBracket ? $"({groupInfo.Name})" : groupInfo.Name;
+        }
+
+        private string? GetGroupMemberNick(long groupId, long qq, bool withBracket = false)
+        {
+            if (GroupMemberInfoDict.TryGetValue(groupId, out var groupInfo))
+            {
+                if (groupInfo.TryGetValue(qq, out var memberNick))
+                {
+                    return memberNick == null ? "" : withBracket ? $"({memberNick.Card})" : memberNick.Card;
+                }
+                else
+                {
+                    var info = GetRawGroupMemberInfo(groupId, qq, false);
+                    if (info.Group > 0)
+                    {
+                        groupInfo.Add(qq, info);
+                        return info == null ? "" : withBracket ? $"({info.Card})" : info.Card;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+            }
+            else
+            {
+                groupInfo = new();
+                GroupMemberInfoDict.Add(groupId, groupInfo);
+                var info = GetRawGroupMemberInfo(groupId, qq, false);
+                if (info.Group > 0)
+                {
+                    groupInfo.Add(qq, info);
+                    return info == null ? "" : withBracket ? $"({info.Card})" : info.Card;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        private string? GetFriendNick(long qq, bool withBracket = false)
+        {
+            var friendInfo = FriendInfoList.FirstOrDefault(x => x.QQ == qq);
+            if (friendInfo == null)
+            {
+                FriendInfoList = GetRawFriendList(false);
+                var info = FriendInfoList.FirstOrDefault(x => x.QQ == qq);
+                return info == null ? "" : withBracket ? $"({info.Nick})" : info.Nick;
+            }
+            else
+            {
+                return friendInfo == null ? "" : withBracket ? $"({friendInfo.Nick})" : friendInfo.Nick;
+            }
+        }
+
+        private void UpdateGroupMemberNick(long groupId, long qq, string nick)
+        {
+            if (GroupMemberInfoDict.TryGetValue(groupId, out var dict) && dict.TryGetValue(qq, out var info))
+            {
+                info.Card = nick;
+            }
+        }
+
+        private void UpdateMemberLeave(long groupId, long qq)
+        {
+            if (GroupMemberInfoDict.TryGetValue(groupId, out var dict) && dict.TryGetValue(qq, out _))
+            {
+                dict.Remove(qq);
+            }
+        }
+
+        private void UpdateGroupLeave(long groupId)
+        {
+            var groupInfo = GroupInfoList.FirstOrDefault(x => x.Group == groupId);
+            if (groupInfo != null)
+            {
+                GroupInfoList.Remove(groupInfo);
+            }
+
+            if (GroupMemberInfoDict.ContainsKey(groupId))
+            {
+                GroupMemberInfoDict.Remove(groupId);
+            }
         }
 
         private GroupMemberInfo ParseResult2GroupMemberInfo(JObject r)
