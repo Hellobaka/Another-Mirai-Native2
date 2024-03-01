@@ -4,19 +4,16 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
-using Another_Mirai_Native.UI.Converters;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -25,6 +22,8 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class ChatPage : Page, INotifyPropertyChanged
     {
+        private object detailListLock = new object();
+
         public ChatPage()
         {
             InitializeComponent();
@@ -32,236 +31,58 @@ namespace Another_Mirai_Native.UI.Pages
             Instance = this;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public static event Action<int> MsgRecalled;
 
         public static event Action<SizeChangedEventArgs> WindowSizeChanged;
 
-        public static event Action<int> MsgRecalled;
-
-        public ObservableCollection<ChatListItemViewModel> ChatList { get; set; } = new();
-
-        public ObservableCollection<ChatDetailItemViewModel> DetailList { get; set; } = new();
-
-        public string GroupName { get; set; } = "";
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static ChatPage Instance { get; private set; }
 
+        public List<ChatListItemViewModel> ChatList { get; set; } = new();
+
+        public List<ChatDetailItemViewModel> DetailList { get; set; } = new();
+
+        public string GroupName { get; set; } = "";
+
         private bool FormLoaded { get; set; }
 
-        private Dictionary<long, ObservableCollection<ChatDetailItemViewModel>> FriendChatHistory { get; set; } = new();
+        private Dictionary<long, List<ChatDetailItemViewModel>> FriendChatHistory { get; set; } = new();
 
         private Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
 
-        private Dictionary<long, ObservableCollection<ChatDetailItemViewModel>> GroupChatHistory { get; set; } = new();
+        private Dictionary<long, List<ChatDetailItemViewModel>> GroupChatHistory { get; set; } = new();
 
         private Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
         private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
+        private string LastMessageGUID { get; set; } = "";
+
+        private Timer LazyLoadDebounceTimer { get; set; }
+
+        private int LoadCount { get; set; } = 15;
+
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        public int CallGroupMsgSend(long groupId, string message)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Stopwatch sw = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
+            int msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
+            sw.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            return msgId;
         }
 
-        private string? AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null)
+        public int CallPrivateMsgSend(long qq, string message)
         {
-            ChatDetailItemViewModel item = null;
-            if (GroupChatHistory.TryGetValue(group, out var chatHistory))
-            {
-                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
-                {
-                    chatHistory.RemoveAt(0);
-                }
-                item = BuildChatDetailItem(msgId, qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType);
-                chatHistory.Add(item);
-            }
-            else
-            {
-                GroupChatHistory.Add(group, new ObservableCollection<ChatDetailItemViewModel>());
-                item = BuildChatDetailItem(msgId, qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType);
-                GroupChatHistory[group].Add(item);
-            }
-            OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() =>
-            {
-                RefreshMessageContainer(false);
-                itemAdded?.Invoke(item?.GUID);
-            });
-            return item?.GUID;
-        }
-
-        private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null)
-        {
-            ChatDetailItemViewModel item = null;
-            if (FriendChatHistory.TryGetValue(qq, out var chatHistory))
-            {
-                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
-                {
-                    chatHistory.RemoveAt(0);
-                }
-                item = BuildChatDetailItem(msgId, qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType);
-                chatHistory.Add(item);
-            }
-            else
-            {
-                FriendChatHistory.Add(qq, new ObservableCollection<ChatDetailItemViewModel>());
-                item = BuildChatDetailItem(msgId, qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType);
-                FriendChatHistory[qq].Add(item);
-            }
-            OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() =>
-            {
-                RefreshMessageContainer(false);
-                itemAdded?.Invoke(item?.GUID);
-            });
-            return item?.GUID;
-        }
-
-        private void RefreshMessageContainer(bool refreshAll)
-        {
-            // TODO: 实现懒加载，每次读取消息条数可配置
-            // TODO: 添加滚动至底按钮
-            if (SelectedItem == null)
-            {
-                return;
-            }
-            if (refreshAll)
-            {
-                RefreshGroupName();
-                MessageContainer.Children.Clear();
-                GC.Collect();
-            }
-
-            foreach (var item in DetailList)
-            {
-                if (!CheckMessageContainerHasItem(item.GUID))
-                {
-                    switch (item.DetailItemType)
-                    {
-                        case DetailItemType.Notice:
-                            MessageContainer.Children.Add(BuildMiddleBlock(item));
-                            break;
-                        case DetailItemType.Receive:
-                            MessageContainer.Children.Add(BuildLeftBlock(item));
-                            break;
-                        default:
-                        case DetailItemType.Send:
-                            MessageContainer.Children.Add(BuildRightBlock(item));
-                            break;
-                    }
-                }
-            }
-            ScrollToBottom(MessageScrollViewer);
-        }
-
-        private void ScrollToBottom(ScrollViewer scrollViewer)
-        {
-            scrollViewer.ScrollToBottom();
-        }
-
-        private UIElement BuildRightBlock(ChatDetailItemViewModel item)
-        {
-            return new ChatDetailListItem_Right()
-            {
-                Message = item.Content,
-                DetailItemType = item.DetailItemType,
-                AvatarType = item.AvatarType,
-                DisplayName = item.Nick,
-                Time = item.Time,
-                Id = item.Id,
-                GroupId = SelectedItem.Id,
-                MsgId = item.MsgId,
-                GUID = item.GUID,
-                MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Margin = new Thickness(0, 10, 0, 10)
-            };
-        }
-
-        private UIElement BuildLeftBlock(ChatDetailItemViewModel item)
-        {
-            return new ChatDetailListItem_Left()
-            {
-                Message = item.Content,
-                DetailItemType = item.DetailItemType,
-                AvatarType = item.AvatarType,
-                DisplayName = item.Nick,
-                Time = item.Time,
-                Id = item.Id,
-                GroupId = SelectedItem.Id,
-                MsgId = item.MsgId,
-                GUID = item.GUID,
-                MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(0, 10, 0, 10)
-            };
-        }
-
-        private UIElement BuildMiddleBlock(ChatDetailItemViewModel item)
-        {
-            return new ChatDetailListItem_Center()
-            {
-                Message = item.Content,
-                DetailItemType = item.DetailItemType,
-                GUID = item.GUID,
-                MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
-            };
-        }
-
-        private bool CheckMessageContainerHasItem(string guid)
-        {
-            foreach (UIElement item in MessageContainer.Children)
-            {
-                if (item is ChatDetailListItem_Center center && center.GUID == guid)
-                {
-                    return true;
-                }
-                else if (item is ChatDetailListItem_Right right && right.GUID == guid)
-                {
-                    return true;
-                }
-                else if (item is ChatDetailListItem_Left left && left.GUID == guid)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void RefreshGroupName()
-        {
-            switch (SelectedItem.AvatarType)
-            {
-                case ChatAvatar.AvatarTypes.QQGroup:
-                    GroupName = GetGroupName(SelectedItem.Id);
-                    break;
-
-                case ChatAvatar.AvatarTypes.Fallback:
-                case ChatAvatar.AvatarTypes.QQPrivate:
-                    GroupName = GetFriendNick(SelectedItem.Id);
-                    break;
-                default:
-                    break;
-            }
-            OnPropertyChanged(nameof(GroupName));
-        }
-
-        private ChatDetailItemViewModel BuildChatDetailItem(int msgId, long qq, string msg, string nick, ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
-        {
-            return new ChatDetailItemViewModel
-            {
-                AvatarType = avatarType,
-                Content = msg,
-                DetailItemType = itemType,
-                Id = qq,
-                Nick = nick,
-                MsgId = msgId,
-                Time = DateTime.Now,
-            };
+            Stopwatch sw = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
+            int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
+            sw.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            return msgId;
         }
 
         public string GetFriendNick(long qq)
@@ -328,7 +149,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private string GetGroupName(long groupId)
+        public string GetGroupName(long groupId)
         {
             try
             {
@@ -345,6 +166,297 @@ namespace Another_Mirai_Native.UI.Pages
             catch
             {
                 return groupId.ToString();
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private string? AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null)
+        {
+            ChatDetailItemViewModel item = null;
+            if (GroupChatHistory.TryGetValue(group, out var chatHistory))
+            {
+                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
+                {
+                    chatHistory.RemoveAt(0);
+                }
+                item = BuildChatDetailItem(msgId, qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType);
+                chatHistory.Add(item);
+            }
+            else
+            {
+                GroupChatHistory.Add(group, new());
+                item = BuildChatDetailItem(msgId, qq, msg, GetGroupMemberNick(group, qq), ChatAvatar.AvatarTypes.QQGroup, itemType);
+                GroupChatHistory[group].Add(item);
+            }
+            OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(false);
+                itemAdded?.Invoke(item?.GUID);
+            });
+            return item?.GUID;
+        }
+
+        private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null)
+        {
+            ChatDetailItemViewModel item = null;
+            if (FriendChatHistory.TryGetValue(qq, out var chatHistory))
+            {
+                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
+                {
+                    chatHistory.RemoveAt(0);
+                }
+                item = BuildChatDetailItem(msgId, qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType);
+                chatHistory.Add(item);
+            }
+            else
+            {
+                FriendChatHistory.Add(qq, new());
+                item = BuildChatDetailItem(msgId, qq, msg, GetFriendNick(qq), ChatAvatar.AvatarTypes.QQPrivate, itemType);
+                FriendChatHistory[qq].Add(item);
+            }
+            OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(false);
+                itemAdded?.Invoke(item?.GUID);
+            });
+            return item?.GUID;
+        }
+
+        private void AtBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void AudioBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private ChatDetailItemViewModel BuildChatDetailItem(int msgId, long qq, string msg, string nick, ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
+        {
+            return new ChatDetailItemViewModel
+            {
+                AvatarType = avatarType,
+                Content = msg,
+                DetailItemType = itemType,
+                Id = qq,
+                Nick = nick,
+                MsgId = msgId,
+                Time = DateTime.Now,
+            };
+        }
+
+        private UIElement BuildLeftBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Left()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                AvatarType = item.AvatarType,
+                DisplayName = item.Nick,
+                Time = item.Time,
+                Id = item.Id,
+                GroupId = SelectedItem.Id,
+                MsgId = item.MsgId,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private UIElement BuildMiddleBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Center()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private UIElement BuildRightBlock(ChatDetailItemViewModel item)
+        {
+            return new ChatDetailListItem_Right()
+            {
+                Message = item.Content,
+                DetailItemType = item.DetailItemType,
+                AvatarType = item.AvatarType,
+                DisplayName = item.Nick,
+                Time = item.Time,
+                Id = item.Id,
+                GroupId = SelectedItem.Id,
+                MsgId = item.MsgId,
+                GUID = item.GUID,
+                MaxWidth = ActualWidth * 0.6,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(0, 10, 0, 10)
+            };
+        }
+
+        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = SelectedItem;
+            lock (detailListLock)
+            {
+                if (item != null)
+                {
+                    if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+                    {
+                        if (FriendChatHistory.TryGetValue(item.Id, out var msg))
+                        {
+                            DetailList = msg;
+                        }
+                        else
+                        {
+                            FriendChatHistory.Add(item.Id, new());
+                            DetailList = FriendChatHistory[item.Id];
+                        }
+                    }
+                    else
+                    {
+                        if (GroupChatHistory.TryGetValue(item.Id, out var msg))
+                        {
+                            DetailList = msg;
+                        }
+                        else
+                        {
+                            GroupChatHistory.Add(item.Id, new());
+                            DetailList = GroupChatHistory[item.Id];
+                        }
+                    }
+                }
+            }
+            OnPropertyChanged(nameof(DetailList));
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshMessageContainer(true);
+            });
+        }
+
+        private bool CheckMessageContainerHasItem(string guid)
+        {
+            foreach (UIElement item in MessageContainer.Children)
+            {
+                if (item is ChatDetailListItem_Center center && center.GUID == guid)
+                {
+                    return true;
+                }
+                else if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                {
+                    return true;
+                }
+                else if (item is ChatDetailListItem_Left left && left.GUID == guid)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void FaceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem != null)
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    PluginManagerProxy_OnGroupMsg(i + 1, SelectedItem.Id, 1145141919, i.ToString());
+                }
+            }
+        }
+
+        private void LazyLoad()
+        {
+            if (string.IsNullOrWhiteSpace(LastMessageGUID))
+            {
+                return;
+            }
+            int index = -1;
+            for (int i = 0; i < DetailList.Count; i++)
+            {
+                var item = DetailList[i];
+                if (item.GUID == LastMessageGUID)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            IEnumerable<ChatDetailItemViewModel> ls;
+            if (index <= 0)
+            {
+                return;
+            }
+
+            else
+            {
+                ls = index > 15 ? DetailList.Skip(Math.Max(0, index - LoadCount)).Take(LoadCount) : DetailList.Take(LoadCount);
+            }
+            if (ls == null || !ls.Any())
+            {
+                return;
+            }
+            LastMessageGUID = ls.First().GUID;
+
+            UIElement lastElement;
+            Dispatcher.BeginInvoke(() =>
+            {
+                FrameworkElement firstItem = (FrameworkElement)MessageContainer.Children[0];
+                foreach (var item in ls.Reverse())
+                {
+                    if (!CheckMessageContainerHasItem(item.GUID))
+                    {
+                        lastElement = item.DetailItemType switch
+                        {
+                            DetailItemType.Notice => BuildMiddleBlock(item),
+                            DetailItemType.Receive => BuildLeftBlock(item),
+                            _ => BuildRightBlock(item),
+                        };
+                        MessageContainer.Children.Insert(0, lastElement);
+                    }
+                }
+
+                firstItem.BringIntoView();
+            });
+        }
+
+        private void MessageScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (sender is not ScrollViewer scrollViewer)
+            {
+                return;
+            }
+            double distanceToBottom = scrollViewer.ScrollableHeight - scrollViewer.VerticalOffset;
+            double distanceToTop = scrollViewer.VerticalOffset;
+
+            ScrollBottomContainer.Visibility = distanceToBottom > scrollViewer.ScrollableHeight * 0.1 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (distanceToTop < scrollViewer.ScrollableHeight * 0.1)
+            {
+                if (LazyLoadDebounceTimer == null)
+                {
+                    LazyLoadDebounceTimer = new Timer
+                    {
+                        Interval = 200,
+                    };
+                    LazyLoadDebounceTimer.Elapsed += (_, _) =>
+                    {
+                        LazyLoadDebounceTimer.Stop();
+                        LazyLoad();
+                    };
+                    LazyLoadDebounceTimer.Start();
+                }
+                else
+                {
+                    LazyLoadDebounceTimer.Stop();
+                    LazyLoadDebounceTimer.Start();
+                }
             }
         }
 
@@ -372,14 +484,8 @@ namespace Another_Mirai_Native.UI.Pages
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
         }
 
-        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        private void PictureBtn_Click(object sender, RoutedEventArgs e)
         {
-            MsgRecalled?.Invoke(msgId);
-        }
-
-        private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
-        {
-            MsgRecalled?.Invoke(msgId);
         }
 
         private void PluginManagerProxy_OnAdminChanged(long group, long qq, QQGroupMemberType type)
@@ -455,6 +561,11 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
+        private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
+        {
+            MsgRecalled?.Invoke(msgId);
+        }
+
         private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
         {
             AddPrivateChatItem(qq, msg, DetailItemType.Receive);
@@ -483,72 +594,99 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
+        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        {
+            MsgRecalled?.Invoke(msgId);
+        }
+
+        private void RefreshGroupName()
+        {
+            switch (SelectedItem.AvatarType)
+            {
+                case ChatAvatar.AvatarTypes.QQGroup:
+                    GroupName = GetGroupName(SelectedItem.Id);
+                    break;
+
+                case ChatAvatar.AvatarTypes.Fallback:
+                case ChatAvatar.AvatarTypes.QQPrivate:
+                    GroupName = GetFriendNick(SelectedItem.Id);
+                    break;
+
+                default:
+                    break;
+            }
+            OnPropertyChanged(nameof(GroupName));
+        }
+
+        private void RefreshMessageContainer(bool refreshAll)
+        {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            if (refreshAll)
+            {
+                RefreshGroupName();
+                MessageContainer.Children.Clear();
+                LastMessageGUID = "";
+                GC.Collect();
+            }
+
+            lock (detailListLock)
+            {
+                var ls = DetailList.Skip(Math.Max(0, DetailList.Count - LoadCount));
+                if (string.IsNullOrEmpty(LastMessageGUID))
+                {
+                    LastMessageGUID = ls.First().GUID;
+                }
+                foreach (var item in ls)
+                {
+                    if (!CheckMessageContainerHasItem(item.GUID))
+                    {
+                        switch (item.DetailItemType)
+                        {
+                            case DetailItemType.Notice:
+                                MessageContainer.Children.Add(BuildMiddleBlock(item));
+                                break;
+
+                            case DetailItemType.Receive:
+                                MessageContainer.Children.Add(BuildLeftBlock(item));
+                                break;
+
+                            default:
+                            case DetailItemType.Send:
+                                MessageContainer.Children.Add(BuildRightBlock(item));
+                                break;
+                        }
+                    }
+                }
+            }
+            ScrollToBottom(MessageScrollViewer);
+        }
+
         private void ReorderChatList()
         {
             Dispatcher.BeginInvoke(() =>
             {
-                ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
+                ChatList = ChatList.OrderByDescending(x => x.Time).ToList();
                 OnPropertyChanged(nameof(ChatList));
 
                 EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             });
         }
 
-        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ScrollToBottom(ScrollViewer scrollViewer, bool forced = false)
         {
-            var item = SelectedItem;
-            if (item != null)
+            if (!forced && ScrollBottomContainer.Visibility == Visibility.Visible)
             {
-                if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
-                {
-                    if (FriendChatHistory.TryGetValue(item.Id, out var msg))
-                    {
-                        DetailList = msg;
-                    }
-                    else
-                    {
-                        FriendChatHistory.Add(item.Id, new());
-                        DetailList = FriendChatHistory[item.Id];
-                    }
-                }
-                else
-                {
-                    if (GroupChatHistory.TryGetValue(item.Id, out var msg))
-                    {
-                        DetailList = msg;
-                    }
-                    else
-                    {
-                        GroupChatHistory.Add(item.Id, new());
-                        DetailList = GroupChatHistory[item.Id];
-                    }
-                }
+                return;
             }
-            OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() =>
-            {
-                RefreshMessageContainer(true);
-            });
+            scrollViewer.ScrollToBottom();
         }
 
-        private void FaceBtn_Click(object sender, RoutedEventArgs e)
+        private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void AtBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void PictureBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AudioBtn_Click(object sender, RoutedEventArgs e)
-        {
-
+            ScrollToBottom(MessageScrollViewer, true);
         }
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
@@ -596,19 +734,12 @@ namespace Another_Mirai_Native.UI.Pages
             SendText.Text = "";
         }
 
-        private void UpdateSendStatus(string? guid, bool enable)
+        private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (string.IsNullOrEmpty(guid))
+            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
             {
-                return;
-            }
-            foreach (UIElement item in MessageContainer.Children)
-            {
-                if (item is ChatDetailListItem_Right right && right.GUID == guid)
-                {
-                    right.UpdateSendStatus(enable);
-                    return;
-                }
+                e.Handled = true;
+                SendBtn_Click(sender, e);
             }
         }
 
@@ -628,33 +759,20 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void UpdateSendStatus(string? guid, bool enable)
         {
-            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
+            if (string.IsNullOrEmpty(guid))
             {
-                e.Handled = true;
-                SendBtn_Click(sender, e);
+                return;
             }
-        }
-
-        public int CallPrivateMsgSend(long qq, string message)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
-        }
-
-        public int CallGroupMsgSend(long groupId, string message)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
+            foreach (UIElement item in MessageContainer.Children)
+            {
+                if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                {
+                    right.UpdateSendStatus(enable);
+                    return;
+                }
+            }
         }
     }
 }

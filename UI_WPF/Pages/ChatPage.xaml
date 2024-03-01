@@ -10,7 +10,7 @@
     xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="ChatPage"
     d:DataContext="{d:DesignInstance Type={x:Type local:ChatPage}}"
-    d:DesignHeight="450"
+    d:DesignHeight="650"
     d:DesignWidth="800"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
@@ -154,9 +154,42 @@
                     BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
                     BorderThickness="1"
                     CornerRadius="5">
-                    <ScrollViewer x:Name="MessageScrollViewer" Padding="10">
-                        <StackPanel x:Name="MessageContainer" />
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <ScrollViewer
+                            x:Name="MessageScrollViewer"
+                            Grid.RowSpan="2"
+                            Padding="10"
+                            ScrollChanged="MessageScrollViewer_ScrollChanged">
+                            <StackPanel x:Name="MessageContainer" />
+                        </ScrollViewer>
+                        <Grid
+                            x:Name="ScrollBottomContainer"
+                            Grid.Row="1"
+                            Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                x:Name="ScrollToBottomBtn"
+                                Grid.Column="1"
+                                Width="40"
+                                Margin="20,10"
+                                Click="ScrollToBottomBtn_Click"
+                                Style="{StaticResource AccentButtonStyle}">
+                                <ui:FontIcon
+                                    Width="14"
+                                    Height="14"
+                                    FontSize="14"
+                                    Glyph="&#xE74B;" />
+                            </Button>
+                        </Grid>
+                    </Grid>
+
                 </Border>
             </ui:ThemeShadowChrome>
         </Grid>
