@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.UI.Converters
             var time = (DateTime)value;
             if((DateTime.Now - time).Days < 1)
             {
-                return time.ToString("t");    
+                return time.ToString("T");    
             }
             else if((DateTime.Now - time).Days <= 7)
             {
