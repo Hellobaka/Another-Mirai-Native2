@@ -90,7 +90,7 @@ namespace Another_Mirai_Native.UI.Converters
         {
             double actualWidth = (double)value;
             double scrollBarWidth = parameter is double d ? d : 0;
-            return actualWidth - scrollBarWidth - 6; // 可以根据需要调整这里的计算
+            return actualWidth - scrollBarWidth - 8; // 可以根据需要调整这里的计算
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
