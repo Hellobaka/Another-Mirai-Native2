@@ -43,7 +43,7 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
             public long user_id { get; set; }
 
-            public long? group_id { get; set; }
+            public long group_id { get; set; }
         }
     }
 }
