@@ -18,8 +18,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public static string AuthKey { get; set; } = "";
 
-        public bool MessageArrayType { get; set; }
-
         public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
 
         public bool ExitFlag { get; private set; }
@@ -150,7 +148,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            if (MessageArrayType)
+            if (groupMessage.message_type == "array")
             {
                 groupMessage.ParsedMessage = ParseCQCodeArrayToText(groupMessage.message);
             }
@@ -347,7 +345,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            if (MessageArrayType)
+            if (privateMessage.message_type == "array")
             {
                 privateMessage.ParsedMessage = ParseCQCodeArrayToText(privateMessage.message);
             }
@@ -403,92 +401,21 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 throw new ArgumentNullException("消息类型不正确");
             }
             string result = "";
-            foreach(dynamic json in arr)
+            foreach (JObject json in arr)
             {
-                switch (json.type)
+                if (json["type"].ToString() == "text")
                 {
-                    case "text":
-                        result += json.data.text;
-                        break;
-
-                    case "face":
-                        result += $"[CQ:face,id={json.data.id}]";
-                        break;
-
-                    case "image":
-                        result += $"[CQ:image,file={json.data.file}]";
-                        break;
-
-                    case "record":
-                        result += $"[CQ:record,file={json.data.file}]";
-                        break;
-
-                    case "video":
-                        result += $"[CQ:video,file={json.data.file}]";
-                        break;
-
-                    case "at":
-                        result += $"[CQ:face,qq={json.data.qq}]";
-                        break;
-
-                    case "rps":
-                        result += $"[CQ:rps]";
-                        break;
-
-                    case "dice":
-                        result += $"[CQ:dice]";
-                        break;
-
-                    case "shake":
-                        result += $"[CQ:shake]";
-                        break;
-
-                    case "poke":
-                        result += $"[CQ:poke,type={json.data.type},id={json.data.id}]";
-                        break;
-
-                    case "anonymous":
-                        result += $"[CQ:anonymous]";
-                        break;
-
-                    case "share":
-                        result += $"[CQ:share,url={json.data.url},title={json.data.title}]";
-                        break;
-
-                    case "contact":
-                        result += $"[CQ:contact,type={json.data.type},id={json.data.id}]";
-                        break;
-
-                    case "location":
-                        result += $"[CQ:location,lat={json.data.lat},lon={json.data.lon}]";
-                        break;
-
-                    case "music":
-                        if(json.data.type == "custom")
-                        {
-                            result += $"[CQ:music,type={json.data.type},url={json.data.url},audio={json.data.audio},title={json.data.title}]";
-                        }
-                        else
-                        {
-                            result += $"[CQ:music,type={json.data.type},id={json.data.id}]";
-                        }
-                        break;
-
-                    case "reply":
-                        result += $"[CQ:reply,id={json.data.id}]";
-                        break;
-
-                    case "xml":
-                        result += $"[CQ:xml,data={json.data.data}]";
-                        break;
-
-                    case "json":
-                        result += $"[CQ:json,data={json.data.data}]";
-                        break;
-
-                    case "rich":
-                        result += $"[CQ:rich,content={json.data.data}]";
-                        break;
+                    result += json["data"]["text"].ToString();
+                }
+                else
+                {
+                    string cqCode = $"[CQ:{json["type"]},";
+                    foreach (JProperty key in json["data"].Values<JProperty>())
+                    {
+                        cqCode += $"{key.Name}={key.Value},";
+                    }
+                    cqCode = cqCode.Substring(0, cqCode.Length - 1) + "]";
+                    result += cqCode;
                 }
             }
             return result;

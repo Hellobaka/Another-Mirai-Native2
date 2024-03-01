@@ -264,7 +264,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             WsURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
-            MessageArrayType = GetConfig("MessageArrayType", true);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
