@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,16 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
             DataContext = this;
             Instance = this;
+            // TODO: 寻找发送卡顿的原因
+            // TODO: 发送更新左侧列表、修复发送时名片无法正确获取的bug
+            // TODO: 修复At消息独立占一行
+            // TODO: 实现右键菜单
+            // TOOD: 实现图片双击预览
+            // TODO: 修复切换左侧列表时重复获取好友列表的bug
+            // TODO: 修复图片加载异常缓慢
+            // TODO: URL变为超链接？
+            // TODO: 滚动到底部出现时机改为特定像素数 不使用比例
+            // TODO: 图片收藏功能
         }
 
         public static event Action<int> MsgRecalled;
@@ -537,7 +548,7 @@ namespace Another_Mirai_Native.UI.Pages
         private void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg)
         {
             AddGroupChatItem(group, qq, msg, DetailItemType.Receive);
-            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.Fallback);
+            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
             if (item != null)
             {
                 item.GroupName = GetGroupName(group);
@@ -550,7 +561,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     ChatList.Add(new ChatListItemViewModel
                     {
-                        AvatarType = ChatAvatar.AvatarTypes.Fallback,
+                        AvatarType = ChatAvatar.AvatarTypes.QQGroup,
                         Detail = $"{GetGroupMemberNick(group, qq)}: {msg}",
                         GroupName = GetGroupName(group),
                         Id = group,
@@ -607,12 +618,13 @@ namespace Another_Mirai_Native.UI.Pages
                     GroupName = GetGroupName(SelectedItem.Id);
                     break;
 
-                case ChatAvatar.AvatarTypes.Fallback:
                 case ChatAvatar.AvatarTypes.QQPrivate:
                     GroupName = GetFriendNick(SelectedItem.Id);
                     break;
 
                 default:
+                case ChatAvatar.AvatarTypes.Fallback:
+                    GroupName = SelectedItem.Id.ToString();
                     break;
             }
             OnPropertyChanged(nameof(GroupName));
@@ -696,15 +708,17 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             string sendText = SendText.Text;
-            Dispatcher.BeginInvoke(() =>
+            ChatAvatar.AvatarTypes avatar = SelectedItem.AvatarType;
+            long id = SelectedItem.Id;
+            Task.Run(() =>
             {
-                if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+                if (avatar == ChatAvatar.AvatarTypes.QQPrivate)
                 {
-                    AddPrivateChatItem(SelectedItem.Id, sendText, DetailItemType.Send,
+                    AddPrivateChatItem(id, sendText, DetailItemType.Send,
                         itemAdded: (guid) =>
                         {
                             UpdateSendStatus(guid, true);
-                            if (CallPrivateMsgSend(SelectedItem.Id, sendText) > 0)
+                            if (CallPrivateMsgSend(id, sendText) > 0)
                             {
                                 UpdateSendStatus(guid, false);
                             }
@@ -716,11 +730,11 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 else
                 {
-                    AddGroupChatItem(SelectedItem.Id, AppConfig.Instance.CurrentQQ, sendText, DetailItemType.Send,
+                    AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, sendText, DetailItemType.Send,
                         itemAdded: (guid) =>
                         {
                             UpdateSendStatus(guid, true);
-                            if (CallGroupMsgSend(SelectedItem.Id, sendText) == 0)
+                            if (CallGroupMsgSend(id, sendText) > 0)
                             {
                                 UpdateSendStatus(guid, false);
                             }

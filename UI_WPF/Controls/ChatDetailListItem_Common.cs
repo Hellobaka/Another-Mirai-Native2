@@ -41,8 +41,8 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 dispatcher.BeginInvoke(() =>
                 {
-                    border.Width = maxWidth;
-                    border.Height = ImageMaxHeight;
+                    border.Width = Math.Min(image.Width, maxWidth);
+                    border.Height = Math.Min(image.Height, ImageMaxHeight);
 
                     border.Background = CreateImageBrush(image);
                     if (image.Height > ImageMaxHeight)
