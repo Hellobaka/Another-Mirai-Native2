@@ -38,7 +38,6 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 修复切换左侧列表时重复获取好友列表的bug
             // TODO: 修复图片加载异常缓慢
             // TODO: URL变为超链接？
-            // TODO: 滚动到底部出现时机改为特定像素数 不使用比例
             // TODO: 图片收藏功能
         }
 
@@ -446,9 +445,9 @@ namespace Another_Mirai_Native.UI.Pages
             double distanceToBottom = scrollViewer.ScrollableHeight - scrollViewer.VerticalOffset;
             double distanceToTop = scrollViewer.VerticalOffset;
 
-            ScrollBottomContainer.Visibility = distanceToBottom > scrollViewer.ScrollableHeight * 0.1 ? Visibility.Visible : Visibility.Collapsed;
+            ScrollBottomContainer.Visibility = distanceToBottom > 100 ? Visibility.Visible : Visibility.Collapsed;
 
-            if (distanceToTop < scrollViewer.ScrollableHeight * 0.1)
+            if (distanceToTop < 100)
             {
                 if (LazyLoadDebounceTimer == null)
                 {

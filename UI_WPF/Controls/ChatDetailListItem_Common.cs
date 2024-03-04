@@ -121,18 +121,21 @@ namespace Another_Mirai_Native.UI.Controls
                     border.Child = fontIcon;
                 });
             };
-            bitmapImage.BeginInit();
-            if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
+            border.Dispatcher.BeginInvoke(() =>
             {
-                bitmapImage.UriSource = uri;
-            }
-            bitmapImage.EndInit();
+                bitmapImage.BeginInit();
+                if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
+                {
+                    bitmapImage.UriSource = uri;
+                }
+                bitmapImage.EndInit();
 
-            // local pic
-            if (!url.StartsWith("http"))
-            {
-                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
-            }
+                // local pic
+                if (!url.StartsWith("http"))
+                {
+                    SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
+                }
+            });
             return border;
         }
 
