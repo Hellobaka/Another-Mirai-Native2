@@ -152,7 +152,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
-            Debug.WriteLine($"[Event]\t" + e.Data);
+            LogHelper.Debug("Event", e.Data);
             Task.Run(() => HandleEvent(e.Data));
         }
 
@@ -200,7 +200,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         private void MessageConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
         {
-            Debug.WriteLine($"[Message]\t" + e.Data);
+            LogHelper.Debug("Message", e.Data);
             Task.Run(() => HandleMessage(e.Data));
         }
 
