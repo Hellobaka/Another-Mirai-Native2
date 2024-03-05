@@ -78,7 +78,12 @@
                     MouseDown="UnreadTip_MouseDown"
                     RenderOptions.EdgeMode="Aliased"
                     Visibility="Visible">
-                    <TextBlock x:Name="UnreadCountDisplay" Text="{Binding UnreadCount}" />
+                    <TextBlock
+                        x:Name="UnreadCountDisplay"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Text="{Binding UnreadCount}"
+                        TextAlignment="Center" />
                 </Border>
             </Grid>
         </Grid>
