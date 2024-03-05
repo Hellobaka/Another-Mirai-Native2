@@ -96,6 +96,10 @@ namespace Another_Mirai_Native.UI.Pages
         {
             try
             {
+                if (qq == AppConfig.Instance.CurrentQQ)
+                {
+                    return AppConfig.Instance.CurrentNickName;
+                }
                 if (FriendInfoCache.TryGetValue(qq, out var info))
                 {
                     return info.Nick;
@@ -144,8 +148,19 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                     if (GroupMemberCache[group].ContainsKey(qq) is false)
                     {
-                        var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                        GroupMemberCache[group].Add(qq, memberInfo);
+                        if (qq == AppConfig.Instance.CurrentQQ)
+                        {
+                            var full = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(group);
+                            if (full != null && full.Any(x => x.QQ == qq))
+                            {
+                                GroupMemberCache[group].Add(qq, full.First(x => x.QQ == qq));
+                            }
+                        }
+                        else
+                        {
+                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
+                            GroupMemberCache[group].Add(qq, memberInfo);
+                        }
                     }
                     return GroupMemberCache[group][qq].Nick;
                 }
