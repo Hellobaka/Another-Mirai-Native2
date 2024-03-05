@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -41,7 +42,7 @@ namespace Another_Mirai_Native.UI.Controls
                 };
                 return brush;
             }
-            void SetBackground(Dispatcher dispatcher, Viewbox viewBox, ProgressRing progressRing, BitmapImage bitmapImage)
+            void SetBackground(Dispatcher dispatcher,Viewbox viewBox, ProgressRing progressRing, BitmapImage bitmapImage)
             {
                 dispatcher.BeginInvoke(() =>
                 {
@@ -49,13 +50,16 @@ namespace Another_Mirai_Native.UI.Controls
                     image.Stretch = Stretch.Uniform;
                     image.Source = bitmapImage;
 
+                    viewBox.Height = Math.Min(bitmapImage.Height, viewBox.MaxHeight);
+                    double rate = bitmapImage.Height / viewBox.Height;
                     RectangleGeometry clipGeometry = new RectangleGeometry
                     {
-                        RadiusX = 10,
-                        RadiusY = 10,
+                        RadiusX = 10 * rate,
+                        RadiusY = 10 * rate,
                         Rect = new Rect(0, 0, bitmapImage.Width, bitmapImage.Height)
                     };
                     image.Clip = clipGeometry;
+                    (viewBox.Parent as Grid).Background = Brushes.Transparent;
                     viewBox.Child = image;
 
                     viewBox.Visibility = Visibility.Visible;
@@ -64,11 +68,8 @@ namespace Another_Mirai_Native.UI.Controls
             }
             Grid grid = new()
             {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
                 MinHeight = 100,
                 MinWidth = 100,
-                MaxHeight = ImageMaxHeight
             };
 
             var viewBox = new Viewbox()
@@ -81,6 +82,14 @@ namespace Another_Mirai_Native.UI.Controls
                 Visibility = Visibility.Collapsed
             };
             grid.Children.Add(viewBox);
+            var binding = new Binding
+            {
+                Source = viewBox,
+                Path = new PropertyPath("ActualHeight"),
+                Mode = BindingMode.OneWay
+            };
+            grid.SetBinding(Grid.HeightProperty, binding);
+
             viewBox.MouseLeftButtonDown += (_, e) =>
             {
                 if (e.ClickCount == 2)
@@ -88,7 +97,7 @@ namespace Another_Mirai_Native.UI.Controls
                     Debug.WriteLine("DbClick");
                 }
             };
-            viewBox.SetResourceReference(Border.BackgroundProperty, "SystemControlPageBackgroundChromeMediumLowBrush");
+            grid.SetResourceReference(Border.BackgroundProperty, "SystemControlPageBackgroundChromeMediumLowBrush");
             RenderOptions.SetBitmapScalingMode(viewBox, BitmapScalingMode.Fant);
             var progressRing = new ProgressRing
             {

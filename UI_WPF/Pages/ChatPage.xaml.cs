@@ -37,6 +37,8 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: URL变为超链接？
             // TODO: 图片收藏功能
             // TODO: 群主、管理员头衔
+            // TODO: 监听发送事件
+            // TODO: GIF
         }
 
         public static event Action<int> MsgRecalled;
@@ -137,6 +139,10 @@ namespace Another_Mirai_Native.UI.Pages
         {
             try
             {
+                if (qq == AppConfig.Instance.CurrentQQ)
+                {
+                    return AppConfig.Instance.CurrentNickName;
+                }
                 if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
                 {
                     return info.Nick;
@@ -149,19 +155,8 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                     if (GroupMemberCache[group].ContainsKey(qq) is false)
                     {
-                        if (qq == AppConfig.Instance.CurrentQQ)
-                        {
-                            var full = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(group);
-                            if (full != null && full.Any(x => x.QQ == qq))
-                            {
-                                GroupMemberCache[group].Add(qq, full.First(x => x.QQ == qq));
-                            }
-                        }
-                        else
-                        {
-                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                            GroupMemberCache[group].Add(qq, memberInfo);
-                        }
+                        var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
+                        GroupMemberCache[group].Add(qq, memberInfo);
                     }
                     return GroupMemberCache[group][qq].Nick;
                 }
