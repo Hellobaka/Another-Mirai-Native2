@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
@@ -27,56 +28,68 @@ namespace Another_Mirai_Native.UI.Controls
             return textBox;
         }
 
-        public static Border BuildImageElement(CQCode cqCode, double maxWidth)
+        public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
         {
             ImageBrush CreateImageBrush(BitmapImage image)
             {
                 var brush = new ImageBrush(image)
                 {
-                    Stretch = Stretch.Uniform
+                    Stretch = Stretch.Uniform,
+                    AlignmentX = AlignmentX.Left,
+                    AlignmentY = AlignmentY.Top,
+                    TileMode = TileMode.None
                 };
                 return brush;
             }
-            void SetBorderBackground(Dispatcher dispatcher, Border border, ProgressRing progressRing, BitmapImage image)
+            void SetBackground(Dispatcher dispatcher, Viewbox viewBox, ProgressRing progressRing, BitmapImage bitmapImage)
             {
                 dispatcher.BeginInvoke(() =>
                 {
-                    border.Width = Math.Min(image.Width, maxWidth);
-                    border.Height = Math.Min(image.Height, ImageMaxHeight);
+                    Image image = new();
+                    image.Stretch = Stretch.Uniform;
+                    image.Source = bitmapImage;
 
-                    border.Background = CreateImageBrush(image);
-                    if (image.Height > ImageMaxHeight)
+                    RectangleGeometry clipGeometry = new RectangleGeometry
                     {
-                        // 超长图居中问题
-                        border.Width = Math.Min(border.Width, image.Width * (ImageMaxHeight / image.Height));
-                        border.Height = Math.Min(border.Height, image.Height * (border.Width / image.Width));
-                    }
-                    else
-                    {
-                        border.Width = Math.Min(border.MaxWidth, border.Width * 1.2);
-                        border.Height = image.Height * (border.Width / image.Width);
-                    }
+                        RadiusX = 10,
+                        RadiusY = 10,
+                        Rect = new Rect(0, 0, bitmapImage.Width, bitmapImage.Height)
+                    };
+                    image.Clip = clipGeometry;
+                    viewBox.Child = image;
+
+                    viewBox.Visibility = Visibility.Visible;
                     progressRing.Visibility = Visibility.Collapsed;
                 });
             }
-
-            var border = new Border()
+            Grid grid = new()
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 MinHeight = 100,
                 MinWidth = 100,
-                CornerRadius = new CornerRadius(10),
+                MaxHeight = ImageMaxHeight
             };
-            border.MouseLeftButtonDown += (_, e) =>
+
+            var viewBox = new Viewbox()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                MinHeight = 100,
+                MinWidth = 100,
+                MaxHeight = ImageMaxHeight,
+                Visibility = Visibility.Collapsed
+            };
+            grid.Children.Add(viewBox);
+            viewBox.MouseLeftButtonDown += (_, e) =>
             {
                 if (e.ClickCount == 2)
                 {
                     Debug.WriteLine("DbClick");
                 }
             };
-            border.SetResourceReference(Border.BackgroundProperty, "SystemControlPageBackgroundChromeMediumLowBrush");
-            RenderOptions.SetBitmapScalingMode(border, BitmapScalingMode.Fant);
+            viewBox.SetResourceReference(Border.BackgroundProperty, "SystemControlPageBackgroundChromeMediumLowBrush");
+            RenderOptions.SetBitmapScalingMode(viewBox, BitmapScalingMode.Fant);
             var progressRing = new ProgressRing
             {
                 IsActive = true,
@@ -85,13 +98,13 @@ namespace Another_Mirai_Native.UI.Controls
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
             };
-            border.Child = progressRing;
+            grid.Children.Add(progressRing);
 
             string url = Extend.GetImageUrlOrPathFromCQCode(cqCode);
             if (CachedImage.TryGetValue(url, out BitmapImage? img))
             {
-                SetBorderBackground(border.Dispatcher, border, progressRing, img);
-                return border;
+                SetBackground(viewBox.Dispatcher, viewBox, progressRing, img);
+                return grid;
             }
 
             var bitmapImage = new BitmapImage();
@@ -105,7 +118,7 @@ namespace Another_Mirai_Native.UI.Controls
                 {
                     CachedImage.Add(url, bitmapImage);
                 }
-                SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
+                SetBackground(viewBox.Dispatcher, viewBox, progressRing, bitmapImage);
             };
             bitmapImage.DownloadFailed += (_, _) =>
             {
@@ -116,12 +129,12 @@ namespace Another_Mirai_Native.UI.Controls
                     FontSize = 16,
                     Glyph = "\uF384"
                 };
-                border.Dispatcher.BeginInvoke(() =>
+                viewBox.Dispatcher.BeginInvoke(() =>
                 {
-                    border.Child = fontIcon;
+                    viewBox.Child = fontIcon;
                 });
             };
-            border.Dispatcher.BeginInvoke(() =>
+            ChatPage.Instance.Dispatcher.BeginInvoke(() =>
             {
                 bitmapImage.BeginInit();
                 if (Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
@@ -133,10 +146,10 @@ namespace Another_Mirai_Native.UI.Controls
                 // local pic
                 if (!url.StartsWith("http"))
                 {
-                    SetBorderBackground(border.Dispatcher, border, progressRing, bitmapImage);
+                    SetBackground(viewBox.Dispatcher, viewBox, progressRing, bitmapImage);
                 }
             });
-            return border;
+            return grid;
         }
 
         public static TextBox BuildTextElement(string text)

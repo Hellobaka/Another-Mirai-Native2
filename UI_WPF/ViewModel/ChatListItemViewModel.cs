@@ -18,6 +18,8 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public DateTime Time { get; set; }
 
+        public int UnreadCount { get; set; }
+
         public void InvokePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));

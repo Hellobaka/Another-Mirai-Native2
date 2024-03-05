@@ -1,18 +1,9 @@
-﻿using Another_Mirai_Native.UI.ViewModel;
+﻿using Another_Mirai_Native.UI.Pages;
+using Another_Mirai_Native.UI.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI.Controls
 {
@@ -36,8 +27,8 @@ namespace Another_Mirai_Native.UI.Controls
 
         public ChatListItemViewModel Item
         {
-            get { return (ChatListItemViewModel)GetValue(ItemProperty); }
-            set { SetValue(ItemProperty, value); }
+            get => (ChatListItemViewModel)GetValue(ItemProperty);
+            set => SetValue(ItemProperty, value);
         }
 
         private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -45,10 +36,20 @@ namespace Another_Mirai_Native.UI.Controls
             ChatListItem control = (ChatListItem)d;
             ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
 
+            control.ViewModel = newValue;
             control.Id = newValue.Id;
             control.GroupName = newValue.GroupName;
             control.Detail = newValue.Detail;
             control.Time = newValue.Time;
+            control.UnreadCount = newValue.UnreadCount;
+
+            control.UpdateControl();
+        }
+
+        private void UpdateControl()
+        {
+            UnreadTip.Visibility = UnreadCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+            UnreadCountDisplay.FontSize = UnreadTip.Width * 0.5;
         }
 
         public int ItemId { get; set; }
@@ -61,9 +62,19 @@ namespace Another_Mirai_Native.UI.Controls
 
         public DateTime Time { get; set; } = DateTime.Now;
 
+        public int UnreadCount { get; set; }
+
+        public ChatListItemViewModel ViewModel { get; set; }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+        }
 
+        private void UnreadTip_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UnreadCount = 0;
+            UpdateControl();
+            ChatPage.Instance.UpdateUnreadCount(ViewModel);
         }
     }
 }

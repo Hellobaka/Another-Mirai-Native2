@@ -51,15 +51,36 @@
                     FontSize="12"
                     Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}" />
             </Grid>
-            <TextBlock
-                x:Name="DetailDisplay"
-                Grid.Row="1"
-                Margin="0,0,10,0"
-                VerticalAlignment="Center"
-                FontSize="12"
-                Text="{Binding Detail}"
-                TextTrimming="CharacterEllipsis"
-                TextWrapping="NoWrap" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    x:Name="DetailDisplay"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Text="{Binding Detail}"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="NoWrap" />
+                <Border
+                    x:Name="UnreadTip"
+                    Grid.Column="1"
+                    Width="15"
+                    Height="15"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ResourceKey=SystemControlErrorTextForegroundBrush}"
+                    CornerRadius="100"
+                    Cursor="Hand"
+                    MouseDown="UnreadTip_MouseDown"
+                    RenderOptions.EdgeMode="Aliased"
+                    Visibility="Visible">
+                    <TextBlock x:Name="UnreadCountDisplay" Text="{Binding UnreadCount}" />
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

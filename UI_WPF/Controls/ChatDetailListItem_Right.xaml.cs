@@ -41,27 +41,18 @@ namespace Another_Mirai_Native.UI.Controls
 
         public void ParseAndBuildDetail()
         {
+            Message = UnionAllAtMsg(Message);
             var ls = CQCode.Parse(Message);
             int imageCount = ls.Count(x => x.IsImageCQCode);
             int recordCount = ls.Count(x => x.IsRecordCQCode);
-            StackPanel imgContainer = imageCount == 1 ? ImageDisplay : DetailContainer;
-            if (imageCount == 1)
-            {
-                ImageBorder.Visibility = Visibility.Visible;
-                DetailBorder.Visibility = Visibility.Collapsed;
-            }
-            if (recordCount == 1) // 不会与Image同时出现
-            {
-                DetailBorder.Visibility = Visibility.Collapsed;
-                ImageBorder.Visibility = Visibility.Collapsed;
-            }
             string msg = Message;
             foreach (var item in ls)
             {
                 msg = msg.Replace(item.ToString(), "<!cqCode!>");
             }
-            var p = msg.Split("<!cqCode!>");
+            var p = msg.SplitV2("<!cqCode!>");
             int cqCode_index = 0;
+            StackPanel imgContainer = imageCount == 1 && p.Length == 1 ? ImageDisplay : DetailContainer;
             for (int i = 0; i < p.Length; i++)
             {
                 if (p[i] == "<!cqCode!>")
@@ -69,34 +60,22 @@ namespace Another_Mirai_Native.UI.Controls
                     var item = ls[cqCode_index];
                     if (item.Function == Model.Enums.CQCodeType.Image)
                     {
+                        if (imageCount == 1 && p.Length == 1)
+                        {
+                            ImageBorder.Visibility = Visibility.Visible;
+                            DetailBorder.Visibility = Visibility.Collapsed;
+                        }
                         imgContainer.Children.Add(ChatDetailListItem_Common.BuildImageElement(item, MaxWidth * 0.5));
                     }
-                    else if (item.Function == Model.Enums.CQCodeType.Rich)
+                    else
                     {
                         Expander expander = new()
                         {
-                            Header = "富文本",
+                            Header = "CQ 码",
                             Margin = new Thickness(10),
                             Content = ChatDetailListItem_Common.BuildTextElement(item.ToSendString())
                         };
                         DetailContainer.Children.Add(expander);
-                    }
-                    else if (item.Function == Model.Enums.CQCodeType.At)
-                    {
-                        if (long.TryParse(item.Items["qq"], out long id))
-                        {
-                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildAtElement(AvatarType == ChatAvatar.AvatarTypes.QQGroup
-                                ? ChatPage.Instance.GetGroupMemberNick(GroupId, id)
-                                    : ChatPage.Instance.GetFriendNick(id)));
-                        }
-                        else
-                        {
-                            DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
-                        }
-                    }
-                    else
-                    {
-                        DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(item.ToSendString()));
                     }
                     cqCode_index++;
                 }
@@ -105,6 +84,25 @@ namespace Another_Mirai_Native.UI.Controls
                     DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(p[i]));
                 }
             }
+        }
+
+        private string UnionAllAtMsg(string message)
+        {
+            var ls = CQCode.Parse(message);
+            foreach (var item in ls)
+            {
+                if (item.Function == Model.Enums.CQCodeType.At)
+                {
+                    if (item.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
+                    {
+                        string nick = AvatarType == ChatAvatar.AvatarTypes.QQGroup
+                                ? ChatPage.Instance.GetGroupMemberNick(GroupId, id)
+                                    : ChatPage.Instance.GetFriendNick(id);
+                        message = message.Replace(item.ToSendString(), $" @{nick} ");
+                    }
+                }
+            }
+            return message;
         }
 
         private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)

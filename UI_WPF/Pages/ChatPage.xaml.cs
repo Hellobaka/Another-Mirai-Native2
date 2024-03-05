@@ -30,13 +30,10 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            // TODO: 寻找发送卡顿的原因
             // TODO: 发送更新左侧列表、修复发送时名片无法正确获取的bug
-            // TODO: 修复At消息独立占一行
             // TODO: 实现右键菜单
             // TOOD: 实现图片双击预览
             // TODO: 修复切换左侧列表时重复获取好友列表的bug
-            // TODO: 修复图片加载异常缓慢
             // TODO: URL变为超链接？
             // TODO: 图片收藏功能
         }
@@ -179,6 +176,16 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        public void UpdateUnreadCount(ChatListItemViewModel model)
+        {
+            var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
+            if (item != null)
+            {
+                item.UnreadCount = model.UnreadCount;
+                ReorderChatList();
+            }
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -203,11 +210,8 @@ namespace Another_Mirai_Native.UI.Pages
                 GroupChatHistory[group].Add(item);
             }
             OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() =>
-            {
-                RefreshMessageContainer(false);
-                itemAdded?.Invoke(item?.GUID);
-            });
+            Dispatcher.BeginInvoke(() => RefreshMessageContainer(false));
+            itemAdded?.Invoke(item?.GUID);
             return item?.GUID;
         }
 
@@ -553,6 +557,7 @@ namespace Another_Mirai_Native.UI.Pages
                 item.GroupName = GetGroupName(group);
                 item.Detail = $"{GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
+                item.UnreadCount++;
             }
             else
             {
@@ -565,6 +570,7 @@ namespace Another_Mirai_Native.UI.Pages
                         GroupName = GetGroupName(group),
                         Id = group,
                         Time = DateTime.Now,
+                        UnreadCount = 1
                     });
                 });
             }
@@ -586,6 +592,7 @@ namespace Another_Mirai_Native.UI.Pages
                 item.GroupName = GetFriendNick(qq);
                 item.Detail = msg;
                 item.Time = DateTime.Now;
+                item.UnreadCount++;
             }
             else
             {
@@ -598,6 +605,7 @@ namespace Another_Mirai_Native.UI.Pages
                         GroupName = GetFriendNick(qq),
                         Id = qq,
                         Time = DateTime.Now,
+                        UnreadCount = 1
                     });
                 });
             }
@@ -778,14 +786,17 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            foreach (UIElement item in MessageContainer.Children)
+            Dispatcher.BeginInvoke(() =>
             {
-                if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                foreach (UIElement item in MessageContainer.Children)
                 {
-                    right.UpdateSendStatus(enable);
-                    return;
+                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    {
+                        right.UpdateSendStatus(enable);
+                        return;
+                    }
                 }
-            }
+            });
         }
     }
 }
