@@ -36,6 +36,7 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 修复切换左侧列表时重复获取好友列表的bug
             // TODO: URL变为超链接？
             // TODO: 图片收藏功能
+            // TODO: 群主、管理员头衔
         }
 
         public static event Action<int> MsgRecalled;
