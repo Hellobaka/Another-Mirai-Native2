@@ -1,5 +1,7 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
+using Another_Mirai_Native.UI.Windows;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
@@ -120,14 +122,6 @@ namespace Another_Mirai_Native.UI.Controls
                 Visibility = Visibility.Collapsed
             };
             grid.Children.Add(viewBox);
-            // 图片双击事件
-            viewBox.MouseLeftButtonDown += (_, e) =>
-            {
-                if (e.ClickCount == 2)
-                {
-                    Debug.WriteLine("DbClick");
-                }
-            };
             // 图片渲染质量
             RenderOptions.SetBitmapScalingMode(viewBox, BitmapScalingMode.Fant);
             // 进度环
@@ -155,6 +149,16 @@ namespace Another_Mirai_Native.UI.Controls
                         {
                             Stretch = Stretch.Uniform,
                             Source = bitmapImage
+                        };
+                        // 图片双击事件
+                        viewBox.MouseLeftButtonDown += (_, e) =>
+                        {
+                            if (e.ClickCount == 2)
+                            {
+                                PictureViewer pictureViewer = new() { Image = bitmapImage };
+                                pictureViewer.Owner = MainWindow.Instance;
+                                pictureViewer.Show();
+                            }
                         };
                         AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
                         // 拉伸容器高度

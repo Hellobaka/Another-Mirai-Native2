@@ -31,7 +31,6 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            // TOOD: 实现图片双击预览
             // TODO: 图片收藏功能
         }
 
@@ -514,13 +513,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedItem != null)
-            {
-                for (int i = 0; i < 50; i++)
-                {
-                    PluginManagerProxy_OnGroupMsg(i + 1, SelectedItem.Id, 1145141919, i.ToString());
-                }
-            }
+
         }
 
         private void LazyLoad()
