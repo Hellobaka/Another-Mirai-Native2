@@ -48,8 +48,9 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void UpdateControl()
         {
+            ViewModel.UnreadCount = UnreadCount;
             UnreadTip.Visibility = UnreadCount > 0 ? Visibility.Visible : Visibility.Collapsed;
-            UnreadCountDisplay.FontSize = UnreadTip.Width * 0.5;
+            UnreadCountDisplay.FontSize = UnreadTip.Width * 0.6;
         }
 
         public int ItemId { get; set; }

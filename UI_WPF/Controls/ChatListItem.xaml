@@ -72,16 +72,17 @@
                     Margin="0,0,10,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ResourceKey=SystemControlErrorTextForegroundBrush}"
+                    Background="{DynamicResource SystemAccentColorLight3Brush}"
                     CornerRadius="100"
                     Cursor="Hand"
                     MouseDown="UnreadTip_MouseDown"
-                    RenderOptions.EdgeMode="Aliased"
+                    RenderOptions.BitmapScalingMode="HighQuality"
                     Visibility="Visible">
                     <TextBlock
                         x:Name="UnreadCountDisplay"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
+                        Foreground="Black"
                         Text="{Binding UnreadCount}"
                         TextAlignment="Center" />
                 </Border>
