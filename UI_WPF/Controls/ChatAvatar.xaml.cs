@@ -16,6 +16,13 @@ namespace Another_Mirai_Native.UI.Controls
     /// </summary>
     public partial class ChatAvatar : UserControl
     {
+        public static readonly DependencyProperty ItemProperty =
+            DependencyProperty.Register(
+                "Item",
+                typeof(ChatListItemViewModel),
+                typeof(ChatAvatar),
+                new PropertyMetadata(new ChatListItemViewModel(), OnItemChanged));
+
         public ChatAvatar()
         {
             //DataContext = this;
@@ -41,33 +48,10 @@ namespace Another_Mirai_Native.UI.Controls
 
         public bool IsRound { get; set; }
 
-        public static readonly DependencyProperty ItemProperty =
-            DependencyProperty.Register(
-                "Item",
-                typeof(ChatListItemViewModel),
-                typeof(ChatAvatar),
-                new PropertyMetadata(new ChatListItemViewModel(), OnItemChanged));
-
         public ChatListItemViewModel Item
         {
             get { return (ChatListItemViewModel)GetValue(ItemProperty); }
             set { SetValue(ItemProperty, value); }
-        }
-
-        private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ChatAvatar control = (ChatAvatar)d;
-            ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
-
-            control.Id = newValue.Id;
-            control.FallbackName = newValue.GroupName;
-            control.AvatarType = newValue.AvatarType;
-            if (LoadedItems.Any(x => x == newValue.Id) is false)
-            {
-                LoadedItems.Add(newValue.Id);
-            }
-            control.GetDisplayImage(newValue.Id);
-            control.Init();
         }
 
         private static Color[] Colors { get; set; } = new Color[]
@@ -95,6 +79,31 @@ namespace Another_Mirai_Native.UI.Controls
         };
 
         private static List<long> LoadedItems { get; set; } = new();
+
+        public void Init()
+        {
+            Container.CornerRadius = IsRound ? new CornerRadius(double.MaxValue) : new CornerRadius(Width * 0.1);
+            FallbackBrush = new SolidColorBrush(Colors[new Random(Id.GetHashCode()).Next(Colors.Length)]);
+            Container.Background = FallbackBrush;
+            FallbackDisplay.FontSize = Width * 0.35;
+            FallbackDisplay.Text = FallbackName.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName;
+        }
+
+        private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ChatAvatar control = (ChatAvatar)d;
+            ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
+
+            control.Id = newValue.Id;
+            control.FallbackName = newValue.GroupName;
+            control.AvatarType = newValue.AvatarType;
+            if (LoadedItems.Any(x => x == newValue.Id) is false)
+            {
+                LoadedItems.Add(newValue.Id);
+            }
+            control.GetDisplayImage(newValue.Id);
+            control.Init();
+        }
 
         private void GetDisplayImage(long id)
         {
@@ -130,15 +139,6 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                 });
             });
-        }
-
-        public void Init()
-        {
-            Container.CornerRadius = IsRound ? new CornerRadius(double.MaxValue) : new CornerRadius(Width * 0.1);
-            FallbackBrush = new SolidColorBrush(Colors[new Random(Id.GetHashCode()).Next(Colors.Length)]);
-            Container.Background = FallbackBrush;
-            FallbackDisplay.FontSize = Width * 0.35;
-            FallbackDisplay.Text = FallbackName.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName;
         }
     }
 }

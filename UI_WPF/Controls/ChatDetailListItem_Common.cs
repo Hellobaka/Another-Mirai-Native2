@@ -1,15 +1,11 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.UI.Pages;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +13,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Controls
@@ -27,6 +22,77 @@ namespace Another_Mirai_Native.UI.Controls
         public static Dictionary<string, BitmapImage> CachedImage { get; set; } = new();
 
         public static double ImageMaxHeight { get; set; } = 450;
+
+        public static ContextMenu BuildAvatarContextMenu(Action copyNick = null, Action copyQQ = null, Action at = null)
+        {
+            var contextMenu = new ContextMenu();
+            contextMenu.Items.Add(new MenuItem { Header = "复制昵称" });
+            contextMenu.Items.Add(new MenuItem { Header = "复制QQ" });
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(new MenuItem { Header = "@" });
+
+            (contextMenu.Items[0] as MenuItem).Click += (sender, _) =>
+            {
+                copyNick?.Invoke();
+            };
+            (contextMenu.Items[1] as MenuItem).Click += (sender, e) =>
+            {
+                copyQQ?.Invoke();
+            };
+            (contextMenu.Items[3] as MenuItem).Click += (sender, e) =>
+            {
+                at?.Invoke();
+            };
+
+            return contextMenu;
+        }
+
+        public static ContextMenu BuildDetailContextMenu(Action repeat = null, Action recall = null, Action at = null, Action copy = null)
+        {
+            var contextMenu = new ContextMenu();
+            contextMenu.Items.Add(new MenuItem { Header = "复制", Icon = new FontIcon { Glyph = "\uE16F" } });
+            contextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
+            contextMenu.Items.Add(new MenuItem { Header = "@", Icon = new FontIcon { Glyph = "\uE9B2" } });
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(new MenuItem { Header = "撤回", Icon = new FontIcon { Glyph = "\uE107" } });
+
+            (contextMenu.Items[0] as MenuItem).Click += (sender, _) =>
+            {
+                copy?.Invoke();
+            };
+            (contextMenu.Items[1] as MenuItem).Click += (sender, e) =>
+            {
+                repeat?.Invoke();
+            };
+            (contextMenu.Items[2] as MenuItem).Click += (sender, e) =>
+            {
+                at?.Invoke();
+            };
+            (contextMenu.Items[4] as MenuItem).Click += (sender, _) =>
+            {
+                recall?.Invoke();
+            };
+
+            return contextMenu;
+        }
+
+        public static ContextMenu BuildGroupContextMenu(Action copyName = null, Action copyGroupId = null)
+        {
+            var contextMenu = new ContextMenu();
+            contextMenu.Items.Add(new MenuItem { Header = "复制名称" });
+            contextMenu.Items.Add(new MenuItem { Header = "复制ID" });
+
+            (contextMenu.Items[0] as MenuItem).Click += (sender, _) =>
+            {
+                copyName?.Invoke();
+            };
+            (contextMenu.Items[1] as MenuItem).Click += (sender, e) =>
+            {
+                copyGroupId?.Invoke();
+            };
+
+            return contextMenu;
+        }
 
         public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
         {
@@ -85,9 +151,11 @@ namespace Another_Mirai_Native.UI.Controls
                     if (bitmapImage != null)
                     {
                         // 显示图片元素
-                        Image image = new();
-                        image.Stretch = Stretch.Uniform;
-                        image.Source = bitmapImage;
+                        Image image = new()
+                        {
+                            Stretch = Stretch.Uniform,
+                            Source = bitmapImage
+                        };
                         AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
                         // 拉伸容器高度
                         viewBox.Height = Math.Min(bitmapImage.Height, viewBox.MaxHeight);
@@ -145,7 +213,8 @@ namespace Another_Mirai_Native.UI.Controls
                 TextWrapping = TextWrapping.Wrap,
                 IsReadOnly = true,
                 Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0)
+                BorderThickness = new Thickness(0),
+                ContextMenu = null
             };
         }
 

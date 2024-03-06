@@ -25,8 +25,6 @@ namespace Another_Mirai_Native.UI.Controls
             DataContext = this;
         }
 
-        public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
-
         public bool ControlLoaded { get; set; }
 
         public DetailItemType DetailItemType { get; set; }
@@ -35,17 +33,19 @@ namespace Another_Mirai_Native.UI.Controls
 
         public string GUID { get; set; }
 
-        public int MsgId { get; set; }
-
         public long Id { get; set; }
-
-        public long GroupId { get; set; }
 
         public string Message { get; set; } = "";
 
-        public DateTime Time { get; set; }
+        public int MsgId { get; set; }
+
+        public long ParentId { get; set; }
+
+        public ChatAvatar.AvatarTypes ParentType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
 
         public bool Recalled { get; set; }
+
+        public DateTime Time { get; set; }
 
         public void ParseAndBuildDetail()
         {
@@ -94,6 +94,28 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        public void Recall()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                RecallDisplay.Visibility = Visibility.Visible;
+            });
+        }
+
+        private void ChatPage_MsgRecalled(int id)
+        {
+            if (id == MsgId)
+            {
+                Recall();
+            }
+        }
+
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        {
+            MaxWidth = e.NewSize.Width * 0.6;
+            ImageBorder.MaxWidth = MaxWidth;
+        }
+
         private string UnionAllAtMsg(string message)
         {
             var ls = CQCode.Parse(message);
@@ -103,28 +125,14 @@ namespace Another_Mirai_Native.UI.Controls
                 {
                     if (item.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
                     {
-                        string nick = AvatarType == ChatAvatar.AvatarTypes.QQGroup
-                                ? ChatPage.Instance.GetGroupMemberNick(GroupId, id)
+                        string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
+                                ? ChatPage.Instance.GetGroupMemberNick(ParentId, id)
                                     : ChatPage.Instance.GetFriendNick(id);
                         message = message.Replace(item.ToSendString(), $" @{nick} ");
                     }
                 }
             }
             return message;
-        }
-
-        public void Recall()
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                RecallDisplay.Visibility = Visibility.Visible;
-            });
-        }
-
-        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
-        {
-            MaxWidth = e.NewSize.Width * 0.6;
-            ImageBorder.MaxWidth = MaxWidth;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -148,14 +156,41 @@ namespace Another_Mirai_Native.UI.Controls
             }
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
             ChatPage.MsgRecalled += ChatPage_MsgRecalled;
-        }
 
-        private void ChatPage_MsgRecalled(int id)
-        {
-            if (id == MsgId)
-            {
-                Recall();
-            }
+            DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu(
+                repeat: () =>
+                {
+                    ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message);
+                },
+                recall: () =>
+                {
+                    if (MsgId > 0)
+                    {
+                        ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
+                    }
+                },
+                at: () =>
+                {
+                    ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
+                },
+                copy: () =>
+                {
+                    Clipboard.SetText(Message);
+                });
+            ImageBorder.ContextMenu = DetailBorder.ContextMenu;
+            Avatar.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu(
+                copyNick: () =>
+                {
+                    Clipboard.SetText(DisplayName);
+                },
+                copyQQ: () =>
+                {
+                    Clipboard.SetText(Id.ToString());
+                },
+                at: () =>
+                {
+                    ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
+                });
         }
     }
 }

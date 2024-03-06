@@ -69,6 +69,15 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            ContextMenu = ChatDetailListItem_Common.BuildGroupContextMenu(
+                copyName: () =>
+                {
+                    Clipboard.SetText(GroupName);
+                },
+                copyGroupId: () =>
+                {
+                    Clipboard.SetText(Id.ToString());
+                });
         }
 
         private void UnreadTip_MouseDown(object sender, MouseButtonEventArgs e)

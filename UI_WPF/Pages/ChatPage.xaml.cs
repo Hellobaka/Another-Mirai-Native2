@@ -31,9 +31,7 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            // TODO: 实现右键菜单
             // TOOD: 实现图片双击预览
-            // TODO: URL变为超链接？
             // TODO: 图片收藏功能
             // TODO: 群主、管理员头衔
         }
@@ -71,6 +69,47 @@ namespace Another_Mirai_Native.UI.Pages
         private int LoadCount { get; set; } = 15;
 
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
+
+        public void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
+        {
+            if (id == 0 || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            if (avatar == ChatAvatar.AvatarTypes.QQGroup)
+            {
+                AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                    itemAdded: (guid) =>
+                    {
+                        UpdateSendStatus(guid, true);
+                        if (CallGroupMsgSend(id, message) > 0)
+                        {
+                            UpdateSendStatus(guid, false);
+                        }
+                        else
+                        {
+                            UpdateSendFail(guid);
+                        }
+                    }
+                );
+            }
+            else
+            {
+                AddPrivateChatItem(id, message, DetailItemType.Send,
+                    itemAdded: (guid) =>
+                    {
+                        UpdateSendStatus(guid, true);
+                        if (CallPrivateMsgSend(id, message) > 0)
+                        {
+                            UpdateSendStatus(guid, false);
+                        }
+                        else
+                        {
+                            UpdateSendFail(guid);
+                        }
+                    });
+            }
+        }
 
         public int CallGroupMsgSend(long groupId, string message)
         {
@@ -184,6 +223,14 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        public void AddTextToSendBox(string text)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                SendText.Text += text;
+            });
+        }
+
         public void UpdateUnreadCount(ChatListItemViewModel model)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
@@ -288,11 +335,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 Message = item.Content,
                 DetailItemType = item.DetailItemType,
-                AvatarType = item.AvatarType,
+                ParentType = item.AvatarType,
                 DisplayName = item.Nick,
                 Time = item.Time,
                 Id = item.Id,
-                GroupId = SelectedItem.Id,
+                ParentId = SelectedItem.Id,
                 MsgId = item.MsgId,
                 GUID = item.GUID,
                 MaxWidth = ActualWidth * 0.6,
@@ -321,11 +368,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 Message = item.Content,
                 DetailItemType = item.DetailItemType,
-                AvatarType = item.AvatarType,
+                ParentType = item.AvatarType,
                 DisplayName = item.Nick,
                 Time = item.Time,
                 Id = item.Id,
-                GroupId = SelectedItem.Id,
+                ParentId = SelectedItem.Id,
                 MsgId = item.MsgId,
                 GUID = item.GUID,
                 MaxWidth = ActualWidth * 0.6,
@@ -781,38 +828,7 @@ namespace Another_Mirai_Native.UI.Pages
             long id = SelectedItem.Id;
             Task.Run(() =>
             {
-                if (avatar == ChatAvatar.AvatarTypes.QQPrivate)
-                {
-                    AddPrivateChatItem(id, sendText, DetailItemType.Send,
-                        itemAdded: (guid) =>
-                        {
-                            UpdateSendStatus(guid, true);
-                            if (CallPrivateMsgSend(id, sendText) > 0)
-                            {
-                                UpdateSendStatus(guid, false);
-                            }
-                            else
-                            {
-                                UpdateSendFail(guid);
-                            }
-                        });
-                }
-                else
-                {
-                    AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, sendText, DetailItemType.Send,
-                        itemAdded: (guid) =>
-                        {
-                            UpdateSendStatus(guid, true);
-                            if (CallGroupMsgSend(id, sendText) > 0)
-                            {
-                                UpdateSendStatus(guid, false);
-                            }
-                            else
-                            {
-                                UpdateSendFail(guid);
-                            }
-                        });
-                }
+                ExecuteSendMessage(id, avatar, sendText);
             });
             SendText.Text = "";
         }
@@ -832,14 +848,17 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            foreach (UIElement item in MessageContainer.Children)
+            Dispatcher.BeginInvoke(() =>
             {
-                if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                foreach (UIElement item in MessageContainer.Children)
                 {
-                    right.SendFail();
-                    return;
+                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    {
+                        right.SendFail();
+                        return;
+                    }
                 }
-            }
+            });
         }
 
         private void UpdateSendStatus(string? guid, bool enable)
