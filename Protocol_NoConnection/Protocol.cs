@@ -44,7 +44,7 @@ namespace Protocol_NoConnection
 
         private Tester TesterForm { get; set; }
 
-        private int MsgId { get; set; }
+        private int MsgId { get; set; } = 10;
 
         public void BuildMockData()
         {
