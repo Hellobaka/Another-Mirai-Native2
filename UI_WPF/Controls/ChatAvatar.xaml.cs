@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,8 +32,6 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;
-
-        public BitmapImage BitmapImage { get; set; }
 
         public Brush FallbackBrush { get; set; }
 
@@ -97,47 +96,40 @@ namespace Another_Mirai_Native.UI.Controls
 
         private static List<long> LoadedItems { get; set; } = new();
 
-        private static Dictionary<(long, AvatarTypes), BitmapImage> CachedImage { get; set; } = new();
-
         private void GetDisplayImage(long id)
         {
-            if (CachedImage.ContainsKey((id, AvatarType)))
-            {
-                return;
-            }
-
-            BitmapImage = new BitmapImage();
-            BitmapImage.DownloadCompleted += (_, _) =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    if (CachedImage.ContainsKey((id, AvatarType)))
-                    {
-                        CachedImage[(id, AvatarType)] = BitmapImage;
-                    }
-                    else
-                    {
-                        CachedImage.Add((id, AvatarType), BitmapImage);
-                    }
-                    Container.Background = new ImageBrush(BitmapImage);
-                    FallbackDisplay.Visibility = Visibility.Collapsed;
-                });
-            };
-            BitmapImage.BeginInit();
+            string url = "";
             switch (AvatarType)
             {
                 case AvatarTypes.QQPrivate:
-                    BitmapImage.UriSource = new Uri($"https://q.qlogo.cn/g?b=qq&nk={id}&s=160");
+                    url = $"https://q.qlogo.cn/g?b=qq&nk={id}&s=160";
                     break;
 
                 case AvatarTypes.QQGroup:
-                    BitmapImage.UriSource = new Uri($"http://p.qlogo.cn/gh/{id}/{id}/0");
+                    url = $"http://p.qlogo.cn/gh/{id}/{id}/0";
                     break;
 
                 case AvatarTypes.Fallback:
                     return;
             }
-            BitmapImage.EndInit();
+            Task.Run(async () =>
+            {
+                await Dispatcher.BeginInvoke(async () =>
+                {
+                    var img = await ChatDetailListItem_Common.DownloadImageAsync(url);
+                    if (img != null)
+                    {
+                        Container.Background = new ImageBrush(img)
+                        {
+                            Stretch = Stretch.UniformToFill,
+                            AlignmentX = AlignmentX.Left,
+                            AlignmentY = AlignmentY.Top,
+                            TileMode = TileMode.None
+                        };
+                        FallbackDisplay.Visibility = Visibility.Collapsed;
+                    }
+                });
+            });
         }
 
         public void Init()
@@ -147,13 +139,6 @@ namespace Another_Mirai_Native.UI.Controls
             Container.Background = FallbackBrush;
             FallbackDisplay.FontSize = Width * 0.35;
             FallbackDisplay.Text = FallbackName.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName;
-
-            if (CachedImage.ContainsKey((Id, AvatarType)))
-            {
-                BitmapImage = CachedImage[(Id, AvatarType)];
-                Container.Background = new ImageBrush(BitmapImage);
-                FallbackDisplay.Visibility = Visibility.Collapsed;
-            }
         }
     }
 }
