@@ -15,6 +15,16 @@ namespace Another_Mirai_Native.Native
 
         public bool Testing => CurrentPlugin?.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode;
 
+        /// <summary>
+        /// msgId, groupId, msg
+        /// </summary>
+        public static event Action<int, long, string, CQPluginProxy> OnGroupMessageSend;
+
+        /// <summary>
+        /// msgId, qq, msg
+        /// </summary>
+        public static event Action<int, long, string, CQPluginProxy> OnPrivateMessageSend;
+
         public CQPImplementation(CQPluginProxy plugin)
         {
             CurrentPlugin = plugin;
@@ -94,6 +104,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qqId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qqId, msg);
+            OnPrivateMessageSend?.Invoke(ret, qqId, msg, CurrentPlugin);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
             return ret;
@@ -109,6 +120,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg);
+            OnGroupMessageSend?.Invoke(ret, groupId, msg, CurrentPlugin);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
             return ret;
@@ -124,6 +136,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch stopwatch = Stopwatch.StartNew();
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
+            OnGroupMessageSend?.Invoke(ret, groupId, msg, CurrentPlugin);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
             return ret;
