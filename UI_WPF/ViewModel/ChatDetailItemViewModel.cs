@@ -34,6 +34,8 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public string GUID { get; set; } = Guid.NewGuid().ToString();
 
+        public bool Recalled { get; set; }
+
         public void InvokePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));

@@ -39,6 +39,8 @@ namespace Another_Mirai_Native.UI.Controls
 
         public DateTime Time { get; set; }
 
+        public bool Recalled { get; set; }
+
         public void ParseAndBuildDetail()
         {
             Message = UnionAllAtMsg(Message);
@@ -113,7 +115,10 @@ namespace Another_Mirai_Native.UI.Controls
 
         public void Recall()
         {
-            RecallDisplay.Visibility = Visibility.Visible;
+            Dispatcher.BeginInvoke(() =>
+            {
+                RecallDisplay.Visibility = Visibility.Visible;
+            });
         }
 
         public void UpdateSendStatus(bool sending)
@@ -143,6 +148,10 @@ namespace Another_Mirai_Native.UI.Controls
                 GroupName = DisplayName,
                 Id = Id
             };
+            if (Recalled)
+            {
+                Recall();
+            }
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
             ChatPage.MsgRecalled += ChatPage_MsgRecalled;
         }

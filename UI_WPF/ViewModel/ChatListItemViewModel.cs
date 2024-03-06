@@ -24,5 +24,14 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ChatListItemViewModel viewModel)
+            {
+                return viewModel.Id == Id;
+            }
+            return false;
+        }
     }
 }
