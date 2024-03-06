@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Windows
 {
@@ -19,7 +22,7 @@ namespace Another_Mirai_Native.UI.Windows
             InitializeComponent();
         }
 
-        public BitmapImage Image { get; set; }
+        public Uri Image { get; set; }
 
         public void UpdateImageScale(double scale)
         {
@@ -100,7 +103,8 @@ namespace Another_Mirai_Native.UI.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ImageDisplayer.Source = Image;
+            AnimationBehavior.SetSourceUri(ImageDisplayer, Image);
+            AnimationBehavior.SetRepeatBehavior(ImageDisplayer, RepeatBehavior.Forever);
         }
     }
 }

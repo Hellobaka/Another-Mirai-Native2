@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
@@ -139,37 +140,38 @@ namespace Another_Mirai_Native.UI.Controls
 
             Task.Run(async () =>
             {
-                var bitmapImage = await DownloadImageAsync(url);
+                var imagePath = await DownloadImageAsync(url);
                 await viewBox.Dispatcher.BeginInvoke(() =>
                 {
-                    if (bitmapImage != null)
+                    if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
                     {
                         // 显示图片元素
                         Image image = new()
                         {
                             Stretch = Stretch.Uniform,
-                            Source = bitmapImage
                         };
                         // 图片双击事件
                         viewBox.MouseLeftButtonDown += (_, e) =>
                         {
                             if (e.ClickCount == 2)
                             {
-                                PictureViewer pictureViewer = new() { Image = bitmapImage };
+                                PictureViewer pictureViewer = new() { Image = uri };
                                 pictureViewer.Owner = MainWindow.Instance;
                                 pictureViewer.Show();
                             }
-                        };
+                        }; 
+                        AnimationBehavior.SetSourceUri(image, uri);
                         AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                        var img = new BitmapImage(uri);
                         // 拉伸容器高度
-                        viewBox.Height = Math.Min(bitmapImage.Height, viewBox.MaxHeight);
+                        viewBox.Height = Math.Min(img.Height, viewBox.MaxHeight);
                         // 计算变化比率用于圆角尺寸统一
-                        double rate = bitmapImage.Height / viewBox.Height;
+                        double rate = img.Height / viewBox.Height;
                         RectangleGeometry clipGeometry = new()
                         {
                             RadiusX = 10 * rate,
                             RadiusY = 10 * rate,
-                            Rect = new Rect(0, 0, bitmapImage.Width, bitmapImage.Height)
+                            Rect = new Rect(0, 0, img.Width, img.Height)
                         };
                         image.Clip = clipGeometry;
                         // 设置背景容器背景色透明
@@ -222,7 +224,43 @@ namespace Another_Mirai_Native.UI.Controls
             };
         }
 
-        public static async Task<BitmapImage> DownloadImageAsync(string imageUrl)
+        public static async Task<string> DownloadImageAsync(string imageUrl)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.Combine("data", "image", "cached"));
+                if (!imageUrl.StartsWith("http"))
+                {                    
+                    return new FileInfo(imageUrl).FullName;
+                }
+                string name = Helper.GetPicNameFromUrl(imageUrl);
+                if (string.IsNullOrEmpty(name))
+                {
+                    LogHelper.Error("DownloadImageAsync", "无法从URL中解析出图片ID");
+                    return null;
+                }
+                using var client = new HttpClient();
+                var response = await client.GetAsync(imageUrl);
+                response.EnsureSuccessStatusCode();
+                string path = Path.Combine("data", "image", "cached", name + ".jpg");
+                path = Path.ChangeExtension(path, response.Content.Headers.ContentType?.MediaType.Split('/').Last());
+                if (File.Exists(path))
+                {
+                    return new DirectoryInfo(path).FullName;
+                }
+                var imageBytes = await response.Content.ReadAsByteArrayAsync();
+                File.WriteAllBytes(path, imageBytes);
+
+                return new DirectoryInfo(path).FullName;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("DownloadImageAsync", ex.Message + ex.StackTrace);
+                return null;
+            }
+        }
+
+        public static async Task<BitmapImage> DownloadBitmapImageAsync(string imageUrl)
         {
             try
             {

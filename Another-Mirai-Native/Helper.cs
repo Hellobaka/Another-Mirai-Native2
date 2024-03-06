@@ -240,5 +240,15 @@ namespace Another_Mirai_Native
             FieldInfo field = instance.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic);
             return ((Delegate)field.GetValue(instance)).GetInvocationList().Length > 0;
         }
+
+        public static string GetPicNameFromUrl(string imageUrl)
+        {
+            Regex regex = new Regex(".*gchat\\.qpic\\.cn\\/gchatpic_new.*?-.*?-(.*)\\/.*");
+            if (regex.Match(imageUrl).Success)
+            {
+                return regex.Match(imageUrl).Groups[1].Value;
+            }
+            return "";
+        }
     }
 }
