@@ -13,6 +13,8 @@ namespace Protocol_NoConnection
 {
     public class Protocol : ConfigBase, IProtocol
     {
+        private object msgIdLock = new ();
+
         public Protocol()
             : base(@"conf\NoConnection_ProtocolConfig.json")
         {
@@ -41,6 +43,8 @@ namespace Protocol_NoConnection
         private Random Random { get; set; } = new();
 
         private Tester TesterForm { get; set; }
+
+        private int MsgId { get; set; }
 
         public void BuildMockData()
         {
@@ -261,12 +265,18 @@ namespace Protocol_NoConnection
 
         public int SendDiscussMsg(long discussId, string msg)
         {
-            return 1;
+            lock (msgIdLock)
+            {
+                return MsgId++;
+            }
         }
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
-            return 1;
+            lock (msgIdLock)
+            {
+                return MsgId++;
+            }
         }
 
         public int SendLike(long qqId, int count)
@@ -276,7 +286,10 @@ namespace Protocol_NoConnection
 
         public int SendPrivateMessage(long qqId, string msg)
         {
-            return 1;
+            lock (msgIdLock)
+            {
+                return MsgId++;
+            }
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)

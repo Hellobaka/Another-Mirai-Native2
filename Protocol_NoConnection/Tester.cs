@@ -5,6 +5,7 @@ using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,6 +34,8 @@ namespace Protocol_NoConnection
         private List<string> MessageHistories { get; set; } = new();
 
         private int MessageHistoryIndex { get; set; }
+
+        private bool AutoRecall { get; set; } = false;
 
         private void Tester_Load(object sender, EventArgs e)
         {
@@ -70,17 +73,34 @@ namespace Protocol_NoConnection
                 sw.Start();
                 int logId;
                 CQPluginProxy handledPlugin = null;
+                int msgId = MsgId++;
                 if (PrivateSelector.Checked)
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, MsgId++, QQId, msg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, msgId, QQId, msg, 0);
                 }
                 else
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{GroupId} QQ:{QQId} 消息: {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, MsgId++, GroupId, QQId, "", msg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, msgId, GroupId, QQId, "", msg, 0);
                 }
                 sw.Stop();
+                new Thread(() =>
+                {
+                    if (AutoRecall is false)
+                    {
+                        return;
+                    }
+                    Thread.Sleep(3000);
+                    if (PrivateSelector.Checked)
+                    {
+                        PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(msgId, QQId, msg);
+                    }
+                    else
+                    {
+                        PluginManagerProxy.Instance.Event_OnGroupMsgRecall(msgId, GroupId, msg);
+                    }
+                }).Start();
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
                 if (handledPlugin != null)
                 {
@@ -138,7 +158,7 @@ namespace Protocol_NoConnection
             }
             catch
             {
-            }            
+            }
         }
     }
 }
