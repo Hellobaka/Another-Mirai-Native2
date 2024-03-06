@@ -33,7 +33,6 @@ namespace Another_Mirai_Native.UI.Pages
             Instance = this;
             // TOOD: 实现图片双击预览
             // TODO: 图片收藏功能
-            // TODO: 群主、管理员头衔
         }
 
         public static event Action<int> MsgRecalled;
@@ -69,6 +68,34 @@ namespace Another_Mirai_Native.UI.Pages
         private int LoadCount { get; set; } = 15;
 
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
+
+        public void AddTextToSendBox(string text)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                SendText.Text += text;
+            });
+        }
+
+        public int CallGroupMsgSend(long groupId, string message)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
+            int msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
+            sw.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            return msgId;
+        }
+
+        public int CallPrivateMsgSend(long qq, string message)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
+            int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
+            sw.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            return msgId;
+        }
 
         public void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
         {
@@ -109,26 +136,6 @@ namespace Another_Mirai_Native.UI.Pages
                         }
                     });
             }
-        }
-
-        public int CallGroupMsgSend(long groupId, string message)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
-        }
-
-        public int CallPrivateMsgSend(long qq, string message)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
         }
 
         public string GetFriendNick(long qq)
@@ -223,14 +230,6 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        public void AddTextToSendBox(string text)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                SendText.Text += text;
-            });
-        }
-
         public void UpdateUnreadCount(ChatListItemViewModel model)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
@@ -273,6 +272,60 @@ namespace Another_Mirai_Native.UI.Pages
             Dispatcher.BeginInvoke(() => RefreshMessageContainer(false));
             itemAdded?.Invoke(item?.GUID);
             return item?.GUID;
+        }
+
+        private void AddOrUpdateGroupChatList(long group, long qq, string msg)
+        {
+            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
+            if (item != null)
+            {
+                item.GroupName = GetGroupName(group);
+                item.Detail = $"{GetGroupMemberNick(group, qq)}: {msg}";
+                item.Time = DateTime.Now;
+                item.UnreadCount++;
+            }
+            else
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    ChatList.Add(new ChatListItemViewModel
+                    {
+                        AvatarType = ChatAvatar.AvatarTypes.QQGroup,
+                        Detail = $"{GetGroupMemberNick(group, qq)}: {msg}",
+                        GroupName = GetGroupName(group),
+                        Id = group,
+                        Time = DateTime.Now,
+                        UnreadCount = 1
+                    });
+                });
+            }
+        }
+
+        private void AddOrUpdatePrivateChatList(long qq, string msg)
+        {
+            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
+            if (item != null)
+            {
+                item.GroupName = GetFriendNick(qq);
+                item.Detail = msg;
+                item.Time = DateTime.Now;
+                item.UnreadCount++;
+            }
+            else
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    ChatList.Add(new ChatListItemViewModel
+                    {
+                        AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                        Detail = msg,
+                        GroupName = GetFriendNick(qq),
+                        Id = qq,
+                        Time = DateTime.Now,
+                        UnreadCount = 1
+                    });
+                });
+            }
         }
 
         private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
@@ -445,6 +498,20 @@ namespace Another_Mirai_Native.UI.Pages
             return false;
         }
 
+        private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
+        {
+            AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
+            AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
+            ReorderChatList();
+        }
+
+        private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
+        {
+            AddOrUpdatePrivateChatList(qq, msg);
+            AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
+            ReorderChatList();
+        }
+
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedItem != null)
@@ -477,7 +544,6 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-
             else
             {
                 ls = index > 15 ? DetailList.Skip(Math.Max(0, index - LoadCount)).Take(LoadCount) : DetailList.Take(LoadCount);
@@ -571,20 +637,6 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
         }
 
-        private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
-        {
-            AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
-            AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
-            ReorderChatList();
-        }
-
-        private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
-        {
-            AddOrUpdatePrivateChatList(qq, msg);
-            AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
-            ReorderChatList();
-        }
-
         private void PictureBtn_Click(object sender, RoutedEventArgs e)
         {
         }
@@ -642,33 +694,6 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
-        private void AddOrUpdateGroupChatList(long group, long qq, string msg)
-        {
-            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
-            if (item != null)
-            {
-                item.GroupName = GetGroupName(group);
-                item.Detail = $"{GetGroupMemberNick(group, qq)}: {msg}";
-                item.Time = DateTime.Now;
-                item.UnreadCount++;
-            }
-            else
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    ChatList.Add(new ChatListItemViewModel
-                    {
-                        AvatarType = ChatAvatar.AvatarTypes.QQGroup,
-                        Detail = $"{GetGroupMemberNick(group, qq)}: {msg}",
-                        GroupName = GetGroupName(group),
-                        Id = group,
-                        Time = DateTime.Now,
-                        UnreadCount = 1
-                    });
-                });
-            }
-        }
-
         private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
         {
             if (GroupChatHistory.TryGetValue(groupId, out var list))
@@ -688,33 +713,6 @@ namespace Another_Mirai_Native.UI.Pages
 
             AddOrUpdatePrivateChatList(qq, msg);
             ReorderChatList();
-        }
-
-        private void AddOrUpdatePrivateChatList(long qq, string msg)
-        {
-            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
-            if (item != null)
-            {
-                item.GroupName = GetFriendNick(qq);
-                item.Detail = msg;
-                item.Time = DateTime.Now;
-                item.UnreadCount++;
-            }
-            else
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    ChatList.Add(new ChatListItemViewModel
-                    {
-                        AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
-                        Detail = msg,
-                        GroupName = GetFriendNick(qq),
-                        Id = qq,
-                        Time = DateTime.Now,
-                        UnreadCount = 1
-                    });
-                });
-            }
         }
 
         private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
