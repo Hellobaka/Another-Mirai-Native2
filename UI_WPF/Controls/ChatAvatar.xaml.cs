@@ -125,10 +125,10 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 await Dispatcher.BeginInvoke(async () =>
                 {
-                    var img = await ChatDetailListItem_Common.DownloadBitmapImageAsync(url);
-                    if (img != null)
+                    var imgPath = await ChatDetailListItem_Common.DownloadImageAsync(url);
+                    if (imgPath != null)
                     {
-                        Container.Background = new ImageBrush(img)
+                        Container.Background = new ImageBrush(new BitmapImage(new Uri(imgPath)))
                         {
                             Stretch = Stretch.UniformToFill,
                             AlignmentX = AlignmentX.Left,

@@ -243,7 +243,17 @@ namespace Another_Mirai_Native
 
         public static string GetPicNameFromUrl(string imageUrl)
         {
-            Regex regex = new Regex(".*gchat\\.qpic\\.cn\\/gchatpic_new.*?-.*?-(.*)\\/.*");
+            Regex regex = new(".*gchat\\.qpic\\.cn\\/gchatpic_new.*?-.*?-(.*)\\/.*");
+            if (regex.Match(imageUrl).Success)
+            {
+                return regex.Match(imageUrl).Groups[1].Value;
+            }
+            regex = new(".*q\\.qlogo\\.cn.*?&nk=(.*?)&s.*");
+            if (regex.Match(imageUrl).Success)
+            {
+                return regex.Match(imageUrl).Groups[1].Value;
+            }
+            regex = new(".*p\\.qlogo\\.cn\\/gh\\/(.*?)\\/.*");
             if (regex.Match(imageUrl).Success)
             {
                 return regex.Match(imageUrl).Groups[1].Value;
