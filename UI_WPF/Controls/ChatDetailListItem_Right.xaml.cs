@@ -3,6 +3,7 @@ using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -108,6 +109,39 @@ namespace Another_Mirai_Native.UI.Controls
             ResendClick.Visibility = Visibility.Collapsed;
         }
 
+        public void ContextMenu_Repeat(object sender, EventArgs e)
+        {
+            Task.Run(() => ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message));
+        }
+
+        public void ContextMenu_Recall(object sender, EventArgs e)
+        {
+            if (MsgId > 0)
+            {
+                ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
+            }
+        }
+
+        public void ContextMenu_At(object sender, EventArgs e)
+        {
+            ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
+        }
+
+        public void ContextMenu_CopyMessage(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Message);
+        }
+
+        public void ContextMenu_CopyId(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Id.ToString());
+        }
+
+        public void ContextMenu_CopyNick(object sender, EventArgs e)
+        {
+            Clipboard.SetText(DisplayName);
+        }
+
         private void ChatPage_MsgRecalled(int id)
         {
             if (id == MsgId)
@@ -197,32 +231,9 @@ namespace Another_Mirai_Native.UI.Controls
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
             ChatPage.MsgRecalled += ChatPage_MsgRecalled;
 
-            DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu(
-                repeat: () =>
-                {
-                    ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message);
-                },
-                recall: () =>
-                {
-                    if (MsgId > 0)
-                    {
-                        ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
-                    }
-                },
-                copy: () =>
-                {
-                    Clipboard.SetText(Message);
-                });
+            DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ImageBorder.ContextMenu = DetailBorder.ContextMenu;
-            Avatar.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu(
-              copyNick: () =>
-              {
-                  Clipboard.SetText(DisplayName);
-              },
-              copyQQ: () =>
-              {
-                  Clipboard.SetText(Id.ToString());
-              });
+            Avatar.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu();
         }
     }
 }
