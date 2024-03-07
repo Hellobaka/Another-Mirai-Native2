@@ -89,6 +89,12 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        public void Dispose()
+        {
+            ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
+            ChatPage.MsgRecalled -= ChatPage_MsgRecalled;
+        }
+
         public void Recall()
         {
             Dispatcher.BeginInvoke(() =>
@@ -234,6 +240,11 @@ namespace Another_Mirai_Native.UI.Controls
             DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ImageBorder.ContextMenu = DetailBorder.ContextMenu;
             Avatar.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu();
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Dispose();
         }
     }
 }

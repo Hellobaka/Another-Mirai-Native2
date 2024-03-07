@@ -1,16 +1,11 @@
 ﻿using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
-using ModernWpf.Controls;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.Controls
@@ -93,6 +88,12 @@ namespace Another_Mirai_Native.UI.Controls
                     DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(p[i]));
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
+            ChatPage.MsgRecalled -= ChatPage_MsgRecalled;
         }
 
         public void Recall()
@@ -194,6 +195,11 @@ namespace Another_Mirai_Native.UI.Controls
             DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ImageBorder.ContextMenu = DetailBorder.ContextMenu;
             Avatar.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu();
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Dispose();
         }
     }
 }

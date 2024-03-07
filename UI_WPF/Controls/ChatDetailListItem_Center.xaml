@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="20"
+    d:DesignHeight="20" Unloaded="UserControl_Unloaded"
     d:DesignWidth="430" Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <Border

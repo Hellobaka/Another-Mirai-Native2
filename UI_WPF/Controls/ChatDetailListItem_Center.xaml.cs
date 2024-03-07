@@ -29,10 +29,23 @@ namespace Another_Mirai_Native.UI.Controls
             DataContext = this;
         }
 
-        public string Message { get; set; } = "";
-        public DetailItemType DetailItemType { get; set; }
-        public string GUID { get; set; }
         public bool ControlLoaded { get; set; }
+
+        public DetailItemType DetailItemType { get; set; }
+
+        public string GUID { get; set; }
+
+        public string Message { get; set; } = "";
+
+        public void Dispose()
+        {
+            ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
+        }
+
+        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        {
+            MaxWidth = e.NewSize.Width * 0.6;
+        }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -44,9 +57,9 @@ namespace Another_Mirai_Native.UI.Controls
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
         }
 
-        private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            MaxWidth = e.NewSize.Width * 0.6;
+            Dispose();
         }
     }
 }
