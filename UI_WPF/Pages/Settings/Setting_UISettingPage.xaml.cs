@@ -50,6 +50,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
+            SoftWareRender.IsOn = UIConfig.Instance.SoftwareRender;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
             MaterialSelector.SelectedIndex = UIConfig.Instance.WindowMaterial switch
             {
@@ -128,6 +129,15 @@ namespace Another_Mirai_Native.UI.Pages
 
             UIConfig.Instance.WindowMaterial = material.ToString();
             UIConfig.Instance.SetConfig("WindowMaterial", material.ToString());
+        }
+
+        private void SoftWareRender_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.Instance.SetConfig("SoftwareRender", SoftWareRender.IsOn);
         }
     }
 }

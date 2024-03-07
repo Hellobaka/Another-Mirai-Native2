@@ -40,6 +40,13 @@
             OffContent="关闭"
             OnContent="开启"
             Toggled="ShowWhenError_Toggled" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">渲染关闭硬件加速（降低内存消耗，但是会增加CPU占用）</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="SoftWareRender"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="SoftWareRender_Toggled" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题</TextBlock>
         <ComboBox
             x:Name="ThemeSelector"

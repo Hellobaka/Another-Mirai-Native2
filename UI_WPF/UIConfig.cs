@@ -33,6 +33,8 @@ namespace Another_Mirai_Native.UI
 
         public bool ChatEnabled { get; set; } = false;
 
+        public bool SoftwareRender { get; set; } = false;
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -45,6 +47,7 @@ namespace Another_Mirai_Native.UI
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
             ChatEnabled = GetConfig("ChatEnabled", false);
+            SoftwareRender = GetConfig("SoftwareRender", false);
         }
     }
 }
