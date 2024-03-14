@@ -1,17 +1,13 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
-using Another_Mirai_Native.WebSocket;
 using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native
@@ -259,6 +255,16 @@ namespace Another_Mirai_Native
                 return regex.Match(imageUrl).Groups[1].Value;
             }
             return "";
+        }
+
+        public static string MD5(this string raw)
+        {
+            if (raw == null)
+            {
+                return "";
+            }
+            var md5 = System.Security.Cryptography.MD5.Create();
+            return BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(raw))).Replace("-", "").ToUpper();
         }
     }
 }

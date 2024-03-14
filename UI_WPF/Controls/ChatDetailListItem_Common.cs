@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -34,7 +35,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// <summary>
         /// 信号量限制下载并发
         /// </summary>
-        private static SemaphoreSlim Semaphore { get; set; } = new SemaphoreSlim(3, 3);
+        private static SemaphoreSlim Semaphore { get; set; } = new SemaphoreSlim(1, 1);
 
         public static ContextMenu BuildAvatarContextMenu()
         {
@@ -232,81 +233,95 @@ namespace Another_Mirai_Native.UI.Controls
                 VerticalAlignment = VerticalAlignment.Center,
             };
             grid.Children.Add(progressRing);
+            FontIcon fontIcon = new()
+            {
+                Width = 16,
+                Height = 16,
+                FontSize = 16,
+                Glyph = "\uF384",
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Cursor = Cursors.Hand,
+                Visibility = Visibility.Collapsed
+            };
+            fontIcon.SetResourceReference(FontIcon.FontFamilyProperty, "SymbolThemeFontFamily");
+            grid.Children.Add(fontIcon);
             // 解析图片路径
             string url = Extend.GetImageUrlOrPathFromCQCode(cqCode);
-
-            Task.Run(async () =>
+            LoadImage(url);
+            fontIcon.MouseDown += (_, _) =>
             {
-                var imagePath = await DownloadImageAsync(url);
-                await viewBox.Dispatcher.BeginInvoke(() =>
+                // 加载失败时可点击重试
+                progressRing.Visibility = Visibility.Visible;
+                progressRing.Visibility = Visibility.Collapsed;
+                LoadImage(url);
+            };
+            
+            void LoadImage(string url)
+            {
+                Task.Run(async () =>
                 {
-                    if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
+                    var imagePath = await DownloadImageAsync(url);
+                    await viewBox.Dispatcher.BeginInvoke(() =>
                     {
-                        // 显示图片元素
-                        Image image = new()
+                        if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
                         {
-                            Stretch = Stretch.Uniform,
-                        };
-                        // 图片双击事件
-                        viewBox.MouseLeftButtonDown += (_, e) =>
-                        {
-                            if (e.ClickCount == 2)
+                            // 显示图片元素
+                            Image image = new()
                             {
-                                PictureViewer pictureViewer = new()
+                                Stretch = Stretch.Uniform,
+                            };
+                            // 图片双击事件
+                            viewBox.MouseLeftButtonDown += (_, e) =>
+                            {
+                                if (e.ClickCount == 2)
                                 {
-                                    Image = uri,
-                                    Owner = MainWindow.Instance
-                                };
-                                pictureViewer.Show();
-                            }
-                        };
-                        AnimationBehavior.SetSourceUri(image, uri);
-                        AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
-                        var img = new BitmapImage(uri);
-                        // 拉伸容器高度
-                        viewBox.Height = Math.Min(img.Height, viewBox.MaxHeight);
-                        // 计算变化比率用于圆角尺寸统一
-                        double rate = img.Height / viewBox.Height;
-                        RectangleGeometry clipGeometry = new()
+                                    PictureViewer pictureViewer = new()
+                                    {
+                                        Image = uri,
+                                        Owner = MainWindow.Instance
+                                    };
+                                    pictureViewer.Show();
+                                }
+                            };
+                            AnimationBehavior.SetSourceUri(image, uri);
+                            AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                            var img = new BitmapImage(uri);
+                            // 拉伸容器高度
+                            viewBox.Height = Math.Min(img.Height, viewBox.MaxHeight);
+                            // 计算变化比率用于圆角尺寸统一
+                            double rate = img.Height / viewBox.Height;
+                            RectangleGeometry clipGeometry = new()
+                            {
+                                RadiusX = 10 * rate,
+                                RadiusY = 10 * rate,
+                                Rect = new Rect(0, 0, img.Width, img.Height)
+                            };
+                            image.Clip = clipGeometry;
+                            // 设置背景容器背景色透明
+                            // 将Grid的Height与ViewBox绑定
+                            var binding = new Binding
+                            {
+                                Source = viewBox,
+                                Path = new PropertyPath("ActualHeight"),
+                                Mode = BindingMode.OneWay
+                            };
+                            grid.SetBinding(Grid.HeightProperty, binding);
+                            grid.Background = Brushes.Transparent;
+                            grid.Clip = null;
+                            viewBox.Child = image;
+                            // 显示图片元素
+                            viewBox.Visibility = Visibility.Visible;
+                            progressRing.Visibility = Visibility.Collapsed;
+                        }
+                        else
                         {
-                            RadiusX = 10 * rate,
-                            RadiusY = 10 * rate,
-                            Rect = new Rect(0, 0, img.Width, img.Height)
-                        };
-                        image.Clip = clipGeometry;
-                        // 设置背景容器背景色透明
-                        // 将Grid的Height与ViewBox绑定
-                        var binding = new Binding
-                        {
-                            Source = viewBox,
-                            Path = new PropertyPath("ActualHeight"),
-                            Mode = BindingMode.OneWay
-                        };
-                        grid.SetBinding(Grid.HeightProperty, binding);
-                        grid.Background = Brushes.Transparent;
-                        grid.Clip = null;
-                        viewBox.Child = image;
-                        // 显示图片元素
-                        viewBox.Visibility = Visibility.Visible;
-                        progressRing.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        FontIcon fontIcon = new()
-                        {
-                            Width = 16,
-                            Height = 16,
-                            FontSize = 16,
-                            Glyph = "\uF384",
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center,
-                        };
-                        grid.Children.Remove(progressRing);
-                        grid.Children.Add(fontIcon);
-                    }
+                            progressRing.Visibility = Visibility.Collapsed;
+                            fontIcon.Visibility = Visibility.Visible;
+                        }
+                    });
                 });
-            });
-
+            }
             return grid;
         }
 
@@ -338,8 +353,9 @@ namespace Another_Mirai_Native.UI.Controls
                 string name = Helper.GetPicNameFromUrl(imageUrl);
                 if (string.IsNullOrEmpty(name))
                 {
-                    LogHelper.Error("DownloadImageAsync", "无法从URL中解析出图片ID");
-                    return null;
+                    //LogHelper.Error("DownloadImageAsync", "无法从URL中解析出图片ID");
+                    //return null;
+                    name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
                 }
                 // 检测文件是否已经存在
                 string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
