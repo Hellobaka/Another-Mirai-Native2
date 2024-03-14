@@ -26,11 +26,11 @@ namespace Another_Mirai_Native.UI.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var time = (DateTime)value;
-            if((DateTime.Now - time).Days < 1)
+            if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day == time.Day)
             {
-                return time.ToString("T");    
+                return time.ToString("T");
             }
-            else if((DateTime.Now - time).Days <= 7)
+            else if ((DateTime.Now - time).Days <= 7)
             {
                 return time.ToString("dddd");
             }
