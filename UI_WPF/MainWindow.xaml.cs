@@ -199,6 +199,7 @@ namespace Another_Mirai_Native.UI
                 "None" => Material.None,
                 _ => Material.None
             };
+            ChatMenuItem.IsEnabled = UIConfig.Instance.ChatEnabled;
             try
             {
                 ChangeMaterial(material);

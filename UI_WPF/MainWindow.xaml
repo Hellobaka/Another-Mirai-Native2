@@ -85,11 +85,11 @@
                 <ui:NavigationViewItem
                     x:Name="TestMenuItem"
                     Content="测试"
-                    Icon="59634"
+                    Icon="59728"
                     Tag="TestPage" />
                 <ui:NavigationViewItem
                     x:Name="ChatMenuItem"
-                    Content="测试"
+                    Content="聊天"
                     Icon="59634"
                     IsSelected="True"
                     Tag="ChatPage" />
