@@ -844,7 +844,10 @@ namespace Another_Mirai_Native.UI.Pages
                         if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
                             && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
                         {
-                            MessageContainer.Children.RemoveAt(0);
+                            do
+                            {
+                                MessageContainer.Children.RemoveAt(0);
+                            } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
                         }
                     }
                 }
