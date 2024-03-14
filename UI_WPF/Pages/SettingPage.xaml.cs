@@ -50,6 +50,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
+            MainWindow.SetNavigationViewTransparent(SettingContainer);
             foreach (var item in Directory.GetFiles("conf", "*.json"))
             {
                 if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json")

@@ -51,6 +51,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
+            MainWindow.SetNavigationViewTransparent(MainContainer);
             CurrentPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode);
             if (CurrentPlugin == null)
             {

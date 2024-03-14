@@ -14,12 +14,14 @@
     ui:WindowHelper.UseModernWindowStyle="True"
     Closing="Window_Closing"
     Loaded="MainWindow_Loaded"
+    ResizeMode="CanResizeWithGrip"
     SizeChanged="Window_SizeChanged"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
         <ui:NavigationView
+            x:Name="MainDrawer"
             ExpandedModeThresholdWidth="1115"
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="False"

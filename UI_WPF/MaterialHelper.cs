@@ -1,7 +1,10 @@
 ﻿using ModernWpf;
 using ModernWpf.Controls;
 using System;
+using System.Resources;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -52,6 +55,51 @@ namespace Another_Mirai_Native.UI
             int value = (int)material;
             SetWindowAttribute(new WindowInteropHelper(this).Handle, ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
                 value);
+        }
+
+        public static void SetNavigationViewTransparent(NavigationView navigationView)
+        {
+            UIElement GetPaneRoot(DependencyObject element, NavigationViewPaneDisplayMode findMode)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+                {
+                    var e = VisualTreeHelper.GetChild(element, i);
+                    if (e is Grid grid && grid.Name == "PaneRoot" && findMode != NavigationViewPaneDisplayMode.Top)
+                    {
+                        return grid;
+                    }
+                    if (e is StackPanel top && top.Name == "TopNavArea" && findMode == NavigationViewPaneDisplayMode.Top)
+                    {
+                        return top;
+                    }
+                    else if (e is Grid ignoreGrid && ignoreGrid.Name == "ContentRoot")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        var result = GetPaneRoot(e, findMode);
+                        if (result != null)
+                        {
+                            return result;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            var paneRoot = GetPaneRoot(navigationView, navigationView.PaneDisplayMode);
+            if (paneRoot != null)
+            {
+                if(paneRoot is StackPanel stackPanel)
+                {
+                    stackPanel.Background = Brushes.Transparent;
+                }
+                else if(paneRoot is Grid grid)
+                {
+                    grid.Background = Brushes.Transparent;
+                }
+            }
         }
 
         [DllImport("DwmApi.dll")]
