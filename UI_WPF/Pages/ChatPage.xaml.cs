@@ -15,7 +15,6 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -32,6 +31,13 @@ namespace Another_Mirai_Native.UI.Pages
             DataContext = this;
             Instance = this;
             // TODO: 图片收藏功能
+            // TODO: 消息引用显示
+            // TODO: 解决表情如何显示
+            // TODO: 实现功能按钮
+            // TODO: 解决同一页面长时间挂机时内存溢出问题
+            // TODO: 解决部分图片URL不规则，无法通过CQImg ID与URL对应的问题
+            // TODO: 消息记录持久化，缓解内存压力
+            // TODO: 添加清空按钮
         }
 
         public static event Action<int> MsgRecalled;
