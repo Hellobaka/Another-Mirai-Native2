@@ -5,10 +5,12 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.ViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -34,10 +36,9 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 消息引用显示
             // TODO: 解决表情如何显示
             // TODO: 实现功能按钮
-            // TODO: 解决同一页面长时间挂机时内存溢出问题
-            // TODO: 解决部分图片URL不规则，无法通过CQImg ID与URL对应的问题
             // TODO: 消息记录持久化，缓解内存压力
             // TODO: 添加清空按钮
+            // TODO: 粘贴图片
         }
 
         public static event Action<int> MsgRecalled;
@@ -78,7 +79,9 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                SendText.Text += text;
+                int cursorPosition = SendText.CaretIndex;
+                SendText.Text = SendText.Text.Insert(cursorPosition, text);
+                SendText.CaretIndex = cursorPosition + text.Length;
             });
         }
 
@@ -371,6 +374,32 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void AudioBtn_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Multiselect = false,
+                Filter = "音频文件|*.wav;*.mp3;*.flac;*.amr;*.m4a|所有文件|*.*",
+                Title = "请选择要发送的音频"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            string filePath = openFileDialog.FileName;
+            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\cached");
+            if (filePath.StartsWith(audioPath))
+            {
+                filePath = filePath.Replace(audioPath, "");
+            }
+            else
+            {
+                string fileName = Path.GetFileName(filePath);
+                File.Copy(filePath, Path.Combine(audioPath, fileName), true);
+                filePath = fileName;
+            }
+            AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
         }
 
         private ChatDetailItemViewModel BuildChatDetailItem(int msgId, long qq, string msg, string nick, ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
@@ -643,6 +672,34 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PictureBtn_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "图片文件|*.jpg;*.jpeg;*.png;*.bmp;*.webp|所有文件|*.*",
+                Title = "请选择要发送的图片"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            foreach(var file in openFileDialog.FileNames)
+            {
+                string filePath = file;
+                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\cached");
+                if (filePath.StartsWith(picPath))
+                {
+                    filePath = filePath.Replace(picPath, "");
+                }
+                else
+                {
+                    string fileName = Path.GetFileName(filePath);
+                    File.Copy(filePath, Path.Combine(picPath, fileName), true);
+                    filePath = fileName;
+                }
+                AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
+            }
         }
 
         private void PluginManagerProxy_OnAdminChanged(long group, long qq, QQGroupMemberType type)
@@ -782,6 +839,12 @@ namespace Another_Mirai_Native.UI.Pages
                             case DetailItemType.Send:
                                 MessageContainer.Children.Add(BuildRightBlock(item));
                                 break;
+                        }
+
+                        if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
+                            && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
+                        {
+                            MessageContainer.Children.RemoveAt(0);
                         }
                     }
                 }

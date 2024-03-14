@@ -35,6 +35,8 @@ namespace Another_Mirai_Native.UI
 
         public bool SoftwareRender { get; set; } = false;
 
+        public int MessageContainerMaxCount { get; set; } = 30;
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -43,6 +45,7 @@ namespace Another_Mirai_Native.UI
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);
             LogItemsCount = GetConfig("LogItemsCount", 500);
+            MessageContainerMaxCount = GetConfig("MessageContainerMaxCount", 30);
             LogAutoScroll = GetConfig("LogAutoScroll", true);
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
