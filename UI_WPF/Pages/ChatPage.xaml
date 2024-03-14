@@ -87,6 +87,7 @@
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
                                 FontSize="16"
                                 Glyph="&#xE76E;" />
                         </Button>
@@ -97,6 +98,7 @@
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
                                 FontSize="16"
                                 Glyph="&#xE716;" />
                         </Button>
@@ -107,6 +109,7 @@
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
                                 FontSize="16"
                                 Glyph="&#xEB9F;" />
                         </Button>
@@ -117,6 +120,7 @@
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
                                 FontSize="16"
                                 Glyph="&#xE720;" />
                         </Button>

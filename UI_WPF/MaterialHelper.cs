@@ -1,4 +1,5 @@
 ﻿using ModernWpf;
+using ModernWpf.Controls;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
@@ -47,7 +48,7 @@ namespace Another_Mirai_Native.UI
                 throw new NotSupportedException("更换材质只支持Windows11 21H2版本以上。");
             }
             Background = Brushes.Transparent;
-
+            Resources["SymbolThemeFontFamily"] = new FontFamily("Segoe Fluent Icons");
             int value = (int)material;
             SetWindowAttribute(new WindowInteropHelper(this).Handle, ParameterTypes.DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
                 value);

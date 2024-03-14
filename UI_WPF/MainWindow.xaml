@@ -54,6 +54,8 @@
                                     <ui:FontIcon
                                         Width="16"
                                         Height="16"
+                                        FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                        FontSize="16"
                                         Glyph="&#xEB5E;" />
                                     <TextBlock
                                         Width="150"
@@ -71,8 +73,15 @@
                 <ui:NavigationViewItem
                     x:Name="PluginMenuItem"
                     Content="插件管理"
-                    Icon="59212"
-                    Tag="PluginPage" />
+                    Tag="PluginPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon
+                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                            FontSize="16"
+                            Glyph="&#xE74C;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
 
                 <ui:NavigationViewItem
                     x:Name="LogMenuItem"
@@ -90,9 +99,15 @@
                 <ui:NavigationViewItem
                     x:Name="ChatMenuItem"
                     Content="聊天"
-                    Icon="59634"
                     IsSelected="True"
-                    Tag="ChatPage" />
+                    Tag="ChatPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon
+                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                            FontSize="16"
+                            Glyph="&#xE8F2;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置" Tag="SettingPage">
