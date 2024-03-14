@@ -139,5 +139,14 @@ namespace Another_Mirai_Native.UI.Pages
             }
             UIConfig.Instance.SetConfig("SoftwareRender", SoftWareRender.IsOn);
         }
+
+        private void ChatEnableSelector_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.Instance.SetConfig("ChatEnabled", ChatEnableSelector.IsOn);
+        }
     }
 }

@@ -47,6 +47,12 @@
             OffContent="关闭"
             OnContent="开启"
             Toggled="SoftWareRender_Toggled" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">启用聊天窗口</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="ChatEnableSelector"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启" Toggled="ChatEnableSelector_Toggled" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题</TextBlock>
         <ComboBox
             x:Name="ThemeSelector"

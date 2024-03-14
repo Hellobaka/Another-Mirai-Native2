@@ -611,15 +611,20 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            if (UIConfig.Instance.ChatEnabled is false)
+            {
+                DisableDisplay.Visibility = Visibility.Visible;
+                MainContent.Visibility = Visibility.Collapsed;
+                return;
+            }
+            DisableDisplay.Visibility = Visibility.Collapsed;
+            MainContent.Visibility = Visibility.Visible;
+
             if (FormLoaded)
             {
                 return;
             }
             FormLoaded = true;
-            if (UIConfig.Instance.ChatEnabled is false)
-            {
-                return;
-            }
             SizeChanged += (_, e) => WindowSizeChanged?.Invoke(e);
 
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
