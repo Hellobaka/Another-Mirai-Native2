@@ -129,6 +129,7 @@ namespace Another_Mirai_Native.UI.Controls
                     ChatDetailListItem_Common.AddTextToRichTextBox(DetailContainer, item);
                 }
             }
+            ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
             DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ChangeContainerWidth(minWidth);
         }

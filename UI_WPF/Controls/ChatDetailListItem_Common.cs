@@ -330,7 +330,7 @@ namespace Another_Mirai_Native.UI.Controls
 
         public static TextBox BuildTextElement(string text)
         {
-            return new TextBox
+            var textbox = new TextBox
             {
                 Text = text,
                 Padding = new Thickness(10),
@@ -340,6 +340,45 @@ namespace Another_Mirai_Native.UI.Controls
                 BorderThickness = new Thickness(0),
                 ContextMenu = null
             };
+            SetElementNoSelectEffect(textbox);
+            return textbox;
+        }
+       
+        public static void SetElementNoSelectEffect(UIElement element)
+        {
+            UIElement GetBorderElement(DependencyObject element)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+                {
+                    var e = VisualTreeHelper.GetChild(element, i);
+                    if (e is Border border && border.Name == "BorderElement")
+                    {
+                        return border;
+                    }
+                    else if (e is Grid ignoreGrid && ignoreGrid.Name == "ContentRoot")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        var result = GetBorderElement(e);
+                        if (result != null)
+                        {
+                            return result;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            var borderElement = GetBorderElement(element);
+            if (borderElement != null)
+            {
+                if (borderElement is Border border)
+                {
+                    border.BorderBrush = Brushes.Transparent;
+                }
+            }
         }
 
         public static async Task<string?> DownloadImageAsync(string imageUrl)

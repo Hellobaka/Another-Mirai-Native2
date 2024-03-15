@@ -56,7 +56,7 @@
                 MinHeight="38"
                 Margin="0,5,10,0"
                 HorizontalAlignment="Stretch"
-                Background="{DynamicResource SystemControlPageBackgroundChromeMediumLowBrush}"
+                Background="{DynamicResource SystemControlTransientBorderBrush}"
                 CornerRadius="10">
                 <RichTextBox
                     x:Name="DetailContainer"

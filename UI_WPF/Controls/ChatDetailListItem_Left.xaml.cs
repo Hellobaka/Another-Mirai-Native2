@@ -130,6 +130,7 @@ namespace Another_Mirai_Native.UI.Controls
                     ChatDetailListItem_Common.AddTextToRichTextBox(DetailContainer, item);
                 }
             }
+            ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
             DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ChangeContainerWidth(minWidth);
         }
@@ -151,10 +152,6 @@ namespace Another_Mirai_Native.UI.Controls
                     TextFormattingMode.Display, pixelsPerDip);
 
             DetailContainer.Width = formattedText.Width + 30 + minWidth;
-            if (minWidth > 0)
-            {
-                DetailContainer.Padding = new Thickness(10, 10, 10, 0);
-            }
         }
 
         public void Dispose()
