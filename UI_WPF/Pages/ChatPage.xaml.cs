@@ -388,7 +388,8 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             string filePath = openFileDialog.FileName;
-            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\cached");
+            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
+            Directory.CreateDirectory(audioPath);
             if (filePath.StartsWith(audioPath))
             {
                 filePath = filePath.Replace(audioPath, "");
@@ -687,7 +688,8 @@ namespace Another_Mirai_Native.UI.Pages
             foreach(var file in openFileDialog.FileNames)
             {
                 string filePath = file;
-                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\cached");
+                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
+                Directory.CreateDirectory(picPath);
                 if (filePath.StartsWith(picPath))
                 {
                     filePath = filePath.Replace(picPath, "");
