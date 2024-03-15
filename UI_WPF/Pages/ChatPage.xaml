@@ -122,6 +122,17 @@
                                 FontSize="16"
                                 Glyph="&#xE720;" />
                         </Button>
+                        <Button
+                            x:Name="CleanMessageBtn"
+                            Margin="0,0,5,8"
+                            Click="CleanMessageBtn_Click">
+                            <ui:FontIcon
+                                Width="16"
+                                Height="16"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                FontSize="16"
+                                Glyph="&#xE75C;" />
+                        </Button>
                     </StackPanel>
                     <RichTextBox
                         x:Name="SendText"
@@ -135,6 +146,15 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
+                        <Button
+                            x:Name="CleanSendBtn"
+                            Width="150"
+                            Margin="0,5,10,10"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Click="CleanSendBtn_Click">
+                            清空
+                        </Button>
                         <Button
                             x:Name="SendBtn"
                             Grid.Column="1"

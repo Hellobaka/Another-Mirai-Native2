@@ -281,7 +281,27 @@ namespace Another_Mirai_Native.UI.Pages
                 GroupChatHistory[group].Add(item);
             }
             OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() => RefreshMessageContainer(false));
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (SelectedItem?.Id == group)
+                {
+                    switch (item.DetailItemType)
+                    {
+                        case DetailItemType.Notice:
+                            MessageContainer.Children.Add(BuildMiddleBlock(item));
+                            break;
+
+                        case DetailItemType.Receive:
+                            MessageContainer.Children.Add(BuildLeftBlock(item));
+                            break;
+
+                        default:
+                        case DetailItemType.Send:
+                            MessageContainer.Children.Add(BuildRightBlock(item));
+                            break;
+                    }
+                }
+            });
             itemAdded?.Invoke(item?.GUID);
             return item?.GUID;
         }
@@ -366,9 +386,26 @@ namespace Another_Mirai_Native.UI.Pages
             OnPropertyChanged(nameof(DetailList));
             Dispatcher.BeginInvoke(() =>
             {
-                RefreshMessageContainer(false);
-                itemAdded?.Invoke(item?.GUID);
+                if (SelectedItem?.Id == qq)
+                {
+                    switch (item.DetailItemType)
+                    {
+                        case DetailItemType.Notice:
+                            MessageContainer.Children.Add(BuildMiddleBlock(item));
+                            break;
+
+                        case DetailItemType.Receive:
+                            MessageContainer.Children.Add(BuildLeftBlock(item));
+                            break;
+
+                        default:
+                        case DetailItemType.Send:
+                            MessageContainer.Children.Add(BuildRightBlock(item));
+                            break;
+                    }
+                }
             });
+            itemAdded?.Invoke(item?.GUID);
             return item?.GUID;
         }
 
@@ -1017,6 +1054,16 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             });
+        }
+
+        private void CleanMessageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageContainer.Children.Clear();
+        }
+
+        private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SendText.Document.Blocks.Clear();
         }
     }
 }
