@@ -263,8 +263,17 @@ namespace Another_Mirai_Native
             {
                 return "";
             }
+            return Encoding.UTF8.GetBytes(raw).MD5();
+        }
+
+        public static string MD5(this byte[] raw)
+        {
+            if (raw == null)
+            {
+                return "";
+            }
             var md5 = System.Security.Cryptography.MD5.Create();
-            return BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(raw))).Replace("-", "").ToUpper();
+            return BitConverter.ToString(md5.ComputeHash(raw)).Replace("-", "").ToUpper();
         }
     }
 }

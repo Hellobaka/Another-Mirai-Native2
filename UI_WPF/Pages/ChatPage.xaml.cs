@@ -674,26 +674,28 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
 
-            DataObject.AddPastingHandler(SendText, SendTextPasteOverrideAction);
+            DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
         }
 
-        private void SendTextPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
+        private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
         {
             if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
             {
-                string guid = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
                 string cacheImagePath = Path.Combine("data", "image", "cached");
-                using FileStream fileStream = new(Path.Combine(cacheImagePath, guid + ".png"), FileMode.CreateNew);
+                using MemoryStream memoryStream = new();
                 BitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(image));
-                encoder.Save(fileStream);
+                encoder.Save(memoryStream);
+                var buffer = memoryStream.ToArray();
+                string md5 = buffer.MD5();
 
+                File.WriteAllBytes(Path.Combine(cacheImagePath, md5 + ".png"), buffer);
                 Image img = new()
                 {
                     Source = image,
                     Width = image.Width,
                     Height = image.Height,
-                    Tag = $"[CQ:image,file=cached\\{guid}.png]"
+                    Tag = $"[CQ:image,file=cached\\{md5}.png]"
                 };
                 (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
                 e.Handled = true;
