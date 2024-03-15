@@ -12,8 +12,6 @@
     mc:Ignorable="d">
     <Border
         x:Name="Container"
-        BorderBrush="Black"
-        BorderThickness="1"
         ClipToBounds="True"
         CornerRadius="500"
         RenderOptions.BitmapScalingMode="HighQuality">
