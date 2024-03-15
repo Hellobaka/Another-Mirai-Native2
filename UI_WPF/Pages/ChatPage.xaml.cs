@@ -11,12 +11,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -37,7 +41,6 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 实现功能按钮
             // TODO: 消息记录持久化，缓解内存压力
             // TODO: 添加清空按钮
-            // TODO: 粘贴图片
         }
 
         public static event Action<int> MsgRecalled;
@@ -78,9 +81,11 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                int cursorPosition = SendText.CaretIndex;
-                SendText.Text = SendText.Text.Insert(cursorPosition, text);
-                SendText.CaretIndex = cursorPosition + text.Length;
+                TextPointer startPosition = SendText.Document.ContentStart;
+                int start = startPosition.GetOffsetToPosition(SendText.CaretPosition);
+                SendText.CaretPosition.InsertTextInRun(text);
+                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length);
+                SendText.Focus();
             });
         }
 
@@ -668,6 +673,40 @@ namespace Another_Mirai_Native.UI.Pages
 
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+
+            DataObject.AddPastingHandler(SendText, SendTextPasteOverrideAction);
+        }
+
+        private void SendTextPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
+            {
+                string guid = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+                string cacheImagePath = Path.Combine("data", "image", "cached");
+                using FileStream fileStream = new(Path.Combine(cacheImagePath, guid + ".png"), FileMode.CreateNew);
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(image));
+                encoder.Save(fileStream);
+
+                Image img = new()
+                {
+                    Source = image,
+                    Width = image.Width,
+                    Height = image.Height,
+                    Tag = $"[CQ:image,file=cached\\{guid}.png]"
+                };
+                (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
+                e.Handled = true;
+                e.CancelCommand();
+            }
+            else if (e.DataObject.GetDataPresent(DataFormats.Text)
+                && e.DataObject.GetData(DataFormats.Text) is string text
+                && string.IsNullOrEmpty(text) is false)
+            {
+                AddTextToSendBox(text);
+                e.Handled = true;
+                e.CancelCommand(); 
+            }
         }
 
         private void PictureBtn_Click(object sender, RoutedEventArgs e)
@@ -684,7 +723,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            foreach(var file in openFileDialog.FileNames)
+            foreach (var file in openFileDialog.FileNames)
             {
                 string filePath = file;
                 string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
@@ -892,14 +931,43 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            string sendText = SendText.Text;
+            string sendText = BuildTextFromRichTextBox();
             ChatAvatar.AvatarTypes avatar = SelectedItem.AvatarType;
             long id = SelectedItem.Id;
             Task.Run(() =>
             {
                 ExecuteSendMessage(id, avatar, sendText);
             });
-            SendText.Text = "";
+            SendText.Document.Blocks.Clear();
+        }
+
+        private string BuildTextFromRichTextBox()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Block item in SendText.Document.Blocks)
+            {
+                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
+                {
+                    stringBuilder.Append(blockImg.Tag?.ToString());
+                    continue;
+                }
+                if (item is not Paragraph paragraph)
+                {
+                    continue;
+                }
+                foreach (Inline inline in paragraph.Inlines)
+                {
+                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
+                    {
+                        stringBuilder.Append(inlineImage.Tag?.ToString());
+                    }
+                    else
+                    {
+                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
+                    }
+                }
+            }
+            return stringBuilder.ToString();
         }
 
         private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

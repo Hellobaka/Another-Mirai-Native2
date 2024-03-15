@@ -386,6 +386,11 @@ namespace Another_Mirai_Native.UI.Controls
             await Semaphore.WaitAsync();
             try
             {
+                if (string.IsNullOrEmpty(imageUrl))
+                {
+                    return null;
+                }
+
                 string cacheImagePath = Path.Combine("data", "image", "cached");
                 Directory.CreateDirectory(cacheImagePath);
                 if (!imageUrl.StartsWith("http"))

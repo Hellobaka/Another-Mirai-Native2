@@ -123,13 +123,12 @@
                                 Glyph="&#xE720;" />
                         </Button>
                     </StackPanel>
-                    <TextBox
+                    <RichTextBox
                         x:Name="SendText"
                         Grid.Row="1"
                         AcceptsReturn="True"
                         HorizontalScrollBarVisibility="Auto"
                         PreviewKeyDown="SendText_PreviewKeyDown"
-                        TextWrapping="Wrap"
                         VerticalScrollBarVisibility="Auto" />
                     <Grid Grid.Row="2" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
