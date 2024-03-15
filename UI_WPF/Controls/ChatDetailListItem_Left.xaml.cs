@@ -2,10 +2,14 @@
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.Controls
@@ -43,33 +47,71 @@ namespace Another_Mirai_Native.UI.Controls
 
         public DateTime Time { get; set; }
 
+        private Paragraph CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
+
         public void ParseAndBuildDetail()
         {
-            Message = UnionAllAtMsg(Message);
+            Regex regex = new("(\\[CQ:.*?,.*?\\])");
+            var cqCodeCaptures = regex.Matches(Message).Cast<Match>().Select(m => m.Value).ToList();
+
             var ls = CQCode.Parse(Message);
             int imageCount = ls.Count(x => x.IsImageCQCode);
             int recordCount = ls.Count(x => x.IsRecordCQCode);
-            string msg = Message;
-            foreach (var item in ls)
+
+            var s = regex.Split(Message).ToList();
+            s.RemoveAll(string.IsNullOrEmpty);
+            double minWidth = 0;
+            foreach (var item in s)
             {
-                msg = msg.Replace(item.ToString(), "<!cqCode!>");
-            }
-            var p = msg.SplitV2("<!cqCode!>");
-            int cqCode_index = 0;
-            StackPanel imgContainer = imageCount == 1 && p.Length == 1 ? ImageDisplay : DetailContainer;
-            for (int i = 0; i < p.Length; i++)
-            {
-                if (p[i] == "<!cqCode!>")
+                if (cqCodeCaptures.Contains(item))
                 {
-                    var item = ls[cqCode_index];
-                    if (item.Function == Model.Enums.CQCodeType.Image)
+                    var cqcode = CQCode.Parse(item).FirstOrDefault();
+                    if (cqcode == null)
                     {
-                        if (imageCount == 1 && p.Length == 1)
+                        Expander expander = new()
+                        {
+                            Header = "CQ 码",
+                            Margin = new Thickness(10),
+                            Content = ChatDetailListItem_Common.BuildTextElement(item)
+                        };
+                        CurrentParagraph.Inlines.Add(new InlineUIContainer(expander));
+                        minWidth = Math.Max(minWidth, expander.Width);
+                        continue;
+                    }
+                    if (cqcode.Function == Model.Enums.CQCodeType.Image)
+                    {
+                        if (imageCount == 1 && s.Count == 1)
                         {
                             ImageBorder.Visibility = Visibility.Visible;
                             DetailBorder.Visibility = Visibility.Collapsed;
+                            ImageDisplay.Children.Add(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5));
                         }
-                        imgContainer.Children.Add(ChatDetailListItem_Common.BuildImageElement(item, MaxWidth * 0.5));
+                        else
+                        {
+                            DetailContainer.Document.Blocks.Add(new Paragraph());
+                            CurrentParagraph.Inlines.Add(new InlineUIContainer(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5)));
+                            DetailContainer.Document.Blocks.Add(new Paragraph());
+                        }
+                        minWidth = Math.Max(minWidth, 150);
+                    }
+                    else if (cqcode.Function == Model.Enums.CQCodeType.At
+                        && cqcode.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
+                    {
+                        string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
+                                ? ChatPage.Instance.GetGroupMemberNick(ParentId, id)
+                                    : ChatPage.Instance.GetFriendNick(id);
+                        var hyperlink = new Hyperlink(new Run($"@{nick}"))
+                        {
+                            NavigateUri = new Uri("https://www.google.com"),
+                        };
+                        hyperlink.SetResourceReference(Hyperlink.ForegroundProperty, "TextFillColorPrimaryBrush");
+
+                        hyperlink.RequestNavigate += (_, e) =>
+                        {
+                            e.Handled = true;
+                            ChatPage.Instance.AddTextToSendBox(cqcode.ToSendString());
+                        };
+                        CurrentParagraph.Inlines.Add(hyperlink);
                     }
                     else
                     {
@@ -77,16 +119,41 @@ namespace Another_Mirai_Native.UI.Controls
                         {
                             Header = "CQ 码",
                             Margin = new Thickness(10),
-                            Content = ChatDetailListItem_Common.BuildTextElement(item.ToSendString())
+                            Content = ChatDetailListItem_Common.BuildTextElement(cqcode.ToSendString())
                         };
-                        DetailContainer.Children.Add(expander);
+                        CurrentParagraph.Inlines.Add(new InlineUIContainer(expander));
+                        minWidth = Math.Max(minWidth, expander.Width);
                     }
-                    cqCode_index++;
                 }
                 else
                 {
-                    DetailContainer.Children.Add(ChatDetailListItem_Common.BuildTextElement(p[i]));
+                    ChatDetailListItem_Common.AddTextToRichTextBox(DetailContainer, item);
                 }
+            }
+            DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
+            ChangeContainerWidth(minWidth);
+        }
+
+        private void ChangeContainerWidth(double minWidth)
+        {
+            TextRange documentRange = new TextRange(DetailContainer.Document.ContentStart, DetailContainer.Document.ContentEnd);
+            string text = documentRange.Text;
+            double pixelsPerDip = VisualTreeHelper.GetDpi(DetailContainer).PixelsPerDip;
+
+            var formattedText = new FormattedText(
+                    text,
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface(DetailContainer.FontFamily, DetailContainer.FontStyle, DetailContainer.FontWeight, DetailContainer.FontStretch),
+                    DetailContainer.FontSize,
+                    Brushes.Black,
+                    new NumberSubstitution(),
+                    TextFormattingMode.Display, pixelsPerDip);
+
+            DetailContainer.Width = formattedText.Width + 30 + minWidth;
+            if (minWidth > 0)
+            {
+                DetailContainer.Padding = new Thickness(10, 10, 10, 0);
             }
         }
 
@@ -149,25 +216,7 @@ namespace Another_Mirai_Native.UI.Controls
         {
             MaxWidth = e.NewSize.Width * 0.6;
             ImageBorder.MaxWidth = MaxWidth;
-        }
-
-        private string UnionAllAtMsg(string message)
-        {
-            var ls = CQCode.Parse(message);
-            foreach (var item in ls)
-            {
-                if (item.Function == Model.Enums.CQCodeType.At)
-                {
-                    if (item.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
-                    {
-                        string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
-                                ? ChatPage.Instance.GetGroupMemberNick(ParentId, id)
-                                    : ChatPage.Instance.GetFriendNick(id);
-                        message = message.Replace(item.ToSendString(), $" @{nick} ");
-                    }
-                }
-            }
-            return message;
+            DetailContainer.MaxWidth = ImageDisplay.MaxWidth;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -177,6 +226,7 @@ namespace Another_Mirai_Native.UI.Controls
                 return;
             }
             ControlLoaded = true;
+            DetailContainer.MaxWidth = ImageDisplay.MaxWidth;
             ParseAndBuildDetail();
             ImageDisplay.MaxWidth = MaxWidth * 0.6;
             Avatar.Item = new ChatListItemViewModel

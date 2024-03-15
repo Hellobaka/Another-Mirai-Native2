@@ -56,9 +56,20 @@
                 MinHeight="38"
                 Margin="0,5,10,0"
                 HorizontalAlignment="Stretch"
-                Background="{StaticResource SystemControlPageBackgroundChromeMediumLowBrush}"
+                Background="{DynamicResource SystemControlPageBackgroundChromeMediumLowBrush}"
                 CornerRadius="10">
-                <StackPanel x:Name="DetailContainer" />
+                <RichTextBox
+                    x:Name="DetailContainer"
+                    Padding="10"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="0"
+                    HorizontalScrollBarVisibility="Disabled"
+                    IsDocumentEnabled="True"
+                    IsReadOnly="True"
+                    VerticalScrollBarVisibility="Disabled" />
             </Border>
             <Border
                 x:Name="ImageBorder"

@@ -4,14 +4,17 @@ using Another_Mirai_Native.UI.Windows;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -388,6 +391,40 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 Semaphore.Release();
             }
+        }
+
+        public static void AddTextToRichTextBox(RichTextBox textBox, string item)
+        {
+            var paragraph = textBox.Document.Blocks.FirstBlock as Paragraph;
+            Regex urlRegex = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
+            var urlCaptures = urlRegex.Matches(item).Cast<Match>().Select(m => m.Value).ToList();
+            var urlSplit = urlRegex.Split(item);
+            foreach (var capture in urlSplit)
+            {
+                if (urlCaptures.Contains(capture))
+                {
+                    var hyperlink = new Hyperlink(new Run(capture))
+                    {
+                        NavigateUri = new Uri(capture),
+                    };
+                    hyperlink.RequestNavigate += (sender, args) =>
+                    {
+                        var startInfo = new ProcessStartInfo
+                        {
+                            FileName = capture,
+                            UseShellExecute = true,
+                        };
+                        Process.Start(startInfo);
+                    };
+
+                    paragraph.Inlines.Add(hyperlink);
+                }
+                else
+                {
+                    paragraph.Inlines.Add(new Run(capture));
+                }
+            }
+
         }
 
         private static object GetContextMenuTarget(object sender)
