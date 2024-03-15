@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +20,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -39,8 +39,6 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 图片收藏功能
             // TODO: 消息引用显示
             // TODO: 实现功能按钮
-            // TODO: 消息记录持久化，缓解内存压力
-            // TODO: 添加清空按钮
         }
 
         public static event Action<int> MsgRecalled;
@@ -57,13 +55,11 @@ namespace Another_Mirai_Native.UI.Pages
 
         public string GroupName { get; set; } = "";
 
+        private int CurrentPageIndex { get; set; }
+
         private bool FormLoaded { get; set; }
 
-        private Dictionary<long, List<ChatDetailItemViewModel>> FriendChatHistory { get; set; } = new();
-
         private Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
-
-        private Dictionary<long, List<ChatDetailItemViewModel>> GroupChatHistory { get; set; } = new();
 
         private Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
@@ -71,7 +67,9 @@ namespace Another_Mirai_Native.UI.Pages
 
         private string LastMessageGUID { get; set; } = "";
 
-        private Timer LazyLoadDebounceTimer { get; set; }
+        private DispatcherTimer LazyLoadDebounceTimer { get; set; }
+
+        private bool LazyLoading { get; set; }
 
         private int LoadCount { get; set; } = 15;
 
@@ -259,28 +257,25 @@ namespace Another_Mirai_Native.UI.Pages
 
         private string? AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
-            ChatDetailItemViewModel item = null;
             string nick = GetGroupMemberNick(group, qq);
             if (plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
-            if (GroupChatHistory.TryGetValue(group, out var chatHistory))
+            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQGroup, itemType);
+            var history = new ChatHistory
             {
-                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
-                {
-                    chatHistory.RemoveAt(0);
-                }
-                item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQGroup, itemType);
-                chatHistory.Add(item);
-            }
-            else
-            {
-                GroupChatHistory.Add(group, new());
-                item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQGroup, itemType);
-                GroupChatHistory[group].Add(item);
-            }
-            OnPropertyChanged(nameof(DetailList));
+                Message = msg,
+                ParentID = group,
+                SenderID = qq,
+                Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Group,
+                MsgId = msgId,
+            };
+            ChatHistoryHelper.InsertHistory(history);
+            history.Message = $"{GetGroupMemberNick(group, qq)}: {msg}";
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            ChatList.FirstOrDefault(x => x.Id == group).Detail = $"{GetGroupMemberNick(group, AppConfig.Instance.CurrentQQ)}: {msg}";
+            ReorderChatList();
             Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == group)
@@ -303,6 +298,7 @@ namespace Another_Mirai_Native.UI.Pages
                 }
             });
             itemAdded?.Invoke(item?.GUID);
+
             return item?.GUID;
         }
 
@@ -362,28 +358,25 @@ namespace Another_Mirai_Native.UI.Pages
 
         private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
-            ChatDetailItemViewModel item = null;
             string nick = GetFriendNick(qq);
             if (plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
-            if (FriendChatHistory.TryGetValue(qq, out var chatHistory))
+            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
+            var history = new ChatHistory
             {
-                if (chatHistory.Count > AppConfig.Instance.MessageCacheSize)
-                {
-                    chatHistory.RemoveAt(0);
-                }
-                item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
-                chatHistory.Add(item);
-            }
-            else
-            {
-                FriendChatHistory.Add(qq, new());
-                item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
-                FriendChatHistory[qq].Add(item);
-            }
-            OnPropertyChanged(nameof(DetailList));
+                Message = msg,
+                ParentID = qq,
+                SenderID = qq,
+                Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
+                MsgId = msgId,
+            };
+            ChatHistoryHelper.InsertHistory(history);
+            history.Message = $"{GetFriendNick(qq)}: {msg}";
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            ChatList.FirstOrDefault(x => x.Id == qq).Detail = $"{GetFriendNick(AppConfig.Instance.CurrentQQ)}: {msg}";
+            ReorderChatList();
             Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == qq)
@@ -511,6 +504,35 @@ namespace Another_Mirai_Native.UI.Pages
             };
         }
 
+        private string BuildTextFromRichTextBox()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Block item in SendText.Document.Blocks)
+            {
+                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
+                {
+                    stringBuilder.Append(blockImg.Tag?.ToString());
+                    continue;
+                }
+                if (item is not Paragraph paragraph)
+                {
+                    continue;
+                }
+                foreach (Inline inline in paragraph.Inlines)
+                {
+                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
+                    {
+                        stringBuilder.Append(inlineImage.Tag?.ToString());
+                    }
+                    else
+                    {
+                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
+                    }
+                }
+            }
+            return stringBuilder.ToString();
+        }
+
         private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = SelectedItem;
@@ -520,30 +542,21 @@ namespace Another_Mirai_Native.UI.Pages
             }
             lock (detailListLock)
             {
+                List<ChatHistory> history = new();
                 if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
                 {
-                    if (FriendChatHistory.TryGetValue(item.Id, out var msg))
-                    {
-                        DetailList = msg;
-                    }
-                    else
-                    {
-                        FriendChatHistory.Add(item.Id, new());
-                        DetailList = FriendChatHistory[item.Id];
-                    }
+                    history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, 15, 1);
                 }
                 else
                 {
-                    if (GroupChatHistory.TryGetValue(item.Id, out var msg))
-                    {
-                        DetailList = msg;
-                    }
-                    else
-                    {
-                        GroupChatHistory.Add(item.Id, new());
-                        DetailList = GroupChatHistory[item.Id];
-                    }
+                    history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, 15, 1);
                 }
+                DetailList.Clear();
+                history.ForEach(x =>
+                {
+                    DetailList.Add(ParseChatHistoryToViewModel(item.AvatarType, x));
+                });
+                CurrentPageIndex = 1;
             }
             OnPropertyChanged(nameof(DetailList));
             Dispatcher.BeginInvoke(() =>
@@ -574,6 +587,16 @@ namespace Another_Mirai_Native.UI.Pages
             return false;
         }
 
+        private void CleanMessageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageContainer.Children.Clear();
+        }
+
+        private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SendText.Document.Blocks.Clear();
+        }
+
         private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
             AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
@@ -590,60 +613,66 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
-        private void LazyLoad()
+        private async void LazyLoad()
         {
-            if (string.IsNullOrWhiteSpace(LastMessageGUID))
+            if (SelectedItem == null)
             {
                 return;
             }
-            int index = -1;
-            for (int i = 0; i < DetailList.Count; i++)
+            lock (detailListLock)
             {
-                var item = DetailList[i];
-                if (item.GUID == LastMessageGUID)
+                var list = ChatHistoryHelper.GetHistoriesByPage(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group, UIConfig.Instance.MessageContainerMaxCount, CurrentPageIndex + 1);
+                if (list.Count > 0)
                 {
-                    index = i;
-                    break;
+                    CurrentPageIndex++;
                 }
-            }
-            IEnumerable<ChatDetailItemViewModel> ls;
-            if (index <= 0)
-            {
-                return;
-            }
-            else
-            {
-                ls = index > 15 ? DetailList.Skip(Math.Max(0, index - LoadCount)).Take(LoadCount) : DetailList.Take(LoadCount);
-            }
-            if (ls == null || !ls.Any())
-            {
-                return;
-            }
-            LastMessageGUID = ls.First().GUID;
-
-            UIElement lastElement;
-            Dispatcher.BeginInvoke(() =>
-            {
+                else
+                {
+                    return;
+                }
+                list.Reverse();
                 FrameworkElement firstItem = (FrameworkElement)MessageContainer.Children[0];
-                foreach (var item in ls.Reverse())
+                foreach (var item in list)
                 {
-                    if (!CheckMessageContainerHasItem(item.GUID))
+                    UIElement lastElement;
+                    if (item.SenderID == AppConfig.Instance.CurrentQQ)
                     {
-                        lastElement = item.DetailItemType switch
-                        {
-                            DetailItemType.Notice => BuildMiddleBlock(item),
-                            DetailItemType.Receive => BuildLeftBlock(item),
-                            _ => BuildRightBlock(item),
-                        };
-                        MessageContainer.Children.Insert(0, lastElement);
+                        lastElement = BuildRightBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
                     }
+                    else if (item.Type == ChatHistoryType.Notice)
+                    {
+                        lastElement = BuildMiddleBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
+                    }
+                    else
+                    {
+                        lastElement = BuildLeftBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
+                    }
+                    MessageContainer.Children.Insert(0, lastElement);
                 }
-
+                MessageContainer.UpdateLayout();
                 firstItem.BringIntoView();
-            });
+            }
+        }
+
+        private void LoadChatHistory()
+        {
+            var list = ChatHistoryHelper.GetHistoryCategroies();
+            ChatList.Clear();
+            foreach (var item in list)
+            {
+                ChatList.Add(new ChatListItemViewModel
+                {
+                    AvatarType = item.Type == ChatHistoryType.Private ? ChatAvatar.AvatarTypes.QQPrivate : ChatAvatar.AvatarTypes.QQGroup,
+                    Detail = item.Message,
+                    GroupName = GetGroupName(item.ParentID),
+                    Id = item.ParentID,
+                    Time = item.Time,
+                    UnreadCount = 0
+                });
+            }
+            EmptyHint.Visibility = ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void MessageScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -656,27 +685,29 @@ namespace Another_Mirai_Native.UI.Pages
             double distanceToTop = scrollViewer.VerticalOffset;
 
             ScrollBottomContainer.Visibility = distanceToBottom > 100 ? Visibility.Visible : Visibility.Collapsed;
-
-            if (distanceToTop < 100)
+            if (distanceToTop < 50 && distanceToBottom > 100 && !LazyLoading)
             {
                 if (LazyLoadDebounceTimer == null)
                 {
-                    LazyLoadDebounceTimer = new Timer
+                    LazyLoadDebounceTimer = new DispatcherTimer
                     {
-                        Interval = 200,
+                        Interval = TimeSpan.FromMilliseconds(500),
                     };
-                    LazyLoadDebounceTimer.Elapsed += (_, _) =>
+                    LazyLoadDebounceTimer.Tick += (_, _) =>
                     {
                         LazyLoadDebounceTimer.Stop();
-                        LazyLoad();
+                        Dispatcher.BeginInvoke(LazyLoad);
+                        Dispatcher.BeginInvoke(() => LazyLoading = false);
                     };
+                    LazyLoading = true;
                     LazyLoadDebounceTimer.Start();
                 }
                 else
                 {
                     LazyLoadDebounceTimer.Stop();
-                    LazyLoadDebounceTimer.Start();
                 }
+                LazyLoading = true;
+                LazyLoadDebounceTimer.Start();
             }
         }
 
@@ -712,40 +743,22 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
 
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
+            LoadChatHistory();
         }
 
-        private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
+        private ChatDetailItemViewModel ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
         {
-            if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
+            return new ChatDetailItemViewModel
             {
-                string cacheImagePath = Path.Combine("data", "image", "cached");
-                using MemoryStream memoryStream = new();
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(image));
-                encoder.Save(memoryStream);
-                var buffer = memoryStream.ToArray();
-                string md5 = buffer.MD5();
-
-                File.WriteAllBytes(Path.Combine(cacheImagePath, md5 + ".png"), buffer);
-                Image img = new()
-                {
-                    Source = image,
-                    Width = image.Width,
-                    Height = image.Height,
-                    Tag = $"[CQ:image,file=cached\\{md5}.png]"
-                };
-                (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
-                e.Handled = true;
-                e.CancelCommand();
-            }
-            else if (e.DataObject.GetDataPresent(DataFormats.Text)
-                && e.DataObject.GetData(DataFormats.Text) is string text
-                && string.IsNullOrEmpty(text) is false)
-            {
-                AddTextToSendBox(text);
-                e.Handled = true;
-                e.CancelCommand(); 
-            }
+                AvatarType = avatarType,
+                Content = history.Message,
+                DetailItemType = history.Type == ChatHistoryType.Notice ? DetailItemType.Notice : (history.SenderID == AppConfig.Instance.CurrentQQ ? DetailItemType.Send : DetailItemType.Receive),
+                Id = history.SenderID,
+                MsgId = history.MsgId,
+                Nick = avatarType == ChatAvatar.AvatarTypes.QQPrivate ? GetFriendNick(history.SenderID) : GetGroupMemberNick(history.ParentID, history.SenderID),
+                Recalled = history.Recalled,
+                Time = history.Time,
+            };
         }
 
         private void PictureBtn_Click(object sender, RoutedEventArgs e)
@@ -836,35 +849,20 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
         {
-            if (GroupChatHistory.TryGetValue(groupId, out var list))
-            {
-                var item = list.FirstOrDefault(x => x.MsgId == msgId);
-                if (item != null)
-                {
-                    item.Recalled = true;
-                }
-            }
+            ChatHistoryHelper.UpdateHistoryRecall(groupId, msgId, ChatHistoryType.Group, true);
             MsgRecalled?.Invoke(msgId);
         }
 
         private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
         {
             AddPrivateChatItem(qq, msg, DetailItemType.Receive, msgId);
-
             AddOrUpdatePrivateChatList(qq, msg);
             ReorderChatList();
         }
 
         private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
         {
-            if (FriendChatHistory.TryGetValue(qq, out var list))
-            {
-                var item = list.FirstOrDefault(x => x.MsgId == msgId);
-                if (item != null)
-                {
-                    item.Recalled = true;
-                }
-            }
+            ChatHistoryHelper.UpdateHistoryRecall(qq, msgId, ChatHistoryType.Private, true);
             MsgRecalled?.Invoke(msgId);
         }
 
@@ -950,6 +948,40 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
+        private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
+            {
+                string cacheImagePath = Path.Combine("data", "image", "cached");
+                using MemoryStream memoryStream = new();
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(image));
+                encoder.Save(memoryStream);
+                var buffer = memoryStream.ToArray();
+                string md5 = buffer.MD5();
+
+                File.WriteAllBytes(Path.Combine(cacheImagePath, md5 + ".png"), buffer);
+                Image img = new()
+                {
+                    Source = image,
+                    Width = image.Width,
+                    Height = image.Height,
+                    Tag = $"[CQ:image,file=cached\\{md5}.png]"
+                };
+                (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
+                e.Handled = true;
+                e.CancelCommand();
+            }
+            else if (e.DataObject.GetDataPresent(DataFormats.Text)
+                && e.DataObject.GetData(DataFormats.Text) is string text
+                && string.IsNullOrEmpty(text) is false)
+            {
+                AddTextToSendBox(text);
+                e.Handled = true;
+                e.CancelCommand();
+            }
+        }
+
         private void ScrollToBottom(ScrollViewer scrollViewer, bool forced = false)
         {
             if (!forced && ScrollBottomContainer.Visibility == Visibility.Visible)
@@ -978,35 +1010,6 @@ namespace Another_Mirai_Native.UI.Pages
                 ExecuteSendMessage(id, avatar, sendText);
             });
             SendText.Document.Blocks.Clear();
-        }
-
-        private string BuildTextFromRichTextBox()
-        {
-            StringBuilder stringBuilder = new();
-            foreach (Block item in SendText.Document.Blocks)
-            {
-                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
-                {
-                    stringBuilder.Append(blockImg.Tag?.ToString());
-                    continue;
-                }
-                if (item is not Paragraph paragraph)
-                {
-                    continue;
-                }
-                foreach (Inline inline in paragraph.Inlines)
-                {
-                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
-                    {
-                        stringBuilder.Append(inlineImage.Tag?.ToString());
-                    }
-                    else
-                    {
-                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
-                    }
-                }
-            }
-            return stringBuilder.ToString();
         }
 
         private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -1054,16 +1057,6 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             });
-        }
-
-        private void CleanMessageBtn_Click(object sender, RoutedEventArgs e)
-        {
-            MessageContainer.Children.Clear();
-        }
-
-        private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
-        {
-            SendText.Document.Blocks.Clear();
         }
     }
 }
