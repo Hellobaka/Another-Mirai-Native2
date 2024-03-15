@@ -73,7 +73,6 @@ namespace Another_Mirai_Native.UI
             Icon = new System.Drawing.Icon(new MemoryStream(Convert.FromBase64String(Another_Mirai_Native.Resources.TaskBarIconResources.IconBase64)))
         };
 
-
         private Dictionary<string, object> PageCache { get; set; } = new();
 
         private DispatcherTimer ResizeTimer { get; set; }
@@ -122,17 +121,17 @@ namespace Another_Mirai_Native.UI
                    });
         }
 
+        public void InitNotifyIcon()
+        {
+            Dispatcher.BeginInvoke(BuildTaskbarIconMenu);
+        }
+
         public void UpdateTrayToolTip()
         {
             Dispatcher.BeginInvoke(() =>
             {
                 TaskbarIcon.ToolTipText = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})\n已启用 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件";
             });
-        }
-
-        public void InitNotifyIcon()
-        {
-            Dispatcher.BeginInvoke(BuildTaskbarIconMenu);
         }
 
         [DllImport("user32.dll")]
@@ -168,9 +167,8 @@ namespace Another_Mirai_Native.UI
                 {
                     DialogHelper.ShowSimpleDialog("切换失败力", "协议断开连接失败，建议在设置中更改自己需要的协议并重启框架");
                 }
-
             }
-        }        
+        }
 
         private void LoadPlugins()
         {
@@ -214,7 +212,7 @@ namespace Another_Mirai_Native.UI
                 WindowState = WindowState.Normal;
                 Show();
                 SetForegroundWindow();
-                LogPage.Instance.SelectLastLog();
+                LogPage.Instance?.SelectLastLog();
             };
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
@@ -235,11 +233,6 @@ namespace Another_Mirai_Native.UI
             PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
         }
 
-        private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy _)
-        {
-            UpdateTrayToolTip();
-        }
-
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var selectedItem = (NavigationViewItem)args.SelectedItem;
@@ -258,6 +251,11 @@ namespace Another_Mirai_Native.UI
                     MainFrame.Navigate(obj);
                 }
             }
+        }
+
+        private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy _)
+        {
+            UpdateTrayToolTip();
         }
 
         private void ResizeTimer_Tick(object? sender, EventArgs e)
