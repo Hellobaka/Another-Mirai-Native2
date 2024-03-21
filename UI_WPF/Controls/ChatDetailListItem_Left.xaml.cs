@@ -133,6 +133,8 @@ namespace Another_Mirai_Native.UI.Controls
             ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
             DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
             ChangeContainerWidth(minWidth);
+            TimeDisplay.ToolTip = Time.ToString("G");
+            NameDisplay.ToolTip = $"{DisplayName} [{Id}]";
         }
 
         private void ChangeContainerWidth(double minWidth)
