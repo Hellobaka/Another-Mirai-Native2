@@ -3,11 +3,13 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Windows;
 using ModernWpf.Controls;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,20 +27,30 @@ namespace Another_Mirai_Native.UI.Controls
 {
     public static class ChatDetailListItem_Common
     {
-        public static Dictionary<string, BitmapImage> CachedImage { get; set; } = new();
-
+        /// <summary>
+        /// 图片容器的最大高度
+        /// </summary>
         public static double ImageMaxHeight { get; set; } = 450;
 
+        /// <summary>
+        /// 消息菜单
+        /// </summary>
         private static ContextMenu DetailContextMenu { get; set; } = BuildDetailContextMenu();
 
+        /// <summary>
+        /// 名称菜单
+        /// </summary>
         private static ContextMenu GroupContextMenu { get; set; } = BuildGroupContextMenu();
 
+        /// <summary>
+        /// 个人头像菜单
+        /// </summary>
         private static ContextMenu AvatarContextMenu { get; set; } = BuildAvatarContextMenu();
 
         /// <summary>
-        /// 信号量限制下载并发
+        /// 下载并发限制
         /// </summary>
-        private static SemaphoreSlim Semaphore { get; set; } = new SemaphoreSlim(1, 1);
+        private static ConcurrentDictionary<string, Task<string?>> DownloadTasks { get; set; } = new();
 
         public static ContextMenu BuildAvatarContextMenu()
         {
@@ -344,6 +356,10 @@ namespace Another_Mirai_Native.UI.Controls
             return textbox;
         }
        
+        /// <summary>
+        /// 文本框删除点击时发光的外边框
+        /// </summary>
+        /// <param name="element"></param>
         public static void SetElementNoSelectEffect(UIElement element)
         {
             UIElement GetBorderElement(DependencyObject element)
@@ -376,67 +392,63 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 if (borderElement is Border border)
                 {
+                    // 设置边框画笔为透明
                     border.BorderBrush = Brushes.Transparent;
                 }
             }
         }
 
+        /// <summary>
+        /// 下载或读取缓存图片
+        /// </summary>
+        /// <param name="imageUrl">欲下载的图片URL</param>
+        /// <returns>本地图片路径</returns>
         public static async Task<string?> DownloadImageAsync(string imageUrl)
         {
-            await Semaphore.WaitAsync();
             try
             {
                 if (string.IsNullOrEmpty(imageUrl))
                 {
                     return null;
                 }
-
                 string cacheImagePath = Path.Combine("data", "image", "cached");
                 Directory.CreateDirectory(cacheImagePath);
-                if (!imageUrl.StartsWith("http"))
+                if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
                 {
                     return new FileInfo(imageUrl).FullName;
                 }
-                string name = Helper.GetPicNameFromUrl(imageUrl);
+                string name = Helper.GetPicNameFromUrl(imageUrl);// 解析图片唯一ID
                 if (string.IsNullOrEmpty(name))
                 {
                     //LogHelper.Error("DownloadImageAsync", "无法从URL中解析出图片ID");
                     //return null;
                     name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
                 }
-                // 检测文件是否已经存在
-                string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
+                // 尝试从本地读取缓存
+                string? path = await GetFromCacheAsync(cacheImagePath, name);
                 if (!string.IsNullOrEmpty(path))
                 {
-                    return new DirectoryInfo(path).FullName;
+                    return path;
                 }
+                // 如果没有缓存则进行下载, 从同步字典中获取或新建一个下载任务
+                var downloadTask = DownloadTasks.GetOrAdd(imageUrl, _ => DownloadFileFromWebAsync(cacheImagePath, name, imageUrl));
 
-                using var client = new HttpClient();
-                var response = await client.GetAsync(imageUrl);
-                response.EnsureSuccessStatusCode();
-                // 文件类型已知
-                if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
-                {
-                    return null;
-                }
-                path = Path.Combine(cacheImagePath, name + ".jpg");
-                path = Path.ChangeExtension(path, response.Content.Headers.ContentType.MediaType.Split('/').Last());
-                var imageBytes = await response.Content.ReadAsByteArrayAsync();
-                File.WriteAllBytes(path, imageBytes);
-
-                return new DirectoryInfo(path).FullName;
+                string? data = await downloadTask;
+                DownloadTasks.TryRemove(imageUrl, out var _);
+                return data;
             }
             catch (Exception ex)
             {
                 LogHelper.Error("DownloadImageAsync", ex.Message + ex.StackTrace);
                 return null;
             }
-            finally
-            {
-                Semaphore.Release();
-            }
         }
 
+        /// <summary>
+        /// 向富文本框添加文本, 同步解析为超链接
+        /// </summary>
+        /// <param name="textBox"></param>
+        /// <param name="item"></param>
         public static void AddTextToRichTextBox(RichTextBox textBox, string item)
         {
             var paragraph = textBox.Document.Blocks.FirstBlock as Paragraph;
@@ -474,6 +486,36 @@ namespace Another_Mirai_Native.UI.Controls
         private static object GetContextMenuTarget(object sender)
         {
             return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
+        }
+
+        private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetAsync(imageUrl);
+            response.EnsureSuccessStatusCode();
+            // 文件类型已知
+            if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
+            {
+                return null;
+            }
+            string path = Path.Combine(cacheImagePath, name + ".jpg");
+            path = Path.ChangeExtension(path, response.Content.Headers.ContentType.MediaType.Split('/').Last());
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            File.WriteAllBytes(path, imageBytes);
+
+            return new DirectoryInfo(path).FullName;
+        }
+
+        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name)
+        {
+            // 检测文件是否已经存在
+            string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
+            if (!string.IsNullOrEmpty(path))
+            {
+                return Task.FromResult<string?>(new DirectoryInfo(path).FullName);
+            }
+
+            return Task.FromResult<string?>(null);
         }
     }
 }
