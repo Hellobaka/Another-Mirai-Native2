@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -105,6 +107,24 @@ namespace Another_Mirai_Native.UI.Windows
         {
             AnimationBehavior.SetSourceUri(ImageDisplayer, Image);
             AnimationBehavior.SetRepeatBehavior(ImageDisplayer, RepeatBehavior.Forever);
+
+            ImageDisplayer.ContextMenu = new ContextMenu();
+            ImageDisplayer.ContextMenu.Items.Add(new MenuItem() { Header = "另存为" });
+            (ImageDisplayer.ContextMenu.Items[0] as MenuItem).Click += (_, _) =>
+            {
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Title = "图片另存为",
+                    AddExtension = true,
+                    FileName = Path.GetFileName(Image.OriginalString),
+                    Filter = "JPG 图片|*.jpg|JPEG 图片|*.jpeg|PNG 图片|*.png|BMP 图片|*.bmp|Webp 图片|*.webp|所有文件|*.*",
+                };
+                if (saveFileDialog.ShowDialog() is false)
+                {
+                    return;
+                }
+                File.Copy(Image.OriginalString, saveFileDialog.FileName);
+            };
         }
     }
 }
