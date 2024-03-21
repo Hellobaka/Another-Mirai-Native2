@@ -65,8 +65,6 @@ namespace Another_Mirai_Native.UI.Pages
 
         private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
-        private string LastMessageGUID { get; set; } = "";
-
         private DispatcherTimer LazyLoadDebounceTimer { get; set; }
 
         private bool LazyLoading { get; set; }
@@ -274,27 +272,13 @@ namespace Another_Mirai_Native.UI.Pages
             ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{GetGroupMemberNick(group, qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
-            ChatList.FirstOrDefault(x => x.Id == group).Detail = $"{GetGroupMemberNick(group, AppConfig.Instance.CurrentQQ)}: {msg}";
-            ReorderChatList();
+            AddOrUpdateGroupChatList(group, qq, msg);
             Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == group)
                 {
-                    switch (item.DetailItemType)
-                    {
-                        case DetailItemType.Notice:
-                            MessageContainer.Children.Add(BuildMiddleBlock(item));
-                            break;
-
-                        case DetailItemType.Receive:
-                            MessageContainer.Children.Add(BuildLeftBlock(item));
-                            break;
-
-                        default:
-                        case DetailItemType.Send:
-                            MessageContainer.Children.Add(BuildRightBlock(item));
-                            break;
-                    }
+                    AddItemToMessageContainer(item, true);
+                    ScrollToBottom(MessageScrollViewer, true);
                 }
             });
             itemAdded?.Invoke(item?.GUID);
@@ -327,6 +311,7 @@ namespace Another_Mirai_Native.UI.Pages
                     });
                 });
             }
+            ReorderChatList();
         }
 
         private void AddOrUpdatePrivateChatList(long qq, string msg)
@@ -354,6 +339,7 @@ namespace Another_Mirai_Native.UI.Pages
                     });
                 });
             }
+            ReorderChatList();
         }
 
         private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
@@ -375,27 +361,13 @@ namespace Another_Mirai_Native.UI.Pages
             ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{GetFriendNick(qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
-            ChatList.FirstOrDefault(x => x.Id == qq).Detail = $"{GetFriendNick(AppConfig.Instance.CurrentQQ)}: {msg}";
-            ReorderChatList();
+            AddOrUpdatePrivateChatList(qq, msg);
             Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == qq)
                 {
-                    switch (item.DetailItemType)
-                    {
-                        case DetailItemType.Notice:
-                            MessageContainer.Children.Add(BuildMiddleBlock(item));
-                            break;
-
-                        case DetailItemType.Receive:
-                            MessageContainer.Children.Add(BuildLeftBlock(item));
-                            break;
-
-                        default:
-                        case DetailItemType.Send:
-                            MessageContainer.Children.Add(BuildRightBlock(item));
-                            break;
-                    }
+                    AddItemToMessageContainer(item, true);
+                    ScrollToBottom(MessageScrollViewer, true);
                 }
             });
             itemAdded?.Invoke(item?.GUID);
@@ -601,14 +573,12 @@ namespace Another_Mirai_Native.UI.Pages
         {
             AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
             AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
-            ReorderChatList();
         }
 
         private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
             AddOrUpdatePrivateChatList(qq, msg);
             AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
-            ReorderChatList();
         }
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
@@ -744,6 +714,7 @@ namespace Another_Mirai_Native.UI.Pages
 
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
             LoadChatHistory();
+            ReorderChatList();
         }
 
         private ChatDetailItemViewModel ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
@@ -844,7 +815,6 @@ namespace Another_Mirai_Native.UI.Pages
         {
             AddGroupChatItem(group, qq, msg, DetailItemType.Receive, msgId);
             AddOrUpdateGroupChatList(group, qq, msg);
-            ReorderChatList();
         }
 
         private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
@@ -857,7 +827,6 @@ namespace Another_Mirai_Native.UI.Pages
         {
             AddPrivateChatItem(qq, msg, DetailItemType.Receive, msgId);
             AddOrUpdatePrivateChatList(qq, msg);
-            ReorderChatList();
         }
 
         private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
@@ -887,49 +856,49 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 RefreshGroupName();
                 MessageContainer.Children.Clear();
-                LastMessageGUID = "";
                 GC.Collect();
             }
 
             lock (detailListLock)
             {
                 var ls = DetailList.Skip(Math.Max(0, DetailList.Count - LoadCount)).ToList();
-                if (string.IsNullOrEmpty(LastMessageGUID))
-                {
-                    LastMessageGUID = ls.First().GUID;
-                }
                 foreach (var item in ls)
                 {
                     if (!CheckMessageContainerHasItem(item.GUID))
                     {
-                        switch (item.DetailItemType)
-                        {
-                            case DetailItemType.Notice:
-                                MessageContainer.Children.Add(BuildMiddleBlock(item));
-                                break;
-
-                            case DetailItemType.Receive:
-                                MessageContainer.Children.Add(BuildLeftBlock(item));
-                                break;
-
-                            default:
-                            case DetailItemType.Send:
-                                MessageContainer.Children.Add(BuildRightBlock(item));
-                                break;
-                        }
-
-                        if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
-                            && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
-                        {
-                            do
-                            {
-                                MessageContainer.Children.RemoveAt(0);
-                            } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
-                        }
+                        AddItemToMessageContainer(item, isRemove: true);
                     }
                 }
             }
             ScrollToBottom(MessageScrollViewer);
+        }
+
+        private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
+        {
+            switch (item.DetailItemType)
+            {
+                case DetailItemType.Notice:
+                    MessageContainer.Children.Add(BuildMiddleBlock(item));
+                    break;
+
+                case DetailItemType.Receive:
+                    MessageContainer.Children.Add(BuildLeftBlock(item));
+                    break;
+
+                default:
+                case DetailItemType.Send:
+                    MessageContainer.Children.Add(BuildRightBlock(item));
+                    break;
+            }
+
+            if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
+                && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
+            {
+                do
+                {
+                    MessageContainer.Children.RemoveAt(0);
+                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
+            }
         }
 
         private void ReorderChatList()
@@ -940,8 +909,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     SelectedItem.UnreadCount = 0;
                 }
-                ChatList = ChatList.Distinct().ToList();
-                ChatList = ChatList.OrderByDescending(x => x.Time).ToList();
+                ChatList = ChatList.GroupBy(x => x.Id).Select(x => x.First()).OrderByDescending(x => x.Time).ToList();
                 OnPropertyChanged(nameof(ChatList));
 
                 EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
