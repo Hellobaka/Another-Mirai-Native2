@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using System;
 using System.Collections.Generic;
 
 namespace Another_Mirai_Native.UI
@@ -45,7 +46,7 @@ namespace Another_Mirai_Native.UI
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);
             LogItemsCount = GetConfig("LogItemsCount", 500);
-            MessageContainerMaxCount = GetConfig("MessageContainerMaxCount", 15);
+            MessageContainerMaxCount = Math.Max(GetConfig("MessageContainerMaxCount", 15), 10);
             LogAutoScroll = GetConfig("LogAutoScroll", true);
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
