@@ -64,6 +64,9 @@ namespace Another_Mirai_Native.UI
             }
             Width = Math.Max(MinWidth, UIConfig.Instance.Width);
             Height = Math.Max(MinHeight, UIConfig.Instance.Height);
+            // 提前实例化重要页面
+            PageCache.Add("LogPage", new LogPage());
+            PageCache.Add("ChatPage", new ChatPage());
         }
 
         public static MainWindow Instance { get; set; }
