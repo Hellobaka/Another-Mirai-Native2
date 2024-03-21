@@ -30,9 +30,26 @@ namespace Another_Mirai_Native.UI.Converters
             {
                 return time.ToString("T");
             }
+            else if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day != time.Day 
+                || (DateTime.Now - time).Days == 1)
+            {
+                return "昨天";
+            }
+            else if ((DateTime.Now - time).Days == 2)
+            {
+                return "前天";
+            }
             else if ((DateTime.Now - time).Days <= 7)
             {
-                return time.ToString("dddd");
+                bool flag = false;
+                for (DateTime date = time; date < DateTime.Now; date = date.AddDays(1))
+                {
+                    if (date.DayOfWeek == DayOfWeek.Monday)
+                    {
+                        flag = true; 
+                    }
+                }
+                return flag ? time.ToString("D") : time.ToString("dddd");
             }
             else
             {
