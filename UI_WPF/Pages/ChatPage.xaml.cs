@@ -39,6 +39,8 @@ namespace Another_Mirai_Native.UI.Pages
             // TODO: 图片收藏功能
             // TODO: 消息引用显示
             // TODO: 实现功能按钮
+            // TODO: 消息列表修复多行文本
+            // TODO: At消息背景色
         }
 
         public static event Action<int> MsgRecalled;
