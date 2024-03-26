@@ -117,17 +117,17 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Xml:
                         var xml = (MiraiMessageTypeDetail.Xml)item;
-                        Result.Append($"[CQ:rich,type=xml,content={xml.xml}]");
+                        Result.Append($"[CQ:rich,type=xml,content={EscapeRawMessage(xml.xml)}]");
                         break;
 
                     case MiraiMessageType.Json:
                         var json = (MiraiMessageTypeDetail.Json)item;
-                        Result.Append($"[CQ:rich,type=json,content={json.json}]");
+                        Result.Append($"[CQ:rich,type=json,content={EscapeRawMessage(json.json)}]");
                         break;
 
                     case MiraiMessageType.App:
                         var app = (MiraiMessageTypeDetail.App)item;
-                        Result.Append($"[CQ:rich,type=app,content={app.content}]");
+                        Result.Append($"[CQ:rich,type=app,content={EscapeRawMessage(app.content)}]");
                         break;
 
                     case MiraiMessageType.Poke:
@@ -353,15 +353,25 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case CQCodeType.Rich:
                     return (object)cqCode.Items["type"] switch
                     {
-                        "xml" => new MiraiMessageTypeDetail.Xml { xml = cqCode.Items["content"] },
-                        "json" => new MiraiMessageTypeDetail.Json { json = cqCode.Items["content"] },
-                        "app" => new MiraiMessageTypeDetail.App { content = cqCode.Items["content"] },
+                        "xml" => new MiraiMessageTypeDetail.Xml { xml = UnescapeRawMessage(cqCode.Items["content"]) },
+                        "json" => new MiraiMessageTypeDetail.Json { json = UnescapeRawMessage(cqCode.Items["content"]) },
+                        "app" => new MiraiMessageTypeDetail.App { content = UnescapeRawMessage(cqCode.Items["content"]) },
                         _ => null,
                     };
 
                 default:
                     return null;
             }
+        }
+
+        private static string UnescapeRawMessage(string msg)
+        {
+            return msg.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&#44;", ",").Replace("&amp;", "&");
+        }
+
+        private static string EscapeRawMessage(string msg)
+        {
+            return msg.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
         }
     }
 }
