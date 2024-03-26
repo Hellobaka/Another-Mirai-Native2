@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Windows
@@ -19,6 +18,8 @@ namespace Another_Mirai_Native.UI.Windows
 
         private Point lastMousePosition;
 
+        private double displayScale = 1;
+
         public PictureViewer()
         {
             InitializeComponent();
@@ -26,17 +27,18 @@ namespace Another_Mirai_Native.UI.Windows
 
         public Uri Image { get; set; }
 
-        public void UpdateImageScale(double scale)
+        public void UpdateImageScale(double diff)
         {
             if (imageScaleTransform.ScaleX >= 16 || imageScaleTransform.ScaleY >= 16
                 || imageScaleTransform.ScaleX <= 0.1 || imageScaleTransform.ScaleY <= 0.1)
             {
                 return;
             }
-            imageScaleTransform.ScaleX += scale;
-            imageScaleTransform.ScaleY += scale;
+            imageScaleTransform.ScaleX += diff;
+            imageScaleTransform.ScaleY += diff;
+            displayScale += diff;
 
-            ScaleDisplay.Text = $"{(int)(imageScaleTransform.ScaleX * 100)}%";
+            ScaleDisplay.Text = $"{(int)(displayScale * 100)}%";
         }
 
         private void ImageDisplayer_MouseDown(object sender, MouseButtonEventArgs e)
@@ -84,13 +86,22 @@ namespace Another_Mirai_Native.UI.Windows
         {
             if (e.ClickCount == 2)
             {
-                imageTranslateTransform.X = 0;
-                imageTranslateTransform.Y = 0;
-
-                imageScaleTransform.ScaleX = 1;
-                imageScaleTransform.ScaleY = 1;
-                ScaleDisplay.Text = "100%";
+                ResetScale();
             }
+        }
+
+        private void ResetScale()
+        {
+            displayScale -= imageScaleTransform.ScaleX - 1;
+            ScaleDisplay.Text = $"{(int)(displayScale * 100)}%";
+
+            imageTranslateTransform.X = 0;
+            imageTranslateTransform.Y = 0;
+
+            imageScaleTransform.ScaleX = 1;
+            imageScaleTransform.ScaleY = 1;
+            imageScaleTransform.CenterX = 0;
+            imageScaleTransform.CenterY = 0;
         }
 
         private void ScaleMinusBtn_Click(object sender, RoutedEventArgs e)
@@ -105,9 +116,10 @@ namespace Another_Mirai_Native.UI.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            AnimationBehavior.AddLoadedHandler(ImageDisplayer, ImageDisplayer_Loaded);
+
             AnimationBehavior.SetSourceUri(ImageDisplayer, Image);
             AnimationBehavior.SetRepeatBehavior(ImageDisplayer, RepeatBehavior.Forever);
-
             ImageDisplayer.ContextMenu = new ContextMenu();
             ImageDisplayer.ContextMenu.Items.Add(new MenuItem() { Header = "另存为" });
             (ImageDisplayer.ContextMenu.Items[0] as MenuItem).Click += (_, _) =>
@@ -125,6 +137,51 @@ namespace Another_Mirai_Native.UI.Windows
                 }
                 File.Copy(Image.OriginalString, saveFileDialog.FileName);
             };
+        }
+
+        private void ImageDisplayer_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ImageDisplayer.Source == null)
+            {
+                return;
+            }
+            double width = ImageDisplayer.Source.Width;
+            double height = ImageDisplayer.Source.Height;
+            double windowWidth = Width;
+            double windowHeight = Height - ControlPanel.ActualHeight;
+
+            double scale = 1;
+            if (width > height)
+            {
+                scale = windowWidth / width;
+                if (scale > 1)// 窗口宽度大于图片，显示原图大小
+                {
+                    UpdateImageScale(1 / scale - 1);
+                    imageScaleTransform.CenterX = windowWidth / 2;
+                    imageScaleTransform.CenterY = windowHeight / 2;
+                    scale = 1;
+                }
+            }
+            else
+            {
+                scale = windowHeight / height;
+                if (scale > 1)
+                {
+                    UpdateImageScale(1 / scale - 1);
+                    imageScaleTransform.CenterX = windowWidth / 2;
+                    imageScaleTransform.CenterY = windowHeight / 2;
+                    scale = 1;
+                }
+            }
+
+            displayScale = scale;
+            ScaleDisplay.Text = $"{(int)(displayScale * 100)}%";
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ResetScale();
+            ImageDisplayer_Loaded(sender, e);
         }
     }
 }

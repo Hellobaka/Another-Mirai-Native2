@@ -7,11 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="PictureViewer"
-    Width="500"
-    Height="750"
+    Width="900"
+    Height="650"
     ui:WindowHelper.UseModernWindowStyle="True"
     Loaded="Window_Loaded"
-    WindowStartupLocation="CenterOwner"
+    WindowStartupLocation="CenterOwner" SizeChanged="Window_SizeChanged"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -36,6 +36,7 @@
             </Image.RenderTransform>
         </Image>
         <Grid
+            x:Name="ControlPanel"
             Grid.Row="1"
             Panel.ZIndex="1"
             Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
