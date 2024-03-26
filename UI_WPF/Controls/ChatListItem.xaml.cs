@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.UI.Controls
             control.ViewModel = newValue;
             control.Id = newValue.Id;
             control.GroupName = newValue.GroupName;
-            control.Detail = newValue.Detail;
+            control.Detail = newValue.Detail.Replace("\r", "").Replace("\n", "");
             control.Time = newValue.Time;
             control.UnreadCount = newValue.UnreadCount;
 
