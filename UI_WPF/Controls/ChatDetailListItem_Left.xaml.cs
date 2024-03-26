@@ -104,8 +104,8 @@ namespace Another_Mirai_Native.UI.Controls
                         {
                             NavigateUri = new Uri("https://www.google.com"),
                         };
-                        hyperlink.Background = Brushes.SeaGreen;
-                        hyperlink.Foreground = Brushes.White;
+                        hyperlink.Background = new SolidColorBrush(Color.FromRgb(249, 242, 244));
+                        hyperlink.Foreground = new SolidColorBrush(Color.FromRgb(199, 37, 38));
                         hyperlink.TextDecorations = null;
 
                         hyperlink.RequestNavigate += (_, e) =>
