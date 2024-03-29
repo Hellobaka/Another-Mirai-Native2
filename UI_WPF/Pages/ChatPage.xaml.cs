@@ -81,7 +81,7 @@ namespace Another_Mirai_Native.UI.Pages
                 TextPointer startPosition = SendText.Document.ContentStart;
                 int start = startPosition.GetOffsetToPosition(SendText.CaretPosition);
                 SendText.CaretPosition.InsertTextInRun(text);
-                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length);
+                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length + 1);
                 SendText.Focus();
             });
         }
@@ -584,6 +584,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
+            // ModernWpf.Controls.FlyoutService.SetFlyout(FaceBtn, new SendImageSelector());
         }
 
         private async void LazyLoad()
@@ -695,6 +696,10 @@ namespace Another_Mirai_Native.UI.Pages
 
             if (FormLoaded)
             {
+                if (SelectedItem == null && ChatList.Count > 0)
+                {
+                    ChatListDisplay.SelectedItem = ChatList.First();
+                }
                 return;
             }
             FormLoaded = true;
@@ -912,7 +917,6 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 ChatList = ChatList.GroupBy(x => x.Id).Select(x => x.First()).OrderByDescending(x => x.Time).ToList();
                 OnPropertyChanged(nameof(ChatList));
-
                 EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             });
         }
@@ -1026,6 +1030,12 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             });
+        }
+
+        private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
+        {
+            AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
+            FaceImageFlyout.Hide();
         }
     }
 }
