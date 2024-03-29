@@ -37,7 +37,6 @@ namespace Another_Mirai_Native.UI.Pages
             DataContext = this;
             Instance = this;
             Dispatcher.BeginInvoke(() => Page_Loaded(null, null));
-            // TODO: 图片收藏功能
             // TODO: 消息引用显示
             // TODO: 实现功能按钮
         }
