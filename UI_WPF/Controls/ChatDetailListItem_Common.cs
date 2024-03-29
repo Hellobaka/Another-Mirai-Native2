@@ -218,8 +218,10 @@ namespace Another_Mirai_Native.UI.Controls
                 return ImageContextMenu;
             }
             ImageContextMenu = new ContextMenu();
-            ImageContextMenu.Items.Add(new MenuItem { Header = "收藏" });
-            ImageContextMenu.Items.Add(new MenuItem { Header = "另存为" });
+            ImageContextMenu.Items.Add(new MenuItem { Header = "收藏", Icon = new FontIcon { Glyph = "\uEB51" } });
+            ImageContextMenu.Items.Add(new MenuItem { Header = "另存为", Icon = new FontIcon { Glyph = "\uE792" } });
+            ImageContextMenu.Items.Add(new Separator());
+            ImageContextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
 
             (ImageContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
@@ -255,6 +257,18 @@ namespace Another_Mirai_Native.UI.Controls
                         return;
                     }
                     File.Copy(path, saveFileDialog.FileName, true);
+                }
+            };
+            (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
+            {
+                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (target.DataContext is ChatDetailListItem_Right right)
+                {
+                    right.ContextMenu_Repeat(sender, e);
+                }
+                else if (target.DataContext is ChatDetailListItem_Left left)
+                {
+                    left.ContextMenu_Repeat(sender, e);
                 }
             };
 
