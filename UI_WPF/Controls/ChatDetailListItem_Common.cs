@@ -5,14 +5,11 @@ using Microsoft.Win32;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -233,7 +230,7 @@ namespace Another_Mirai_Native.UI.Controls
                     Directory.CreateDirectory(collectImagePath);
                     if (File.Exists(path))
                     {
-                        File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}.{Path.GetExtension(path)}"));
+                        File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(path)}"));
                     }
                 }
             };
