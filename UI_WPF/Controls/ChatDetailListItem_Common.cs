@@ -445,7 +445,7 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         /// <summary>
-        /// 向富文本框添加文本, 同步解析为超链接
+        /// 向富文本框添加文本, 同步解析URL为超链接
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="item"></param>
@@ -465,6 +465,7 @@ namespace Another_Mirai_Native.UI.Controls
                     };
                     hyperlink.RequestNavigate += (sender, args) =>
                     {
+                        args.Handled = true;
                         var startInfo = new ProcessStartInfo
                         {
                             FileName = capture,
