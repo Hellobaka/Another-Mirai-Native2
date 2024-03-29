@@ -88,6 +88,11 @@
                                 FontFamily="{DynamicResource SymbolThemeFontFamily}"
                                 FontSize="16"
                                 Glyph="&#xE76E;" />
+                            <ui:FlyoutService.Flyout>
+                                <ui:Flyout x:Name="FaceImageFlyout" Placement="TopEdgeAlignedLeft">
+                                    <controls:FaceImageSelector x:Name="FaceImageSelector" ImageSelected="FaceImageSelector_ImageSelected" />
+                                </ui:Flyout>
+                            </ui:FlyoutService.Flyout>
                         </Button>
                         <Button
                             x:Name="AtBtn"

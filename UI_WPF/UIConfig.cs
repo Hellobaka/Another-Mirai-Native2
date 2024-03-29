@@ -38,6 +38,8 @@ namespace Another_Mirai_Native.UI
 
         public int MessageContainerMaxCount { get; set; } = 15;
 
+        public List<int> UsedFaceId { get; set; } = new();
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -52,6 +54,7 @@ namespace Another_Mirai_Native.UI
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
             ChatEnabled = GetConfig("ChatEnabled", false);
             SoftwareRender = GetConfig("SoftwareRender", false);
+            UsedFaceId = GetConfig("UsedFaceId", new List<int>());
         }
     }
 }
