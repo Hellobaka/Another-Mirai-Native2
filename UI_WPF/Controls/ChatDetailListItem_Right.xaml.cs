@@ -113,6 +113,27 @@ namespace Another_Mirai_Native.UI.Controls
                         };
                         CurrentParagraph.Inlines.Add(hyperlink);
                     }
+                    else if (cqcode.Function == Model.Enums.CQCodeType.Face
+                        && int.TryParse(cqcode.Items["id"], out int faceId))
+                    {
+                        Image? faceElement = ChatDetailListItem_Common.BuildFaceElement(faceId);
+                        if (faceElement != null)
+                        {
+                            CurrentParagraph.Inlines.Add(faceElement);
+                            minWidth += faceElement.Width;
+                        }
+                        else
+                        {
+                            Expander expander = new()
+                            {
+                                Header = "CQ 码",
+                                Margin = new Thickness(10),
+                                Content = ChatDetailListItem_Common.BuildTextElement(item)
+                            };
+                            CurrentParagraph.Inlines.Add(new InlineUIContainer(expander));
+                            minWidth = Math.Max(minWidth, expander.Width);
+                        }
+                    }
                     else
                     {
                         Expander expander = new()
@@ -135,6 +156,10 @@ namespace Another_Mirai_Native.UI.Controls
             ChangeContainerWidth(minWidth);
             TimeDisplay.ToolTip = Time.ToString("G");
             NameDisplay.ToolTip = $"{DisplayName} [{Id}]";
+
+            // 文本垂直居中
+            var text = new TextRange(DetailContainer.Document.ContentStart, DetailContainer.Document.ContentEnd);
+            text.ApplyPropertyValue(Inline.BaselineAlignmentProperty, BaselineAlignment.Center);
         }
 
         private void ChangeContainerWidth(double minWidth)

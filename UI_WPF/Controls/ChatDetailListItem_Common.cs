@@ -21,6 +21,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Controls
@@ -154,7 +155,7 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[2] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;                
+                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_At(sender, e);
@@ -271,7 +272,7 @@ namespace Another_Mirai_Native.UI.Controls
                 progressRing.Visibility = Visibility.Collapsed;
                 LoadImage(url);
             };
-            
+
             void LoadImage(string url)
             {
                 Task.Run(async () =>
@@ -340,6 +341,32 @@ namespace Another_Mirai_Native.UI.Controls
             return grid;
         }
 
+        /// <summary>
+        /// 构建QQ表情元素
+        /// </summary>
+        /// <param name="id">表情Id</param>
+        /// <returns></returns>
+        public static Image? BuildFaceElement(int id)
+        {
+            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.gif";
+            if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
+            {
+                return null;
+            }
+            else
+            {
+                Image image = new()
+                {
+                    Stretch = Stretch.Uniform,
+                    Width = 30,
+                    Height = 30,
+                };
+                AnimationBehavior.SetSourceStream(image, resource.Stream);
+                AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                return image;
+            }
+        }
+
         public static TextBox BuildTextElement(string text)
         {
             var textbox = new TextBox
@@ -355,7 +382,7 @@ namespace Another_Mirai_Native.UI.Controls
             SetElementNoSelectEffect(textbox);
             return textbox;
         }
-       
+
         /// <summary>
         /// 文本框删除点击时发光的外边框
         /// </summary>
@@ -517,6 +544,30 @@ namespace Another_Mirai_Native.UI.Controls
             }
 
             return Task.FromResult<string?>(null);
+        }
+
+        /// <summary>
+        /// 检查指定的资源是否存在。
+        /// </summary>
+        /// <param name="resourcePath">资源的路径</param>
+        /// <returns>如果资源存在返回 true，否则返回 false。</returns>
+        private static bool CheckResourceExists(string uri, out StreamResourceInfo streamInfo)
+        {
+            streamInfo = null;
+            try
+            {
+                Uri resourceUri = new(uri, UriKind.Absolute);
+                // 尝试获取资源流
+                streamInfo = Application.GetResourceStream(resourceUri);
+
+                // 如果能获取到资源流，说明资源存在
+                return streamInfo != null;
+            }
+            catch (Exception)
+            {
+                // 如果在尝试获取资源流的过程中发生了异常，说明资源不存在
+                return false;
+            }
         }
     }
 }
