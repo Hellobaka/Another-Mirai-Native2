@@ -135,7 +135,7 @@ namespace Another_Mirai_Native.UI.Windows
                 {
                     return;
                 }
-                File.Copy(Image.OriginalString, saveFileDialog.FileName);
+                File.Copy(Image.OriginalString, saveFileDialog.FileName, true);
             };
         }
 

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Controls
 {
@@ -23,6 +26,8 @@ namespace Another_Mirai_Native.UI.Controls
         public event EventHandler ImageSelected;
 
         public string SelectedImageCQCode { get; set; }
+
+        private string CollectedImagePath { get; } = Path.Combine("data", "image", "collected");
 
         private void MainContainer_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
         {
@@ -49,6 +54,35 @@ namespace Another_Mirai_Native.UI.Controls
                 if (element != null)
                 {
                     FaceContainer_Common.Children.Add(BuildFaceElement(element, item));
+                }
+            }
+
+            ImageConatainer.Children.Clear();
+            foreach (var item in Directory.GetFiles(CollectedImagePath))
+            {
+                if (Uri.TryCreate(Path.GetFullPath(item), UriKind.Absolute, out Uri uri))
+                {
+                    Image image = new()
+                    {
+                        Width = 80,
+                        Height = 80,
+                        Stretch = Stretch.UniformToFill,
+                        Margin = new Thickness(5),
+                        Tag = Path.GetFileName(item)
+                    };
+                    AnimationBehavior.SetSourceUri(image, uri);
+                    AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                    Button button = new()
+                    {
+                        Content = image,
+                        Background = Brushes.Transparent
+                    };
+                    button.Click += (_, _) =>
+                    {
+                        SelectedImageCQCode = $"[CQ:image,file=collected\\{image.Tag}]";
+                        ImageSelected?.Invoke(button, new EventArgs());
+                    };
+                    ImageConatainer.Children.Add(button);
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Windows;
+using Microsoft.Win32;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Concurrent;
@@ -47,6 +48,8 @@ namespace Another_Mirai_Native.UI.Controls
         /// 个人头像菜单
         /// </summary>
         private static ContextMenu AvatarContextMenu { get; set; } = BuildAvatarContextMenu();
+
+        private static ContextMenu ImageContextMenu { get; set; } = BuildImageContextMenu();
 
         /// <summary>
         /// 下载并发限制
@@ -211,6 +214,56 @@ namespace Another_Mirai_Native.UI.Controls
             return GroupContextMenu;
         }
 
+        private static ContextMenu BuildImageContextMenu()
+        {
+            if (ImageContextMenu != null)
+            {
+                return ImageContextMenu;
+            }
+            ImageContextMenu = new ContextMenu();
+            ImageContextMenu.Items.Add(new MenuItem { Header = "收藏" });
+            ImageContextMenu.Items.Add(new MenuItem { Header = "另存为" });
+
+            (ImageContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
+            {
+                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
+                {
+                    string path = image.Tag?.ToString();
+                    string collectImagePath = Path.Combine("data", "image", "collected");
+                    Directory.CreateDirectory(collectImagePath);
+                    if (File.Exists(path))
+                    {
+                        File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}.{Path.GetExtension(path)}"));
+                    }
+                }
+            };
+            (ImageContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
+            {
+                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
+                {
+                    string path = image.Tag?.ToString();
+                    if (File.Exists(path) is false)
+                    {
+                        return;
+                    }
+                    SaveFileDialog saveFileDialog = new()
+                    {
+                        Title = "图片另存为",
+                        AddExtension = true,
+                        FileName = Path.GetFileName(path),
+                        Filter = "JPG 图片|*.jpg|JPEG 图片|*.jpeg|PNG 图片|*.png|BMP 图片|*.bmp|Webp 图片|*.webp|所有文件|*.*",
+                    };
+                    if (saveFileDialog.ShowDialog() is false)
+                    {
+                        return;
+                    }
+                    File.Copy(path, saveFileDialog.FileName, true);
+                }
+            };
+
+            return ImageContextMenu;
+        }
+
         public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
         {
             Grid grid = new()
@@ -286,6 +339,8 @@ namespace Another_Mirai_Native.UI.Controls
                             Image image = new()
                             {
                                 Stretch = Stretch.Uniform,
+                                Tag = imagePath,
+                                ContextMenu = BuildImageContextMenu()
                             };
                             // 图片双击事件
                             viewBox.MouseLeftButtonDown += (_, e) =>
