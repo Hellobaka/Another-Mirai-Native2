@@ -66,7 +66,6 @@ namespace Another_Mirai_Native.UI
             Height = Math.Max(MinHeight, UIConfig.Instance.Height);
             // 提前实例化重要页面
             PageCache.Add("LogPage", new LogPage());
-            PageCache.Add("ChatPage", new ChatPage());
         }
 
         public static MainWindow Instance { get; set; }
@@ -229,6 +228,8 @@ namespace Another_Mirai_Native.UI
             }
             else
             {
+                // 登录成功后才有有效的QQ号，此时获取到的历史记录才有效
+                PageCache.Add("ChatPage", new ChatPage());
                 LoadPlugins();
             }
 

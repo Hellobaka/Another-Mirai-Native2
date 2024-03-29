@@ -34,6 +34,8 @@ namespace Another_Mirai_Native.UI.Pages
                 descriptor.AddValueChanged(item, ColumnWidthChanged);
             }
             Instance = this;
+
+            Dispatcher.BeginInvoke(() => LogPage_Loaded(null, null));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
