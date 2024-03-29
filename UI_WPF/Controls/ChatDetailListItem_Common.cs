@@ -346,9 +346,9 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         /// <param name="id">表情Id</param>
         /// <returns></returns>
-        public static Image? BuildFaceElement(int id)
+        public static Image? BuildFaceElement(int id, bool isAnimation)
         {
-            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.gif";
+            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "gif" : "png")}";
             if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
             {
                 return null;

@@ -118,7 +118,7 @@ namespace Another_Mirai_Native.UI.Controls
                     else if (cqcode.Function == Model.Enums.CQCodeType.Face
                         && int.TryParse(cqcode.Items["id"], out int faceId))
                     {
-                        Image? faceElement = ChatDetailListItem_Common.BuildFaceElement(faceId);
+                        Image? faceElement = ChatDetailListItem_Common.BuildFaceElement(faceId, true);
                         if (faceElement != null)
                         {
                             CurrentParagraph.Inlines.Add(faceElement);
