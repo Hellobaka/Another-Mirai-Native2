@@ -422,7 +422,7 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         GroupMemberCache.Add(SelectedItem.Id, new Dictionary<long, GroupMemberInfo>());
                     }
-                    if(GroupMemberCache.TryGetValue(SelectedItem.Id, out var cache))
+                    if (GroupMemberCache.TryGetValue(SelectedItem.Id, out var cache))
                     {
                         if (cache.ContainsKey(item.QQ))
                         {
@@ -581,6 +581,23 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+            FaceBtn.IsEnabled = true;
+            PictureBtn.IsEnabled = true;
+            AudioBtn.IsEnabled = true;
+            CleanMessageBtn.IsEnabled = true;
+            SendText.IsEnabled = true;
+            CleanSendBtn.IsEnabled = true;
+            SendBtn.IsEnabled = true;
+
+            if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup)
+            {
+                AtBtn.IsEnabled = true;
+            }
+            else if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+            {
+                AtBtn.IsEnabled = false;
+            }
+
             lock (detailListLock)
             {
                 List<ChatHistory> history = new();
@@ -1058,6 +1075,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 e.Handled = true;
                 SendBtn_Click(sender, e);
+            }
+            else if (e.Key == Key.D2 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                e.Handled = true;
+                AtBtn_Click(sender, e);
             }
         }
 

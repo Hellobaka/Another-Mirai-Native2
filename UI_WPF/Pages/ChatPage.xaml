@@ -81,7 +81,8 @@
                         <Button
                             x:Name="FaceBtn"
                             Margin="0,0,5,8"
-                            Click="FaceBtn_Click">
+                            Click="FaceBtn_Click"
+                            IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -97,7 +98,8 @@
                         <Button
                             x:Name="AtBtn"
                             Margin="0,0,5,8"
-                            Click="AtBtn_Click">
+                            Click="AtBtn_Click"
+                            IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -108,7 +110,8 @@
                         <Button
                             x:Name="PictureBtn"
                             Margin="0,0,5,8"
-                            Click="PictureBtn_Click">
+                            Click="PictureBtn_Click"
+                            IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -119,7 +122,8 @@
                         <Button
                             x:Name="AudioBtn"
                             Margin="0,0,5,8"
-                            Click="AudioBtn_Click">
+                            Click="AudioBtn_Click"
+                            IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -130,7 +134,8 @@
                         <Button
                             x:Name="CleanMessageBtn"
                             Margin="0,0,5,8"
-                            Click="CleanMessageBtn_Click">
+                            Click="CleanMessageBtn_Click"
+                            IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -144,6 +149,7 @@
                         Grid.Row="1"
                         AcceptsReturn="True"
                         HorizontalScrollBarVisibility="Auto"
+                        IsEnabled="False"
                         PreviewKeyDown="SendText_PreviewKeyDown"
                         VerticalScrollBarVisibility="Auto" />
                     <Grid Grid.Row="2" Grid.ColumnSpan="2">
@@ -157,7 +163,8 @@
                             Margin="0,5,10,10"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Click="CleanSendBtn_Click">
+                            Click="CleanSendBtn_Click"
+                            IsEnabled="False">
                             清空
                         </Button>
                         <Button
@@ -168,6 +175,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Click="SendBtn_Click"
+                            IsEnabled="False"
                             Style="{StaticResource AccentButtonStyle}">
                             发送
                         </Button>
