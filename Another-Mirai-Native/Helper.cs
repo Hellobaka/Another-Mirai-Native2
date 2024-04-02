@@ -220,7 +220,7 @@ namespace Another_Mirai_Native
             {
                 ClientManager.Client.ShowErrorDialog(guid, ex.Message, ex.StackTrace, canIgnore);
             }
-            if (QueryEventDescribed(ServerManager.Server, nameof(ServerManager.Server.OnShowErrorDialogCalled)))
+            if (ServerManager.Server.ShowErrorDialogEventHasSubscribed)
             {
                 ManualResetEvent waitEvent = new(false);
                 RequestWaiter.CommonWaiter.TryAdd(guid, new WaiterInfo
@@ -229,12 +229,6 @@ namespace Another_Mirai_Native
                 });
                 waitEvent.WaitOne();
             }
-        }
-
-        public static bool QueryEventDescribed(object instance, string eventName)
-        {
-            FieldInfo field = instance.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic);
-            return ((Delegate)field.GetValue(instance)).GetInvocationList().Length > 0;
         }
 
         public static string GetPicNameFromUrl(string imageUrl)
