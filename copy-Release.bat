@@ -2,8 +2,8 @@
 setlocal
 
 set ROOT=.
-set TARGET=%ROOT%\UI_WPF\bin\x86\Release\net481\protocols
-set TARGET2=%ROOT%\UI_WPF\bin\x86\Release\net481
+set TARGET=%ROOT%\UI_WPF\bin\x86\Release\net48\protocols
+set TARGET2=%ROOT%\UI_WPF\bin\x86\Release\net48
 
 :: 创建目标文件夹
 if not exist "%TARGET%" (
@@ -12,9 +12,9 @@ if not exist "%TARGET%" (
 
 :: 复制文件
 for %%F in (
-    "%ROOT%\Protocol_OneBot\bin\x86\Release\net481\Protocol_OneBotv11.dll"
-    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Release\net481\MiraiAPIHttp.dll"
-    "%ROOT%\Protocol_NoConnection\bin\x86\Release\net481\Protocol_NoConnection.dll"
+    "%ROOT%\Protocol_OneBot\bin\x86\Release\net48\Protocol_OneBotv11.dll"
+    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Release\net48\MiraiAPIHttp.dll"
+    "%ROOT%\Protocol_NoConnection\bin\x86\Release\net48\Protocol_NoConnection.dll"
 ) do (
     if exist "%%F" (
         copy /Y "%%F" "%TARGET%"

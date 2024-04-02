@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7;net481</TargetFrameworks>
+    <TargetFrameworks>net7;net48</TargetFrameworks>
     <RootNamespace>Another_Mirai_Native.Protocol.MiraiAPIHttp</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
     <AssemblyName>MiraiAPIHttp</AssemblyName>

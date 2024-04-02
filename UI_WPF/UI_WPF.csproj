@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net7.0-windows;net481</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AssemblyName>Another-Mirai-Native-UI</AssemblyName>
