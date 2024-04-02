@@ -44,7 +44,7 @@ namespace Another_Mirai_Native.UI.Controls
             DeboundTimer.Elapsed += DeboundTimer_Elapsed;
             DeboundTimer.Interval = 500;
 
-            GroupMemeberList = OriginList.OrderBy(x => x.Id).ToList();
+            GroupMemeberList = OriginList.OrderBy(x => x.GroupName).ToList();
             OnPropertyChanged(nameof(GroupMemeberList));
         }
 

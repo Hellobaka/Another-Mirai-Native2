@@ -48,7 +48,7 @@ namespace Another_Mirai_Native.UI.Controls
 
         private Paragraph CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
 
-        public void ParseAndBuildDetail()
+        public async void ParseAndBuildDetail()
         {
             Regex regex = new("(\\[CQ:.*?,.*?\\])");
             var cqCodeCaptures = regex.Matches(Message).Cast<Match>().Select(m => m.Value).ToList();
@@ -97,8 +97,8 @@ namespace Another_Mirai_Native.UI.Controls
                         && cqcode.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
                     {
                         string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
-                                ? ChatPage.Instance.GetGroupMemberNick(ParentId, id)
-                                    : ChatPage.Instance.GetFriendNick(id);
+                                ? await ChatPage.Instance.GetGroupMemberNick(ParentId, id)
+                                    : await ChatPage.Instance.GetFriendNick(id);
                         var hyperlink = new Hyperlink(new Run($" @{nick} "))
                         {
                             NavigateUri = new Uri("https://www.google.com"),

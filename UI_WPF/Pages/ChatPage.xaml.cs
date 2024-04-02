@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class ChatPage : Page, INotifyPropertyChanged
     {
-        private object detailListLock = new object();
+        private SemaphoreSlim detailListLock = new(1, 1);
 
         public ChatPage()
         {
@@ -108,7 +109,7 @@ namespace Another_Mirai_Native.UI.Pages
             return msgId;
         }
 
-        public void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
+        public async void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
         {
             if (id == 0 || string.IsNullOrEmpty(message))
             {
@@ -116,43 +117,44 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (avatar == ChatAvatar.AvatarTypes.QQGroup)
             {
-                AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
-                    itemAdded: (guid) =>
-                    {
-                        UpdateSendStatus(guid, true);
-                        if (CallGroupMsgSend(id, message) > 0)
-                        {
-                            UpdateSendStatus(guid, false);
-                        }
-                        else
-                        {
-                            UpdateSendFail(guid);
-                        }
-                    }
-                );
+                await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                     itemAdded: (guid) =>
+                     {
+                         UpdateSendStatus(guid, true);
+                         if (CallGroupMsgSend(id, message) > 0)
+                         {
+                             UpdateSendStatus(guid, false);
+                         }
+                         else
+                         {
+                             UpdateSendFail(guid);
+                         }
+                     }
+                 );
             }
             else
             {
-                AddPrivateChatItem(id, message, DetailItemType.Send,
-                    itemAdded: (guid) =>
-                    {
-                        UpdateSendStatus(guid, true);
-                        if (CallPrivateMsgSend(id, message) > 0)
-                        {
-                            UpdateSendStatus(guid, false);
-                        }
-                        else
-                        {
-                            UpdateSendFail(guid);
-                        }
-                    });
+                await AddPrivateChatItem(id, message, DetailItemType.Send,
+                     itemAdded: (guid) =>
+                     {
+                         UpdateSendStatus(guid, true);
+                         if (CallPrivateMsgSend(id, message) > 0)
+                         {
+                             UpdateSendStatus(guid, false);
+                         }
+                         else
+                         {
+                             UpdateSendFail(guid);
+                         }
+                     });
             }
         }
 
-        public string GetFriendNick(long qq)
+        public async Task<string> GetFriendNick(long qq)
         {
             try
             {
+                await detailListLock.WaitAsync();
                 if (qq == AppConfig.Instance.CurrentQQ)
                 {
                     return AppConfig.Instance.CurrentNickName;
@@ -167,23 +169,26 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 else
                 {
-                    var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
                     string r = qq.ToString();
-                    foreach (var item in ls)
+                    await Task.Run(() =>
                     {
-                        if (FriendInfoCache.ContainsKey(item.QQ))
+                        var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
+                        foreach (var item in ls)
                         {
-                            FriendInfoCache[item.QQ] = item;
+                            if (FriendInfoCache.ContainsKey(item.QQ))
+                            {
+                                FriendInfoCache[item.QQ] = item;
+                            }
+                            else
+                            {
+                                FriendInfoCache.Add(item.QQ, item);
+                            }
+                            if (item.QQ == qq)
+                            {
+                                r = item.Nick;
+                            }
                         }
-                        else
-                        {
-                            FriendInfoCache.Add(item.QQ, item);
-                        }
-                        if (item.QQ == qq)
-                        {
-                            r = item.Nick;
-                        }
-                    }
+                    });
                     return r;
                 }
             }
@@ -191,12 +196,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return qq.ToString();
             }
+            finally
+            {
+                detailListLock.Release();
+            }
         }
 
-        public string GetGroupMemberNick(long group, long qq)
+        public async Task<string> GetGroupMemberNick(long group, long qq)
         {
             try
             {
+                await detailListLock.WaitAsync();
+
                 if (qq == AppConfig.Instance.CurrentQQ)
                 {
                     return AppConfig.Instance.CurrentNickName;
@@ -217,8 +228,11 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                     if (GroupMemberCache[group].ContainsKey(qq) is false)
                     {
-                        var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                        GroupMemberCache[group].Add(qq, memberInfo);
+                        await Task.Run(() =>
+                        {
+                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
+                            GroupMemberCache[group].Add(qq, memberInfo);
+                        });
                     }
                     if (GroupMemberCache[group][qq] == null)
                     {
@@ -231,12 +245,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return qq.ToString();
             }
+            finally
+            {
+                detailListLock.Release();
+            }
         }
 
-        public string GetGroupName(long groupId)
+        public async Task<string> GetGroupName(long groupId)
         {
             try
             {
+                await detailListLock.WaitAsync();
+
                 if (GroupInfoCache.TryGetValue(groupId, out var info))
                 {
                     if (info == null)
@@ -247,17 +267,26 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 else
                 {
-                    GroupInfoCache.Add(groupId, ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false));
-                    if (GroupInfoCache[groupId] == null)
+                    string r = groupId.ToString();
+                    await Task.Run(() =>
                     {
-                        return groupId.ToString();
-                    }
-                    return GroupInfoCache[groupId].Name;
+                        GroupInfoCache.Add(groupId, ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false));
+                        if (GroupInfoCache[groupId] == null)
+                        {
+                            r = groupId.ToString();
+                        }
+                        r = GroupInfoCache[groupId].Name;
+                    });
+                    return r;
                 }
             }
             catch
             {
                 return groupId.ToString();
+            }
+            finally
+            {
+                detailListLock.Release();
             }
         }
 
@@ -276,9 +305,9 @@ namespace Another_Mirai_Native.UI.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string? AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<string?> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
-            string nick = GetGroupMemberNick(group, qq);
+            string nick = await GetGroupMemberNick(group, qq);
             if (plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -293,10 +322,10 @@ namespace Another_Mirai_Native.UI.Pages
                 MsgId = msgId,
             };
             ChatHistoryHelper.InsertHistory(history);
-            history.Message = $"{GetGroupMemberNick(group, qq)}: {msg}";
+            history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
             AddOrUpdateGroupChatList(group, qq, msg);
-            Dispatcher.BeginInvoke(() =>
+            await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == group)
                 {
@@ -309,25 +338,25 @@ namespace Another_Mirai_Native.UI.Pages
             return item?.GUID;
         }
 
-        private void AddOrUpdateGroupChatList(long group, long qq, string msg)
+        private async void AddOrUpdateGroupChatList(long group, long qq, string msg)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
             if (item != null)
             {
-                item.GroupName = GetGroupName(group);
-                item.Detail = $"{GetGroupMemberNick(group, qq)}: {msg}";
+                item.GroupName = await GetGroupName(group);
+                item.Detail = $"{await GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
             }
             else
             {
-                Dispatcher.BeginInvoke(() =>
+                await Dispatcher.BeginInvoke(async () =>
                 {
                     ChatList.Add(new ChatListItemViewModel
                     {
                         AvatarType = ChatAvatar.AvatarTypes.QQGroup,
-                        Detail = $"{GetGroupMemberNick(group, qq)}: {msg}",
-                        GroupName = GetGroupName(group),
+                        Detail = $"{await GetGroupMemberNick(group, qq)}: {msg}",
+                        GroupName = await GetGroupName(group),
                         Id = group,
                         Time = DateTime.Now,
                         UnreadCount = 1
@@ -337,37 +366,37 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
-        private void AddOrUpdatePrivateChatList(long qq, string msg)
+        private async void AddOrUpdatePrivateChatList(long qq, string msg)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
             if (item != null)
             {
-                item.GroupName = GetFriendNick(qq);
+                item.GroupName = await GetFriendNick(qq);
                 item.Detail = msg;
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
             }
             else
             {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    ChatList.Add(new ChatListItemViewModel
-                    {
-                        AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
-                        Detail = msg,
-                        GroupName = GetFriendNick(qq),
-                        Id = qq,
-                        Time = DateTime.Now,
-                        UnreadCount = 1
-                    });
-                });
+                await Dispatcher.BeginInvoke(async () =>
+                 {
+                     ChatList.Add(new ChatListItemViewModel
+                     {
+                         AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
+                         Detail = msg,
+                         GroupName = await GetFriendNick(qq),
+                         Id = qq,
+                         Time = DateTime.Now,
+                         UnreadCount = 1
+                     });
+                 });
             }
             ReorderChatList();
         }
 
-        private string? AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<string?> AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
-            string nick = GetFriendNick(qq);
+            string nick = await GetFriendNick(qq);
             if (plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -382,10 +411,10 @@ namespace Another_Mirai_Native.UI.Pages
                 MsgId = msgId,
             };
             ChatHistoryHelper.InsertHistory(history);
-            history.Message = $"{GetFriendNick(qq)}: {msg}";
+            history.Message = $"{await GetFriendNick(qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
             AddOrUpdatePrivateChatList(qq, msg);
-            Dispatcher.BeginInvoke(() =>
+            await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == qq)
                 {
@@ -574,7 +603,7 @@ namespace Another_Mirai_Native.UI.Pages
             return stringBuilder.ToString();
         }
 
-        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = SelectedItem;
             if (item == null)
@@ -598,26 +627,23 @@ namespace Another_Mirai_Native.UI.Pages
                 AtBtn.IsEnabled = false;
             }
 
-            lock (detailListLock)
+            List<ChatHistory> history = new();
+            if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
             {
-                List<ChatHistory> history = new();
-                if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
-                {
-                    history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, 15, 1);
-                }
-                else
-                {
-                    history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, 15, 1);
-                }
-                DetailList.Clear();
-                history.ForEach(x =>
-                {
-                    DetailList.Add(ParseChatHistoryToViewModel(item.AvatarType, x));
-                });
-                CurrentPageIndex = 1;
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, 15, 1);
             }
+            else
+            {
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, 15, 1);
+            }
+            DetailList.Clear();
+            foreach(var x in history)
+            {
+                DetailList.Add(await ParseChatHistoryToViewModel(item.AvatarType, x));
+            }
+            CurrentPageIndex = 1;
             OnPropertyChanged(nameof(DetailList));
-            Dispatcher.BeginInvoke(() =>
+            await Dispatcher.BeginInvoke(() =>
             {
                 item.UnreadCount = 0;
                 UpdateUnreadCount(item);
@@ -655,16 +681,16 @@ namespace Another_Mirai_Native.UI.Pages
             SendText.Document.Blocks.Clear();
         }
 
-        private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
+        private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
             AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
-            AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
+            await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
         }
 
-        private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
+        private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
             AddOrUpdatePrivateChatList(qq, msg);
-            AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
+            await AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
         }
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
@@ -677,42 +703,39 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            lock (detailListLock)
+            var list = ChatHistoryHelper.GetHistoriesByPage(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group, UIConfig.Instance.MessageContainerMaxCount, CurrentPageIndex + 1);
+            if (list.Count > 0)
             {
-                var list = ChatHistoryHelper.GetHistoriesByPage(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group, UIConfig.Instance.MessageContainerMaxCount, CurrentPageIndex + 1);
-                if (list.Count > 0)
+                CurrentPageIndex++;
+            }
+            else
+            {
+                return;
+            }
+            list.Reverse();
+            FrameworkElement firstItem = (FrameworkElement)MessageContainer.Children[0];
+            foreach (var item in list)
+            {
+                UIElement lastElement;
+                if (item.SenderID == AppConfig.Instance.CurrentQQ)
                 {
-                    CurrentPageIndex++;
+                    lastElement = BuildRightBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
+                }
+                else if (item.Type == ChatHistoryType.Notice)
+                {
+                    lastElement = BuildMiddleBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
                 }
                 else
                 {
-                    return;
+                    lastElement = BuildLeftBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
                 }
-                list.Reverse();
-                FrameworkElement firstItem = (FrameworkElement)MessageContainer.Children[0];
-                foreach (var item in list)
-                {
-                    UIElement lastElement;
-                    if (item.SenderID == AppConfig.Instance.CurrentQQ)
-                    {
-                        lastElement = BuildRightBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                    }
-                    else if (item.Type == ChatHistoryType.Notice)
-                    {
-                        lastElement = BuildMiddleBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                    }
-                    else
-                    {
-                        lastElement = BuildLeftBlock(ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                    }
-                    MessageContainer.Children.Insert(0, lastElement);
-                }
-                MessageContainer.UpdateLayout();
-                firstItem.BringIntoView();
+                MessageContainer.Children.Insert(0, lastElement);
             }
+            MessageContainer.UpdateLayout();
+            firstItem.BringIntoView();
         }
 
-        private void LoadChatHistory()
+        private async void LoadChatHistory()
         {
             var list = ChatHistoryHelper.GetHistoryCategroies();
             ChatList.Clear();
@@ -722,7 +745,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     AvatarType = item.Type == ChatHistoryType.Private ? ChatAvatar.AvatarTypes.QQPrivate : ChatAvatar.AvatarTypes.QQGroup,
                     Detail = item.Message,
-                    GroupName = GetGroupName(item.ParentID),
+                    GroupName = item.Type == ChatHistoryType.Private ? await GetFriendNick(item.ParentID) : await GetGroupName(item.ParentID),
                     Id = item.ParentID,
                     Time = item.Time,
                     UnreadCount = 0
@@ -807,7 +830,7 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
-        private ChatDetailItemViewModel ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
+        private async Task<ChatDetailItemViewModel> ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
         {
             return new ChatDetailItemViewModel
             {
@@ -816,7 +839,7 @@ namespace Another_Mirai_Native.UI.Pages
                 DetailItemType = history.Type == ChatHistoryType.Notice ? DetailItemType.Notice : (history.SenderID == AppConfig.Instance.CurrentQQ ? DetailItemType.Send : DetailItemType.Receive),
                 Id = history.SenderID,
                 MsgId = history.MsgId,
-                Nick = avatarType == ChatAvatar.AvatarTypes.QQPrivate ? GetFriendNick(history.SenderID) : GetGroupMemberNick(history.ParentID, history.SenderID),
+                Nick = avatarType == ChatAvatar.AvatarTypes.QQPrivate ? await GetFriendNick(history.SenderID) : await GetGroupMemberNick(history.ParentID, history.SenderID),
                 Recalled = history.Recalled,
                 Time = history.Time,
             };
@@ -872,38 +895,37 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginManagerProxy_OnFriendAdded(long qq)
         {
-            GetFriendNick(qq);
             // 额外实现
         }
 
-        private void PluginManagerProxy_OnGroupAdded(long group, long qq)
+        private async void PluginManagerProxy_OnGroupAdded(long group, long qq)
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
-                AddGroupChatItem(group, qq, $"{GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice);
+                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice);
             }
         }
 
-        private void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
+        private async void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
-                AddGroupChatItem(group, qq, $"{GetGroupMemberNick(group, qq)} 禁言了 {GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice);
+                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice);
             }
         }
 
-        private void PluginManagerProxy_OnGroupLeft(long group, long qq)
+        private async void PluginManagerProxy_OnGroupLeft(long group, long qq)
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
                 dict.Remove(qq);
-                AddGroupChatItem(group, qq, $"{GetGroupMemberNick(group, qq)}离开了群", DetailItemType.Notice);
+                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)}离开了群", DetailItemType.Notice);
             }
         }
 
-        private void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg)
+        private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg)
         {
-            AddGroupChatItem(group, qq, msg, DetailItemType.Receive, msgId);
+            await AddGroupChatItem(group, qq, msg, DetailItemType.Receive, msgId);
             AddOrUpdateGroupChatList(group, qq, msg);
         }
 
@@ -913,9 +935,9 @@ namespace Another_Mirai_Native.UI.Pages
             MsgRecalled?.Invoke(msgId);
         }
 
-        private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
+        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
         {
-            AddPrivateChatItem(qq, msg, DetailItemType.Receive, msgId);
+            await AddPrivateChatItem(qq, msg, DetailItemType.Receive, msgId);
             AddOrUpdatePrivateChatList(qq, msg);
         }
 
@@ -925,12 +947,12 @@ namespace Another_Mirai_Native.UI.Pages
             MsgRecalled?.Invoke(msgId);
         }
 
-        private void RefreshGroupName()
+        private async void RefreshGroupName()
         {
             GroupName = SelectedItem.AvatarType switch
             {
-                ChatAvatar.AvatarTypes.QQGroup => GetGroupName(SelectedItem.Id),
-                ChatAvatar.AvatarTypes.QQPrivate => GetFriendNick(SelectedItem.Id),
+                ChatAvatar.AvatarTypes.QQGroup => await GetGroupName(SelectedItem.Id),
+                ChatAvatar.AvatarTypes.QQPrivate => await GetFriendNick(SelectedItem.Id),
                 _ => SelectedItem.Id.ToString(),
             };
             OnPropertyChanged(nameof(GroupName));
@@ -949,15 +971,12 @@ namespace Another_Mirai_Native.UI.Pages
                 GC.Collect();
             }
 
-            lock (detailListLock)
+            var ls = DetailList.Skip(Math.Max(0, DetailList.Count - LoadCount)).ToList();
+            foreach (var item in ls)
             {
-                var ls = DetailList.Skip(Math.Max(0, DetailList.Count - LoadCount)).ToList();
-                foreach (var item in ls)
+                if (!CheckMessageContainerHasItem(item.GUID))
                 {
-                    if (!CheckMessageContainerHasItem(item.GUID))
-                    {
-                        AddItemToMessageContainer(item, isRemove: true);
-                    }
+                    AddItemToMessageContainer(item, isRemove: true);
                 }
             }
             ScrollToBottom(MessageScrollViewer);
@@ -1051,6 +1070,14 @@ namespace Another_Mirai_Native.UI.Pages
         private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
         {
             ScrollToBottom(MessageScrollViewer, true);
+            if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
+                 && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
+            {
+                do
+                {
+                    MessageContainer.Children.RemoveAt(0);
+                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
+            }
         }
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
