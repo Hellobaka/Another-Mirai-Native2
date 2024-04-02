@@ -341,7 +341,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 Task.Run(async () =>
                 {
-                    var imagePath = await DownloadImageAsync(url);
+                    var imagePath = await DownloadImageAsync(url, ChatAvatar.AvatarTypes.Fallback);
                     await viewBox.Dispatcher.BeginInvoke(() =>
                     {
                         if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
@@ -496,7 +496,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         /// <param name="imageUrl">欲下载的图片URL</param>
         /// <returns>本地图片路径</returns>
-        public static async Task<string?> DownloadImageAsync(string imageUrl)
+        public static async Task<string?> DownloadImageAsync(string imageUrl, ChatAvatar.AvatarTypes avatarTypes)
         {
             try
             {
@@ -505,6 +505,14 @@ namespace Another_Mirai_Native.UI.Controls
                     return null;
                 }
                 string cacheImagePath = Path.Combine("data", "image", "cached");
+                if (avatarTypes == ChatAvatar.AvatarTypes.QQPrivate)
+                {
+                    cacheImagePath = Path.Combine(cacheImagePath, "private");
+                }
+                else if (avatarTypes == ChatAvatar.AvatarTypes.QQGroup)
+                {
+                    cacheImagePath = Path.Combine(cacheImagePath, "group");
+                }
                 Directory.CreateDirectory(cacheImagePath);
                 if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
                 {
@@ -518,7 +526,7 @@ namespace Another_Mirai_Native.UI.Controls
                     name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
                 }
                 // 尝试从本地读取缓存
-                string? path = await GetFromCacheAsync(cacheImagePath, name);
+                string? path = await GetFromCacheAsync(cacheImagePath, name, avatarTypes);
                 if (!string.IsNullOrEmpty(path))
                 {
                     return path;
@@ -600,7 +608,7 @@ namespace Another_Mirai_Native.UI.Controls
             return new DirectoryInfo(path).FullName;
         }
 
-        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name)
+        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name, ChatAvatar.AvatarTypes avatarTypes)
         {
             // 检测文件是否已经存在
             string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);

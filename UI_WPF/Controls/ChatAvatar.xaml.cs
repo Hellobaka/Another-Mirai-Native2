@@ -125,7 +125,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 await Dispatcher.BeginInvoke(async () =>
                 {
-                    var imgPath = await ChatDetailListItem_Common.DownloadImageAsync(url);
+                    var imgPath = await ChatDetailListItem_Common.DownloadImageAsync(url, AvatarType);
                     if (imgPath != null)
                     {
                         Container.Background = new ImageBrush(new BitmapImage(new Uri(imgPath)))

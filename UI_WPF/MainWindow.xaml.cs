@@ -229,7 +229,6 @@ namespace Another_Mirai_Native.UI
             else
             {
                 // 登录成功后才有有效的QQ号，此时获取到的历史记录才有效
-                PageCache.Add("ChatPage", new ChatPage());
                 LoadPlugins();
             }
 
