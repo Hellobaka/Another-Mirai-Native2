@@ -68,6 +68,8 @@ namespace Another_Mirai_Native.Config
 
         public List<string> AutoEnablePlugin { get; set; } = new();
 
+        public bool ShowTaskBar { get; set; } = true;
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -90,6 +92,7 @@ namespace Another_Mirai_Native.Config
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
             ServerType = (ServerType)GetConfig("ServerType", 0);
+            ShowTaskBar = GetConfig("ShowTaskBar", true);
         }
     }
 }

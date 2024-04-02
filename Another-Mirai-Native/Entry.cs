@@ -89,7 +89,10 @@ namespace Another_Mirai_Native
                             }
                         }
                     }
-                    BuildTaskBar();
+                    if (AppConfig.Instance.ShowTaskBar)
+                    {
+                        BuildTaskBar();
+                    }
                     PluginManagerProxy.Instance.OnPluginLoaded();
                 }
             }

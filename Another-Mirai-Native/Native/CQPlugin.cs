@@ -116,7 +116,12 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
                 return -1;
             }
-            UIForm?.BeginInvoke(() =>
+            if (UIForm == null)
+            {
+                LogHelper.Error("调用Menu事件", $"UI线程未创建，无法调用Menu事件");
+                return -1;
+            }
+            UIForm.BeginInvoke(() =>
             {
                 menuMethod.DynamicInvoke(null);
             });
@@ -125,7 +130,6 @@ namespace Another_Mirai_Native.Native
 
         public bool Init(string json)
         {
-            BuildMenuThread();
             AppInfo = JsonConvert.DeserializeObject<AppInfo>(json);
             if (AppInfo == null)
             {
@@ -210,6 +214,11 @@ namespace Another_Mirai_Native.Native
             AppInfo.AppId = GetAppId().Value;
             Directory.CreateDirectory(System.IO.Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
             Initialize(AppInfo.AuthCode);
+
+            if (AppInfo.menu != null && AppInfo.menu.Length > 0)
+            {
+                BuildMenuThread();
+            }
             return true;
         }
 
