@@ -330,7 +330,7 @@ namespace Another_Mirai_Native.UI.Pages
                 if (SelectedItem?.Id == group)
                 {
                     AddItemToMessageContainer(item, true);
-                    ScrollToBottom(MessageScrollViewer, true);
+                    ScrollToBottom(MessageScrollViewer, qq == AppConfig.Instance.CurrentQQ);
                 }
             });
             itemAdded?.Invoke(item?.GUID);
@@ -419,7 +419,7 @@ namespace Another_Mirai_Native.UI.Pages
                 if (SelectedItem?.Id == qq)
                 {
                     AddItemToMessageContainer(item, true);
-                    ScrollToBottom(MessageScrollViewer, true);
+                    ScrollToBottom(MessageScrollViewer, sender == AppConfig.Instance.CurrentQQ);
                 }
             });
             itemAdded?.Invoke(item?.GUID);
