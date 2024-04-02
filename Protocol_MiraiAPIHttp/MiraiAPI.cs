@@ -244,6 +244,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
             IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg).ToArray();
+            if (msgChains.Length <= 0)
+            {
+                return -1;
+            }
             object request;
             if (msgId > 0)
             {
@@ -276,6 +280,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public int SendPrivateMessage(long qqId, string msg)
         {
             IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg).ToArray();
+            if (msgChains.Length <= 0)
+            {
+                return -1;
+            }
             object request = new
             {
                 sessionKey = SessionKey_Message,

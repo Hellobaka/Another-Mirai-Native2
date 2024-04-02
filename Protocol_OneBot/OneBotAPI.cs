@@ -278,6 +278,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 msg = $"[CQ:reply,id={msgId}]" + msg;
             }
             msg = RepackCQCode(msg);
+            if (string.IsNullOrEmpty(msg))
+            {
+                return -1;
+            }
             var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
             {
                 {"group_id", groupId },
@@ -299,6 +303,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
         public int SendPrivateMessage(long qqId, string msg)
         {
             msg = RepackCQCode(msg);
+            if (string.IsNullOrEmpty(msg))
+            {
+                return -1;
+            }
             var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
             {
                 {"user_id", qqId },
