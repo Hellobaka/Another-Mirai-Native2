@@ -638,7 +638,7 @@ namespace Another_Mirai_Native.UI.Pages
                 history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, 15, 1);
             }
             DetailList.Clear();
-            foreach(var x in history)
+            foreach (var x in history)
             {
                 DetailList.Add(await ParseChatHistoryToViewModel(item.AvatarType, x));
             }
@@ -1045,6 +1045,10 @@ namespace Another_Mirai_Native.UI.Pages
                     Height = image.Height,
                     Tag = $"[CQ:image,file=cached\\{md5}.png]"
                 };
+                if (SendText.Document.Blocks.Count == 0)
+                {
+                    SendText.Document.Blocks.Add(new Paragraph());
+                }
                 (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
                 e.Handled = true;
                 e.CancelCommand();
