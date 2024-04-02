@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="50"
-    Height="50"
+    Width="30"
+    Height="30"
     d:DataContext="{d:DesignInstance Type=local:ChatAvatar}"
     mc:Ignorable="d">
     <Border
