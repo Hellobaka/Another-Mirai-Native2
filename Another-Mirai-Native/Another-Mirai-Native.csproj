@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net481</TargetFrameworks>
 	<UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -34,7 +34,7 @@
 	<Protobuf Include="RPC\gRPC\protos\CoreFunction.proto" GrpcServices="Both" />
 
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net481' ">
     <PackageReference Include="SqlSugar" Version="5.1.4.141" />
   </ItemGroup>
 
