@@ -156,6 +156,10 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 if (FriendInfoCache.TryGetValue(qq, out var info))
                 {
+                    if (info == null)
+                    {
+                        return qq.ToString();
+                    }
                     return info.Nick;
                 }
                 else
@@ -196,6 +200,10 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
                 {
+                    if (info == null)
+                    {
+                        return qq.ToString();
+                    }
                     return info.Nick;
                 }
                 else
@@ -208,6 +216,10 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
                         GroupMemberCache[group].Add(qq, memberInfo);
+                    }
+                    if (GroupMemberCache[group][qq] == null)
+                    {
+                        return qq.ToString();
                     }
                     return GroupMemberCache[group][qq].Nick;
                 }
@@ -224,11 +236,19 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 if (GroupInfoCache.TryGetValue(groupId, out var info))
                 {
+                    if (info == null)
+                    {
+                        return groupId.ToString();
+                    }
                     return info.Name;
                 }
                 else
                 {
                     GroupInfoCache.Add(groupId, ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false));
+                    if (GroupInfoCache[groupId] == null)
+                    {
+                        return groupId.ToString();
+                    }
                     return GroupInfoCache[groupId].Name;
                 }
             }

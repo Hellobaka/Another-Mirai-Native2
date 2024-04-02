@@ -100,7 +100,7 @@ namespace Another_Mirai_Native.UI.Controls
                         string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
                                 ? ChatPage.Instance.GetGroupMemberNick(ParentId, id)
                                     : ChatPage.Instance.GetFriendNick(id);
-                        var hyperlink = new Hyperlink(new Run($" @{nick} "))
+                        var hyperlink = new Hyperlink(new Run($"@{nick} "))
                         {
                             NavigateUri = new Uri("https://www.google.com"),
                         };

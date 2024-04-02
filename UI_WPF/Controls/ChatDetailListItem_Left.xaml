@@ -61,6 +61,7 @@
                 <RichTextBox
                     x:Name="DetailContainer"
                     Padding="10"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     Background="Transparent"
