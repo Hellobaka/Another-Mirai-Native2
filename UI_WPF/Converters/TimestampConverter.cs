@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Another_Mirai_Native.UI.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -21,6 +22,23 @@ namespace Another_Mirai_Native.UI.Converters
         }
     }
 
+    internal class AtTargetNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ChatListItemViewModel item)
+            {
+                return $"{item.GroupName} [{item.Id}]";
+            }
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     internal class DisplayTimeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -30,7 +48,7 @@ namespace Another_Mirai_Native.UI.Converters
             {
                 return time.ToString("T");
             }
-            else if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day != time.Day 
+            else if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day != time.Day
                 || (DateTime.Now - time).Days == 1)
             {
                 return "昨天";
@@ -46,7 +64,7 @@ namespace Another_Mirai_Native.UI.Converters
                 {
                     if (date.DayOfWeek == DayOfWeek.Monday)
                     {
-                        flag = true; 
+                        flag = true;
                     }
                 }
                 return flag ? time.ToString("D") : time.ToString("dddd");

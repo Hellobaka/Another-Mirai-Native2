@@ -86,7 +86,7 @@ namespace Another_Mirai_Native.UI.Controls
             FallbackBrush = new SolidColorBrush(Colors[new Random(Id.GetHashCode()).Next(Colors.Length)]);
             Container.Background = FallbackBrush;
             FallbackDisplay.FontSize = Width * 0.35;
-            FallbackDisplay.Text = FallbackName.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName;
+            FallbackDisplay.Text = FallbackName?.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName ?? Id.ToString().Substring(0, 2);
         }
 
         private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

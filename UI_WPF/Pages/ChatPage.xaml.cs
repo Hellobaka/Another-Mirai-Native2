@@ -38,7 +38,6 @@ namespace Another_Mirai_Native.UI.Pages
             Instance = this;
             Dispatcher.BeginInvoke(() => Page_Loaded(null, null));
             // TODO: 消息引用显示
-            // TODO: 实现功能按钮
         }
 
         public static event Action<int> MsgRecalled;
@@ -72,6 +71,10 @@ namespace Another_Mirai_Native.UI.Pages
         private int LoadCount { get; set; } = 15;
 
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
+
+        private AtTargetSelector AtTargetSelector { get; set; }
+
+        private ModernWpf.Controls.Flyout AtFlyout { get; set; }
 
         public void AddTextToSendBox(string text)
         {
@@ -396,6 +399,52 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void AtBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            List<ChatListItemViewModel> list = new();
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(SelectedItem.Id);
+            if (rawList != null)
+            {
+                foreach (var item in rawList)
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+                    list.Add(new ChatListItemViewModel
+                    {
+                        Id = item.QQ,
+                        GroupName = item.Card ?? ""
+                    });
+                    if (GroupMemberCache.ContainsKey(SelectedItem.Id) is false)
+                    {
+                        GroupMemberCache.Add(SelectedItem.Id, new Dictionary<long, GroupMemberInfo>());
+                    }
+                    if(GroupMemberCache.TryGetValue(SelectedItem.Id, out var cache))
+                    {
+                        if (cache.ContainsKey(item.QQ))
+                        {
+                            cache[item.QQ] = item;
+                        }
+                        else
+                        {
+                            cache.Add(item.QQ, item);
+                        }
+                    }
+                }
+            }
+
+            AtTargetSelector = new(list);
+            AtTargetSelector.ItemSelected -= AtTargetSelector_ItemSelected;
+            AtTargetSelector.ItemSelected += AtTargetSelector_ItemSelected;
+            AtFlyout = new ModernWpf.Controls.Flyout
+            {
+                Content = AtTargetSelector,
+                Placement = ModernWpf.Controls.Primitives.FlyoutPlacementMode.TopEdgeAlignedLeft
+            };
+            AtFlyout.ShowAt(AtBtn);
         }
 
         private void AudioBtn_Click(object sender, RoutedEventArgs e)
@@ -603,7 +652,6 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
-            // ModernWpf.Controls.FlyoutService.SetFlyout(FaceBtn, new SendImageSelector());
         }
 
         private async void LazyLoad()
@@ -964,8 +1012,8 @@ namespace Another_Mirai_Native.UI.Pages
                 e.Handled = true;
                 e.CancelCommand();
             }
-            else if (e.DataObject.GetDataPresent(DataFormats.Text)
-                && e.DataObject.GetData(DataFormats.Text) is string text
+            else if (e.DataObject.GetDataPresent(DataFormats.UnicodeText)
+                && e.DataObject.GetData(DataFormats.UnicodeText) is string text
                 && string.IsNullOrEmpty(text) is false)
             {
                 AddTextToSendBox(text);
@@ -1055,6 +1103,12 @@ namespace Another_Mirai_Native.UI.Pages
         {
             AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
             FaceImageFlyout.Hide();
+        }
+
+        private void AtTargetSelector_ItemSelected(object sender, EventArgs e)
+        {
+            AddTextToSendBox(AtTargetSelector.SelectedCQCode);
+            AtFlyout.Hide();
         }
     }
 }
