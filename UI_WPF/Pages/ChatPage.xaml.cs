@@ -134,7 +134,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
-                await AddPrivateChatItem(id, message, DetailItemType.Send,
+                await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
@@ -366,7 +366,7 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
-        private async void AddOrUpdatePrivateChatList(long qq, string msg)
+        private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
             if (item != null)
@@ -385,7 +385,7 @@ namespace Another_Mirai_Native.UI.Pages
                          AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
                          Detail = msg,
                          GroupName = await GetFriendNick(qq),
-                         Id = qq,
+                         Id = sender,
                          Time = DateTime.Now,
                          UnreadCount = 1
                      });
@@ -394,26 +394,26 @@ namespace Another_Mirai_Native.UI.Pages
             ReorderChatList();
         }
 
-        private async Task<string?> AddPrivateChatItem(long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<string?> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
-            string nick = await GetFriendNick(qq);
+            string nick = await GetFriendNick(sender);
             if (plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
-            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
+            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, sender, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
             var history = new ChatHistory
             {
                 Message = msg,
                 ParentID = qq,
-                SenderID = qq,
+                SenderID = sender,
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
                 MsgId = msgId,
             };
             ChatHistoryHelper.InsertHistory(history);
-            history.Message = $"{await GetFriendNick(qq)}: {msg}";
+            history.Message = $"{await GetFriendNick(sender)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
-            AddOrUpdatePrivateChatList(qq, msg);
+            AddOrUpdatePrivateChatList(qq, sender, msg);
             await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == qq)
@@ -503,7 +503,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 string fileName = Path.GetFileName(filePath);
                 File.Copy(filePath, Path.Combine(audioPath, fileName), true);
-                filePath = fileName;
+                filePath = @$"cached\\{fileName}";
             }
             AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
         }
@@ -690,8 +690,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
-            AddOrUpdatePrivateChatList(qq, msg);
-            await AddPrivateChatItem(qq, msg, DetailItemType.Send, msgId, plugin: plugin);
+            AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
+            await AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
         }
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
@@ -873,7 +873,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     string fileName = Path.GetFileName(filePath);
                     File.Copy(filePath, Path.Combine(picPath, fileName), true);
-                    filePath = fileName;
+                    filePath = @$"cached\\{fileName}";
                 }
                 AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
             }
@@ -938,8 +938,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
         {
-            await AddPrivateChatItem(qq, msg, DetailItemType.Receive, msgId);
-            AddOrUpdatePrivateChatList(qq, msg);
+            await AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, msgId);
+            AddOrUpdatePrivateChatList(qq, qq, msg);
         }
 
         private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
