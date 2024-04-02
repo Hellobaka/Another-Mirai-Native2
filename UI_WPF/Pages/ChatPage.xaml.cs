@@ -290,13 +290,13 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        public void UpdateUnreadCount(ChatListItemViewModel model)
+        public async void UpdateUnreadCount(ChatListItemViewModel model)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
             if (item != null)
             {
                 item.UnreadCount = model.UnreadCount;
-                ReorderChatList();
+                await ReorderChatList();
             }
         }
 
@@ -363,7 +363,7 @@ namespace Another_Mirai_Native.UI.Pages
                     });
                 });
             }
-            ReorderChatList();
+            await ReorderChatList();
         }
 
         private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
@@ -391,7 +391,7 @@ namespace Another_Mirai_Native.UI.Pages
                      });
                  });
             }
-            ReorderChatList();
+            await ReorderChatList();
         }
 
         private async Task<string?> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
@@ -736,7 +736,7 @@ namespace Another_Mirai_Native.UI.Pages
             firstItem.BringIntoView();
         }
 
-        private async void LoadChatHistory()
+        private async Task LoadChatHistory()
         {
             var list = ChatHistoryHelper.GetHistoryCategroies();
             ChatList.Clear();
@@ -791,7 +791,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (UIConfig.Instance.ChatEnabled is false)
             {
@@ -827,8 +827,8 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
 
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
-            LoadChatHistory();
-            ReorderChatList();
+            await LoadChatHistory();
+            await ReorderChatList();
         }
 
         private async Task<ChatDetailItemViewModel> ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
@@ -1011,9 +1011,9 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void ReorderChatList()
+        private async Task ReorderChatList()
         {
-            Dispatcher.BeginInvoke(() =>
+            await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem != null)
                 {
