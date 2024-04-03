@@ -579,7 +579,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     string voiceId = item.Items["file"].Replace(".amr", "");
                     Directory.CreateDirectory("data\\record");
-                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
+
+                    if (item.Items.TryGetValue("url", out string? url) is false
+                        && item.Items.TryGetValue("path", out string? value))
+                    {
+                        url = $"file://{value}";
+                    }
+                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={url ?? ""}");
                 }
             }
         }
