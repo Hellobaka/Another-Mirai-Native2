@@ -121,7 +121,7 @@ namespace Another_Mirai_Native.UI.Pages
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
-                         if (CallGroupMsgSend(id, message) > 0)
+                         if (CallGroupMsgSend(id, message) != 0)
                          {
                              UpdateSendStatus(guid, false);
                          }
@@ -138,7 +138,7 @@ namespace Another_Mirai_Native.UI.Pages
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
-                         if (CallPrivateMsgSend(id, message) > 0)
+                         if (CallPrivateMsgSend(id, message) != 0)
                          {
                              UpdateSendStatus(guid, false);
                          }
