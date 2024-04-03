@@ -18,6 +18,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public static string AuthKey { get; set; } = "";
 
+        public string MessageType { get; set; } = "Array";
+
         public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
 
         public bool ExitFlag { get; private set; }
@@ -148,7 +150,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            if (groupMessage.message_type == "array")
+            if (groupMessage.message_format == "array")
             {
                 groupMessage.ParsedMessage = ParseCQCodeArrayToText(groupMessage.message);
             }
@@ -345,7 +347,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            if (privateMessage.message_type == "array")
+            if (privateMessage.message_format == "array")
             {
                 privateMessage.ParsedMessage = ParseCQCodeArrayToText(privateMessage.message);
             }

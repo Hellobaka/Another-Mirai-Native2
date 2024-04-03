@@ -17,6 +17,8 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public string raw_message { get; set; }
 
+        public string message_format { get; set; }
+
         public int font { get; set; }
 
         public Sender? sender { get; set; }
