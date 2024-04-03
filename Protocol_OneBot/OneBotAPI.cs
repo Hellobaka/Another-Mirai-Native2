@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
@@ -32,11 +33,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string Name { get; set; } = "OneBot v11";
 
-        private List<FriendInfo> FriendInfoList { get; set; }
+        private List<FriendInfo> FriendInfoList { get; set; } = new();
 
-        private List<GroupInfo> GroupInfoList { get; set; }
+        private List<GroupInfo> GroupInfoList { get; set; } = new();
 
-        private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberInfoDict { get; set; }
+        private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberInfoDict { get; set; } = new();
 
         public int CanSendImage()
         {
@@ -177,7 +178,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             });
             if (r != null)
             {
-                new GroupInfo
+                return new GroupInfo
                 {
                     Group = (long)r["group_id"],
                     Name = r["group_name"].ToString(),
@@ -264,6 +265,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             WsURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
+            MessageType = GetConfig("MessageType", "Array");
         }
 
         public int SendDiscussMsg(long discussId, string msg)
@@ -282,13 +284,71 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return -1;
             }
-            var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
+            if (MessageType == "Array")
             {
-                {"group_id", groupId },
-                {"message", msg },
-                {"auto_escape", false },
-            });
-            return r != null ? (int)r["message_id"] : 0;
+                var arrMessage = PackCQCodeMessage(msg);
+                var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
+                {
+                    {"group_id", groupId },
+                    {"message", arrMessage },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int)r["message_id"] : 0;
+            }
+            else
+            {
+                var r = CallOneBotAPI(APIType.send_group_msg, new Dictionary<string, object>
+                {
+                    {"group_id", groupId },
+                    {"message", msg },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int)r["message_id"] : 0;
+            }
+        }
+
+        private object PackCQCodeMessage(string msg)
+        {
+            Regex regex = new("(\\[CQ:.*?,.*?\\])");
+            var cqCodeCaptures = regex.Matches(msg).Cast<Match>().Select(m => m.Value).ToList();
+
+            var ls = CQCode.Parse(msg);
+            var s = regex.Split(msg).ToList();
+            s.RemoveAll(string.IsNullOrEmpty);
+            List<JObject> result = new();
+            foreach (var item in s)
+            {
+                if (cqCodeCaptures.Contains(item))
+                {
+                    var cqcode = CQCode.Parse(item).FirstOrDefault();
+                    if (cqcode == null)
+                    {
+                        continue;
+                    }
+                    JObject json = new()
+                    {
+                        new JProperty("type", cqcode.Function.GetDescription()),
+                        new JProperty("data", new JObject())
+                    };
+                    foreach (var data in cqcode.Items)
+                    {
+                        (json["data"] as JObject).Add(new JProperty(data.Key, data.Value));
+                    }
+                    result.Add(json);
+                }
+                else
+                {
+                    result.Add(new JObject
+                    {
+                        new JProperty("type", "text"),
+                        new JProperty("data", new JObject()
+                        {
+                            new JProperty("text", item),
+                        })
+                    });
+                }
+            }
+            return result;
         }
 
         public int SendLike(long qqId, int count)
@@ -307,13 +367,27 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return -1;
             }
-            var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
+            if (MessageType == "Array")
             {
-                {"user_id", qqId },
-                {"message", msg },
-                {"auto_escape", false },
-            });
-            return r != null ? (int)r["message_id"] : 0;
+                var arrMessage = PackCQCodeMessage(msg);
+                var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
+                {
+                    {"user_id", qqId },
+                    {"message", arrMessage },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int)r["message_id"] : 0;
+            }
+            else
+            {
+                var r = CallOneBotAPI(APIType.send_private_msg, new Dictionary<string, object>
+                {
+                    {"user_id", qqId },
+                    {"message", msg },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int)r["message_id"] : 0;
+            }
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
