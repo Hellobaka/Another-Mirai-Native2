@@ -126,6 +126,9 @@ namespace Another_Mirai_Native.Model.Enums
         /// 匿名消息
         /// </summary>
         [Description("anonymous")]
-        Anonymous
+        Anonymous,
+
+        [Description("reply")]
+        Reply
     }
 }

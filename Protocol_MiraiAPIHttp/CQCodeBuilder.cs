@@ -23,8 +23,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         /// <param name="message">CQ码文本</param>
         /// <returns>转换后的消息链数组</returns>
-        public static List<IMiraiMessageBase> BuildMessageChains(string message)
+        public static List<IMiraiMessageBase> BuildMessageChains(string message, out int quoteId)
         {
+            quoteId = -1;
             List<IMiraiMessageBase> result = new();
             var list = CQCode.Parse(message);// 通过工具函数提取所有的CQ码
             foreach (var item in list)
@@ -38,7 +39,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 IMiraiMessageBase messageBase;
                 if (p[i] == "<!cqCode!>")
                 {
-                    messageBase = ParseCQCode2MiraiMessageBase(list[cqCode_index]);// 将CQ码转换为消息链对象
+                    messageBase = ParseCQCode2MiraiMessageBase(list[cqCode_index], out quoteId);// 将CQ码转换为消息链对象
                     cqCode_index++;
                     if (messageBase == null)
                     {
@@ -70,6 +71,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         break;
 
                     case MiraiMessageType.Quote:
+                        var quote = (MiraiMessageTypeDetail.Quote)item;
+                        Result.Append($"[CQ:reply,id={quote.id}]");
                         break;
 
                     case MiraiMessageType.At:
@@ -259,8 +262,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// 将CQ码转换为消息链对象
         /// </summary>
         /// <param name="cqCode">需要转换的CQ码对象</param>
-        private static IMiraiMessageBase ParseCQCode2MiraiMessageBase(CQCode cqCode)
+        private static IMiraiMessageBase ParseCQCode2MiraiMessageBase(CQCode cqCode, out int quoteId)
         {
+            quoteId = -1;
             switch (cqCode.Function)
             {
                 case CQCodeType.Face:
@@ -358,6 +362,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         "app" => new MiraiMessageTypeDetail.App { content = UnescapeRawMessage(cqCode.Items["content"]) },
                         _ => null,
                     };
+
+                case CQCodeType.Reply:
+                    quoteId = Convert.ToInt32(cqCode.Items["id"]);
+                    return null;
 
                 default:
                     return null;

@@ -243,7 +243,11 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
-            IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg).ToArray();
+            IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg, out int quoteId).ToArray();
+            if (msgId == 0)
+            {
+                msgId = quoteId;
+            }
             if (msgChains.Length <= 0)
             {
                 return -1;
@@ -279,17 +283,31 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public int SendPrivateMessage(long qqId, string msg)
         {
-            IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg).ToArray();
+            IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg, out int quoteId).ToArray();
             if (msgChains.Length <= 0)
             {
                 return -1;
             }
-            object request = new
+            object request;
+            if (quoteId > 0)
             {
-                sessionKey = SessionKey_Message,
-                target = qqId,
-                messageChain = msgChains
-            };
+                request = new
+                {
+                    sessionKey = SessionKey_Message,
+                    target = qqId,
+                    quote = quoteId,
+                    messageChain = msgChains
+                };
+            }
+            else
+            {
+                request = new
+                {
+                    sessionKey = SessionKey_Message,
+                    target = qqId,
+                    messageChain = msgChains
+                };
+            }
             JObject json = CallMiraiAPI(MiraiApiType.sendFriendMessage, request);
             return json == null || ((int)json["code"]) != 0 ? 0 : (int)json["messageId"];
         }
