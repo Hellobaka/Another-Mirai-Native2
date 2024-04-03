@@ -9,6 +9,7 @@ using Another_Mirai_Native.Protocol.OneBot.Notice;
 using Another_Mirai_Native.Protocol.OneBot.Requests;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
@@ -161,6 +162,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             groupMessage.CQCodes = CQCode.Parse(groupMessage.ParsedMessage);
             SaveCQCodeCache(groupMessage.CQCodes);
+            groupMessage.ParsedMessage = RebuildImageAndRecordCQCode(groupMessage.ParsedMessage);
             RequestCache.AddMessageCache(groupMessage.message_id, groupMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
@@ -172,6 +174,16 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
             }
             LogHelper.UpdateLogStatus(logId, updateMsg);
+        }
+
+        private string RebuildImageAndRecordCQCode(string parsedMessage)
+        {
+            Regex regex = new("\\[CQ:image,file=(.*)\\..*url\\=.*\\]");
+            parsedMessage = regex.Replace(parsedMessage, "[CQ:image,file=$1]");
+            regex = new("\\[CQ:record,file=(.*)\\..*url\\=.*\\]");
+            parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
+            regex = new("\\[CQ:record,file=(.*)\\..*path\\=.*\\]");
+            return regex.Replace(parsedMessage, "[CQ:record,file=$1]");
         }
 
         private string UnescapeRawMessage(string msg)
@@ -358,6 +370,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             privateMessage.CQCodes = CQCode.Parse(privateMessage.ParsedMessage);
             SaveCQCodeCache(privateMessage.CQCodes);
+            privateMessage.ParsedMessage = RebuildImageAndRecordCQCode(privateMessage.ParsedMessage);
             RequestCache.AddMessageCache(privateMessage.message_id, privateMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
