@@ -52,7 +52,11 @@ namespace Another_Mirai_Native.DB
         public static void UpdateHistoryRecall(long id, int msgId, ChatHistoryType type, bool recalled)
         {
             using var db = GetInstance(GetDBPath(id, type));
-            var item = db.Queryable<ChatHistory>().Where(x => x.ParentID == id && x.MsgId == msgId).OrderByDescending(x=>x.ID).First();
+            var item = db.Queryable<ChatHistory>().Where(x => x.ParentID == id && x.MsgId == msgId).OrderByDescending(x => x.ID).First();
+            if (item == null)
+            {
+                return;
+            }
             item.Recalled = recalled;
             db.Updateable(item).ExecuteCommand();
         }
