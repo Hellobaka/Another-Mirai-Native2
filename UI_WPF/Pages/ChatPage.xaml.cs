@@ -368,6 +368,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
         {
+            msg = msg.Replace("\r", "").Replace("\n", "");
             var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
             if (item != null)
             {
