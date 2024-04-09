@@ -427,7 +427,8 @@ namespace Another_Mirai_Native.UI.Controls
         /// <returns></returns>
         public static Image? BuildFaceElement(int id, bool isAnimation)
         {
-            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "gif" : "png")}";
+            // TODO: 实现Lottie
+            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "png" : "png")}";
             if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
             {
                 return null;

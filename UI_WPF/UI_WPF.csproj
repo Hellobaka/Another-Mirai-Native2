@@ -17,777 +17,333 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\qq-face\0.gif" />
     <None Remove="Resources\qq-face\0.png" />
-    <None Remove="Resources\qq-face\1.gif" />
     <None Remove="Resources\qq-face\1.png" />
-    <None Remove="Resources\qq-face\10.gif" />
     <None Remove="Resources\qq-face\10.png" />
-    <None Remove="Resources\qq-face\100.gif" />
     <None Remove="Resources\qq-face\100.png" />
-    <None Remove="Resources\qq-face\101.gif" />
     <None Remove="Resources\qq-face\101.png" />
-    <None Remove="Resources\qq-face\102.gif" />
     <None Remove="Resources\qq-face\102.png" />
-    <None Remove="Resources\qq-face\103.gif" />
     <None Remove="Resources\qq-face\103.png" />
-    <None Remove="Resources\qq-face\104.gif" />
     <None Remove="Resources\qq-face\104.png" />
-    <None Remove="Resources\qq-face\105.gif" />
     <None Remove="Resources\qq-face\105.png" />
-    <None Remove="Resources\qq-face\106.gif" />
     <None Remove="Resources\qq-face\106.png" />
-    <None Remove="Resources\qq-face\107.gif" />
     <None Remove="Resources\qq-face\107.png" />
-    <None Remove="Resources\qq-face\108.gif" />
     <None Remove="Resources\qq-face\108.png" />
-    <None Remove="Resources\qq-face\109.gif" />
     <None Remove="Resources\qq-face\109.png" />
-    <None Remove="Resources\qq-face\11.gif" />
     <None Remove="Resources\qq-face\11.png" />
-    <None Remove="Resources\qq-face\110.gif" />
     <None Remove="Resources\qq-face\110.png" />
-    <None Remove="Resources\qq-face\111.gif" />
     <None Remove="Resources\qq-face\111.png" />
-    <None Remove="Resources\qq-face\112.gif" />
     <None Remove="Resources\qq-face\112.png" />
-    <None Remove="Resources\qq-face\113.gif" />
     <None Remove="Resources\qq-face\113.png" />
-    <None Remove="Resources\qq-face\114.gif" />
     <None Remove="Resources\qq-face\114.png" />
-    <None Remove="Resources\qq-face\115.gif" />
     <None Remove="Resources\qq-face\115.png" />
-    <None Remove="Resources\qq-face\116.gif" />
     <None Remove="Resources\qq-face\116.png" />
-    <None Remove="Resources\qq-face\117.gif" />
     <None Remove="Resources\qq-face\117.png" />
-    <None Remove="Resources\qq-face\118.gif" />
     <None Remove="Resources\qq-face\118.png" />
-    <None Remove="Resources\qq-face\119.gif" />
     <None Remove="Resources\qq-face\119.png" />
-    <None Remove="Resources\qq-face\12.gif" />
     <None Remove="Resources\qq-face\12.png" />
-    <None Remove="Resources\qq-face\120.gif" />
     <None Remove="Resources\qq-face\120.png" />
-    <None Remove="Resources\qq-face\121.gif" />
     <None Remove="Resources\qq-face\121.png" />
-    <None Remove="Resources\qq-face\122.gif" />
     <None Remove="Resources\qq-face\122.png" />
-    <None Remove="Resources\qq-face\123.gif" />
     <None Remove="Resources\qq-face\123.png" />
-    <None Remove="Resources\qq-face\124.gif" />
     <None Remove="Resources\qq-face\124.png" />
-    <None Remove="Resources\qq-face\125.gif" />
     <None Remove="Resources\qq-face\125.png" />
-    <None Remove="Resources\qq-face\126.gif" />
     <None Remove="Resources\qq-face\126.png" />
-    <None Remove="Resources\qq-face\127.gif" />
     <None Remove="Resources\qq-face\127.png" />
-    <None Remove="Resources\qq-face\128.gif" />
     <None Remove="Resources\qq-face\128.png" />
-    <None Remove="Resources\qq-face\129.gif" />
     <None Remove="Resources\qq-face\129.png" />
-    <None Remove="Resources\qq-face\13.gif" />
     <None Remove="Resources\qq-face\13.png" />
-    <None Remove="Resources\qq-face\130.gif" />
     <None Remove="Resources\qq-face\130.png" />
-    <None Remove="Resources\qq-face\131.gif" />
     <None Remove="Resources\qq-face\131.png" />
-    <None Remove="Resources\qq-face\132.gif" />
     <None Remove="Resources\qq-face\132.png" />
-    <None Remove="Resources\qq-face\133.gif" />
     <None Remove="Resources\qq-face\133.png" />
-    <None Remove="Resources\qq-face\134.gif" />
     <None Remove="Resources\qq-face\134.png" />
-    <None Remove="Resources\qq-face\136.gif" />
+    <None Remove="Resources\qq-face\135.png" />
     <None Remove="Resources\qq-face\136.png" />
-    <None Remove="Resources\qq-face\137.gif" />
     <None Remove="Resources\qq-face\137.png" />
-    <None Remove="Resources\qq-face\138.gif" />
     <None Remove="Resources\qq-face\138.png" />
-    <None Remove="Resources\qq-face\139.gif" />
     <None Remove="Resources\qq-face\139.png" />
-    <None Remove="Resources\qq-face\14.gif" />
     <None Remove="Resources\qq-face\14.png" />
-    <None Remove="Resources\qq-face\140.gif" />
     <None Remove="Resources\qq-face\140.png" />
-    <None Remove="Resources\qq-face\141.gif" />
     <None Remove="Resources\qq-face\141.png" />
-    <None Remove="Resources\qq-face\142.gif" />
     <None Remove="Resources\qq-face\142.png" />
-    <None Remove="Resources\qq-face\143.gif" />
     <None Remove="Resources\qq-face\143.png" />
-    <None Remove="Resources\qq-face\144.gif" />
     <None Remove="Resources\qq-face\144.png" />
-    <None Remove="Resources\qq-face\145.gif" />
     <None Remove="Resources\qq-face\145.png" />
-    <None Remove="Resources\qq-face\146.gif" />
     <None Remove="Resources\qq-face\146.png" />
-    <None Remove="Resources\qq-face\147.gif" />
     <None Remove="Resources\qq-face\147.png" />
-    <None Remove="Resources\qq-face\148.gif" />
     <None Remove="Resources\qq-face\148.png" />
-    <None Remove="Resources\qq-face\149.gif" />
     <None Remove="Resources\qq-face\149.png" />
-    <None Remove="Resources\qq-face\15.gif" />
     <None Remove="Resources\qq-face\15.png" />
-    <None Remove="Resources\qq-face\150.gif" />
     <None Remove="Resources\qq-face\150.png" />
-    <None Remove="Resources\qq-face\151.gif" />
     <None Remove="Resources\qq-face\151.png" />
-    <None Remove="Resources\qq-face\152.gif" />
     <None Remove="Resources\qq-face\152.png" />
-    <None Remove="Resources\qq-face\153.gif" />
     <None Remove="Resources\qq-face\153.png" />
-    <None Remove="Resources\qq-face\154.gif" />
     <None Remove="Resources\qq-face\154.png" />
-    <None Remove="Resources\qq-face\155.gif" />
     <None Remove="Resources\qq-face\155.png" />
-    <None Remove="Resources\qq-face\156.gif" />
     <None Remove="Resources\qq-face\156.png" />
-    <None Remove="Resources\qq-face\157.gif" />
     <None Remove="Resources\qq-face\157.png" />
-    <None Remove="Resources\qq-face\158.gif" />
     <None Remove="Resources\qq-face\158.png" />
-    <None Remove="Resources\qq-face\159.gif" />
     <None Remove="Resources\qq-face\159.png" />
-    <None Remove="Resources\qq-face\16.gif" />
     <None Remove="Resources\qq-face\16.png" />
-    <None Remove="Resources\qq-face\160.gif" />
     <None Remove="Resources\qq-face\160.png" />
-    <None Remove="Resources\qq-face\161.gif" />
     <None Remove="Resources\qq-face\161.png" />
-    <None Remove="Resources\qq-face\162.gif" />
     <None Remove="Resources\qq-face\162.png" />
-    <None Remove="Resources\qq-face\163.gif" />
     <None Remove="Resources\qq-face\163.png" />
-    <None Remove="Resources\qq-face\164.gif" />
     <None Remove="Resources\qq-face\164.png" />
-    <None Remove="Resources\qq-face\165.gif" />
     <None Remove="Resources\qq-face\165.png" />
-    <None Remove="Resources\qq-face\166.gif" />
     <None Remove="Resources\qq-face\166.png" />
-    <None Remove="Resources\qq-face\167.gif" />
     <None Remove="Resources\qq-face\167.png" />
-    <None Remove="Resources\qq-face\168.gif" />
     <None Remove="Resources\qq-face\168.png" />
-    <None Remove="Resources\qq-face\169.gif" />
     <None Remove="Resources\qq-face\169.png" />
-    <None Remove="Resources\qq-face\170.gif" />
     <None Remove="Resources\qq-face\170.png" />
-    <None Remove="Resources\qq-face\171.gif" />
     <None Remove="Resources\qq-face\171.png" />
-    <None Remove="Resources\qq-face\172.gif" />
     <None Remove="Resources\qq-face\172.png" />
-    <None Remove="Resources\qq-face\173.gif" />
     <None Remove="Resources\qq-face\173.png" />
-    <None Remove="Resources\qq-face\174.gif" />
     <None Remove="Resources\qq-face\174.png" />
-    <None Remove="Resources\qq-face\175.gif" />
     <None Remove="Resources\qq-face\175.png" />
-    <None Remove="Resources\qq-face\176.gif" />
     <None Remove="Resources\qq-face\176.png" />
-    <None Remove="Resources\qq-face\177.gif" />
     <None Remove="Resources\qq-face\177.png" />
-    <None Remove="Resources\qq-face\178.gif" />
     <None Remove="Resources\qq-face\178.png" />
-    <None Remove="Resources\qq-face\179.gif" />
     <None Remove="Resources\qq-face\179.png" />
-    <None Remove="Resources\qq-face\18.gif" />
     <None Remove="Resources\qq-face\18.png" />
-    <None Remove="Resources\qq-face\180.gif" />
     <None Remove="Resources\qq-face\180.png" />
-    <None Remove="Resources\qq-face\181.gif" />
     <None Remove="Resources\qq-face\181.png" />
-    <None Remove="Resources\qq-face\182.gif" />
     <None Remove="Resources\qq-face\182.png" />
-    <None Remove="Resources\qq-face\183.gif" />
     <None Remove="Resources\qq-face\183.png" />
-    <None Remove="Resources\qq-face\184.gif" />
     <None Remove="Resources\qq-face\184.png" />
-    <None Remove="Resources\qq-face\185.gif" />
     <None Remove="Resources\qq-face\185.png" />
-    <None Remove="Resources\qq-face\186.gif" />
     <None Remove="Resources\qq-face\186.png" />
-    <None Remove="Resources\qq-face\187.gif" />
     <None Remove="Resources\qq-face\187.png" />
-    <None Remove="Resources\qq-face\188.gif" />
     <None Remove="Resources\qq-face\188.png" />
-    <None Remove="Resources\qq-face\189.gif" />
     <None Remove="Resources\qq-face\189.png" />
-    <None Remove="Resources\qq-face\19.gif" />
     <None Remove="Resources\qq-face\19.png" />
-    <None Remove="Resources\qq-face\190.gif" />
     <None Remove="Resources\qq-face\190.png" />
-    <None Remove="Resources\qq-face\191.gif" />
     <None Remove="Resources\qq-face\191.png" />
-    <None Remove="Resources\qq-face\192.gif" />
     <None Remove="Resources\qq-face\192.png" />
-    <None Remove="Resources\qq-face\193.gif" />
     <None Remove="Resources\qq-face\193.png" />
-    <None Remove="Resources\qq-face\194.gif" />
     <None Remove="Resources\qq-face\194.png" />
-    <None Remove="Resources\qq-face\197.gif" />
+    <None Remove="Resources\qq-face\195.png" />
+    <None Remove="Resources\qq-face\196.png" />
     <None Remove="Resources\qq-face\197.png" />
-    <None Remove="Resources\qq-face\198.gif" />
     <None Remove="Resources\qq-face\198.png" />
-    <None Remove="Resources\qq-face\199.gif" />
     <None Remove="Resources\qq-face\199.png" />
-    <None Remove="Resources\qq-face\2.gif" />
     <None Remove="Resources\qq-face\2.png" />
-    <None Remove="Resources\qq-face\20.gif" />
     <None Remove="Resources\qq-face\20.png" />
-    <None Remove="Resources\qq-face\200.gif" />
     <None Remove="Resources\qq-face\200.png" />
-    <None Remove="Resources\qq-face\201.gif" />
     <None Remove="Resources\qq-face\201.png" />
-    <None Remove="Resources\qq-face\202.gif" />
     <None Remove="Resources\qq-face\202.png" />
-    <None Remove="Resources\qq-face\203.gif" />
     <None Remove="Resources\qq-face\203.png" />
-    <None Remove="Resources\qq-face\204.gif" />
     <None Remove="Resources\qq-face\204.png" />
-    <None Remove="Resources\qq-face\205.gif" />
     <None Remove="Resources\qq-face\205.png" />
-    <None Remove="Resources\qq-face\206.gif" />
     <None Remove="Resources\qq-face\206.png" />
-    <None Remove="Resources\qq-face\207.gif" />
     <None Remove="Resources\qq-face\207.png" />
-    <None Remove="Resources\qq-face\208.gif" />
     <None Remove="Resources\qq-face\208.png" />
-    <None Remove="Resources\qq-face\21.gif" />
+    <None Remove="Resources\qq-face\209.png" />
     <None Remove="Resources\qq-face\21.png" />
-    <None Remove="Resources\qq-face\210.gif" />
     <None Remove="Resources\qq-face\210.png" />
-    <None Remove="Resources\qq-face\211.gif" />
     <None Remove="Resources\qq-face\211.png" />
-    <None Remove="Resources\qq-face\212.gif" />
     <None Remove="Resources\qq-face\212.png" />
-    <None Remove="Resources\qq-face\214.gif" />
+    <None Remove="Resources\qq-face\213.png" />
     <None Remove="Resources\qq-face\214.png" />
-    <None Remove="Resources\qq-face\215.gif" />
     <None Remove="Resources\qq-face\215.png" />
-    <None Remove="Resources\qq-face\216.gif" />
     <None Remove="Resources\qq-face\216.png" />
-    <None Remove="Resources\qq-face\217.gif" />
     <None Remove="Resources\qq-face\217.png" />
-    <None Remove="Resources\qq-face\218.gif" />
     <None Remove="Resources\qq-face\218.png" />
-    <None Remove="Resources\qq-face\219.gif" />
     <None Remove="Resources\qq-face\219.png" />
-    <None Remove="Resources\qq-face\22.gif" />
     <None Remove="Resources\qq-face\22.png" />
-    <None Remove="Resources\qq-face\220.gif" />
     <None Remove="Resources\qq-face\220.png" />
-    <None Remove="Resources\qq-face\221.gif" />
     <None Remove="Resources\qq-face\221.png" />
-    <None Remove="Resources\qq-face\23.gif" />
+    <None Remove="Resources\qq-face\222.png" />
+    <None Remove="Resources\qq-face\223.png" />
+    <None Remove="Resources\qq-face\224.png" />
+    <None Remove="Resources\qq-face\225.png" />
+    <None Remove="Resources\qq-face\226.png" />
+    <None Remove="Resources\qq-face\227.png" />
+    <None Remove="Resources\qq-face\228.png" />
+    <None Remove="Resources\qq-face\229.png" />
     <None Remove="Resources\qq-face\23.png" />
-    <None Remove="Resources\qq-face\24.gif" />
+    <None Remove="Resources\qq-face\230.png" />
+    <None Remove="Resources\qq-face\231.png" />
+    <None Remove="Resources\qq-face\232.png" />
+    <None Remove="Resources\qq-face\233.png" />
+    <None Remove="Resources\qq-face\234.png" />
+    <None Remove="Resources\qq-face\235.png" />
+    <None Remove="Resources\qq-face\236.png" />
+    <None Remove="Resources\qq-face\237.png" />
+    <None Remove="Resources\qq-face\238.png" />
+    <None Remove="Resources\qq-face\239.png" />
     <None Remove="Resources\qq-face\24.png" />
-    <None Remove="Resources\qq-face\25.gif" />
+    <None Remove="Resources\qq-face\240.png" />
+    <None Remove="Resources\qq-face\241.png" />
+    <None Remove="Resources\qq-face\242.png" />
+    <None Remove="Resources\qq-face\243.png" />
+    <None Remove="Resources\qq-face\244.png" />
+    <None Remove="Resources\qq-face\245.png" />
+    <None Remove="Resources\qq-face\246.png" />
+    <None Remove="Resources\qq-face\247.png" />
     <None Remove="Resources\qq-face\25.png" />
-    <None Remove="Resources\qq-face\26.gif" />
     <None Remove="Resources\qq-face\26.png" />
-    <None Remove="Resources\qq-face\27.gif" />
+    <None Remove="Resources\qq-face\260.png" />
+    <None Remove="Resources\qq-face\261.png" />
+    <None Remove="Resources\qq-face\262.png" />
+    <None Remove="Resources\qq-face\263.png" />
+    <None Remove="Resources\qq-face\264.png" />
+    <None Remove="Resources\qq-face\265.png" />
+    <None Remove="Resources\qq-face\266.png" />
+    <None Remove="Resources\qq-face\267.png" />
+    <None Remove="Resources\qq-face\268.png" />
+    <None Remove="Resources\qq-face\269.png" />
     <None Remove="Resources\qq-face\27.png" />
-    <None Remove="Resources\qq-face\28.gif" />
+    <None Remove="Resources\qq-face\270.png" />
+    <None Remove="Resources\qq-face\271.png" />
+    <None Remove="Resources\qq-face\272.png" />
+    <None Remove="Resources\qq-face\273.png" />
+    <None Remove="Resources\qq-face\274.png" />
+    <None Remove="Resources\qq-face\276.png" />
+    <None Remove="Resources\qq-face\277.png" />
+    <None Remove="Resources\qq-face\278.png" />
+    <None Remove="Resources\qq-face\279.png" />
     <None Remove="Resources\qq-face\28.png" />
-    <None Remove="Resources\qq-face\29.gif" />
+    <None Remove="Resources\qq-face\280.png" />
+    <None Remove="Resources\qq-face\281.png" />
+    <None Remove="Resources\qq-face\282.png" />
+    <None Remove="Resources\qq-face\283.png" />
+    <None Remove="Resources\qq-face\284.png" />
+    <None Remove="Resources\qq-face\285.png" />
+    <None Remove="Resources\qq-face\286.png" />
+    <None Remove="Resources\qq-face\287.png" />
+    <None Remove="Resources\qq-face\288.png" />
+    <None Remove="Resources\qq-face\289.png" />
     <None Remove="Resources\qq-face\29.png" />
-    <None Remove="Resources\qq-face\3.gif" />
+    <None Remove="Resources\qq-face\290.png" />
+    <None Remove="Resources\qq-face\291.png" />
+    <None Remove="Resources\qq-face\292.png" />
+    <None Remove="Resources\qq-face\293.png" />
+    <None Remove="Resources\qq-face\294.png" />
+    <None Remove="Resources\qq-face\295.png" />
+    <None Remove="Resources\qq-face\296.png" />
+    <None Remove="Resources\qq-face\297.png" />
+    <None Remove="Resources\qq-face\298.png" />
+    <None Remove="Resources\qq-face\299.png" />
     <None Remove="Resources\qq-face\3.png" />
-    <None Remove="Resources\qq-face\30.gif" />
     <None Remove="Resources\qq-face\30.png" />
-    <None Remove="Resources\qq-face\31.gif" />
+    <None Remove="Resources\qq-face\300.png" />
+    <None Remove="Resources\qq-face\301.png" />
+    <None Remove="Resources\qq-face\302.png" />
+    <None Remove="Resources\qq-face\303.png" />
+    <None Remove="Resources\qq-face\304.png" />
+    <None Remove="Resources\qq-face\305.png" />
+    <None Remove="Resources\qq-face\306.png" />
+    <None Remove="Resources\qq-face\307.png" />
+    <None Remove="Resources\qq-face\308.png" />
+    <None Remove="Resources\qq-face\309.png" />
     <None Remove="Resources\qq-face\31.png" />
-    <None Remove="Resources\qq-face\32.gif" />
+    <None Remove="Resources\qq-face\310.png" />
+    <None Remove="Resources\qq-face\311.png" />
+    <None Remove="Resources\qq-face\312.png" />
+    <None Remove="Resources\qq-face\313.png" />
+    <None Remove="Resources\qq-face\314.png" />
+    <None Remove="Resources\qq-face\315.png" />
+    <None Remove="Resources\qq-face\316.png" />
+    <None Remove="Resources\qq-face\317.png" />
+    <None Remove="Resources\qq-face\318.png" />
+    <None Remove="Resources\qq-face\319.png" />
     <None Remove="Resources\qq-face\32.png" />
-    <None Remove="Resources\qq-face\33.gif" />
+    <None Remove="Resources\qq-face\320.png" />
+    <None Remove="Resources\qq-face\321.png" />
+    <None Remove="Resources\qq-face\322.png" />
+    <None Remove="Resources\qq-face\323.png" />
+    <None Remove="Resources\qq-face\324.png" />
+    <None Remove="Resources\qq-face\325.png" />
+    <None Remove="Resources\qq-face\326.png" />
+    <None Remove="Resources\qq-face\327.png" />
+    <None Remove="Resources\qq-face\328.png" />
+    <None Remove="Resources\qq-face\329.png" />
     <None Remove="Resources\qq-face\33.png" />
-    <None Remove="Resources\qq-face\34.gif" />
+    <None Remove="Resources\qq-face\330.png" />
+    <None Remove="Resources\qq-face\331.png" />
+    <None Remove="Resources\qq-face\332.png" />
+    <None Remove="Resources\qq-face\333.png" />
+    <None Remove="Resources\qq-face\334.png" />
+    <None Remove="Resources\qq-face\335.png" />
+    <None Remove="Resources\qq-face\336.png" />
+    <None Remove="Resources\qq-face\337.png" />
+    <None Remove="Resources\qq-face\338.png" />
+    <None Remove="Resources\qq-face\339.png" />
     <None Remove="Resources\qq-face\34.png" />
-    <None Remove="Resources\qq-face\35.gif" />
+    <None Remove="Resources\qq-face\340.png" />
+    <None Remove="Resources\qq-face\341.png" />
+    <None Remove="Resources\qq-face\342.png" />
+    <None Remove="Resources\qq-face\343.png" />
+    <None Remove="Resources\qq-face\344.png" />
+    <None Remove="Resources\qq-face\345.png" />
+    <None Remove="Resources\qq-face\346.png" />
+    <None Remove="Resources\qq-face\347.png" />
+    <None Remove="Resources\qq-face\348.png" />
+    <None Remove="Resources\qq-face\349.png" />
     <None Remove="Resources\qq-face\35.png" />
-    <None Remove="Resources\qq-face\36.gif" />
+    <None Remove="Resources\qq-face\350.png" />
+    <None Remove="Resources\qq-face\351.png" />
+    <None Remove="Resources\qq-face\352.png" />
+    <None Remove="Resources\qq-face\353.png" />
+    <None Remove="Resources\qq-face\354.png" />
+    <None Remove="Resources\qq-face\355.png" />
+    <None Remove="Resources\qq-face\356.png" />
+    <None Remove="Resources\qq-face\357.png" />
+    <None Remove="Resources\qq-face\358.png" />
+    <None Remove="Resources\qq-face\359.png" />
     <None Remove="Resources\qq-face\36.png" />
-    <None Remove="Resources\qq-face\37.gif" />
     <None Remove="Resources\qq-face\37.png" />
-    <None Remove="Resources\qq-face\38.gif" />
     <None Remove="Resources\qq-face\38.png" />
-    <None Remove="Resources\qq-face\39.gif" />
     <None Remove="Resources\qq-face\39.png" />
-    <None Remove="Resources\qq-face\4.gif" />
+    <None Remove="Resources\qq-face\392.png" />
+    <None Remove="Resources\qq-face\393.png" />
+    <None Remove="Resources\qq-face\394.png" />
+    <None Remove="Resources\qq-face\395.png" />
     <None Remove="Resources\qq-face\4.png" />
-    <None Remove="Resources\qq-face\41.gif" />
     <None Remove="Resources\qq-face\41.png" />
-    <None Remove="Resources\qq-face\42.gif" />
     <None Remove="Resources\qq-face\42.png" />
-    <None Remove="Resources\qq-face\43.gif" />
     <None Remove="Resources\qq-face\43.png" />
-    <None Remove="Resources\qq-face\46.gif" />
     <None Remove="Resources\qq-face\46.png" />
-    <None Remove="Resources\qq-face\49.gif" />
     <None Remove="Resources\qq-face\49.png" />
-    <None Remove="Resources\qq-face\5.gif" />
     <None Remove="Resources\qq-face\5.png" />
-    <None Remove="Resources\qq-face\53.gif" />
+    <None Remove="Resources\qq-face\50.png" />
     <None Remove="Resources\qq-face\53.png" />
-    <None Remove="Resources\qq-face\54.gif" />
     <None Remove="Resources\qq-face\54.png" />
-    <None Remove="Resources\qq-face\55.gif" />
     <None Remove="Resources\qq-face\55.png" />
-    <None Remove="Resources\qq-face\56.gif" />
     <None Remove="Resources\qq-face\56.png" />
-    <None Remove="Resources\qq-face\57.gif" />
     <None Remove="Resources\qq-face\57.png" />
-    <None Remove="Resources\qq-face\59.gif" />
     <None Remove="Resources\qq-face\59.png" />
-    <None Remove="Resources\qq-face\6.gif" />
     <None Remove="Resources\qq-face\6.png" />
-    <None Remove="Resources\qq-face\60.gif" />
     <None Remove="Resources\qq-face\60.png" />
-    <None Remove="Resources\qq-face\61.gif" />
     <None Remove="Resources\qq-face\61.png" />
-    <None Remove="Resources\qq-face\62.gif" />
-    <None Remove="Resources\qq-face\62.png" />
-    <None Remove="Resources\qq-face\63.gif" />
     <None Remove="Resources\qq-face\63.png" />
-    <None Remove="Resources\qq-face\64.gif" />
     <None Remove="Resources\qq-face\64.png" />
-    <None Remove="Resources\qq-face\66.gif" />
     <None Remove="Resources\qq-face\66.png" />
-    <None Remove="Resources\qq-face\67.gif" />
     <None Remove="Resources\qq-face\67.png" />
-    <None Remove="Resources\qq-face\69.gif" />
     <None Remove="Resources\qq-face\69.png" />
-    <None Remove="Resources\qq-face\7.gif" />
     <None Remove="Resources\qq-face\7.png" />
-    <None Remove="Resources\qq-face\72.gif" />
-    <None Remove="Resources\qq-face\72.png" />
-    <None Remove="Resources\qq-face\74.gif" />
     <None Remove="Resources\qq-face\74.png" />
-    <None Remove="Resources\qq-face\75.gif" />
     <None Remove="Resources\qq-face\75.png" />
-    <None Remove="Resources\qq-face\76.gif" />
     <None Remove="Resources\qq-face\76.png" />
-    <None Remove="Resources\qq-face\77.gif" />
     <None Remove="Resources\qq-face\77.png" />
-    <None Remove="Resources\qq-face\78.gif" />
     <None Remove="Resources\qq-face\78.png" />
-    <None Remove="Resources\qq-face\79.gif" />
     <None Remove="Resources\qq-face\79.png" />
-    <None Remove="Resources\qq-face\8.gif" />
     <None Remove="Resources\qq-face\8.png" />
-    <None Remove="Resources\qq-face\85.gif" />
+    <None Remove="Resources\qq-face\81.png" />
     <None Remove="Resources\qq-face\85.png" />
-    <None Remove="Resources\qq-face\86.gif" />
     <None Remove="Resources\qq-face\86.png" />
-    <None Remove="Resources\qq-face\89.gif" />
     <None Remove="Resources\qq-face\89.png" />
-    <None Remove="Resources\qq-face\9.gif" />
     <None Remove="Resources\qq-face\9.png" />
-    <None Remove="Resources\qq-face\90.gif" />
-    <None Remove="Resources\qq-face\90.png" />
-    <None Remove="Resources\qq-face\91.gif" />
-    <None Remove="Resources\qq-face\91.png" />
-    <None Remove="Resources\qq-face\96.gif" />
     <None Remove="Resources\qq-face\96.png" />
-    <None Remove="Resources\qq-face\97.gif" />
     <None Remove="Resources\qq-face\97.png" />
-    <None Remove="Resources\qq-face\98.gif" />
     <None Remove="Resources\qq-face\98.png" />
-    <None Remove="Resources\qq-face\99.gif" />
     <None Remove="Resources\qq-face\99.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Resources\icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\qq-face\0.gif" />
-    <Resource Include="Resources\qq-face\0.png" />
-    <Resource Include="Resources\qq-face\1.gif" />
-    <Resource Include="Resources\qq-face\1.png" />
-    <Resource Include="Resources\qq-face\10.gif" />
-    <Resource Include="Resources\qq-face\10.png" />
-    <Resource Include="Resources\qq-face\100.gif" />
-    <Resource Include="Resources\qq-face\100.png" />
-    <Resource Include="Resources\qq-face\101.gif" />
-    <Resource Include="Resources\qq-face\101.png" />
-    <Resource Include="Resources\qq-face\102.gif" />
-    <Resource Include="Resources\qq-face\102.png" />
-    <Resource Include="Resources\qq-face\103.gif" />
-    <Resource Include="Resources\qq-face\103.png" />
-    <Resource Include="Resources\qq-face\104.gif" />
-    <Resource Include="Resources\qq-face\104.png" />
-    <Resource Include="Resources\qq-face\105.gif" />
-    <Resource Include="Resources\qq-face\105.png" />
-    <Resource Include="Resources\qq-face\106.gif" />
-    <Resource Include="Resources\qq-face\106.png" />
-    <Resource Include="Resources\qq-face\107.gif" />
-    <Resource Include="Resources\qq-face\107.png" />
-    <Resource Include="Resources\qq-face\108.gif" />
-    <Resource Include="Resources\qq-face\108.png" />
-    <Resource Include="Resources\qq-face\109.gif" />
-    <Resource Include="Resources\qq-face\109.png" />
-    <Resource Include="Resources\qq-face\11.gif" />
-    <Resource Include="Resources\qq-face\11.png" />
-    <Resource Include="Resources\qq-face\110.gif" />
-    <Resource Include="Resources\qq-face\110.png" />
-    <Resource Include="Resources\qq-face\111.gif" />
-    <Resource Include="Resources\qq-face\111.png" />
-    <Resource Include="Resources\qq-face\112.gif" />
-    <Resource Include="Resources\qq-face\112.png" />
-    <Resource Include="Resources\qq-face\113.gif" />
-    <Resource Include="Resources\qq-face\113.png" />
-    <Resource Include="Resources\qq-face\114.gif" />
-    <Resource Include="Resources\qq-face\114.png" />
-    <Resource Include="Resources\qq-face\115.gif" />
-    <Resource Include="Resources\qq-face\115.png" />
-    <Resource Include="Resources\qq-face\116.gif" />
-    <Resource Include="Resources\qq-face\116.png" />
-    <Resource Include="Resources\qq-face\117.gif" />
-    <Resource Include="Resources\qq-face\117.png" />
-    <Resource Include="Resources\qq-face\118.gif" />
-    <Resource Include="Resources\qq-face\118.png" />
-    <Resource Include="Resources\qq-face\119.gif" />
-    <Resource Include="Resources\qq-face\119.png" />
-    <Resource Include="Resources\qq-face\12.gif" />
-    <Resource Include="Resources\qq-face\12.png" />
-    <Resource Include="Resources\qq-face\120.gif" />
-    <Resource Include="Resources\qq-face\120.png" />
-    <Resource Include="Resources\qq-face\121.gif" />
-    <Resource Include="Resources\qq-face\121.png" />
-    <Resource Include="Resources\qq-face\122.gif" />
-    <Resource Include="Resources\qq-face\122.png" />
-    <Resource Include="Resources\qq-face\123.gif" />
-    <Resource Include="Resources\qq-face\123.png" />
-    <Resource Include="Resources\qq-face\124.gif" />
-    <Resource Include="Resources\qq-face\124.png" />
-    <Resource Include="Resources\qq-face\125.gif" />
-    <Resource Include="Resources\qq-face\125.png" />
-    <Resource Include="Resources\qq-face\126.gif" />
-    <Resource Include="Resources\qq-face\126.png" />
-    <Resource Include="Resources\qq-face\127.gif" />
-    <Resource Include="Resources\qq-face\127.png" />
-    <Resource Include="Resources\qq-face\128.gif" />
-    <Resource Include="Resources\qq-face\128.png" />
-    <Resource Include="Resources\qq-face\129.gif" />
-    <Resource Include="Resources\qq-face\129.png" />
-    <Resource Include="Resources\qq-face\13.gif" />
-    <Resource Include="Resources\qq-face\13.png" />
-    <Resource Include="Resources\qq-face\130.gif" />
-    <Resource Include="Resources\qq-face\130.png" />
-    <Resource Include="Resources\qq-face\131.gif" />
-    <Resource Include="Resources\qq-face\131.png" />
-    <Resource Include="Resources\qq-face\132.gif" />
-    <Resource Include="Resources\qq-face\132.png" />
-    <Resource Include="Resources\qq-face\133.gif" />
-    <Resource Include="Resources\qq-face\133.png" />
-    <Resource Include="Resources\qq-face\134.gif" />
-    <Resource Include="Resources\qq-face\134.png" />
-    <Resource Include="Resources\qq-face\136.gif" />
-    <Resource Include="Resources\qq-face\136.png" />
-    <Resource Include="Resources\qq-face\137.gif" />
-    <Resource Include="Resources\qq-face\137.png" />
-    <Resource Include="Resources\qq-face\138.gif" />
-    <Resource Include="Resources\qq-face\138.png" />
-    <Resource Include="Resources\qq-face\139.gif" />
-    <Resource Include="Resources\qq-face\139.png" />
-    <Resource Include="Resources\qq-face\14.gif" />
-    <Resource Include="Resources\qq-face\14.png" />
-    <Resource Include="Resources\qq-face\140.gif" />
-    <Resource Include="Resources\qq-face\140.png" />
-    <Resource Include="Resources\qq-face\141.gif" />
-    <Resource Include="Resources\qq-face\141.png" />
-    <Resource Include="Resources\qq-face\142.gif" />
-    <Resource Include="Resources\qq-face\142.png" />
-    <Resource Include="Resources\qq-face\143.gif" />
-    <Resource Include="Resources\qq-face\143.png" />
-    <Resource Include="Resources\qq-face\144.gif" />
-    <Resource Include="Resources\qq-face\144.png" />
-    <Resource Include="Resources\qq-face\145.gif" />
-    <Resource Include="Resources\qq-face\145.png" />
-    <Resource Include="Resources\qq-face\146.gif" />
-    <Resource Include="Resources\qq-face\146.png" />
-    <Resource Include="Resources\qq-face\147.gif" />
-    <Resource Include="Resources\qq-face\147.png" />
-    <Resource Include="Resources\qq-face\148.gif" />
-    <Resource Include="Resources\qq-face\148.png" />
-    <Resource Include="Resources\qq-face\149.gif" />
-    <Resource Include="Resources\qq-face\149.png" />
-    <Resource Include="Resources\qq-face\15.gif" />
-    <Resource Include="Resources\qq-face\15.png" />
-    <Resource Include="Resources\qq-face\150.gif" />
-    <Resource Include="Resources\qq-face\150.png" />
-    <Resource Include="Resources\qq-face\151.gif" />
-    <Resource Include="Resources\qq-face\151.png" />
-    <Resource Include="Resources\qq-face\152.gif" />
-    <Resource Include="Resources\qq-face\152.png" />
-    <Resource Include="Resources\qq-face\153.gif" />
-    <Resource Include="Resources\qq-face\153.png" />
-    <Resource Include="Resources\qq-face\154.gif" />
-    <Resource Include="Resources\qq-face\154.png" />
-    <Resource Include="Resources\qq-face\155.gif" />
-    <Resource Include="Resources\qq-face\155.png" />
-    <Resource Include="Resources\qq-face\156.gif" />
-    <Resource Include="Resources\qq-face\156.png" />
-    <Resource Include="Resources\qq-face\157.gif" />
-    <Resource Include="Resources\qq-face\157.png" />
-    <Resource Include="Resources\qq-face\158.gif" />
-    <Resource Include="Resources\qq-face\158.png" />
-    <Resource Include="Resources\qq-face\159.gif" />
-    <Resource Include="Resources\qq-face\159.png" />
-    <Resource Include="Resources\qq-face\16.gif" />
-    <Resource Include="Resources\qq-face\16.png" />
-    <Resource Include="Resources\qq-face\160.gif" />
-    <Resource Include="Resources\qq-face\160.png" />
-    <Resource Include="Resources\qq-face\161.gif" />
-    <Resource Include="Resources\qq-face\161.png" />
-    <Resource Include="Resources\qq-face\162.gif" />
-    <Resource Include="Resources\qq-face\162.png" />
-    <Resource Include="Resources\qq-face\163.gif" />
-    <Resource Include="Resources\qq-face\163.png" />
-    <Resource Include="Resources\qq-face\164.gif" />
-    <Resource Include="Resources\qq-face\164.png" />
-    <Resource Include="Resources\qq-face\165.gif" />
-    <Resource Include="Resources\qq-face\165.png" />
-    <Resource Include="Resources\qq-face\166.gif" />
-    <Resource Include="Resources\qq-face\166.png" />
-    <Resource Include="Resources\qq-face\167.gif" />
-    <Resource Include="Resources\qq-face\167.png" />
-    <Resource Include="Resources\qq-face\168.gif" />
-    <Resource Include="Resources\qq-face\168.png" />
-    <Resource Include="Resources\qq-face\169.gif" />
-    <Resource Include="Resources\qq-face\169.png" />
-    <Resource Include="Resources\qq-face\170.gif" />
-    <Resource Include="Resources\qq-face\170.png" />
-    <Resource Include="Resources\qq-face\171.gif" />
-    <Resource Include="Resources\qq-face\171.png" />
-    <Resource Include="Resources\qq-face\172.gif" />
-    <Resource Include="Resources\qq-face\172.png" />
-    <Resource Include="Resources\qq-face\173.gif" />
-    <Resource Include="Resources\qq-face\173.png" />
-    <Resource Include="Resources\qq-face\174.gif" />
-    <Resource Include="Resources\qq-face\174.png" />
-    <Resource Include="Resources\qq-face\175.gif" />
-    <Resource Include="Resources\qq-face\175.png" />
-    <Resource Include="Resources\qq-face\176.gif" />
-    <Resource Include="Resources\qq-face\176.png" />
-    <Resource Include="Resources\qq-face\177.gif" />
-    <Resource Include="Resources\qq-face\177.png" />
-    <Resource Include="Resources\qq-face\178.gif" />
-    <Resource Include="Resources\qq-face\178.png" />
-    <Resource Include="Resources\qq-face\179.gif" />
-    <Resource Include="Resources\qq-face\179.png" />
-    <Resource Include="Resources\qq-face\18.gif" />
-    <Resource Include="Resources\qq-face\18.png" />
-    <Resource Include="Resources\qq-face\180.gif" />
-    <Resource Include="Resources\qq-face\180.png" />
-    <Resource Include="Resources\qq-face\181.gif" />
-    <Resource Include="Resources\qq-face\181.png" />
-    <Resource Include="Resources\qq-face\182.gif" />
-    <Resource Include="Resources\qq-face\182.png" />
-    <Resource Include="Resources\qq-face\183.gif" />
-    <Resource Include="Resources\qq-face\183.png" />
-    <Resource Include="Resources\qq-face\184.gif" />
-    <Resource Include="Resources\qq-face\184.png" />
-    <Resource Include="Resources\qq-face\185.gif" />
-    <Resource Include="Resources\qq-face\185.png" />
-    <Resource Include="Resources\qq-face\186.gif" />
-    <Resource Include="Resources\qq-face\186.png" />
-    <Resource Include="Resources\qq-face\187.gif" />
-    <Resource Include="Resources\qq-face\187.png" />
-    <Resource Include="Resources\qq-face\188.gif" />
-    <Resource Include="Resources\qq-face\188.png" />
-    <Resource Include="Resources\qq-face\189.gif" />
-    <Resource Include="Resources\qq-face\189.png" />
-    <Resource Include="Resources\qq-face\19.gif" />
-    <Resource Include="Resources\qq-face\19.png" />
-    <Resource Include="Resources\qq-face\190.gif" />
-    <Resource Include="Resources\qq-face\190.png" />
-    <Resource Include="Resources\qq-face\191.gif" />
-    <Resource Include="Resources\qq-face\191.png" />
-    <Resource Include="Resources\qq-face\192.gif" />
-    <Resource Include="Resources\qq-face\192.png" />
-    <Resource Include="Resources\qq-face\193.gif" />
-    <Resource Include="Resources\qq-face\193.png" />
-    <Resource Include="Resources\qq-face\194.gif" />
-    <Resource Include="Resources\qq-face\194.png" />
-    <Resource Include="Resources\qq-face\197.gif" />
-    <Resource Include="Resources\qq-face\197.png" />
-    <Resource Include="Resources\qq-face\198.gif" />
-    <Resource Include="Resources\qq-face\198.png" />
-    <Resource Include="Resources\qq-face\199.gif" />
-    <Resource Include="Resources\qq-face\199.png" />
-    <Resource Include="Resources\qq-face\2.gif" />
-    <Resource Include="Resources\qq-face\2.png" />
-    <Resource Include="Resources\qq-face\20.gif" />
-    <Resource Include="Resources\qq-face\20.png" />
-    <Resource Include="Resources\qq-face\200.gif" />
-    <Resource Include="Resources\qq-face\200.png" />
-    <Resource Include="Resources\qq-face\201.gif" />
-    <Resource Include="Resources\qq-face\201.png" />
-    <Resource Include="Resources\qq-face\202.gif" />
-    <Resource Include="Resources\qq-face\202.png" />
-    <Resource Include="Resources\qq-face\203.gif" />
-    <Resource Include="Resources\qq-face\203.png" />
-    <Resource Include="Resources\qq-face\204.gif" />
-    <Resource Include="Resources\qq-face\204.png" />
-    <Resource Include="Resources\qq-face\205.gif" />
-    <Resource Include="Resources\qq-face\205.png" />
-    <Resource Include="Resources\qq-face\206.gif" />
-    <Resource Include="Resources\qq-face\206.png" />
-    <Resource Include="Resources\qq-face\207.gif" />
-    <Resource Include="Resources\qq-face\207.png" />
-    <Resource Include="Resources\qq-face\208.gif" />
-    <Resource Include="Resources\qq-face\208.png" />
-    <Resource Include="Resources\qq-face\21.gif" />
-    <Resource Include="Resources\qq-face\21.png" />
-    <Resource Include="Resources\qq-face\210.gif" />
-    <Resource Include="Resources\qq-face\210.png" />
-    <Resource Include="Resources\qq-face\211.gif" />
-    <Resource Include="Resources\qq-face\211.png" />
-    <Resource Include="Resources\qq-face\212.gif" />
-    <Resource Include="Resources\qq-face\212.png" />
-    <Resource Include="Resources\qq-face\214.gif" />
-    <Resource Include="Resources\qq-face\214.png" />
-    <Resource Include="Resources\qq-face\215.gif" />
-    <Resource Include="Resources\qq-face\215.png" />
-    <Resource Include="Resources\qq-face\216.gif" />
-    <Resource Include="Resources\qq-face\216.png" />
-    <Resource Include="Resources\qq-face\217.gif" />
-    <Resource Include="Resources\qq-face\217.png" />
-    <Resource Include="Resources\qq-face\218.gif" />
-    <Resource Include="Resources\qq-face\218.png" />
-    <Resource Include="Resources\qq-face\219.gif" />
-    <Resource Include="Resources\qq-face\219.png" />
-    <Resource Include="Resources\qq-face\22.gif" />
-    <Resource Include="Resources\qq-face\22.png" />
-    <Resource Include="Resources\qq-face\220.gif" />
-    <Resource Include="Resources\qq-face\220.png" />
-    <Resource Include="Resources\qq-face\221.gif" />
-    <Resource Include="Resources\qq-face\221.png" />
-    <Resource Include="Resources\qq-face\23.gif" />
-    <Resource Include="Resources\qq-face\23.png" />
-    <Resource Include="Resources\qq-face\24.gif" />
-    <Resource Include="Resources\qq-face\24.png" />
-    <Resource Include="Resources\qq-face\25.gif" />
-    <Resource Include="Resources\qq-face\25.png" />
-    <Resource Include="Resources\qq-face\26.gif" />
-    <Resource Include="Resources\qq-face\26.png" />
-    <Resource Include="Resources\qq-face\27.gif" />
-    <Resource Include="Resources\qq-face\27.png" />
-    <Resource Include="Resources\qq-face\28.gif" />
-    <Resource Include="Resources\qq-face\28.png" />
-    <Resource Include="Resources\qq-face\29.gif" />
-    <Resource Include="Resources\qq-face\29.png" />
-    <Resource Include="Resources\qq-face\3.gif" />
-    <Resource Include="Resources\qq-face\3.png" />
-    <Resource Include="Resources\qq-face\30.gif" />
-    <Resource Include="Resources\qq-face\30.png" />
-    <Resource Include="Resources\qq-face\31.gif" />
-    <Resource Include="Resources\qq-face\31.png" />
-    <Resource Include="Resources\qq-face\32.gif" />
-    <Resource Include="Resources\qq-face\32.png" />
-    <Resource Include="Resources\qq-face\33.gif" />
-    <Resource Include="Resources\qq-face\33.png" />
-    <Resource Include="Resources\qq-face\34.gif" />
-    <Resource Include="Resources\qq-face\34.png" />
-    <Resource Include="Resources\qq-face\35.gif" />
-    <Resource Include="Resources\qq-face\35.png" />
-    <Resource Include="Resources\qq-face\36.gif" />
-    <Resource Include="Resources\qq-face\36.png" />
-    <Resource Include="Resources\qq-face\37.gif" />
-    <Resource Include="Resources\qq-face\37.png" />
-    <Resource Include="Resources\qq-face\38.gif" />
-    <Resource Include="Resources\qq-face\38.png" />
-    <Resource Include="Resources\qq-face\39.gif" />
-    <Resource Include="Resources\qq-face\39.png" />
-    <Resource Include="Resources\qq-face\4.gif" />
-    <Resource Include="Resources\qq-face\4.png" />
-    <Resource Include="Resources\qq-face\41.gif" />
-    <Resource Include="Resources\qq-face\41.png" />
-    <Resource Include="Resources\qq-face\42.gif" />
-    <Resource Include="Resources\qq-face\42.png" />
-    <Resource Include="Resources\qq-face\43.gif" />
-    <Resource Include="Resources\qq-face\43.png" />
-    <Resource Include="Resources\qq-face\46.gif" />
-    <Resource Include="Resources\qq-face\46.png" />
-    <Resource Include="Resources\qq-face\49.gif" />
-    <Resource Include="Resources\qq-face\49.png" />
-    <Resource Include="Resources\qq-face\5.gif" />
-    <Resource Include="Resources\qq-face\5.png" />
-    <Resource Include="Resources\qq-face\53.gif" />
-    <Resource Include="Resources\qq-face\53.png" />
-    <Resource Include="Resources\qq-face\54.gif" />
-    <Resource Include="Resources\qq-face\54.png" />
-    <Resource Include="Resources\qq-face\55.gif" />
-    <Resource Include="Resources\qq-face\55.png" />
-    <Resource Include="Resources\qq-face\56.gif" />
-    <Resource Include="Resources\qq-face\56.png" />
-    <Resource Include="Resources\qq-face\57.gif" />
-    <Resource Include="Resources\qq-face\57.png" />
-    <Resource Include="Resources\qq-face\59.gif" />
-    <Resource Include="Resources\qq-face\59.png" />
-    <Resource Include="Resources\qq-face\6.gif" />
-    <Resource Include="Resources\qq-face\6.png" />
-    <Resource Include="Resources\qq-face\60.gif" />
-    <Resource Include="Resources\qq-face\60.png" />
-    <Resource Include="Resources\qq-face\61.gif" />
-    <Resource Include="Resources\qq-face\61.png" />
-    <Resource Include="Resources\qq-face\62.gif" />
-    <Resource Include="Resources\qq-face\62.png" />
-    <Resource Include="Resources\qq-face\63.gif" />
-    <Resource Include="Resources\qq-face\63.png" />
-    <Resource Include="Resources\qq-face\64.gif" />
-    <Resource Include="Resources\qq-face\64.png" />
-    <Resource Include="Resources\qq-face\66.gif" />
-    <Resource Include="Resources\qq-face\66.png" />
-    <Resource Include="Resources\qq-face\67.gif" />
-    <Resource Include="Resources\qq-face\67.png" />
-    <Resource Include="Resources\qq-face\69.gif" />
-    <Resource Include="Resources\qq-face\69.png" />
-    <Resource Include="Resources\qq-face\7.gif" />
-    <Resource Include="Resources\qq-face\7.png" />
-    <Resource Include="Resources\qq-face\72.gif" />
-    <Resource Include="Resources\qq-face\72.png" />
-    <Resource Include="Resources\qq-face\74.gif" />
-    <Resource Include="Resources\qq-face\74.png" />
-    <Resource Include="Resources\qq-face\75.gif" />
-    <Resource Include="Resources\qq-face\75.png" />
-    <Resource Include="Resources\qq-face\76.gif" />
-    <Resource Include="Resources\qq-face\76.png" />
-    <Resource Include="Resources\qq-face\77.gif" />
-    <Resource Include="Resources\qq-face\77.png" />
-    <Resource Include="Resources\qq-face\78.gif" />
-    <Resource Include="Resources\qq-face\78.png" />
-    <Resource Include="Resources\qq-face\79.gif" />
-    <Resource Include="Resources\qq-face\79.png" />
-    <Resource Include="Resources\qq-face\8.gif" />
-    <Resource Include="Resources\qq-face\8.png" />
-    <Resource Include="Resources\qq-face\85.gif" />
-    <Resource Include="Resources\qq-face\85.png" />
-    <Resource Include="Resources\qq-face\86.gif" />
-    <Resource Include="Resources\qq-face\86.png" />
-    <Resource Include="Resources\qq-face\89.gif" />
-    <Resource Include="Resources\qq-face\89.png" />
-    <Resource Include="Resources\qq-face\9.gif" />
-    <Resource Include="Resources\qq-face\9.png" />
-    <Resource Include="Resources\qq-face\90.gif" />
-    <Resource Include="Resources\qq-face\90.png" />
-    <Resource Include="Resources\qq-face\91.gif" />
-    <Resource Include="Resources\qq-face\91.png" />
-    <Resource Include="Resources\qq-face\96.gif" />
-    <Resource Include="Resources\qq-face\96.png" />
-    <Resource Include="Resources\qq-face\97.gif" />
-    <Resource Include="Resources\qq-face\97.png" />
-    <Resource Include="Resources\qq-face\98.gif" />
-    <Resource Include="Resources\qq-face\98.png" />
-    <Resource Include="Resources\qq-face\99.gif" />
-    <Resource Include="Resources\qq-face\99.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -803,6 +359,975 @@
 
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\qq-face\0.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\10.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\101.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\102.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\103.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\104.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\105.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\106.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\107.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\108.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\109.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\11.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\110.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\111.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\112.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\113.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\114.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\115.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\116.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\117.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\118.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\119.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\12.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\120.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\121.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\122.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\123.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\124.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\125.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\126.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\127.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\128.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\129.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\13.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\130.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\131.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\132.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\133.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\134.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\135.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\136.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\137.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\138.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\139.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\14.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\140.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\141.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\142.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\143.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\144.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\145.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\146.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\147.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\148.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\149.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\15.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\150.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\151.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\152.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\153.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\154.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\155.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\156.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\157.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\158.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\159.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\16.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\160.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\161.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\162.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\163.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\164.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\165.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\166.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\167.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\168.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\169.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\170.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\171.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\172.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\173.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\174.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\175.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\176.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\177.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\178.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\179.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\18.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\180.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\181.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\182.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\183.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\184.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\185.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\186.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\187.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\188.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\189.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\19.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\190.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\191.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\192.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\193.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\194.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\195.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\196.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\197.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\198.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\199.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\20.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\200.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\201.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\202.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\203.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\204.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\205.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\206.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\207.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\208.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\209.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\21.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\210.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\211.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\212.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\213.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\214.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\215.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\216.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\217.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\218.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\219.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\22.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\220.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\221.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\222.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\223.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\224.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\225.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\226.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\227.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\228.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\229.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\23.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\230.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\231.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\232.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\233.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\234.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\235.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\236.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\237.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\238.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\239.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\24.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\241.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\242.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\243.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\244.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\245.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\246.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\247.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\25.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\26.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\260.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\261.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\262.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\263.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\264.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\265.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\266.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\267.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\268.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\269.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\27.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\270.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\271.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\272.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\273.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\274.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\276.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\277.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\278.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\279.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\28.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\280.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\281.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\282.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\283.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\284.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\285.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\286.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\287.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\288.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\289.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\29.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\290.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\291.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\292.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\293.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\294.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\295.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\296.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\297.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\298.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\299.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\30.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\300.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\301.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\302.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\303.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\304.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\305.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\306.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\307.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\308.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\309.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\31.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\310.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\311.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\312.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\313.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\314.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\315.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\316.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\317.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\318.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\319.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\32.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\320.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\321.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\322.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\323.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\324.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\325.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\326.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\327.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\328.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\329.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\33.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\330.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\331.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\332.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\333.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\334.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\335.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\336.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\337.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\338.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\339.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\34.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\340.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\341.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\342.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\343.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\344.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\345.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\346.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\347.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\348.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\349.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\35.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\350.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\351.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\352.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\353.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\354.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\355.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\356.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\357.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\358.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\359.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\36.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\37.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\38.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\39.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\392.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\393.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\394.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\395.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\41.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\42.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\43.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\46.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\49.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\5.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\50.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\53.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\54.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\55.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\56.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\57.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\59.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\6.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\60.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\61.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\63.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\64.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\66.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\67.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\69.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\7.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\74.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\75.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\76.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\77.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\78.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\79.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\8.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\81.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\85.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\86.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\89.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\9.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\96.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\97.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\98.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\qq-face\99.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
