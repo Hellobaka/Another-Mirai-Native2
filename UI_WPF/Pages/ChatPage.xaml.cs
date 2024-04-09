@@ -447,7 +447,7 @@ namespace Another_Mirai_Native.UI.Pages
                     list.Add(new ChatListItemViewModel
                     {
                         Id = item.QQ,
-                        GroupName = item.Card ?? "",
+                        GroupName = string.IsNullOrEmpty(item.Card) ? item.Nick : item.Card,
                         AvatarType = ChatAvatar.AvatarTypes.QQPrivate
                     });
                     if (GroupMemberCache.ContainsKey(SelectedItem.Id) is false)
