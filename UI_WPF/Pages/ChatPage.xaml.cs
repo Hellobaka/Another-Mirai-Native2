@@ -218,7 +218,7 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         return qq.ToString();
                     }
-                    return info.Nick;
+                    return string.IsNullOrEmpty(info.Card) ? info.Nick : info.Card;
                 }
                 else
                 {
@@ -238,7 +238,7 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         return qq.ToString();
                     }
-                    return GroupMemberCache[group][qq].Nick;
+                    return string.IsNullOrEmpty(GroupMemberCache[group][qq].Card) ? GroupMemberCache[group][qq].Nick : GroupMemberCache[group][qq].Card;
                 }
             }
             catch
@@ -340,6 +340,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void AddOrUpdateGroupChatList(long group, long qq, string msg)
         {
+            msg = msg.Replace("\r", "").Replace("\n", "");
             var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
             if (item != null)
             {
@@ -645,12 +646,9 @@ namespace Another_Mirai_Native.UI.Pages
             }
             CurrentPageIndex = 1;
             OnPropertyChanged(nameof(DetailList));
-            await Dispatcher.BeginInvoke(() =>
-            {
-                item.UnreadCount = 0;
-                UpdateUnreadCount(item);
-                RefreshMessageContainer(true);
-            });
+            item.UnreadCount = 0;
+            UpdateUnreadCount(item);
+            await RefreshMessageContainer(true);
         }
 
         private bool CheckMessageContainerHasItem(string guid)
@@ -949,7 +947,7 @@ namespace Another_Mirai_Native.UI.Pages
             MsgRecalled?.Invoke(msgId);
         }
 
-        private async void RefreshGroupName()
+        private async Task RefreshGroupName()
         {
             GroupName = SelectedItem.AvatarType switch
             {
@@ -960,7 +958,7 @@ namespace Another_Mirai_Native.UI.Pages
             OnPropertyChanged(nameof(GroupName));
         }
 
-        private void RefreshMessageContainer(bool refreshAll)
+        private async Task RefreshMessageContainer(bool refreshAll)
         {
             if (SelectedItem == null)
             {
@@ -968,7 +966,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (refreshAll)
             {
-                RefreshGroupName();
+                await RefreshGroupName();
                 MessageContainer.Children.Clear();
                 GC.Collect();
             }
