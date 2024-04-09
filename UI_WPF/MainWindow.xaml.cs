@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.UI
             InitializeComponent();
             Instance = this;
             UIConfig.Instance.LoadConfig();
-            if (UIConfig.Instance.SoftwareRender)
+            if (!UIConfig.Instance.HardwareRender)
             {
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }

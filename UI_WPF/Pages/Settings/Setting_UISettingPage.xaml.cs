@@ -1,8 +1,8 @@
-﻿using Another_Mirai_Native.Config;
-using ModernWpf;
-using System;
+﻿using ModernWpf;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -50,7 +50,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
-            SoftWareRender.IsOn = UIConfig.Instance.SoftwareRender;
+            HardwareRender.IsOn = UIConfig.Instance.HardwareRender;
             ChatEnableSelector.IsOn = UIConfig.Instance.ChatEnabled;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
             MaterialSelector.SelectedIndex = UIConfig.Instance.WindowMaterial switch
@@ -138,7 +138,15 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            UIConfig.Instance.SetConfig("SoftwareRender", SoftWareRender.IsOn);
+            if (HardwareRender.IsOn)
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.Default;
+            }
+            else
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            }
+            UIConfig.Instance.SetConfig("HardwareRender", HardwareRender.IsOn);
         }
 
         private void ChatEnableSelector_Toggled(object sender, RoutedEventArgs e)

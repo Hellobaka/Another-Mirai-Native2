@@ -34,7 +34,7 @@ namespace Another_Mirai_Native.UI
 
         public bool ChatEnabled { get; set; } = false;
 
-        public bool SoftwareRender { get; set; } = false;
+        public bool HardwareRender { get; set; } = false;
 
         public int MessageContainerMaxCount { get; set; } = 15;
 
@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.UI
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
             ChatEnabled = GetConfig("ChatEnabled", false);
-            SoftwareRender = GetConfig("SoftwareRender", false);
+            HardwareRender = GetConfig("HardwareRender", false);
             UsedFaceId = GetConfig("UsedFaceId", new List<int>());
         }
     }
