@@ -260,6 +260,11 @@ namespace Another_Mirai_Native.UI.Controls
             ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
         }
 
+        public void ContextMenu_Reply(object sender, EventArgs e)
+        {
+            ChatPage.Instance.AddTextToSendBox($"[CQ:reply,id={MsgId}]");
+        }
+
         public void ContextMenu_CopyMessage(object sender, EventArgs e)
         {
             Clipboard.SetText(Message);

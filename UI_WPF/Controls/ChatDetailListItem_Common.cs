@@ -121,6 +121,7 @@ namespace Another_Mirai_Native.UI.Controls
             DetailContextMenu.Items.Add(new MenuItem { Header = "复制", Icon = new FontIcon { Glyph = "\uE16F" } });
             DetailContextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
             DetailContextMenu.Items.Add(new MenuItem { Header = "@", Icon = new FontIcon { Glyph = "\uE9B2" } });
+            DetailContextMenu.Items.Add(new MenuItem { Header = "回复", Icon = new FontIcon { Glyph = "\uE97A" } });
             DetailContextMenu.Items.Add(new Separator());
             DetailContextMenu.Items.Add(new MenuItem { Header = "撤回", Icon = new FontIcon { Glyph = "\uE107" } });
             DetailContextMenu.Opened += (sender, _) =>
@@ -165,7 +166,19 @@ namespace Another_Mirai_Native.UI.Controls
                     left.ContextMenu_At(sender, e);
                 }
             };
-            (DetailContextMenu.Items[4] as MenuItem).Click += (sender, e) =>
+            (DetailContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
+            {
+                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (target.DataContext is ChatDetailListItem_Right right)
+                {
+                    right.ContextMenu_Reply(sender, e);
+                }
+                else if (target.DataContext is ChatDetailListItem_Left left)
+                {
+                    left.ContextMenu_Reply(sender, e);
+                }
+            };
+            (DetailContextMenu.Items[5] as MenuItem).Click += (sender, e) =>
             {
                 FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
                 if (target.DataContext is ChatDetailListItem_Right right)
