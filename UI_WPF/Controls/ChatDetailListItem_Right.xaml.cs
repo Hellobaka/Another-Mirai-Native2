@@ -102,6 +102,7 @@ namespace Another_Mirai_Native.UI.Controls
                         var hyperlink = new Hyperlink(new Run($" @{nick} "))
                         {
                             NavigateUri = new Uri("https://www.google.com"),
+                            Tag = $" @{nick} "
                         };
                         hyperlink.Background = Brushes.SeaGreen;
                         hyperlink.Foreground = Brushes.White;
@@ -156,33 +157,63 @@ namespace Another_Mirai_Native.UI.Controls
             ChangeContainerWidth(minWidth);
             TimeDisplay.ToolTip = Time.ToString("G");
             NameDisplay.ToolTip = $"{DisplayName} [{Id}]";
-
+            
+            var lastParagraph = DetailContainer.Document.Blocks.Count > 0 && DetailContainer.Document.Blocks.LastBlock is Paragraph p
+                && p.Inlines.Count == 0;
             // 文本垂直居中
             var text = new TextRange(DetailContainer.Document.ContentStart, DetailContainer.Document.ContentEnd);
             text.ApplyPropertyValue(Inline.BaselineAlignmentProperty, BaselineAlignment.Center);
+            // 若末尾段落内容为空则移除
+            if (lastParagraph)
+            {
+                DetailContainer.Document.Blocks.Remove(DetailContainer.Document.Blocks.LastBlock);
+            }
         }
 
         private void ChangeContainerWidth(double minWidth)
         {
-            TextRange documentRange = new TextRange(DetailContainer.Document.ContentStart, DetailContainer.Document.ContentEnd);
-            string text = documentRange.Text;
             double pixelsPerDip = VisualTreeHelper.GetDpi(DetailContainer).PixelsPerDip;
-
-            var formattedText = new FormattedText(
-                    text,
-                    CultureInfo.CurrentCulture,
-                    FlowDirection.LeftToRight,
-                    new Typeface(DetailContainer.FontFamily, DetailContainer.FontStyle, DetailContainer.FontWeight, DetailContainer.FontStretch),
-                    DetailContainer.FontSize,
-                    Brushes.Black,
-                    new NumberSubstitution(),
-                    TextFormattingMode.Display, pixelsPerDip);
-
-            DetailContainer.Width = formattedText.Width + 30 + minWidth;
-            if (minWidth > 0)
+            double width = minWidth;
+            foreach (Paragraph paragraph in DetailContainer.Document.Blocks.Cast<Paragraph>())
             {
-                DetailContainer.Padding = new Thickness(10, 10, 10, 0);
+                double currentWidth = 0;
+                foreach (Inline inline in paragraph.Inlines)
+                {
+                    if (inline is InlineUIContainer ui && ui.Child is Expander expander)
+                    {
+                        currentWidth += expander.ActualWidth;
+                    }
+                    else if (inline is InlineUIContainer ui2 && ui2.Child is Image image)
+                    {
+                        currentWidth += image.Width;
+                    }
+                    else if (inline is Run || inline is Hyperlink)
+                    {
+                        string text = "";
+                        if (inline is Run run)
+                        {
+                            text = run.Text;
+                        }
+                        else if (inline is Hyperlink link)
+                        {
+                            text = link.Tag.ToString();
+                        }
+                        var formattedText = new FormattedText(
+                            text,
+                            CultureInfo.CurrentCulture,
+                            FlowDirection.LeftToRight,
+                            new Typeface(DetailContainer.FontFamily, DetailContainer.FontStyle, DetailContainer.FontWeight, DetailContainer.FontStretch),
+                            DetailContainer.FontSize,
+                            Brushes.Black,
+                            new NumberSubstitution(),
+                            TextFormattingMode.Display, pixelsPerDip);
+                        currentWidth += formattedText.Width;
+                    }
+                }
+                width = Math.Max(currentWidth, width);
             }
+
+            DetailContainer.Width = width + 10 + DetailContainer.Padding.Left + DetailContainer.Padding.Right;
         }
 
         public void Dispose()
