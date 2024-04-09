@@ -56,7 +56,9 @@
                 <RichTextBox
                     x:Name="DetailContainer"
                     Padding="10"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
                     Background="Transparent"
                     BorderBrush="Transparent"
