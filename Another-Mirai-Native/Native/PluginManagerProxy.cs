@@ -92,7 +92,17 @@ namespace Another_Mirai_Native.Native
 
         public static void TriggerTestInvoke(string methodName, Dictionary<string, object> args)
         {
-            OnTestInvoked?.Invoke(methodName, args);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnTestInvoked?.Invoke(methodName, args);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnTestInvoked事件", e);
+                }
+            }).Start();
         }
 
         public int InvokeEvent(CQPluginProxy target, PluginEventType eventType, params object[] args)
@@ -321,7 +331,18 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnAdminChange(int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
-            OnAdminChanged?.Invoke(fromGroup, beingOperateQQ, subType == 1 ? QQGroupMemberType.Member : QQGroupMemberType.Manage);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnAdminChanged?.Invoke(fromGroup, beingOperateQQ, subType == 1 ? QQGroupMemberType.Member : QQGroupMemberType.Manage);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnAdminChanged事件", e);
+                }
+            }).Start();
+
             return InvokeEvent(PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
         }
 
@@ -372,7 +393,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnFriendAdded(int subType, long sendTime, long fromQQ)
         {
-            OnFriendAdded?.Invoke(fromQQ);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnFriendAdded?.Invoke(fromQQ);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnFriendAdded事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.FriendAdded, subType, sendTime, fromQQ);
         }
 
@@ -403,7 +434,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
-            OnGroupBan?.Invoke(fromGroup, fromQQ, beingOperateQQ, duration);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupBan?.Invoke(fromGroup, fromQQ, beingOperateQQ, duration);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupBan事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
@@ -414,7 +455,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupMemberDecrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
-            OnGroupLeft?.Invoke(fromGroup, fromQQ);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupLeft?.Invoke(fromGroup, fromQQ);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupLeft事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
@@ -425,7 +476,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupMemberIncrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
-            OnGroupAdded?.Invoke(fromGroup, fromQQ);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupAdded?.Invoke(fromGroup, fromQQ);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupAdded事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
@@ -436,7 +497,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
-            OnGroupMsg?.Invoke(msgId, fromGroup, fromQQ, msg);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupMsg?.Invoke(msgId, fromGroup, fromQQ, msg);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupMsg事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
@@ -447,7 +518,17 @@ namespace Another_Mirai_Native.Native
 
         public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
         {
-            OnPrivateMsg?.Invoke(msgId, fromQQ, msg);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnPrivateMsg?.Invoke(msgId, fromQQ, msg);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnPrivateMsg事件", e);
+                }
+            }).Start();
             return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
@@ -473,12 +554,32 @@ namespace Another_Mirai_Native.Native
 
         public void Event_OnGroupMsgRecall(int msgId, long groupId, string msg)
         {
-            OnGroupMsgRecall?.Invoke(msgId, groupId, msg);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupMsgRecall?.Invoke(msgId, groupId, msg);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupMsgRecall事件", e);
+                }
+            }).Start();
         }
 
         public void Event_OnPrivateMsgRecall(int msgId, long qq, string msg)
         {
-            OnPrivateMsgRecall?.Invoke(msgId, qq, msg);
+            new Thread(() =>
+            {
+                try
+                {
+                    OnPrivateMsgRecall?.Invoke(msgId, qq, msg);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnPrivateMsgRecall事件", e);
+                }
+            }).Start();
         }
 
         #endregion 测试事件调用
