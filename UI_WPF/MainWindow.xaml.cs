@@ -28,12 +28,12 @@ namespace Another_Mirai_Native.UI
         public MainWindow()
         {
             InitializeComponent();
+            Instance = this;
+            UIConfig.Instance.LoadConfig();
             if (UIConfig.Instance.SoftwareRender)
             {
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }
-            UIConfig.Instance.LoadConfig();
-            Instance = this;
             switch (UIConfig.Instance.Theme)
             {
                 case "Light":
@@ -201,8 +201,11 @@ namespace Another_Mirai_Native.UI
             ChatMenuItem.IsEnabled = UIConfig.Instance.ChatEnabled;
             try
             {
-                ChangeMaterial(material);
-                SetNavigationViewTransparent(MainDrawer);
+                if (material != Material.None)
+                {
+                    ChangeMaterial(material);
+                    SetNavigationViewTransparent(MainDrawer);
+                }
             }
             catch (Exception ex)
             {
