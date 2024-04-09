@@ -563,6 +563,7 @@ namespace Another_Mirai_Native.UI.Controls
                     var hyperlink = new Hyperlink(new Run(capture))
                     {
                         NavigateUri = new Uri(capture),
+                        Tag = capture
                     };
                     hyperlink.RequestNavigate += (sender, args) =>
                     {
