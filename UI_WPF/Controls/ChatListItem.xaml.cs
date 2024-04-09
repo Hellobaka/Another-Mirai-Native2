@@ -36,10 +36,11 @@ namespace Another_Mirai_Native.UI.Controls
             ChatListItem control = (ChatListItem)d;
             ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
 
+            newValue.Detail = newValue.Detail.Replace("\r", "").Replace("\n", "");
             control.ViewModel = newValue;
             control.Id = newValue.Id;
             control.GroupName = newValue.GroupName;
-            control.Detail = newValue.Detail.Replace("\r", "").Replace("\n", "");
+            control.Detail = newValue.Detail;
             control.Time = newValue.Time;
             control.UnreadCount = newValue.UnreadCount;
 
