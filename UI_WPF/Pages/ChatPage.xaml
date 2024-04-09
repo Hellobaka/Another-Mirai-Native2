@@ -68,8 +68,7 @@
                 <Border>
                     <TextBlock
                         x:Name="GroupNameDisplay"
-                        FontSize="18"
-                        Text="{Binding GroupName}" />
+                        FontSize="18" />
                 </Border>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>

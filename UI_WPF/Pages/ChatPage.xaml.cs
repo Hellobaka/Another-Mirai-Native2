@@ -647,6 +647,7 @@ namespace Another_Mirai_Native.UI.Pages
             CurrentPageIndex = 1;
             OnPropertyChanged(nameof(DetailList));
             item.UnreadCount = 0;
+            GroupNameDisplay.Text = $"{SelectedItem.GroupName} [{SelectedItem.Id}]";
             UpdateUnreadCount(item);
             await RefreshMessageContainer(true);
         }
@@ -919,7 +920,11 @@ namespace Another_Mirai_Native.UI.Pages
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
                 dict.Remove(qq);
-                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)}离开了群", DetailItemType.Notice);
+                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice);
+            }
+            else
+            {
+                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", DetailItemType.Notice);
             }
         }
 
