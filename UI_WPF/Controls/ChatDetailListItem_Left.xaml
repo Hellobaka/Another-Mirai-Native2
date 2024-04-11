@@ -46,7 +46,7 @@
                     x:Name="NameDisplay"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="10"
+                    FontSize="12"
                     Text="{Binding DisplayName}"
                     TextTrimming="CharacterEllipsis" />
             </Grid>
@@ -55,7 +55,7 @@
                 Grid.Row="1"
                 MinHeight="38"
                 Margin="0,5,10,0"
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Left"
                 Background="{DynamicResource SystemControlTransientBorderBrush}"
                 CornerRadius="10">
                 <RichTextBox
