@@ -210,8 +210,8 @@ namespace Another_Mirai_Native.UI.Controls
                         {
                             // 构建一个元素并放在当前段落里 后创建一个新的元素
                             string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup ?
-                                await ChatPage.Instance.GetGroupMemberNick(ParentId, Id) :
-                                await ChatPage.Instance.GetFriendNick(Id);
+                                await ChatPage.Instance.GetGroupMemberNick(ParentId, messageItem.SenderID) :
+                                await ChatPage.Instance.GetFriendNick(messageItem.SenderID);
                             var reply = ChatDetailListItem_Common.BuildReplyElement(nick, messageItem.Message, () =>
                             {
                                 ChatPage.Instance.JumpToReplyItem(messageItem.MsgId);
