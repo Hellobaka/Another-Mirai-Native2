@@ -514,6 +514,7 @@ namespace Another_Mirai_Native.UI.Pages
                     MessageContainer.Children.Add(BuildRightBlock(item));
                     break;
             }
+            DetailList.Add(item);
 
             if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
                 && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
