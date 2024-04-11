@@ -626,6 +626,7 @@ namespace Another_Mirai_Native.UI.Pages
                 SenderID = sender,
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
                 MsgId = msgId,
+                PluginName = plugin == null ? "" : plugin.PluginName
             };
             int logId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetFriendNick(sender)}: {msg}";
