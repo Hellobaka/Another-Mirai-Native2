@@ -215,7 +215,7 @@ namespace Another_Mirai_Native.UI.Controls
                 width = Math.Max(currentWidth, width);
             }
 
-            DetailContainer.Width = width + 10 + DetailContainer.Padding.Left + DetailContainer.Padding.Right;
+            DetailContainer.Width = width + 5 + DetailContainer.Padding.Left + DetailContainer.Padding.Right;
         }
 
         public void Dispose()
@@ -282,7 +282,7 @@ namespace Another_Mirai_Native.UI.Controls
         {
             MaxWidth = e.NewSize.Width * 0.6;
             ImageBorder.MaxWidth = MaxWidth;
-            DetailContainer.MaxWidth = ImageDisplay.MaxWidth;
+            DetailContainer.MaxWidth = MaxWidth * 0.8;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -294,7 +294,7 @@ namespace Another_Mirai_Native.UI.Controls
             ControlLoaded = true;
             ParseAndBuildDetail();
             ImageDisplay.MaxWidth = MaxWidth * 0.6;
-            DetailContainer.MaxWidth = ImageDisplay.MaxWidth;
+            DetailContainer.MaxWidth = MaxWidth * 0.8;
             Avatar.Item = new ChatListItemViewModel
             {
                 AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
