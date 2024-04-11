@@ -182,7 +182,7 @@ namespace Another_Mirai_Native.UI.Controls
                 }
                 else
                 {
-                    ChatDetailListItem_Common.AddTextToRichTextBox(DetailContainer, item);
+                    ChatDetailListItem_Common.AddTextToRichTextBox(CurrentParagraph, item);
                 }
             }
             ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);

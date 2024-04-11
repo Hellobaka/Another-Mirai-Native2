@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
@@ -135,6 +136,36 @@ namespace Another_Mirai_Native.UI.Controls
                             minWidth = Math.Max(minWidth, expander.Width);
                         }
                     }
+                    else if (cqcode.Function == Model.Enums.CQCodeType.Reply
+                         && int.TryParse(cqcode.Items["id"], out int replyId))
+                    {
+                        var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(ParentId, replyId, ParentType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+                        if (messageItem == null)
+                        {
+                            Expander expander = new()
+                            {
+                                Header = "CQ 码",
+                                Margin = new Thickness(10),
+                                Content = ChatDetailListItem_Common.BuildTextElement(item)
+                            };
+                            CurrentParagraph.Inlines.Add(new InlineUIContainer(expander));
+                            minWidth = Math.Max(minWidth, expander.Width);
+                        }
+                        else
+                        {
+                            string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup ?
+                                await ChatPage.Instance.GetGroupMemberNick(ParentId, Id) :
+                                await ChatPage.Instance.GetFriendNick(Id);
+                            var reply = ChatDetailListItem_Common.BuildReplyElement(nick, messageItem.Message, () =>
+                            {
+                                ChatPage.Instance.JumpToReplyItem(messageItem.MsgId);
+                            });
+                            CurrentParagraph.Inlines.Add(reply);
+                            reply.UpdateLayout();
+                            minWidth = Math.Max(minWidth, reply.ActualWidth);
+                            DetailContainer.Document.Blocks.Add(new Paragraph());
+                        }
+                    }
                     else
                     {
                         Expander expander = new()
@@ -149,7 +180,7 @@ namespace Another_Mirai_Native.UI.Controls
                 }
                 else
                 {
-                    ChatDetailListItem_Common.AddTextToRichTextBox(DetailContainer, item);
+                    ChatDetailListItem_Common.AddTextToRichTextBox(CurrentParagraph, item);
                 }
             }
             ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);

@@ -55,6 +55,10 @@ namespace Another_Mirai_Native.UI.Pages
 
         public string GroupName { get; set; } = "";
 
+        private ModernWpf.Controls.Flyout AtFlyout { get; set; }
+
+        private AtTargetSelector AtTargetSelector { get; set; }
+
         private int CurrentPageIndex { get; set; }
 
         private bool FormLoaded { get; set; }
@@ -72,10 +76,6 @@ namespace Another_Mirai_Native.UI.Pages
         private int LoadCount { get; set; } = 15;
 
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
-
-        private AtTargetSelector AtTargetSelector { get; set; }
-
-        private ModernWpf.Controls.Flyout AtFlyout { get; set; }
 
         public void AddTextToSendBox(string text)
         {
@@ -124,7 +124,7 @@ namespace Another_Mirai_Native.UI.Pages
                         int msgId = CallGroupMsgSend(id, message);
                         if (msgId != 0)
                         {
-                            //ChatHistoryHelper.UpdateHistoryMessageId(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup 
+                            //ChatHistoryHelper.UpdateHistoryMessageId(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup
                             //    ? ChatHistoryType.Group : ChatHistoryType.Private, logId, msgId);
                             UpdateSendStatus(guid, false);
                         }
@@ -293,6 +293,41 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        public async void JumpToReplyItem(int msgId)
+        {
+            var history = ChatHistoryHelper.GetHistoriesByMsgId(SelectedItem.Id, msgId, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+            if (history == null)
+            {
+                return;
+            }
+            var item = DetailList.FirstOrDefault(x => x.MsgId == msgId);
+            if (item != null)
+            {
+                foreach (var control in MessageContainer.Children)
+                {
+                    if (control is ChatDetailListItem_Left left
+                        && left.MsgId == msgId)
+                    {
+                        await Dispatcher.Yield();
+                        left.BringIntoView();
+                        break;
+                    }
+                    else if (control is ChatDetailListItem_Right right
+                        && right.MsgId == msgId)
+                    {
+                        await Dispatcher.Yield();
+                        right.BringIntoView();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                int lastId = DetailList.First().SqlId;
+                await LazyLoad(lastId - history.ID, msgId);
+            }
+        }
+
         public async void UpdateUnreadCount(ChatListItemViewModel model)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
@@ -340,6 +375,36 @@ namespace Another_Mirai_Native.UI.Pages
             itemAdded?.Invoke(item?.GUID);
 
             return historyId;
+        }
+
+        private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
+        {
+            switch (item.DetailItemType)
+            {
+                case DetailItemType.Notice:
+                    MessageContainer.Children.Add(BuildMiddleBlock(item));
+                    break;
+
+                case DetailItemType.Receive:
+                    MessageContainer.Children.Add(BuildLeftBlock(item));
+                    break;
+
+                default:
+                case DetailItemType.Send:
+                    MessageContainer.Children.Add(BuildRightBlock(item));
+                    break;
+            }
+
+            if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
+                && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
+            {
+                do
+                {
+                    MessageContainer.Children.RemoveAt(0);
+                    DetailList.RemoveAt(0);
+                    CurrentPageIndex = 1;
+                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
+            }
         }
 
         private async void AddOrUpdateGroupChatList(long group, long qq, string msg)
@@ -482,6 +547,12 @@ namespace Another_Mirai_Native.UI.Pages
                 Placement = ModernWpf.Controls.Primitives.FlyoutPlacementMode.TopEdgeAlignedLeft
             };
             AtFlyout.ShowAt(AtBtn);
+        }
+
+        private void AtTargetSelector_ItemSelected(object sender, EventArgs e)
+        {
+            AddTextToSendBox(AtTargetSelector.SelectedCQCode);
+            AtFlyout.Hide();
         }
 
         private void AudioBtn_Click(object sender, RoutedEventArgs e)
@@ -701,6 +772,12 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void FaceBtn_Click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
+        {
+            AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
+            FaceImageFlyout.Hide();
         }
 
         private async Task LazyLoad(int count, int msgId = -1)
@@ -1017,36 +1094,6 @@ namespace Another_Mirai_Native.UI.Pages
             ScrollToBottom(MessageScrollViewer);
         }
 
-        private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
-        {
-            switch (item.DetailItemType)
-            {
-                case DetailItemType.Notice:
-                    MessageContainer.Children.Add(BuildMiddleBlock(item));
-                    break;
-
-                case DetailItemType.Receive:
-                    MessageContainer.Children.Add(BuildLeftBlock(item));
-                    break;
-
-                default:
-                case DetailItemType.Send:
-                    MessageContainer.Children.Add(BuildRightBlock(item));
-                    break;
-            }
-
-            if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
-                && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
-            {
-                do
-                {
-                    MessageContainer.Children.RemoveAt(0);
-                    DetailList.RemoveAt(0);
-                    CurrentPageIndex = 1;
-                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
-            }
-        }
-
         private async Task ReorderChatList()
         {
             await Dispatcher.BeginInvoke(() =>
@@ -1189,53 +1236,6 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             });
-        }
-
-        private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
-        {
-            AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
-            FaceImageFlyout.Hide();
-        }
-
-        private void AtTargetSelector_ItemSelected(object sender, EventArgs e)
-        {
-            AddTextToSendBox(AtTargetSelector.SelectedCQCode);
-            AtFlyout.Hide();
-        }
-
-        public async void JumpToReplyItem(int msgId)
-        {
-            var history = ChatHistoryHelper.GetHistoriesByMsgId(SelectedItem.Id, msgId, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
-            if (history == null)
-            {
-                return;
-            }
-            var item = DetailList.FirstOrDefault(x => x.MsgId == msgId);
-            if (item != null)
-            {
-                foreach (var control in MessageContainer.Children)
-                {
-                    if (control is ChatDetailListItem_Left left
-                        && left.MsgId == msgId)
-                    {
-                        await Dispatcher.Yield();
-                        left.BringIntoView();
-                        break;
-                    }
-                    else if (control is ChatDetailListItem_Right right
-                        && right.MsgId == msgId)
-                    {
-                        await Dispatcher.Yield();
-                        right.BringIntoView();
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                int lastId = DetailList.First().SqlId;
-                await LazyLoad(lastId - history.ID, msgId);
-            }
         }
     }
 }

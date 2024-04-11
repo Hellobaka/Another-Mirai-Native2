@@ -32,26 +32,65 @@ namespace Another_Mirai_Native.UI.Controls
         public static double ImageMaxHeight { get; set; } = 450;
 
         /// <summary>
+        /// 个人头像菜单
+        /// </summary>
+        private static ContextMenu AvatarContextMenu { get; set; } = BuildAvatarContextMenu();
+
+        /// <summary>
         /// 消息菜单
         /// </summary>
         private static ContextMenu DetailContextMenu { get; set; } = BuildDetailContextMenu();
+
+        /// <summary>
+        /// 下载并发限制
+        /// </summary>
+        private static ConcurrentDictionary<string, Task<string?>> DownloadTasks { get; set; } = new();
 
         /// <summary>
         /// 名称菜单
         /// </summary>
         private static ContextMenu GroupContextMenu { get; set; } = BuildGroupContextMenu();
 
-        /// <summary>
-        /// 个人头像菜单
-        /// </summary>
-        private static ContextMenu AvatarContextMenu { get; set; } = BuildAvatarContextMenu();
-
         private static ContextMenu ImageContextMenu { get; set; } = BuildImageContextMenu();
 
         /// <summary>
-        /// 下载并发限制
+        /// 向富文本框添加文本, 同步解析URL为超链接
         /// </summary>
-        private static ConcurrentDictionary<string, Task<string?>> DownloadTasks { get; set; } = new();
+        /// <param name="textBox"></param>
+        /// <param name="item"></param>
+        public static void AddTextToRichTextBox(Paragraph paragraph, string item)
+        {
+            Regex urlRegex = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
+            var urlCaptures = urlRegex.Matches(item).Cast<Match>().Select(m => m.Value).ToList();
+            var urlSplit = urlRegex.Split(item);
+            foreach (var capture in urlSplit)
+            {
+                if (urlCaptures.Contains(capture))
+                {
+                    var hyperlink = new Hyperlink(new Run(capture))
+                    {
+                        NavigateUri = new Uri(capture),
+                        Tag = capture
+                    };
+                    hyperlink.RequestNavigate += (sender, args) =>
+                    {
+                        args.Handled = true;
+                        var startInfo = new ProcessStartInfo
+                        {
+                            FileName = capture,
+                            UseShellExecute = true,
+                        };
+                        Process.Start(startInfo);
+                    };
+
+                    paragraph.Inlines.Add(hyperlink);
+                }
+                else
+                {
+                    paragraph.Inlines.Add(new Run(capture));
+                }
+            }
+        }
 
         public static ContextMenu BuildAvatarContextMenu()
         {
@@ -194,6 +233,33 @@ namespace Another_Mirai_Native.UI.Controls
             return DetailContextMenu;
         }
 
+        /// <summary>
+        /// 构建QQ表情元素
+        /// </summary>
+        /// <param name="id">表情Id</param>
+        /// <returns></returns>
+        public static Image? BuildFaceElement(int id, bool isAnimation)
+        {
+            // TODO: 实现Lottie
+            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "png" : "png")}";
+            if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
+            {
+                return null;
+            }
+            else
+            {
+                Image image = new()
+                {
+                    Stretch = Stretch.Uniform,
+                    Width = 30,
+                    Height = 30,
+                };
+                AnimationBehavior.SetSourceStream(image, resource.Stream);
+                AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                return image;
+            }
+        }
+
         public static ContextMenu BuildGroupContextMenu()
         {
             if (GroupContextMenu != null)
@@ -222,70 +288,6 @@ namespace Another_Mirai_Native.UI.Controls
             };
 
             return GroupContextMenu;
-        }
-
-        private static ContextMenu BuildImageContextMenu()
-        {
-            if (ImageContextMenu != null)
-            {
-                return ImageContextMenu;
-            }
-            ImageContextMenu = new ContextMenu();
-            ImageContextMenu.Items.Add(new MenuItem { Header = "收藏", Icon = new FontIcon { Glyph = "\uEB51" } });
-            ImageContextMenu.Items.Add(new MenuItem { Header = "另存为", Icon = new FontIcon { Glyph = "\uE792" } });
-            ImageContextMenu.Items.Add(new Separator());
-            ImageContextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
-
-            (ImageContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
-                {
-                    string path = image.Tag?.ToString();
-                    string collectImagePath = Path.Combine("data", "image", "collected");
-                    Directory.CreateDirectory(collectImagePath);
-                    if (File.Exists(path))
-                    {
-                        File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(path)}"));
-                    }
-                }
-            };
-            (ImageContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
-                {
-                    string path = image.Tag?.ToString();
-                    if (File.Exists(path) is false)
-                    {
-                        return;
-                    }
-                    SaveFileDialog saveFileDialog = new()
-                    {
-                        Title = "图片另存为",
-                        AddExtension = true,
-                        FileName = Path.GetFileName(path),
-                        Filter = "JPG 图片|*.jpg|JPEG 图片|*.jpeg|PNG 图片|*.png|BMP 图片|*.bmp|Webp 图片|*.webp|所有文件|*.*",
-                    };
-                    if (saveFileDialog.ShowDialog() is false)
-                    {
-                        return;
-                    }
-                    File.Copy(path, saveFileDialog.FileName, true);
-                }
-            };
-            (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
-            {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_Repeat(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_Repeat(sender, e);
-                }
-            };
-
-            return ImageContextMenu;
         }
 
         public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
@@ -420,33 +422,6 @@ namespace Another_Mirai_Native.UI.Controls
             return grid;
         }
 
-        /// <summary>
-        /// 构建QQ表情元素
-        /// </summary>
-        /// <param name="id">表情Id</param>
-        /// <returns></returns>
-        public static Image? BuildFaceElement(int id, bool isAnimation)
-        {
-            // TODO: 实现Lottie
-            string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "png" : "png")}";
-            if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
-            {
-                return null;
-            }
-            else
-            {
-                Image image = new()
-                {
-                    Stretch = Stretch.Uniform,
-                    Width = 30,
-                    Height = 30,
-                };
-                AnimationBehavior.SetSourceStream(image, resource.Stream);
-                AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
-                return image;
-            }
-        }
-
         public static Border BuildReplyElement(string nick, string msg, Action jumpAction)
         {
             Border border = new Border();
@@ -514,48 +489,6 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         /// <summary>
-        /// 文本框删除点击时发光的外边框
-        /// </summary>
-        /// <param name="element"></param>
-        public static void SetElementNoSelectEffect(UIElement element)
-        {
-            UIElement GetBorderElement(DependencyObject element)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
-                {
-                    var e = VisualTreeHelper.GetChild(element, i);
-                    if (e is Border border && border.Name == "BorderElement")
-                    {
-                        return border;
-                    }
-                    else if (e is Grid ignoreGrid && ignoreGrid.Name == "ContentRoot")
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        var result = GetBorderElement(e);
-                        if (result != null)
-                        {
-                            return result;
-                        }
-                    }
-                }
-                return null;
-            }
-
-            var borderElement = GetBorderElement(element);
-            if (borderElement != null)
-            {
-                if (borderElement is Border border)
-                {
-                    // 设置边框画笔为透明
-                    border.BorderBrush = Brushes.Transparent;
-                }
-            }
-        }
-
-        /// <summary>
         /// 下载或读取缓存图片
         /// </summary>
         /// <param name="imageUrl">欲下载的图片URL</param>
@@ -610,79 +543,109 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         /// <summary>
-        /// 向富文本框添加文本, 同步解析URL为超链接
+        /// 文本框删除点击时发光的外边框
         /// </summary>
-        /// <param name="textBox"></param>
-        /// <param name="item"></param>
-        public static void AddTextToRichTextBox(RichTextBox textBox, string item)
+        /// <param name="element"></param>
+        public static void SetElementNoSelectEffect(UIElement element)
         {
-            var paragraph = textBox.Document.Blocks.LastBlock as Paragraph;
-            Regex urlRegex = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
-            var urlCaptures = urlRegex.Matches(item).Cast<Match>().Select(m => m.Value).ToList();
-            var urlSplit = urlRegex.Split(item);
-            foreach (var capture in urlSplit)
+            UIElement GetBorderElement(DependencyObject element)
             {
-                if (urlCaptures.Contains(capture))
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
                 {
-                    var hyperlink = new Hyperlink(new Run(capture))
+                    var e = VisualTreeHelper.GetChild(element, i);
+                    if (e is Border border && border.Name == "BorderElement")
                     {
-                        NavigateUri = new Uri(capture),
-                        Tag = capture
-                    };
-                    hyperlink.RequestNavigate += (sender, args) =>
+                        return border;
+                    }
+                    else if (e is Grid ignoreGrid && ignoreGrid.Name == "ContentRoot")
                     {
-                        args.Handled = true;
-                        var startInfo = new ProcessStartInfo
+                        continue;
+                    }
+                    else
+                    {
+                        var result = GetBorderElement(e);
+                        if (result != null)
                         {
-                            FileName = capture,
-                            UseShellExecute = true,
-                        };
-                        Process.Start(startInfo);
-                    };
-
-                    paragraph.Inlines.Add(hyperlink);
+                            return result;
+                        }
+                    }
                 }
-                else
-                {
-                    paragraph.Inlines.Add(new Run(capture));
-                }
-            }
-
-        }
-
-        private static object GetContextMenuTarget(object sender)
-        {
-            return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
-        }
-
-        private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
-        {
-            using var client = new HttpClient();
-            var response = await client.GetAsync(imageUrl);
-            response.EnsureSuccessStatusCode();
-            // 文件类型已知
-            if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
-            {
                 return null;
             }
-            string path = Path.Combine(cacheImagePath, name + ".jpg");
-            path = Path.ChangeExtension(path, response.Content.Headers.ContentType.MediaType.Split('/').Last());
-            var imageBytes = await response.Content.ReadAsByteArrayAsync();
-            File.WriteAllBytes(path, imageBytes);
 
-            return new DirectoryInfo(path).FullName;
+            var borderElement = GetBorderElement(element);
+            if (borderElement != null)
+            {
+                if (borderElement is Border border)
+                {
+                    // 设置边框画笔为透明
+                    border.BorderBrush = Brushes.Transparent;
+                }
+            }
         }
 
-        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name, ChatAvatar.AvatarTypes avatarTypes)
+        private static ContextMenu BuildImageContextMenu()
         {
-            // 检测文件是否已经存在
-            string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
-            if (!string.IsNullOrEmpty(path))
+            if (ImageContextMenu != null)
             {
-                return Task.FromResult<string?>(new DirectoryInfo(path).FullName);
+                return ImageContextMenu;
             }
+            ImageContextMenu = new ContextMenu();
+            ImageContextMenu.Items.Add(new MenuItem { Header = "收藏", Icon = new FontIcon { Glyph = "\uEB51" } });
+            ImageContextMenu.Items.Add(new MenuItem { Header = "另存为", Icon = new FontIcon { Glyph = "\uE792" } });
+            ImageContextMenu.Items.Add(new Separator());
+            ImageContextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
 
-            return Task.FromResult<string?>(null);
+            (ImageContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
+            {
+                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
+                {
+                    string path = image.Tag?.ToString();
+                    string collectImagePath = Path.Combine("data", "image", "collected");
+                    Directory.CreateDirectory(collectImagePath);
+                    if (File.Exists(path))
+                    {
+                        File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(path)}"));
+                    }
+                }
+            };
+            (ImageContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
+            {
+                if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
+                {
+                    string path = image.Tag?.ToString();
+                    if (File.Exists(path) is false)
+                    {
+                        return;
+                    }
+                    SaveFileDialog saveFileDialog = new()
+                    {
+                        Title = "图片另存为",
+                        AddExtension = true,
+                        FileName = Path.GetFileName(path),
+                        Filter = "JPG 图片|*.jpg|JPEG 图片|*.jpeg|PNG 图片|*.png|BMP 图片|*.bmp|Webp 图片|*.webp|所有文件|*.*",
+                    };
+                    if (saveFileDialog.ShowDialog() is false)
+                    {
+                        return;
+                    }
+                    File.Copy(path, saveFileDialog.FileName, true);
+                }
+            };
+            (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
+            {
+                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (target.DataContext is ChatDetailListItem_Right right)
+                {
+                    right.ContextMenu_Repeat(sender, e);
+                }
+                else if (target.DataContext is ChatDetailListItem_Left left)
+                {
+                    left.ContextMenu_Repeat(sender, e);
+                }
+            };
+
+            return ImageContextMenu;
         }
 
         /// <summary>
@@ -707,6 +670,41 @@ namespace Another_Mirai_Native.UI.Controls
                 // 如果在尝试获取资源流的过程中发生了异常，说明资源不存在
                 return false;
             }
+        }
+
+        private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetAsync(imageUrl);
+            response.EnsureSuccessStatusCode();
+            // 文件类型已知
+            if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
+            {
+                return null;
+            }
+            string path = Path.Combine(cacheImagePath, name + ".jpg");
+            path = Path.ChangeExtension(path, response.Content.Headers.ContentType.MediaType.Split('/').Last());
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            File.WriteAllBytes(path, imageBytes);
+
+            return new DirectoryInfo(path).FullName;
+        }
+
+        private static object GetContextMenuTarget(object sender)
+        {
+            return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
+        }
+
+        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name, ChatAvatar.AvatarTypes avatarTypes)
+        {
+            // 检测文件是否已经存在
+            string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
+            if (!string.IsNullOrEmpty(path))
+            {
+                return Task.FromResult<string?>(new DirectoryInfo(path).FullName);
+            }
+
+            return Task.FromResult<string?>(null);
         }
     }
 }
