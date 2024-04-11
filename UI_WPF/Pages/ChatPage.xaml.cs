@@ -38,7 +38,6 @@ namespace Another_Mirai_Native.UI.Pages
             DataContext = this;
             Instance = this;
             Dispatcher.BeginInvoke(() => Page_Loaded(null, null));
-            // TODO: 消息引用显示
         }
 
         public static event Action<int> MsgRecalled;
