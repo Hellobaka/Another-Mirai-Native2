@@ -30,8 +30,6 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class ChatPage : Page, INotifyPropertyChanged
     {
-        private SemaphoreSlim detailListLock = new(1, 1);
-
         public ChatPage()
         {
             InitializeComponent();
@@ -40,7 +38,14 @@ namespace Another_Mirai_Native.UI.Pages
             Dispatcher.BeginInvoke(() => Page_Loaded(null, null));
         }
 
+        /// <summary>
+        /// 框架撤回消息事件, 各个消息块均订阅此事件
+        /// </summary>
         public static event Action<int> MsgRecalled;
+
+        /// <summary>
+        /// 主窗体尺寸变化事件, 各个消息块均订阅此事件
+        /// </summary>
 
         public static event Action<SizeChangedEventArgs> WindowSizeChanged;
 
@@ -48,34 +53,85 @@ namespace Another_Mirai_Native.UI.Pages
 
         public static ChatPage Instance { get; private set; }
 
+        /// <summary>
+        /// 侧边栏列表
+        /// </summary>
         public List<ChatListItemViewModel> ChatList { get; set; } = new();
 
+        /// <summary>
+        /// 消息容器列表
+        /// </summary>
         public List<ChatDetailItemViewModel> DetailList { get; set; } = new();
 
+        /// <summary>
+        /// 当前选择项的组名称
+        /// </summary>
         public string GroupName { get; set; } = "";
 
+        /// <summary>
+        /// 协议API调用锁
+        /// </summary>
+        private SemaphoreSlim APILock { get; set; } = new(1, 1);
+
+        /// <summary>
+        /// At选择器Flyout元素
+        /// </summary>
         private ModernWpf.Controls.Flyout AtFlyout { get; set; }
 
+        /// <summary>
+        /// At选择器内容
+        /// </summary>
         private AtTargetSelector AtTargetSelector { get; set; }
 
+        /// <summary>
+        /// 懒加载当前页数
+        /// </summary>
         private int CurrentPageIndex { get; set; }
 
+        /// <summary>
+        /// 窗体加载完成事件
+        /// </summary>
         private bool FormLoaded { get; set; }
 
+        /// <summary>
+        /// 好友信息列表缓存
+        /// </summary>
         private Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
 
+        /// <summary>
+        /// 群信息列表缓存
+        /// </summary>
         private Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
+        /// <summary>
+        /// 群成员信息列表缓存
+        /// </summary>
         private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
+        /// <summary>
+        /// 懒加载防抖时钟
+        /// </summary>
         private DispatcherTimer LazyLoadDebounceTimer { get; set; }
 
+        /// <summary>
+        /// 是否在懒加载中
+        /// </summary>
         private bool LazyLoading { get; set; }
 
+        /// <summary>
+        /// 初始化加载时的消息数量
+        /// </summary>
         private int LoadCount { get; set; } = 15;
 
+        /// <summary>
+        /// 左侧聊天列表选中的元素
+        /// </summary>
         private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
 
+        /// <summary>
+        /// 向发送框中添加文本
+        /// </summary>
+        /// <param name="text">添加的文本</param>
         public void AddTextToSendBox(string text)
         {
             Dispatcher.BeginInvoke(() =>
@@ -83,11 +139,17 @@ namespace Another_Mirai_Native.UI.Pages
                 TextPointer startPosition = SendText.Document.ContentStart;
                 int start = startPosition.GetOffsetToPosition(SendText.CaretPosition);
                 SendText.CaretPosition.InsertTextInRun(text);
-                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length + 1);
+                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length + 2);
                 SendText.Focus();
             });
         }
 
+        /// <summary>
+        /// 调用发送群消息
+        /// </summary>
+        /// <param name="groupId">发送的群</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
         public int CallGroupMsgSend(long groupId, string message)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -98,6 +160,12 @@ namespace Another_Mirai_Native.UI.Pages
             return msgId;
         }
 
+        /// <summary>
+        /// 调用发送好友消息
+        /// </summary>
+        /// <param name="qq">发送的好友</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
         public int CallPrivateMsgSend(long qq, string message)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -108,6 +176,12 @@ namespace Another_Mirai_Native.UI.Pages
             return msgId;
         }
 
+        /// <summary>
+        /// 添加消息块并调用发送
+        /// </summary>
+        /// <param name="id">发送对象</param>
+        /// <param name="avatar">发送对象的类型</param>
+        /// <param name="message">发送的消息</param>
         public async void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
         {
             if (id == 0 || string.IsNullOrEmpty(message))
@@ -123,8 +197,6 @@ namespace Another_Mirai_Native.UI.Pages
                         int msgId = CallGroupMsgSend(id, message);
                         if (msgId != 0)
                         {
-                            //ChatHistoryHelper.UpdateHistoryMessageId(SelectedItem.Id, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup
-                            //    ? ChatHistoryType.Group : ChatHistoryType.Private, logId, msgId);
                             UpdateSendStatus(guid, false);
                         }
                         else
@@ -152,11 +224,17 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        /// <summary>
+        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <returns>昵称, 失败时返回QQ号</returns>
         public async Task<string> GetFriendNick(long qq)
         {
             try
             {
-                await detailListLock.WaitAsync();
+                await APILock.WaitAsync();
                 if (qq == AppConfig.Instance.CurrentQQ)
                 {
                     return AppConfig.Instance.CurrentNickName;
@@ -200,15 +278,22 @@ namespace Another_Mirai_Native.UI.Pages
             }
             finally
             {
-                detailListLock.Release();
+                APILock.Release();
             }
         }
 
+        /// <summary>
+        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="group">群来源</param>
+        /// <param name="qq">群员QQ</param>
+        /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
         public async Task<string> GetGroupMemberNick(long group, long qq)
         {
             try
             {
-                await detailListLock.WaitAsync();
+                await APILock.WaitAsync();
 
                 if (qq == AppConfig.Instance.CurrentQQ)
                 {
@@ -249,15 +334,21 @@ namespace Another_Mirai_Native.UI.Pages
             }
             finally
             {
-                detailListLock.Release();
+                APILock.Release();
             }
         }
 
+        /// <summary>
+        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="groupId">群号</param>
+        /// <returns>群名称, 若不存在则返回群号</returns>
         public async Task<string> GetGroupName(long groupId)
         {
             try
             {
-                await detailListLock.WaitAsync();
+                await APILock.WaitAsync();
 
                 if (GroupInfoCache.TryGetValue(groupId, out var info))
                 {
@@ -288,20 +379,26 @@ namespace Another_Mirai_Native.UI.Pages
             }
             finally
             {
-                detailListLock.Release();
+                APILock.Release();
             }
         }
 
+        /// <summary>
+        /// 跳转至消息ID目标的消息
+        /// </summary>
+        /// <param name="msgId">消息ID</param>
         public async void JumpToReplyItem(int msgId)
         {
             var history = ChatHistoryHelper.GetHistoriesByMsgId(SelectedItem.Id, msgId, SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
-            if (history == null)
+            if (history == null) // 查询失败
             {
                 return;
             }
+            // 当前消息列表中已经有此消息
             var item = DetailList.FirstOrDefault(x => x.MsgId == msgId);
             if (item != null)
             {
+                // 遍历查询消息ID相同的, 并跳转
                 foreach (var control in MessageContainer.Children)
                 {
                     if (control is ChatDetailListItem_Left left
@@ -322,11 +419,16 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
+                // 计算相差数量, 进行懒加载并跳转
                 int lastId = DetailList.First().SqlId;
                 await LazyLoad(lastId - history.ID, msgId);
             }
         }
 
+        /// <summary>
+        /// 更新目标消息历史的未读消息数量
+        /// </summary>
+        /// <param name="model"></param>
         public async void UpdateUnreadCount(ChatListItemViewModel model)
         {
             var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
@@ -337,11 +439,25 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        /// <summary>
+        /// MVVM
+        /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// 消息持久化 若消息刚好为当前群则向容器构建消息并滚动至底
+        /// </summary>
+        /// <param name="group">群号</param>
+        /// <param name="qq">发送者ID</param>
+        /// <param name="msg">消息</param>
+        /// <param name="itemType">消息位置</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="itemAdded">消息添加后的回调</param>
+        /// <param name="plugin">发送来源插件</param>
+        /// <returns>消息持久化的ID</returns>
         private async Task<int?> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
@@ -376,6 +492,11 @@ namespace Another_Mirai_Native.UI.Pages
             return historyId;
         }
 
+        /// <summary>
+        /// 向消息容器构建消息块
+        /// </summary>
+        /// <param name="item">消息模型</param>
+        /// <param name="isRemove">是否需要清理消息至最少</param>
         private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
         {
             switch (item.DetailItemType)
@@ -406,14 +527,20 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private async void AddOrUpdateGroupChatList(long group, long qq, string msg)
+        /// <summary>
+        /// 添加或更新左侧聊天列表群内容
+        /// </summary>
+        /// <param name="id">群ID</param>
+        /// <param name="qq">发送者ID</param>
+        /// <param name="msg">消息</param>
+        private async void AddOrUpdateGroupChatList(long id, long qq, string msg)
         {
             msg = msg.Replace("\r", "").Replace("\n", "");
-            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
-            if (item != null)
+            var item = ChatList.FirstOrDefault(x => x.Id == id && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
+            if (item != null) // 消息已存在, 更新
             {
-                item.GroupName = await GetGroupName(group);
-                item.Detail = $"{await GetGroupMemberNick(group, qq)}: {msg}";
+                item.GroupName = await GetGroupName(id);
+                item.Detail = $"{await GetGroupMemberNick(id, qq)}: {msg}";
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
                 await ReorderChatList();
@@ -425,9 +552,9 @@ namespace Another_Mirai_Native.UI.Pages
                     ChatList.Add(new ChatListItemViewModel
                     {
                         AvatarType = ChatAvatar.AvatarTypes.QQGroup,
-                        Detail = $"{await GetGroupMemberNick(group, qq)}: {msg}",
-                        GroupName = await GetGroupName(group),
-                        Id = group,
+                        Detail = $"{await GetGroupMemberNick(id, qq)}: {msg}",
+                        GroupName = await GetGroupName(id),
+                        Id = id,
                         Time = DateTime.Now,
                         UnreadCount = 1
                     });
@@ -436,6 +563,12 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        /// <summary>
+        /// 添加或更新左侧聊天列表好友内容
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <param name="sender">发送者ID</param>
+        /// <param name="msg">消息</param>
         private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
         {
             msg = msg.Replace("\r", "").Replace("\n", "");
@@ -446,6 +579,7 @@ namespace Another_Mirai_Native.UI.Pages
                 item.Detail = msg;
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
+                await ReorderChatList();
             }
             else
             {
@@ -460,12 +594,23 @@ namespace Another_Mirai_Native.UI.Pages
                          Time = DateTime.Now,
                          UnreadCount = 1
                      });
+                     await ReorderChatList();
                  });
             }
-            await ReorderChatList();
         }
 
-        private async Task<string?> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        /// <summary>
+        /// 消息持久化 若消息刚好为当前好友则向容器构建消息并滚动至底
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <param name="sender">发送者ID</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="itemType">消息位置</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="itemAdded">持久化后的回调</param>
+        /// <param name="plugin">消息来源的插件</param>
+        /// <returns>持久化后的ID</returns>
+        private async Task<int?> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetFriendNick(sender);
             if (plugin != null)
@@ -481,7 +626,7 @@ namespace Another_Mirai_Native.UI.Pages
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
                 MsgId = msgId,
             };
-            ChatHistoryHelper.InsertHistory(history);
+            int logId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetFriendNick(sender)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
             AddOrUpdatePrivateChatList(qq, sender, msg);
@@ -494,7 +639,7 @@ namespace Another_Mirai_Native.UI.Pages
                 }
             });
             itemAdded?.Invoke(item?.GUID);
-            return item?.GUID;
+            return logId;
         }
 
         private void AtBtn_Click(object sender, RoutedEventArgs e)
@@ -505,6 +650,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             List<ChatListItemViewModel> list = new();
             var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(SelectedItem.Id);
+            // 构建群成员列表
             if (rawList != null)
             {
                 foreach (var item in rawList)
@@ -536,7 +682,7 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             }
-
+            // 显示Flyout
             AtTargetSelector = new(list);
             AtTargetSelector.ItemSelected -= AtTargetSelector_ItemSelected;
             AtTargetSelector.ItemSelected += AtTargetSelector_ItemSelected;
@@ -548,6 +694,11 @@ namespace Another_Mirai_Native.UI.Pages
             AtFlyout.ShowAt(AtBtn);
         }
 
+        /// <summary>
+        /// At选择器的项目被选中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AtTargetSelector_ItemSelected(object sender, EventArgs e)
         {
             AddTextToSendBox(AtTargetSelector.SelectedCQCode);
@@ -572,6 +723,7 @@ namespace Another_Mirai_Native.UI.Pages
             string filePath = openFileDialog.FileName;
             string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
             Directory.CreateDirectory(audioPath);
+            // 选择的文件在缓存文件夹中
             if (filePath.StartsWith(audioPath))
             {
                 filePath = filePath.Replace(audioPath, "");
@@ -579,12 +731,22 @@ namespace Another_Mirai_Native.UI.Pages
             else
             {
                 string fileName = Path.GetFileName(filePath);
+                // 复制文件到缓存文件夹中
                 File.Copy(filePath, Path.Combine(audioPath, fileName), true);
                 filePath = @$"cached\\{fileName}";
             }
             AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
         }
 
+        /// <summary>
+        /// 构建聊天模型
+        /// </summary>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="qq">来源QQ</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="nick">昵称</param>
+        /// <param name="avatarType">消息来源</param>
+        /// <param name="itemType">消息位置</param>
         private ChatDetailItemViewModel BuildChatDetailItem(int msgId, long qq, string msg, string nick, ChatAvatar.AvatarTypes avatarType, DetailItemType itemType)
         {
             return new ChatDetailItemViewModel
@@ -599,6 +761,11 @@ namespace Another_Mirai_Native.UI.Pages
             };
         }
 
+        /// <summary>
+        /// 构建左侧消息块
+        /// </summary>
+        /// <param name="item">消息模型</param>
+        /// <returns>消息块元素</returns>
         private UIElement BuildLeftBlock(ChatDetailItemViewModel item)
         {
             return new ChatDetailListItem_Left()
@@ -619,6 +786,11 @@ namespace Another_Mirai_Native.UI.Pages
             };
         }
 
+        /// <summary>
+        /// 构建中间消息块
+        /// </summary>
+        /// <param name="item">消息模型</param>
+        /// <returns>消息块元素</returns>
         private UIElement BuildMiddleBlock(ChatDetailItemViewModel item)
         {
             return new ChatDetailListItem_Center()
@@ -632,6 +804,11 @@ namespace Another_Mirai_Native.UI.Pages
             };
         }
 
+        /// <summary>
+        /// 构建右侧消息块
+        /// </summary>
+        /// <param name="item">消息模型</param>
+        /// <returns>消息块元素</returns>
         private UIElement BuildRightBlock(ChatDetailItemViewModel item)
         {
             return new ChatDetailListItem_Right()
@@ -652,11 +829,16 @@ namespace Another_Mirai_Native.UI.Pages
             };
         }
 
+        /// <summary>
+        /// 发送消息转CQ码
+        /// </summary>
+        /// <returns>处理后的CQ码消息</returns>
         private string BuildTextFromRichTextBox()
         {
             StringBuilder stringBuilder = new();
             foreach (Block item in SendText.Document.Blocks)
             {
+                // 粘贴的图片
                 if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
                 {
                     stringBuilder.Append(blockImg.Tag?.ToString());
@@ -681,6 +863,9 @@ namespace Another_Mirai_Native.UI.Pages
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// 左侧列表选中变化
+        /// </summary>
         private async void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var item = SelectedItem;
@@ -702,17 +887,19 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
             {
+                // 私聊时禁用At按钮
                 AtBtn.IsEnabled = false;
             }
 
+            // 重新加载消息内容
             List<ChatHistory> history = new();
             if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
             {
-                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, 15, 1);
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, LoadCount, 1);
             }
             else
             {
-                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, 15, 1);
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, LoadCount, 1);
             }
             DetailList.Clear();
             foreach (var x in history)
@@ -727,6 +914,9 @@ namespace Another_Mirai_Native.UI.Pages
             await RefreshMessageContainer(true);
         }
 
+        /// <summary>
+        /// 检测GUID是否已存在于消息容器中
+        /// </summary>
         private bool CheckMessageContainerHasItem(string guid)
         {
             foreach (UIElement item in MessageContainer.Children)
@@ -757,6 +947,9 @@ namespace Another_Mirai_Native.UI.Pages
             SendText.Document.Blocks.Clear();
         }
 
+        /// <summary>
+        /// CQP事件_群消息发送
+        /// </summary>
         private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
             AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
@@ -769,23 +962,26 @@ namespace Another_Mirai_Native.UI.Pages
             await AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
         }
 
-        private void FaceBtn_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
         {
             AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
             FaceImageFlyout.Hide();
         }
 
+        /// <summary>
+        /// 消息列表懒加载
+        /// </summary>
+        /// <param name="count">欲加载的消息数量</param>
+        /// <param name="msgId">最终跳转的消息ID, 若为-1则保持当前滚动条</param>
         private async Task LazyLoad(int count, int msgId = -1)
         {
             if (SelectedItem == null)
             {
                 return;
             }
+            // 加载的页面数量
             int diff = (int)Math.Ceiling(count / (float)UIConfig.Instance.MessageContainerMaxCount);
+            // 从数据库取的消息历史
             List<ChatHistory> list = new List<ChatHistory>();
             for (int i = CurrentPageIndex + 1; i <= CurrentPageIndex + diff; i++)
             {
@@ -797,6 +993,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             if (list.Count > 0)
             {
+                // 更新页数
                 CurrentPageIndex += diff;
             }
             else
@@ -832,6 +1029,7 @@ namespace Another_Mirai_Native.UI.Pages
             await Dispatcher.Yield();
             if (msgId == -1 || scrollItem == null)
             {
+                // 保持滚动条位置
                 MessageScrollViewer.ScrollToVerticalOffset(MessageScrollViewer.ScrollableHeight - distanceToBottom);
             }
             else
@@ -840,6 +1038,10 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
+        /// <summary>
+        /// 加载左侧聊天列表
+        /// </summary>
+        /// <returns></returns>
         private async Task LoadChatHistory()
         {
             var list = ChatHistoryHelper.GetHistoryCategroies();
@@ -871,11 +1073,13 @@ namespace Another_Mirai_Native.UI.Pages
             ScrollBottomContainer.Visibility = distanceToBottom > 100 ? Visibility.Visible : Visibility.Collapsed;
             if (distanceToTop < 50 && distanceToBottom > 100 && !LazyLoading)
             {
+                // 滚动条距顶部50像素以内 且 距离底部100像素以上
+                // 懒加载防抖
                 if (LazyLoadDebounceTimer == null)
                 {
                     LazyLoadDebounceTimer = new DispatcherTimer
                     {
-                        Interval = TimeSpan.FromMilliseconds(100),
+                        Interval = TimeSpan.FromMilliseconds(300),
                     };
                     LazyLoadDebounceTimer.Tick += (_, _) =>
                     {
@@ -910,6 +1114,8 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 if (SelectedItem == null && ChatList.Count > 0)
                 {
+                    // 当没有内容被选中时 选中第一项
+                    await Dispatcher.Yield();
                     ChatListDisplay.SelectedItem = ChatList.First();
                 }
                 return;
@@ -935,6 +1141,12 @@ namespace Another_Mirai_Native.UI.Pages
             await ReorderChatList();
         }
 
+        /// <summary>
+        /// 将历史转换为消息模型
+        /// </summary>
+        /// <param name="avatarType">消息来源</param>
+        /// <param name="history">聊天历史</param>
+        /// <returns>消息模型</returns>
         private async Task<ChatDetailItemViewModel> ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
         {
             return new ChatDetailItemViewModel
@@ -973,10 +1185,12 @@ namespace Another_Mirai_Native.UI.Pages
                 Directory.CreateDirectory(picPath);
                 if (filePath.StartsWith(picPath))
                 {
+                    // 选中图片已经存在于缓存文件夹
                     filePath = filePath.Replace(picPath, "");
                 }
                 else
                 {
+                    // 复制至缓存文件夹
                     string fileName = Path.GetFileName(filePath);
                     File.Copy(filePath, Path.Combine(picPath, fileName), true);
                     filePath = @$"cached\\{fileName}";
@@ -1058,6 +1272,9 @@ namespace Another_Mirai_Native.UI.Pages
             MsgRecalled?.Invoke(msgId);
         }
 
+        /// <summary>
+        /// 更新顶部显示的群名称
+        /// </summary>
         private async Task RefreshGroupName()
         {
             GroupName = SelectedItem.AvatarType switch
@@ -1069,6 +1286,10 @@ namespace Another_Mirai_Native.UI.Pages
             OnPropertyChanged(nameof(GroupName));
         }
 
+        /// <summary>
+        /// 更新或刷新消息容器
+        /// </summary>
+        /// <param name="refreshAll">是否清空后加载</param>
         private async Task RefreshMessageContainer(bool refreshAll)
         {
             if (SelectedItem == null)
@@ -1093,6 +1314,9 @@ namespace Another_Mirai_Native.UI.Pages
             ScrollToBottom(MessageScrollViewer);
         }
 
+        /// <summary>
+        /// 按时间重新排序左侧聊天列表
+        /// </summary>
         private async Task ReorderChatList()
         {
             await Dispatcher.BeginInvoke(() =>
@@ -1107,10 +1331,14 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
+        /// <summary>
+        /// 发送文本框响应粘贴事件
+        /// </summary>
         private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
         {
             if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
             {
+                // 粘贴内容为图片 将图片保存进缓存文件夹
                 string cacheImagePath = Path.Combine("data", "image", "cached");
                 using MemoryStream memoryStream = new();
                 BitmapEncoder encoder = new PngBitmapEncoder();
@@ -1139,12 +1367,19 @@ namespace Another_Mirai_Native.UI.Pages
                 && e.DataObject.GetData(DataFormats.UnicodeText) is string text
                 && string.IsNullOrEmpty(text) is false)
             {
+                // 粘贴内容为文本
                 AddTextToSendBox(text);
                 e.Handled = true;
                 e.CancelCommand();
             }
         }
 
+        /// <summary>
+        /// 将滚动容器滚动至底部
+        /// 当滚动至底按钮不可见时不滚动
+        /// </summary>
+        /// <param name="scrollViewer">滚动容器</param>
+        /// <param name="forced">true时忽略滚动至底按钮是否可见</param>
         private void ScrollToBottom(ScrollViewer scrollViewer, bool forced = false)
         {
             if (!forced && ScrollBottomContainer.Visibility == Visibility.Visible)
@@ -1157,6 +1392,7 @@ namespace Another_Mirai_Native.UI.Pages
         private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
         {
             ScrollToBottom(MessageScrollViewer, true);
+            // 清理消息内容至数量以下
             if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
                  && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
             {
@@ -1182,6 +1418,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 ExecuteSendMessage(id, avatar, sendText);
             });
+            // 清空发送框
             SendText.Document.Blocks.Clear();
         }
 
@@ -1194,11 +1431,16 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else if (e.Key == Key.D2 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
+                // 触发@
                 e.Handled = true;
                 AtBtn_Click(sender, e);
             }
         }
 
+        /// <summary>
+        /// 消息发送失败 显示重新发送按钮
+        /// </summary>
+        /// <param name="guid">目标GUID</param>
         private void UpdateSendFail(string? guid)
         {
             if (string.IsNullOrEmpty(guid))
@@ -1218,6 +1460,11 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
+        /// <summary>
+        /// 更新消息发送状态
+        /// </summary>
+        /// <param name="guid">消息GUID</param>
+        /// <param name="enable">正在发送</param>
         private void UpdateSendStatus(string? guid, bool enable)
         {
             if (string.IsNullOrEmpty(guid))

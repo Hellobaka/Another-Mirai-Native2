@@ -92,6 +92,9 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 构建消息容器头像右键菜单
+        /// </summary>
         public static ContextMenu BuildAvatarContextMenu()
         {
             if (AvatarContextMenu != null)
@@ -150,6 +153,9 @@ namespace Another_Mirai_Native.UI.Controls
             return AvatarContextMenu;
         }
 
+        /// <summary>
+        /// 构建消息右键菜单
+        /// </summary>
         public static ContextMenu BuildDetailContextMenu()
         {
             if (DetailContextMenu != null)
@@ -237,7 +243,8 @@ namespace Another_Mirai_Native.UI.Controls
         /// 构建QQ表情元素
         /// </summary>
         /// <param name="id">表情Id</param>
-        /// <returns></returns>
+        /// <param name="isAnimation">是否为动图</param>
+        /// <returns>构建结果 当ID不存在时返回null</returns>
         public static Image? BuildFaceElement(int id, bool isAnimation)
         {
             // TODO: 实现Lottie
@@ -260,6 +267,9 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 构建左侧列表项目的右键菜单
+        /// </summary>
         public static ContextMenu BuildGroupContextMenu()
         {
             if (GroupContextMenu != null)
@@ -290,6 +300,12 @@ namespace Another_Mirai_Native.UI.Controls
             return GroupContextMenu;
         }
 
+        /// <summary>
+        /// 构建图片元素 包含自动下载与进度显示
+        /// </summary>
+        /// <param name="cqCode">图片CQ码</param>
+        /// <param name="maxWidth">最大宽度</param>
+        /// <returns>图片元素</returns>
         public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
         {
             Grid grid = new()
@@ -422,12 +438,18 @@ namespace Another_Mirai_Native.UI.Controls
             return grid;
         }
 
+        /// <summary>
+        /// 构建回复消息元素
+        /// </summary>
+        /// <param name="nick">消息昵称</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="jumpAction">点击跳转回调</param>
         public static Border BuildReplyElement(string nick, string msg, Action jumpAction)
         {
             Border border = new Border();
             border.BorderBrush = Brushes.Gray;
             border.BorderThickness = new Thickness(2, 0, 0, 0);
-            //border.CornerRadius = new CornerRadius(5);
+            border.CornerRadius = new CornerRadius(0, 5, 5, 0);
             //border.ClipToBounds = true;
             Grid grid = new();
             border.Child = grid;
@@ -459,6 +481,7 @@ namespace Another_Mirai_Native.UI.Controls
 
             border.MouseEnter += (_, _) =>
             {
+                // 半透明背景色
                 border.Background = new SolidColorBrush(Color.FromArgb(100, 100, 100, 100));
             };
             border.MouseLeave += (_, _) =>
@@ -472,6 +495,10 @@ namespace Another_Mirai_Native.UI.Controls
             return border;
         }
 
+        /// <summary>
+        /// 构建文本元素 折叠框使用
+        /// </summary>
+        /// <param name="text">内容</param>
         public static TextBox BuildTextElement(string text)
         {
             var textbox = new TextBox
@@ -523,7 +550,7 @@ namespace Another_Mirai_Native.UI.Controls
                     name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
                 }
                 // 尝试从本地读取缓存
-                string? path = await GetFromCacheAsync(cacheImagePath, name, avatarTypes);
+                string? path = await GetFromCacheAsync(cacheImagePath, name);
                 if (!string.IsNullOrEmpty(path))
                 {
                     return path;
@@ -584,6 +611,9 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 构建图片右键菜单
+        /// </summary>
         private static ContextMenu BuildImageContextMenu()
         {
             if (ImageContextMenu != null)
@@ -672,6 +702,13 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 下载图片
+        /// </summary>
+        /// <param name="cacheImagePath">缓存图片路径</param>
+        /// <param name="name">文件名</param>
+        /// <param name="imageUrl">目标下载Url</param>
+        /// <returns>下载后完全路径</returns>
         private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
         {
             using var client = new HttpClient();
@@ -690,12 +727,22 @@ namespace Another_Mirai_Native.UI.Controls
             return new DirectoryInfo(path).FullName;
         }
 
+        /// <summary>
+        /// 获取右键菜单触发元素
+        /// </summary>
         private static object GetContextMenuTarget(object sender)
         {
             return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
         }
 
-        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name, ChatAvatar.AvatarTypes avatarTypes)
+        /// <summary>
+        /// 从缓存获取图片
+        /// </summary>
+        /// <param name="cacheImagePath">图片缓存文件夹</param>
+        /// <param name="name">文件名</param>
+        /// <param name="avatarTypes"></param>
+        /// <returns>文件的完全路径</returns>
+        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name)
         {
             // 检测文件是否已经存在
             string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);

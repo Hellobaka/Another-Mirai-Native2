@@ -25,32 +25,72 @@ namespace Another_Mirai_Native.UI.Controls
             DataContext = this;
         }
 
+        /// <summary>
+        /// 控件加载完成
+        /// </summary>
         public bool ControlLoaded { get; set; }
 
+        /// <summary>
+        /// 消息位置
+        /// </summary>
         public DetailItemType DetailItemType { get; set; }
 
+        /// <summary>
+        /// 显示的名称
+        /// </summary>
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// 消息块的GUID
+        /// </summary>
         public string GUID { get; set; }
 
+        /// <summary>
+        /// 消息所属的QQ
+        /// </summary>
         public long Id { get; set; }
 
+        /// <summary>
+        /// 未转换的消息内容
+        /// </summary>
         public string Message { get; set; } = "";
 
+        /// <summary>
+        /// 消息ID
+        /// </summary>
         public int MsgId { get; set; }
 
+        /// <summary>
+        /// 消息所属的组ID 群号或QQ
+        /// </summary>
         public long ParentId { get; set; }
 
+        /// <summary>
+        /// 消息来源
+        /// </summary>
         public ChatAvatar.AvatarTypes ParentType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
 
+        /// <summary>
+        /// 是否已撤回
+        /// </summary>
         public bool Recalled { get; set; }
 
+        /// <summary>
+        /// 显示的时间
+        /// </summary>
         public DateTime Time { get; set; }
 
+        /// <summary>
+        /// 最后一个段落
+        /// </summary>
         private Paragraph CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
-
+       
+        /// <summary>
+        /// 转换消息为可显示内容
+        /// </summary>
         public async void ParseAndBuildDetail()
         {
+            // 拆分CQ码
             Regex regex = new("(\\[CQ:.*?,.*?\\])");
             var cqCodeCaptures = regex.Matches(Message).Cast<Match>().Select(m => m.Value).ToList();
 
@@ -65,9 +105,11 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 if (cqCodeCaptures.Contains(item))
                 {
+                    // 当前元素为CQ码
                     var cqcode = CQCode.Parse(item).FirstOrDefault();
                     if (cqcode == null)
                     {
+                        // 无法转换
                         Expander expander = new()
                         {
                             Header = "CQ 码",
@@ -80,14 +122,17 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                     if (cqcode.Function == Model.Enums.CQCodeType.Image)
                     {
+                        // 图片元素
                         if (imageCount == 1 && s.Count == 1)
                         {
+                            // 只有图片没有文本 隐藏原本文本框
                             ImageBorder.Visibility = Visibility.Visible;
                             DetailBorder.Visibility = Visibility.Collapsed;
                             ImageDisplay.Children.Add(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5));
                         }
                         else
                         {
+                            // 构建一个新的段落存放图片 之后放个新的图片
                             DetailContainer.Document.Blocks.Add(new Paragraph());
                             CurrentParagraph.Inlines.Add(new InlineUIContainer(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5)));
                             DetailContainer.Document.Blocks.Add(new Paragraph());
@@ -97,9 +142,11 @@ namespace Another_Mirai_Native.UI.Controls
                     else if (cqcode.Function == Model.Enums.CQCodeType.At
                         && cqcode.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
                     {
+                        // At元素
                         string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
                                 ? await ChatPage.Instance.GetGroupMemberNick(ParentId, id)
                                     : await ChatPage.Instance.GetFriendNick(id);
+                        // 超链接 点击时向文本框添加AtCQ码
                         var hyperlink = new Hyperlink(new Run($" @{nick} "))
                         {
                             NavigateUri = new Uri("https://www.google.com"),
@@ -108,8 +155,10 @@ namespace Another_Mirai_Native.UI.Controls
                         hyperlink.Background = Brushes.SeaGreen;
                         hyperlink.Foreground = Brushes.White;
                         hyperlink.TextDecorations = null;
+
                         hyperlink.RequestNavigate += (_, e) =>
                         {
+                            // 阻止Frame跳转
                             e.Handled = true;
                             ChatPage.Instance.AddTextToSendBox(cqcode.ToSendString());
                         };
@@ -118,14 +167,17 @@ namespace Another_Mirai_Native.UI.Controls
                     else if (cqcode.Function == Model.Enums.CQCodeType.Face
                         && int.TryParse(cqcode.Items["id"], out int faceId))
                     {
+                        // 表情元素
                         Image? faceElement = ChatDetailListItem_Common.BuildFaceElement(faceId, true);
                         if (faceElement != null)
                         {
+                            // 表情无需构建新段落
                             CurrentParagraph.Inlines.Add(faceElement);
                             minWidth += faceElement.Width;
                         }
                         else
                         {
+                            // 构建失败 添加CQ码
                             Expander expander = new()
                             {
                                 Header = "CQ 码",
@@ -137,11 +189,13 @@ namespace Another_Mirai_Native.UI.Controls
                         }
                     }
                     else if (cqcode.Function == Model.Enums.CQCodeType.Reply
-                         && int.TryParse(cqcode.Items["id"], out int replyId))
+                        && int.TryParse(cqcode.Items["id"], out int replyId))
                     {
+                        // 回复元素
                         var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(ParentId, replyId, ParentType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
                         if (messageItem == null)
                         {
+                            // 获取消息内容失败
                             Expander expander = new()
                             {
                                 Header = "CQ 码",
@@ -153,6 +207,7 @@ namespace Another_Mirai_Native.UI.Controls
                         }
                         else
                         {
+                            // 构建一个元素并放在当前段落里 后创建一个新的元素
                             string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup ?
                                 await ChatPage.Instance.GetGroupMemberNick(ParentId, Id) :
                                 await ChatPage.Instance.GetFriendNick(Id);
@@ -168,6 +223,7 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                     else
                     {
+                        // 其他CQ码
                         Expander expander = new()
                         {
                             Header = "CQ 码",
@@ -180,15 +236,19 @@ namespace Another_Mirai_Native.UI.Controls
                 }
                 else
                 {
+                    // 文本消息
                     ChatDetailListItem_Common.AddTextToRichTextBox(CurrentParagraph, item);
                 }
             }
+            // 删除点击效果
             ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
             DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
+            // 根据内容重新计算消息块宽度
             ChangeContainerWidth(minWidth);
             TimeDisplay.ToolTip = Time.ToString("G");
             NameDisplay.ToolTip = $"{DisplayName} [{Id}]";
-            
+
+            // 最后一个段落是否为空
             var lastParagraph = DetailContainer.Document.Blocks.Count > 0 && DetailContainer.Document.Blocks.LastBlock is Paragraph p
                 && p.Inlines.Count == 0;
             // 文本垂直居中
@@ -201,6 +261,10 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 根据内容计算宽度
+        /// </summary>
+        /// <param name="minWidth">最小宽度</param>
         private void ChangeContainerWidth(double minWidth)
         {
             double pixelsPerDip = VisualTreeHelper.GetDpi(DetailContainer).PixelsPerDip;

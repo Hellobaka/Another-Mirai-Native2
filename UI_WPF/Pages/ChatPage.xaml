@@ -66,9 +66,7 @@
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Border>
-                    <TextBlock
-                        x:Name="GroupNameDisplay"
-                        FontSize="18" />
+                    <TextBlock x:Name="GroupNameDisplay" FontSize="18" />
                 </Border>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
@@ -80,7 +78,6 @@
                         <Button
                             x:Name="FaceBtn"
                             Margin="0,0,5,8"
-                            Click="FaceBtn_Click"
                             IsEnabled="False">
                             <ui:FontIcon
                                 Width="16"
