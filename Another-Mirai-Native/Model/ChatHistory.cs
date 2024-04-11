@@ -23,6 +23,8 @@ namespace Another_Mirai_Native.Model
         public int MsgId { get; set; }
 
         public bool Recalled { get; set; }
+
+        public string PluginName { get; set; } = "";
     }
 
     public enum ChatHistoryType

@@ -320,6 +320,7 @@ namespace Another_Mirai_Native.UI.Pages
                 SenderID = qq,
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Group,
                 MsgId = msgId,
+                PluginName = plugin == null ? "" : plugin.PluginName
             };
             ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
@@ -840,7 +841,8 @@ namespace Another_Mirai_Native.UI.Pages
                 DetailItemType = history.Type == ChatHistoryType.Notice ? DetailItemType.Notice : (history.SenderID == AppConfig.Instance.CurrentQQ ? DetailItemType.Send : DetailItemType.Receive),
                 Id = history.SenderID,
                 MsgId = history.MsgId,
-                Nick = avatarType == ChatAvatar.AvatarTypes.QQPrivate ? await GetFriendNick(history.SenderID) : await GetGroupMemberNick(history.ParentID, history.SenderID),
+                Nick = (avatarType == ChatAvatar.AvatarTypes.QQPrivate ? await GetFriendNick(history.SenderID) : await GetGroupMemberNick(history.ParentID, history.SenderID))
+                     + (string.IsNullOrEmpty(history.PluginName) ? "" : $" [{history.PluginName}]"),
                 Recalled = history.Recalled,
                 Time = history.Time,
             };
