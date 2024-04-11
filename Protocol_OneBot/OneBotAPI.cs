@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Protocol.OneBot
@@ -37,7 +38,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private List<GroupInfo> GroupInfoList { get; set; } = new();
 
-        private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberInfoDict { get; set; } = new();
+        private ConcurrentDictionary<long, ConcurrentDictionary<long, GroupMemberInfo>> GroupMemberInfoDict { get; set; } = new();
 
         public int CanSendImage()
         {
@@ -547,21 +548,32 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return groupInfo == null ? "" : withBracket ? $"({groupInfo.Name})" : groupInfo.Name;
         }
 
+        private string GetNickFromGroupMemberInfo(GroupMemberInfo info)
+        {
+            if (info == null)
+            {
+                return "";
+            }
+            return string.IsNullOrEmpty(info.Card) ? info.Nick : info.Card;
+        }
+
         private string? GetGroupMemberNick(long groupId, long qq, bool withBracket = false)
         {
             if (GroupMemberInfoDict.TryGetValue(groupId, out var groupInfo))
             {
                 if (groupInfo.TryGetValue(qq, out var memberNick))
                 {
-                    return memberNick == null ? "" : withBracket ? $"({memberNick.Card})" : memberNick.Card;
+                    string nick = GetNickFromGroupMemberInfo(memberNick);
+                    return withBracket ? $"({nick})" : nick;
                 }
                 else
                 {
                     var info = GetRawGroupMemberInfo(groupId, qq, false);
-                    if (info.Group > 0)
+                    if (info != null && info.Group > 0)
                     {
-                        groupInfo.Add(qq, info);
-                        return info == null ? "" : withBracket ? $"({info.Card})" : info.Card;
+                        groupInfo.TryAdd(qq, info);
+                        string nick = GetNickFromGroupMemberInfo(info);
+                        return withBracket ? $"({nick})" : nick;
                     }
                     else
                     {
@@ -572,12 +584,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
             else
             {
                 groupInfo = new();
-                GroupMemberInfoDict.Add(groupId, groupInfo);
+                GroupMemberInfoDict.TryAdd(groupId, groupInfo);
                 var info = GetRawGroupMemberInfo(groupId, qq, false);
-                if (info.Group > 0)
+                if (info != null && info.Group > 0)
                 {
-                    groupInfo.Add(qq, info);
-                    return info == null ? "" : withBracket ? $"({info.Card})" : info.Card;
+                    groupInfo.TryAdd(qq, info);
+                    string nick = GetNickFromGroupMemberInfo(info);
+                    return withBracket ? $"({nick})" : nick;
                 }
                 else
                 {
@@ -613,7 +626,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             if (GroupMemberInfoDict.TryGetValue(groupId, out var dict) && dict.TryGetValue(qq, out _))
             {
-                dict.Remove(qq);
+                dict.TryRemove(qq, out _);
             }
         }
 
@@ -627,7 +640,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
             if (GroupMemberInfoDict.ContainsKey(groupId))
             {
-                GroupMemberInfoDict.Remove(groupId);
+                GroupMemberInfoDict.TryRemove(groupId, out _);
             }
         }
 

@@ -166,7 +166,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             RequestCache.AddMessageCache(groupMessage.message_id, groupMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
-            int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}{GetGroupMemberNick(groupMessage.group_id, groupMessage.user_id, true)}({groupMessage.sender?.nickname}) {groupMessage.ParsedMessage}", "处理中...");
+            int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}({groupMessage.sender?.nickname}) {groupMessage.ParsedMessage}", "处理中...");
             CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
@@ -388,7 +388,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {
                         break;
                     }
-                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{privateMessage.sender.group_id}{GetGroupName(privateMessage.sender.group_id, true)} QQ:{privateMessage.user_id}{GetGroupMemberNick(privateMessage.sender.group_id, privateMessage.user_id, true)}({privateMessage.sender?.nickname}) {privateMessage.ParsedMessage}", "处理中...");
+                    logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{privateMessage.sender.group_id}{GetGroupName(privateMessage.sender.group_id, true)} QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.ParsedMessage}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0);
                     break;
 
