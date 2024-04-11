@@ -46,6 +46,7 @@ namespace Another_Mirai_Native.UI.Controls
 
             GroupMemeberList = OriginList.OrderBy(x => x.GroupName).ToList();
             OnPropertyChanged(nameof(GroupMemeberList));
+            SearchBox.Focus();
         }
 
         private void DeboundTimer_Elapsed(object sender, ElapsedEventArgs e)

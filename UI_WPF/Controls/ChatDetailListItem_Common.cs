@@ -447,6 +447,56 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        public static Border BuildReplyElement(string nick, string msg, Action jumpAction)
+        {
+            Border border = new Border();
+            border.BorderBrush = Brushes.Gray;
+            border.BorderThickness = new Thickness(2, 0, 0, 0);
+            //border.CornerRadius = new CornerRadius(5);
+            //border.ClipToBounds = true;
+            Grid grid = new();
+            border.Child = grid;
+
+            border.Cursor = Cursors.Hand;
+            border.Background = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            nick = nick.Replace("\r", "").Replace("\n", "");
+            msg = msg.Replace("\r", "").Replace("\n", "");
+            TextBlock nickBlock = new()
+            {
+                TextWrapping = TextWrapping.NoWrap,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Text = nick,
+                Margin = new Thickness(10, 10, 10, 5)
+            };
+            TextBlock content = new()
+            {
+                TextWrapping = TextWrapping.NoWrap,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Text = msg,
+                Margin = new Thickness(10, 5, 10, 10)
+            };
+            grid.Children.Add(nickBlock);
+            grid.Children.Add(content);
+            nickBlock.SetValue(Grid.RowProperty, 0);
+            content.SetValue(Grid.RowProperty, 1);
+
+            border.MouseEnter += (_, _) =>
+            {
+                border.Background = new SolidColorBrush(Color.FromArgb(100, 100, 100, 100));
+            };
+            border.MouseLeave += (_, _) =>
+            {
+                border.Background = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
+            };
+            border.MouseDown += (_, _) =>
+            {
+                jumpAction?.Invoke();
+            };
+            return border;
+        }
+
         public static TextBox BuildTextElement(string text)
         {
             var textbox = new TextBox
@@ -566,7 +616,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// <param name="item"></param>
         public static void AddTextToRichTextBox(RichTextBox textBox, string item)
         {
-            var paragraph = textBox.Document.Blocks.FirstBlock as Paragraph;
+            var paragraph = textBox.Document.Blocks.LastBlock as Paragraph;
             Regex urlRegex = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
             var urlCaptures = urlRegex.Matches(item).Cast<Match>().Select(m => m.Value).ToList();
             var urlSplit = urlRegex.Split(item);

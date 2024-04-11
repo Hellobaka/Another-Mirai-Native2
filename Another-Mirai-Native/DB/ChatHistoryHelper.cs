@@ -29,14 +29,20 @@ namespace Another_Mirai_Native.DB
             db.CodeFirst.InitTables(typeof(ChatHistory));
         }
 
-        public static void InsertHistory(ChatHistory history)
+        public static int InsertHistory(ChatHistory history)
         {
             if (history == null)
             {
-                return;
+                return -1;
             }
             using var db = GetInstance(GetDBPath(history.ParentID, history.Type));
-            db.Insertable(history).ExecuteCommand();
+            return db.Insertable(history).ExecuteReturnIdentity();
+        }
+
+        public static void UpdateHistoryMessageId(long parentId, ChatHistoryType chatHistoryType, int id, int msgId)
+        {
+            using var db = GetInstance(GetDBPath(parentId, chatHistoryType));
+            db.Updateable<ChatHistory>().Where(x => x.ID == id).SetColumns(x => x.MsgId == msgId).ExecuteCommand();
         }
 
         public static void UpdateHistory(ChatHistory history)
@@ -67,6 +73,13 @@ namespace Another_Mirai_Native.DB
             var ls = db.Queryable<ChatHistory>().OrderByDescending(x => x.Time).ToPageList(pageIndex, pageSize);
             ls.Reverse();
             return ls;
+        }
+
+        public static ChatHistory GetHistoriesByMsgId(long id, int msgId, ChatHistoryType historyType)
+        {
+            using var db = GetInstance(GetDBPath(id, historyType));
+            var item = db.Queryable<ChatHistory>().First(x => x.MsgId == msgId);
+            return item;
         }
 
         public static List<ChatHistory> GetHistoryCategroies()

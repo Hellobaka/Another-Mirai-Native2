@@ -42,5 +42,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         }
 
         public int MsgId { get; set; }
+
+        public int SqlId { get; set; }
     }
 }
