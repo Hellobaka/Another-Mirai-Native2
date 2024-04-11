@@ -349,6 +349,7 @@ namespace Another_Mirai_Native.UI.Pages
                 item.Detail = $"{await GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
+                await ReorderChatList();
             }
             else
             {
@@ -363,9 +364,9 @@ namespace Another_Mirai_Native.UI.Pages
                         Time = DateTime.Now,
                         UnreadCount = 1
                     });
+                    await ReorderChatList();
                 });
             }
-            await ReorderChatList();
         }
 
         private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
