@@ -166,7 +166,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             RequestCache.AddMessageCache(groupMessage.message_id, groupMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
-            int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}({groupMessage.sender?.nickname}) {groupMessage.ParsedMessage}", "处理中...");
+            int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}({GetGroupMemberNick(groupMessage.group_id, groupMessage.user_id)}) {groupMessage.ParsedMessage}", "处理中...");
             CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
