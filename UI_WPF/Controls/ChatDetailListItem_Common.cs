@@ -465,7 +465,8 @@ namespace Another_Mirai_Native.UI.Controls
                 TextWrapping = TextWrapping.NoWrap,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 Text = nick,
-                Margin = new Thickness(10, 10, 10, 5)
+                Margin = new Thickness(10, 10, 10, 5),
+                FontSize = 10
             };
             TextBlock content = new()
             {
