@@ -86,6 +86,8 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         private Paragraph CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
 
+        private Border ReplyElement { get; set; }
+
         /// <summary>
         /// 转换消息为可显示内容
         /// </summary>
@@ -217,6 +219,7 @@ namespace Another_Mirai_Native.UI.Controls
                                 ChatPage.Instance.JumpToReplyItem(messageItem.MsgId);
                             });
                             CurrentParagraph.Inlines.Add(reply);
+                            ReplyElement = reply;
                             reply.UpdateLayout();
                             minWidth = Math.Max(minWidth, reply.ActualWidth);
                             DetailContainer.Document.Blocks.Add(new Paragraph());
@@ -309,7 +312,11 @@ namespace Another_Mirai_Native.UI.Controls
                 width = Math.Max(currentWidth, width);
             }
 
-            DetailContainer.Width = width + 5 + DetailContainer.Padding.Left + DetailContainer.Padding.Right;
+            DetailContainer.Width = width + 10 + DetailContainer.Padding.Left + DetailContainer.Padding.Right;
+            if (ReplyElement != null)
+            {
+                ReplyElement.Width = width;
+            }
         }
 
         public void Dispose()
