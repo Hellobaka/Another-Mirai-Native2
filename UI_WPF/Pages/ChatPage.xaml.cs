@@ -495,7 +495,7 @@ namespace Another_Mirai_Native.UI.Pages
             int historyId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
-            // AddOrUpdateGroupChatList(group, qq, msg);
+            AddOrUpdateGroupChatList(group, qq, msg);
             await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == group)
@@ -972,13 +972,13 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
-            AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
+            // AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
             await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
         }
 
         private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
-            AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
+            // AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
             await AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
         }
 
