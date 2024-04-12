@@ -129,7 +129,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             RequestWaiter.ResetSignalByWebSocket(APIClient);
             LogHelper.Error("API服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
-            ConnectEventServer();
+            ConnectAPIServer();
         }
 
         private void APIClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
@@ -158,7 +158,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
             else
             {
                 groupMessage.ParsedMessage = groupMessage.message.ToString();
-                groupMessage.ParsedMessage = UnescapeRawMessage(groupMessage.ParsedMessage);
+                if (string.IsNullOrEmpty(groupMessage.raw_message))
+                {
+                    groupMessage.ParsedMessage = UnescapeRawMessage(groupMessage.ParsedMessage);
+                }
+                else
+                {
+                    groupMessage.ParsedMessage = groupMessage.raw_message;
+                }
             }
             groupMessage.CQCodes = CQCode.Parse(groupMessage.ParsedMessage);
             SaveCQCodeCache(groupMessage.CQCodes);
@@ -366,7 +373,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
             else
             {
                 privateMessage.ParsedMessage = privateMessage.message.ToString();
-                privateMessage.ParsedMessage = UnescapeRawMessage(privateMessage.ParsedMessage);
+                if (string.IsNullOrEmpty(privateMessage.raw_message))
+                {
+                    privateMessage.ParsedMessage = UnescapeRawMessage(privateMessage.ParsedMessage);
+                }
+                else
+                {
+                    privateMessage.ParsedMessage = privateMessage.raw_message;
+                }
             }
             privateMessage.CQCodes = CQCode.Parse(privateMessage.ParsedMessage);
             SaveCQCodeCache(privateMessage.CQCodes);
@@ -427,7 +441,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     string cqCode = $"[CQ:{json["type"]},";
                     foreach (JProperty key in json["data"].Values<JProperty>())
                     {
-                        cqCode += $"{key.Name}={key.Value},";
+                        cqCode += $"{key.Name}={EscapeRawMessage(key.Value.ToString())},";
                     }
                     cqCode = cqCode.Substring(0, cqCode.Length - 1) + "]";
                     result += cqCode;
