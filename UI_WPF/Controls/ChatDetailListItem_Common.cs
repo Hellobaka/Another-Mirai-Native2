@@ -263,6 +263,7 @@ namespace Another_Mirai_Native.UI.Controls
                 };
                 AnimationBehavior.SetSourceStream(image, resource.Stream);
                 AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
+                RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
                 return image;
             }
         }
