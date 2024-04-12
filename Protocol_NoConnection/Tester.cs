@@ -77,12 +77,12 @@ namespace Protocol_NoConnection
                 if (PrivateSelector.Checked)
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, msgId, QQId, msg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, msgId, QQId, msg, 0, DateTime.Now);
                 }
                 else
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{GroupId} QQ:{QQId} 消息: {msg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, msgId, GroupId, QQId, "", msg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, msgId, GroupId, QQId, "", msg, 0, DateTime.Now);
                 }
                 sw.Stop();
                 new Thread(() =>

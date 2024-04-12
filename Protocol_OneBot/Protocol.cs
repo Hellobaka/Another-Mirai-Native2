@@ -174,7 +174,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             Stopwatch sw = new();
             sw.Start();
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}({GetGroupMemberNick(groupMessage.group_id, groupMessage.user_id)}) {groupMessage.ParsedMessage}", "处理中...");
-            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0);
+            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(groupMessage.time));
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -349,6 +349,16 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     PluginManagerProxy.Instance.Event_OnPrivateMsgRecall((int)friendMessageRecall.message_id, friendMessageRecall.user_id, friendRecallMsg);
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友消息撤回", $"QQ:{friendMessageRecall.user_id}{GetFriendNick(friendMessageRecall.user_id)} 内容:{friendRecallMsg}", "处理中...");
                     break;
+
+                case NoticeType.group_card:
+                    GroupMemberCardChanged groupMemberCardChanged = notice.ToObject<GroupMemberCardChanged>();
+                    if (groupMemberCardChanged != null)
+                    {
+                        logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员名片改变", $"群:{groupMemberCardChanged.group_id}({GetGroupName(groupMemberCardChanged.group_id)}) QQ:{groupMemberCardChanged.user_id} 名片:{groupMemberCardChanged.card_new}", "处理中...");
+                        PluginManagerProxy.Instance.Event_OnGroupMemberCardChanged(groupMemberCardChanged.group_id, groupMemberCardChanged.user_id, groupMemberCardChanged.card_new);
+                    }
+                    break;
+
             }
             sw.Stop();
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -394,7 +404,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 case "friend":
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.ParsedMessage}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(privateMessage.time));
                     break;
 
                 case "group":
@@ -403,12 +413,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         break;
                     }
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{privateMessage.sender.group_id}{GetGroupName(privateMessage.sender.group_id, true)} QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.ParsedMessage}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(privateMessage.time));
                     break;
 
                 case "other":
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{privateMessage.user_id}({privateMessage.sender?.nickname}) {privateMessage.ParsedMessage}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, privateMessage.message_id, privateMessage.user_id, privateMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(privateMessage.time));
                     break;
 
                 default:

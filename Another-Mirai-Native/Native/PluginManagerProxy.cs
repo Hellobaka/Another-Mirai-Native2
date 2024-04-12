@@ -51,16 +51,22 @@ namespace Another_Mirai_Native.Native
         /// <summary>
         /// MsgId QQ Msg
         /// </summary>
-        public static event Action<int, long, string> OnPrivateMsg;
+        public static event Action<int, long, string, DateTime> OnPrivateMsg;
 
         /// <summary>
         /// MsgId Group QQ Msg
         /// </summary>
-        public static event Action<int, long, long, string> OnGroupMsg;
+        public static event Action<int, long, long, string, DateTime> OnGroupMsg;
 
         public static event Action<int, long, string> OnGroupMsgRecall;
 
         public static event Action<int, long, string> OnPrivateMsgRecall;
+
+        public static event Action<long, long, string> OnGroupMemberCardChanged;
+
+        public static event Action<long, string> OnFriendNickChanged;
+
+        public static event Action<long, string> OnGroupNameChanged;
 
         #endregion 事件外抛
 
@@ -495,13 +501,13 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(target, PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
-        public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
+        public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font, DateTime time)
         {
             new Thread(() =>
             {
                 try
                 {
-                    OnGroupMsg?.Invoke(msgId, fromGroup, fromQQ, msg);
+                    OnGroupMsg?.Invoke(msgId, fromGroup, fromQQ, msg, time);
                 }
                 catch (Exception e)
                 {
@@ -516,13 +522,13 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(target, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
-        public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font)
+        public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font, DateTime time)
         {
             new Thread(() =>
             {
                 try
                 {
-                    OnPrivateMsg?.Invoke(msgId, fromQQ, msg);
+                    OnPrivateMsg?.Invoke(msgId, fromQQ, msg, time);
                 }
                 catch (Exception e)
                 {
@@ -578,6 +584,51 @@ namespace Another_Mirai_Native.Native
                 catch (Exception e)
                 {
                     LogHelper.Error("OnPrivateMsgRecall事件", e);
+                }
+            }).Start();
+        }
+
+        public void Event_OnGroupMemberCardChanged(long group, long qq, string card)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupMemberCardChanged?.Invoke(group, qq, card);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupMemberCardChanged事件", e);
+                }
+            }).Start();
+        }
+
+        public void Event_OnFriendNickChanged(long qq, string nick)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    OnFriendNickChanged?.Invoke(qq, nick);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnFriendNickChanged事件", e);
+                }
+            }).Start();
+        }
+
+        public void Event_OnGroupNameChanged(long group, string name)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    OnGroupNameChanged?.Invoke(group, name);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("OnGroupNameChanged", e);
                 }
             }).Start();
         }

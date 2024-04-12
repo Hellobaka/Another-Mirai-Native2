@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.UI.Pages
             ManualResetEvent sendSignal = new(false);
             if (avatar == ChatAvatar.AvatarTypes.QQGroup)
             {
-                sqlId = await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                sqlId = await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
                     itemAdded: (guid) =>
                     {
                         UpdateSendStatus(guid, true);
@@ -214,7 +214,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
-                sqlId = await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                sqlId = await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
@@ -473,7 +473,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         /// <returns>消息持久化的ID</returns>
-        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
             if (plugin != null)
@@ -488,8 +488,10 @@ namespace Another_Mirai_Native.UI.Pages
                 SenderID = qq,
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Group,
                 MsgId = msgId,
-                PluginName = plugin == null ? "" : plugin.PluginName
+                PluginName = plugin == null ? "" : plugin.PluginName,
+                Time = time,
             };
+
             int historyId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
@@ -626,7 +628,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">持久化后的回调</param>
         /// <param name="plugin">消息来源的插件</param>
         /// <returns>持久化后的ID</returns>
-        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetFriendNick(sender);
             if (plugin != null)
@@ -641,7 +643,8 @@ namespace Another_Mirai_Native.UI.Pages
                 SenderID = sender,
                 Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
                 MsgId = msgId,
-                PluginName = plugin == null ? "" : plugin.PluginName
+                PluginName = plugin == null ? "" : plugin.PluginName,
+                Time = time
             };
             int logId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetFriendNick(sender)}: {msg}";
@@ -970,13 +973,13 @@ namespace Another_Mirai_Native.UI.Pages
         private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
             AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
-            await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
+            await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
         }
 
         private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
             AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
-            await AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, msgId, plugin: plugin);
+            await AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
         }
 
         private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
@@ -1149,6 +1152,9 @@ namespace Another_Mirai_Native.UI.Pages
             PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
             PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
+            PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
+            PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
+            PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
 
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
@@ -1156,6 +1162,30 @@ namespace Another_Mirai_Native.UI.Pages
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
             await LoadChatHistory();
             await ReorderChatList();
+        }
+
+        private void PluginManagerProxy_OnFriendNickChanged(long qq, string nick)
+        {
+            if (FriendInfoCache.TryGetValue(qq, out var info) && info != null)
+            {
+                info.Nick = nick;
+            }
+        }
+
+        private void PluginManagerProxy_OnGroupNameChanged(long group, string name)
+        {
+            if (GroupInfoCache.TryGetValue(group, out var info) && info != null)
+            {
+                info.Name = name;
+            }
+        }
+
+        private void PluginManagerProxy_OnGroupMemberCardChanged(long group, long qq, string card)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var member) && member.TryGetValue(qq, out var info) && info != null)
+            {
+                info.Card = card;
+            }
         }
 
         /// <summary>
@@ -1240,7 +1270,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
-                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice);
+                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
             }
         }
 
@@ -1248,7 +1278,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
-                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice);
+                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
             }
         }
 
@@ -1257,17 +1287,17 @@ namespace Another_Mirai_Native.UI.Pages
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
                 dict.Remove(qq);
-                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice);
+                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
             }
             else
             {
-                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", DetailItemType.Notice);
+                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", DetailItemType.Notice, DateTime.Now);
             }
         }
 
-        private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg)
+        private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
         {
-            await AddGroupChatItem(group, qq, msg, DetailItemType.Receive, msgId);
+            await AddGroupChatItem(group, qq, msg, DetailItemType.Receive, time, msgId);
             AddOrUpdateGroupChatList(group, qq, msg);
         }
 
@@ -1277,9 +1307,9 @@ namespace Another_Mirai_Native.UI.Pages
             MsgRecalled?.Invoke(msgId);
         }
 
-        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg)
+        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
         {
-            await AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, msgId);
+            await AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, time, msgId);
             AddOrUpdatePrivateChatList(qq, qq, msg);
         }
 

@@ -345,6 +345,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.FriendNickChangedEvent:
                     var friendNickChangedEvent = msg.ToObject<FriendNickChangedEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友昵称改变", $"QQ:{friendNickChangedEvent.friend.id}({friendNickChangedEvent.from}) 变更为:{friendNickChangedEvent.to}", "处理中...");
+                    PluginManagerProxy.Instance.Event_OnFriendNickChanged(friendNickChangedEvent.friend.id, friendNickChangedEvent.to);
                     break;
 
                 case MiraiEvents.BotGroupPermissionChangeEvent:
@@ -435,6 +436,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.GroupNameChangeEvent:
                     var groupNameChange = msg.ToObject<GroupNameChangeEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群名变更", $"群:{groupNameChange.group.id}({groupNameChange.origin}) 变更为:{groupNameChange.current} 操作人:{groupNameChange._operator.id}({groupNameChange._operator.memberName})", "处理中...");
+                    PluginManagerProxy.Instance.Event_OnGroupNameChanged(groupNameChange.group.id, groupNameChange.current);
                     break;
 
                 case MiraiEvents.GroupEntranceAnnouncementChangeEvent:
@@ -484,6 +486,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.MemberCardChangeEvent:
                     var memberCardChangeEvent = msg.ToObject<MemberCardChangeEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员名片改变", $"群:{memberCardChangeEvent.member.group.id}({memberCardChangeEvent.member.group.name}) QQ:{memberCardChangeEvent.member.id}({memberCardChangeEvent.member.memberName}) 名片:{memberCardChangeEvent.current}", "处理中...");
+                    PluginManagerProxy.Instance.Event_OnGroupMemberCardChanged(memberCardChangeEvent.member.group.id, memberCardChangeEvent.member.id, memberCardChangeEvent.current);
                     break;
 
                 case MiraiEvents.MemberSpecialTitleChangeEvent:
@@ -610,25 +613,25 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiMessageEvents.FriendMessage:
                     var friend = msg.ToObject<FriendMessage>();
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{friend.sender.id}({friend.sender.nickname}) {parsedMsg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, source.id, friend.sender.id, parsedMsg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(11, source.id, friend.sender.id, parsedMsg, 0, DateTime.Now);
                     break;
 
                 case MiraiMessageEvents.GroupMessage:
                     var group = msg.ToObject<GroupMessage>();
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{group.sender.group.id}({group.sender.group.name}) QQ:{group.sender.id}({group.sender.memberName}) 消息: {parsedMsg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, source.id, group.sender.group.id, group.sender.id, "", parsedMsg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, source.id, group.sender.group.id, group.sender.id, "", parsedMsg, 0, DateTime.Now);
                     break;
 
                 case MiraiMessageEvents.TempMessage:
                     var temp = msg.ToObject<TempMessage>();
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息", $"群:{temp.sender.group.id}({temp.sender.group.name}) QQ:{temp.sender.id}({temp.sender.memberName}) 消息: {parsedMsg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, source.id, temp.sender.id, parsedMsg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, source.id, temp.sender.id, parsedMsg, 0, DateTime.Now);
                     break;
 
                 case MiraiMessageEvents.StrangerMessage:
                     var stranger = msg.ToObject<StrangerMessage>();
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到陌生人消息", $"QQ:{stranger.sender.id}({stranger.sender.nickname}) 消息: {parsedMsg}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, source.id, stranger.sender.id, parsedMsg, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, source.id, stranger.sender.id, parsedMsg, 0, DateTime.Now);
                     break;
 
                 case MiraiMessageEvents.OtherClientMessage:

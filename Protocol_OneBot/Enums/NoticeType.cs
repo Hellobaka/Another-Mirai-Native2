@@ -24,6 +24,8 @@
 
         lucky_king,
 
-        honor
+        honor,
+
+        group_card
     }
 }
