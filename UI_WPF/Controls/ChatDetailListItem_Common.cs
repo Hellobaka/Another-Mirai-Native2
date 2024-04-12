@@ -489,7 +489,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 border.Background = new SolidColorBrush(Color.FromArgb(0, 100, 100, 100));
             };
-            border.MouseDown += (_, _) =>
+            border.MouseLeftButtonDown += (_, _) =>
             {
                 jumpAction?.Invoke();
             };
