@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -188,39 +190,52 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+            int sendMsgId = 0, sqlId = 0;
+            ManualResetEvent sendSignal = new(false);
             if (avatar == ChatAvatar.AvatarTypes.QQGroup)
             {
-                int? logId = await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                sqlId = await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
                     itemAdded: (guid) =>
                     {
                         UpdateSendStatus(guid, true);
                         int msgId = CallGroupMsgSend(id, message);
                         if (msgId != 0)
                         {
+                            sendMsgId = msgId;
                             UpdateSendStatus(guid, false);
                         }
                         else
                         {
                             UpdateSendFail(guid);
                         }
+                        sendSignal.Set();
                     }
                 );
             }
             else
             {
-                await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
+                sqlId = await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send,
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
-                         if (CallPrivateMsgSend(id, message) != 0)
+                         int msgId = CallPrivateMsgSend(id, message);
+                         if (msgId != 0)
                          {
+                             sendMsgId = msgId;
                              UpdateSendStatus(guid, false);
                          }
                          else
                          {
                              UpdateSendFail(guid);
                          }
+                         sendSignal.Set();
                      });
+            }
+            sendSignal.WaitOne();
+            if (sendMsgId != 0)
+            {
+                ChatHistoryHelper.UpdateHistoryMessageId(id, avatar == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
+                    , sqlId, sendMsgId);
             }
         }
 
@@ -458,7 +473,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         /// <returns>消息持久化的ID</returns>
-        private async Task<int?> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
             if (plugin != null)
@@ -478,7 +493,7 @@ namespace Another_Mirai_Native.UI.Pages
             int historyId = ChatHistoryHelper.InsertHistory(history);
             history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
             ChatHistoryHelper.UpdateHistoryCategory(history);
-            AddOrUpdateGroupChatList(group, qq, msg);
+            // AddOrUpdateGroupChatList(group, qq, msg);
             await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem?.Id == group)
@@ -611,7 +626,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">持久化后的回调</param>
         /// <param name="plugin">消息来源的插件</param>
         /// <returns>持久化后的ID</returns>
-        private async Task<int?> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetFriendNick(sender);
             if (plugin != null)
