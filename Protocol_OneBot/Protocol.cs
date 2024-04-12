@@ -141,7 +141,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         private void APIClient_OnOpen(object? sender, EventArgs e)
         {
             ReconnectCount = 0;
-            LogHelper.WriteLog(LogLevel.Debug, "API服务器", "连接到API服务器");
+            LogHelper.Info("API服务器", "成功连接到API服务器");
         }
 
         private void DispatchGroupMessage(JObject message)
@@ -511,7 +511,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         private void EventClient_OnOpen(object? sender, EventArgs e)
         {
             ReconnectCount = 0;
-            LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
+            LogHelper.Info("事件服务器", "成功连接到事件服务器");
         }
 
         private void HandleAPI(string data)

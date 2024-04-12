@@ -172,7 +172,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void EventConnection_OnOpen(object sender, EventArgs e)
         {
             ReconnectCount = 0;
-            LogHelper.WriteLog(LogLevel.Debug, "事件服务器", "连接到事件服务器");
+            LogHelper.Info("事件服务器", "成功连接到事件服务器");
         }
 
         private bool ConnectMessageServer()
@@ -220,7 +220,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         private void MessageConnection_OnOpen(object sender, EventArgs e)
         {
             ReconnectCount = 0;
-            LogHelper.WriteLog(LogLevel.Debug, "消息服务器", "连接到消息服务器");
+            LogHelper.Info("消息服务器", "成功连接到消息服务器");
         }
 
         private void HandleEvent(string message)
