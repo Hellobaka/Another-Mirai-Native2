@@ -15,6 +15,7 @@ for %%F in (
     "%ROOT%\Protocol_OneBot\bin\x86\Release\net48\Protocol_OneBotv11.dll"
     "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Release\net48\MiraiAPIHttp.dll"
     "%ROOT%\Protocol_NoConnection\bin\x86\Release\net48\Protocol_NoConnection.dll"
+    "%ROOT%\Protocol_NoConnection\bin\x86\Release\net48\Protocol_Satori_v1.dll"
 ) do (
     if exist "%%F" (
         copy /Y "%%F" "%TARGET%"
