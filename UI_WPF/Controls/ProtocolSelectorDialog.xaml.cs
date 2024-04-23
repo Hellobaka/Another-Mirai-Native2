@@ -30,6 +30,7 @@ namespace Another_Mirai_Native.UI.Controls
         {
             set
             {
+                ConnectButton.IsEnabled = !value;
                 ConnectingStatus.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
