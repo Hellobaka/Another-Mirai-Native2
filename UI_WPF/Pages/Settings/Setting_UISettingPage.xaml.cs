@@ -14,6 +14,7 @@ namespace Another_Mirai_Native.UI.Pages
         public Setting_UISettingPage()
         {
             InitializeComponent();
+            // TODO: 缓存自动清理
         }
 
         public bool FormLoaded { get; set; }
