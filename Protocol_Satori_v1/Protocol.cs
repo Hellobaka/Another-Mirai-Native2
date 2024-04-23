@@ -38,8 +38,9 @@ namespace Another_Mirai_Native.Protocol.Satori
             EventClient.OnClose += EventClient_OnClose;
             EventClient.OnMessage += EventClient_OnMessage;
             EventClient.Connect();
+            MessageDict.CreateDB();
 
-            bool waitFlag = RequestWaiter.Wait("Satori_Identity", EventClient, int.MaxValue, out object success);
+            bool waitFlag = RequestWaiter.Wait("Satori_Identity", EventClient, 5000, out object success);
             return (bool)success && EventClient.ReadyState == WebSocketState.Open;
         }
 
@@ -191,11 +192,11 @@ namespace Another_Mirai_Native.Protocol.Satori
                 case "login-updated":
                     break;
                 case "message-created":
-                    HandleMessage(e.guild, e.user, e.member, e.message);
+                    HandleMessage(e.channel, e.guild, e.user, e.member, e.message);
                     break;
                 case "message-deleted":
                     string msg = "内容未捕获";
-                    int messageId = GetMessageIdFromDB(e.message.id, out _);
+                    int messageId = Protocol.GetMessageIdFromDB(e.message.id, out _);
                     var msgCache = RequestCache.Message.Last(x => x.Item1 == messageId);
                     if (!string.IsNullOrEmpty(msgCache.Item2))
                     {
@@ -236,25 +237,37 @@ namespace Another_Mirai_Native.Protocol.Satori
             LogHelper.UpdateLogStatus(logId, updateMsg);
         }
 
-        int i = 0;
-        private int GetMessageIdFromDB(string id, out long parentId)
+        private static int GetMessageIdFromDB(string id, out string parentId)
         {
-            parentId = 0;
-            return i++;
+            var item = MessageDict.GetMessageByRawId(id);
+            if (item == null)
+            {
+                parentId = "";
+                return 0;
+            }
+            else
+            {
+                parentId = item.ParentId;
+                return item.MessageId;
+            }
         }
 
-        private int SaveMessageIdInDB(string id)
+        private static int SaveMessageIdInDB(string parentId, string id)
         {
-            return i++;
+            return MessageDict.InsertMessage(new MessageDict
+            {
+                ParentId = parentId,
+                RawMessageId = id
+            });
         }
 
-        private void HandleMessage(Guild? guild, User? user, GuildMember? member, Message? rawMessage)
+        private void HandleMessage(Channel? channel, Guild? guild, User? user, GuildMember? member, Message? rawMessage)
         {
-            if (rawMessage == null)
+            if (rawMessage == null || user?.id == AppConfig.Instance.CurrentQQ.ToString())
             {
                 return;
             }
-            int msgId = SaveMessageIdInDB(rawMessage.id);
+            int msgId = SaveMessageIdInDB(channel.id, rawMessage.id);
             string message = CQCodeBuilder.RawParseToCQCode(rawMessage.content, CurrentPlatform);
             Stopwatch sw = new();
             sw.Start();

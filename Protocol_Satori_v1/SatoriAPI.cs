@@ -114,10 +114,10 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public int DeleteMsg(long msgId)
         {
-            int rawId = GetMessageIdFromDB(msgId.ToString(), out long parentId);
-            if (rawId > 0)
+            var msg = MessageDict.GetMessageByDictId((int)msgId);
+            if (msg != null)
             {
-                var info = SendRequest("message.delete", new { channel_id = parentId.ToString(), message_id = rawId.ToString() }.ToJson());
+                var info = SendRequest("message.delete", new { channel_id = msg.ParentId, message_id = msg.RawMessageId }.ToJson());
                 if (info.ContainsKey("ret"))
                 {
                     return 0;
@@ -311,12 +311,12 @@ namespace Another_Mirai_Native.Protocol.Satori
             {
                 return 0;
             }
-            int quoteId = 0;
+            string quoteId = "";
             if (msgId != 0)
             {
-                quoteId = GetMessageIdFromDB(msgId.ToString(), out _);
+                quoteId = MessageDict.GetMessageByDictId(msgId)?.RawMessageId;
             }
-            if (quoteId > 0)
+            if (!string.IsNullOrEmpty(quoteId))
             {
                 // parsedMessage = $"<quote id={quoteId}>" + parsedMessage;
             }
@@ -325,7 +325,11 @@ namespace Another_Mirai_Native.Protocol.Satori
             {
                 return 0;
             }
-            return 1;
+            return MessageDict.InsertMessage(new MessageDict
+            {
+                ParentId = groupId.ToString(),
+                RawMessageId = info["id"].ToString()
+            });
         }
 
         public int SendLike(long qqId, int count)
@@ -352,7 +356,11 @@ namespace Another_Mirai_Native.Protocol.Satori
             {
                 return 0;
             }
-            return 1;
+            return MessageDict.InsertMessage(new MessageDict
+            {
+                ParentId = channel.id.ToString(),
+                RawMessageId = info["id"].ToString()
+            });
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
