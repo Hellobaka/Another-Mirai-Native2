@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Native;
+using SqlSugar;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
@@ -15,22 +16,26 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, int processId, int timeout)
+        public static bool Wait(object key, int processId, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
-            CommonWaiter.TryAdd(key, new WaiterInfo()
+            WaiterInfo waiterInfo = new WaiterInfo()
             {
                 CurrentProcessId = processId,
                 WaitSignal = signal,
-            });
+            };
+            CommonWaiter.TryAdd(key, waiterInfo);
+            bool timeoutFlag;
             if (timeout > 0)
             {
-                return signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
+                timeoutFlag = signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
             }
             else
             {
-                return signal.WaitOne();
+                timeoutFlag = signal.WaitOne();
             }
+            result = waiterInfo.Result;
+            return timeoutFlag;
         }
 
         /// <summary>
@@ -39,21 +44,25 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, int timeout)
+        public static bool Wait(object key, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
-            CommonWaiter.TryAdd(key, new WaiterInfo()
+            WaiterInfo waiterInfo = new()
             {
                 WaitSignal = signal,
-            });
+            };
+            CommonWaiter.TryAdd(key, waiterInfo);
+            bool timeoutFlag;
             if (timeout > 0)
             {
-                return signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
+                timeoutFlag = signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
             }
             else
             {
-                return signal.WaitOne();
+                timeoutFlag = signal.WaitOne();
             }
+            result = waiterInfo.Result;
+            return timeoutFlag;
         }
 
         /// <summary>
@@ -62,22 +71,26 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, string connectionID, int timeout)
+        public static bool Wait(object key, string connectionID, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
-            CommonWaiter.TryAdd(key, new WaiterInfo()
+            WaiterInfo waiterInfo = new()
             {
                 WaitSignal = signal,
                 ConnectionID = connectionID,
-            });
+            };
+            CommonWaiter.TryAdd(key, waiterInfo);
+            bool timeoutFlag;
             if (timeout > 0)
             {
-                return signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
+                timeoutFlag = signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
             }
             else
             {
-                return signal.WaitOne();
+                timeoutFlag = signal.WaitOne();
             }
+            result = waiterInfo.Result;
+            return timeoutFlag;
         }
 
         /// <summary>
@@ -86,22 +99,26 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, CQPluginProxy plugin, int timeout)
+        public static bool Wait(object key, CQPluginProxy plugin, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
-            CommonWaiter.TryAdd(key, new WaiterInfo()
+            WaiterInfo waiterInfo = new()
             {
                 CurrentPluginProxy = plugin,
                 WaitSignal = signal,
-            });
+            };
+            CommonWaiter.TryAdd(key, waiterInfo);
+            bool timeoutFlag;
             if (timeout > 0)
             {
-                return signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
+                timeoutFlag = signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
             }
             else
             {
-                return signal.WaitOne();
+                timeoutFlag = signal.WaitOne();
             }
+            result = waiterInfo.Result;
+            return timeoutFlag;
         }
 
         /// <summary>
@@ -110,22 +127,26 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, WebSocketSharp.WebSocket webSocket, int timeout)
+        public static bool Wait(object key, WebSocketSharp.WebSocket webSocket, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
-            CommonWaiter.TryAdd(key, new WaiterInfo()
+            WaiterInfo waiterInfo = new()
             {
                 CurrentWebSocket = webSocket,
                 WaitSignal = signal,
-            });
+            };
+            CommonWaiter.TryAdd(key, waiterInfo);
+            bool timeoutFlag;
             if (timeout > 0)
             {
-                return signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
+                timeoutFlag = signal.WaitOne(TimeSpan.FromMilliseconds(timeout));
             }
             else
             {
-                return signal.WaitOne();
+                timeoutFlag = signal.WaitOne();
             }
+            result = waiterInfo.Result;
+            return timeoutFlag;
         }
 
         public static void TriggerByKey(object key, object result = null)

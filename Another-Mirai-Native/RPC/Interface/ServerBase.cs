@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public event Action<string, int, string, string, bool> OnShowErrorDialogCalled;
 
-        public bool ShowErrorDialogEventHasSubscribed => OnShowErrorDialogCalled.GetInvocationList().Length > 0;
+        public bool ShowErrorDialogEventHasSubscribed => OnShowErrorDialogCalled?.GetInvocationList().Length > 0;
 
         public void ActiveShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {
@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.RPC.Interface
         {
             WaitingMessage.Add(guid, new InvokeResult());
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title, content, canIgnore);
-            RequestWaiter.Wait(guid, -1);
+            RequestWaiter.Wait(guid, -1, out _);
             WaitingMessage.Remove(guid);
         }
 

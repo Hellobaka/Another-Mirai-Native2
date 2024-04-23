@@ -100,7 +100,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             };
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
-            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout))
+            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout, out _))
             {
                 WaitingMessages.Remove(syncId);
                 return msg.Result;
@@ -121,7 +121,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             EventConnection = new(event_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.Instance.LoadTimeout);
+                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.Instance.LoadTimeout, out _);
             });
             EventConnection.OnOpen += EventConnection_OnOpen;
             EventConnection.OnClose += EventConnection_OnClose;
@@ -187,7 +187,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection = new(message_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.Instance.LoadTimeout);
+                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.Instance.LoadTimeout, out _);
             });
             MessageConnection.OnOpen += MessageConnection_OnOpen;
             MessageConnection.OnClose += MessageConnection_OnClose;

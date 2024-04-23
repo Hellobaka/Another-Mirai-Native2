@@ -183,7 +183,7 @@ namespace Another_Mirai_Native.Native
 
         private bool WaitClientResponse()
         {
-            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.Instance.LoadTimeout);
+            return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.Instance.LoadTimeout, out _);
         }
     }
 }

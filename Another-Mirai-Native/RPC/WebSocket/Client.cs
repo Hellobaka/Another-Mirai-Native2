@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.WebSocket
                 return null;
             }
             WaitingMessage.Add(guid, new InvokeResult());
-            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.Instance.PluginInvokeTimeout) && WaitingMessage.ContainsKey(guid))
+            if (RequestWaiter.Wait(guid, WebSocketClient, AppConfig.Instance.PluginInvokeTimeout, out _) && WaitingMessage.ContainsKey(guid))
             {
                 var result = WaitingMessage[guid];
                 WaitingMessage.Remove(guid);

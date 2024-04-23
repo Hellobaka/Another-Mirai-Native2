@@ -32,7 +32,7 @@ namespace Another_Mirai_Native.WebSocket
             connection.Send(new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
             WaitingMessage.Add(guid, new InvokeResult());
 
-            if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout)
+            if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, out _)
                     && WaitingMessage.TryGetValue(guid, out InvokeResult result))
             {
                 WaitingMessage.Remove(guid);
