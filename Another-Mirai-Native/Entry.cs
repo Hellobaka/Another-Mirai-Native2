@@ -188,17 +188,18 @@ namespace Another_Mirai_Native
             Invoke(TaskBarMenuParent.DropDownItems.Clear);
             foreach (var item in PluginManagerProxy.Proxies.OrderBy(x => x.PluginName))
             {
-                ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}" };
-                ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用" };
-                ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用" };
-                enableItem.Click += (a, b) =>
+                ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}", Tag = item };
+                ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用", Tag = item };
+                ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用", Tag = item };
+                enableItem.Click += (sender, b) =>
                 {
-                    if (PluginManagerProxy.Instance.SetPluginEnabled(item, true))
+                    CQPluginProxy plugin = sender as CQPluginProxy;
+                    if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
                     {
                         enableItem.Text = "√ 启用";
                         disableItem.Text = "禁用";
 
-                        AppConfig.Instance.AutoEnablePlugin.Add(item.PluginName);
+                        AppConfig.Instance.AutoEnablePlugin.Add(plugin.PluginName);
                         AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
                         AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
                     }
@@ -207,14 +208,15 @@ namespace Another_Mirai_Native
                         MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 };
-                disableItem.Click += (a, b) =>
+                disableItem.Click += (sender, b) =>
                 {
-                    if (PluginManagerProxy.Instance.SetPluginEnabled(item, false))
+                    CQPluginProxy plugin = sender as CQPluginProxy;
+                    if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, false))
                     {
                         enableItem.Text = "启用";
                         disableItem.Text = "√ 禁用";
 
-                        AppConfig.Instance.AutoEnablePlugin.Remove(item.PluginName);
+                        AppConfig.Instance.AutoEnablePlugin.Remove(plugin.PluginName);
                         AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
                         AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
                     }
@@ -231,17 +233,18 @@ namespace Another_Mirai_Native
                 }
                 foreach (var subMenu in item.AppInfo.menu)
                 {
-                    ToolStripMenuItem subMenuItem = new() { Text = subMenu.name };
-                    subMenuItem.Click += (a, b) =>
+                    ToolStripMenuItem subMenuItem = new() { Text = subMenu.name, Tag = item };
+                    subMenuItem.Click += (sender, b) =>
                     {
-                        if (item.Enabled is false)
+                        CQPluginProxy plugin = sender as CQPluginProxy;
+                        if (plugin.Enabled is false)
                         {
                             MessageBox.Show("当前插件未启用，无法调用窗口事件", "嗯哼", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         Task.Run(() =>
                         {
-                            PluginManagerProxy.Instance.InvokeEvent(item, PluginEventType.Menu, subMenu.function);
+                            PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, subMenu.function);
                         });
                     };                    
                     menuItem.DropDownItems.Add(subMenuItem);
