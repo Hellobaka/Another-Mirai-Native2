@@ -83,6 +83,10 @@ namespace Another_Mirai_Native.Protocol.Satori
                     {
                         result += $"<at id=\"{cqcode.Items["qq"]}\">";
                     }
+                    else if(cqcode.Function == CQCodeType.Face)
+                    {
+                        result += $"<chronocat:face id=\"{cqcode.Items["id"]}\">";
+                    }
                     else if(cqcode.Function == CQCodeType.Record)
                     {
                         string recordPath = cqcode.Items["file"];
