@@ -1366,5 +1366,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+	
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
+	</Target>
 
 </Project>
