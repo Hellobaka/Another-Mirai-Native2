@@ -244,7 +244,7 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public List<GroupInfo> GetRawGroupList()
         {
-            List<Guild>? guilds = SendRequest("friend.list", new { }.ToJson())?["data"]?.ToObject<List<Guild>?>();
+            List<Guild>? guilds = SendRequest("guild.list", new { }.ToJson())?["data"]?.ToObject<List<Guild>?>();
             List<GroupInfo> groupInfos = new();
             if (guilds == null)
             {
