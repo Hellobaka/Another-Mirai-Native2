@@ -203,6 +203,7 @@ namespace Another_Mirai_Native.UI.Pages
                         {
                             sendMsgId = msgId;
                             UpdateSendStatus(guid, false);
+                            UpdateMessageId(guid, sendMsgId);
                         }
                         else
                         {
@@ -223,6 +224,7 @@ namespace Another_Mirai_Native.UI.Pages
                          {
                              sendMsgId = msgId;
                              UpdateSendStatus(guid, false);
+                             UpdateMessageId(guid, sendMsgId);
                          }
                          else
                          {
@@ -1525,6 +1527,30 @@ namespace Another_Mirai_Native.UI.Pages
                     if (item is ChatDetailListItem_Right right && right.GUID == guid)
                     {
                         right.UpdateSendStatus(enable);
+                        return;
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// 更新消息发送状态
+        /// </summary>
+        /// <param name="guid">消息GUID</param>
+        /// <param name="enable">正在发送</param>
+        private void UpdateMessageId(string? guid, int msgId)
+        {
+            if (string.IsNullOrEmpty(guid))
+            {
+                return;
+            }
+            Dispatcher.BeginInvoke(() =>
+            {
+                foreach (UIElement item in MessageContainer.Children)
+                {
+                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    {
+                        right.UpdateMessageId(msgId);
                         return;
                     }
                 }
