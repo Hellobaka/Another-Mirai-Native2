@@ -87,6 +87,50 @@ namespace Another_Mirai_Native.UI.Controls
       
         private Border ReplyElement { get; set; }
 
+        public void ContextMenu_At(object sender, EventArgs e)
+        {
+            ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
+        }
+
+        public void ContextMenu_CopyId(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Id.ToString());
+        }
+
+        public void ContextMenu_CopyMessage(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Message);
+        }
+
+        public void ContextMenu_CopyNick(object sender, EventArgs e)
+        {
+            Clipboard.SetText(DisplayName);
+        }
+
+        public void ContextMenu_Recall(object sender, EventArgs e)
+        {
+            if (MsgId > 0)
+            {
+                ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
+            }
+        }
+
+        public void ContextMenu_Repeat(object sender, EventArgs e)
+        {
+            Task.Run(() => ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message));
+        }
+
+        public void ContextMenu_Reply(object sender, EventArgs e)
+        {
+            ChatPage.Instance.AddTextToSendBox($"[CQ:reply,id={MsgId}]");
+        }
+
+        public void Dispose()
+        {
+            ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
+            ChatPage.MsgRecalled -= ChatPage_MsgRecalled;
+        }
+
         /// <summary>
         /// 转换消息为可显示内容
         /// </summary>
@@ -264,6 +308,31 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
+        public void Recall()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                RecallDisplay.Visibility = Visibility.Visible;
+            });
+        }
+
+        public void SendFail()
+        {
+            SendStatus.Visibility = Visibility.Collapsed;
+            ResendClick.Visibility = Visibility.Visible;
+        }
+
+        public void UpdateMessageId(int msgId)
+        {
+            MsgId = msgId;
+        }
+
+        public void UpdateSendStatus(bool sending)
+        {
+            SendStatus.Visibility = sending ? Visibility.Visible : Visibility.Collapsed;
+            ResendClick.Visibility = Visibility.Collapsed;
+        }
+
         /// <summary>
         /// 根据内容计算宽度
         /// </summary>
@@ -317,71 +386,6 @@ namespace Another_Mirai_Native.UI.Controls
                 ReplyElement.Width = width;
             }
         }
-
-        public void Dispose()
-        {
-            ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
-            ChatPage.MsgRecalled -= ChatPage_MsgRecalled;
-        }
-
-        public void Recall()
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                RecallDisplay.Visibility = Visibility.Visible;
-            });
-        }
-
-        public void SendFail()
-        {
-            SendStatus.Visibility = Visibility.Collapsed;
-            ResendClick.Visibility = Visibility.Visible;
-        }
-
-        public void UpdateSendStatus(bool sending)
-        {
-            SendStatus.Visibility = sending ? Visibility.Visible : Visibility.Collapsed;
-            ResendClick.Visibility = Visibility.Collapsed;
-        }
-
-        public void ContextMenu_Repeat(object sender, EventArgs e)
-        {
-            Task.Run(() => ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message));
-        }
-
-        public void ContextMenu_Recall(object sender, EventArgs e)
-        {
-            if (MsgId > 0)
-            {
-                ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
-            }
-        }
-
-        public void ContextMenu_At(object sender, EventArgs e)
-        {
-            ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
-        }
-
-        public void ContextMenu_Reply(object sender, EventArgs e)
-        {
-            ChatPage.Instance.AddTextToSendBox($"[CQ:reply,id={MsgId}]");
-        }
-
-        public void ContextMenu_CopyMessage(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Message);
-        }
-
-        public void ContextMenu_CopyId(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Id.ToString());
-        }
-
-        public void ContextMenu_CopyNick(object sender, EventArgs e)
-        {
-            Clipboard.SetText(DisplayName);
-        }
-
         private void ChatPage_MsgRecalled(int id)
         {
             if (id == MsgId)
