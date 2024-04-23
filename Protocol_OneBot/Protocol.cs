@@ -56,7 +56,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             WaitingMessages.Add(syncId, msg);
             APIClient.Send(obj.ToJson());
             JObject result = null;
-            if (RequestWaiter.Wait(syncId, APIClient, AppConfig.Instance.PluginInvokeTimeout))
+            if (RequestWaiter.Wait(syncId, APIClient, AppConfig.Instance.PluginInvokeTimeout, out _))
             {
                 WaitingMessages.Remove(syncId);
                 result = msg.Result;
@@ -280,16 +280,19 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         case "leave":
                             UpdateMemberLeave(leave.group_id, leave.user_id);
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员离开", $"群:{leave.group_id}{GetGroupName(leave.group_id, true)} QQ:{leave.user_id}{GetGroupMemberNick(leave.group_id, leave.user_id, true)}", "处理中...");
+                            handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.TimeStamp, leave.group_id, 0, leave.user_id);
                             break;
 
                         case "kick":
                             UpdateMemberLeave(leave.group_id, leave.user_id);
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员被踢出", $"群:{leave.group_id}{GetGroupName(leave.group_id, true)} QQ:{leave.user_id}{GetGroupMemberNick(leave.group_id, leave.user_id, true)} 操作者:{leave.operator_id}", "处理中...");
+                            handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.TimeStamp, leave.group_id, leave.operator_id, leave.user_id);
                             break;
 
                         case "kick_me":
                             UpdateGroupLeave(leave.group_id);
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot被踢出群聊", $"群:{leave.group_id}{GetGroupName(leave.group_id, true)} 操作人: {leave.operator_id}", "处理中...");
+                            handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.TimeStamp, leave.group_id, leave.operator_id, AppConfig.Instance.CurrentQQ);
                             break;
                     }
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.TimeStamp, leave.group_id, leave.operator_id, leave.user_id);
@@ -477,7 +480,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     GroupRequest groupRequest = request.ToObject<GroupRequest>();
                     RequestCache.GroupRequest.Add(groupRequest.flag, (groupRequest.user_id, "", groupRequest.group_id, ""));
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{groupRequest.group_id}{GetGroupName(groupRequest.group_id, true)} QQ:{groupRequest.user_id}{GetGroupMemberNick(groupRequest.group_id, groupRequest.user_id, true)} 备注:{groupRequest.comment}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, groupRequest.time, groupRequest.group_id, groupRequest.user_id, groupRequest.comment, groupRequest.comment);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, groupRequest.time, groupRequest.group_id, groupRequest.user_id, groupRequest.comment, groupRequest.flag);
                     break;
 
                 case "friend":
