@@ -40,6 +40,10 @@ namespace Another_Mirai_Native.UI
 
         public List<int> UsedFaceId { get; set; } = new();
 
+        public bool AutoStartup { get; set; }
+
+        public bool AutoCloseWindow { get; set; }
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -54,6 +58,8 @@ namespace Another_Mirai_Native.UI
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
             ChatEnabled = GetConfig("ChatEnabled", false);
             HardwareRender = GetConfig("HardwareRender", false);
+            AutoStartup = GetConfig("AutoStartup", false);
+            AutoCloseWindow = GetConfig("AutoCloseWindow", false);
             UsedFaceId = GetConfig("UsedFaceId", new List<int>());
         }
     }

@@ -1,4 +1,7 @@
 ﻿using ModernWpf;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -54,6 +57,8 @@ namespace Another_Mirai_Native.UI.Pages
             HardwareRender.IsOn = UIConfig.Instance.HardwareRender;
             ChatEnableSelector.IsOn = UIConfig.Instance.ChatEnabled;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
+            AutoStartup.IsOn = UIConfig.Instance.AutoStartup;
+            AutoCloseWindow.IsOn = UIConfig.Instance.AutoCloseWindow;
             MaterialSelector.SelectedIndex = UIConfig.Instance.WindowMaterial switch
             {
                 "Mica" => 1,
@@ -147,6 +152,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }
+            UIConfig.Instance.HardwareRender = HardwareRender.IsOn;
             UIConfig.Instance.SetConfig("HardwareRender", HardwareRender.IsOn);
         }
 
@@ -157,6 +163,68 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             UIConfig.Instance.SetConfig("ChatEnabled", ChatEnableSelector.IsOn);
+        }
+
+        private void AutoStartup_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            bool current = UIConfig.Instance.AutoStartup;
+            if (!SetApplicationAutoStartup(!current))
+            {
+                AutoStartup.IsOn = current;
+                return;
+            }
+            UIConfig.Instance.AutoStartup = AutoStartup.IsOn;
+            UIConfig.Instance.SetConfig("AutoStartup", !current);
+        }
+
+        private bool SetApplicationAutoStartup(bool enable)
+        {
+            string keyPath = @"HKCU\Software\Microsoft\Windows\CurrentVersion\Run";
+            string valueName = "Another-Mirai-Native2";
+            string programPath = Assembly.GetExecutingAssembly().Location;
+
+            string command = enable
+                ? $"reg add \"{keyPath}\" /v \"{valueName}\" /d \"{programPath}\" /f"
+                : $"reg delete \"{keyPath}\" /v \"{valueName}\" /f";
+
+            try
+            {
+                // UAC提权运行脚本
+                var procStartInfo = new ProcessStartInfo("cmd", "/c " + command)
+                {
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    Verb = "runas"
+                };
+
+                using var proc = new Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+                proc.WaitForExit();
+
+                return true;
+            }
+            catch
+            {
+                DialogHelper.ShowSimpleDialog("设置开机启动", "无法写注册表，可能与拒绝了UAC提权有关");
+                return false;
+            }
+        }
+
+        private void AutoCloseWindow_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.Instance.AutoCloseWindow = AutoCloseWindow.IsOn;
+            UIConfig.Instance.SetConfig("AutoCloseWindow", AutoCloseWindow.IsOn);
         }
     }
 }

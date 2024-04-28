@@ -14,6 +14,22 @@
     mc:Ignorable="d">
 
     <StackPanel Margin="20">
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">开机自动启动</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="AutoStartup"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="AutoStartup_Toggled" />
+
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">连接成功后自动关闭窗口</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="AutoCloseWindow"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="AutoCloseWindow_Toggled" />
+
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">日志最大数量</TextBlock>
         <TextBox
             x:Name="LogMaxCount"
