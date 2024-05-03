@@ -120,6 +120,7 @@ namespace Another_Mirai_Native.UI
                        Show();
                        SetForegroundWindow();
                        AboutMenuItem.IsSelected = true;
+                       AboutPage.Instance.CheckUpdateButton_Click(null, null);
                    });
         }
 

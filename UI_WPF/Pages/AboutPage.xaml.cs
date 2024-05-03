@@ -18,13 +18,16 @@ namespace Another_Mirai_Native.UI.Pages
         public AboutPage()
         {
             InitializeComponent();
+            Instance = this;
         }
+
+        public static AboutPage Instance { get; private set; }
 
         private Version CurrentVersion => GetType().Assembly.GetName().Version;
 
         private UpdateModel.UpdateItem NewUpdateModel { get; set; }
 
-        private async void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
+        public async void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
         {
             UpdateUpdateStatus("检查更新中...", true);
             DownloadButton.IsEnabled = false;
