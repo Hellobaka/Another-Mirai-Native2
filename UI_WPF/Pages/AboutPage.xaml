@@ -5,10 +5,83 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="AboutPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <Grid />
+    <StackPanel Margin="20">
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">更新</TextBlock>
+        <TextBlock x:Name="CurrentVersionDisplay" Margin="0,10,0,5">当前版本：</TextBlock>
+        <TextBlock x:Name="NewVersionDisplay" Margin="0,5" Visibility="Collapsed">新版本：</TextBlock>
+        <TextBlock x:Name="NewVersionUpdateTimeDisplay" Margin="0,5" Visibility="Collapsed">更新时间：</TextBlock>
+        <TextBlock x:Name="NewVersionDescriptionDisplay" Margin="0,5" Visibility="Collapsed">更新说明：</TextBlock>
+
+        <StackPanel
+            Margin="0,10"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Name="CheckUpdateButton"
+                Click="CheckUpdateButton_Click"
+                Style="{StaticResource AccentButtonStyle}">
+                检查更新
+            </Button>
+            <Button
+                Name="DownloadButton"
+                Margin="10,0"
+                Click="DownloadButton_Click"
+                IsEnabled="False">
+                下载更新
+            </Button>
+
+            <TextBlock
+                x:Name="UpdateStatusDisplay"
+                Margin="10,0"
+                VerticalAlignment="Center" />
+            <ui:ProgressRing
+                x:Name="UpdateStatusRing"
+                Margin="5,0,0,0"
+                IsActive="True"
+                Visibility="Collapsed" />
+        </StackPanel>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">缓存</TextBlock>
+        <StackPanel Margin="0,10" Orientation="Horizontal">
+            <Button x:Name="ClearPictureButton" Click="ClearPictureButton_Click">清空图片缓存</Button>
+            <Button
+                Name="ClearAudioButton"
+                Margin="10,0,0,0"
+                Click="ClearAudioButton_Click">
+                清空音频缓存
+            </Button>
+            <Button
+                Name="ClearChatAvatarButton"
+                Margin="10,0,0,0"
+                Click="ClearChatAvatarButton_Click">
+                清空聊天头像缓存
+            </Button>
+            <Button
+                Name="ClearChatImageButton"
+                Margin="10,0,0,0"
+                Click="ClearChatImageButton_Click">
+                清空聊天图片缓存
+            </Button>
+            <Button
+                Name="ClearChatCacheButton"
+                Margin="10,0,0,0"
+                Click="ClearChatCacheButton_Click"
+                Style="{StaticResource AccentButtonStyle}">
+                清空聊天缓存
+            </Button>
+            <Button
+                Name="ClearChatHistoryButton"
+                Margin="10,0,0,0"
+                Background="PaleVioletRed"
+                Click="ClearChatHistoryButton_Click">
+                清空聊天历史
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </Page>

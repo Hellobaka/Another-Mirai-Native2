@@ -203,6 +203,23 @@ namespace Another_Mirai_Native
                 return false;
             }
         }
+        
+        public static async Task<string> DownloadString(string url)
+        {
+            using var http = new HttpClient();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(url)) return "";
+                var r = await http.GetAsync(url);
+                byte[] buffer = await r.Content.ReadAsByteArrayAsync();
+                return Encoding.UTF8.GetString(buffer);
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error("下载字符串", e);
+                return "";
+            }
+        }
 
         public static void ShowErrorDialog(Exception ex, bool canIgnore)
         {
