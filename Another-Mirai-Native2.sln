@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_OneBotv11", "Proto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_Satori_v1", "Protocol_Satori_v1\Protocol_Satori_v1.csproj", "{DE147760-0C55-4B95-BA3C-CE0DDE01AFE7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQP_DNNE", "CQP_DNNE\CQP_DNNE.csproj", "{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,14 @@ Global
 		{DE147760-0C55-4B95-BA3C-CE0DDE01AFE7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE147760-0C55-4B95-BA3C-CE0DDE01AFE7}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE147760-0C55-4B95-BA3C-CE0DDE01AFE7}.Release|x86.Build.0 = Release|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Debug|x86.ActiveCfg = Debug|x86
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Debug|x86.Build.0 = Debug|x86
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|x86.ActiveCfg = Release|Any CPU
+		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

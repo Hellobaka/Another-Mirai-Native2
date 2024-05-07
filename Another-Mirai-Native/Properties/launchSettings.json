@@ -2,7 +2,8 @@
   "profiles": {
     "Another-Mirai-Native": {
       "commandName": "Project",
-      "nativeDebugging": false
+      "commandLineArgs": "-PID 31388 -AuthCode 10003 -AutoExit True -Path data\\plugins\\tmp\\io.github.richardchien.coolqhttpapi.dll -WS ws://127.0.0.1:30303",
+      "nativeDebugging": true
     }
   }
 }

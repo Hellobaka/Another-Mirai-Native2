@@ -226,7 +226,11 @@ namespace Another_Mirai_Native.Native
         [SecurityCritical]
         public bool Load()
         {
-            LoadLibrary("CQP.dll");
+            var cqpHandle = LoadLibrary(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
+            if (cqpHandle == IntPtr.Zero)
+            {
+                LogHelper.Error("加载插件", $"CQP.dll加载失败, GetLastError={GetLastError()}");
+            }
             string fileName = new FileInfo(Path).Name;
             try
             {

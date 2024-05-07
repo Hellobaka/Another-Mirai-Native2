@@ -154,6 +154,10 @@ for %%F in (
     "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.dll"
     "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.exe"
     "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.runtimeconfig.json"
+    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP.dll"
+    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.dll"
+    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.deps.json"
+    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.runtimeconfig.json"
 ) do (
     if exist "%%F" (
         copy /Y "%%F" "%DIR%"
