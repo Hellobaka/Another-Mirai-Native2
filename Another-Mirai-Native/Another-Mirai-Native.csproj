@@ -1,57 +1,66 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
-	<UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Another_Mirai_Native</RootNamespace>
-    <Platforms>AnyCPU;x86</Platforms>
-    <LangVersion>11</LangVersion>
-    <Version>2.5.0</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Another_Mirai_Native</RootNamespace>
+		<Platforms>AnyCPU;x86</Platforms>
+		<LangVersion>11</LangVersion>
+		<Version>2.5.0</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="RPC\gRPC\CQPEvents.proto" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="RPC\gRPC\CQPEvents.proto" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Fleck" Version="1.2.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.25.2" />
-    <PackageReference Include="Grpc.Core" Version="2.46.6" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.60.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <Protobuf Include="RPC\gRPC\protos\CQPEvents.proto" GrpcServices="Both" />
-	<Protobuf Include="RPC\gRPC\protos\CQPFunction.proto" GrpcServices="Both" />
-	<Protobuf Include="RPC\gRPC\protos\CoreFunction.proto" GrpcServices="Both" />
+	<ItemGroup>
+		<PackageReference Include="Fleck" Version="1.2.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.2" />
+		<PackageReference Include="Grpc.Core" Version="2.46.6" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.60.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<Protobuf Include="RPC\gRPC\protos\CQPEvents.proto" GrpcServices="Both" />
+		<Protobuf Include="RPC\gRPC\protos\CQPFunction.proto" GrpcServices="Both" />
+		<Protobuf Include="RPC\gRPC\protos\CoreFunction.proto" GrpcServices="Both" />
 
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-    <PackageReference Include="SqlSugar" Version="5.1.4.141" />
-  </ItemGroup>
+	<PackageReference Include="Fody" Version="6.8.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="Costura.Fody" Version="5.7.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
-    <PackageReference Include="SqlSugarCore">
-      <Version>5.1.4.141</Version>
-    </PackageReference>
-  </ItemGroup>
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+		<PackageReference Include="SqlSugar" Version="5.1.4.141" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="websocket-sharp">
-      <HintPath>..\websocket-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+		<PackageReference Include="SqlSugarCore">
+			<Version>5.1.4.141</Version>
+		</PackageReference>
+	</ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd ..&#xD;&#xA;call copy.bat" />
-  </Target>
+	<ItemGroup>
+		<Reference Include="websocket-sharp">
+			<HintPath>..\websocket-sharp.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
+	</Target>
 </Project>
