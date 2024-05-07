@@ -2,12 +2,8 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using Another_Mirai_Native.WebSocket;
-using Fleck;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.IO;
 
 namespace Another_Mirai_Native.Native
 {
@@ -41,6 +37,10 @@ namespace Another_Mirai_Native.Native
         public Process PluginProcess { get; set; }
 
         public bool ExitFlag { get; set; }
+
+        public PluginLoaderType PluginLoaderType { get; set; } = PluginLoaderType.NetFramework48;
+
+        public string LoaderProcessPath { get; set; } = "";
 
         private static List<string> APIAuthWhiteList { get; set; } = new()
         {
@@ -142,6 +142,19 @@ namespace Another_Mirai_Native.Native
                     return false;
                 }
                 AppInfo.AuthCode = PluginManagerProxy.MakeAuthCode();
+
+                PluginLoaderType = (PluginLoaderType)AppInfo.LoaderType;
+                LoaderProcessPath = PluginLoaderType switch
+                {
+                    PluginLoaderType.Net8 => @"loaders\Net8\Another-Mirai-Native.exe",
+                    _ => @"loaders\NetFramework48\Another-Mirai-Native.exe",
+                };
+
+                if (File.Exists(LoaderProcessPath) is false)
+                {
+                    LogHelper.Error("加载插件", $"指定的加载器文件不存在，将尝试使用主程序加载");
+                    LoaderProcessPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}";
+                }
                 LogHelper.Info("加载插件", $"{AppInfo.name} 插件信息读取成功");
                 return true;
             }
@@ -164,7 +177,7 @@ namespace Another_Mirai_Native.Native
             var startConfig = new ProcessStartInfo
             {
                 Arguments = arguments,
-                FileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}",
+                FileName = LoaderProcessPath,
                 WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
             };
             if (!AppConfig.Instance.DebugMode)

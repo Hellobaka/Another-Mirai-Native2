@@ -8,6 +8,8 @@ namespace Another_Mirai_Native.Model
 
         public string AppId { get; set; } = "";
 
+        public int LoaderType { get; set; }
+
         public int ret { get; set; }
 
         public int apiver { get; set; }
