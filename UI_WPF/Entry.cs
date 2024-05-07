@@ -3,6 +3,7 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.RPC;
 using System;
 using System.IO;
+using System.Text;
 
 namespace Another_Mirai_Native.UI
 {
@@ -11,6 +12,10 @@ namespace Another_Mirai_Native.UI
         [STAThread]
         public static void Main(string[] args)
         {
+#if NET5_0_OR_GREATER
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+
             if (args.Length == 0)
             {
                 InitCore();

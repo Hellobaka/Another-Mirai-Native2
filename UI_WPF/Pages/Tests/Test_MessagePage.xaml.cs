@@ -102,13 +102,13 @@ namespace Another_Mirai_Native.UI.Pages
                     string img_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", img_file);
                     if (File.Exists(img_path))
                     {
-                        Process.Start(img_path);
+                        Helper.OpenFolder(img_path);
                     }
                     else if (File.Exists(img_path + ".cqimg"))
                     {
                         string picTmp = File.ReadAllText(img_path + ".cqimg");
                         picTmp = picTmp.Split('\n').Last().Replace("url=", "");
-                        Process.Start(picTmp);
+                        Helper.OpenFolder(picTmp);
                     }
                 }
             };

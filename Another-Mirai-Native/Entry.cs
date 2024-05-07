@@ -5,6 +5,7 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.RPC.Interface;
 using System.Diagnostics;
+using System.Text;
 
 namespace Another_Mirai_Native
 {
@@ -26,6 +27,9 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         public static void Main(string[] args)
         {
+#if NET5_0_OR_GREATER
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
             Console.CancelKeyPress += (sender, eArgs) =>
             {
                 _quitEvent.Set();
@@ -306,6 +310,7 @@ namespace Another_Mirai_Native
             Directory.CreateDirectory(@"data\record");
             Directory.CreateDirectory(@"logs");
             Directory.CreateDirectory("protocols");
+            Directory.CreateDirectory("loaders");
         }
 
         public static void MonitorCoreProcess(int pid)

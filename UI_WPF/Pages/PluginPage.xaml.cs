@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,7 +91,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void OpenAllDataBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "app"));
+            Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "app"));
         }
 
         private void OpenDataBtn_Click(object sender, RoutedEventArgs e)
@@ -102,7 +103,7 @@ namespace Another_Mirai_Native.UI.Pages
             string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
             if (Directory.Exists(path))
             {
-                Process.Start(path);
+                Helper.OpenFolder(path);
             }
             else
             {
@@ -138,7 +139,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void OpenPluginPathBtn_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
+            Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

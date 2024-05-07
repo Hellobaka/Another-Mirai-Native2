@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native
 {
@@ -285,6 +286,16 @@ namespace Another_Mirai_Native
             }
             var md5 = System.Security.Cryptography.MD5.Create();
             return BitConverter.ToString(md5.ComputeHash(raw)).Replace("-", "").ToUpper();
+        }
+
+        public static void OpenFolder(string path)
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true,
+            };
+            Process.Start(startInfo);
         }
     }
 }

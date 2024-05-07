@@ -201,7 +201,7 @@ namespace Another_Mirai_Native.UI.Pages
 
                     Mouse.OverrideCursor = Cursors.Arrow;
                     await DialogHelper.ShowConfirmDialog("清理完成", $"点击任意按钮重启程序");
-                    Process.Start(GetType().Assembly.Location);
+                    Helper.OpenFolder(GetType().Assembly.Location);
                     Environment.Exit(0);
                 }
                 catch (Exception ex)
