@@ -1,0 +1,30 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<MudButton Color="Color.Primary" OnClick="LoadClick">Load</MudButton>
+<MudList>
+    @foreach (var item in logs)
+    {
+        <MudListItem>@item.detail</MudListItem>
+    }
+</MudList>
+
+    @code{
+    List<LogModel> logs { get; set; } = new List<LogModel>();
+
+    protected override void OnInitialized()
+    {
+        LogHelper.LogAdded += LogAdded;
+    }
+
+    private void LogAdded(int logId, LogModel log)
+    {
+        logs.Add(log);
+    }
+
+    private void LoadClick()
+    {
+        Entry.Main(new string[0]);
+    }
+}

@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_Satori_v1", "Proto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQP_DNNE", "CQP_DNNE\CQP_DNNE.csproj", "{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI_Blazor", "UI_Blazor\UI_Blazor.csproj", "{D2B1680B-0D64-4C40-A589-0BC6D5583517}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,14 @@ Global
 		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|x86.ActiveCfg = Release|Any CPU
 		{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}.Release|x86.Build.0 = Release|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Debug|x86.ActiveCfg = Debug|x86
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Debug|x86.Build.0 = Debug|x86
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2B1680B-0D64-4C40-A589-0BC6D5583517}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="6.*" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  
+</Project>
