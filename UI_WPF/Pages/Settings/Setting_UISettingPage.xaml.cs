@@ -56,6 +56,8 @@ namespace Another_Mirai_Native.UI.Pages
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             HardwareRender.IsOn = UIConfig.Instance.HardwareRender;
             ChatEnableSelector.IsOn = UIConfig.Instance.ChatEnabled;
+            ShowBalloonTip.IsOn = UIConfig.Instance.ShowBalloonTip;
+            ShowWhenError.IsOn = UIConfig.Instance.PopWindowWhenError;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
             AutoStartup.IsOn = UIConfig.Instance.AutoStartup;
             AutoCloseWindow.IsOn = UIConfig.Instance.AutoCloseWindow;
