@@ -1,24 +1,48 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthService _authProvider
 
-<MudThemingProvider />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" />
+<MudSnackbarProvider />
+
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">AMN2 Blazor-WebUI</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="ToggleTheme" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
-        @Body
+        <AuthorizeView>
+            <Authorized>
+                @Body
+            </Authorized>
+            <NotAuthorized>
+                <UI_Blazor.Components.Pages.Login/>
+            </NotAuthorized>
+        </AuthorizeView>
     </MudMainContent>
 </MudLayout>
 
 @code {
-    private bool _drawerOpen = true;
+    public static bool _drawerOpen = false;
+    private bool _isDarkMode;
+
+    protected override void OnInitialized()
+    {
+        _isDarkMode = _authProvider.DarkTheme;
+    }
 
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+        _authProvider.DarkTheme = _isDarkMode;
     }
 }

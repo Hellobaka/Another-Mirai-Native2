@@ -1,8 +1,11 @@
-﻿@page "/"
+﻿@page "/dashboard"
+@using UI_Blazor.Components.Layout
+@inject AuthService _auth
 
 <PageTitle>Home</PageTitle>
 
 <MudButton Color="Color.Primary" OnClick="LoadClick">Load</MudButton>
+<MudButton Color="Color.Primary" OnClick="LogoutClick">Logout</MudButton>
 <MudList>
     @foreach (var item in logs)
     {
@@ -10,7 +13,7 @@
     }
 </MudList>
 
-    @code{
+@code{
     List<LogModel> logs { get; set; } = new List<LogModel>();
 
     protected override void OnInitialized()
@@ -26,5 +29,10 @@
     private void LoadClick()
     {
         Entry.Main(new string[0]);
+    }
+
+    private async void LogoutClick()
+    {
+        await _auth.UpdateSignInStatusAsync(null);
     }
 }

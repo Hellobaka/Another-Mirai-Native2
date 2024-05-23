@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 using UI_Blazor.Components;
 
@@ -14,6 +15,10 @@ namespace UI_Blazor
                 .AddInteractiveServerComponents();
 
             builder.Services.AddMudServices();
+
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
 
             var app = builder.Build();
 
