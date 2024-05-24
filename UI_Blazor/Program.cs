@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
-using UI_Blazor.Components;
-using UI_Blazor.Models;
+using Another_Mirai_Native.BlazorUI.Components;
+using Another_Mirai_Native.BlazorUI.Models;
 
-namespace UI_Blazor
+namespace Another_Mirai_Native.BlazorUI
 {
     public class Program
     {

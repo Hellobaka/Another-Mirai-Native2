@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
-using UI_Blazor.Models;
+using Another_Mirai_Native.BlazorUI.Models;
 
-namespace UI_Blazor
+namespace Another_Mirai_Native.BlazorUI
 {
     public class AuthService : AuthenticationStateProvider
     {

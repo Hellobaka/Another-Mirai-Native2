@@ -1,4 +1,4 @@
-﻿namespace UI_Blazor.Models
+﻿namespace Another_Mirai_Native.BlazorUI.Models
 {
     public class Shared
     {
