@@ -304,13 +304,14 @@ namespace Another_Mirai_Native
 
         public static void CreateInitFolders()
         {
-            Directory.CreateDirectory(@"data\app");
-            Directory.CreateDirectory(@"data\plugins");
-            Directory.CreateDirectory(@"data\image");
-            Directory.CreateDirectory(@"data\record");
-            Directory.CreateDirectory(@"logs");
-            Directory.CreateDirectory("protocols");
-            Directory.CreateDirectory("loaders");
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            Directory.CreateDirectory(Path.Combine(basePath, "data", "app"));
+            Directory.CreateDirectory(Path.Combine(basePath, "data", "plugins"));
+            Directory.CreateDirectory(Path.Combine(basePath, "data", "image"));
+            Directory.CreateDirectory(Path.Combine(basePath, "data", "record"));
+            Directory.CreateDirectory(Path.Combine(basePath, "logs"));
+            Directory.CreateDirectory(Path.Combine(basePath, "protocols"));
+            Directory.CreateDirectory(Path.Combine(basePath, "loaders"));
         }
 
         public static void MonitorCoreProcess(int pid)

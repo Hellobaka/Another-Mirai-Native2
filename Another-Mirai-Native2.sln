@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_Satori_v1", "Proto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQP_DNNE", "CQP_DNNE\CQP_DNNE.csproj", "{87C86F9D-82CE-49F9-9DD1-4BF4AD0BC14C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI_Blazor", "UI_Blazor\UI_Blazor.csproj", "{D2B1680B-0D64-4C40-A589-0BC6D5583517}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_Blazor", "UI_Blazor\UI_Blazor.csproj", "{D2B1680B-0D64-4C40-A589-0BC6D5583517}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
