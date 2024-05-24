@@ -6,6 +6,7 @@
 	  <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x86</Platforms>
+    <AssemblyName>Another-Mirai-Native-WebUI</AssemblyName>
   </PropertyGroup>
 
   
