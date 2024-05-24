@@ -4,6 +4,5 @@
     {
         public bool IsDarkMode { get; set; } = true;
 
-        public string SessionId { get; set; } = Guid.NewGuid().ToString();
     }
 }

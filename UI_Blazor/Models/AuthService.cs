@@ -15,6 +15,8 @@ namespace UI_Blazor
 
         private Shared Shared { get; set; }
 
+        public string SessionId { get; set; } = Guid.NewGuid().ToString();
+
         public AuthService(ProtectedSessionStorage protectedSessionStorage, Shared shared)
         {
             _protectedSessionStorage = protectedSessionStorage;
@@ -25,7 +27,7 @@ namespace UI_Blazor
 
         private async void AuthService_OnAuthChanged(string sessionId)
         {
-            if (_principal == null || Shared.SessionId == sessionId)
+            if (_principal == null || SessionId == sessionId)
             {
                 return;
             }
@@ -68,7 +70,7 @@ namespace UI_Blazor
             }
             if (principal != null)
             {
-                OnAuthChanged?.Invoke(Shared.SessionId);
+                OnAuthChanged?.Invoke(SessionId);
             }
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }

@@ -2,8 +2,11 @@
 @inject AuthService _authProvider
 @inject ISnackbar Snackbar
 @inject Shared Shared
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" />
+<MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
@@ -11,7 +14,8 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">AMN2 Blazor-WebUI</MudText>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="ToggleTheme" />
+        <MudIconButton Icon="@Icons.Material.Filled.BrightnessMedium" @onclick="ToggleTheme" />
+        <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.ExitToApp" @onclick="Logout" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
@@ -39,17 +43,43 @@
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var info = await _authProvider.GetAuthenticationStateAsync();
+            if ((info == null || !(info?.User?.Identity?.IsAuthenticated ?? false)) && NavigationManager.ToBaseRelativePath(NavigationManager.Uri) != "/")
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+    }
+
     private void AuthService_OnAuthChanged(string sessionId)
     {
-        if (sessionId != Shared.SessionId)
+        if (sessionId != _authProvider.SessionId)
         {
             Snackbar.Add("Auth Exipred. Logout", Severity.Warning);
+            InvokeAsync(() =>
+            {
+                NavigationManager.NavigateTo("/");
+            });
         }
     }
 
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private async void Logout()
+    {
+        bool? result = await DialogService.ShowMessageBox("Warning", "Are you sure to logout?", "Yes", cancelText: "Cancel", options: new DialogOptions { FullWidth = true });
+        if (result != null && result.Value)
+        {
+            await _authProvider.UpdateSignInStatusAsync(null);
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void ToggleTheme()
