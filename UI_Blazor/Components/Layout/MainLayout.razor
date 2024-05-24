@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthService _authProvider
+@inject ISnackbar Snackbar
+@inject Shared Shared
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" />
 <MudSnackbarProvider />
@@ -32,7 +34,17 @@
 
     protected override void OnInitialized()
     {
-        _isDarkMode = _authProvider.DarkTheme;
+        _isDarkMode = Shared.IsDarkMode;
+        AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
+        AuthService.OnAuthChanged += AuthService_OnAuthChanged;
+    }
+
+    private void AuthService_OnAuthChanged(string sessionId)
+    {
+        if (sessionId != Shared.SessionId)
+        {
+            Snackbar.Add("Auth Exipred. Logout", Severity.Warning);
+        }
     }
 
     private void DrawerToggle()
@@ -43,6 +55,6 @@
     private void ToggleTheme()
     {
         _isDarkMode = !_isDarkMode;
-        _authProvider.DarkTheme = _isDarkMode;
+        Shared.IsDarkMode = _isDarkMode;
     }
 }

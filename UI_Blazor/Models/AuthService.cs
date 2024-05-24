@@ -1,19 +1,35 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
+using UI_Blazor.Models;
 
 namespace UI_Blazor
 {
     public class AuthService : AuthenticationStateProvider
     {
-        private static readonly AuthenticationState UnauthorizedAuthenticationState = new AuthenticationState(new ClaimsPrincipal());
+        private static readonly AuthenticationState UnauthorizedAuthenticationState = new(new ClaimsPrincipal());
         private ClaimsPrincipal? _principal;
         private readonly ProtectedSessionStorage _protectedSessionStorage;
-        public bool DarkTheme { get; set; } = true;
 
-        public AuthService(ProtectedSessionStorage protectedSessionStorage)
+        public static event Action<string> OnAuthChanged;
+
+        private Shared Shared { get; set; }
+
+        public AuthService(ProtectedSessionStorage protectedSessionStorage, Shared shared)
         {
             _protectedSessionStorage = protectedSessionStorage;
+            OnAuthChanged += AuthService_OnAuthChanged;
+
+            Shared = shared;
+        }
+
+        private async void AuthService_OnAuthChanged(string sessionId)
+        {
+            if (_principal == null || Shared.SessionId == sessionId)
+            {
+                return;
+            }
+            await UpdateSignInStatusAsync(null);
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -30,10 +46,9 @@ namespace UI_Blazor
                 var name = result.Value!;
                 await UpdateSignInStatusAsync(new ClaimsPrincipal(
                     new ClaimsIdentity(
-                        new Claim[]
-                        {
-                        new(ClaimTypes.Name, name)
-                        },
+                        [
+                            new(ClaimTypes.Name, name)
+                        ],
                         "Blazor"
                     )
                 ));
@@ -45,13 +60,16 @@ namespace UI_Blazor
             _principal = principal;
             if (_principal?.Identity?.IsAuthenticated ?? false)
             {
-                await _protectedSessionStorage.SetAsync("authkey", _principal.Identity.Name!); // Name あるでしょ多分
+                await _protectedSessionStorage.SetAsync("authkey", _principal.Identity.Name!);
             }
             else
             {
                 await _protectedSessionStorage.DeleteAsync("authkey");
             }
-
+            if (principal != null)
+            {
+                OnAuthChanged?.Invoke(Shared.SessionId);
+            }
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
