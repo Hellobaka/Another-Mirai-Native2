@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.BlazorUI
 
         public async Task<bool> AuthenticateUser(string password)
         {
-            if (password != "123456")
+            if (password != Blazor_Config.Instance.Password)
             {
                 await UpdateSignInStatusAsync(null);
                 return false;
