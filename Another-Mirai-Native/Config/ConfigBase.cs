@@ -23,9 +23,9 @@ namespace Another_Mirai_Native.Config
         /// <returns>目标类型的配置</returns>
         public T GetConfig<T>(string sectionName, T defaultValue = default)
         {
-            if (Directory.Exists("conf") is false)
+            if (Directory.Exists(Path.GetDirectoryName(ConfigPath)) is false)
             {
-                Directory.CreateDirectory("conf");
+                Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath));
             }
 
             if (File.Exists(ConfigPath) is false)
