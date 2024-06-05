@@ -5,60 +5,8 @@
 
 <PageTitle>Home</PageTitle>
 
-<MudButton Color="Color.Primary" OnClick="LoadClick">Load</MudButton>
-<MudButton Color="Color.Primary" OnClick="LogoutClick">Logout</MudButton>
-<MudText>Logs:</MudText>
-<MudList>
-    @foreach (var item in logs)
-    {
-        <MudListItem>@item.detail</MudListItem>
-    }
-</MudList>
-<MudText>Console:</MudText>
-<MudText>@markupString</MudText>
-
 @code{
-    string consoleOutput { get; set; } = "";
-    MarkupString markupString;
-    List<LogModel> logs { get; set; } = new List<LogModel>();
-
     protected override void OnInitialized()
     {
-        ObservableTextWriter.OnConsoleOutput += OnConsoleOutput;
-    }
-
-    private void OnConsoleOutput(string msg)
-    {
-        InvokeAsync(() =>
-        {
-            msg = msg.Replace("\r\n", "<br>");
-            consoleOutput += msg;
-
-            markupString = new MarkupString(consoleOutput);
-            StateHasChanged();
-        });
-    }
-
-    private void LogAdded(int logId, LogModel log)
-    {
-        InvokeAsync(() =>
-        {
-            logs.Add(log);
-            StateHasChanged();
-        });
-    }
-
-    private void LoadClick()
-    {
-        Task.Run(() =>
-        {
-            LogHelper.LogAdded += LogAdded;
-            Entry.Main(new string[0]);
-        });
-    }
-
-    private async void LogoutClick()
-    {
-        await _auth.UpdateSignInStatusAsync(null);
     }
 }
