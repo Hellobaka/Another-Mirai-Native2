@@ -6,13 +6,13 @@
 <MudContainer Style="height: 100%; display: flex; justify-content: center; align-items: center;">
     <MudCard Elevation="19" Style="width: 70%; padding: 10px;">
         <MudCardHeader>
-            <h3>Password</h3>
+            <h3>后台存储的密码</h3>
         </MudCardHeader>
         <MudCardContent>
-            <MudTextField @bind-Value="Password" Label="Password" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="Show Password" />
+            <MudTextField @bind-Value="Password" Label="密码" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="显示密码" />
         </MudCardContent>
         <MudCardActions>
-            <MudButton Variant="Variant.Filled" Color=" Color.Primary" @onclick="LoginClick">Login</MudButton>
+            <MudButton Variant="Variant.Filled" Color=" Color.Primary" @onclick="LoginClick">连接</MudButton>
         </MudCardActions>
     </MudCard>
 </MudContainer>
@@ -23,6 +23,11 @@
     private bool isShow;
     private InputType PasswordInput = InputType.Password;
     private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected override void OnInitialized()
+    {
+        LogHandler.StopSaveLogs();
+    }
 
     void TogglePassword()
     {
@@ -44,7 +49,7 @@
     {
         if (!await _authProvider.AuthenticateUser(Password))
         {
-            Snackbar.Add("Password Error", Severity.Error);
+            Snackbar.Add("密码错误", Severity.Error);
         }
         else
         {

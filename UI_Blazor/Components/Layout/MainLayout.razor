@@ -17,7 +17,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.BrightnessMedium" @onclick="ToggleTheme" />
         <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.ExitToApp" @onclick="Logout" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer Variant="@DrawerVariant.Mini" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
@@ -59,7 +59,7 @@
     {
         if (sessionId != _authProvider.SessionId)
         {
-            Snackbar.Add("Auth Exipred. Logout", Severity.Warning);
+            Snackbar.Add("令牌过期，登出", Severity.Warning);
             InvokeAsync(() =>
             {
                 NavigationManager.NavigateTo("/");
@@ -74,7 +74,7 @@
 
     private async void Logout()
     {
-        bool? result = await DialogService.ShowMessageBox("Warning", "Are you sure to logout?", "Yes", cancelText: "Cancel", options: new DialogOptions { FullWidth = true });
+        bool? result = await DialogService.ShowMessageBox("嗯？", "要登出了吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
         if (result != null && result.Value)
         {
             await _authProvider.UpdateSignInStatusAsync(null);
