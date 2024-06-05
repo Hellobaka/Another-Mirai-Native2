@@ -16,6 +16,7 @@ namespace Another_Mirai_Native.BlazorUI
 
         public static void Main(string[] args)
         {
+            Blazor_Config.Instance.LoadConfig();
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

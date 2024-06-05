@@ -13,16 +13,17 @@ namespace Another_Mirai_Native.BlazorUI
 
         public static event Action<string> OnAuthChanged;
 
-        private Shared Shared { get; set; }
-
         public string SessionId { get; set; } = Guid.NewGuid().ToString();
 
         public AuthService(ProtectedSessionStorage protectedSessionStorage, Shared shared)
         {
             _protectedSessionStorage = protectedSessionStorage;
             OnAuthChanged += AuthService_OnAuthChanged;
+        }
 
-            Shared = shared;
+        ~AuthService()
+        {
+            OnAuthChanged -= AuthService_OnAuthChanged;
         }
 
         private async void AuthService_OnAuthChanged(string sessionId)
@@ -60,13 +61,19 @@ namespace Another_Mirai_Native.BlazorUI
         public async Task UpdateSignInStatusAsync(ClaimsPrincipal? principal)
         {
             _principal = principal;
-            if (_principal?.Identity?.IsAuthenticated ?? false)
+            try
             {
-                await _protectedSessionStorage.SetAsync("authkey", _principal.Identity.Name!);
+                if (_principal?.Identity?.IsAuthenticated ?? false)
+                {
+                    await _protectedSessionStorage.SetAsync("authkey", _principal.Identity.Name!);
+                }
+                else
+                {
+                    await _protectedSessionStorage.DeleteAsync("authkey");
+                }
             }
-            else
+            catch
             {
-                await _protectedSessionStorage.DeleteAsync("authkey");
             }
             if (principal != null)
             {

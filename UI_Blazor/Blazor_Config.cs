@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.BlazorUI
 
         public string Password { get; set; }
 
-        private void LoadConfig()
+        public void LoadConfig()
         {
             FocusDarkMode = GetConfig("FocusDarkMode", false);
             Password = GetConfig("Password", Guid.NewGuid().ToString());

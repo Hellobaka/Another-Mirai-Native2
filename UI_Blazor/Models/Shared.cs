@@ -2,7 +2,6 @@
 {
     public class Shared
     {
-        public bool IsDarkMode { get; set; } = true;
-
+        public bool IsDarkMode { get; set; } = Blazor_Config.Instance.FocusDarkMode;
     }
 }
