@@ -1,0 +1,101 @@
+﻿@page "/logs"
+@using System.Collections.Specialized
+@using System.Collections.ObjectModel
+@using LogLevel = Another_Mirai_Native.Model.Enums.LogLevel
+@inject Shared Shared
+@inject IJSRuntime JS
+
+<MudGrid>
+    <MudSpacer></MudSpacer>
+    <MudSwitch @bind-Value="@AutoScroll" Style="margin: 10px;" Color="Color.Primary" T="bool" CheckedChanged="AutoScrollChecked">自动滚动</MudSwitch>
+</MudGrid>
+<MudDataGrid Items="@DisplayLogs" Dense="true" id="LogContainer">
+    <Columns>
+        <PropertyColumn Property="x => x.Time" Title="时间" CellStyleFunc="@_cellStyleFunc" />
+        <PropertyColumn Property="x => x.Source" Title="插件" CellStyleFunc="@_cellStyleFunc" />
+        <PropertyColumn Property="x => x.Name" Title="来源" CellStyleFunc="@_cellStyleFunc" />
+        <PropertyColumn Property="x => x.Detail" Title="消息" CellStyleFunc="@_cellStyleFunc" />
+        <PropertyColumn Property="x => x.Status" Title="结果" CellStyleFunc="@_cellStyleFunc" />
+    </Columns>
+</MudDataGrid>
+<div id="bottomItem"></div>
+<MudOverlay @bind-Visible="Loading" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+</MudOverlay>
+
+@code {
+    private MudTheme Theme = new MudTheme();
+    public ObservableCollection<LogDisplay> DisplayLogs { get; set; } = new();
+    public bool Loading { get; set; } = true;
+    public bool AutoScroll { get; set; }
+
+    protected override void OnInitialized()
+    {
+        DisplayLogs.Clear();
+        foreach (var item in LogHandler.Logs)
+        {
+            DisplayLogs.Add(LogDisplay.ParseLogModel(item));
+        }
+        LogHandler.Logs.CollectionChanged += OnLogHandlerLogChanged;
+        LogHelper.LogStatusUpdated += OnLogStatusUpdated;
+        InvokeAsync(() => StateHasChanged());
+        Loading = false;
+    }
+
+    private void OnLogStatusUpdated(int logId, string status)
+    {
+        var item = DisplayLogs.FirstOrDefault(x=>x.Id == logId);
+        if (item != null)
+        {
+            item.Status = status;
+            InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    private async void OnLogHandlerLogChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if(e.Action != NotifyCollectionChangedAction.Add
+            || e.NewItems == null)
+        {
+            return;
+        }
+        foreach(LogModel item in e.NewItems)
+        {
+            DisplayLogs.Add(LogDisplay.ParseLogModel(item));
+        }
+        await InvokeAsync(() => StateHasChanged());
+        await ScrollToBottom();
+    }
+
+    private Func<LogDisplay, string> _cellStyleFunc => (x) =>
+    {
+        var pattle = Shared.IsDarkMode ? Theme.PaletteDark : Theme.Palette;
+        string color = (LogLevel)x.Priority switch
+        {
+            LogLevel.Debug => "",
+            LogLevel.Error => pattle.Error.ToString(),
+            LogLevel.Info => "",
+            LogLevel.Fatal => pattle.ErrorDarken,
+            LogLevel.InfoSuccess => pattle.Primary.ToString(),
+            LogLevel.InfoSend => pattle.Success.ToString(),
+            LogLevel.InfoReceive => pattle.Info.ToString(),
+            LogLevel.Warning => pattle.Warning.ToString(),
+            _ => "",
+        };
+
+        return $"color: {color};";
+    };
+
+    private async Task AutoScrollChecked(bool a)
+    {
+        await ScrollToBottom();
+    }
+
+    private async Task ScrollToBottom()
+    {
+        if (AutoScroll)
+        {
+            await JS.InvokeVoidAsync("scrollToBottom", "bottomItem");
+        }
+    }
+}
