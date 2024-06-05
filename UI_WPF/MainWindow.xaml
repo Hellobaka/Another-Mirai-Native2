@@ -110,6 +110,17 @@
                             Glyph="&#xE8F2;" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    x:Name="WebUIMenuItem"
+                    Content="WebUI"
+                    Tag="WebUIPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon
+                            FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                            FontSize="16"
+                            Glyph="&#xE753;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置" Tag="SettingPage">
