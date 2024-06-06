@@ -16,8 +16,7 @@
 	<script src="_content/MudBlazor/MudBlazor.min.js"></script>
 
     <script>
-        function scrollToBottom(elementId) {
-            var element = document.getElementById(elementId);
+        function scrollToBottom(element) {
             if (element) {
                 element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
             }

@@ -7,7 +7,7 @@ namespace Another_Mirai_Native.BlazorUI.Models
 {
     public static class LogHandler
     {
-        public static ObservableCollection<LogModel> Logs { get; set; }
+        public static ObservableCollection<LogModel> Logs { get; set; } = [];
 
         public static void StartSaveLogs()
         {
@@ -16,6 +16,7 @@ namespace Another_Mirai_Native.BlazorUI.Models
             {
                 Logs.Add(item);
             }
+            LogHelper.LogAdded -= LogHelper_LogAdded;
             LogHelper.LogAdded += LogHelper_LogAdded;
         }
 
