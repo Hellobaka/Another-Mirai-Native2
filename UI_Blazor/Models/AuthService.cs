@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
 using Another_Mirai_Native.BlazorUI.Models;
+using Microsoft.AspNetCore.Components.Server.Circuits;
+using System.Windows.Forms.Design;
+using System.Collections.Concurrent;
 
 namespace Another_Mirai_Native.BlazorUI
 {
-    public class AuthService : AuthenticationStateProvider
+    public class AuthService : AuthenticationStateProvider, IDisposable
     {
         private static readonly AuthenticationState UnauthorizedAuthenticationState = new(new ClaimsPrincipal());
         private ClaimsPrincipal? _principal;
@@ -21,7 +24,7 @@ namespace Another_Mirai_Native.BlazorUI
             OnAuthChanged += AuthService_OnAuthChanged;
         }
 
-        ~AuthService()
+        public void Dispose()
         {
             OnAuthChanged -= AuthService_OnAuthChanged;
         }
@@ -100,4 +103,41 @@ namespace Another_Mirai_Native.BlazorUI
             return true;
         }
     }
+
+    public class AuthCircuitHandler : CircuitHandler
+    {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ConcurrentDictionary<Circuit, IServiceScope> _scopes = new ConcurrentDictionary<Circuit, IServiceScope>();
+
+        public AuthCircuitHandler(IServiceScopeFactory serviceScopeFactory)
+        {
+            _serviceScopeFactory = serviceScopeFactory;
+        }
+
+        public override Task OnCircuitOpenedAsync(Circuit circuit, CancellationToken cancellationToken)
+        {
+            var scope = _serviceScopeFactory.CreateScope();
+            _scopes.TryAdd(circuit, scope);
+            return Task.CompletedTask;
+        }
+
+        public override async Task OnCircuitClosedAsync(Circuit circuit, CancellationToken cancellationToken)
+        {
+            if (_scopes.TryRemove(circuit, out var scope))
+            {
+                if (scope != null)
+                {
+                    var myService = scope.ServiceProvider.GetService<AuthService>();
+                    if (myService is IDisposable disposableService)
+                    {
+                        disposableService.Dispose();
+                    }
+                    scope.Dispose();
+                }
+            }
+
+            await base.OnCircuitClosedAsync(circuit, cancellationToken);
+        }
+    }
+
 }

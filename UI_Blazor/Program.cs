@@ -4,6 +4,7 @@ using Another_Mirai_Native.BlazorUI.Components;
 using Another_Mirai_Native.BlazorUI.Models;
 using System.Text;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 
 namespace Another_Mirai_Native.BlazorUI
 {
@@ -29,6 +30,7 @@ namespace Another_Mirai_Native.BlazorUI
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<Shared>();
             builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
+            builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
 
             var app = builder.Build();
             BlazorHost = app;
