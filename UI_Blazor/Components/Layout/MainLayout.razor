@@ -4,8 +4,9 @@
 @inject Shared Shared
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" @ref="@_mudThemeProvider" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -35,24 +36,41 @@
 @code {
     public static bool _drawerOpen = false;
     private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider;
 
-    protected override void OnInitialized()
+    protected async override void OnInitialized()
     {
-        _isDarkMode = Shared.IsDarkMode;
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var info = await _authProvider.GetAuthenticationStateAsync();
-            if ((info == null || !(info?.User?.Identity?.IsAuthenticated ?? false)) && NavigationManager.ToBaseRelativePath(NavigationManager.Uri) != "/")
+            if (Shared.IsDarkMode)
             {
-                NavigationManager.NavigateTo("/");
+                _isDarkMode = Shared.IsDarkMode;
+            }
+            else
+            {
+                _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             }
         }
+
+        // if (firstRender)
+        // {
+        //     var info = await _authProvider.GetAuthenticationStateAsync();
+        //     if ((info == null || !(info?.User?.Identity?.IsAuthenticated ?? false)) && NavigationManager.ToBaseRelativePath(NavigationManager.Uri) != "/")
+        //     {
+        //         NavigationManager.NavigateTo("/");
+        //     }
+        // }
     }
 
     private void AuthService_OnAuthChanged(string sessionId)
@@ -85,6 +103,5 @@
     private void ToggleTheme()
     {
         _isDarkMode = !_isDarkMode;
-        Shared.IsDarkMode = _isDarkMode;
     }
 }
