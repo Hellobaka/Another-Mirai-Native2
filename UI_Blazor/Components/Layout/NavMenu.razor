@@ -1,9 +1,10 @@
-﻿<MudNavMenu>
+﻿<MudNavMenu Bordered="true" Color="Color.Primary" Rounded="false">
      <AuthorizeView>
          <Authorized>
             <MudNavLink Href="dashboard" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Dashboard">首页</MudNavLink>
             <MudNavLink Href="logs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AutoAwesome">日志</MudNavLink>
             <MudNavLink Href="plugins" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Cable">插件管理</MudNavLink>
+            <MudNavLink Href="test" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccessibleForward">插件测试</MudNavLink>
             <MudNavLink Href="chat" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Cyclone">会话管理</MudNavLink>
         </Authorized>
          <NotAuthorized>
