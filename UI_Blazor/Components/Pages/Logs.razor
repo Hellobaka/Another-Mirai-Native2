@@ -6,6 +6,8 @@
 @inject IJSRuntime JS
 @inject IScrollManager ScrollManager
 @inject IScrollListenerFactory ScrollListenerFactory
+@inject NavigationManager NavigationManager
+@implements IAsyncDisposable
 
 <MudDataGrid Items="@DisplayLogs" Dense="true" FixedHeader="true" Virtualize="true" id="logContainer">
     <ToolBarContent>
@@ -28,20 +30,14 @@
 
 <script>
     var resizeTable = () => {
-        document.getElementsByClassName('mud-table-container')[0].style.height = document.querySelector('aside').clientHeight - 30 + 'px'
+        const element = document.getElementsByClassName('mud-table-container')
+        if (element.length > 0) {
+            document.getElementsByClassName('mud-table-container')[0].style.height = document.querySelector('aside').clientHeight - 30 + 'px'
+        }
     };
-    var scrollTableToBottom = () => {
-        const element = document.querySelector('.mud-drop-container table tbody')
-        scrollToBottom(element.lastElementChild)
-        document.getElementsByTagName('body')[0].scrollTop = document.getElementsByTagName('body')[0].scrollHeight
-
-        //scrollToBottom(document.getElementById('scrollBottomItem'))
-    };
-    var scrollTableToTop = () => {
-        const element = document.querySelector('.mud-table-container')
-        element.scrollTop = 0
-        document.getElementsByTagName('body')[0].scrollTop = 0
-    };
+    var removeSizeHandler = () => {
+        window.removeEventListener('resize', resizeTable)
+    }
     window.addEventListener('resize', resizeTable)
 </script>
 
@@ -49,21 +45,40 @@
     private MudTheme Theme = new MudTheme();
     public ObservableCollection<LogDisplay> DisplayLogs { get; set; } = new();
     public bool Loading { get; set; } = true;
-    public bool AutoScroll { get; set; }
+    public bool AutoScroll { get; set; } = true;
     private IScrollListener? _scrollListener;
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        AutoScroll = Shared.AutoScroll;
         LogHandler.StartSaveLogs();
         DisplayLogs.Clear();
         foreach (var item in LogHandler.Logs)
         {
             DisplayLogs.Add(LogDisplay.ParseLogModel(item));
         }
+        LogHandler.Logs.CollectionChanged -= OnLogHandlerLogChanged;
+        LogHelper.LogStatusUpdated -= OnLogStatusUpdated;
         LogHandler.Logs.CollectionChanged += OnLogHandlerLogChanged;
         LogHelper.LogStatusUpdated += OnLogStatusUpdated;
-        InvokeAsync(() => StateHasChanged());
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        Program.OnBlazorServiceStopped += OnBlazorStopped;
+
+        await InvokeAsync(() => StateHasChanged());
         Loading = false;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        LogHandler.Logs.CollectionChanged -= OnLogHandlerLogChanged;
+        LogHelper.LogStatusUpdated -= OnLogStatusUpdated;
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        await JS.InvokeVoidAsync("removeSizeHandler", []);
+    }
+
+    private async void OnBlazorStopped()
+    {
+        await DisposeAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -72,6 +87,7 @@
         {
             await JS.InvokeVoidAsync("resizeTable", []);
             _scrollListener = ScrollListenerFactory.Create(null);
+            await ScrollToBottom();
         }
     }
 
@@ -134,14 +150,14 @@
 
     private async Task AutoScrollChecked(bool a)
     {
+        Shared.AutoScroll = AutoScroll;
         await ScrollToBottom();
     }
 
     private async Task ScrollToBottom()
     {
-        if (AutoScroll)
+        if (AutoScroll && NavigationManager.ToBaseRelativePath(NavigationManager.Uri).StartsWith("logs"))
         {
-            //await JS.InvokeVoidAsync("scrollTableToBottom", "");
             await ScrollManager.ScrollToBottomAsync(".mud-table-container", ScrollBehavior.Smooth);
             await ScrollManager.ScrollToBottomAsync(_scrollListener.Selector, ScrollBehavior.Smooth);
         }
@@ -149,7 +165,6 @@
 
     private async Task ScrollToTop()
     {
-        // await JS.InvokeVoidAsync("scrollTableToTop", "");
         await ScrollManager.ScrollToTopAsync(".mud-table-container", ScrollBehavior.Smooth);
         await ScrollManager.ScrollToTopAsync(_scrollListener.Selector, ScrollBehavior.Smooth);
     }

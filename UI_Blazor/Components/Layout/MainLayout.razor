@@ -19,7 +19,11 @@
         <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.ExitToApp" @onclick="Logout" />
     </MudAppBar>
     <MudDrawer Variant="@DrawerVariant.Mini" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
+        <NavMenu />            
+        <MudSpacer></MudSpacer>
+        <MudNavMenu Bordered="true" Color="Color.Primary" Rounded="false">
+            <MudNavLink Href="setting" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">@(_drawerOpen ? "设置" : "")</MudNavLink>
+        </MudNavMenu>
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
         <AuthorizeView>
@@ -35,18 +39,26 @@
 
 @code {
     public static bool _drawerOpen = false;
-    private bool _isDarkMode;
+    private bool _isDarkMode = true;
     private MudThemeProvider _mudThemeProvider;
 
-    protected async override void OnInitialized()
+    protected override void OnInitialized()
     {
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        Program.OnBlazorServiceStopped += OnBlazorStopped;
+    }
+
+    private void OnBlazorStopped()
+    {
+        Dispose();
     }
 
     public void Dispose()
     {
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -59,7 +71,7 @@
             }
             else
             {
-                _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+                await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);                
             }
         }
 
@@ -71,6 +83,11 @@
         //         NavigationManager.NavigateTo("/");
         //     }
         // }
+    }
+
+    private async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = await _mudThemeProvider.GetSystemPreference();
     }
 
     private void AuthService_OnAuthChanged(string sessionId)

@@ -132,7 +132,15 @@
         PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        Program.OnBlazorServiceStopped += OnBlazorStopped;
+
         LoadPluginList();
+    }
+
+    private void OnBlazorStopped()
+    {
+        Dispose();
     }
 
     private void LoadPluginList()
@@ -150,6 +158,7 @@
         PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
         PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
     }
 
     private void SelectedItemChanged(CQPluginProxyWrapper selected)

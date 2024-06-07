@@ -102,7 +102,7 @@ namespace Another_Mirai_Native.UI.Pages
             Console.SetError(errorWriter);
 
             BlazorUI.Program.OnBlazorServiceStarted += Program_OnBlazorServiceStarted;
-            BlazorUI.Program.OnBlazorServiceStoped += Program_OnBlazorServiceStoped;
+            BlazorUI.Program.OnBlazorServiceStopped += Program_OnBlazorServiceStoped;
 #else
             WebUIStartButton.IsEnabled = false;
             WebUIStopButton.IsEnabled = false;
