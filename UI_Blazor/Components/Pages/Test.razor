@@ -1,0 +1,34 @@
+﻿@page "/test"
+
+<div style="height: 90vh; display: flex; flex-direction: column; flex-wrap: wrap;">
+    <div style="padding: 10px; display: flex;">
+        <MudSwitch @bind-Value="@Group" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
+        <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
+    </div>
+    <MudPaper style="padding: 10px; flex-grow: 7;" Elevation="3">
+    </MudPaper>
+    <MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
+        <div style="display: flex;">
+            <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary"></MudIconButton>
+        </div>
+        <div style="display: flex; align-items: center;;">
+            <MudTextField T="string" AutoGrow AutoFocus Text="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
+            <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
+        </div>
+    </MudPaper>
+</div>
+<MudOverlay DarkBackground="true" AutoClose="false" @bind-Visible="Unavailable">
+    <MudText>请在插件管理选择一个测试插件</MudText>
+</MudOverlay>
+
+@code
+{
+    public bool Unavailable { get; set; } = false;
+    public bool Group { get; set; }
+    public long GroupId { get; set; }
+    public long QQId { get; set; }
+    public string SendText { get; set; }
+}
