@@ -5,13 +5,15 @@ using Another_Mirai_Native.BlazorUI.Models;
 using System.Text;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using System.Net;
+using System.Reflection.PortableExecutable;
 
 namespace Another_Mirai_Native.BlazorUI
 {
     public class Program
     {
         public static event Action OnBlazorServiceStarted;
-        public static event Action OnBlazorServiceStoped;
+        public static event Action OnBlazorServiceStopped;
 
         public static IHost BlazorHost { get; private set; }
 
@@ -32,6 +34,11 @@ namespace Another_Mirai_Native.BlazorUI
             builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
             builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
 
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.Listen(IPAddress.Parse(Blazor_Config.Instance.ListenIP), Blazor_Config.Instance.ListenPort);
+            });
+
             var app = builder.Build();
             BlazorHost = app;
             var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
@@ -43,7 +50,7 @@ namespace Another_Mirai_Native.BlazorUI
 
             lifetime.ApplicationStopped.Register(() =>
             {
-                OnBlazorServiceStoped?.Invoke();
+                OnBlazorServiceStopped?.Invoke();
             });
 
             // Configure the HTTP request pipeline.
