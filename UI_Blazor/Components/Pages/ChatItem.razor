@@ -1,0 +1,108 @@
+﻿
+<div style="@GetContainerStyle()">
+    <MudAvatar Style="margin-top: 1.25rem;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+        <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
+        @if (ShowFallbackName)
+        {
+            <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
+        }
+    </MudAvatar>
+    <div style="margin: 0 1rem;">
+        <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
+        <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
+            @foreach(var line in MessageLines)
+            {
+                <MudText Style="text-align: left;">@line</MudText>
+            }
+        </MudPaper>
+        <div style="display: flex; align-items: center;">
+            <MudProgressCircular Indeterminate="@Loading" Size="Size.Small" Style="@("height: 0.75rem; width: 0.75rem; margin-right: 0.25rem;" + (Loading ? "" : "display: none;"))" />
+            <MudText Style="font-size: 0.75rem;">@Item.Time</MudText>
+            @if (Item.Recalled)
+            {
+                <MudText Style="font-size: 0.75rem;margin-left: 0.25rem;">[已撤回]</MudText>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ChatItemModel Item { get; set; }
+
+    private bool Loading { get; set; } = true;
+    private bool ShowFallbackName { get; set; } = false;
+    private MudImage AvatarImage { get; set; }
+    private MudText AvatarText { get; set; }
+    private string[] MessageLines{ get; set; }
+    private static string[] FallbackColors { get; set; } = new[]
+    {
+        $"rgb(255, 87, 51)", // Crimson
+        $"rgb(52, 152, 219)", // SkyBlue
+        $"rgb(46, 204, 113)", // Emerald
+        $"rgb(155, 89, 182)", // Amethyst
+        $"rgb(52, 73, 94)", // Asphalt
+        $"rgb(22, 160, 133)", // Turquoise
+        $"rgb(39, 174, 96)", // Nephritis
+        $"rgb(41, 128, 185)", // BelizeHole
+        $"rgb(142, 68, 173)", // Wisteria
+        $"rgb(241, 196, 15)", // Sunflower
+        $"rgb(230, 126, 34)", // Carrot
+        $"rgb(231, 76, 60)", // Alizarin
+        $"rgb(236, 240, 241)", // Clouds
+        $"rgb(149, 165, 166)", // Concrete
+        $"rgb(243, 156, 18)", // Orange
+        $"rgb(211, 84, 0)", // Pumpkin
+        $"rgb(192, 57, 43)", // Pomegranate
+        $"rgb(189, 195, 199)", // Silver
+        $"rgb(127, 140, 141)", // Asbestos
+        $"rgb(44, 62, 80)" // MidnightBlue
+    };
+
+    protected override void OnParametersSet()
+    {
+        MessageLines = Item.Message.Split('\n');
+    }
+
+    private string GetAvatarSource()
+    {
+        string imgUrl = "";
+        switch (Item.Avatar.AvatarType)
+        {
+            case AvatarTypes.QQPrivate:
+                imgUrl = $"https://q.qlogo.cn/g?b=qq&nk={Item.Avatar.Id}&s=160";
+                break;
+
+            case AvatarTypes.QQGroup:
+                imgUrl = $"http://p.qlogo.cn/gh/{Item.Avatar.Id}/{Item.Avatar.Id}/0";
+                break;
+
+            case AvatarTypes.Fallback:
+                break;
+        }
+        return imgUrl;
+    }
+
+    private void OnAvatarLoadFail()
+    {
+        AvatarImage.Style = "display: none";
+        ShowFallbackName = true;
+    }
+
+    private string GetContainerStyle()
+    {
+        string baseStyle = "display: flex; flex-wrap: nowrap;";
+        switch (Item.DetailItemType)
+        {
+            case DetailItemType.Send:
+                baseStyle += " flex-direction: row-reverse; text-align: right;";
+                break;
+
+            default:
+            case DetailItemType.Receive:
+                break;
+
+        }
+        return baseStyle;
+    }
+}
