@@ -1,34 +1,257 @@
 ﻿@page "/test"
+@using Another_Mirai_Native.Config
+@using System.Diagnostics
+@using Another_Mirai_Native.Native
+@inject ISnackbar Snackbar
+@inject IJSRuntime JS
+@inject Shared Shared
+@implements IDisposable
+@inject IScrollManager ScrollManager
 
-<div style="height: 90vh; display: flex; flex-direction: column; flex-wrap: wrap;">
-    <div style="padding: 10px; display: flex;">
-        <MudSwitch @bind-Value="@Group" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
-        <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
-        <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
-    </div>
-    <MudPaper style="padding: 10px; flex-grow: 7;" Elevation="3">
+<div style="height: 90vh; display: flex; flex-direction: column;">
+    <MudGrid>
+        <MudItem sm="12">
+            <MudText>当前测试插件: @(TestingPlugin == null ? "空" : TestingPlugin.PluginName)</MudText>
+        </MudItem>
+        <MudItem sm="12" md="2">
+            <MudSwitch @bind-Value="@Group" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
+        </MudItem>
+        <MudItem sm="12" md="5">
+            <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
+        </MudItem>
+        <MudItem sm="12" md="5">
+            <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudPaper style="padding: 10px; flex-grow: 7; height: 100%; overflow: scroll; overflow-x: hidden;" Elevation="3">
+        @foreach(var item in ChatItems)
+        {
+            <ChatItem Item="@item"/>
+        }
     </MudPaper>
     <MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
         <div style="display: flex;">
-            <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
-            <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary"></MudIconButton>
-            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary"></MudIconButton>
+            <MudTooltip Text="图片">
+                <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="At Bot">
+                <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="清空">
+                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="ClearSendText"></MudIconButton>
+            </MudTooltip>
         </div>
-        <div style="display: flex; align-items: center;;">
-            <MudTextField T="string" AutoGrow AutoFocus Text="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
-            <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
+        <div style="display: flex; align-items: center;">
+            <MudTextField id="sendTextInput" @ref="SendTextElement" OnKeyDown="SendTextKeyDown" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
+            <MudIconButton OnClick="@SendTestMessage" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
         </div>
     </MudPaper>
 </div>
 <MudOverlay DarkBackground="true" AutoClose="false" @bind-Visible="Unavailable">
     <MudText>请在插件管理选择一个测试插件</MudText>
 </MudOverlay>
-
+<script>
+    function getSendTextInput(){
+        return document.getElementById('sendTextInput').value;
+    }
+</script>
 @code
 {
-    public bool Unavailable { get; set; } = false;
-    public bool Group { get; set; }
+    public bool Group { get; set; } = true;
     public long GroupId { get; set; }
     public long QQId { get; set; }
-    public string SendText { get; set; }
+    public string SendText { get; set; } = "";
+    public List<string> SendHistories { get; set; } = [];
+    private List<ChatItemModel> ChatItems { get; set; } = [];
+    private int MessageHistoryIndex { get; set; } = 0;
+    private CQPluginProxy? TestingPlugin { get; set; }
+    private bool Unavailable { get{ return TestingPlugin == null; } set { _ = value; } }
+    private MudTextField<string> SendTextElement { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GroupId = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)100000);
+        QQId = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)100000);
+        SendHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
+
+        TestingPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode);
+        ChatItems = Shared.TestMessages.ToList();
+        PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
+        PluginManagerProxy.OnTestInvoked += PluginManagerProxy_OnTestInvoked;
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        Program.OnBlazorServiceStopped += OnBlazorStopped;
+    }
+
+    private void OnBlazorStopped()
+    {
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
+    }
+
+    private async void AtBotClicked()
+    {
+        await SendTextElement.SetText(await GetRawInputValue() + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
+    }
+
+    private async void ClearSendText()
+    {
+        ChatItems.Clear();
+        Shared.TestMessages.Clear();
+        await SendTextElement.Clear();
+        await InvokeAsync(() => StateHasChanged());
+    } 
+
+    private async void SendTextKeyDown(KeyboardEventArgs key)
+    {
+        if (key.Key == "Enter")
+        {
+            await SendTestMessage();
+        }
+        else if (key.Key == "ArrowUp")
+        {
+            MessageHistoryIndex++;
+            if (MessageHistoryIndex > SendHistories.Count)
+            {
+                MessageHistoryIndex = SendHistories.Count;
+            }
+            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
+            await SendTextElement.SetText(text);
+        }
+        else if (key.Key == "ArrowDown")
+        {
+            MessageHistoryIndex--;
+            if (MessageHistoryIndex <= 0)
+            {
+                MessageHistoryIndex = 0;
+                await SendTextElement.SetText("");
+                return;
+            }
+            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
+            await SendTextElement.SetText(text);
+        }
+    }
+
+    private async void PluginManagerProxy_OnTestInvoked(string functionName, Dictionary<string, object> obj)
+    {
+        try
+        {
+            switch (functionName)
+            {
+                case "CQ_sendPrivateMsg":
+                case "CQ_sendGroupMsg":
+                case "CQ_sendGroupQuoteMsg":
+                    string msg = obj["msg"].ToString();
+                    if (string.IsNullOrEmpty(msg))
+                    {
+                        return;
+                    }
+                    await AddChatBlock(msg, TestingPlugin.PluginName, AppConfig.Instance.CurrentQQ, DetailItemType.Receive);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task AddChatBlock(string content, string name, long qq, DetailItemType direction)
+    {
+        var item = new ChatItemModel
+            {
+                Avatar = new AvatarModel
+                {
+                    AvatarType = AvatarTypes.QQPrivate,
+                    FallbackName = name,
+                    Id = qq,
+                    IsRound = true
+                },
+                DetailItemType = direction,
+                DisplayName = name,
+                GUID = Guid.NewGuid().ToString(),
+                Id = qq,
+                Message = content,
+                MsgId = 0,
+                Time = DateTime.Now
+            };
+        ChatItems.Add(item);
+        Shared.TestMessages.Add(item);
+        await InvokeAsync(() => StateHasChanged());
+        await ScrollManager.ScrollToBottomAsync(".mud-paper", ScrollBehavior.Smooth);
+    }
+
+    private async Task<string> GetRawInputValue()
+    {
+        return await JS.InvokeAsync<string>("getSendTextInput", "");
+    }
+
+    private async Task SendTestMessage()
+    {
+        string msg = await GetRawInputValue();
+        if (string.IsNullOrEmpty(msg))
+        {
+            return;
+        }
+        await AddChatBlock(msg, "Tester", QQId, DetailItemType.Send);
+        CommonConfig.SetConfig("TesterGroup", GroupId, @"conf\Test.json");
+        CommonConfig.SetConfig("TesterQQ", QQId, @"conf\Test.json");
+        await SendTextElement.Clear();
+        if (SendHistories.Contains(msg))
+        {
+            SendHistories.Remove(msg);
+        }
+        SendHistories.Add(msg);
+        MessageHistoryIndex = 0;
+        CommonConfig.SetConfig("MessageHistories", SendHistories, @"conf\Test.json");
+        Stopwatch sw = Stopwatch.StartNew();
+        bool flag = Group ? SendGroupMessage(msg) : SendPrivateMessage(msg);
+        await AddChatBlock($"插件{(flag ? "结束" : "放弃")}了处理({sw.ElapsedMilliseconds}ms)", TestingPlugin?.PluginName, AppConfig.Instance.CurrentQQ, DetailItemType.Receive);
+    }
+
+    private bool SendGroupMessage(string msg)
+    {
+        try
+        {
+            if (TestingPlugin == null)
+            {
+                Snackbar.Add($"无法调用 GroupMsg 方法，测试插件为 null", Severity.Error);
+                return false;
+            }
+            return PluginManagerProxy.Instance
+                .Event_OnGroupMsg(TestingPlugin, 1, 1, GroupId, QQId, "", msg, 0)
+                == 1;
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"无法调用 GroupMsg 方法，发生了异常: {ex.Message}", Severity.Error);
+            return false;
+        }
+    }
+
+    private bool SendPrivateMessage(string msg)
+    {
+        try
+        {
+            if (TestingPlugin == null)
+            {
+                Snackbar.Add($"无法调用 PrivateMsg 方法，测试插件为 null", Severity.Error);
+                return false;
+            }
+
+            return PluginManagerProxy.Instance
+                .Event_OnPrivateMsg(TestingPlugin, 1, 1, QQId, msg, 0)
+                == 1;
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"无法调用 PrivateMsg 方法，发生了异常: {ex.Message}", Severity.Error);
+            return false;
+        }
+    }
 }
