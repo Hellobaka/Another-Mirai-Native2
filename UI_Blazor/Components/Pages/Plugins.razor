@@ -4,6 +4,7 @@
 @using System.Collections.ObjectModel
 @implements IDisposable
 @inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 
 <MudGrid>
     <MudItem sm="12" md="6">
@@ -242,7 +243,7 @@
         if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode)
         {
             AppConfig.Instance.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
-            // navaigate to test
+            NavigationManager.NavigateTo("/test");
         }
         else
         {
