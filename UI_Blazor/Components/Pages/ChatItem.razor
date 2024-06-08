@@ -30,7 +30,7 @@
     [Parameter]
     public ChatItemModel Item { get; set; }
 
-    private bool Loading { get; set; } = true;
+    private bool Loading { get; set; } = false;
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
     private MudText AvatarText { get; set; }
@@ -91,7 +91,7 @@
 
     private string GetContainerStyle()
     {
-        string baseStyle = "display: flex; flex-wrap: nowrap;";
+        string baseStyle = "display: flex; flex-wrap: nowrap; margin-top: 15px;";
         switch (Item.DetailItemType)
         {
             case DetailItemType.Send:
