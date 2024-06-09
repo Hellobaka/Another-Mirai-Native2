@@ -14,7 +14,7 @@
             <MudText>当前测试插件: @(TestingPlugin == null ? "空" : TestingPlugin.PluginName)</MudText>
         </MudItem>
         <MudItem sm="12" md="2">
-            <MudSwitch @bind-Value="@Group" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
+            <MudSwitch @bind-Value="@Group" T="bool" CheckedChanged="TestGroupChanged" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
         </MudItem>
         <MudItem sm="12" md="5">
             <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
@@ -23,16 +23,20 @@
             <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
         </MudItem>
     </MudGrid>
-    <MudPaper style="padding: 10px; flex-grow: 7; height: 100%; overflow: scroll; overflow-x: hidden;" Elevation="3">
+    <MudPaper id="chatContainer" style="padding: 10px; flex-grow: 7; height: 100%; overflow: scroll; overflow-x: hidden;" Elevation="3">
         @foreach(var item in ChatItems)
         {
-            <ChatItem Item="@item"/>
+            <ChatItem Item="@item" ReplyEnabled="false" OnAt="ChatItem_At" OnCopy="ChatItem_Copy" OnRepeat="ChatItem_Repeat"/>
         }
     </MudPaper>
     <MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
         <div style="display: flex;">
             <MudTooltip Text="图片">
-                <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+                <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
+                    <ButtonTemplate>
+                        <MudIconButton HtmlTag="label" Icon="@Icons.Material.Filled.Image" Color="Color.Secondary" for="@context.Id"></MudIconButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
             </MudTooltip>
             <MudTooltip Text="At Bot">
                 <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
@@ -76,6 +80,7 @@
 
         TestingPlugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode);
         ChatItems = Shared.TestMessages.ToList();
+        Group = Shared.TestGroup;
         PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
         PluginManagerProxy.OnTestInvoked += PluginManagerProxy_OnTestInvoked;
         Program.OnBlazorServiceStopped -= OnBlazorStopped;
@@ -87,12 +92,17 @@
         Dispose();
     }
 
+    public void TestGroupChanged(bool target)
+    {
+        Shared.TestGroup = Group;
+    }
+
     public void Dispose()
     {
         PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
     }
 
-    private async void AtBotClicked()
+    private async Task AtBotClicked()
     {
         await SendTextElement.SetText(await GetRawInputValue() + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
     }
@@ -164,31 +174,61 @@
     private async Task AddChatBlock(string content, string name, long qq, DetailItemType direction)
     {
         var item = new ChatItemModel
+        {
+            Avatar = new AvatarModel
             {
-                Avatar = new AvatarModel
-                {
-                    AvatarType = AvatarTypes.QQPrivate,
-                    FallbackName = name,
-                    Id = qq,
-                    IsRound = true
-                },
-                DetailItemType = direction,
-                DisplayName = name,
-                GUID = Guid.NewGuid().ToString(),
+                AvatarType = AvatarTypes.QQPrivate,
+                FallbackName = name,
                 Id = qq,
-                Message = content,
-                MsgId = 0,
-                Time = DateTime.Now
-            };
+                IsRound = true
+            },
+            DetailItemType = direction,
+            DisplayName = name,
+            GUID = Guid.NewGuid().ToString(),
+            Id = qq,
+            Message = content,
+            MsgId = 0,
+            Time = DateTime.Now
+        };
         ChatItems.Add(item);
         Shared.TestMessages.Add(item);
         await InvokeAsync(() => StateHasChanged());
-        await ScrollManager.ScrollToBottomAsync(".mud-paper", ScrollBehavior.Smooth);
+        await ScrollManager.ScrollToBottomAsync("#chatContainer", ScrollBehavior.Smooth);
     }
 
     private async Task<string> GetRawInputValue()
     {
         return await JS.InvokeAsync<string>("getSendTextInput", "");
+    }
+
+    private async Task UploadFile(IBrowserFile upload)
+    {
+        int minFileSize = 4 * 1024, maxFileSize = 5 * 1024 * 1024;
+        if (upload.Size < minFileSize || upload.Size > maxFileSize)
+        {
+            Snackbar.Add("上传图片文件尺寸不得大于 5MB 且不得小于 4KB", Severity.Error);
+            return;
+        }
+        // byte[] buffer = new byte[upload.Size];
+        // await upload.OpenReadStream().ReadAsync(buffer);
+        string fileName = Path.GetFileName(upload.Name);
+        string imageDirectory = @"data\image\cached";
+        string cqCode = $"[CQ:image,file=cached\\{fileName.Replace(".cqimg", "")}]";
+        string path = Path.Combine(imageDirectory, fileName);
+
+        if (upload.Name.EndsWith("cqimg"))
+        {
+            imageDirectory = @"data\image";
+        }
+
+        if (!File.Exists(path))
+        {
+            Directory.CreateDirectory(imageDirectory);
+            await using FileStream fileStream = new(path, FileMode.Create);
+            await upload.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
+        }
+
+        await SendTextElement.SetText(await GetRawInputValue() + cqCode);
     }
 
     private async Task SendTestMessage()
@@ -253,5 +293,23 @@
             Snackbar.Add($"无法调用 PrivateMsg 方法，发生了异常: {ex.Message}", Severity.Error);
             return false;
         }
+    }
+
+    private async Task ChatItem_At(ChatItemModel item)
+    {
+        await AtBotClicked();
+        await SendTextElement.FocusAsync();
+    }
+
+    private async Task ChatItem_Copy(ChatItemModel item)
+    {
+        await JS.InvokeVoidAsync("copyTextToClipboard", item.Message);
+        await SendTextElement.FocusAsync();
+    }
+
+    private async Task ChatItem_Repeat(ChatItemModel item)
+    {
+        await SendTextElement.SetText(item.Message);
+        await SendTextElement.FocusAsync();
     }
 }

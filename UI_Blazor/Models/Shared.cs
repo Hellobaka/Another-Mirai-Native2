@@ -6,6 +6,8 @@
 
         public bool AutoScroll { get; set; } = true;
 
+        public bool TestGroup { get; set; } = true;
+
         public List<ChatItemModel> TestMessages { get; set; } = [];
     }
 }
