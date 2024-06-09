@@ -256,8 +256,11 @@ namespace Another_Mirai_Native.DB
                 model.id = logId;
                 NoDatabaseLogs.Add(model);
             }
-            ChangeConsoleColor(model.priority);
-            Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}] [{model.name}]{model.detail}");
+            if (Console.LargestWindowWidth > 0)
+            {
+                ChangeConsoleColor(model.priority);
+                Console.WriteLine($"[{(model.priority > (int)LogLevel.Warning ? "-" : "+")}][{DateTime.Now:G}][{model.source}] [{model.name}]{model.detail}");
+            }
             LogAdded?.Invoke(logId, model);
             return logId;
         }
