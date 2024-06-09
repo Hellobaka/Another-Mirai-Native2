@@ -44,6 +44,8 @@ namespace Another_Mirai_Native.UI
 
         public bool AutoCloseWindow { get; set; }
 
+        public bool AutoStartWebUI { get; set; }
+
         public void LoadConfig()
         {
             Theme = GetConfig("Theme", "System");
@@ -60,6 +62,7 @@ namespace Another_Mirai_Native.UI
             HardwareRender = GetConfig("HardwareRender", false);
             AutoStartup = GetConfig("AutoStartup", false);
             AutoCloseWindow = GetConfig("AutoCloseWindow", false);
+            AutoStartWebUI = GetConfig("AutoStartWebUI", false);
             UsedFaceId = GetConfig("UsedFaceId", new List<int>());
         }
     }

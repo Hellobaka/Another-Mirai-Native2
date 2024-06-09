@@ -66,6 +66,7 @@ namespace Another_Mirai_Native.UI
             Height = Math.Max(MinHeight, UIConfig.Instance.Height);
             // 提前实例化重要页面
             PageCache.Add("LogPage", new LogPage());
+            PageCache.Add("WebUIPage", new WebUIPage());
         }
 
         public static MainWindow Instance { get; set; }
@@ -88,6 +89,7 @@ namespace Another_Mirai_Native.UI
             UpdateTrayToolTip();
             TaskbarIcon.ContextMenu = DialogHelper.BuildNotifyIconContextMenu(PluginManagerProxy.Proxies,
                    exitAction: () => Environment.Exit(0),
+                   webUIAction: () => WebUIMenuItem.IsSelected = true,
                    reloadAction: PluginManagerProxy.Instance.ReloadAllPlugins,
                    pluginManageAction: () =>
                    {
@@ -238,6 +240,10 @@ namespace Another_Mirai_Native.UI
                 }
                 // 登录成功后才有有效的QQ号，此时获取到的历史记录才有效
                 LoadPlugins();
+            }
+            if (UIConfig.Instance.AutoStartWebUI)
+            {
+                await WebUIPage.Instance.StartWebUI();
             }
 
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;

@@ -61,6 +61,7 @@ namespace Another_Mirai_Native.UI.Pages
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
             AutoStartup.IsOn = UIConfig.Instance.AutoStartup;
             AutoCloseWindow.IsOn = UIConfig.Instance.AutoCloseWindow;
+            WebUIAutoStartSelector.IsOn = UIConfig.Instance.AutoStartWebUI;
             MaterialSelector.SelectedIndex = UIConfig.Instance.WindowMaterial switch
             {
                 "Mica" => 1,
@@ -70,6 +71,9 @@ namespace Another_Mirai_Native.UI.Pages
                 _ => 0
             };
             FormLoaded = true;
+#if NET48
+            WebUIAutoStartSelector.IsEnabled = false;
+#endif
         }
 
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -227,6 +231,16 @@ namespace Another_Mirai_Native.UI.Pages
             }
             UIConfig.Instance.AutoCloseWindow = AutoCloseWindow.IsOn;
             UIConfig.Instance.SetConfig("AutoCloseWindow", AutoCloseWindow.IsOn);
+        }
+
+        private void WebUIAutoStartSelector_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (!FormLoaded)
+            {
+                return;
+            }
+            UIConfig.Instance.AutoStartWebUI = WebUIAutoStartSelector.IsOn;
+            UIConfig.Instance.SetConfig("AutoStartWebUI", WebUIAutoStartSelector.IsOn);
         }
     }
 }

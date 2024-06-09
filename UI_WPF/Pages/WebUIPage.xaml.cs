@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Another_Mirai_Native.DB;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -16,9 +17,40 @@ namespace Another_Mirai_Native.UI.Pages
     {
         public bool PageLoaded { get; private set; }
 
+        public static WebUIPage Instance { get; private set; }
+
+        public bool StartStatus { get; set; }
+
         public WebUIPage()
         {
             InitializeComponent();
+            Instance = this;
+            Page_Loaded(null, null);
+        }
+
+        public async Task<bool> StartWebUI()
+        {
+            if (ProcessStartStatus.Fill == Brushes.Green)
+            {
+                return false;
+            }
+#if NET5_0_OR_GREATER
+            Task.Run(() => BlazorUI.Program.Main([]));
+            LogHelper.Info("启动 WebUI", $"WebUI 已尝试启动");
+            return true;
+#else
+            LogHelper.Error("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
+            return false;
+#endif
+        }
+
+        public async Task<bool> StopWebUI()
+        {
+#if NET5_0_OR_GREATER
+            await BlazorUI.Program.BlazorHost?.StopAsync(); 
+            LogHelper.Info("停止 WebUI", $"WebUI 已停止");
+#endif
+            return true;
         }
 
         private async void WebUIStartButton_Click(object sender, RoutedEventArgs e)
@@ -32,11 +64,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-#if NET5_0_OR_GREATER
-            Task.Run(() => BlazorUI.Program.Main([]));
-#else
-            DialogHelper.ShowSimpleDialog("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
-#endif
+            StartWebUI();
         }
 
         private void Program_OnBlazorServiceStoped()
@@ -45,6 +73,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 ProcessStartStatus.Fill = Brushes.Red;
                 ProcessStartText.Text = "服务已退出";
+                StartStatus = false;
+
+                MainWindow.Instance.BuildTaskbarIconMenu();
             });
         }
 
@@ -54,6 +85,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 ProcessStartStatus.Fill = Brushes.Green;
                 ProcessStartText.Text = "服务已启动";
+                StartStatus = true;
+
+                MainWindow.Instance.BuildTaskbarIconMenu();
             });
         }
 
@@ -82,7 +116,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            await BlazorUI.Program.BlazorHost.StopAsync();
+            StopWebUI();
 #endif
         }
 

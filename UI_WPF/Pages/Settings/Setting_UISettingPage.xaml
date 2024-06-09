@@ -8,7 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="Setting_UISettingPage"
-    d:DesignHeight="450"
     d:DesignWidth="800"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
@@ -70,6 +69,13 @@
             OffContent="关闭"
             OnContent="开启"
             Toggled="ChatEnableSelector_Toggled" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">自动启动WebUI</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="WebUIAutoStartSelector"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="WebUIAutoStartSelector_Toggled" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题</TextBlock>
         <ComboBox
             x:Name="ThemeSelector"
