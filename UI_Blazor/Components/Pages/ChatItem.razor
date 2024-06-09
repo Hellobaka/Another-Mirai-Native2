@@ -1,5 +1,4 @@
-﻿
-<div style="@GetContainerStyle()">
+﻿<div style="@GetContainerStyle()">
     <MudAvatar Style="margin-top: 1.25rem;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
         <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
         @if (ShowFallbackName)
@@ -9,12 +8,22 @@
     </MudAvatar>
     <div style="margin: 0 1rem;">
         <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
-        <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
-            @foreach(var line in MessageLines)
-            {
-                <MudText Style="text-align: left;">@line</MudText>
-            }
-        </MudPaper>
+        <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true"  Style="cursor: default;">
+            <ActivatorContent>
+                <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
+                    @foreach (var line in MessageLines)
+                    {
+                        <MudText Style="text-align: left;">@line</MudText>
+                    }
+                </MudPaper>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled">复制</MudMenuItem>
+                <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled">+1</MudMenuItem>
+                <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled">@@</MudMenuItem>
+                <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled">回复</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
         <div style="display: flex; align-items: center;">
             <MudProgressCircular Indeterminate="@Loading" Size="Size.Small" Style="@("height: 0.75rem; width: 0.75rem; margin-right: 0.25rem;" + (Loading ? "" : "display: none;"))" />
             <MudText Style="font-size: 0.75rem;">@Item.Time</MudText>
@@ -26,9 +35,27 @@
     </div>
 </div>
 
+<style>
+    .mud-menu *{
+        cursor: auto;
+    }
+</style>
+
 @code {
     [Parameter]
     public ChatItemModel Item { get; set; }
+
+    [Parameter]
+    public bool CopyEnabled { get; set; } = true;
+
+    [Parameter]
+    public bool RepeatEnabled { get; set; } = true;
+
+    [Parameter]
+    public bool AtEnabled { get; set; } = true;
+
+    [Parameter]
+    public bool ReplyEnabled { get; set; } = true;
 
     private bool Loading { get; set; } = false;
     private bool ShowFallbackName { get; set; } = false;
@@ -58,6 +85,18 @@
         $"rgb(127, 140, 141)", // Asbestos
         $"rgb(44, 62, 80)" // MidnightBlue
     };
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnCopy { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnRepeat { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnAt { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnReply { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -104,5 +143,41 @@
 
         }
         return baseStyle;
+    }
+
+    private async Task CopyClicked()
+    {
+        if (CopyEnabled is false)
+        {
+            return;
+        }
+        await OnCopy.InvokeAsync(Item);
+    }
+
+    private async Task RepeatClicked()
+    {
+        if (RepeatEnabled is false)
+        {
+            return;
+        }
+        await OnRepeat.InvokeAsync(Item);
+    }
+
+    private async Task AtClicked()
+    {
+        if (AtEnabled is false)
+        {
+            return;
+        }
+        await OnAt.InvokeAsync(Item);
+    }
+
+    private async Task ReplyClicked()
+    {
+        if (ReplyEnabled is false)
+        {
+            return;
+        }
+        await OnReply.InvokeAsync(Item);
     }
 }

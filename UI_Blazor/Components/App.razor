@@ -21,6 +21,19 @@
                 element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
             }
         }
+
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                console.error('Clipboard API not supported');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function () {
+                console.log('Text copied to clipboard');
+            }).catch(function (err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
     </script>
 </body>
 
