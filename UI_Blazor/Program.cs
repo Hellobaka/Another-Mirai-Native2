@@ -16,6 +16,8 @@ namespace Another_Mirai_Native.BlazorUI
         public static event Action OnBlazorServiceStopped;
 
         public static IHost BlazorHost { get; private set; }
+        
+        public static string WebUIURL { get; private set; } = "";
 
         public static void Main(string[] args)
         {
@@ -38,7 +40,7 @@ namespace Another_Mirai_Native.BlazorUI
             {
                 serverOptions.Listen(IPAddress.Parse(Blazor_Config.Instance.ListenIP), Blazor_Config.Instance.ListenPort);
             });
-
+            WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
             var app = builder.Build();
             BlazorHost = app;
             var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();

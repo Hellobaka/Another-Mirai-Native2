@@ -3,13 +3,20 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI
 {
@@ -19,13 +26,52 @@ namespace Another_Mirai_Native.UI
 
         private static Queue<DialogQueueObject> ErrorDialogQueue { get; set; } = new();
 
-        public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
+        public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action webUIAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
         {
             var menu = new ContextMenu();
             menu.Items.Add(new MenuItem { Header = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})" });
             menu.Items.Add(new Separator());
             menu.Items.Add(new MenuItem { Header = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
+#if NET5_0_OR_GREATER
+            StackPanel webUIStatus= new StackPanel();
+            webUIStatus.Orientation = Orientation.Horizontal;
+
+            webUIStatus.Children.Add(new Ellipse
+            {
+                Width = 10,
+                Height = 10,
+                Margin = new System.Windows.Thickness(0, 0, 10, 0),
+                Fill = WebUIPage.Instance.StartStatus ? Brushes.Green : Brushes.Red,
+            });
+            TextBlock webuiUrl = new TextBlock() { Text = BlazorUI.Program.WebUIURL };
+            DynamicResourceExtension dynamicResource = new("TextControlForeground");
+            webuiUrl.SetResourceReference(TextBlock.ForegroundProperty, dynamicResource.ResourceKey);
+
+            webUIStatus.Children.Add(webuiUrl);
+
+            MouseButtonEventHandler mouseDownAction = (_, _) =>
+            {
+                if (WebUIPage.Instance.StartStatus)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = BlazorUI.Program.WebUIURL,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    webUIAction?.Invoke();
+                }
+            };
+            webuiUrl.MouseDown -= mouseDownAction;
+            webUIStatus.MouseDown -= mouseDownAction;
+            webuiUrl.MouseDown += mouseDownAction;
+            webUIStatus.MouseDown += mouseDownAction;
+            menu.Items.Add(webUIStatus);
+#else
             menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
+#endif
             MenuItem updateItem = new() { Header = "检查更新" };
             updateItem.Click += (a, b) => updateAction?.Invoke();
             menu.Items.Add(updateItem);
