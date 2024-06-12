@@ -1,7 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.RPC;
-using Another_Mirai_Native.WebSocket;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
