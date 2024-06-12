@@ -96,7 +96,15 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Image:
                         var image = (MiraiMessageTypeDetail.Image)item;
-                        string imgId = image.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
+                        string imgId;
+                        if (image.imageId.StartsWith("http"))
+                        {
+                            imgId = image.imageId.MD5();
+                        }
+                        else
+                        {
+                            imgId = image.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
+                        }
                         Directory.CreateDirectory("data\\image");
                         File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={image.url}");
                         Result.Append($"[CQ:image,file={imgId}]");

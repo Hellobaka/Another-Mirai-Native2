@@ -7,21 +7,23 @@ using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Another_Mirai_Native.Protocol.OneBot.Messages;
 using Another_Mirai_Native.Protocol.OneBot.Notice;
 using Another_Mirai_Native.Protocol.OneBot.Requests;
+using Another_Mirai_Native.RPC.WebSocket;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
     public partial class OneBotAPI
     {
-        public WebSocketSharp.WebSocket APIClient { get; set; } = new("ws://127.0.0.1");
+        public WebSocketClient APIClient { get; set; } = new("ws://127.0.0.1");
 
         public static string AuthKey { get; set; } = "";
 
         public string MessageType { get; set; } = "Array";
 
-        public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
+        public WebSocketClient EventClient { get; set; } = new("ws://127.0.0.1");
 
         public bool ExitFlag { get; private set; }
 
@@ -95,7 +97,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             APIClient.OnMessage += APIClient_OnMessage;
             APIClient.Connect();
 
-            return APIClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            return APIClient.ReadyState == WebSocketState.Open;
         }
 
         public bool ConnectEventServer()
@@ -116,10 +118,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             EventClient.OnMessage += EventClient_OnMessage;
             EventClient.Connect();
 
-            return EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            return EventClient.ReadyState == WebSocketState.Open;
         }
 
-        private void APIClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
+        private void APIClient_OnClose()
         {
             if (ExitFlag)
             {
@@ -132,13 +134,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
             ConnectAPIServer();
         }
 
-        private void APIClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
+        private void APIClient_OnMessage(string message)
         {
-            LogHelper.Debug("API", e.Data);
-            Task.Run(() => HandleAPI(e.Data));
+            LogHelper.Debug("API", message);
+            Task.Run(() => HandleAPI(message));
         }
 
-        private void APIClient_OnOpen(object? sender, EventArgs e)
+        private void APIClient_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("API服务器", "成功连接到API服务器");
@@ -502,7 +504,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             LogHelper.UpdateLogStatus(logId, updateMsg);
         }
 
-        private void EventClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
+        private void EventClient_OnClose()
         {
             if (ExitFlag)
             {
@@ -515,13 +517,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
             ConnectEventServer();
         }
 
-        private void EventClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
+        private void EventClient_OnMessage(string message)
         {
-            LogHelper.Debug("Event", e.Data);
-            Task.Run(() => HandleEvent(e.Data));
+            LogHelper.Debug("Event", message);
+            Task.Run(() => HandleEvent(message));
         }
 
-        private void EventClient_OnOpen(object? sender, EventArgs e)
+        private void EventClient_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器");

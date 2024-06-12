@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 
 namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 {
@@ -15,8 +16,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             get
             {
-                return MessageConnection != null && MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                        EventConnection != null && EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+                return MessageConnection != null && MessageConnection.ReadyState == WebSocketState.Open &&
+                        EventConnection != null && EventConnection.ReadyState == WebSocketState.Open;
             }
             set
             {

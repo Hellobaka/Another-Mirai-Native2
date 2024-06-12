@@ -4,6 +4,7 @@ using Another_Mirai_Native.Enums;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse;
+using Another_Mirai_Native.RPC.WebSocket;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,9 +30,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         /// </summary>
         public string AuthKey { get; set; }
 
-        public WebSocketSharp.WebSocket EventConnection { get; set; } = new("ws://127.0.0.1");
+        public WebSocketClient EventConnection { get; set; } = new("ws://127.0.0.1");
 
-        public WebSocketSharp.WebSocket MessageConnection { get; set; } = new("ws://127.0.0.1");
+        public WebSocketClient MessageConnection { get; set; } = new("ws://127.0.0.1");
 
         private Task HeartBeatTask { get; set; }
 
@@ -129,7 +131,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             EventConnection.Connect();
             StartHeartBeatTask();
             waitTask.Wait();
-            return EventConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+            return EventConnection.ReadyState == WebSocketState.Open;
         }
 
         private void StartHeartBeatTask()
@@ -143,20 +145,20 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 while (IsConnected)
                 {
                     Thread.Sleep(AppConfig.Instance.HeartBeatInterval);
-                    EventConnection.Ping();
-                    MessageConnection.Ping();
+                    EventConnection.Send(Array.Empty<byte>());
+                    MessageConnection.Send(Array.Empty<byte>());
                 }
                 HeartBeatTask = null;
             });
         }
 
-        private void EventConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
+        private void EventConnection_OnMessage(string message)
         {
-            LogHelper.Debug("Event", e.Data);
-            Task.Run(() => HandleEvent(e.Data));
+            LogHelper.Debug("Event", message);
+            Task.Run(() => HandleEvent(message));
         }
 
-        private void EventConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
+        private void EventConnection_OnClose()
         {
             if (ExitFlag)
             {
@@ -169,7 +171,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             ConnectEventServer();
         }
 
-        private void EventConnection_OnOpen(object sender, EventArgs e)
+        private void EventConnection_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器");
@@ -195,16 +197,16 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection.Connect();
             StartHeartBeatTask();
             waitTask.Wait();
-            return MessageConnection.ReadyState == WebSocketSharp.WebSocketState.Open;
+            return MessageConnection.ReadyState == WebSocketState.Open;
         }
 
-        private void MessageConnection_OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
+        private void MessageConnection_OnMessage(string message)
         {
-            LogHelper.Debug("Message", e.Data);
-            Task.Run(() => HandleMessage(e.Data));
+            LogHelper.Debug("Message", message);
+            Task.Run(() => HandleMessage(message));
         }
 
-        private void MessageConnection_OnClose(object sender, WebSocketSharp.CloseEventArgs e)
+        private void MessageConnection_OnClose()
         {
             if (ExitFlag)
             {
@@ -217,7 +219,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             ConnectMessageServer();
         }
 
-        private void MessageConnection_OnOpen(object sender, EventArgs e)
+        private void MessageConnection_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("消息服务器", "成功连接到消息服务器");
@@ -229,6 +231,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 Console.WriteLine(message);
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
+                if (api.data == null)
+                {
+                    return;
+                }
                 var data = JObject.FromObject(api.data);
                 if (string.IsNullOrEmpty(SessionKey_Event))
                 {
@@ -257,6 +263,10 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             try
             {
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
+                if (api.data == null)
+                {
+                    return;
+                }
                 var data = JObject.FromObject(api.data);
                 if (string.IsNullOrEmpty(SessionKey_Message))
                 {

@@ -6,6 +6,7 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using System.Net.WebSockets;
 using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Protocol.OneBot
@@ -22,8 +23,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             get
             {
-                return APIClient != null && APIClient.ReadyState == WebSocketSharp.WebSocketState.Open &&
-                         EventClient != null && EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+                return APIClient != null && APIClient.ReadyState == WebSocketState.Open &&
+                         EventClient != null && EventClient.ReadyState == WebSocketState.Open;
             }
 
             set

@@ -3,17 +3,18 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.Protocol.Satori.Enums;
 using Another_Mirai_Native.Protocol.Satori.Models;
+using Another_Mirai_Native.RPC.WebSocket;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using WebSocketSharp;
+using System.Net.WebSockets;
 using LogLevel = Another_Mirai_Native.Model.Enums.LogLevel;
 
 namespace Another_Mirai_Native.Protocol.Satori
 {
     public partial class Protocol
     {
-        public WebSocketSharp.WebSocket EventClient { get; set; } = new("ws://127.0.0.1");
+        public WebSocketClient EventClient { get; set; } = new("ws://127.0.0.1");
 
         public bool ExitFlag { get; private set; }
 
@@ -44,10 +45,10 @@ namespace Another_Mirai_Native.Protocol.Satori
             return (bool)success && EventClient.ReadyState == WebSocketState.Open;
         }
 
-        private void EventClient_OnMessage(object? sender, MessageEventArgs e)
+        private void EventClient_OnMessage(string message)
         {
-            LogHelper.Debug("Event", e.Data);
-            Task.Run(() => HandleServerMessage(e.Data));
+            LogHelper.Debug("Event", message);
+            Task.Run(() => HandleServerMessage(message));
         }
 
         private void HandleServerMessage(string data)
@@ -309,7 +310,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             return msg.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
         }
 
-        private void EventClient_OnClose(object? sender, CloseEventArgs e)
+        private void EventClient_OnClose()
         {
             AppConfig.Instance.CurrentQQ = 0;
             CurrentPlatform = "";
@@ -325,7 +326,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             ConnectEventServer();
         }
 
-        private void EventClient_OnOpen(object? sender, EventArgs e)
+        private void EventClient_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器，开始鉴权");

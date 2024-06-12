@@ -18,12 +18,6 @@
 		<ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="websocket-sharp">
-			<HintPath>..\websocket-sharp.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
 		<PackageReference Include="SqlSugar" Version="5.1.4.141" />
 	</ItemGroup>

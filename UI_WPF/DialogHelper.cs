@@ -4,7 +4,6 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.Pages;
-using Another_Mirai_Native.WebSocket;
 using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;

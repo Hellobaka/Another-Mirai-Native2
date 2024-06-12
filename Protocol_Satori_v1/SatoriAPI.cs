@@ -5,6 +5,7 @@ using Another_Mirai_Native.Protocol.Satori.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Net.WebSockets;
 using System.Security.Policy;
 using System.Xml.Linq;
 
@@ -30,7 +31,7 @@ namespace Another_Mirai_Native.Protocol.Satori
         {
             get
             {
-                return EventClient != null && EventClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+                return EventClient != null && EventClient.ReadyState == WebSocketState.Open;
             }
 
             set
