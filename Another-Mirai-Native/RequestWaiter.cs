@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.RPC.WebSocket;
 using SqlSugar;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -127,7 +128,7 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, WebSocketSharp.WebSocket webSocket, int timeout, out object result)
+        public static bool Wait(object key, WebSocketClient webSocket, int timeout, out object result)
         {
             ManualResetEvent signal = new(false);
             WaiterInfo waiterInfo = new()
@@ -189,7 +190,7 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static void ResetSignalByWebSocket(WebSocketSharp.WebSocket webSocket)
+        public static void ResetSignalByWebSocket(WebSocketClient webSocket)
         {
             foreach (var key in CommonWaiter.Keys)
             {
@@ -226,7 +227,7 @@ namespace Another_Mirai_Native
 
         public CQPluginProxy CurrentPluginProxy { get; set; }
 
-        public WebSocketSharp.WebSocket CurrentWebSocket { get; set; }
+        public WebSocketClient CurrentWebSocket { get; set; }
 
         public string ConnectionID { get; set; }
 

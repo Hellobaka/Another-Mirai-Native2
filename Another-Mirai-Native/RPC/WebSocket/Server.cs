@@ -7,7 +7,7 @@ using Another_Mirai_Native.RPC.Interface;
 using Fleck;
 using Newtonsoft.Json.Linq;
 
-namespace Another_Mirai_Native.WebSocket
+namespace Another_Mirai_Native.RPC.WebSocket
 {
     public class Server : ServerBase
     {

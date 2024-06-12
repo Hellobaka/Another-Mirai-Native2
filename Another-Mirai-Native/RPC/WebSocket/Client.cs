@@ -4,13 +4,15 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
+using Another_Mirai_Native.RPC.WebSocket;
 using Newtonsoft.Json.Linq;
+using System.Net.WebSockets;
 
-namespace Another_Mirai_Native.WebSocket
+namespace Another_Mirai_Native.RPC.WebSocket
 {
     public class Client : ClientBase
     {
-        public WebSocketSharp.WebSocket WebSocketClient { get; set; }
+        public WebSocketClient WebSocketClient { get; set; }
 
         private string ConnectUrl { get; set; } = AppConfig.Instance.Core_WSURL;
 
@@ -39,7 +41,7 @@ namespace Another_Mirai_Native.WebSocket
             WebSocketClient.Connect();
             LogHelper.Debug("连接服务端", "连接成功");
             HeartBeatLostCount = 0;
-            return WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open;
+            return WebSocketClient.ReadyState == WebSocketState.Open;
         }
 
         public override object InvokeCQPFuntcion(string function, bool waiting, params object[] args)
@@ -151,14 +153,14 @@ namespace Another_Mirai_Native.WebSocket
 
         private void Send(string message)
         {
-            if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketSharp.WebSocketState.Open)
+            if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketState.Open)
             {
                 // LogHelper.Debug("向服务端发送", message);
                 WebSocketClient.Send(message);
             }
         }
 
-        private void WebSocketClient_OnClose(object? sender, WebSocketSharp.CloseEventArgs e)
+        private void WebSocketClient_OnClose()
         {
             ReconnectCount++;
             LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
@@ -167,9 +169,9 @@ namespace Another_Mirai_Native.WebSocket
             Connect();
         }
 
-        private void WebSocketClient_OnMessage(object? sender, WebSocketSharp.MessageEventArgs e)
+        private void WebSocketClient_OnMessage(string message)
         {
-            new Thread(() => HandleMessage(e.Data)).Start();
+            new Thread(() => HandleMessage(message)).Start();
         }
     }
 }

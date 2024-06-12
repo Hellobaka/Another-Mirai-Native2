@@ -1,7 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using Another_Mirai_Native.WebSocket;
 using System.Runtime.ExceptionServices;
 using System.IO;
 using System.Diagnostics;

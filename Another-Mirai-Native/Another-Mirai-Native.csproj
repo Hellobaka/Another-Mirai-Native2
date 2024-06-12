@@ -53,13 +53,6 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="websocket-sharp">
-			<HintPath>..\websocket-sharp.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-	</ItemGroup>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
 	</Target>
