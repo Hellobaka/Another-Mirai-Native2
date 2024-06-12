@@ -1,6 +1,123 @@
 ﻿@page "/setting"
-<h1>Test</h1>
+@using Another_Mirai_Native.Config
+@inject IDialogService DialogService
+@inject ISnackbar SnackBar
+
+<MudTabs Position="Position.Top" Rounded="true" Border="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="协议设置">
+        <MudSelect Variant="Variant.Outlined" Label="协议" T="string" @bind-Value="SelectedProtocol" TextChanged="SelectProtocolChanged">
+            @foreach (var item in ProtocolList)
+            {
+                <MudSelectItem T="string" Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+        <MudText Class="mt-5">该协议当前的连接参数:</MudText>
+        @foreach (var item in ProtocolConnectionConfig)
+        {
+            <MudTextField T="string" Label="@item.Key" Value="@item.Value"></MudTextField>
+        }
+        <MudButton Class="mt-6" Disabled="!CurrentProtocolCanToggle" Color="Color.Primary" Variant="Variant.Filled" OnClick="ChangeProtocolClicked">切换</MudButton>
+        <MudOverlay @bind-Visible="ProtocolLoading" DarkBackground="true" AutoClose="false">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+        </MudOverlay>
+    </MudTabPanel>
+</MudTabs>
+
+<MudOverlay @bind-Visible="Loading" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+</MudOverlay>
 
 @code
 {
+    private string _selectedProtocol = "";
+    public bool ProtocolLoading { get; set; } = false;
+    public bool Loading { get; set; } = true;
+    private string SelectedProtocol { get; set; }
+    private List<string> ProtocolList { get; set; } = [];
+    private Dictionary<string, string> ProtocolConnectionConfig { get; set; } = [];
+    private bool CurrentProtocolCanToggle { get; set; } = false;
+    private IProtocol? SelectedProtocolInstance { get; set; }
+
+    protected override void OnInitialized()
+    {
+        foreach (var item in ProtocolManager.Protocols)
+        {
+            ProtocolList.Add(item.Name);
+        }
+        Loading = false;
+        SelectedProtocol = ProtocolManager.Instance.CurrentProtocol.Name;
+        SelectedProtocolInstance = ProtocolManager.Instance.CurrentProtocol;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    private void SelectProtocolChanged(string protocol)
+    {
+        // SelectedProtocol = protocol;
+
+        SelectedProtocolInstance = ProtocolManager.Protocols.FirstOrDefault(x => x.Name == SelectedProtocol);
+        if (SelectedProtocolInstance == null)
+        {
+            ProtocolConnectionConfig = [];
+        }
+        else
+        {
+            ProtocolConnectionConfig = SelectedProtocolInstance.GetConnectionConfig();
+        }
+        CurrentProtocolCanToggle = ProtocolManager.Instance.CurrentProtocol != null && SelectedProtocolInstance != null &&
+            ProtocolManager.Instance.CurrentProtocol?.Name != SelectedProtocolInstance?.Name;
+    }
+
+    private async void ChangeProtocolClicked()
+    {
+        if (SelectedProtocolInstance == null)
+        {
+            SnackBar.Add("选中协议为空，无法进行切换", Severity.Error);
+            return;
+        }
+        if (await DialogService.ShowMessageBox("协议切换", "确定要切换协议吗，操作会导致与机器人断开连接，无法处理消息", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true }) ?? false)
+        {
+            ProtocolLoading = true;
+            StateHasChanged();
+            await Task.Run(() =>
+            {
+                try
+                {
+                    if (ProtocolManager.Instance.CurrentProtocol.Disconnect() is false)
+                    {
+                        SnackBar.Add("协议断开失败", Severity.Error);
+                        return;
+                    }
+                    if (SelectedProtocolInstance.SetConnectionConfig(ProtocolConnectionConfig) is false)
+                    {
+                        SnackBar.Add("协议参数写入失败", Severity.Error);
+                        return;
+                    }
+                    if (ProtocolManager.Instance.Start(SelectedProtocolInstance) is false)
+                    {
+                        SnackBar.Add("协议启动失败", Severity.Error);
+                        return;
+                    }
+
+                    SnackBar.Add($"{ProtocolManager.Instance.CurrentProtocol.Name} 协议切换成功", Severity.Success);
+                    CurrentProtocolCanToggle = false;
+                    AppConfig.Instance.AutoProtocol = ProtocolManager.Instance.CurrentProtocol.Name;
+                    AppConfig.Instance.SetConfig("AutoProtocol", ProtocolManager.Instance.CurrentProtocol.Name);
+                }
+                catch(Exception ex)
+                {
+                    LogHelper.Error("切换协议", ex);
+                    SnackBar.Add("协议启动失败，查看日志了解错误详情", Severity.Error);
+                }
+                return;
+            });
+            ProtocolLoading = false;
+            StateHasChanged();
+        }
+    }
 }
