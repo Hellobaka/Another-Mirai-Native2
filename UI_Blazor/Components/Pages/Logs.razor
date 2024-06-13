@@ -9,10 +9,37 @@
 @inject NavigationManager NavigationManager
 @implements IAsyncDisposable
 
-<MudDataGrid Items="@DisplayLogs" Dense="true" FixedHeader="true" Virtualize="true" id="logContainer">
+<MudDataGrid Items="@DisplayLogs" Dense="true" FixedHeader="true" Virtualize="true" id="logContainer" SortMode="SortMode.None">
     <ToolBarContent>
-        <MudSpacer></MudSpacer>
-        <MudSwitch id="autoScroll" @bind-Value="@AutoScroll" Style="margin: 10px;" Color="Color.Primary" T="bool" CheckedChanged="AutoScrollChecked">自动滚动</MudSwitch>
+        <div style="display: flex; align-items: center;">
+            <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Label="日志等级" T="string" @bind-Value="SelectedLogLevel" TextChanged="SelectLogLevelChanged">
+                <MudSelectItem T="string" Value="@("Debug 调试")"></MudSelectItem>
+                <MudSelectItem T="string" Value="@("Info 信息")"></MudSelectItem>
+                <MudSelectItem T="string" Value="@("Warning 警告")"></MudSelectItem>
+                <MudSelectItem T="string" Value="@("Error 错误")"></MudSelectItem>
+                <MudSelectItem T="string" Value="@("Fatal 致命")"></MudSelectItem>
+            </MudSelect>
+            <MudTextField @bind-Value="LogSearchText" Margin="Margin.Dense" Label="搜点什么？" TextChanged="SearchTextChanged" Variant="Variant.Outlined" Style="margin-left: 10px;"></MudTextField>
+            <MudSwitch id="autoScroll" @bind-Value="@AutoScroll" Style="margin: 10px;" Color="Color.Primary" T="bool" CheckedChanged="AutoScrollChecked">自动滚动</MudSwitch>
+            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Primary" OnClick="@(() => ShowMoreFilter = !ShowMoreFilter)"></MudIconButton>
+        </div>
+        <div>
+            <MudCollapse Expanded="ShowMoreFilter">
+                <div style="display: flex; align-items: center;">
+                    <MudDateRangePicker PickerOpened="@(() => FilterDateRange_Backup = FilterDateRange)" StartMonth="@DateTime.Now.AddMonths(-1)" AutoClose="false" TitleDateFormat="yyyy/MM/dd" @ref="DateRangePicker" PickerVariant="PickerVariant.Dialog" Variant="Variant.Outlined" Margin="Margin.Dense" Label="筛选日期" @bind-DateRange="@FilterDateRange_Backup" PlaceholderStart="开始日期" PlaceholderEnd="结束日期">
+                        <PickerActions>
+                            <MudButton Class="mr-auto align-self-start" Color="Color.Error" OnClick="@(() => DateRangePicker.Clear())">重置</MudButton>
+                            <MudButton Class="mr-auto align-self-start" Color="Color.Success" OnClick="@(() => {DateTime dateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); DateRangePicker.PickerMonth = dateTime.AddMonths(-1);})">今天</MudButton>
+                            <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddDays(-1), DateTime.Now))">天</MudButton>
+                            <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddDays(-7), DateTime.Now))">周</MudButton>
+                            <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddMonths(-1), DateTime.Now))">月</MudButton>
+                            <MudButton Color="Color.Secondary" OnClick="@(() => { FilterDateRange_Backup = FilterDateRange; DateRangePicker.Close(false); })">取消</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => { DateRangePicker.Close(); FilterDateRange = FilterDateRange_Backup; })">确认</MudButton>
+                        </PickerActions>
+                    </MudDateRangePicker>
+                </div>
+            </MudCollapse>
+        </div>
     </ToolBarContent>
     <Columns>
         <PropertyColumn Property="x => x.Time" Title="时间" CellClassFunc="@_cellClassFunc" />
@@ -27,6 +54,17 @@
     <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
 </MudOverlay>        
 <MudFab Style="position: fixed; right: 10px; bottom: 20px;" Color="Color.Primary" StartIcon="@Icons.Material.Filled.ArrowCircleUp" OnClick="ScrollToTop" />
+
+<style>
+    .mud-toolbar.mud-toolbar-gutters.mud-table-toolbar {
+        position: sticky;
+        z-index: 10;
+        top: 70px;
+        background-color: var(--mud-palette-surface);
+        display: block;
+        height: auto;
+    }
+</style>
 
 <script>
     var resizeTable = () => {
@@ -46,7 +84,13 @@
     public ObservableCollection<LogDisplay> DisplayLogs { get; set; } = new();
     public bool Loading { get; set; } = true;
     public bool AutoScroll { get; set; } = true;
+    public bool ShowMoreFilter { get; set; } = false;
     private IScrollListener? _scrollListener;
+    private string SelectedLogLevel { get; set; } = "Debug 调试";
+    private string LogSearchText { get; set; } = "";
+    private DateRange FilterDateRange { get; set; }
+    private DateRange FilterDateRange_Backup { get; set; }
+    private MudDateRangePicker DateRangePicker{ get; set; }
 
     protected override async void OnInitialized()
     {
@@ -167,5 +211,20 @@
     {
         await ScrollManager.ScrollToTopAsync(".mud-table-container", ScrollBehavior.Smooth);
         await ScrollManager.ScrollToTopAsync(_scrollListener.Selector, ScrollBehavior.Smooth);
+    }
+
+    private void SelectLogLevelChanged(string logLevel)
+    {
+
+    }
+
+    private void SearchTextChanged(string search)
+    {
+
+    }
+
+    private void DoLogFilter()
+    {
+        
     }
 }
