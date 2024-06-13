@@ -42,14 +42,15 @@ namespace Another_Mirai_Native.UI
                 Margin = new System.Windows.Thickness(0, 0, 10, 0),
                 Fill = WebUIPage.Instance.StartStatus ? Brushes.Green : Brushes.Red,
             });
-            TextBlock webuiUrl = new TextBlock() { Text = BlazorUI.Program.WebUIURL };
+            TextBlock webuiUrl = new TextBlock() { Text = string.IsNullOrEmpty(BlazorUI.Program.WebUIURL) ? "WebUI 未启动" : BlazorUI.Program.WebUIURL };
             DynamicResourceExtension dynamicResource = new("TextControlForeground");
             webuiUrl.SetResourceReference(TextBlock.ForegroundProperty, dynamicResource.ResourceKey);
 
             webUIStatus.Children.Add(webuiUrl);
 
-            MouseButtonEventHandler mouseDownAction = (_, _) =>
+            MouseButtonEventHandler mouseDownAction = (_, e) =>
             {
+                e.Handled = true;
                 if (WebUIPage.Instance.StartStatus)
                 {
                     Process.Start(new ProcessStartInfo
