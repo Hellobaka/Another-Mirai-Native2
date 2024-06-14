@@ -127,6 +127,8 @@ namespace Another_Mirai_Native
         /// 时间戳转换为DateTime
         /// </summary>
         public static DateTime TimeStamp2DateTime(long timestamp) => new DateTime(1970, 1, 1, 8, 0, 0, DateTimeKind.Local).AddSeconds(timestamp);
+      
+        public static long DateTime2TimeStamp(DateTime time) => (long)(time.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
 
         public static string ToJson(this object obj)
         {
