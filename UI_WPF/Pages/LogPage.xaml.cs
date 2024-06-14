@@ -67,7 +67,11 @@ namespace Another_Mirai_Native.UI.Pages
 
         public void RefilterLogCollection()
         {
-            var ls = ConvertListToObservableCollection(PackLogModelWrapper(LogHelper.DetailQueryLogs(FilterLogLevel, UIConfig.Instance.LogItemsCount, SearchText)));
+            var ls = ConvertListToObservableCollection(
+                PackLogModelWrapper(
+                    LogHelper.DetailQueryLogs(FilterLogLevel, 1, UIConfig.Instance.LogItemsCount, SearchText, out _, out _, null, null)
+                    )
+                );
             Dispatcher.BeginInvoke(() =>
             {
                 LogCollections = ls;
@@ -171,7 +175,9 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                if (log.priority >= FilterLogLevel)
+                if (log.priority >= FilterLogLevel
+                    && log.status.Contains(SearchText) && log.detail.Contains(SearchText) && log.source.Contains(SearchText)
+                    && log.name.Contains(SearchText))
                 {
                     if (LogCollections.Count > 0 && LogCollections.Count > UIConfig.Instance.LogItemsCount)
                     {
@@ -243,6 +249,7 @@ namespace Another_Mirai_Native.UI.Pages
             SearchText = FilterTextValue.Text;
             RefilterLogCollection();
             SelectLastLog();
+            SearchDebounceTimer.Stop();
         }
     }
 }

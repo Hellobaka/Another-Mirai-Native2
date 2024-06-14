@@ -12,12 +12,12 @@
 <MudDataGrid Items="@DisplayLogs" Dense="true" FixedHeader="true" Virtualize="true" id="logContainer" SortMode="SortMode.None">
     <ToolBarContent>
         <div style="display: flex; align-items: center;">
-            <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Label="日志等级" T="string" @bind-Value="SelectedLogLevel" TextChanged="SelectLogLevelChanged">
-                <MudSelectItem T="string" Value="@("Debug 调试")"></MudSelectItem>
-                <MudSelectItem T="string" Value="@("Info 信息")"></MudSelectItem>
-                <MudSelectItem T="string" Value="@("Warning 警告")"></MudSelectItem>
-                <MudSelectItem T="string" Value="@("Error 错误")"></MudSelectItem>
-                <MudSelectItem T="string" Value="@("Fatal 致命")"></MudSelectItem>
+            <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Label="日志等级" T="int" @bind-Value="SelectedLogLevel" TextChanged="SelectLogLevelChanged">
+                <MudSelectItem T="int" Value="@(0)">Debug 调试</MudSelectItem>
+                <MudSelectItem T="int" Value="@(10)">Info 信息</MudSelectItem>
+                <MudSelectItem T="int" Value="@(20)">Warning 警告</MudSelectItem>
+                <MudSelectItem T="int" Value="@(30)">Error 错误</MudSelectItem>
+                <MudSelectItem T="int" Value="@(40)">Fatal 致命</MudSelectItem>
             </MudSelect>
             <MudTextField @bind-Value="LogSearchText" Margin="Margin.Dense" Label="搜点什么？" TextChanged="SearchTextChanged" Variant="Variant.Outlined" Style="margin-left: 10px;"></MudTextField>
             <MudSwitch id="autoScroll" @bind-Value="@AutoScroll" Style="margin: 10px;" Color="Color.Primary" T="bool" CheckedChanged="AutoScrollChecked">自动滚动</MudSwitch>
@@ -34,7 +34,7 @@
                             <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddDays(-7), DateTime.Now))">周</MudButton>
                             <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddMonths(-1), DateTime.Now))">月</MudButton>
                             <MudButton Color="Color.Secondary" OnClick="@(() => { FilterDateRange_Backup = FilterDateRange; DateRangePicker.Close(false); })">取消</MudButton>
-                            <MudButton Color="Color.Primary" OnClick="@(() => { DateRangePicker.Close(); FilterDateRange = FilterDateRange_Backup; })">确认</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => { DateRangePicker.Close(); FilterDateRange = FilterDateRange_Backup; DoLogFilter(); })">确认</MudButton>
                         </PickerActions>
                     </MudDateRangePicker>
                 </div>
@@ -50,6 +50,16 @@
     </Columns>
 </MudDataGrid>
 <div id="scrollBottomItem"/>
+<div style="margin-top: 10px; position: sticky; bottom: 0; display: flex; align-items: center; justify-content: flex-start;">
+    <MudText Style="margin-right: 10px;">@TotalItem 条日志</MudText>
+    <MudSelect Class="2318" @ref="LogCountSelector" FullWidth="false" Margin="Margin.Dense" Variant="Variant.Outlined" Label="每页数量" T="int" TextChanged="@(() => DoLogFilter())" @bind-Value="CurrentPageCount">
+        <MudSelectItem T="int" Value="@(10)"></MudSelectItem>
+        <MudSelectItem T="int" Value="@(50)"></MudSelectItem>
+        <MudSelectItem T="int" Value="@(100)"></MudSelectItem>
+        <MudSelectItem T="int" Value="@(500)"></MudSelectItem>
+    </MudSelect>
+    <MudPagination Style="margin-left: 10px;" SelectedChanged="@((i) => { CurrentPage = i; DoLogFilter(); })" BoundaryCount="2" MiddleCount="3" ShowFirstButton="true" ShowLastButton="true" Variant="Variant.Filled" Count="TotalPage" />
+</div>
 <MudOverlay @bind-Visible="Loading" DarkBackground="true" AutoClose="false">
     <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
 </MudOverlay>        
@@ -59,10 +69,13 @@
     .mud-toolbar.mud-toolbar-gutters.mud-table-toolbar {
         position: sticky;
         z-index: 10;
-        top: 70px;
+        top: var(--mud-appbar-height);
         background-color: var(--mud-palette-surface);
         display: block;
         height: auto;
+    }
+    .shrink {
+        flex-grow: 0;
     }
 </style>
 
@@ -76,6 +89,12 @@
     var removeSizeHandler = () => {
         window.removeEventListener('resize', resizeTable)
     }
+    var remakeMudSelect = () => {
+        const arr = document.querySelectorAll('.mud-select');
+        if (arr && arr.length > 0) {
+            arr[arr.length - 1].parentElement.classList.add('shrink');
+        }
+    }
     window.addEventListener('resize', resizeTable)
 </script>
 
@@ -86,21 +105,25 @@
     public bool AutoScroll { get; set; } = true;
     public bool ShowMoreFilter { get; set; } = false;
     private IScrollListener? _scrollListener;
-    private string SelectedLogLevel { get; set; } = "Debug 调试";
+    private int SelectedLogLevel { get; set; }
     private string LogSearchText { get; set; } = "";
     private DateRange FilterDateRange { get; set; }
     private DateRange FilterDateRange_Backup { get; set; }
     private MudDateRangePicker DateRangePicker{ get; set; }
+    private MudSelect<int> LogCountSelector { get; set; }
+    private Debouncer SearchDebounder { get; set; } = new();
+    private bool Loaded { get; set; }
+
+    private int CurrentPage { get; set; } = 1;
+    private int CurrentPageCount { get; set; } = 100;
+    private int TotalItem { get; set; } = 1;
+    private int TotalPage { get; set; } = 1;
 
     protected override async void OnInitialized()
     {
         AutoScroll = Shared.AutoScroll;
         LogHandler.StartSaveLogs();
-        DisplayLogs.Clear();
-        foreach (var item in LogHandler.Logs)
-        {
-            DisplayLogs.Add(LogDisplay.ParseLogModel(item));
-        }
+        DoLogFilter();
         LogHandler.Logs.CollectionChanged -= OnLogHandlerLogChanged;
         LogHelper.LogStatusUpdated -= OnLogStatusUpdated;
         LogHandler.Logs.CollectionChanged += OnLogHandlerLogChanged;
@@ -129,7 +152,9 @@
     {
         if (firstRender)
         {
+            Loaded = true;
             await JS.InvokeVoidAsync("resizeTable", []);
+            await JS.InvokeVoidAsync("remakeMudSelect", []);
             _scrollListener = ScrollListenerFactory.Create(null);
             await ScrollToBottom();
         }
@@ -152,9 +177,29 @@
         {
             return;
         }
+
         foreach(LogModel item in e.NewItems)
         {
-            DisplayLogs.Add(LogDisplay.ParseLogModel(item));
+            if (item.priority >= SelectedLogLevel 
+                    && item.status.Contains(LogSearchText) && item.detail.Contains(LogSearchText)
+                    && item.source.Contains(LogSearchText) && item.name.Contains(LogSearchText))
+            {
+                if (ShowMoreFilter && FilterDateRange != null 
+                    && FilterDateRange.Start != null && FilterDateRange.End != null)
+                {
+                    var startTime = new DateTime(FilterDateRange.Start.Value.Year, FilterDateRange.Start.Value.Month, FilterDateRange.Start.Value.Day).AddDays(-1);
+                    var endTime = new DateTime(FilterDateRange.End.Value.Year, FilterDateRange.End.Value.Month, FilterDateRange.End.Value.Day).AddDays(1);
+                    long startTimestamp = Helper.DateTime2TimeStamp(startTime);
+                    long endTimestamp = Helper.DateTime2TimeStamp(endTime);
+
+                    if (item.time < startTimestamp || item.time > endTimestamp)
+                    {
+                        break;
+                    }
+                }
+                DisplayLogs.Add(LogDisplay.ParseLogModel(item));
+            }
+            TotalItem++;
         }
         await InvokeAsync(() => StateHasChanged());
         await ScrollToBottom();
@@ -163,18 +208,6 @@
     private Func<LogDisplay, string> _cellClassFunc => (x) =>
     {
         var pattle = Shared.IsDarkMode ? Theme.PaletteDark : Theme.Palette;
-        // string color = (LogLevel)x.Priority switch
-        // {
-        //     LogLevel.Debug => "",
-        //     LogLevel.Error => pattle.Error.ToString(),
-        //     LogLevel.Info => "",
-        //     LogLevel.Fatal => pattle.ErrorDarken,
-        //     LogLevel.InfoSuccess => pattle.Primary.ToString(),
-        //     LogLevel.InfoSend => pattle.Success.ToString(),
-        //     LogLevel.InfoReceive => pattle.Info.ToString(),
-        //     LogLevel.Warning => pattle.Warning.ToString(),
-        //     _ => "",
-        // };
         string itemClass = (LogLevel)x.Priority switch
         {
             LogLevel.Debug => "",
@@ -187,8 +220,6 @@
             LogLevel.Warning => "mud-warning-text",
             _ => "",
         };
-
-        //return $"color: {color};";
         return itemClass;
     };
 
@@ -200,7 +231,7 @@
 
     private async Task ScrollToBottom()
     {
-        if (AutoScroll && NavigationManager.ToBaseRelativePath(NavigationManager.Uri).StartsWith("logs"))
+        if (Loaded && AutoScroll && NavigationManager.ToBaseRelativePath(NavigationManager.Uri).StartsWith("logs"))
         {
             await ScrollManager.ScrollToBottomAsync(".mud-table-container", ScrollBehavior.Smooth);
             await ScrollManager.ScrollToBottomAsync(_scrollListener.Selector, ScrollBehavior.Smooth);
@@ -215,16 +246,48 @@
 
     private void SelectLogLevelChanged(string logLevel)
     {
-
+        if (!Loaded)
+        {
+            return;
+        }
+        DoLogFilter();
     }
 
     private void SearchTextChanged(string search)
     {
-
+        if (!Loaded)
+        {
+            return;
+        }
+        SearchDebounder.Debounce(DoLogFilter, 500);
     }
 
-    private void DoLogFilter()
+    private async void DoLogFilter()
     {
-        
+        List<LogModel> logs = [];
+        if (ShowMoreFilter && FilterDateRange != null
+                    && FilterDateRange.Start != null && FilterDateRange.End != null)
+        {
+            logs = LogHelper.DetailQueryLogs(SelectedLogLevel, CurrentPage, CurrentPageCount
+                , LogSearchText, out int totalItem, out int totalPage, FilterDateRange.Start, FilterDateRange.End);
+            TotalItem = totalItem;
+            TotalPage = totalPage;
+        }
+        else
+        {
+            logs = LogHelper.DetailQueryLogs(SelectedLogLevel, CurrentPage, CurrentPageCount
+                , LogSearchText, out int totalItem, out int totalPage, null, null);
+            TotalItem = totalItem;
+            TotalPage = totalPage;
+        }
+
+        DisplayLogs.Clear();
+        foreach (var item in logs)
+        {
+            DisplayLogs.Add(LogDisplay.ParseLogModel(item));
+        }
+
+        await InvokeAsync(() => StateHasChanged());
+        await InvokeAsync(() => ScrollToBottom());
     }
 }
