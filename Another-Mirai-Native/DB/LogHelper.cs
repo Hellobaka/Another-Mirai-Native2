@@ -71,30 +71,56 @@ namespace Another_Mirai_Native.DB
             DebugLogAdded?.Invoke(logModel);
         }
 
-        public static List<LogModel> DetailQueryLogs(int priority, int pageSize, string search)
+        public static List<LogModel> DetailQueryLogs(int priority, int pageIndex, int pageSize, string search, out int totalCount, out int totalPage, DateTime? start = null, DateTime? end = null)
         {
+            totalCount = 1;
+            totalPage = 1;
             if (AppConfig.Instance.UseDatabase)
             {
                 using var db = GetInstance();
-                List<LogModel> r = db.Queryable<LogModel>()
+                var r = db.Queryable<LogModel>()
                     .Where(x => x.priority >= priority)
                     .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
                         x.name.Contains(search) || x.status.Contains(search))
-                    .OrderByDescending(x => x.id)
-                    .Take(pageSize).ToList();
-                r.Reverse();
-                return r;
+                    .OrderByDescending(x => x.id);
+                if (start != null && end != null)
+                {
+                    var startTime = new DateTime(start.Value.Year, start.Value.Month, start.Value.Day).AddDays(-1);
+                    var endTime = new DateTime(end.Value.Year, end.Value.Month, end.Value.Day).AddDays(1);
+                    long startTimestamp = Helper.DateTime2TimeStamp(startTime);
+                    long endTimestamp = Helper.DateTime2TimeStamp(endTime);
+
+                    r = r.Where(x => x.time >= startTimestamp && x.time <= endTimestamp);
+                }
+
+                var result = r.ToPageList(pageIndex, pageSize, ref totalCount, ref totalPage);
+                result.Reverse();
+                return result;
             }
             else
             {
-                List<LogModel> r = NoDatabaseLogs
+                var r = NoDatabaseLogs
                     .Where(x => x.priority >= priority)
                     .Where(x => x.source.Contains(search) || x.detail.Contains(search) ||
-                        x.name.Contains(search) || x.status.Contains(search))
-                    .OrderByDescending(x => x.id)
-                    .Take(pageSize).ToList();
-                r.Reverse();
-                return r;
+                        x.name.Contains(search) || x.status.Contains(search));
+
+                if (start != null && end != null)
+                {
+                    var startTime = new DateTime(start.Value.Year, start.Value.Month, start.Value.Day).AddDays(-1);
+                    var endTime = new DateTime(end.Value.Year, end.Value.Month, end.Value.Day).AddDays(1);
+                    long startTimestamp = Helper.DateTime2TimeStamp(startTime);
+                    long endTimestamp = Helper.DateTime2TimeStamp(endTime);
+
+                    r = r.Where(x => x.time >= startTimestamp && x.time <= endTimestamp);
+                }
+
+                var order = r.OrderByDescending(x => x.id);
+                totalCount = order.Count();
+                totalPage = (int)Math.Ceiling(totalCount / (double)pageSize);
+                var result = order.Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
+                result.Reverse();
+
+                return result;
             }
         }
 
@@ -123,7 +149,7 @@ namespace Another_Mirai_Native.DB
             }
             else
             {
-                return DetailQueryLogs(priority, count, "");
+                return DetailQueryLogs(priority, 1, count, "", out _, out _, null, null);
             }
         }
 
