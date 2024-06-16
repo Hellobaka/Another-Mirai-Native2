@@ -1,13 +1,254 @@
 ﻿@page "/dashboard"
 @using Another_Mirai_Native.BlazorUI.Components.Layout
 @using static Another_Mirai_Native.BlazorUI.Program
-@inject AuthService _auth
+@using System.Timers
+@using System.Management
+@using System.Net
+@using System.Net.Sockets
+@using System.Diagnostics
+@using Another_Mirai_Native.Config
+@inject IJSRuntime JS
+@implements IDisposable
 
-<PageTitle>Home</PageTitle>
+<MudGrid Style="justify-content: start !important; flex-direction: column;">
+    <MudItem md="6" sm="12">
+        <MudPaper Style="padding: 16px;">
+            <h2>系统信息</h2>
+            <div style="display: flex; margin-top: 10px">
+                <MudIcon Icon="@Icons.Custom.Brands.MicrosoftWindows"></MudIcon>
+                <MudText>系统版本：</MudText>
+                <MudSpacer />
+                <MudText Style="text-align: right">@OSVersion</MudText>
+            </div>
+            <div style="display: flex; margin-top: 5px">
+                <MudIcon Icon="@Icons.Material.Filled.Apps"></MudIcon>
+                <MudText>CPU：</MudText>
+                <MudSpacer />
+                <MudText Style="text-align: right">@CPUInfo</MudText>
+            </div>
+            <div style="display: flex; margin-top: 5px">
+                <MudIcon Icon="@Icons.Material.Filled.Memory"></MudIcon>
+                <MudText>总物理内存：</MudText>
+                <MudSpacer />
+                <MudText Style="text-align: right">@TotalMemory MB</MudText>
+            </div>
+            <div style="display: flex; margin-top: 5px">
+                <MudIcon Icon="@Icons.Material.Filled.MoreTime"></MudIcon>
+                <MudText>框架启动：</MudText>
+                <MudSpacer />
+                <MudText Style="text-align: right">@StartedTime</MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem md="6" sm="12">
+        <MudPaper Style="padding: 16px; display: flex; justify-content: space-evenly;">
+            <div style="width: 30%">
+                <h2>CPU</h2>
+                <MudProgressCircular StrokeWidth="1" Class="cpuContainer" Color="Color.Primary" Style="height: 100%; width: 100%; position: relative;" Value="CPUUsage" />
+                <div id="cpuInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); text-align: center;">
+                    <MudText>@(CPUUsage.ToString("f2"))%</MudText>
+                    <MudText>@((CPUCurrentFrequency / 1000.0).ToString("f2")) GHz</MudText>
+                </div>
+            </div>
+            <div style="width: 30%;">
+                <h2>内存</h2>
+                <MudProgressCircular StrokeWidth="1" Class="memoryContainer" Color="Color.Primary" Style="height: 100%; width: 100%; position: relative;" Value="MemoryUsage" />
+                <div id="memoryInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); text-align: center;">
+                    <MudText>@(MemoryUsage.ToString("f2"))%</MudText>
+                    <MudText>@((UsedMemory / 1024.0).ToString("f2")) / @((TotalMemory / 1024.0).ToString("f2")) GB</MudText>
+                </div>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem sm="4" xs="12">
+    </MudItem>
+</MudGrid>
 
-@code{
+<MudOverlay @bind-Visible="Loading" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+</MudOverlay>
+
+<script>
+    function move() {
+        // 获取目标元素
+        const cpuInfo = document.getElementById('cpuInfo');
+        const memoryInfo = document.getElementById('memoryInfo');
+
+        // 获取容器元素
+        const cpuContainer = document.querySelector('.cpuContainer');
+        const memoryContainer = document.querySelector('.memoryContainer');
+
+        // 将目标元素移动到容器元素中
+        if (cpuContainer && cpuInfo) {
+            cpuContainer.appendChild(cpuInfo);
+        }
+
+        if (memoryContainer && memoryInfo) {
+            memoryContainer.appendChild(memoryInfo);
+        }
+    };
+</script>
+
+@code {
+    public bool Loading { get; set; } = true;
+
+    private string OSVersion { get; set; }
+    private string CPUName { get; set; }
+    private string CPUInfo { get; set; }
+    private string LocalIPAddress { get; set; }
+    private float CPUBaseFrequency { get; set; }
+    private double CPUFrequencyRatio { get; set; }
+    private ulong TotalMemory { get; set; }
+
+    private ulong UsedMemory { get; set; }
+    private double MemoryUsage { get; set; }
+    private double CPUCurrentFrequency { get; set; }
+    private float CPUUsage { get; set; }
+    private string StartedTime { get; set; } = "00:00:00:00";
+
+    private Timer UsageTimer { get; set; }
+    private PerformanceCounter CPUUsageCounter { get; set; }
+    private PerformanceCounter CPUFrequencyCounter { get; set; }
+    private PerformanceCounter CPUBaseFrequencyCounter { get; set; }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("move");
+            CollectBaseInfo();
+            StartUsageTimer();
+            Loading = false;
+
+            StateHasChanged();
+        }
+    }
+
     protected override void OnInitialized()
     {
         LogHandler.StartSaveLogs();
+        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+        Program.OnBlazorServiceStopped += OnBlazorStopped;
+    }
+
+    public void Dispose()
+    {
+        StopUsageTimer();
+    }
+
+    private void OnBlazorStopped()
+    {
+        Dispose();
+    }
+
+    private void CollectBaseInfo()
+    {
+        OSVersion = GetDetailedOSVersion();
+        CPUName = GetCpuName();
+        CPUBaseFrequency = GetCpuFrequency();
+        TotalMemory = GetTotalPhysicalMemory();
+        LocalIPAddress = GetLocalIPAddress();
+        CPUUsageCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
+        CPUBaseFrequencyCounter = new PerformanceCounter("Processor Information", "Processor Frequency", "_Total");
+        CPUFrequencyCounter = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total");
+
+        CPUUsageCounter.NextValue();
+        CPUFrequencyCounter.NextValue();
+        CPUBaseFrequencyCounter.NextValue();
+
+        CPUInfo = $"{CPUName} @ {CPUBaseFrequency / 1000.0:f2} GHz";
+    }
+
+    private void StartUsageTimer()
+    {
+        if (UsageTimer != null)
+        {
+            StopUsageTimer();
+        }
+        UsageTimer = new Timer
+            {
+                Interval = 1000
+            };
+        UsageTimer.Elapsed += UsageTimer_Ticked;
+        UsageTimer.Enabled = true;
+    }
+
+    private void StopUsageTimer()
+    {
+        if (UsageTimer == null)
+        {
+            return;
+        }
+        UsageTimer.Enabled = false;
+        UsageTimer.Stop();
+    }
+
+    private async void UsageTimer_Ticked(object? sender, ElapsedEventArgs e)
+    {
+        CPUFrequencyRatio = CPUFrequencyCounter.NextValue() / 100.0;
+        CPUUsage = CPUUsageCounter.NextValue();
+        UsedMemory = GetUsedMemory();
+
+        CPUCurrentFrequency = CPUBaseFrequency * CPUFrequencyRatio;
+        MemoryUsage = (UsedMemory / (TotalMemory * 1.0)) * 100.0;
+        var span = (DateTime.Now - AppConfig.Instance.StartTime);
+        StartedTime = $"{(int)span.TotalDays:00}:{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private string GetDetailedOSVersion()
+    {
+        string osName = "Unknown OS";
+        string version = "Unknown Version";
+        string edition = "Unknown Edition";
+
+        using (var searcher = new ManagementObjectSearcher("SELECT Caption, Version, OSArchitecture FROM Win32_OperatingSystem"))
+        {
+            foreach (var os in searcher.Get())
+            {
+                osName = os["Caption"]?.ToString() ?? osName;
+                version = os["Version"]?.ToString() ?? version;
+                edition = os["OSArchitecture"]?.ToString() ?? edition;
+            }
+        }
+
+        return $"{osName} {edition} 版本 {version}";
+    }
+
+    private static string GetCpuName()
+    {
+        using var searcher = new ManagementObjectSearcher("select Name from Win32_Processor");
+        var cpuName = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["Name"];
+        return cpuName?.ToString() ?? "Unknown";
+    }
+
+    private uint GetCpuFrequency()
+    {
+        using var searcher = new ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
+        var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
+        return (uint)(maxClockSpeed ?? 0);
+    }
+
+    private ulong GetTotalPhysicalMemory()
+    {
+        using var searcher = new ManagementObjectSearcher("select TotalVisibleMemorySize from Win32_OperatingSystem");
+        var totalMemory = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["TotalVisibleMemorySize"];
+        return (ulong)(totalMemory ?? 0) / 1024;
+    }
+
+    private string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        var ip = host.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+        return ip?.ToString() ?? "No network adapters with an IPv4 address in the system!";
+    }
+
+    private ulong GetUsedMemory()
+    {
+        using var searcher = new ManagementObjectSearcher("select FreePhysicalMemory from Win32_OperatingSystem");
+        var freeMemory = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["FreePhysicalMemory"];
+        ulong freeMemoryMB = (ulong)(freeMemory ?? 0) / 1024;
+        return TotalMemory - freeMemoryMB;
     }
 }

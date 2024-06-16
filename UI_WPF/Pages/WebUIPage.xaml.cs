@@ -116,7 +116,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            StopWebUI();
+            await StopWebUI();
 #endif
         }
 
