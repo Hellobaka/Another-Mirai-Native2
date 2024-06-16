@@ -12,6 +12,8 @@ namespace Another_Mirai_Native.UI
         [STAThread]
         public static void Main(string[] args)
         {
+            AppConfig.Instance.StartTime = DateTime.Now;
+
 #if NET5_0_OR_GREATER
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif

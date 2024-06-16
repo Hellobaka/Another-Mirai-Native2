@@ -70,6 +70,8 @@ namespace Another_Mirai_Native.Config
 
         public bool ShowTaskBar { get; set; } = true;
 
+        public DateTime StartTime { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);

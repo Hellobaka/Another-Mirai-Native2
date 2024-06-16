@@ -27,6 +27,8 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         public static void Main(string[] args)
         {
+            AppConfig.Instance.StartTime = DateTime.Now;
+
 #if NET5_0_OR_GREATER
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
