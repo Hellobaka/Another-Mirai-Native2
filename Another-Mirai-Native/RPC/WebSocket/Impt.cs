@@ -6,6 +6,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
     public class WebSocketClient
     {
         private CancellationTokenSource cts;
+        private object _sendLock = new();
 
         public event Action<string> OnMessage;
         public event Action<byte[]> OnData;
@@ -93,34 +94,40 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         public void Send(string message)
         {
-            try
+            lock (_sendLock)
             {
-                if (Client != null && Client.State == WebSocketState.Open)
+                try
                 {
-                    byte[] buffer = Encoding.UTF8.GetBytes(message);
-                    Client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cts.Token).Wait();
+                    if (Client != null && Client.State == WebSocketState.Open)
+                    {
+                        byte[] buffer = Encoding.UTF8.GetBytes(message);
+                        Client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cts.Token).Wait();
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                OnError?.Invoke(e);
-                Close();
+                catch (Exception e)
+                {
+                    OnError?.Invoke(e);
+                    Close();
+                }
             }
         }
 
         public void Send(byte[] data)
         {
-            try
+            lock (_sendLock)
             {
-                if (Client != null && Client.State == WebSocketState.Open)
+                try
                 {
-                    Client.SendAsync(new ArraySegment<byte>(data), WebSocketMessageType.Binary, true, cts.Token).Wait();
+                    if (Client != null && Client.State == WebSocketState.Open)
+                    {
+                        Client.SendAsync(new ArraySegment<byte>(data), WebSocketMessageType.Binary, true, cts.Token).Wait();
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                OnError?.Invoke(e);
-                Close();
+                catch (Exception e)
+                {
+                    OnError?.Invoke(e);
+                    Close();
+                }
             }
         }
 
