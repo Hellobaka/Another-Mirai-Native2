@@ -7,10 +7,11 @@
 @using System.Net.Sockets
 @using System.Diagnostics
 @using Another_Mirai_Native.Config
+@using Microsoft.Win32
 @inject IJSRuntime JS
 @implements IDisposable
 
-<MudGrid Style="justify-content: start !important; flex-direction: column;">
+<MudGrid Style="">
     <MudItem md="6" sm="12">
         <MudPaper Style="padding: 16px;">
             <h2>系统信息</h2>
@@ -39,31 +40,38 @@
                 <MudText Style="text-align: right">@StartedTime</MudText>
             </div>
         </MudPaper>
-    </MudItem>
-    <MudItem md="6" sm="12">
-        <MudPaper Style="padding: 16px; display: flex; justify-content: space-evenly;">
-            <div style="width: 30%">
+
+        <MudPaper Style="margin-top: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="width: 45%; position: relative; display: flex; flex-direction: column; align-items: center; max-width: 400px; max-height: 420px;">
                 <h2>CPU</h2>
-                <MudProgressCircular StrokeWidth="1" Class="cpuContainer" Color="Color.Primary" Style="height: 100%; width: 100%; position: relative;" Value="CPUUsage" />
-                <div id="cpuInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); text-align: center;">
-                    <MudText>@(CPUUsage.ToString("f2"))%</MudText>
-                    <MudText>@((CPUCurrentFrequency / 1000.0).ToString("f2")) GHz</MudText>
+                <div style="width: 100%; height: 0; padding-bottom: 100%; position: relative;">
+                    <MudProgressCircular StrokeWidth="1" Class="cpuContainer" Color="Color.Primary" Style="max-width: 400px; max-height: 400px; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" Value="CPUUsage" />
+                    <div id="cpuInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <MudText>@(CPUUsage.ToString("f2"))%</MudText>
+                        <MudText>@((CPUCurrentFrequency / 1000.0).ToString("f2")) GHz</MudText>
+                    </div>
                 </div>
             </div>
-            <div style="width: 30%;">
+            <div style="width: 45%; position: relative; display: flex; flex-direction: column; align-items: center; max-width: 400px; max-height: 420px;">
                 <h2>内存</h2>
-                <MudProgressCircular StrokeWidth="1" Class="memoryContainer" Color="Color.Primary" Style="height: 100%; width: 100%; position: relative;" Value="MemoryUsage" />
-                <div id="memoryInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); text-align: center;">
-                    <MudText>@(MemoryUsage.ToString("f2"))%</MudText>
-                    <MudText>@((UsedMemory / 1024.0).ToString("f2")) / @((TotalMemory / 1024.0).ToString("f2")) GB</MudText>
+                <div style="width: 100%; height: 0; padding-bottom: 100%; position: relative;">
+                    <MudProgressCircular StrokeWidth="1" Class="memoryContainer" Color="Color.Primary" Style="max-width: 400px; max-height: 400px; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" Value="MemoryUsage" />
+                    <div id="memoryInfo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <MudText>@(MemoryUsage.ToString("f2"))%</MudText>
+                        <MudText>@((UsedMemory / 1024.0).ToString("f2")) / @((TotalMemory / 1024.0).ToString("f2")) GB</MudText>
+                    </div>
                 </div>
             </div>
         </MudPaper>
     </MudItem>
-    <MudItem sm="4" xs="12">
+    <MudItem sm="6" xs="12">
+        <MudPaper>
+            <MudList>
+                <MudListItem>111</MudListItem>
+            </MudList>
+        </MudPaper>
     </MudItem>
 </MudGrid>
-
 <MudOverlay @bind-Visible="Loading" DarkBackground="true" AutoClose="false">
     <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
 </MudOverlay>
@@ -166,9 +174,9 @@
             StopUsageTimer();
         }
         UsageTimer = new Timer
-            {
-                Interval = 1000
-            };
+        {
+            Interval = 1000
+        };
         UsageTimer.Elapsed += UsageTimer_Ticked;
         UsageTimer.Enabled = true;
     }
@@ -189,7 +197,7 @@
         CPUUsage = CPUUsageCounter.NextValue();
         UsedMemory = GetUsedMemory();
 
-        CPUCurrentFrequency = CPUBaseFrequency * CPUFrequencyRatio;
+        CPUCurrentFrequency = GetCpuCurrentFrequency() * CPUFrequencyRatio;
         MemoryUsage = (UsedMemory / (TotalMemory * 1.0)) * 100.0;
         var span = (DateTime.Now - AppConfig.Instance.StartTime);
         StartedTime = $"{(int)span.TotalDays:00}:{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
@@ -212,8 +220,12 @@
                 edition = os["OSArchitecture"]?.ToString() ?? edition;
             }
         }
-
-        return $"{osName} {edition} 版本 {version}";
+        string releaseId = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "DisplayVersion", "").ToString();
+        if (!string.IsNullOrEmpty(releaseId))
+        {
+            version = releaseId;
+        }
+        return $"{osName} {edition} 版本 {releaseId}";
     }
 
     private static string GetCpuName()
@@ -228,6 +240,13 @@
         using var searcher = new ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
         var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
         return (uint)(maxClockSpeed ?? 0);
+    }
+
+    private uint GetCpuCurrentFrequency()
+    {
+        using var searcher = new ManagementObjectSearcher("select CurrentClockSpeed from Win32_Processor");
+        var currentClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["CurrentClockSpeed"];
+        return (uint)(currentClockSpeed ?? 0);
     }
 
     private ulong GetTotalPhysicalMemory()
