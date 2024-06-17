@@ -7,12 +7,14 @@
 @using System.Net.Sockets
 @using System.Diagnostics
 @using Another_Mirai_Native.Config
+@using Another_Mirai_Native.Native
 @using Microsoft.Win32
+@using System.Runtime.InteropServices
 @inject IJSRuntime JS
 @implements IDisposable
 
 <MudGrid Style="">
-    <MudItem md="6" sm="12">
+    <MudItem md="4" sm="12">
         <MudPaper Style="padding: 16px;">
             <h2>系统信息</h2>
             <div style="display: flex; margin-top: 10px">
@@ -64,11 +66,28 @@
             </div>
         </MudPaper>
     </MudItem>
-    <MudItem sm="6" xs="12">
+    <MudItem md="8" sm="12">
         <MudPaper>
-            <MudList>
-                <MudListItem>111</MudListItem>
-            </MudList>
+            <MudDataGrid Items="@ProcessList" Dense>
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">
+                        @(ProcessList.Count - 1) 个插件 内存 @(TotalProcessMemory.ToString("f2")) MB CPU @(TotalProcessCPU.ToString("f2"))%
+                    </MudText>
+                </ToolBarContent>
+                <Columns>
+                    <PropertyColumn Property="x => x.PID" Title="PID" />
+                    <PropertyColumn Property="x => x.PluginName" Title="名称" />
+                    <PropertyColumn Property="x => x.Running" Title="运行状态" />
+                    <PropertyColumn Property="x => x.CPUUsage" Format="f2" Title="CPU使用率(%)" />
+                    <PropertyColumn Property="x => x.MemoryUsage" Format="f2" Title="内存占用(MB)" />
+                    <TemplateColumn CellClass="d-flex justify-end">
+                        <CellTemplate>
+                            <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Close"></MudIconButton>
+                            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Refresh"></MudIconButton>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -109,6 +128,12 @@
     private double CPUCurrentFrequency { get; set; }
     private float CPUUsage { get; set; }
     private string StartedTime { get; set; } = "00:00:00:00";
+    private double TotalProcessMemory { get; set; }
+    private double TotalProcessCPU { get; set; }
+    private double SelfProcessMemory { get; set; }
+    private double SelfProcessCPU { get; set; }
+    private List<DashBoardProcessItem> ProcessList { get; set; } = [];
+    private Dictionary<int, (DateTime, TimeSpan)> ProcessCPUUsageDict { get; set; } = [];
 
     private Timer UsageTimer { get; set; }
     private PerformanceCounter CPUUsageCounter { get; set; }
@@ -198,6 +223,39 @@
         var span = (DateTime.Now - AppConfig.Instance.StartTime);
         StartedTime = $"{(int)span.TotalDays:00}:{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
 
+        ProcessList.Clear();
+        foreach (var item in PluginManagerProxy.Proxies.Where(x => x.PluginProcess != null))
+        {
+            item.PluginProcess.Refresh();
+
+            double cpu = UpdateOrAddCpuUsagetoDict(item.PluginProcess);
+
+            var processItem = new DashBoardProcessItem()
+            {
+                PID = item.PluginProcess.Id,
+                MemoryUsage = item.PluginProcess.PrivateMemorySize64 / 1024.0 / 1024,
+                PluginName = item.PluginName,
+                Running = !item.PluginProcess.HasExited,
+                CPUUsage = cpu
+            };
+            ProcessList.Add(processItem);
+        }
+
+        var selfProcess = Process.GetCurrentProcess();
+        var selfProcessItem = new DashBoardProcessItem()
+        {
+            PID = selfProcess.Id,
+                MemoryUsage = selfProcess.PrivateMemorySize64 / 1024.0 / 1024,
+            PluginName = "主框架",
+            Running = !selfProcess.HasExited,
+            CPUUsage = UpdateOrAddCpuUsagetoDict(selfProcess)
+        };
+        ProcessList.Add(selfProcessItem);
+        ProcessList = ProcessList.OrderByDescending(x => x.MemoryUsage).ToList();
+
+        TotalProcessMemory = ProcessList.Sum(x => x.MemoryUsage);
+        TotalProcessCPU = ProcessList.Sum(x => x.CPUUsage);
+
         await InvokeAsync(() => StateHasChanged());
     }
 
@@ -216,12 +274,12 @@
                 edition = os["OSArchitecture"]?.ToString() ?? edition;
             }
         }
-        string releaseId = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "DisplayVersion", "").ToString();
+        string? releaseId = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "DisplayVersion", "")?.ToString();
         if (!string.IsNullOrEmpty(releaseId))
         {
             version = releaseId;
         }
-        return $"{osName} {edition} 版本 {releaseId}";
+        return $"{osName} {edition} 版本 {version}";
     }
 
     private static string GetCpuName()
@@ -265,5 +323,50 @@
         var freeMemory = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["FreePhysicalMemory"];
         ulong freeMemoryMB = (ulong)(freeMemory ?? 0) / 1024;
         return TotalMemory - freeMemoryMB;
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GetSystemTimes(out FILETIME lpIdleTime, out FILETIME lpKernelTime, out FILETIME lpUserTime);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct FILETIME
+    {
+        public uint dwLowDateTime;
+        public uint dwHighDateTime;
+    }
+
+    private TimeSpan GetCpuUsage(Process process)
+    {
+        FILETIME ftIdle, ftKernel, ftUser;
+        GetSystemTimes(out ftIdle, out ftKernel, out ftUser);
+
+        var cpuTime = process.TotalProcessorTime;
+        return cpuTime;
+    }
+
+    private double UpdateOrAddCpuUsagetoDict(Process process)
+    {
+        double cpu = 0;
+        if (ProcessCPUUsageDict.TryGetValue(process.Id, out (DateTime, TimeSpan) usage))
+        {
+            var endCpuUsage = GetCpuUsage(process);
+            var endTime = DateTime.UtcNow;
+
+            ProcessCPUUsageDict[process.Id] = (endTime, endCpuUsage);
+
+            // 计算 CPU 使用率
+            var cpuUsedMs = (endCpuUsage - usage.Item2).TotalMilliseconds;
+            var totalMsPassed = (endTime - usage.Item1).TotalMilliseconds;
+            cpu = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed) * 100;
+        }
+        else
+        {
+            var startCpuUsage = GetCpuUsage(process);
+            var startTime = DateTime.UtcNow;
+
+            ProcessCPUUsageDict[process.Id] = (startTime, startCpuUsage);
+        }
+
+        return cpu;
     }
 }
