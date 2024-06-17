@@ -78,15 +78,11 @@
 
 <script>
     function move() {
-        // 获取目标元素
         const cpuInfo = document.getElementById('cpuInfo');
         const memoryInfo = document.getElementById('memoryInfo');
-
-        // 获取容器元素
         const cpuContainer = document.querySelector('.cpuContainer');
         const memoryContainer = document.querySelector('.memoryContainer');
 
-        // 将目标元素移动到容器元素中
         if (cpuContainer && cpuInfo) {
             cpuContainer.appendChild(cpuInfo);
         }

@@ -12,6 +12,13 @@
 
 <body style="height: 100%">
     <Routes @rendermode="InteractiveServer" />
+
+    <div id="blazor-error-ui">
+        连接发生异常，服务端已终止连接，请刷新页面
+        <a href="" class="reload">刷新</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
     <script src="_framework/blazor.web.js"></script>
 	<script src="_content/MudBlazor/MudBlazor.min.js"></script>
 
