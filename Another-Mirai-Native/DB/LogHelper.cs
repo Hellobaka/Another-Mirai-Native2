@@ -71,6 +71,16 @@ namespace Another_Mirai_Native.DB
             DebugLogAdded?.Invoke(logModel);
         }
 
+        public static void LocalDebug(string type, string message)
+        {
+            if (AppConfig.Instance.DebugMode is false)
+            {
+                return;
+            }
+            System.Diagnostics.Debug.WriteLine($"[{type}]", $"\t{message}");
+            Console.WriteLine($"[-][{DateTime.Now:G}][{type}]\t{message}");
+        }
+
         public static List<LogModel> DetailQueryLogs(int priority, int pageIndex, int pageSize, string search, out int totalCount, out int totalPage, DateTime? start = null, DateTime? end = null)
         {
             totalCount = 1;

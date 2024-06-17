@@ -38,10 +38,20 @@ namespace Another_Mirai_Native.RPC.WebSocket
             WebSocketClient = new(ConnectUrl);
             WebSocketClient.OnClose += WebSocketClient_OnClose;
             WebSocketClient.OnMessage += WebSocketClient_OnMessage;
+            WebSocketClient.OnError += WebSocketClient_OnError;
             WebSocketClient.Connect();
             LogHelper.Debug("连接服务端", "连接成功");
+            LogHelper.LocalDebug("Websocket_Connect", "Connection Ok.");
             HeartBeatLostCount = 0;
             return WebSocketClient.ReadyState == WebSocketState.Open;
+        }
+
+        private void WebSocketClient_OnError(Exception exc)
+        {
+            var color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            LogHelper.LocalDebug("Websocket_Error", $"Connection Error: {exc.Message} {exc.StackTrace}");
+            Console.ForegroundColor = color;
         }
 
         public override object InvokeCQPFuntcion(string function, bool waiting, params object[] args)
@@ -112,7 +122,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
         {
             try
             {
-                //LogHelper.Debug("来自服务端的消息", message);
+                LogHelper.LocalDebug("Websocket_Message", message);
                 JObject json = JObject.Parse(message);
                 if (json.ContainsKey("Args"))
                 {
@@ -155,13 +165,16 @@ namespace Another_Mirai_Native.RPC.WebSocket
         {
             if (WebSocketClient != null && WebSocketClient.ReadyState == WebSocketState.Open)
             {
-                // LogHelper.Debug("向服务端发送", message);
+                LogHelper.LocalDebug("Websocket_Send", message);
                 WebSocketClient.Send(message);
+                LogHelper.LocalDebug("Websocket_Send", "Send Ok.");
             }
         }
 
         private void WebSocketClient_OnClose()
         {
+            LogHelper.LocalDebug("Websocket_Close", "Connection Lost...");
+
             ReconnectCount++;
             LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByWebSocket(WebSocketClient);
