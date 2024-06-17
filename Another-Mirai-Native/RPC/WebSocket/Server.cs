@@ -177,6 +177,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
             else if (caller.Function == "HeartBeat")
             {
                 connection.Send(new InvokeBody() { Function = "HeartBeat" }.ToJson());
+                return;
             }
             string message = "InvokeFail";
             connection.Send(new InvokeResult { GUID = caller.GUID, Message = result == null ? message : "", Result = result, Type = caller.Function }.ToJson());

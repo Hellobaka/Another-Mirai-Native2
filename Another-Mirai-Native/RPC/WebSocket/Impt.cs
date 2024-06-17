@@ -137,7 +137,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
             {
                 if (Client != null && Client.State == WebSocketState.Open)
                 {
-                    Client.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", cts.Token).Wait();
+                    Client.Abort();
                 }
             }
             catch (Exception  ex)
