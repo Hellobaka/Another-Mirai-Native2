@@ -354,7 +354,7 @@ namespace Another_Mirai_Native
                 }
                 if (args[i].ToLower() == "-path")
                 {
-                    AppConfig.Instance.Core_PluginPath = args[i + 1];
+                    AppConfig.Instance.Core_PluginPath = args[i + 1].Replace("\"", "");
                 }
                 if (args[i].ToLower() == "-ws")
                 {
