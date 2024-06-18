@@ -11,6 +11,8 @@
 @using Microsoft.Win32
 @using System.Runtime.InteropServices
 @inject IJSRuntime JS
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudGrid Style="">
@@ -81,9 +83,13 @@
                     <PropertyColumn Property="x => x.CPUUsage" Format="f2" Title="CPU使用率(%)" />
                     <PropertyColumn Property="x => x.MemoryUsage" Format="f2" Title="内存占用(MB)" />
                     <TemplateColumn CellClass="d-flex justify-end">
-                        <CellTemplate>
-                            <MudIconButton Color="Color.Secondary" Icon="@Icons.Material.Filled.Close"></MudIconButton>
-                            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Refresh"></MudIconButton>
+                        <CellTemplate>           
+                            <MudTooltip Text="结束进程">
+                                <MudIconButton Color="Color.Secondary" Disabled="@(context.Item.PluginName == "主框架")" Icon="@Icons.Material.Filled.Close" OnClick="() => KillPluginProcess(context.Item)"></MudIconButton>
+                            </MudTooltip>
+                            <MudTooltip Text="重载">
+                                <MudIconButton Color="Color.Primary" Disabled="@(context.Item.PluginName == "主框架")" Icon="@Icons.Material.Filled.Refresh" OnClick="() => ReloadPlugin(context.Item)"></MudIconButton>
+                            </MudTooltip>
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
@@ -224,21 +230,26 @@
         StartedTime = $"{(int)span.TotalDays:00}:{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
 
         ProcessList.Clear();
-        foreach (var item in PluginManagerProxy.Proxies.Where(x => x.PluginProcess != null))
+        foreach (var item in PluginManagerProxy.Proxies.Where(x => x.PluginProcess != null && !x.PluginProcess.HasExited))
         {
             item.PluginProcess.Refresh();
 
             double cpu = UpdateOrAddCpuUsagetoDict(item.PluginProcess);
 
-            var processItem = new DashBoardProcessItem()
+            try
             {
-                PID = item.PluginProcess.Id,
-                MemoryUsage = item.PluginProcess.PrivateMemorySize64 / 1024.0 / 1024,
-                PluginName = item.PluginName,
-                Running = !item.PluginProcess.HasExited,
-                CPUUsage = cpu
-            };
-            ProcessList.Add(processItem);
+                var processItem = new DashBoardProcessItem()
+                {
+                    PID = item.PluginProcess.Id,
+                    MemoryUsage = item.PluginProcess.PrivateMemorySize64 / 1024.0 / 1024,
+                    PluginName = item.PluginName,
+                    Running = !item.PluginProcess.HasExited,
+                    CPUUsage = cpu
+                };
+                ProcessList.Add(processItem);
+            }
+            catch
+            {  }
         }
 
         var selfProcess = Process.GetCurrentProcess();
@@ -368,5 +379,41 @@
         }
 
         return cpu;
+    }
+
+    private async void KillPluginProcess(DashBoardProcessItem item)
+    {
+        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess.Id == item.PID);
+        if (plugin == null)
+        {
+            return;
+        }
+        bool? result = await DialogService.ShowMessageBox("结束进程", $"确定要结束 {item.PluginName} 吗？根据框架设置可能会有不同响应", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
+        if (result == null || !result.Value)
+        {
+            return;
+        }
+        await Task.Run(() =>
+        {
+            plugin.KillProcess();
+        });
+    }
+
+    private async void ReloadPlugin(DashBoardProcessItem item)
+    {
+        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess.Id == item.PID);
+        if (plugin == null)
+        {
+            return;
+        }
+        bool? result = await DialogService.ShowMessageBox("重载插件", $"确定要重载 {item.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
+        if (result == null || !result.Value)
+        {
+            return;
+        }
+        await Task.Run(() =>
+        {
+            PluginManagerProxy.Instance.ReloadPlugin(plugin);
+        });
     }
 }

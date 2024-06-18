@@ -215,7 +215,10 @@
             bool success = PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
             if (!success)
             {
-                await DialogService.ShowMessageBox("哎呀", "切换插件状态失败了");
+                await InvokeAsync(() =>
+                {
+                    DialogService.ShowMessageBox("哎呀", "切换插件状态失败了", options: new DialogOptions { FullWidth = true });
+                });
                 ToggleEnableRunningStatus = false;
                 return;
             }
