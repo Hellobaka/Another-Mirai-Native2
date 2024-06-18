@@ -172,7 +172,7 @@ namespace Another_Mirai_Native.Native
 
         private bool StartPluginProcess()
         {
-            string arguments = $"-PID {PID} -AuthCode {AppInfo.AuthCode} -AutoExit {AppConfig.Instance.PluginExitWhenCoreExit} -Path {new FileInfo(PluginPath).FullName} -WS {AppConfig.Instance.WebSocketURL}";
+            string arguments = $"-PID {PID} -AuthCode {AppInfo.AuthCode} -AutoExit {AppConfig.Instance.PluginExitWhenCoreExit} -Path \"{new FileInfo(PluginPath).FullName}\" -WS {AppConfig.Instance.WebSocketURL}";
             Process? pluginProcess = null;
             var startConfig = new ProcessStartInfo
             {
