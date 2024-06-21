@@ -37,7 +37,7 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            Dispatcher.BeginInvoke(() => Page_Loaded(null, null));
+            Page_Loaded(null, null);
         }
 
         /// <summary>
