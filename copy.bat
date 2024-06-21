@@ -38,10 +38,6 @@ set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders
 if not exist "%DIR%" (
     mkdir "%DIR%"
 )
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\Net8
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
 set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48
 if not exist "%DIR%" (
     mkdir "%DIR%"
@@ -106,10 +102,10 @@ echo Copy Net8 Protocol...
 
 :: 复制文件
 for %%F in (
-    "%ROOT%\Protocol_OneBot\bin\x86\Debug\net8\Protocol_OneBotv11.dll"
-    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net8\MiraiAPIHttp.dll"
+    "%ROOT%\Protocol_OneBot\bin\x86\Debug\net8.0-windows\Protocol_OneBotv11.dll"
+    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net8.0-windows\MiraiAPIHttp.dll"
     "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net8.0-windows\Protocol_NoConnection.dll"
-    "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net8\Protocol_Satori_v1.dll"
+    "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net8.0-windows\Protocol_Satori_v1.dll"
 ) do (
     if exist "%%F" (
         copy /Y "%%F" "%TARGET%"
@@ -122,10 +118,6 @@ for %%F in (
 echo Copy Net8 Loader...
 
 set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\Net8
 if not exist "%DIR%" (
     mkdir "%DIR%"
 )
@@ -146,24 +138,6 @@ if exist "%FILE%" (
     copy /Y "%FILE%" "%DIR%"
 ) else (
     echo Warning: File "%FILE%" not found.
-)
-
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\Net8
-for %%F in (
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.deps.json"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.dll"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.exe"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.runtimeconfig.json"
-    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP.dll"
-    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.dll"
-    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.deps.json"
-    "%ROOT%\CQP_DNNE\bin\x86\Debug\net8.0\win-x86\CQP_DNNE.runtimeconfig.json"
-) do (
-    if exist "%%F" (
-        copy /Y "%%F" "%DIR%"
-    ) else (
-        echo Warning: File "%%F" not found.
-    )
 )
 
 set FILE="CleanI18nFolders.exe"
