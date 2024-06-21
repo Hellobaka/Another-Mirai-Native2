@@ -14,7 +14,6 @@ namespace Another_Mirai_Native.RPC
             {
                 Server = serverType switch
                 {
-                    ServerType.gRPC => new gRPC.Server(),
                     ServerType.WebSocket => new WebSocket.Server(),
                     _ => throw new NotImplementedException(),
                 };

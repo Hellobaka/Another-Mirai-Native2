@@ -3,6 +3,5 @@
     public enum ServerType
     {
         WebSocket,
-        gRPC,
     }
 }
