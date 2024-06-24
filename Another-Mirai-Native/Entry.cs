@@ -72,35 +72,45 @@ namespace Another_Mirai_Native
                     LogHelper.Error("初始化", "构建服务器失败");
                     return;
                 }
-                // 若配置无需UI则自动连接之后加载插件
-                if (AppConfig.Instance.AutoConnect)
+                if (!AppConfig.Instance.AutoConnect)
                 {
-                    if (!new ProtocolManager().Start(AppConfig.Instance.AutoProtocol))
+                    Console.WriteLine("当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
+                    Console.WriteLine("请输入 connect 以进行手动连接。");
+                    while (true)
                     {
-                        return;
-                    }
-                    LogHelper.Info("加载插件", $"配置中启动启用插件为 {AppConfig.Instance.AutoEnablePlugin.Count} 个，开始加载...");
-                    if (!new PluginManagerProxy().LoadPlugins())
-                    {
-                        return;
-                    }
-                    int count = 0;
-                    foreach (var item in PluginManagerProxy.Proxies)
-                    {
-                        if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
+                        if(Console.ReadLine()?.ToLower() == "connect")
                         {
-                            if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
-                            {
-                                UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
-                            }
+                            break;
                         }
                     }
-                    if (AppConfig.Instance.ShowTaskBar)
-                    {
-                        BuildTaskBar();
-                    }
-                    PluginManagerProxy.Instance.OnPluginLoaded();
                 }
+
+                // 若配置无需UI则自动连接之后加载插件
+                if (!new ProtocolManager().Start(AppConfig.Instance.AutoProtocol))
+                {
+                    return;
+                }
+                LogHelper.Info("加载插件", $"配置中启动启用插件为 {AppConfig.Instance.AutoEnablePlugin.Count} 个，开始加载...");
+                if (!new PluginManagerProxy().LoadPlugins())
+                {
+                    return;
+                }
+                int count = 0;
+                foreach (var item in PluginManagerProxy.Proxies)
+                {
+                    if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
+                    {
+                        if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
+                        {
+                            UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
+                        }
+                    }
+                }
+                if (AppConfig.Instance.ShowTaskBar)
+                {
+                    BuildTaskBar();
+                }
+                PluginManagerProxy.Instance.OnPluginLoaded();
             }
             else
             {
@@ -153,7 +163,6 @@ namespace Another_Mirai_Native
                     menu.Items.Add(new ToolStripMenuItem { Text = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})" });
                     menu.Items.Add("-");
                     menu.Items.Add(new ToolStripMenuItem { Text = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
-                    menu.Items.Add(new ToolStripMenuItem { Text = $"UI版本: {AppConfig.Instance.GetType().Assembly.GetName().Version}" });
                     menu.Items.Add("-");
                     TaskBarMenuParent = new ToolStripMenuItem() { Text = "应用" };
                     RebuildTaskBarMenu();
@@ -252,7 +261,7 @@ namespace Another_Mirai_Native
                         {
                             PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, subMenu.function);
                         });
-                    };                    
+                    };
                     menuItem.DropDownItems.Add(subMenuItem);
                 }
                 Invoke(() => TaskBarMenuParent.DropDownItems.Add(menuItem));
