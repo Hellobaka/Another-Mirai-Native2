@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject AuthService _authProvider
 @inject ISnackbar Snackbar
+@inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
 <MudContainer Style="height: 100%; display: flex; justify-content: center; align-items: center;">
@@ -27,6 +28,14 @@
     protected override void OnInitialized()
     {
         LogHandler.StopSaveLogs();
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // await JS.InvokeVoidAsync("setTitle", "连接 - AMN2 WebUI");
+        }
     }
 
     void TogglePassword()

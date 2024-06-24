@@ -32,6 +32,7 @@ namespace Another_Mirai_Native.BlazorUI
 
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<RouteService>();
             builder.Services.AddScoped<Shared>();
             builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
             builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();

@@ -2,10 +2,13 @@
 <html lang="en" style="height: 100%">
 
 <head>
+    <title>AMN2-Blazor</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-	
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" sizes="any" mask="" href="favicon.ico">
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <HeadOutlet />
 </head>
@@ -39,6 +42,10 @@
             }).catch(function (err) {
                 console.error('Could not copy text: ', err);
             });
+        }
+
+        function setTitle(title) {
+            document.title = title;
         }
 
     </script>
