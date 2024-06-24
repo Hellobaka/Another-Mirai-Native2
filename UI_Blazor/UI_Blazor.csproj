@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
+	  <RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
 	  <RootNamespace>Another_Mirai_Native.BlazorUI</RootNamespace>
 	  <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
