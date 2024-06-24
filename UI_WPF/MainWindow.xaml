@@ -113,6 +113,7 @@
                 <ui:NavigationViewItem
                     x:Name="WebUIMenuItem"
                     Content="WebUI"
+                    IsEnabled="False"
                     Tag="WebUIPage">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon

@@ -69,8 +69,6 @@ namespace Another_Mirai_Native.UI
             webuiUrl.MouseDown += mouseDownAction;
             webUIStatus.MouseDown += mouseDownAction;
             menu.Items.Add(webUIStatus);
-#else
-            menu.Items.Add(new MenuItem { Header = $"UI版本: {MainWindow.Instance.GetType().Assembly.GetName().Version}" });
 #endif
             MenuItem updateItem = new() { Header = "检查更新" };
             updateItem.Click += (a, b) => updateAction?.Invoke();
