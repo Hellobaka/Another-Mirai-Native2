@@ -64,23 +64,23 @@ jobs:
     - name: Upload a Build Artifact(Console_net48)
       uses: actions/upload-artifact@v3
       with:
-             name: Minimal_Console.zip
-             path: build\Minimal_Console.zip
+             name: Minimal_Console
+             path: build\Console\net48\
 
     - name: Upload a Build Artifact(Blazor)
       uses: actions/upload-artifact@v3
       with:
-             name: WebUI.zip
-             path: build\WebUI.zip
+             name: WebUI
+             path: build\Web\
 
     - name: Upload a Build Artifact(WPF_net8)
       uses: actions/upload-artifact@v3
       with:
-             name: WPF_net8.zip
-             path: build\WPF_net8.zip
+             name: WPF_net8
+             path: build\WPF\net8\
 
     - name: Upload a Build Artifact(WPF_net48)
       uses: actions/upload-artifact@v3
       with:
-             name: WPF_net48.zip
-             path: build\WPF_net48.zip
+             name: WPF_net48
+             path: build\WPF\net48\
