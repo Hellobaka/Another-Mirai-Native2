@@ -74,8 +74,9 @@ namespace Another_Mirai_Native
                 }
                 if (!AppConfig.Instance.AutoConnect)
                 {
-                    Console.WriteLine("当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
-                    Console.WriteLine("请输入 connect 以进行手动连接。");
+                    Console.WriteLine();
+                    Console.WriteLine("[-]当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
+                    Console.WriteLine("[-]请输入 connect 以进行手动连接。");
                     while (true)
                     {
                         if(Console.ReadLine()?.ToLower() == "connect")
@@ -208,7 +209,11 @@ namespace Another_Mirai_Native
                 ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用", Tag = item };
                 enableItem.Click += (sender, b) =>
                 {
-                    CQPluginProxy plugin = sender as CQPluginProxy;
+                    if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                    {
+                        return;
+                    }
+
                     if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
                     {
                         enableItem.Text = "√ 启用";
@@ -225,7 +230,11 @@ namespace Another_Mirai_Native
                 };
                 disableItem.Click += (sender, b) =>
                 {
-                    CQPluginProxy plugin = sender as CQPluginProxy;
+                    if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                    {
+                        return;
+                    }
+
                     if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, false))
                     {
                         enableItem.Text = "启用";
@@ -251,7 +260,11 @@ namespace Another_Mirai_Native
                     ToolStripMenuItem subMenuItem = new() { Text = subMenu.name, Tag = item };
                     subMenuItem.Click += (sender, b) =>
                     {
-                        CQPluginProxy plugin = sender as CQPluginProxy;
+                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                        {
+                            return;
+                        }
+
                         if (plugin.Enabled is false)
                         {
                             MessageBox.Show("当前插件未启用，无法调用窗口事件", "嗯哼", MessageBoxButtons.OK, MessageBoxIcon.Error);
