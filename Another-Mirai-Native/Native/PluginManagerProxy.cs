@@ -181,19 +181,26 @@ namespace Another_Mirai_Native.Native
 
         public void ReloadAllPlugins()
         {
-            PluginLoaded = false;
-            // 结束所有插件进程
-            foreach (var item in Proxies.Where(x => x.Enabled))
+            try
             {
-                item.ExitFlag = true;
-                item.KillProcess();
+                PluginLoaded = false;
+                // 结束所有插件进程
+                foreach (var item in Proxies.Where(x => x.Enabled))
+                {
+                    item.ExitFlag = true;
+                    item.KillProcess();
+                }
+                // 清空插件列表并重新加载
+                Proxies.Clear();
+                if (LoadPlugins())
+                {
+                    EnablePluginByConfig();
+                    OnPluginLoaded();
+                }
             }
-            // 清空插件列表并重新加载
-            Proxies.Clear();
-            if (LoadPlugins())
+            catch (Exception exc)
             {
-                EnablePluginByConfig();
-                OnPluginLoaded();
+                LogHelper.Error("ReloadAllPlugins", exc);
             }
         }
 
