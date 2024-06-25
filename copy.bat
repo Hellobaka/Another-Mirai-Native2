@@ -57,20 +57,6 @@ if exist "%FILE%" (
     echo Warning: File "%FILE%" not found.
 )
 
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\Net8
-for %%F in (
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.deps.json"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.dll"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.exe"
-    "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\Another-Mirai-Native.runtimeconfig.json"
-) do (
-    if exist "%%F" (
-        copy /Y "%%F" "%DIR%"
-    ) else (
-        echo Warning: File "%%F" not found.
-    )
-)
-
 set FILE="CleanI18nFolders.exe"
 set DIR="%ROOT%\UI_WPF\bin\x86\Debug\net48"
 copy "%FILE%" "%DIR%"
