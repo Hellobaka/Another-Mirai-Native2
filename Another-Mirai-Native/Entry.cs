@@ -81,7 +81,7 @@ namespace Another_Mirai_Native
                     Console.WriteLine("[-]请输入 connect 以进行手动连接。");
                     while (true)
                     {
-                        if(Console.ReadLine()?.ToLower() == "connect")
+                        if (Console.ReadLine()?.ToLower() == "connect")
                         {
                             break;
                         }
@@ -144,7 +144,7 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]");
+                UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.PluginName}]");
             }
 
             ServerStarted?.Invoke();

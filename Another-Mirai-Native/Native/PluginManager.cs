@@ -5,6 +5,7 @@ using System.Runtime.ExceptionServices;
 using System.IO;
 using System.Diagnostics;
 using Another_Mirai_Native.RPC;
+using Another_Mirai_Native.Native.Handler;
 
 namespace Another_Mirai_Native.Native
 {
@@ -17,7 +18,7 @@ namespace Another_Mirai_Native.Native
 
         public static PluginManager Instance { get; private set; }
 
-        public static CQPlugin LoadedPlugin { get; private set; }
+        public static PluginHandlerBase LoadedPlugin { get; private set; }
 
         [HandleProcessCorruptedStateExceptions]
         public int CallEvent(PluginEventType eventName, object[] args)
@@ -164,7 +165,7 @@ namespace Another_Mirai_Native.Native
                 return false;
             }
             CQPlugin plugin = new(pluginPath);
-            var ret = plugin.Load();
+            var ret = plugin.LoadPlugin();
             if (ret)
             {
                 LoadedPlugin = plugin;
