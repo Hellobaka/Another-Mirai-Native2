@@ -19,6 +19,8 @@ namespace Another_Mirai_Native
 
         private static ToolStripMenuItem TaskBarMenuParent { get; set; }
 
+        public static event Action ServerStarted;
+
         // 定义启动参数:
         // 无参时作为框架主体启动
         // -PID 核心进程PID
@@ -144,6 +146,8 @@ namespace Another_Mirai_Native
                 }
                 UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.Name}]");
             }
+
+            ServerStarted?.Invoke();
             _quitEvent.WaitOne();
         }
 
