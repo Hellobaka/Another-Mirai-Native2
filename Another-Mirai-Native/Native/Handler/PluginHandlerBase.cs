@@ -151,24 +151,24 @@ namespace Another_Mirai_Native.Native.Handler
             {
                 LogHelper.Error("加载插件", $"CQP.dll加载失败, GetLastError={GetLastError()}");
             }
-            string fileName = new FileInfo(PluginPath).Name;
             try
             {
                 NativeHandle = LoadLibrary(PluginPath);
                 if (NativeHandle == IntPtr.Zero)
                 {
-                    LogHelper.Error("加载插件", $"{fileName} 加载失败, GetLastError={GetLastError()}");
+                    LogHelper.Error("加载插件", $"{Path.GetFileName(PluginPath)} 加载失败, GetLastError={GetLastError()}");
                     return false;
                 }
-                if (File.Exists(PluginPath.Replace(".dll", ".json"))
-                    && LoadAppInfo(File.ReadAllText(PluginPath.Replace(".dll", ".json")))
+                string appInfoPath = Path.ChangeExtension(PluginPath, ".json");
+                if (File.Exists(appInfoPath)
+                    && LoadAppInfo(appInfoPath)
                     && CreateMethodDelegates())
                 {
                     LogHelper.Info("加载插件", $"{PluginName}, 加载成功");
                 }
                 else
                 {
-                    LogHelper.Info("加载插件", $"{PluginName} 加载失败, Json不存在");
+                    LogHelper.Info("加载插件", $"{PluginName} 加载失败, Json不存在或无法解析");
                     return false;
                 }
             }
