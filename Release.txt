@@ -8,5 +8,5 @@ Console x2 => WebUI => WPF x2
 
 note:
 每个版本需要复制对应生成 bin 内的 loader 与 protocol
-WPF 的 .net 48 发布时保留 x86 文件夹 否则无法运行，虽然使用Fody，
+所有版本的 .net 48 发布时保留 x86 文件夹 否则无法运行，虽然使用Fody
 WPF 的 .net 8 发布时，可删除 WebUI 相关 exe，从 WebUI Only 复制 wwwroot 文件夹
