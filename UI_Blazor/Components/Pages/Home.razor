@@ -1,6 +1,6 @@
 ﻿@page "/dashboard"
 @using Another_Mirai_Native.BlazorUI.Components.Layout
-@using static Another_Mirai_Native.BlazorUI.Program
+@using static Another_Mirai_Native.BlazorUI.Entry_Blazor
 @using System.Timers
 @using System.Management
 @using System.Net
@@ -83,7 +83,7 @@
                     <PropertyColumn Property="x => x.CPUUsage" Format="f2" Title="CPU使用率(%)" />
                     <PropertyColumn Property="x => x.MemoryUsage" Format="f2" Title="内存占用(MB)" />
                     <TemplateColumn CellClass="d-flex justify-end">
-                        <CellTemplate>           
+                        <CellTemplate>
                             <MudTooltip Text="结束进程">
                                 <MudIconButton Color="Color.Secondary" Disabled="@(context.Item.PluginName == "主框架")" Icon="@Icons.Material.Filled.Close" OnClick="() => KillPluginProcess(context.Item)"></MudIconButton>
                             </MudTooltip>
@@ -162,8 +162,8 @@
     protected override void OnInitialized()
     {
         LogHandler.StartSaveLogs();
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
-        Program.OnBlazorServiceStopped += OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
     }
 
     public void Dispose()
@@ -249,14 +249,31 @@
                 ProcessList.Add(processItem);
             }
             catch
-            {  }
+            { }
+        }
+
+        foreach (var item in Process.GetProcessesByName("Another-Mirai-Native"))
+        {
+            if (ProcessList.Any(x => x.PID == item.Id))
+            {
+                continue;
+            }
+            double cpu = UpdateOrAddCpuUsagetoDict(item);
+            ProcessList.Add(new DashBoardProcessItem
+            {
+                PID = item.Id,
+                MemoryUsage = item.PrivateMemorySize64 / 1024.0 / 1024,
+                PluginName = GetPluginNameFromArg(item.Id),
+                Running = !item.HasExited,
+                CPUUsage = cpu
+            });
         }
 
         var selfProcess = Process.GetCurrentProcess();
         var selfProcessItem = new DashBoardProcessItem()
         {
             PID = selfProcess.Id,
-                MemoryUsage = selfProcess.PrivateMemorySize64 / 1024.0 / 1024,
+            MemoryUsage = selfProcess.PrivateMemorySize64 / 1024.0 / 1024,
             PluginName = "主框架",
             Running = !selfProcess.HasExited,
             CPUUsage = UpdateOrAddCpuUsagetoDict(selfProcess)
@@ -268,6 +285,27 @@
         TotalProcessCPU = ProcessList.Sum(x => x.CPUUsage);
 
         await InvokeAsync(() => StateHasChanged());
+    }
+
+    private string GetPluginNameFromArg(int pid)
+    {
+        string query = $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {pid}";
+        using ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+        string? commandLine = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["CommandLine"].ToString();
+
+        string[]? args = commandLine?.ToString().Split(' ');
+        if (args == null)
+        {
+            return "未识别插件";
+        }
+        for (int i = 0; i < args.Length; i ++)
+        {
+            if (args[i] == "-Path")
+            {
+                return Path.GetFileName(args[i + 1]).Replace("\"", "");
+            }
+        }
+        return "未识别插件";
     }
 
     private string GetDetailedOSVersion()
@@ -383,11 +421,18 @@
 
     private async void KillPluginProcess(DashBoardProcessItem item)
     {
-        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess.Id == item.PID);
+        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess?.Id == item.PID);
         if (plugin == null)
         {
+            bool? r = await DialogService.ShowMessageBox("结束进程", $"似乎插件脱离了框架控制，要结束进程 {item.PID} 吗", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
+            if (r != null && r.Value)
+            {
+                Process.GetProcessById(item.PID)?.Kill();
+            }
+
             return;
         }
+
         bool? result = await DialogService.ShowMessageBox("结束进程", $"确定要结束 {item.PluginName} 吗？根据框架设置可能会有不同响应", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
         if (result == null || !result.Value)
         {
@@ -401,9 +446,10 @@
 
     private async void ReloadPlugin(DashBoardProcessItem item)
     {
-        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess.Id == item.PID);
+        var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess?.Id == item.PID);
         if (plugin == null)
         {
+            await DialogService.ShowMessageBox("嗯？", $"{item.PluginName} 无法被重载，建议结束进程后重新启用");
             return;
         }
         bool? result = await DialogService.ShowMessageBox("重载插件", $"确定要重载 {item.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });

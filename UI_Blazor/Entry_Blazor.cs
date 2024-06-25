@@ -1,16 +1,13 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor.Services;
 using Another_Mirai_Native.BlazorUI.Components;
 using Another_Mirai_Native.BlazorUI.Models;
-using System.Text;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using MudBlazor.Services;
 using System.Net;
-using System.Reflection.PortableExecutable;
 
 namespace Another_Mirai_Native.BlazorUI
 {
-    public class Program
+    public class Entry_Blazor
     {
         public static event Action OnBlazorServiceStarted;
         public static event Action OnBlazorServiceStopped;
@@ -19,10 +16,33 @@ namespace Another_Mirai_Native.BlazorUI
         
         public static string WebUIURL { get; private set; } = "";
 
+        private static ManualResetEvent ConsoleStartedSignal { get; set; }
+
+        /// <summary>
+        /// Console Start Entry
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            ConsoleStartedSignal = new(false);
+            Entry.ServerStarted += Entry_ServerStarted;
+
+            Task.Run(() => Entry.Main(args));
+
+            ConsoleStartedSignal.WaitOne();
+            Console.WriteLine("[+]Console Service Started. Starting Blazor Service...");
+            StartBlazorService();
+        }
+
+        private static void Entry_ServerStarted()
+        {
+            ConsoleStartedSignal?.Set();
+        }
+
+        public static void StartBlazorService()
+        {
             Blazor_Config.Instance.LoadConfig();
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder();
 
             // Add services to the container.
             builder.Services.AddRazorComponents()

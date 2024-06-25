@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.UI
                 Margin = new System.Windows.Thickness(0, 0, 10, 0),
                 Fill = WebUIPage.Instance.StartStatus ? Brushes.Green : Brushes.Red,
             });
-            TextBlock webuiUrl = new TextBlock() { Text = string.IsNullOrEmpty(BlazorUI.Program.WebUIURL) ? "WebUI 未启动" : BlazorUI.Program.WebUIURL };
+            TextBlock webuiUrl = new TextBlock() { Text = string.IsNullOrEmpty(BlazorUI.Entry_Blazor.WebUIURL) ? "WebUI 未启动" : BlazorUI.Entry_Blazor.WebUIURL };
             DynamicResourceExtension dynamicResource = new("TextControlForeground");
             webuiUrl.SetResourceReference(TextBlock.ForegroundProperty, dynamicResource.ResourceKey);
 
@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.UI
                 {
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = BlazorUI.Program.WebUIURL,
+                        FileName = BlazorUI.Entry_Blazor.WebUIURL,
                         UseShellExecute = true
                     });
                 }

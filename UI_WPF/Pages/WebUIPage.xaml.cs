@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return false;
             }
 #if NET5_0_OR_GREATER
-            Task.Run(() => BlazorUI.Program.Main([]));
+            Task.Run(() => BlazorUI.Entry_Blazor.StartBlazorService());
             LogHelper.Info("启动 WebUI", $"WebUI 已尝试启动");
             return true;
 #else
@@ -47,7 +47,7 @@ namespace Another_Mirai_Native.UI.Pages
         public async Task<bool> StopWebUI()
         {
 #if NET5_0_OR_GREATER
-            await BlazorUI.Program.BlazorHost?.StopAsync(); 
+            await BlazorUI.Entry_Blazor.BlazorHost?.StopAsync(); 
             LogHelper.Info("停止 WebUI", $"WebUI 已停止");
 #endif
             return true;
@@ -135,8 +135,8 @@ namespace Another_Mirai_Native.UI.Pages
             Console.SetOut(writer);
             Console.SetError(errorWriter);
 
-            BlazorUI.Program.OnBlazorServiceStarted += Program_OnBlazorServiceStarted;
-            BlazorUI.Program.OnBlazorServiceStopped += Program_OnBlazorServiceStoped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStarted += Program_OnBlazorServiceStarted;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += Program_OnBlazorServiceStoped;
 #else
             WebUIStartButton.IsEnabled = false;
             WebUIStopButton.IsEnabled = false;

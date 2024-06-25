@@ -133,8 +133,8 @@
         PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
-        Program.OnBlazorServiceStopped += OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
 
         LoadPluginList();
     }
@@ -159,7 +159,7 @@
         PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
         PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
     }
 
     private void SelectedItemChanged(CQPluginProxyWrapper selected)
@@ -209,17 +209,21 @@
         {
             return;
         }
+        bool? r = await DialogService.ShowMessageBox("结束进程", $"确认要{(SelectedPlugin.Enabled ? "禁用" : "启用")}插件 {SelectedPlugin.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
+        if (r == null || !r.Value)
+        {
+            return;
+        }
+
         ToggleEnableRunningStatus = true;
-        await Task.Run(async () =>
+        bool toggleSuccess = true;
+        await Task.Run(() =>
         {
             bool success = PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
             if (!success)
             {
-                await InvokeAsync(() =>
-                {
-                    DialogService.ShowMessageBox("哎呀", "切换插件状态失败了", options: new DialogOptions { FullWidth = true });
-                });
                 ToggleEnableRunningStatus = false;
+                toggleSuccess = false;
                 return;
             }
             if (SelectedPlugin.Enabled)
@@ -234,6 +238,10 @@
             AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
             ToggleEnableRunningStatus = false;
         });
+        if (!toggleSuccess)
+        {
+            await DialogService.ShowMessageBox("哎呀", "切换插件状态失败了", options: new DialogOptions { FullWidth = true });
+        }
         await InvokeAsync(() => StateHasChanged());
     }
 

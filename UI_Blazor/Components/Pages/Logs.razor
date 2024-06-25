@@ -128,8 +128,8 @@
         LogHelper.LogStatusUpdated -= OnLogStatusUpdated;
         LogHandler.Logs.CollectionChanged += OnLogHandlerLogChanged;
         LogHelper.LogStatusUpdated += OnLogStatusUpdated;
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
-        Program.OnBlazorServiceStopped += OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
 
         await InvokeAsync(() => StateHasChanged());
         Loading = false;
@@ -139,7 +139,7 @@
     {
         LogHandler.Logs.CollectionChanged -= OnLogHandlerLogChanged;
         LogHelper.LogStatusUpdated -= OnLogStatusUpdated;
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
         await JS.InvokeVoidAsync("removeSizeHandler", []);
     }
 
