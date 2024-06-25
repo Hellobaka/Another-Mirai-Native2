@@ -46,8 +46,10 @@
     {
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
-        Program.OnBlazorServiceStopped += OnBlazorStopped;
+        LogHandler.OnErrorLogReceived -= OnErrorLogReceived;
+        LogHandler.OnErrorLogReceived += OnErrorLogReceived;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
     }
 
     private void OnBlazorStopped()
@@ -58,7 +60,8 @@
     public void Dispose()
     {
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
-        Program.OnBlazorServiceStopped -= OnBlazorStopped;
+            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        LogHandler.OnErrorLogReceived -= OnErrorLogReceived;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -100,6 +103,11 @@
                 NavigationManager.NavigateTo("/");
             });
         }
+    }
+
+    private void OnErrorLogReceived(LogModel log)
+    {
+        Snackbar.Add(log.detail, log.priority == (int)Model.Enums.LogLevel.Warning ? Severity.Warning : Severity.Error);
     }
 
     private void DrawerToggle()

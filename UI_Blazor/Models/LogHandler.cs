@@ -1,6 +1,5 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Model.Enums;
 using System.Collections.ObjectModel;
 
 namespace Another_Mirai_Native.BlazorUI.Models
@@ -9,19 +8,36 @@ namespace Another_Mirai_Native.BlazorUI.Models
     {
         public static ObservableCollection<LogModel> Logs { get; set; } = [];
 
+        public static event Action<LogModel> OnErrorLogReceived;
+
+        private static bool Collecting { get; set; }
+
         public static void StartSaveLogs()
         {
+            if (Collecting)
+            {
+                return;
+            }
+            Collecting = true;
             Logs = [];
-            foreach(var item in LogHelper.GetDisplayLogs((int)Model.Enums.LogLevel.Info, 100))
+            foreach (var item in LogHelper.GetDisplayLogs((int)Model.Enums.LogLevel.Info, 100))
             {
                 Logs.Add(item);
             }
             LogHelper.LogAdded -= LogHelper_LogAdded;
             LogHelper.LogAdded += LogHelper_LogAdded;
+            Entry_Blazor.OnBlazorServiceStopped -= Program_OnBlazorServiceStopped;
+            Entry_Blazor.OnBlazorServiceStopped += Program_OnBlazorServiceStopped;
+        }
+
+        private static void Program_OnBlazorServiceStopped()
+        {
+            StopSaveLogs();
         }
 
         public static void StopSaveLogs()
         {
+            Collecting = false;
             LogHelper.LogAdded -= LogHelper_LogAdded;
         }
 
@@ -32,6 +48,11 @@ namespace Another_Mirai_Native.BlazorUI.Models
                 Logs.RemoveAt(0);
             }
             Logs.Add(log);
+
+            if (log.priority >= (int)Model.Enums.LogLevel.Warning)
+            {
+                OnErrorLogReceived?.Invoke(log);
+            }
         }
     }
 
@@ -40,13 +61,13 @@ namespace Another_Mirai_Native.BlazorUI.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-       
+
         public string Time { get; set; }
-       
+
         public string Source { get; set; }
-       
+
         public string Detail { get; set; }
-       
+
         public string Status { get; set; }
 
         public int Priority { get; set; }
