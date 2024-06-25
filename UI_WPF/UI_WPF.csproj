@@ -12,7 +12,7 @@
     <Platforms>AnyCPU;x86</Platforms>
     <StartupObject>Another_Mirai_Native.UI.Entry</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>2.5.0</Version>
+    <Version>2.6.0</Version>
     <PackageIcon>icon.ico</PackageIcon>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
