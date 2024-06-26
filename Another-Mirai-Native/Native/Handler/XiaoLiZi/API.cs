@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 {
@@ -25,6 +26,1211 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             }
             return "";
         }
+
+        #region Delegates
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_1_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_2_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_3_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_4_Delegate(string arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_5_Delegate(string arg0, int arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_6_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_7_Delegate(long arg0, long arg1, string arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_8_Delegate(long arg0, long arg1, long arg2, string arg3, long arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_9_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_10_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_11_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_12_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_13_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_14_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_15_Delegate(long arg0, long arg1, string arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_16_Delegate(long arg0, long arg1, bool arg2, byte[] arg3, int arg4, int arg5, bool arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_17_Delegate(long arg0, long arg1, bool arg2, byte[] arg3, int arg4, int arg5, bool arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_18_Delegate(long arg0, long arg1, int arg2, string arg3, byte[] arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_19_Delegate(long arg0, long arg1, int arg2, string arg3, byte[] arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_20_Delegate(long arg0, byte[] arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate IntPtr Function_21_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate IntPtr Function_22_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate IntPtr Function_23_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_24_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_25_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_26_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_27_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_28_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_29_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_30_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_31_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_32_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_33_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_34_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_35_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_36_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_37_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_38_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_39_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_40_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_41_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_42_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_43_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_44_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_45_Delegate(long arg0, long arg1, byte[] arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_46_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_47_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_48_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_49_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_50_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_51_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_52_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_53_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_54_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_55_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_56_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_57_Delegate(long arg0, long arg1, long arg2, int arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_58_Delegate(long arg0, long arg1, double arg2, double arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_59_Delegate(long arg0, long arg1, double arg2, double arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate long Function_60_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_61_Delegate(long arg0, long arg1, long arg2, long arg3, int arg4, int arg5, string arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_62_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_63_Delegate(long arg0, string arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_64_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_65_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_66_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_67_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_68_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_69_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_70_Delegate(long arg0, long arg1, string arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_71_Delegate(long arg0, long arg1, string arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_72_Delegate(long arg0, int arg1, int arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_73_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_74_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_75_Delegate(string arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_76_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_77_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_78_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_79_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_80_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, long arg5, int arg6, long arg7, int arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_81_Delegate(long arg0, long arg1, string arg2, string arg3, long arg4, int arg5, long arg6, int arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_82_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_83_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_84_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_85_Delegate(long arg0, string arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_86_Delegate(long arg0, object arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_87_Delegate(long arg0, long arg1, string arg2, string arg3, string arg4, string arg5, string arg6, int arg7, int arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_88_Delegate(int arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_89_Delegate(int arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_90_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_91_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, int arg5, string arg6, int arg7, object arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_92_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, int arg5, string arg6, int arg7, object arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_93_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_94_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_95_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_96_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, bool arg6, string arg7, int arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_97_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_98_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, int arg5, string arg6, int arg7, object arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_99_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_100_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_101_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_102_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_103_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_104_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_105_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_106_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_107_Delegate(long arg0, string arg1, int arg2, string arg3, int arg4, string arg5, string arg6, string arg7, string arg8, string arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_108_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_109_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_110_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_111_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_112_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_113_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_114_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_115_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_116_Delegate(long arg0, long arg1, int arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_117_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_118_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_119_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_120_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_121_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_122_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_123_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_124_Delegate(long arg0, bool arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_125_Delegate(long arg0, string arg1, string arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_126_Delegate(long arg0, long arg1, string arg2, string arg3, byte[] arg4, string arg5, bool arg6, bool arg7, bool arg8, bool arg9, bool arg10);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_127_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_128_Delegate(long arg0, long arg1, long arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_129_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_130_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_131_Delegate(long arg0, int arg1, long arg2, string arg3, int arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_132_Delegate(long arg0, int arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_133_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, string arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_134_Delegate(long arg0, long arg1, string arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_135_Delegate(long arg0, long arg1, string arg2, byte[] arg3, int arg4, int arg5, int arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_136_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_137_Delegate(long arg0, long arg1, string arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_138_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_139_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_140_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_141_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_142_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_143_Delegate(long arg0, string arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_144_Delegate(long arg0, int arg1, int arg2, byte[] arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_145_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_146_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_147_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_148_Delegate(long arg0, int arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_149_Delegate(long arg0, byte[] arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_150_Delegate(long arg0, string arg1, int arg2, string arg3, object arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_151_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_152_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_153_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_154_Delegate(long arg0, long arg1, string arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_155_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_156_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_157_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_158_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_159_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_160_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_161_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_162_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_163_Delegate(byte[] arg0, byte[] arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_164_Delegate(byte[] arg0, byte[] arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_165_Delegate(string arg0, int arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_166_Delegate(string arg0, int arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_167_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_168_Delegate(long arg0, long arg1, int arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_169_Delegate(long arg0, long arg1, int arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_170_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_171_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_172_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_173_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_174_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_175_Delegate(long arg0, long arg1, long arg2, long arg3, int arg4, int arg5, string arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_176_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_177_Delegate(long arg0, long arg1, object arg2, long arg3, int arg4, string arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_178_Delegate(long arg0, long arg1, object arg2, bool arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_179_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_180_Delegate(long arg0, long arg1, string arg2, byte[] arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_181_Delegate(string arg0, string arg1, object arg2, string arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_182_Delegate(long arg0, long arg1, string arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_183_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_184_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_185_Delegate(string arg0, string arg1, string arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate void Function_186_Delegate(string arg0, string arg1, string arg2, int arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_187_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_188_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_189_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_190_Delegate(long arg0, long arg1, long arg2, string arg3, long arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_191_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_192_Delegate(long arg0, long arg1, byte[] arg2, string arg3, long arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_193_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_194_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_195_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_196_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate long Function_197_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_198_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_199_Delegate(long arg0, object arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_200_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_201_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_202_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_203_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_204_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, int arg5, string arg6, int arg7, object arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_205_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, int arg5, string arg6, int arg7, object arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_206_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_207_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_208_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_209_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, bool arg6, string arg7, int arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_210_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_211_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_212_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_213_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_214_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_215_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_216_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_217_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_218_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_219_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_220_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_221_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, long arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_222_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, long arg5, int arg6, long arg7, int arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_223_Delegate(long arg0, bool arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_224_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_225_Delegate(string arg0, int arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_226_Delegate(long arg0, long arg1, object arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_227_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_228_Delegate(long arg0, string arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_229_Delegate(long arg0, long arg1, string arg2, int arg3, string arg4, int arg5, object arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_230_Delegate(long arg0, long arg1, object arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_231_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_232_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_233_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_234_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_235_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_236_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_237_Delegate(long arg0, int arg1, int arg2, long arg3, string arg4, string arg5, int arg6, object arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_238_Delegate(long arg0, string arg1, int arg2, string arg3, int arg4, object arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_239_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_240_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_241_Delegate(long arg0, long arg1, int arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate IntPtr Function_242_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_243_Delegate(long arg0, string arg1, byte[] arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_244_Delegate(long arg0, string arg1, string arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_245_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_246_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_247_Delegate(long arg0, byte[] arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_248_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_249_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_250_Delegate(long arg0, long arg1, string arg2, long arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_251_Delegate(long arg0, long arg1, byte[] arg2, string arg3, long arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_252_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_253_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_254_Delegate(long arg0, int arg1, byte[] arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_255_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_256_Delegate(long arg0, long arg1, string arg2, int arg3, long arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_257_Delegate(long arg0, long arg1, string arg2, string arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_258_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_259_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_260_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_261_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_262_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_263_Delegate(long arg0, long arg1, string arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_264_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_265_Delegate(long arg0, long arg1, string arg2, string arg3, string arg4, bool arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate long Function_266_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_267_Delegate(long arg0, long arg1, long arg2, byte[] arg3, int arg4, int arg5, bool arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_268_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_269_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_270_Delegate(long arg0, long arg1, long arg2, long arg3, long arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_271_Delegate(long arg0, long arg1, long arg2, int arg3, string arg4, bool arg5, bool arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_272_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_273_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_274_Delegate(long arg0, long arg1, long arg2, int arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_275_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_276_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_277_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_278_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_279_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_280_Delegate(long arg0, long arg1, string arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_281_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_282_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_283_Delegate(long arg0, long arg1, long arg2, int arg3, long arg4, bool arg5, long arg6, bool arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_284_Delegate(long arg0, long arg1, long arg2, int arg3, long arg4, bool arg5, long arg6, bool arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_285_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_286_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_287_Delegate(long arg0, long arg1, long arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_288_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_289_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_290_Delegate(long arg0, int arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_291_Delegate(long arg0, int arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_292_Delegate(long arg0, int arg1, string arg2, int arg3, string arg4, int arg5, string arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_293_Delegate(long arg0, bool arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_294_Delegate(long arg0, long arg1, int arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_295_Delegate(long arg0, string arg1, int arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_296_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_297_Delegate(long arg0, bool arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_298_Delegate(long arg0, long arg1, object arg2, int arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_299_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_300_Delegate(long arg0, long arg1, int arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_301_Delegate(long arg0, int arg1, long arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_302_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_303_Delegate(long arg0, int arg1, int arg2, long arg3, long arg4, string arg5, int arg6, string arg7, int arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_304_Delegate(long arg0, int arg1, int arg2, long arg3, long arg4, string arg5, int arg6, string arg7, int arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_305_Delegate(long arg0, int arg1, int arg2, long arg3, long arg4, long arg5, string arg6, string arg7, int arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_306_Delegate(long arg0, long arg1, long arg2, long arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_307_Delegate(long arg0, long arg1, long arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_308_Delegate(long arg0, long arg1, long arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_309_Delegate(long arg0, long arg1, long arg2, string arg3, long arg4, bool arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_310_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate long Function_311_Delegate(long arg0, long arg1, string arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_312_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_313_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_314_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_315_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_316_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_317_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_318_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_319_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_320_Delegate(string arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_321_Delegate(string arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_322_Delegate(long arg0, long arg1, object arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_323_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_324_Delegate(long arg0, long arg1, long arg2, string arg3, int arg4, int arg5, int arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_325_Delegate(int arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_326_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_327_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_328_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_329_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_330_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_331_Delegate(string arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_332_Delegate(long arg0, long arg1, long arg2, object arg3, int arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_333_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_334_Delegate(long arg0, long arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_335_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_336_Delegate(long arg0, long arg1, string arg2, string arg3, int arg4, int arg5, int arg6, int arg7, int arg8, long arg9, long arg10, int arg11, int arg12);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_337_Delegate(string arg0, int arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_338_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, string arg5, string arg6, string arg7, int arg8);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_339_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_340_Delegate(long arg0, string arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_341_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_342_Delegate(long arg0, long arg1, long arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_343_Delegate(long arg0, long arg1, long arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_344_Delegate(long arg0, long arg1, long arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_345_Delegate(long arg0, long arg1, long arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_346_Delegate(long arg0, long arg1, long arg2, long arg3, bool arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_347_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_348_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_349_Delegate(long arg0, long arg1, long arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_350_Delegate(long arg0, long arg1, long arg2, string arg3, int arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_351_Delegate(long arg0, long arg1, long arg2, object arg3, string arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_352_Delegate(long arg0, long arg1, long arg2, long arg3, object arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_353_Delegate(long arg0, long arg1, long arg2, long arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_354_Delegate(long arg0, long arg1, long arg2, long arg3, object arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_355_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, long arg5, long arg6, int arg7, long arg8, object arg9);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_356_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_357_Delegate(long arg0, long arg1, long arg2, object arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_358_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_359_Delegate(long arg0, long arg1, long arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_360_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_361_Delegate(long arg0, long arg1, bool arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_362_Delegate(long arg0, string arg1, string arg2, string arg3, int arg4, string arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_363_Delegate(long arg0, bool arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_364_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_365_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_366_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_367_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_368_Delegate(long arg0, long arg1, long arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_369_Delegate(long arg0, long arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_370_Delegate(long arg0, long arg1, double arg2, double arg3, bool arg4, int arg5);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_371_Delegate(long arg0, long arg1, double arg2, double arg3, double arg4);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_372_Delegate(long arg0, long arg1, int arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_373_Delegate(long arg0, int arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_374_Delegate(long arg0, int arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_375_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate int Function_376_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_377_Delegate(long arg0, long arg1, long arg2, string arg3, string arg4, string arg5, long arg6);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_378_Delegate(long arg0, long arg1, string arg2, string arg3, string arg4, string arg5, long arg6, int arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_379_Delegate(long arg0, long arg1, byte[] arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_380_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_381_Delegate(long arg0, string arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_382_Delegate(long arg0, string arg1, string arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_383_Delegate(long arg0, string arg1, int arg2, byte[] arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_384_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_385_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_386_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_387_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_388_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_389_Delegate(long arg0, int arg1, string arg2, int arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_390_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_391_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_392_Delegate(long arg0, long arg1, string arg2, bool arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_393_Delegate(long arg0, long arg1, string arg2, string arg3);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_394_Delegate(long arg0);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_395_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_396_Delegate(long arg0, string arg1);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_397_Delegate(long arg0, double arg1, double arg2);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_398_Delegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate string Function_399_Delegate(long arg0, long arg1, long arg2, long arg3, string arg4, int arg5, long arg6, int arg7);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)] 
+        public delegate bool Function_400_Delegate(long arg0, string arg1);
+
+        public static Function_1_Delegate Function_1_Action = new Function_1_Delegate(Function_1);
+        public static Function_2_Delegate Function_2_Action = new Function_2_Delegate(Function_2);
+        public static Function_3_Delegate Function_3_Action = new Function_3_Delegate(Function_3);
+        public static Function_4_Delegate Function_4_Action = new Function_4_Delegate(Function_4);
+        public static Function_5_Delegate Function_5_Action = new Function_5_Delegate(Function_5);
+        public static Function_6_Delegate Function_6_Action = new Function_6_Delegate(Function_6);
+        public static Function_7_Delegate Function_7_Action = new Function_7_Delegate(Function_7);
+        public static Function_8_Delegate Function_8_Action = new Function_8_Delegate(Function_8);
+        public static Function_9_Delegate Function_9_Action = new Function_9_Delegate(Function_9);
+        public static Function_10_Delegate Function_10_Action = new Function_10_Delegate(Function_10);
+        public static Function_11_Delegate Function_11_Action = new Function_11_Delegate(Function_11);
+        public static Function_12_Delegate Function_12_Action = new Function_12_Delegate(Function_12);
+        public static Function_13_Delegate Function_13_Action = new Function_13_Delegate(Function_13);
+        public static Function_14_Delegate Function_14_Action = new Function_14_Delegate(Function_14);
+        public static Function_15_Delegate Function_15_Action = new Function_15_Delegate(Function_15);
+        public static Function_16_Delegate Function_16_Action = new Function_16_Delegate(Function_16);
+        public static Function_17_Delegate Function_17_Action = new Function_17_Delegate(Function_17);
+        public static Function_18_Delegate Function_18_Action = new Function_18_Delegate(Function_18);
+        public static Function_19_Delegate Function_19_Action = new Function_19_Delegate(Function_19);
+        public static Function_20_Delegate Function_20_Action = new Function_20_Delegate(Function_20);
+        public static Function_21_Delegate Function_21_Action = new Function_21_Delegate(Function_21);
+        public static Function_22_Delegate Function_22_Action = new Function_22_Delegate(Function_22);
+        public static Function_23_Delegate Function_23_Action = new Function_23_Delegate(Function_23);
+        public static Function_24_Delegate Function_24_Action = new Function_24_Delegate(Function_24);
+        public static Function_25_Delegate Function_25_Action = new Function_25_Delegate(Function_25);
+        public static Function_26_Delegate Function_26_Action = new Function_26_Delegate(Function_26);
+        public static Function_27_Delegate Function_27_Action = new Function_27_Delegate(Function_27);
+        public static Function_28_Delegate Function_28_Action = new Function_28_Delegate(Function_28);
+        public static Function_29_Delegate Function_29_Action = new Function_29_Delegate(Function_29);
+        public static Function_30_Delegate Function_30_Action = new Function_30_Delegate(Function_30);
+        public static Function_31_Delegate Function_31_Action = new Function_31_Delegate(Function_31);
+        public static Function_32_Delegate Function_32_Action = new Function_32_Delegate(Function_32);
+        public static Function_33_Delegate Function_33_Action = new Function_33_Delegate(Function_33);
+        public static Function_34_Delegate Function_34_Action = new Function_34_Delegate(Function_34);
+        public static Function_35_Delegate Function_35_Action = new Function_35_Delegate(Function_35);
+        public static Function_36_Delegate Function_36_Action = new Function_36_Delegate(Function_36);
+        public static Function_37_Delegate Function_37_Action = new Function_37_Delegate(Function_37);
+        public static Function_38_Delegate Function_38_Action = new Function_38_Delegate(Function_38);
+        public static Function_39_Delegate Function_39_Action = new Function_39_Delegate(Function_39);
+        public static Function_40_Delegate Function_40_Action = new Function_40_Delegate(Function_40);
+        public static Function_41_Delegate Function_41_Action = new Function_41_Delegate(Function_41);
+        public static Function_42_Delegate Function_42_Action = new Function_42_Delegate(Function_42);
+        public static Function_43_Delegate Function_43_Action = new Function_43_Delegate(Function_43);
+        public static Function_44_Delegate Function_44_Action = new Function_44_Delegate(Function_44);
+        public static Function_45_Delegate Function_45_Action = new Function_45_Delegate(Function_45);
+        public static Function_46_Delegate Function_46_Action = new Function_46_Delegate(Function_46);
+        public static Function_47_Delegate Function_47_Action = new Function_47_Delegate(Function_47);
+        public static Function_48_Delegate Function_48_Action = new Function_48_Delegate(Function_48);
+        public static Function_49_Delegate Function_49_Action = new Function_49_Delegate(Function_49);
+        public static Function_50_Delegate Function_50_Action = new Function_50_Delegate(Function_50);
+        public static Function_51_Delegate Function_51_Action = new Function_51_Delegate(Function_51);
+        public static Function_52_Delegate Function_52_Action = new Function_52_Delegate(Function_52);
+        public static Function_53_Delegate Function_53_Action = new Function_53_Delegate(Function_53);
+        public static Function_54_Delegate Function_54_Action = new Function_54_Delegate(Function_54);
+        public static Function_55_Delegate Function_55_Action = new Function_55_Delegate(Function_55);
+        public static Function_56_Delegate Function_56_Action = new Function_56_Delegate(Function_56);
+        public static Function_57_Delegate Function_57_Action = new Function_57_Delegate(Function_57);
+        public static Function_58_Delegate Function_58_Action = new Function_58_Delegate(Function_58);
+        public static Function_59_Delegate Function_59_Action = new Function_59_Delegate(Function_59);
+        public static Function_60_Delegate Function_60_Action = new Function_60_Delegate(Function_60);
+        public static Function_61_Delegate Function_61_Action = new Function_61_Delegate(Function_61);
+        public static Function_62_Delegate Function_62_Action = new Function_62_Delegate(Function_62);
+        public static Function_63_Delegate Function_63_Action = new Function_63_Delegate(Function_63);
+        public static Function_64_Delegate Function_64_Action = new Function_64_Delegate(Function_64);
+        public static Function_65_Delegate Function_65_Action = new Function_65_Delegate(Function_65);
+        public static Function_66_Delegate Function_66_Action = new Function_66_Delegate(Function_66);
+        public static Function_67_Delegate Function_67_Action = new Function_67_Delegate(Function_67);
+        public static Function_68_Delegate Function_68_Action = new Function_68_Delegate(Function_68);
+        public static Function_69_Delegate Function_69_Action = new Function_69_Delegate(Function_69);
+        public static Function_70_Delegate Function_70_Action = new Function_70_Delegate(Function_70);
+        public static Function_71_Delegate Function_71_Action = new Function_71_Delegate(Function_71);
+        public static Function_72_Delegate Function_72_Action = new Function_72_Delegate(Function_72);
+        public static Function_73_Delegate Function_73_Action = new Function_73_Delegate(Function_73);
+        public static Function_74_Delegate Function_74_Action = new Function_74_Delegate(Function_74);
+        public static Function_75_Delegate Function_75_Action = new Function_75_Delegate(Function_75);
+        public static Function_76_Delegate Function_76_Action = new Function_76_Delegate(Function_76);
+        public static Function_77_Delegate Function_77_Action = new Function_77_Delegate(Function_77);
+        public static Function_78_Delegate Function_78_Action = new Function_78_Delegate(Function_78);
+        public static Function_79_Delegate Function_79_Action = new Function_79_Delegate(Function_79);
+        public static Function_80_Delegate Function_80_Action = new Function_80_Delegate(Function_80);
+        public static Function_81_Delegate Function_81_Action = new Function_81_Delegate(Function_81);
+        public static Function_82_Delegate Function_82_Action = new Function_82_Delegate(Function_82);
+        public static Function_83_Delegate Function_83_Action = new Function_83_Delegate(Function_83);
+        public static Function_84_Delegate Function_84_Action = new Function_84_Delegate(Function_84);
+        public static Function_85_Delegate Function_85_Action = new Function_85_Delegate(Function_85);
+        public static Function_86_Delegate Function_86_Action = new Function_86_Delegate(Function_86);
+        public static Function_87_Delegate Function_87_Action = new Function_87_Delegate(Function_87);
+        public static Function_88_Delegate Function_88_Action = new Function_88_Delegate(Function_88);
+        public static Function_89_Delegate Function_89_Action = new Function_89_Delegate(Function_89);
+        public static Function_90_Delegate Function_90_Action = new Function_90_Delegate(Function_90);
+        public static Function_91_Delegate Function_91_Action = new Function_91_Delegate(Function_91);
+        public static Function_92_Delegate Function_92_Action = new Function_92_Delegate(Function_92);
+        public static Function_93_Delegate Function_93_Action = new Function_93_Delegate(Function_93);
+        public static Function_94_Delegate Function_94_Action = new Function_94_Delegate(Function_94);
+        public static Function_95_Delegate Function_95_Action = new Function_95_Delegate(Function_95);
+        public static Function_96_Delegate Function_96_Action = new Function_96_Delegate(Function_96);
+        public static Function_97_Delegate Function_97_Action = new Function_97_Delegate(Function_97);
+        public static Function_98_Delegate Function_98_Action = new Function_98_Delegate(Function_98);
+        public static Function_99_Delegate Function_99_Action = new Function_99_Delegate(Function_99);
+        public static Function_100_Delegate Function_100_Action = new Function_100_Delegate(Function_100);
+        public static Function_101_Delegate Function_101_Action = new Function_101_Delegate(Function_101);
+        public static Function_102_Delegate Function_102_Action = new Function_102_Delegate(Function_102);
+        public static Function_103_Delegate Function_103_Action = new Function_103_Delegate(Function_103);
+        public static Function_104_Delegate Function_104_Action = new Function_104_Delegate(Function_104);
+        public static Function_105_Delegate Function_105_Action = new Function_105_Delegate(Function_105);
+        public static Function_106_Delegate Function_106_Action = new Function_106_Delegate(Function_106);
+        public static Function_107_Delegate Function_107_Action = new Function_107_Delegate(Function_107);
+        public static Function_108_Delegate Function_108_Action = new Function_108_Delegate(Function_108);
+        public static Function_109_Delegate Function_109_Action = new Function_109_Delegate(Function_109);
+        public static Function_110_Delegate Function_110_Action = new Function_110_Delegate(Function_110);
+        public static Function_111_Delegate Function_111_Action = new Function_111_Delegate(Function_111);
+        public static Function_112_Delegate Function_112_Action = new Function_112_Delegate(Function_112);
+        public static Function_113_Delegate Function_113_Action = new Function_113_Delegate(Function_113);
+        public static Function_114_Delegate Function_114_Action = new Function_114_Delegate(Function_114);
+        public static Function_115_Delegate Function_115_Action = new Function_115_Delegate(Function_115);
+        public static Function_116_Delegate Function_116_Action = new Function_116_Delegate(Function_116);
+        public static Function_117_Delegate Function_117_Action = new Function_117_Delegate(Function_117);
+        public static Function_118_Delegate Function_118_Action = new Function_118_Delegate(Function_118);
+        public static Function_119_Delegate Function_119_Action = new Function_119_Delegate(Function_119);
+        public static Function_120_Delegate Function_120_Action = new Function_120_Delegate(Function_120);
+        public static Function_121_Delegate Function_121_Action = new Function_121_Delegate(Function_121);
+        public static Function_122_Delegate Function_122_Action = new Function_122_Delegate(Function_122);
+        public static Function_123_Delegate Function_123_Action = new Function_123_Delegate(Function_123);
+        public static Function_124_Delegate Function_124_Action = new Function_124_Delegate(Function_124);
+        public static Function_125_Delegate Function_125_Action = new Function_125_Delegate(Function_125);
+        public static Function_126_Delegate Function_126_Action = new Function_126_Delegate(Function_126);
+        public static Function_127_Delegate Function_127_Action = new Function_127_Delegate(Function_127);
+        public static Function_128_Delegate Function_128_Action = new Function_128_Delegate(Function_128);
+        public static Function_129_Delegate Function_129_Action = new Function_129_Delegate(Function_129);
+        public static Function_130_Delegate Function_130_Action = new Function_130_Delegate(Function_130);
+        public static Function_131_Delegate Function_131_Action = new Function_131_Delegate(Function_131);
+        public static Function_132_Delegate Function_132_Action = new Function_132_Delegate(Function_132);
+        public static Function_133_Delegate Function_133_Action = new Function_133_Delegate(Function_133);
+        public static Function_134_Delegate Function_134_Action = new Function_134_Delegate(Function_134);
+        public static Function_135_Delegate Function_135_Action = new Function_135_Delegate(Function_135);
+        public static Function_136_Delegate Function_136_Action = new Function_136_Delegate(Function_136);
+        public static Function_137_Delegate Function_137_Action = new Function_137_Delegate(Function_137);
+        public static Function_138_Delegate Function_138_Action = new Function_138_Delegate(Function_138);
+        public static Function_139_Delegate Function_139_Action = new Function_139_Delegate(Function_139);
+        public static Function_140_Delegate Function_140_Action = new Function_140_Delegate(Function_140);
+        public static Function_141_Delegate Function_141_Action = new Function_141_Delegate(Function_141);
+        public static Function_142_Delegate Function_142_Action = new Function_142_Delegate(Function_142);
+        public static Function_143_Delegate Function_143_Action = new Function_143_Delegate(Function_143);
+        public static Function_144_Delegate Function_144_Action = new Function_144_Delegate(Function_144);
+        public static Function_145_Delegate Function_145_Action = new Function_145_Delegate(Function_145);
+        public static Function_146_Delegate Function_146_Action = new Function_146_Delegate(Function_146);
+        public static Function_147_Delegate Function_147_Action = new Function_147_Delegate(Function_147);
+        public static Function_148_Delegate Function_148_Action = new Function_148_Delegate(Function_148);
+        public static Function_149_Delegate Function_149_Action = new Function_149_Delegate(Function_149);
+        public static Function_150_Delegate Function_150_Action = new Function_150_Delegate(Function_150);
+        public static Function_151_Delegate Function_151_Action = new Function_151_Delegate(Function_151);
+        public static Function_152_Delegate Function_152_Action = new Function_152_Delegate(Function_152);
+        public static Function_153_Delegate Function_153_Action = new Function_153_Delegate(Function_153);
+        public static Function_154_Delegate Function_154_Action = new Function_154_Delegate(Function_154);
+        public static Function_155_Delegate Function_155_Action = new Function_155_Delegate(Function_155);
+        public static Function_156_Delegate Function_156_Action = new Function_156_Delegate(Function_156);
+        public static Function_157_Delegate Function_157_Action = new Function_157_Delegate(Function_157);
+        public static Function_158_Delegate Function_158_Action = new Function_158_Delegate(Function_158);
+        public static Function_159_Delegate Function_159_Action = new Function_159_Delegate(Function_159);
+        public static Function_160_Delegate Function_160_Action = new Function_160_Delegate(Function_160);
+        public static Function_161_Delegate Function_161_Action = new Function_161_Delegate(Function_161);
+        public static Function_162_Delegate Function_162_Action = new Function_162_Delegate(Function_162);
+        public static Function_163_Delegate Function_163_Action = new Function_163_Delegate(Function_163);
+        public static Function_164_Delegate Function_164_Action = new Function_164_Delegate(Function_164);
+        public static Function_165_Delegate Function_165_Action = new Function_165_Delegate(Function_165);
+        public static Function_166_Delegate Function_166_Action = new Function_166_Delegate(Function_166);
+        public static Function_167_Delegate Function_167_Action = new Function_167_Delegate(Function_167);
+        public static Function_168_Delegate Function_168_Action = new Function_168_Delegate(Function_168);
+        public static Function_169_Delegate Function_169_Action = new Function_169_Delegate(Function_169);
+        public static Function_170_Delegate Function_170_Action = new Function_170_Delegate(Function_170);
+        public static Function_171_Delegate Function_171_Action = new Function_171_Delegate(Function_171);
+        public static Function_172_Delegate Function_172_Action = new Function_172_Delegate(Function_172);
+        public static Function_173_Delegate Function_173_Action = new Function_173_Delegate(Function_173);
+        public static Function_174_Delegate Function_174_Action = new Function_174_Delegate(Function_174);
+        public static Function_175_Delegate Function_175_Action = new Function_175_Delegate(Function_175);
+        public static Function_176_Delegate Function_176_Action = new Function_176_Delegate(Function_176);
+        public static Function_177_Delegate Function_177_Action = new Function_177_Delegate(Function_177);
+        public static Function_178_Delegate Function_178_Action = new Function_178_Delegate(Function_178);
+        public static Function_179_Delegate Function_179_Action = new Function_179_Delegate(Function_179);
+        public static Function_180_Delegate Function_180_Action = new Function_180_Delegate(Function_180);
+        public static Function_181_Delegate Function_181_Action = new Function_181_Delegate(Function_181);
+        public static Function_182_Delegate Function_182_Action = new Function_182_Delegate(Function_182);
+        public static Function_183_Delegate Function_183_Action = new Function_183_Delegate(Function_183);
+        public static Function_184_Delegate Function_184_Action = new Function_184_Delegate(Function_184);
+        public static Function_185_Delegate Function_185_Action = new Function_185_Delegate(Function_185);
+        public static Function_186_Delegate Function_186_Action = new Function_186_Delegate(Function_186);
+        public static Function_187_Delegate Function_187_Action = new Function_187_Delegate(Function_187);
+        public static Function_188_Delegate Function_188_Action = new Function_188_Delegate(Function_188);
+        public static Function_189_Delegate Function_189_Action = new Function_189_Delegate(Function_189);
+        public static Function_190_Delegate Function_190_Action = new Function_190_Delegate(Function_190);
+        public static Function_191_Delegate Function_191_Action = new Function_191_Delegate(Function_191);
+        public static Function_192_Delegate Function_192_Action = new Function_192_Delegate(Function_192);
+        public static Function_193_Delegate Function_193_Action = new Function_193_Delegate(Function_193);
+        public static Function_194_Delegate Function_194_Action = new Function_194_Delegate(Function_194);
+        public static Function_195_Delegate Function_195_Action = new Function_195_Delegate(Function_195);
+        public static Function_196_Delegate Function_196_Action = new Function_196_Delegate(Function_196);
+        public static Function_197_Delegate Function_197_Action = new Function_197_Delegate(Function_197);
+        public static Function_198_Delegate Function_198_Action = new Function_198_Delegate(Function_198);
+        public static Function_199_Delegate Function_199_Action = new Function_199_Delegate(Function_199);
+        public static Function_200_Delegate Function_200_Action = new Function_200_Delegate(Function_200);
+        public static Function_201_Delegate Function_201_Action = new Function_201_Delegate(Function_201);
+        public static Function_202_Delegate Function_202_Action = new Function_202_Delegate(Function_202);
+        public static Function_203_Delegate Function_203_Action = new Function_203_Delegate(Function_203);
+        public static Function_204_Delegate Function_204_Action = new Function_204_Delegate(Function_204);
+        public static Function_205_Delegate Function_205_Action = new Function_205_Delegate(Function_205);
+        public static Function_206_Delegate Function_206_Action = new Function_206_Delegate(Function_206);
+        public static Function_207_Delegate Function_207_Action = new Function_207_Delegate(Function_207);
+        public static Function_208_Delegate Function_208_Action = new Function_208_Delegate(Function_208);
+        public static Function_209_Delegate Function_209_Action = new Function_209_Delegate(Function_209);
+        public static Function_210_Delegate Function_210_Action = new Function_210_Delegate(Function_210);
+        public static Function_211_Delegate Function_211_Action = new Function_211_Delegate(Function_211);
+        public static Function_212_Delegate Function_212_Action = new Function_212_Delegate(Function_212);
+        public static Function_213_Delegate Function_213_Action = new Function_213_Delegate(Function_213);
+        public static Function_214_Delegate Function_214_Action = new Function_214_Delegate(Function_214);
+        public static Function_215_Delegate Function_215_Action = new Function_215_Delegate(Function_215);
+        public static Function_216_Delegate Function_216_Action = new Function_216_Delegate(Function_216);
+        public static Function_217_Delegate Function_217_Action = new Function_217_Delegate(Function_217);
+        public static Function_218_Delegate Function_218_Action = new Function_218_Delegate(Function_218);
+        public static Function_219_Delegate Function_219_Action = new Function_219_Delegate(Function_219);
+        public static Function_220_Delegate Function_220_Action = new Function_220_Delegate(Function_220);
+        public static Function_221_Delegate Function_221_Action = new Function_221_Delegate(Function_221);
+        public static Function_222_Delegate Function_222_Action = new Function_222_Delegate(Function_222);
+        public static Function_223_Delegate Function_223_Action = new Function_223_Delegate(Function_223);
+        public static Function_224_Delegate Function_224_Action = new Function_224_Delegate(Function_224);
+        public static Function_225_Delegate Function_225_Action = new Function_225_Delegate(Function_225);
+        public static Function_226_Delegate Function_226_Action = new Function_226_Delegate(Function_226);
+        public static Function_227_Delegate Function_227_Action = new Function_227_Delegate(Function_227);
+        public static Function_228_Delegate Function_228_Action = new Function_228_Delegate(Function_228);
+        public static Function_229_Delegate Function_229_Action = new Function_229_Delegate(Function_229);
+        public static Function_230_Delegate Function_230_Action = new Function_230_Delegate(Function_230);
+        public static Function_231_Delegate Function_231_Action = new Function_231_Delegate(Function_231);
+        public static Function_232_Delegate Function_232_Action = new Function_232_Delegate(Function_232);
+        public static Function_233_Delegate Function_233_Action = new Function_233_Delegate(Function_233);
+        public static Function_234_Delegate Function_234_Action = new Function_234_Delegate(Function_234);
+        public static Function_235_Delegate Function_235_Action = new Function_235_Delegate(Function_235);
+        public static Function_236_Delegate Function_236_Action = new Function_236_Delegate(Function_236);
+        public static Function_237_Delegate Function_237_Action = new Function_237_Delegate(Function_237);
+        public static Function_238_Delegate Function_238_Action = new Function_238_Delegate(Function_238);
+        public static Function_239_Delegate Function_239_Action = new Function_239_Delegate(Function_239);
+        public static Function_240_Delegate Function_240_Action = new Function_240_Delegate(Function_240);
+        public static Function_241_Delegate Function_241_Action = new Function_241_Delegate(Function_241);
+        public static Function_242_Delegate Function_242_Action = new Function_242_Delegate(Function_242);
+        public static Function_243_Delegate Function_243_Action = new Function_243_Delegate(Function_243);
+        public static Function_244_Delegate Function_244_Action = new Function_244_Delegate(Function_244);
+        public static Function_245_Delegate Function_245_Action = new Function_245_Delegate(Function_245);
+        public static Function_246_Delegate Function_246_Action = new Function_246_Delegate(Function_246);
+        public static Function_247_Delegate Function_247_Action = new Function_247_Delegate(Function_247);
+        public static Function_248_Delegate Function_248_Action = new Function_248_Delegate(Function_248);
+        public static Function_249_Delegate Function_249_Action = new Function_249_Delegate(Function_249);
+        public static Function_250_Delegate Function_250_Action = new Function_250_Delegate(Function_250);
+        public static Function_251_Delegate Function_251_Action = new Function_251_Delegate(Function_251);
+        public static Function_252_Delegate Function_252_Action = new Function_252_Delegate(Function_252);
+        public static Function_253_Delegate Function_253_Action = new Function_253_Delegate(Function_253);
+        public static Function_254_Delegate Function_254_Action = new Function_254_Delegate(Function_254);
+        public static Function_255_Delegate Function_255_Action = new Function_255_Delegate(Function_255);
+        public static Function_256_Delegate Function_256_Action = new Function_256_Delegate(Function_256);
+        public static Function_257_Delegate Function_257_Action = new Function_257_Delegate(Function_257);
+        public static Function_258_Delegate Function_258_Action = new Function_258_Delegate(Function_258);
+        public static Function_259_Delegate Function_259_Action = new Function_259_Delegate(Function_259);
+        public static Function_260_Delegate Function_260_Action = new Function_260_Delegate(Function_260);
+        public static Function_261_Delegate Function_261_Action = new Function_261_Delegate(Function_261);
+        public static Function_262_Delegate Function_262_Action = new Function_262_Delegate(Function_262);
+        public static Function_263_Delegate Function_263_Action = new Function_263_Delegate(Function_263);
+        public static Function_264_Delegate Function_264_Action = new Function_264_Delegate(Function_264);
+        public static Function_265_Delegate Function_265_Action = new Function_265_Delegate(Function_265);
+        public static Function_266_Delegate Function_266_Action = new Function_266_Delegate(Function_266);
+        public static Function_267_Delegate Function_267_Action = new Function_267_Delegate(Function_267);
+        public static Function_268_Delegate Function_268_Action = new Function_268_Delegate(Function_268);
+        public static Function_269_Delegate Function_269_Action = new Function_269_Delegate(Function_269);
+        public static Function_270_Delegate Function_270_Action = new Function_270_Delegate(Function_270);
+        public static Function_271_Delegate Function_271_Action = new Function_271_Delegate(Function_271);
+        public static Function_272_Delegate Function_272_Action = new Function_272_Delegate(Function_272);
+        public static Function_273_Delegate Function_273_Action = new Function_273_Delegate(Function_273);
+        public static Function_274_Delegate Function_274_Action = new Function_274_Delegate(Function_274);
+        public static Function_275_Delegate Function_275_Action = new Function_275_Delegate(Function_275);
+        public static Function_276_Delegate Function_276_Action = new Function_276_Delegate(Function_276);
+        public static Function_277_Delegate Function_277_Action = new Function_277_Delegate(Function_277);
+        public static Function_278_Delegate Function_278_Action = new Function_278_Delegate(Function_278);
+        public static Function_279_Delegate Function_279_Action = new Function_279_Delegate(Function_279);
+        public static Function_280_Delegate Function_280_Action = new Function_280_Delegate(Function_280);
+        public static Function_281_Delegate Function_281_Action = new Function_281_Delegate(Function_281);
+        public static Function_282_Delegate Function_282_Action = new Function_282_Delegate(Function_282);
+        public static Function_283_Delegate Function_283_Action = new Function_283_Delegate(Function_283);
+        public static Function_284_Delegate Function_284_Action = new Function_284_Delegate(Function_284);
+        public static Function_285_Delegate Function_285_Action = new Function_285_Delegate(Function_285);
+        public static Function_286_Delegate Function_286_Action = new Function_286_Delegate(Function_286);
+        public static Function_287_Delegate Function_287_Action = new Function_287_Delegate(Function_287);
+        public static Function_288_Delegate Function_288_Action = new Function_288_Delegate(Function_288);
+        public static Function_289_Delegate Function_289_Action = new Function_289_Delegate(Function_289);
+        public static Function_290_Delegate Function_290_Action = new Function_290_Delegate(Function_290);
+        public static Function_291_Delegate Function_291_Action = new Function_291_Delegate(Function_291);
+        public static Function_292_Delegate Function_292_Action = new Function_292_Delegate(Function_292);
+        public static Function_293_Delegate Function_293_Action = new Function_293_Delegate(Function_293);
+        public static Function_294_Delegate Function_294_Action = new Function_294_Delegate(Function_294);
+        public static Function_295_Delegate Function_295_Action = new Function_295_Delegate(Function_295);
+        public static Function_296_Delegate Function_296_Action = new Function_296_Delegate(Function_296);
+        public static Function_297_Delegate Function_297_Action = new Function_297_Delegate(Function_297);
+        public static Function_298_Delegate Function_298_Action = new Function_298_Delegate(Function_298);
+        public static Function_299_Delegate Function_299_Action = new Function_299_Delegate(Function_299);
+        public static Function_300_Delegate Function_300_Action = new Function_300_Delegate(Function_300);
+        public static Function_301_Delegate Function_301_Action = new Function_301_Delegate(Function_301);
+        public static Function_302_Delegate Function_302_Action = new Function_302_Delegate(Function_302);
+        public static Function_303_Delegate Function_303_Action = new Function_303_Delegate(Function_303);
+        public static Function_304_Delegate Function_304_Action = new Function_304_Delegate(Function_304);
+        public static Function_305_Delegate Function_305_Action = new Function_305_Delegate(Function_305);
+        public static Function_306_Delegate Function_306_Action = new Function_306_Delegate(Function_306);
+        public static Function_307_Delegate Function_307_Action = new Function_307_Delegate(Function_307);
+        public static Function_308_Delegate Function_308_Action = new Function_308_Delegate(Function_308);
+        public static Function_309_Delegate Function_309_Action = new Function_309_Delegate(Function_309);
+        public static Function_310_Delegate Function_310_Action = new Function_310_Delegate(Function_310);
+        public static Function_311_Delegate Function_311_Action = new Function_311_Delegate(Function_311);
+        public static Function_312_Delegate Function_312_Action = new Function_312_Delegate(Function_312);
+        public static Function_313_Delegate Function_313_Action = new Function_313_Delegate(Function_313);
+        public static Function_314_Delegate Function_314_Action = new Function_314_Delegate(Function_314);
+        public static Function_315_Delegate Function_315_Action = new Function_315_Delegate(Function_315);
+        public static Function_316_Delegate Function_316_Action = new Function_316_Delegate(Function_316);
+        public static Function_317_Delegate Function_317_Action = new Function_317_Delegate(Function_317);
+        public static Function_318_Delegate Function_318_Action = new Function_318_Delegate(Function_318);
+        public static Function_319_Delegate Function_319_Action = new Function_319_Delegate(Function_319);
+        public static Function_320_Delegate Function_320_Action = new Function_320_Delegate(Function_320);
+        public static Function_321_Delegate Function_321_Action = new Function_321_Delegate(Function_321);
+        public static Function_322_Delegate Function_322_Action = new Function_322_Delegate(Function_322);
+        public static Function_323_Delegate Function_323_Action = new Function_323_Delegate(Function_323);
+        public static Function_324_Delegate Function_324_Action = new Function_324_Delegate(Function_324);
+        public static Function_325_Delegate Function_325_Action = new Function_325_Delegate(Function_325);
+        public static Function_326_Delegate Function_326_Action = new Function_326_Delegate(Function_326);
+        public static Function_327_Delegate Function_327_Action = new Function_327_Delegate(Function_327);
+        public static Function_328_Delegate Function_328_Action = new Function_328_Delegate(Function_328);
+        public static Function_329_Delegate Function_329_Action = new Function_329_Delegate(Function_329);
+        public static Function_330_Delegate Function_330_Action = new Function_330_Delegate(Function_330);
+        public static Function_331_Delegate Function_331_Action = new Function_331_Delegate(Function_331);
+        public static Function_332_Delegate Function_332_Action = new Function_332_Delegate(Function_332);
+        public static Function_333_Delegate Function_333_Action = new Function_333_Delegate(Function_333);
+        public static Function_334_Delegate Function_334_Action = new Function_334_Delegate(Function_334);
+        public static Function_335_Delegate Function_335_Action = new Function_335_Delegate(Function_335);
+        public static Function_336_Delegate Function_336_Action = new Function_336_Delegate(Function_336);
+        public static Function_337_Delegate Function_337_Action = new Function_337_Delegate(Function_337);
+        public static Function_338_Delegate Function_338_Action = new Function_338_Delegate(Function_338);
+        public static Function_339_Delegate Function_339_Action = new Function_339_Delegate(Function_339);
+        public static Function_340_Delegate Function_340_Action = new Function_340_Delegate(Function_340);
+        public static Function_341_Delegate Function_341_Action = new Function_341_Delegate(Function_341);
+        public static Function_342_Delegate Function_342_Action = new Function_342_Delegate(Function_342);
+        public static Function_343_Delegate Function_343_Action = new Function_343_Delegate(Function_343);
+        public static Function_344_Delegate Function_344_Action = new Function_344_Delegate(Function_344);
+        public static Function_345_Delegate Function_345_Action = new Function_345_Delegate(Function_345);
+        public static Function_346_Delegate Function_346_Action = new Function_346_Delegate(Function_346);
+        public static Function_347_Delegate Function_347_Action = new Function_347_Delegate(Function_347);
+        public static Function_348_Delegate Function_348_Action = new Function_348_Delegate(Function_348);
+        public static Function_349_Delegate Function_349_Action = new Function_349_Delegate(Function_349);
+        public static Function_350_Delegate Function_350_Action = new Function_350_Delegate(Function_350);
+        public static Function_351_Delegate Function_351_Action = new Function_351_Delegate(Function_351);
+        public static Function_352_Delegate Function_352_Action = new Function_352_Delegate(Function_352);
+        public static Function_353_Delegate Function_353_Action = new Function_353_Delegate(Function_353);
+        public static Function_354_Delegate Function_354_Action = new Function_354_Delegate(Function_354);
+        public static Function_355_Delegate Function_355_Action = new Function_355_Delegate(Function_355);
+        public static Function_356_Delegate Function_356_Action = new Function_356_Delegate(Function_356);
+        public static Function_357_Delegate Function_357_Action = new Function_357_Delegate(Function_357);
+        public static Function_358_Delegate Function_358_Action = new Function_358_Delegate(Function_358);
+        public static Function_359_Delegate Function_359_Action = new Function_359_Delegate(Function_359);
+        public static Function_360_Delegate Function_360_Action = new Function_360_Delegate(Function_360);
+        public static Function_361_Delegate Function_361_Action = new Function_361_Delegate(Function_361);
+        public static Function_362_Delegate Function_362_Action = new Function_362_Delegate(Function_362);
+        public static Function_363_Delegate Function_363_Action = new Function_363_Delegate(Function_363);
+        public static Function_364_Delegate Function_364_Action = new Function_364_Delegate(Function_364);
+        public static Function_365_Delegate Function_365_Action = new Function_365_Delegate(Function_365);
+        public static Function_366_Delegate Function_366_Action = new Function_366_Delegate(Function_366);
+        public static Function_367_Delegate Function_367_Action = new Function_367_Delegate(Function_367);
+        public static Function_368_Delegate Function_368_Action = new Function_368_Delegate(Function_368);
+        public static Function_369_Delegate Function_369_Action = new Function_369_Delegate(Function_369);
+        public static Function_370_Delegate Function_370_Action = new Function_370_Delegate(Function_370);
+        public static Function_371_Delegate Function_371_Action = new Function_371_Delegate(Function_371);
+        public static Function_372_Delegate Function_372_Action = new Function_372_Delegate(Function_372);
+        public static Function_373_Delegate Function_373_Action = new Function_373_Delegate(Function_373);
+        public static Function_374_Delegate Function_374_Action = new Function_374_Delegate(Function_374);
+        public static Function_375_Delegate Function_375_Action = new Function_375_Delegate(Function_375);
+        public static Function_376_Delegate Function_376_Action = new Function_376_Delegate(Function_376);
+        public static Function_377_Delegate Function_377_Action = new Function_377_Delegate(Function_377);
+        public static Function_378_Delegate Function_378_Action = new Function_378_Delegate(Function_378);
+        public static Function_379_Delegate Function_379_Action = new Function_379_Delegate(Function_379);
+        public static Function_380_Delegate Function_380_Action = new Function_380_Delegate(Function_380);
+        public static Function_381_Delegate Function_381_Action = new Function_381_Delegate(Function_381);
+        public static Function_382_Delegate Function_382_Action = new Function_382_Delegate(Function_382);
+        public static Function_383_Delegate Function_383_Action = new Function_383_Delegate(Function_383);
+        public static Function_384_Delegate Function_384_Action = new Function_384_Delegate(Function_384);
+        public static Function_385_Delegate Function_385_Action = new Function_385_Delegate(Function_385);
+        public static Function_386_Delegate Function_386_Action = new Function_386_Delegate(Function_386);
+        public static Function_387_Delegate Function_387_Action = new Function_387_Delegate(Function_387);
+        public static Function_388_Delegate Function_388_Action = new Function_388_Delegate(Function_388);
+        public static Function_389_Delegate Function_389_Action = new Function_389_Delegate(Function_389);
+        public static Function_390_Delegate Function_390_Action = new Function_390_Delegate(Function_390);
+        public static Function_391_Delegate Function_391_Action = new Function_391_Delegate(Function_391);
+        public static Function_392_Delegate Function_392_Action = new Function_392_Delegate(Function_392);
+        public static Function_393_Delegate Function_393_Action = new Function_393_Delegate(Function_393);
+        public static Function_394_Delegate Function_394_Action = new Function_394_Delegate(Function_394);
+        public static Function_395_Delegate Function_395_Action = new Function_395_Delegate(Function_395);
+        public static Function_396_Delegate Function_396_Action = new Function_396_Delegate(Function_396);
+        public static Function_397_Delegate Function_397_Action = new Function_397_Delegate(Function_397);
+        public static Function_398_Delegate Function_398_Action = new Function_398_Delegate(Function_398);
+        public static Function_399_Delegate Function_399_Action = new Function_399_Delegate(Function_399);
+        public static Function_400_Delegate Function_400_Action = new Function_400_Delegate(Function_400);
+
+        #endregion
 
         /// <summary>
         /// _初始化
@@ -379,14 +1585,14 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         /// <param name="arg0">音频文件路径</param>
         /// </summary>
         [ProxyAPIName("silk解码")]
-        public static byte[] Function_21(string arg0)
+        public static IntPtr Function_21(string arg0)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.Debug("小栗子API", $"arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API silk解码");
             }
-            return [];
+            return IntPtr.Zero;
         }
 
         /// <summary>
@@ -394,14 +1600,14 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         /// <param name="arg0">音频文件路径</param>
         /// </summary>
         [ProxyAPIName("silk编码")]
-        public static byte[] Function_22(string arg0)
+        public static IntPtr Function_22(string arg0)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.Debug("小栗子API", $"arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API silk编码");
             }
-            return [];
+            return IntPtr.Zero;
         }
 
         /// <summary>
@@ -409,14 +1615,14 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         /// <param name="arg0">音频文件路径</param>
         /// </summary>
         [ProxyAPIName("amr编码")]
-        public static byte[] Function_23(string arg0)
+        public static IntPtr Function_23(string arg0)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.Debug("小栗子API", $"arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API amr编码");
             }
-            return [];
+            return IntPtr.Zero;
         }
 
         /// <summary>
@@ -4273,13 +5479,13 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         /// 创建小栗子文本代码解析类对象
         /// </summary>
         [ProxyAPIName("创建小栗子文本代码解析类对象")]
-        public static object Function_242()
+        public static IntPtr Function_242()
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建小栗子文本代码解析类对象");
             }
-            return null;
+            return IntPtr.Zero;
         }
 
         /// <summary>

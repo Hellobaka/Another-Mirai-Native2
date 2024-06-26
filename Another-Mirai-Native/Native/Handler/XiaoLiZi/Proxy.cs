@@ -178,7 +178,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             try
             {
                 p = Marshal.AllocHGlobal(Marshal.SizeOf(e));
-                Marshal.StructureToPtr(e, p, true);
+                Marshal.StructureToPtr(e, p, false);
 
                 int? ret = (int?)(action?.DynamicInvoke(p));
                 if (ret.HasValue)

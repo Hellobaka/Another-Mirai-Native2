@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Other.XiaoLiZi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
@@ -35,25 +36,25 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         public delegate string Type_GetAppInfo(string entryInfo, string authcode);
 
-        public Type_GetAppInfo? GetAppInfo { get; set; }
+        public Delegate? GetAppInfo { get; set; }
 
-        public Type_ReceivePrivateMsg? ReceivePrivateMsg { get; set; }
+        public Delegate? ReceivePrivateMsg { get; set; }
 
-        public Type_ReceiveGroupMsg? ReceiveGroupMsg { get; set; }
+        public Delegate? ReceiveGroupMsg { get; set; }
 
-        public Type_AppEnabled? AppEnabled { get; set; }
+        public Delegate? AppEnabled { get; set; }
 
-        public Type_ReceiveEvent? ReceiveEvent { get; set; }
+        public Delegate? ReceiveEvent { get; set; }
 
-        public Type_AppMenu? AppMenu { get; set; }
+        public Delegate? AppMenu { get; set; }
 
-        public Type_AppExit? AppExit { get; set; }
+        public Delegate? AppExit { get; set; }
 
-        public Type_AppDisabled? AppDisabled { get; set; }
+        public Delegate? AppDisabled { get; set; }
 
-        public Type_SMSVerification? SMSVerification { get; set; }
+        public Delegate? SMSVerification { get; set; }
 
-        public Type_SliderRecognition? SliderRecognition { get; set; }
+        public Delegate? SliderRecognition { get; set; }
         #endregion
 
         private AppInfo_XiaoLiZi? AppInfo_XiaoLiZi { get; set; }
@@ -145,8 +146,12 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 return false;
             }
 
-            string nativeInfo = GetAppInfo(BuildSelfEntryInfo(), AppConfig.Instance.Core_AuthCode.ToString());
-
+            string? nativeInfo = (string?)GetAppInfo?.DynamicInvoke(BuildSelfEntryInfo(), AppConfig.Instance.Core_AuthCode.ToString());
+            if (string.IsNullOrEmpty(nativeInfo))
+            {
+                LogHelper.Error("读取插件信息", $"无法从插件返回解析出插件信息，{Path.GetFileName(PluginPath)}可能并非 小栗子 插件");
+                return false;
+            }
             string path = Path.ChangeExtension(PluginPath, ".json");
             if (File.Exists(path))
             {
@@ -182,14 +187,24 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         private static string BuildSelfEntryInfo()
         {
             JObject json = [];
-            foreach(var item in typeof(API).GetMethods())
+            foreach(var item in typeof(API).GetMethods().OrderBy(x=>x.Name))
             {
                 string attribute = API.GetProxyName(item);
                 if (string.IsNullOrEmpty(attribute))
                 {
                     continue;
                 }
-                json.Add(new JProperty(attribute, Marshal.GetFunctionPointerForDelegate(item).ToInt64()));
+                FieldInfo fieldInfo = typeof(API).GetField($"{item.Name}_Action", BindingFlags.Public | BindingFlags.Static);
+                if (fieldInfo == null)
+                {
+                    continue;
+                }
+                Delegate d = (Delegate)fieldInfo.GetValue(null);
+                if (d == null)
+                {
+                    continue;
+                }
+                json.Add(new JProperty(attribute, Marshal.GetFunctionPointerForDelegate(d).ToInt64()));
             }
             return json.ToString();
         }

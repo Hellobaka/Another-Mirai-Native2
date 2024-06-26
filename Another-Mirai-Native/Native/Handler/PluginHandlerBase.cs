@@ -108,11 +108,11 @@ namespace Another_Mirai_Native.Native.Handler
             return api == IntPtr.Zero ? null : (T?)Marshal.GetDelegateForFunctionPointer(api, typeof(T));
         }
 
-        public T? CreateDelegateFromUnmanaged<T>(int address, string apiName) where T : Delegate
+        public Delegate CreateDelegateFromUnmanaged<T>(int address, string apiName) where T : Delegate
         {
             if (address > 0)
             {
-                return (T?)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(T));
+                return Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(T));
             }
             else
             {
@@ -181,9 +181,9 @@ namespace Another_Mirai_Native.Native.Handler
                     return false;
                 }
             }
-            catch
+            catch (Exception exc)
             {
-                LogHelper.Error("加载插件", $"{PluginPath} 加载失败, GetLastError={GetLastError()}");
+                LogHelper.Error("加载插件", $"{PluginPath} 加载失败, GetLastError={GetLastError()}, Exception: {exc.Message} {exc.StackTrace}");
             }
             return NativeHandle != IntPtr.Zero;
         }
