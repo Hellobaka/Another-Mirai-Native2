@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 
-namespace Another_Mirai_Native.Native.Handler
+namespace Another_Mirai_Native.Native.Handler.CoolQ
 {
-    public class CQPlugin : PluginHandlerBase
+    public class Loader : PluginHandlerBase
     {
-        public CQPlugin(string path)
+        public Loader(string path)
             : base(path)
         {
         }
@@ -25,7 +25,7 @@ namespace Another_Mirai_Native.Native.Handler
                 LogHelper.Error("调用Menu事件", $"在AppInfo中未找到 {menuName}");
                 return -1;
             }
-            var menuMethod = CreateDelegateFromUnmanaged(function, typeof(Type_Menu));
+            var menuMethod = CreateDelegateFromUnmanaged<Type_Menu>(function);
             if (menuMethod == null)
             {
                 LogHelper.Error("调用Menu事件", $"{function} 创建方法失败");
@@ -52,8 +52,8 @@ namespace Another_Mirai_Native.Native.Handler
                     LogHelper.Error("创建方法委托", $"无法从Json文件解析出事件委托");
                     return false;
                 }
-                Initialize = (Type_Initialize?)CreateDelegateFromUnmanaged("Initialize", typeof(Type_Initialize));
-                AppInfoFunction = (Type_AppInfo?)CreateDelegateFromUnmanaged("AppInfo", typeof(Type_AppInfo));
+                Initialize = CreateDelegateFromUnmanaged<Type_Initialize>("Initialize");
+                AppInfoFunction = CreateDelegateFromUnmanaged<Type_AppInfo>("AppInfo");
 
                 foreach (var item in AppInfo._event)
                 {
@@ -66,59 +66,59 @@ namespace Another_Mirai_Native.Native.Handler
                     switch ((PluginEventType)item.id)
                     {
                         case PluginEventType.PrivateMsg:
-                            PrivateMsg = (Type_PrivateMsg?)CreateDelegateFromUnmanaged(item.function, typeof(Type_PrivateMsg));
+                            PrivateMsg = CreateDelegateFromUnmanaged<Type_PrivateMsg>(item.function);
                             break;
 
                         case PluginEventType.GroupMsg:
-                            GroupMsg = (Type_GroupMsg?)CreateDelegateFromUnmanaged(item.function, typeof(Type_GroupMsg));
+                            GroupMsg = CreateDelegateFromUnmanaged<Type_GroupMsg>(item.function);
                             break;
 
                         case PluginEventType.Upload:
-                            Upload = (Type_Upload?)CreateDelegateFromUnmanaged(item.function, typeof(Type_Upload));
+                            Upload = CreateDelegateFromUnmanaged<Type_Upload>(item.function);
                             break;
 
                         case PluginEventType.AdminChange:
-                            AdminChange = (Type_AdminChange?)CreateDelegateFromUnmanaged(item.function, typeof(Type_AdminChange));
+                            AdminChange = CreateDelegateFromUnmanaged<Type_AdminChange>(item.function);
                             break;
 
                         case PluginEventType.GroupMemberDecrease:
-                            GroupMemberDecrease = (Type_GroupMemberDecrease?)CreateDelegateFromUnmanaged(item.function, typeof(Type_GroupMemberDecrease));
+                            GroupMemberDecrease = CreateDelegateFromUnmanaged<Type_GroupMemberDecrease>(item.function);
                             break;
 
                         case PluginEventType.GroupMemberIncrease:
-                            GroupMemberIncrease = (Type_GroupMemberIncrease?)CreateDelegateFromUnmanaged(item.function, typeof(Type_GroupMemberIncrease));
+                            GroupMemberIncrease = CreateDelegateFromUnmanaged<Type_GroupMemberIncrease>(item.function);
                             break;
 
                         case PluginEventType.GroupBan:
-                            GroupBan = (Type_GroupBan?)CreateDelegateFromUnmanaged(item.function, typeof(Type_GroupBan));
+                            GroupBan = CreateDelegateFromUnmanaged<Type_GroupBan>(item.function);
                             break;
 
                         case PluginEventType.FriendAdded:
-                            FriendAdded = (Type_FriendAdded?)CreateDelegateFromUnmanaged(item.function, typeof(Type_FriendAdded));
+                            FriendAdded = CreateDelegateFromUnmanaged<Type_FriendAdded>(item.function);
                             break;
 
                         case PluginEventType.FriendRequest:
-                            FriendAddRequest = (Type_FriendAddRequest?)CreateDelegateFromUnmanaged(item.function, typeof(Type_FriendAddRequest));
+                            FriendAddRequest = CreateDelegateFromUnmanaged<Type_FriendAddRequest>(item.function);
                             break;
 
                         case PluginEventType.GroupAddRequest:
-                            GroupAddRequest = (Type_GroupAddRequest?)CreateDelegateFromUnmanaged(item.function, typeof(Type_GroupAddRequest));
+                            GroupAddRequest = CreateDelegateFromUnmanaged<Type_GroupAddRequest>(item.function);
                             break;
 
                         case PluginEventType.StartUp:
-                            StartUp = (Type_Startup?)CreateDelegateFromUnmanaged(item.function, typeof(Type_Startup));
+                            StartUp = CreateDelegateFromUnmanaged<Type_StartUp>(item.function);
                             break;
 
                         case PluginEventType.Exit:
-                            Exit = (Type_Exit?)CreateDelegateFromUnmanaged(item.function, typeof(Type_Exit));
+                            Exit = CreateDelegateFromUnmanaged<Type_Exit>(item.function);
                             break;
 
                         case PluginEventType.Enable:
-                            Enable = (Type_Enable?)CreateDelegateFromUnmanaged(item.function, typeof(Type_Enable));
+                            Enable = CreateDelegateFromUnmanaged<Type_Enable>(item.function);
                             break;
 
                         case PluginEventType.Disable:
-                            Disable = (Type_Disable?)CreateDelegateFromUnmanaged(item.function, typeof(Type_Disable));
+                            Disable = CreateDelegateFromUnmanaged<Type_Disable>(item.function);
                             break;
 
                         default:
@@ -141,8 +141,9 @@ namespace Another_Mirai_Native.Native.Handler
             }
         }
 
-        public override bool LoadAppInfo(string path)
+        public override bool LoadAppInfo()
         {
+            string path = Path.ChangeExtension(PluginPath, ".json");
             if (!File.Exists(path))
             {
                 LogHelper.Error("加载插件", "Json文件不存在");

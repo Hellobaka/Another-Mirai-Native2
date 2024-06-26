@@ -16,6 +16,10 @@ namespace Another_Mirai_Native.Native
         public CQPluginProxy(string dllPath)
         {
             PluginBasePath = dllPath;
+            if (Path.GetFileName(dllPath).StartsWith("XiaoLiZi_"))
+            {
+                PluginType = PluginType.XiaoLiZi;
+            }
         }
 
         public event Action<CQPluginProxy> OnPluginProcessExited;
@@ -39,6 +43,8 @@ namespace Another_Mirai_Native.Native
         public bool ExitFlag { get; set; }
 
         public PluginLoaderType PluginLoaderType { get; set; } = PluginLoaderType.NetFramework48;
+
+        public PluginType PluginType { get; set; } = PluginType.CoolQ;
 
         public string LoaderProcessPath { get; set; } = "";
 
@@ -112,7 +118,7 @@ namespace Another_Mirai_Native.Native
                 Directory.CreateDirectory(pluginTmpPath);
                 string newPath = Path.Combine(pluginTmpPath, Path.GetFileName(PluginBasePath));
                 File.Copy(PluginBasePath, newPath, true);
-                File.Copy(PluginBasePath.Replace(".dll", ".json"), newPath.Replace(".dll", ".json"), true);
+                File.Copy(Path.ChangeExtension(PluginBasePath, ".json"), Path.ChangeExtension(newPath, ".json"), true);
                 PluginPath = newPath;
             }
             catch (Exception e)

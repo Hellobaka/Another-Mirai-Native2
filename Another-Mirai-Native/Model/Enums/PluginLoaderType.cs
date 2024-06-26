@@ -6,4 +6,10 @@
         Net8,
         Cpp
     }
+
+    public enum PluginType
+    {
+        CoolQ,
+        XiaoLiZi
+    }
 }

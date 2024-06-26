@@ -45,7 +45,7 @@ namespace Another_Mirai_Native.Native.Handler
 
         public delegate int Type_PrivateMsg(int subType, int msgId, long fromQQ, IntPtr msg, int font);
 
-        public delegate int Type_Startup();
+        public delegate int Type_StartUp();
 
         public delegate int Type_Upload(int subType, int sendTime, long fromGroup, long fromQQ, string file);
 
@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.Native.Handler
 
         public Type_PrivateMsg? PrivateMsg { get; set; }
 
-        public Type_Startup? StartUp { get; set; }
+        public Type_StartUp? StartUp { get; set; }
 
         public Type_Upload? Upload { get; set; }
 
@@ -102,10 +102,22 @@ namespace Another_Mirai_Native.Native.Handler
             throw new NotImplementedException();
         }
 
-        public Delegate? CreateDelegateFromUnmanaged(string apiName, Type t)
+        public T? CreateDelegateFromUnmanaged<T>(string apiName) where T : Delegate
         {
             IntPtr api = GetProcAddress(NativeHandle, apiName);
-            return api == IntPtr.Zero ? null : Marshal.GetDelegateForFunctionPointer(api, t);
+            return api == IntPtr.Zero ? null : (T?)Marshal.GetDelegateForFunctionPointer(api, typeof(T));
+        }
+
+        public T? CreateDelegateFromUnmanaged<T>(int address, string apiName) where T : Delegate
+        {
+            if (address > 0)
+            {
+                return (T?)Marshal.GetDelegateForFunctionPointer(new IntPtr(address), typeof(T));
+            }
+            else
+            {
+                return CreateDelegateFromUnmanaged<T>(apiName);
+            }
         }
 
         public virtual bool CreateMethodDelegates()
@@ -137,7 +149,7 @@ namespace Another_Mirai_Native.Native.Handler
             }
         }
 
-        public virtual bool LoadAppInfo(string path)
+        public virtual bool LoadAppInfo()
         {
             throw new NotImplementedException();
         }
@@ -159,10 +171,7 @@ namespace Another_Mirai_Native.Native.Handler
                     LogHelper.Error("加载插件", $"{Path.GetFileName(PluginPath)} 加载失败, GetLastError={GetLastError()}");
                     return false;
                 }
-                string appInfoPath = Path.ChangeExtension(PluginPath, ".json");
-                if (File.Exists(appInfoPath)
-                    && LoadAppInfo(appInfoPath)
-                    && CreateMethodDelegates())
+                if (LoadAppInfo() && CreateMethodDelegates())
                 {
                     LogHelper.Info("加载插件", $"{PluginName}, 加载成功");
                 }

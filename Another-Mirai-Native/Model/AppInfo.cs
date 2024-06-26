@@ -4,6 +4,7 @@ namespace Another_Mirai_Native.Model
 {
     public class AppInfo
     {
+        [JsonIgnore]
         public int AuthCode { get; set; }
 
         public string AppId { get; set; } = "";
@@ -44,6 +45,8 @@ namespace Another_Mirai_Native.Model
             public string function { get; set; }
 
             public int priority { get; set; }
+
+            public int address { get; set; }
         }
 
         public class Menu
@@ -51,6 +54,8 @@ namespace Another_Mirai_Native.Model
             public string name { get; set; }
 
             public string function { get; set; }
+
+            public int address { get; set; }
         }
     }
 }

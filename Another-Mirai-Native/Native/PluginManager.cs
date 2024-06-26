@@ -164,11 +164,18 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("加载插件", $"{pluginPath} 文件不存在");
                 return false;
             }
-            CQPlugin plugin = new(pluginPath);
-            var ret = plugin.LoadPlugin();
+            if (pluginPath.StartsWith("XiaoLiZi_"))
+            {
+                LoadedPlugin = new Handler.XiaoLiZi.Loader(pluginPath);
+            }
+            else
+            {
+                LoadedPlugin = new Handler.CoolQ.Loader(pluginPath);
+            }
+
+            var ret = LoadedPlugin.LoadPlugin();
             if (ret)
             {
-                LoadedPlugin = plugin;
                 ClientManager.Client.ClientStartUp();
             }
             return ret;
