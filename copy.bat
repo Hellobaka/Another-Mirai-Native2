@@ -1,143 +1,54 @@
 @echo off
 setlocal
 
-echo Net48...
 set ROOT=.
-set TARGET=%ROOT%\UI_WPF\bin\x86\Debug\net48\protocols
-set TARGET_Console=%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols
-set TARGET2=%ROOT%\UI_WPF\bin\x86\Debug\net48
 
-:: 创建目标文件夹
-if not exist "%TARGET%" (
-    mkdir "%TARGET%"
-)
-if not exist "%TARGET_Console%" (
-    mkdir "%TARGET_Console%"
-)
+echo Net48...
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders"
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48"
+copy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\Another-Mirai-Native.exe" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" /Y
+copy "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" /Y
 
-echo Copy Net48 Protocol...
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols"
+copy "%ROOT%\Protocol_OneBot\bin\x86\Debug\net48\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
+copy "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net48\MiraiAPIHttp.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
+copy "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net48\Protocol_NoConnection.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
+copy "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net48\Protocol_Satori_v1.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
 
-:: 复制文件
-for %%F in (
-    "%ROOT%\Protocol_OneBot\bin\x86\Debug\net48\Protocol_OneBotv11.dll"
-    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net48\MiraiAPIHttp.dll"
-    "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net48\Protocol_NoConnection.dll"
-    "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net48\Protocol_Satori_v1.dll"
-) do (
-    if exist "%%F" (
-        copy /Y "%%F" "%TARGET%"
-        copy /Y "%%F" "%TARGET_Console%"
-    ) else (
-        echo Warning: File "%%F" not found.
-    )
-)
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders"
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48" /E /I /H /Y
 
-echo Copy Net48 Loader...
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net48\protocols"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" "%ROOT%\UI_WPF\bin\x86\Debug\net48\protocols" /E /I /H /Y
 
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
-
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48
-set FILE=%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\Another-Mirai-Native.exe
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%DIR%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
-set FILE=%ROOT%\CQP\bin\x86\Debug\CQP.dll
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%DIR%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
-
-set FILE="CleanI18nFolders.exe"
-set DIR="%ROOT%\UI_WPF\bin\x86\Debug\net48"
-copy "%FILE%" "%DIR%"
-%DIR%\%FILE%
+copy "CleanI18nFolders.exe" "%ROOT%\UI_WPF\bin\x86\Debug\net48"
+%ROOT%\UI_WPF\bin\x86\Debug\net48\CleanI18nFolders.exe
 echo Delete CleanI18nFolders.exe
-del %DIR%\%FILE%
+del %ROOT%\UI_WPF\bin\x86\Debug\net48\CleanI18nFolders.exe
 
-set FILE=%ROOT%\CQP\bin\x86\Debug\CQP.dll
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%TARGET2%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
-echo net8...
+echo Net8...
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\loaders"
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\loaders\NetFramework48"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\loaders\NetFramework48" /E /I /H /Y
 
-set TARGET=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols
-set TARGET_Console=%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols
-set TARGET2=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols"
+copy "%ROOT%\Protocol_OneBot\bin\x86\Debug\net8\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols" /Y
+copy "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net8\MiraiAPIHttp.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols" /Y
+copy "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net8.0-windows\Protocol_NoConnection.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols" /Y
+copy "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net8\Protocol_Satori_v1.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols" /Y
 
-:: 创建目标文件夹
-if not exist "%TARGET%" (
-    mkdir "%TARGET%"
-)
-if not exist "%TARGET_Console%" (
-    mkdir "%TARGET_Console%"
-)
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders"
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\NetFramework48"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\loaders\NetFramework48" "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\NetFramework48" /E /I /H /Y
 
-echo Copy Net8 Protocol...
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net8.0-windows\protocols" "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" /E /I /H /Y
 
-:: 复制文件
-for %%F in (
-    "%ROOT%\Protocol_OneBot\bin\x86\Debug\net8.0-windows\Protocol_OneBotv11.dll"
-    "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net8.0-windows\MiraiAPIHttp.dll"
-    "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net8.0-windows\Protocol_NoConnection.dll"
-    "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net8.0-windows\Protocol_Satori_v1.dll"
-) do (
-    if exist "%%F" (
-        copy /Y "%%F" "%TARGET%"
-        copy /Y "%%F" "%TARGET_Console%"
-    ) else (
-        echo Warning: File "%%F" not found.
-    )
-)
-
-echo Copy Net8 Loader...
-
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\NetFramework48
-if not exist "%DIR%" (
-    mkdir "%DIR%"
-)
-
-set DIR=%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders\NetFramework48
-set FILE=%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\Another-Mirai-Native.exe
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%DIR%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
-set FILE=%ROOT%\CQP\bin\x86\Debug\CQP.dll
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%DIR%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
-
-set FILE="CleanI18nFolders.exe"
-set DIR="%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows"
-copy "%FILE%" "%DIR%"
-%DIR%\%FILE%
+copy "CleanI18nFolders.exe" "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows"
+%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\CleanI18nFolders.exe
 echo Delete CleanI18nFolders.exe
-del %DIR%\%FILE%
+del %ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\CleanI18nFolders.exe
 
-set FILE=%ROOT%\CQP\bin\x86\Debug\CQP.dll
-if exist "%FILE%" (
-    copy /Y "%FILE%" "%TARGET2%"
-) else (
-    echo Warning: File "%FILE%" not found.
-)
 
 endlocal
