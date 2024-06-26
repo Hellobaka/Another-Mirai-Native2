@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.Native.Handler;
+using Another_Mirai_Native.Config;
 
 namespace Another_Mirai_Native.Native
 {
@@ -164,7 +165,12 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("加载插件", $"{pluginPath} 文件不存在");
                 return false;
             }
-            if (pluginPath.StartsWith("XiaoLiZi_"))
+            if (AppConfig.Instance.DebugMode && AppConfig.Instance.DebugLazyLoad)
+            {
+                Console.WriteLine("[-]LazyLoad已开启，请按回车以继续加载");
+                Console.ReadLine();
+            }
+            if (Path.GetFileName(pluginPath).StartsWith("XiaoLiZi_"))
             {
                 LoadedPlugin = new Handler.XiaoLiZi.Loader(pluginPath);
             }
@@ -172,7 +178,6 @@ namespace Another_Mirai_Native.Native
             {
                 LoadedPlugin = new Handler.CoolQ.Loader(pluginPath);
             }
-
             var ret = LoadedPlugin.LoadPlugin();
             if (ret)
             {

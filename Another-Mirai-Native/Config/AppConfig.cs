@@ -48,6 +48,8 @@ namespace Another_Mirai_Native.Config
 
         public bool DebugMode { get; set; }
 
+        public bool DebugLazyLoad { get; set; }
+
         public int LoadTimeout { get; set; } = 10 * 1000;
 
         public int MessageCacheSize { get; set; } = 4096;
@@ -91,6 +93,7 @@ namespace Another_Mirai_Native.Config
             UseDatabase = GetConfig("UseDatabase", true);
             AutoEnablePlugin = GetConfig("AutoEnablePlugins", new List<string>());
             DebugMode = GetConfig("DebugMode", false);
+            DebugLazyLoad = GetConfig("DebugLazyLoad", false);
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
             ServerType = (ServerType)GetConfig("ServerType", 0);
