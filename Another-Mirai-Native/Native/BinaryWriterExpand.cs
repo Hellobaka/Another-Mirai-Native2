@@ -59,7 +59,7 @@ namespace Another_Mirai_Native.Native
         /// <exception cref="ArgumentNullException">buffer 为 null。</exception>
         public static void Write_Ex(this BinaryWriter binary, string value)
         {
-            byte[] buffer = Encoding.Default.GetBytes(value);
+            byte[] buffer = Helper.GB18030.GetBytes(value);
             Write_Ex(binary, (short)buffer.Length);
             SetBinary(binary, buffer, false);
         }
