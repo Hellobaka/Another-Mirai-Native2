@@ -140,14 +140,28 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Margin="0">
                         <TextBlock FontSize="24">插件信息</TextBlock>
-                        <TextBox Style="{StaticResource SelectableTextBlock}" Text="{Binding SelectedItem.TargetPlugin.AppInfo.AppId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
-                        <TextBox Style="{StaticResource SelectableTextBlock}" Text="{Binding SelectedItem.TargetPlugin.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
-                        <TextBox Style="{StaticResource SelectableTextBlock}" Text="{Binding SelectedItem.TargetPlugin.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
+                        <TextBox
+                            x:Name="AppIdDisplayer"
+                            Background="Transparent"
+                            Style="{StaticResource SelectableTextBlock}"
+                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.AppId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
+                        <TextBox
+                            x:Name="AuthorDisplayer"
+                            Background="Transparent"
+                            Style="{StaticResource SelectableTextBlock}"
+                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
+                        <TextBox
+                            x:Name="VersionDisplayer"
+                            Background="Transparent"
+                            Style="{StaticResource SelectableTextBlock}"
+                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="0,5">
                         <TextBlock FontSize="24">插件描述</TextBlock>
-                        <TextBox Style="{StaticResource SelectableTextBlock}"
+                        <TextBox
                             x:Name="DescriptionDisplay"
+                            Background="Transparent"
+                            Style="{StaticResource SelectableTextBlock}"
                             Text="{Binding SelectedItem.TargetPlugin.AppInfo.description, ElementName=PluginListContainer}"
                             TextWrapping="Wrap" />
                     </StackPanel>

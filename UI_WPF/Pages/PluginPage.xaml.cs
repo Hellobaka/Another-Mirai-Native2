@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,17 @@ namespace Another_Mirai_Native.UI.Pages
         {
             SelectedPlugin = (PluginListContainer.SelectedItem as CQPluginProxyWrapper)?.TargetPlugin;
             UpdateAuthList();
+
+            RemoveSelectEffect();
+        }
+
+        private async void RemoveSelectEffect()
+        {
+            await Task.Delay(100);
+            ChatDetailListItem_Common.SetElementNoSelectEffect(AppIdDisplayer);
+            ChatDetailListItem_Common.SetElementNoSelectEffect(AuthorDisplayer);
+            ChatDetailListItem_Common.SetElementNoSelectEffect(VersionDisplayer);
+            ChatDetailListItem_Common.SetElementNoSelectEffect(DescriptionDisplay);
         }
 
         private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
@@ -289,6 +301,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+
             AuthDisplay.Items.Clear();
             foreach (var item in ((CQPluginProxyWrapper)PluginListContainer.SelectedItem).TargetPlugin.AppInfo.auth.OrderBy(x => x))
             {
