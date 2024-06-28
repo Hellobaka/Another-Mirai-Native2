@@ -181,30 +181,29 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 return false;
             }
             AppInfo = AppInfo_XiaoLiZi.ConvertToBase();
+            AppInfo.AppId = Path.GetFileNameWithoutExtension(PluginPath);
+            PluginName = AppInfo.name;
+
             return AppInfo != null;
         }
 
-        private static string BuildSelfEntryInfo()
+        private string BuildSelfEntryInfo()
         {
             JObject json = [];
-            foreach(var item in typeof(API).GetMethods().OrderBy(x=>x.Name))
+            foreach(var item in typeof(API).GetMethods().OrderBy(x => x.Name))
             {
                 string attribute = API.GetProxyName(item);
                 if (string.IsNullOrEmpty(attribute))
                 {
                     continue;
                 }
-                FieldInfo fieldInfo = typeof(API).GetField($"{item.Name}_Action", BindingFlags.Public | BindingFlags.Static);
-                if (fieldInfo == null)
+                IntPtr handle = GetProcAddress(base.CQPHandle, item.Name);
+                if (handle == IntPtr.Zero)
                 {
+                    Console.WriteLine(item.Name);
                     continue;
                 }
-                Delegate d = (Delegate)fieldInfo.GetValue(null);
-                if (d == null)
-                {
-                    continue;
-                }
-                json.Add(new JProperty(attribute, Marshal.GetFunctionPointerForDelegate(d).ToInt64()));
+                json.Add(new JProperty(attribute, handle.ToInt64()));
             }
             return json.ToString();
         }
