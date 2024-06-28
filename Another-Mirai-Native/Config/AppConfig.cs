@@ -62,10 +62,6 @@ namespace Another_Mirai_Native.Config
 
         public long CurrentQQ { get; set; } = 10001;
 
-        public ushort gRPCListenPort { get; set; } = 30303;
-
-        public string gRPCListenIP { get; set; } = "127.0.0.1";
-
         public ServerType ServerType { get; set; } = ServerType.WebSocket;
 
         public List<string> AutoEnablePlugin { get; set; } = new();
@@ -85,8 +81,6 @@ namespace Another_Mirai_Native.Config
             }
             WebSocketURL = GetConfig("WebSocketURL", "ws://127.0.0.1:30303");
             ReconnectTime = GetConfig("ReconnectTime", 5000);
-            gRPCListenPort = GetConfig("gRPCListenPort", (ushort)30303);
-            gRPCListenIP = GetConfig("gRPCListenIP", "127.0.0.1");
             RestartPluginIfDead = GetConfig("RestartPluginIfDead", false);
             PluginInvokeTimeout = GetConfig("PluginInvokeTimeout", 120 * 1000);
             HeartBeatInterval = GetConfig("HeartBeatInterval", 30 * 1000);
