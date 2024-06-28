@@ -127,6 +127,9 @@ namespace Another_Mirai_Native.Native.Handler.CoolQ
                 }
                 Initialize?.Invoke(AppInfo.AuthCode);
 
+                AppInfo.AppId = GetAppId().Value;
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
+
                 if (AppInfo.menu != null && AppInfo.menu.Length > 0)
                 {
                     CreateUIThread();
@@ -158,8 +161,6 @@ namespace Another_Mirai_Native.Native.Handler.CoolQ
             PluginName = AppInfo.name;
             AuthCode = AppConfig.Instance.Core_AuthCode;
             AppInfo.AuthCode = AppConfig.Instance.Core_AuthCode;
-            AppInfo.AppId = GetAppId().Value;
-            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
 
             return true;
         }
