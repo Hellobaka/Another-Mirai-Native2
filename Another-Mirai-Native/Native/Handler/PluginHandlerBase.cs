@@ -93,6 +93,8 @@ namespace Another_Mirai_Native.Native.Handler
 
         public Form? UIForm { get; set; }
 
+        public IntPtr CQPHandle { get; set; }
+
         private IntPtr NativeHandle { get; set; }
 
         private Thread UIThread { get; set; }
@@ -158,8 +160,8 @@ namespace Another_Mirai_Native.Native.Handler
         [SecurityCritical]
         public virtual bool LoadPlugin()
         {
-            var cqpHandle = LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
-            if (cqpHandle == IntPtr.Zero)
+            CQPHandle = LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
+            if (CQPHandle == IntPtr.Zero)
             {
                 LogHelper.Error("加载插件", $"CQP.dll加载失败, GetLastError={GetLastError()}");
             }
@@ -189,10 +191,10 @@ namespace Another_Mirai_Native.Native.Handler
         }
 
         [DllImport("kernel32.dll")]
-        private static extern int GetLastError();
+        public static extern IntPtr GetProcAddress(IntPtr lib, string funcName);
 
         [DllImport("kernel32.dll")]
-        private static extern IntPtr GetProcAddress(IntPtr lib, string funcName);
+        private static extern int GetLastError();
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr LoadLibrary(string path);

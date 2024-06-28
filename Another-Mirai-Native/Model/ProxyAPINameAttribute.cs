@@ -1,7 +1,7 @@
 ﻿namespace Another_Mirai_Native.Model
 {
     [System.AttributeUsage(AttributeTargets.Method)]
-    sealed class ProxyAPINameAttribute : Attribute
+    public class ProxyAPINameAttribute : Attribute
     {
         public string Description { get; }
 
