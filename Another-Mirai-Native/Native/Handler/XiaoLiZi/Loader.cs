@@ -152,13 +152,15 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 LogHelper.Error("读取插件信息", $"无法从插件返回解析出插件信息，{Path.GetFileName(PluginPath)}可能并非 小栗子 插件");
                 return false;
             }
-            string path = Path.ChangeExtension(PluginPath, ".json");
-            if (File.Exists(path))
+            string path = Path.ChangeExtension(PluginPath, ".dll.json");
+            if (!File.Exists(path))
             {
+                // V3
                 AppInfo_XiaoLiZi = JsonConvert.DeserializeObject<AppInfo_XiaoLiZi>(nativeInfo);
             }
             else
             {
+                // V4
                 AppInfo_XiaoLiZi = JsonConvert.DeserializeObject<AppInfo_XiaoLiZi>(File.ReadAllText(path));
 
                 if (AppInfo_XiaoLiZi != null)
