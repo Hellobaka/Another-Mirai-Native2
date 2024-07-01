@@ -128,7 +128,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
-            RequestWaiter.ResetSignalByWebSocket(APIClient);
+            RequestWaiter.ResetSignalByConnection(APIClient);
             LogHelper.Error("API服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectAPIServer();
@@ -511,7 +511,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 return;
             }
             ReconnectCount++;
-            RequestWaiter.ResetSignalByWebSocket(EventClient);
+            RequestWaiter.ResetSignalByConnection(EventClient);
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();

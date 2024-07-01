@@ -105,7 +105,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             {
                 LogHelper.Error("鉴权", "无法获取当前登录实例");
                 EventClient.Close();
-                RequestWaiter.ResetSignalByWebSocket(EventClient);
+                RequestWaiter.ResetSignalByConnection(EventClient);
             }
         }
 
@@ -314,13 +314,13 @@ namespace Another_Mirai_Native.Protocol.Satori
         {
             AppConfig.Instance.CurrentQQ = 0;
             CurrentPlatform = "";
-            RequestWaiter.ResetSignalByWebSocket(EventClient);
+            RequestWaiter.ResetSignalByConnection(EventClient);
             if (ExitFlag)
             {
                 return;
             }
             ReconnectCount++;
-            RequestWaiter.ResetSignalByWebSocket(EventClient);
+            RequestWaiter.ResetSignalByConnection(EventClient);
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();

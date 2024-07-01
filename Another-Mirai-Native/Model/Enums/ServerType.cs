@@ -3,5 +3,6 @@
     public enum ServerType
     {
         WebSocket,
+        Pipe
     }
 }

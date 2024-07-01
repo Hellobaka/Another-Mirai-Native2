@@ -60,10 +60,7 @@ namespace Protocol_NoConnection
             CommonConfig.SetConfig("TesterQQ", QQId, @"conf/Test.json");
             string msg = SendValue.Text;
             SendValue.Text = "";
-            if (MessageHistories.Contains(msg))
-            {
-                MessageHistories.Remove(msg);
-            }
+            MessageHistories.Remove(msg);
             MessageHistories.Add(msg);
             CommonConfig.SetConfig("MessageHistories", MessageHistories, @"conf/Test.json");
             MessageHistoryIndex = 0;
@@ -102,6 +99,7 @@ namespace Protocol_NoConnection
                     }
                 }).Start();
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
+                LogHelper.LocalDebug("", updateMsg);
                 if (handledPlugin != null)
                 {
                     updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";

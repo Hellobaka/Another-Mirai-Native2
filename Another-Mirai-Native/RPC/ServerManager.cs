@@ -15,6 +15,7 @@ namespace Another_Mirai_Native.RPC
                 Server = serverType switch
                 {
                     ServerType.WebSocket => new WebSocket.Server(),
+                    ServerType.Pipe => new Pipe.Server(),
                     _ => throw new NotImplementedException(),
                 };
                 LogHelper.Info("服务器构建", $"加载服务器 {serverType} 成功");

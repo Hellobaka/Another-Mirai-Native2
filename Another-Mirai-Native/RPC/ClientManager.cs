@@ -18,6 +18,7 @@ namespace Another_Mirai_Native.RPC
                 Client = serverType switch
                 {
                     ServerType.WebSocket => new WebSocket.Client(),
+                    ServerType.Pipe => new Pipe.Client(),
                     _ => throw new NotImplementedException()
                 };
                 if (HeartBeatTimer == null)
