@@ -115,12 +115,13 @@ namespace Another_Mirai_Native.RPC.Pipe
                     {
                         string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                         LogHelper.Debug("收到客户端消息", message);
-                        Task.Run(() => HandleClientMessage(message, pipe));
+                        new Thread(() => HandleClientMessage(message, pipe)).Start();
                     }
                     else
                     {
                         ClientDisconnected?.Invoke(pipe);
                         pipe.Disconnect();
+                        LogHelper.Error("Pipe_Disconnect", "与插件连接断开");
                         break;
                     }
                 }
@@ -128,6 +129,7 @@ namespace Another_Mirai_Native.RPC.Pipe
                 {
                     ClientDisconnected?.Invoke(pipe);
                     pipe.Disconnect();
+                    LogHelper.Error("Pipe_Disconnect", "与插件连接断开");
                     break;
                 }
             }
@@ -179,7 +181,7 @@ namespace Another_Mirai_Native.RPC.Pipe
 #if NET5_0_OR_GREATER
                 await client.WriteAsync(new Memory<byte>(buffer));
 #else
-                await client.WriteAsync(buffer, 0, buffer.Length);
+                client.Write(buffer, 0, buffer.Length);
 #endif
             }
         }

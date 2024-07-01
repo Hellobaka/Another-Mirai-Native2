@@ -105,6 +105,7 @@ namespace Another_Mirai_Native
                     {
                         if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
                         {
+                            LogHelper.Info("加载插件", $"{item.PluginName} 启动完成");
                             UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
                         }
                     }

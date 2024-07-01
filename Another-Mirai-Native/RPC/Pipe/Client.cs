@@ -116,10 +116,11 @@ namespace Another_Mirai_Native.RPC.Pipe
 #else
                     int bytesRead = await PipeClient.ReadAsync(buffer, 0, buffer.Length);
 #endif
+                    LogHelper.LocalDebug("Pipe_Receive", "");
                     if (bytesRead > 0)
                     {
                         string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Task.Run(() => HandleMessage(message));
+                        new Thread(() => HandleMessage(message)).Start();
                     }
                     else
                     {
