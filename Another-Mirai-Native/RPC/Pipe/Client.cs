@@ -49,7 +49,10 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         public override void Send(string message)
         {
-            SendMessage(message).Wait();
+            lock (_lock) 
+            {
+                SendMessage(message).Wait();
+            }
         }
 
         public async Task SendMessage(string message)
