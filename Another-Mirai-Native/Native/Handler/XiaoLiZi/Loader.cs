@@ -190,17 +190,17 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         private string BuildSelfEntryInfo()
         {
             JObject json = [];
-            foreach(var item in typeof(API).GetMethods().OrderBy(x => x.Name))
+            foreach(var item in API.APINames)
             {
-                string attribute = API.GetProxyName(item);
+                string attribute = item.Key;
                 if (string.IsNullOrEmpty(attribute))
                 {
                     continue;
                 }
-                IntPtr handle = GetProcAddress(base.CQPHandle, item.Name);
+                IntPtr handle = GetProcAddress(base.CQPHandle, item.Value);
                 if (handle == IntPtr.Zero)
                 {
-                    Console.WriteLine(item.Name);
+                    Console.WriteLine(item.Value);
                     continue;
                 }
                 json.Add(new JProperty(attribute, handle.ToInt64()));
