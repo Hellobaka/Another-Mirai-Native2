@@ -163,6 +163,8 @@ namespace Another_Mirai_Native
 
         public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 
+        public static int ToTimeStamp(this DateTime? time) => (int)((time ?? DateTime.Now) - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+
         /// <summary>
         /// 从cqimg中获取图片URL
         /// </summary>

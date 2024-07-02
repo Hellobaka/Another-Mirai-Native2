@@ -2,11 +2,19 @@
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using System;
+using Another_Mirai_Native.RPC;
+using Another_Mirai_Native.Model.Enums;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Linq;
 
 namespace Another_Mirai_Native.Export
 {
     public class XiaoLiZI_API
     {
+        private static Dictionary<(long, int), long> MessageCache { get; set; } = new();
+
         /// <summary>
         /// _初始化
         /// </summary>
@@ -78,9 +86,9 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 输出日志");
             }
-            return "";
+            ClientManager.Client.InvokeCQPFuntcion("CQ_addLog", false, authCode, LogLevel.Info, "输出日志", arg0);
+            return "";// 返回值是什么
         }
 
         /// <summary>
@@ -93,14 +101,25 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("发送好友消息")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static string Function_6(string authCode, long arg0, long arg1, string arg2, long arg3, int arg4)
+        public static string Function_6(string authCode, long arg0, long arg1, string arg2, ref long arg3, ref int arg4)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送好友消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, arg2).ToLong();
+            if (msgId > 0)
+            {
+                arg3 = Static.Random.Next();
+                arg4 = Static.Random.Next();
+
+                MessageCache.Add((arg3, arg4), msgId);
+            }
+            return "";// time? 什么格式的time
         }
 
         /// <summary>
@@ -117,8 +136,12 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送群消息");
             }
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            int msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, authCode, arg1, arg2).ToInt();
             return "";
         }
 
@@ -138,9 +161,12 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送群临时消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            return Function_6(authCode, arg0, arg2, arg3, ref arg4, ref arg5);
         }
 
         /// <summary>
@@ -243,14 +269,17 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("发送好友json消息")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static string Function_14(string authCode, long arg0, long arg1, string arg2, long arg3, int arg4)
+        public static string Function_14(string authCode, long arg0, long arg1, string arg2, ref long arg3, ref int arg4)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送好友json消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            return Function_6(authCode, arg0, arg1, $"[CQ:json,content={arg2}]", ref arg3, ref arg4);
         }
 
         /// <summary>
@@ -267,9 +296,12 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送群json消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            return Function_7(authCode, arg0, arg1, $"[CQ:json,content={arg2}]", arg3);
         }
 
         /// <summary>
@@ -437,8 +469,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 设置群名片");
             }
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            int r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupCard", true, authCode, arg1, arg2, arg3).ToInt();
+
             return "";
         }
 
@@ -453,9 +490,17 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取昵称_从缓存");
             }
-            return "";
+
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
+            var item = list.FirstOrDefault(x => x.QQ.ToString() == arg0);
+            if (item == null)
+            {
+                return "";
+            }
+
+            return item.Nick;
         }
 
         /// <summary>
@@ -470,9 +515,8 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 强制取昵称");
             }
-            return "";
+            return Function_25(authCode, arg1);
         }
 
         /// <summary>
@@ -486,9 +530,16 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群名称_从缓存");
             }
-            return "";
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
+            var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
+            var item = list.FirstOrDefault(x => x.Group.ToString() == arg0);
+            if (item == null)
+            {
+                return "";
+            }
+
+            return item.Name;
         }
 
         /// <summary>
@@ -549,9 +600,9 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.Error("小栗子API", "使用了未实现了API 取框架QQ");
+                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}");
             }
-            return "";
+            return AppConfig.Instance.CurrentQQ.ToString();
         }
 
         /// <summary>
@@ -559,16 +610,36 @@ namespace Another_Mirai_Native.Export
         /// <param name="arg0">框架QQ</param>
         /// <param name="arg1">数据</param>
         /// </summary>
+        /// <returns>数量</returns>
         [ProxyAPIName("取好友列表")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static int Function_32(string authCode, long arg0, object arg1)
+        public static int Function_32(string authCode, long arg0, ref IntPtr arg1)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取好友列表");
             }
-            return 0;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return 0;
+            }
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
+            Model.Other.XiaoLiZi.FriendInfo[] friendInfos = new Model.Other.XiaoLiZi.FriendInfo[list.Count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                var friendInfo = list[i];
+                friendInfos[i] = new Model.Other.XiaoLiZi.FriendInfo
+                {
+                    QQNumber = friendInfo.QQ,
+                    Name = friendInfo.Nick,
+                    Note = friendInfo.Postscript,
+                };
+            }
+
+            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(friendInfos));
+            Marshal.StructureToPtr(friendInfos, arg1, false);
+            return friendList.Length;
         }
 
         /// <summary>
@@ -578,14 +649,33 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("取群列表")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static int Function_33(string authCode, long arg0, object arg1)
+        public static int Function_33(string authCode, long arg0, ref IntPtr arg1)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群列表");
             }
-            return 0;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return 0;
+            }
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
+            var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
+            Model.Other.XiaoLiZi.GroupInfo[] groupInfos = new Model.Other.XiaoLiZi.GroupInfo[list.Count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                var groupInfo = list[i];
+                groupInfos[i] = new Model.Other.XiaoLiZi.GroupInfo
+                {
+                    GroupQQ = groupInfo.Group,
+                    GroupName = groupInfo.Name,
+                    GroupMemberCount = groupInfo.CurrentMemberCount,
+                };
+            }
+
+            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(groupInfos));
+            Marshal.StructureToPtr(groupInfos, arg1, false);
+            return friendList.Length;
         }
 
         /// <summary>
@@ -596,14 +686,39 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("取群成员列表")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static int Function_34(string authCode, long arg0, long arg1, object arg2)
+        public static int Function_34(string authCode, long arg0, long arg1, ref IntPtr arg2)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群成员列表");
             }
-            return 0;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return 0;
+            }
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
+            Model.Other.XiaoLiZi.GroupMemberInfo[] memberInfos = new Model.Other.XiaoLiZi.GroupMemberInfo[list.Count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                var memberInfo = list[i];
+                memberInfos[i] = new Model.Other.XiaoLiZi.GroupMemberInfo
+                {
+                    QQNumber = memberInfo.QQ.ToString(),
+                    Name = memberInfo.Nick,
+                    Nickname = memberInfo.Nick,
+                    Gender = (uint)memberInfo.Sex,
+                    Age = (uint)memberInfo.Age,
+                    JoinTime = memberInfo.JoinGroupDateTime.ToTimeStamp(),
+                    ChatTime = memberInfo.LastSpeakDateTime.ToTimeStamp(),
+                    Title = memberInfo.ExclusiveTitle,
+                    TitleTimeout = memberInfo.ExclusiveTitleExpirationTime.ToTimeStamp()
+                };
+            }
+
+            arg2 = Marshal.AllocHGlobal(Marshal.SizeOf(memberInfos));
+            Marshal.StructureToPtr(memberInfos, arg2, false);
+            return memberList.Length;
         }
 
         /// <summary>
@@ -622,7 +737,12 @@ namespace Another_Mirai_Native.Export
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置管理员");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            int r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAdmin", true, authCode, arg1, arg2, arg3).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -637,9 +757,19 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取管理层列表");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
+            StringBuilder sb = new();
+            foreach (var member in list.Where(x => x.MemberType == QQGroupMemberType.Manage || x.MemberType == QQGroupMemberType.Creator))
+            {
+                sb.AppendLine(member.Card);
+            }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -655,9 +785,14 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群名片");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            var memberInfo = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberInfoV2", true, authCode, arg1, arg2).ToString();
+            var info = GroupMemberInfo.FromNative(Convert.FromBase64String(memberInfo));
+            return info.Card;
         }
 
         /// <summary>
@@ -726,9 +861,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 删除群成员");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupKick", true, authCode, arg1, arg2, arg3).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -745,9 +884,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 禁言群成员");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupBan", true, authCode, arg1, arg2, arg3).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -762,9 +905,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 退群");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupLeave", true, authCode, arg1, false).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -779,9 +926,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 解散群");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupLeave", true, authCode, arg1, true).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -815,9 +966,13 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 全员禁言");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupWholeBan", true, authCode, arg1, arg2).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -996,9 +1151,18 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 撤回消息_群聊");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var msg = MessageCache.TryGetValue((arg2, arg3), out long msgId) ? msgId : -1;
+            if (msg == -1)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_deleteMsg", true, authCode, msg).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -1016,9 +1180,18 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 撤回消息_私聊本身");
             }
-            return false;
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return false;
+            }
+            var msg = MessageCache.TryGetValue((arg2, arg3), out long msgId) ? msgId : -1;
+            if (msg == -1)
+            {
+                return false;
+            }
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_deleteMsg", true, authCode, msg).ToInt();
+            return r == 1;
         }
 
         /// <summary>
@@ -1094,8 +1267,23 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 处理群验证事件");
             }
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return;
+            }
+            arg4 = arg4 switch
+            {
+                11 => 1,
+                _ => 2,
+            };
+            arg5 = arg5 switch
+            {
+                3 => 1,
+                _ => 2,
+            };
+
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAddRequestV2", true, authCode, arg2, arg5, arg4, arg6).ToInt();
         }
 
         /// <summary>
@@ -1114,6 +1302,12 @@ namespace Another_Mirai_Native.Export
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 处理好友验证事件");
             }
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return;
+            }
+
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setFriendAddRequest", true, authCode, arg2, arg3, "").ToInt();
         }
 
         /// <summary>
@@ -1313,7 +1507,7 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.Error("小栗子API", "使用了未实现了API 取插件数据目录");
             }
-            return "";
+            return ClientManager.Client.InvokeCQPFuntcion("CQ_getAppDirectory", true, authCode).ToString();
         }
 
         /// <summary>
@@ -1328,9 +1522,14 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API QQ点赞");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            int r = ClientManager.Client.InvokeCQPFuntcion("CQ_sendLikeV2", true, authCode, arg1, 1).ToInt();
+
+            return r.ToString();
         }
 
         /// <summary>
@@ -1346,9 +1545,15 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取图片下载地址");
             }
-            return "";
+            //TODO: 补全
+            if (arg1 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            string r = ClientManager.Client.InvokeCQPFuntcion("CQ_getImage", true, authCode, arg0).ToString();
+
+            return r.ToString();
         }
 
         /// <summary>
@@ -1359,14 +1564,30 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("查询好友信息")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static bool Function_76(string authCode, long arg0, long arg1, object arg2)
+        public static bool Function_76(string authCode, long arg0, long arg1, ref IntPtr arg2)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 查询好友信息");
             }
-            return false;
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
+            var item = list.FirstOrDefault(x => x.QQ == arg1);
+            if (item == null)
+            {
+                return false;
+            }
+            var info = new Model.Other.XiaoLiZi.FriendInfo
+            {
+                QQNumber = item.QQ,
+                Name = item.Nick,
+                Note = item.Postscript,
+            };
+
+            arg2 = Marshal.AllocHGlobal(Marshal.SizeOf(info));
+            Marshal.StructureToPtr(info, arg2, false);
+
+            return true;
         }
 
         /// <summary>
@@ -1377,14 +1598,31 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("查询群信息")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static bool Function_77(string authCode, long arg0, long arg1, object arg2)
+        public static bool Function_77(string authCode, long arg0, long arg1, ref IntPtr arg2)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 查询群信息");
             }
-            return false;
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
+            var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
+
+            var item = list.FirstOrDefault(x => x.Group == arg1);
+            if (item == null)
+            {
+                return false;
+            }
+            var info = new Model.Other.XiaoLiZi.GroupInfo
+            {
+                GroupQQ = item.Group,
+                GroupName = item.Name,
+                GroupMemberCount = item.CurrentMemberCount
+            };
+
+            arg2 = Marshal.AllocHGlobal(Marshal.SizeOf(info));
+            Marshal.StructureToPtr(info, arg2, false);
+
+            return true;
         }
 
         /// <summary>
@@ -2377,13 +2615,38 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("取群成员信息")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static string Function_128(string authCode, long arg0, long arg1, long arg2, object arg3)
+        public static string Function_128(string authCode, long arg0, long arg1, long arg2, ref IntPtr arg3)
         {
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群成员信息");
             }
+
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
+            var item = list.FirstOrDefault(x=>x.Group == arg1 && x.QQ == arg2);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var info = new Model.Other.XiaoLiZi.GroupMemberInfo
+            {
+                QQNumber = item.QQ.ToString(),
+                Name = item.Nick,
+                Nickname = item.Nick,
+                Gender = (uint)item.Sex,
+                Age = (uint)item.Age,
+                JoinTime = item.JoinGroupDateTime.ToTimeStamp(),
+                ChatTime = item.LastSpeakDateTime.ToTimeStamp(),
+                Title = item.ExclusiveTitle,
+                TitleTimeout = item.ExclusiveTitleExpirationTime.ToTimeStamp()
+            };
+
+            arg3 = Marshal.AllocHGlobal(Marshal.SizeOf(info));
+            Marshal.StructureToPtr(info, arg3, false);
+
             return "";
         }
 
@@ -2540,7 +2803,11 @@ namespace Another_Mirai_Native.Export
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送好友xml消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            return Function_6(authCode, arg0, arg1, $"[CQ:xml,content={arg2}]", ref arg3, ref arg4);
         }
 
         /// <summary>
@@ -2559,7 +2826,11 @@ namespace Another_Mirai_Native.Export
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送群xml消息");
             }
-            return "";
+            if (arg0 != AppConfig.Instance.CurrentQQ)
+            {
+                return "";
+            }
+            return Function_7(authCode, arg0, arg1, $"[CQ:xml,content={arg2}]", arg3);
         }
 
         /// <summary>
@@ -4145,9 +4416,8 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取QQ头像");
             }
-            return "";
+            return $"https://q.qlogo.cn/g?b=qq&nk={arg0}&s=160";
         }
 
         /// <summary>
@@ -4161,9 +4431,8 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群头像");
             }
-            return "";
+            return $"http://p.qlogo.cn/gh/{arg0}/{arg0}/0";
         }
 
         /// <summary>
