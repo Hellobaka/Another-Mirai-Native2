@@ -39,6 +39,20 @@ namespace Another_Mirai_Native.Model
             return stream.ToArray();
         }
 
+        public static GroupInfo FromNative(byte[] buffer)
+        {
+            GroupInfo info = new();
+
+            using BinaryReader binaryReader = new(new MemoryStream(buffer));
+            info.Group = binaryReader.ReadInt64();
+            short length = binaryReader.ReadInt16();
+            info.Name = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
+            info.CurrentMemberCount = binaryReader.ReadInt32();
+            info.MaxMemberCount = binaryReader.ReadInt32();
+
+            return info;
+        }
+
         public string ToNativeBase64(bool isGroupList)
         {
             return Convert.ToBase64String(ToNative(isGroupList));
@@ -56,6 +70,20 @@ namespace Another_Mirai_Native.Model
                 binaryWriter.Write(buffer);
             }
             return Convert.ToBase64String(stream.ToArray());
+        }
+
+        public static List<GroupInfo> RawToList(byte[] buffer)
+        {
+            List<GroupInfo> list = [];
+            using BinaryReader binaryReader = new(new MemoryStream(buffer));
+
+            int count = binaryReader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                short length = binaryReader.ReadInt16();
+                list.Add(FromNative(binaryReader.ReadBytes(length)));
+            }
+            return list;
         }
     }
 }

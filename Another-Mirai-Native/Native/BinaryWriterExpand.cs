@@ -4,7 +4,7 @@ using System.Text;
 namespace Another_Mirai_Native.Native
 {
     /// <summary>
-    /// <see cref="BinaryReader"/> 类的扩展方法集
+    /// <see cref="BinaryWriter"/> 类的扩展方法集
     /// </summary>
     public static class BinaryWriterExpand
     {

@@ -37,6 +37,20 @@ namespace Another_Mirai_Native.Model
             return stream.ToArray();
         }
 
+        public static StrangerInfo FromNative(byte[] buffer)
+        {
+            StrangerInfo info = new();
+
+            using BinaryReader binaryReader = new(new MemoryStream(buffer));
+            info.QQ = binaryReader.ReadInt64();
+            short length = binaryReader.ReadInt16();
+            info.Nick = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
+            info.Sex = (QQSex)binaryReader.ReadInt32();
+            info.Age = binaryReader.ReadInt32();
+
+            return info;
+        }
+
         public string ToNativeBase64()
         {
             return Convert.ToBase64String(ToNative());

@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Native;
 using System.IO;
+using System.Text;
 
 namespace Another_Mirai_Native.Model
 {
@@ -23,11 +24,25 @@ namespace Another_Mirai_Native.Model
         public byte[] ToNative()
         {
             MemoryStream stream = new();
-            BinaryWriter binaryWriter = new(stream);
+            using BinaryWriter binaryWriter = new(stream);
             BinaryWriterExpand.Write_Ex(binaryWriter, QQ);
             BinaryWriterExpand.Write_Ex(binaryWriter, Nick);
             BinaryWriterExpand.Write_Ex(binaryWriter, Postscript);
             return stream.ToArray();
+        }
+
+        public static FriendInfo FromNative(byte[] buffer)
+        {
+            FriendInfo info = new();
+
+            using BinaryReader binaryReader = new(new MemoryStream(buffer));
+            info.QQ = binaryReader.ReadInt64();
+            short length = binaryReader.ReadInt16();
+            info.Nick = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
+            length = binaryReader.ReadInt16();
+            info.Postscript = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
+            
+            return info;
         }
 
         public static string CollectionToList(List<FriendInfo> list)
@@ -42,6 +57,20 @@ namespace Another_Mirai_Native.Model
                 binaryWriter.Write(buffer);
             }
             return Convert.ToBase64String(stream.ToArray());
+        }
+
+        public static List<FriendInfo> RawToList(byte[] buffer)
+        {
+            List<FriendInfo> list = [];
+            using BinaryReader binaryReader = new(new MemoryStream(buffer));
+
+            int count = binaryReader.ReadInt32();
+            for(int i = 0; i < count; i++)
+            {
+                short length = binaryReader.ReadInt16();
+                list.Add(FromNative(binaryReader.ReadBytes(length)));
+            }
+            return list;
         }
     }
 }
