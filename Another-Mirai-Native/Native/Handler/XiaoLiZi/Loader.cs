@@ -131,9 +131,12 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 if (menu != null)
                 {
                     AppMenu = CreateDelegateFromUnmanaged<Type_AppMenu>(menu.address, menu.function);
+                    CreateUIThread();
                 }
             }
             CreateProxy();
+            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "data", "app", AppInfo.AppId));
+
             return true;
         }
 

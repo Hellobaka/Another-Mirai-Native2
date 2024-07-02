@@ -1505,7 +1505,6 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.Error("小栗子API", "使用了未实现了API 取插件数据目录");
             }
             return ClientManager.Client.InvokeCQPFuntcion("CQ_getAppDirectory", true, authCode).ToString();
         }
