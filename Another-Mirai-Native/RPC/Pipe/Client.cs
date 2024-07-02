@@ -109,7 +109,7 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         private async Task ListenForMessages()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[65535];
             while (PipeClient.IsConnected)
             {
                 try
