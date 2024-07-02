@@ -5,7 +5,7 @@
         /// <summary>
         /// 私聊消息事件
         /// </summary>
-        PrivateMsg = 1,
+        PrivateMsg = 21,
 
         /// <summary>
         /// 群聊消息事件
@@ -13,49 +13,49 @@
         GroupMsg = 2,
 
         /// <summary>
-        /// 群聊消息事件
+        /// 讨论组消息事件
         /// </summary>
-        DiscussMsg = 3,
+        DiscussMsg = 4,
 
         /// <summary>
         /// 文件上传事件
         /// </summary>
-        Upload = 4,
+        Upload = 11,
 
         /// <summary>
         /// 管理员变更事件
         /// </summary>
-        AdminChange = 5,
+        AdminChange = 101,
 
         /// <summary>
         /// 群成员减少事件
         /// </summary>
-        GroupMemberDecrease = 6,
+        GroupMemberDecrease = 102,
 
         /// <summary>
         /// 群成员增加事件
         /// </summary>
-        GroupMemberIncrease = 7,
+        GroupMemberIncrease = 103,
 
         /// <summary>
         /// 群禁言事件
         /// </summary>
-        GroupBan = 8,
+        GroupBan = 104,
 
         /// <summary>
         /// 好友添加完成事件
         /// </summary>
-        FriendAdded = 10,
+        FriendAdded = 201,
 
         /// <summary>
         /// 好友添加请求事件
         /// </summary>
-        FriendRequest = 11,
+        FriendRequest = 301,
 
         /// <summary>
         /// 加群申请事件
         /// </summary>
-        GroupAddRequest = 12,
+        GroupAddRequest = 302,
 
         /// <summary>
         /// 酷Q启动事件

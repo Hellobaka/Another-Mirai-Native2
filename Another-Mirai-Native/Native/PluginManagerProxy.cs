@@ -113,7 +113,7 @@ namespace Another_Mirai_Native.Native
 
         public int InvokeEvent(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
-            if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.id == (int)eventType))
+            if (eventType == PluginEventType.Menu || target.AppInfo._event.Any(x => x.type == (int)eventType))
             {
                 var r = ServerManager.Server.InvokeEvents(target, eventType, args);
                 return r ?? -1;
@@ -137,8 +137,8 @@ namespace Another_Mirai_Native.Native
                 LogHelper.WriteLog(LogLevel.Warning, "AMN框架", "插件逻辑处理", "插件加载中...", "x 不处理");
                 return null;
             }
-            foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.id == (int)eventType))
-                .OrderByDescending(x => x.AppInfo._event.First(o => o.id == (int)eventType).priority))
+            foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.type == (int)eventType))
+                .OrderByDescending(x => x.AppInfo._event.First().priority))
             {
                 if (item.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
                 {
