@@ -73,6 +73,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             }
             UIForm.BeginInvoke(() =>
             {
+                //AppMenu?.DynamicInvoke(null);
                 SafeInvoke(AppMenu);
             });
             return 1;

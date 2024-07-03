@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         {
             GroupMessageEvent e = new()
             {
-                MessageContent = msg.ToString(Helper.GB18030),
+                MessageContent = MessageParser.ParseFromCQCode(msg.ToString(Helper.GB18030)),
                 SenderQQ = fromQQ,
                 MessageSendTime = (int)Helper.TimeStamp,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
@@ -158,7 +158,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
         {
             try
             {
-                int? ret = (int?)(action?.DynamicInvoke());
+                int? ret = (int?)(action?.DynamicInvoke(null));
                 if (ret.HasValue)
                 {
                     return ret.Value;
