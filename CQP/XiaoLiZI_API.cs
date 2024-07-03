@@ -24,6 +24,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
+                LogHelper.LocalDebug("小栗子API", $"API=_初始化");
                 LogHelper.Error("小栗子API", "使用了未实现了API _初始化");
             }
         }
@@ -37,6 +38,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
+                LogHelper.LocalDebug("小栗子API", $"API=_销毁");
                 LogHelper.Error("小栗子API", "使用了未实现了API _销毁");
             }
         }
@@ -45,13 +47,13 @@ namespace Another_Mirai_Native.Export
         /// 取API函数地址
         /// <param name="arg0">函数名</param>
         /// </summary>
-        [ProxyAPIName("")]
+        [ProxyAPIName("取API函数地址")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
         public static int Function_3(string authCode, string arg0)
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取API函数地址, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取API函数地址");
             }
             return 0;
@@ -68,7 +70,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=int, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API int");
             }
         }
@@ -85,7 +87,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=输出日志, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             ClientManager.Client.InvokeCQPFuntcion("CQ_addLog", false, authCode, LogLevel.Info, "输出日志", arg0);
             return "";// 返回值是什么
@@ -105,7 +107,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送好友消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -135,7 +137,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送群消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -160,7 +162,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送群临时消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -182,7 +184,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=添加好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 添加好友");
             }
             return "";
@@ -200,7 +202,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=添加群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 添加群");
             }
             return "";
@@ -217,7 +219,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除好友");
             }
             return "";
@@ -235,7 +237,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置屏蔽好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置屏蔽好友");
             }
             return "";
@@ -253,7 +255,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置特别关心好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置特别关心好友");
             }
             return "";
@@ -273,7 +275,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送好友json消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -295,7 +297,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送群json消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -320,7 +322,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传好友图片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传好友图片");
             }
             return "";
@@ -342,7 +344,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群图片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群图片");
             }
             return "";
@@ -363,7 +365,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传好友语音, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传好友语音");
             }
             return "";
@@ -384,7 +386,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群语音, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群语音");
             }
             return "";
@@ -401,7 +403,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传头像, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传头像");
             }
             return "";
@@ -417,7 +419,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=silk解码, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API silk解码");
             }
             return IntPtr.Zero;
@@ -433,7 +435,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=silk编码, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API silk编码");
             }
             return IntPtr.Zero;
@@ -449,7 +451,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=amr编码, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API amr编码");
             }
             return IntPtr.Zero;
@@ -468,7 +470,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置群名片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -489,7 +491,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取昵称_从缓存, authCode={authCode}, arg0={arg0}, ");
             }
 
             var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
@@ -514,7 +516,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=强制取昵称, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             return Function_25(authCode, arg1);
         }
@@ -529,7 +531,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群名称_从缓存, authCode={authCode}, arg0={arg0}, ");
             }
             var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
             var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
@@ -552,7 +554,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取skey, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取skey");
             }
             return "";
@@ -569,7 +571,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取pskey, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取pskey");
             }
             return "";
@@ -585,7 +587,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取clientkey, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取clientkey");
             }
             return "";
@@ -600,7 +602,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}");
+                LogHelper.LocalDebug("小栗子API", $"API=取框架QQ, authCode={authCode}");
             }
             return AppConfig.Instance.CurrentQQ.ToString();
         }
@@ -617,7 +619,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -653,7 +655,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -690,7 +692,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群成员列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -734,7 +736,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置管理员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置管理员");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
@@ -756,7 +758,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取管理层列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -784,7 +786,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群名片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -806,7 +808,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取个性签名, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取个性签名");
             }
             return "";
@@ -823,7 +825,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改昵称, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改昵称");
             }
             return false;
@@ -841,7 +843,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改个性签名, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改个性签名");
             }
             return false;
@@ -860,7 +862,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群成员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -883,7 +885,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=禁言群成员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -904,7 +906,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=退群, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -925,7 +927,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=解散群, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -947,7 +949,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群头像, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群头像");
             }
             return false;
@@ -965,7 +967,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=全员禁言, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -987,7 +989,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_发起新的群聊, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_发起新的群聊");
             }
             return false;
@@ -1005,7 +1007,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_发起临时会话, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_发起临时会话");
             }
             return false;
@@ -1023,7 +1025,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_上传文件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_上传文件");
             }
             return false;
@@ -1041,7 +1043,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_上传相册, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_上传相册");
             }
             return false;
@@ -1059,7 +1061,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_邀请好友加群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_邀请好友加群");
             }
             return false;
@@ -1077,7 +1079,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_匿名聊天, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_匿名聊天");
             }
             return false;
@@ -1095,7 +1097,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_坦白说, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_坦白说");
             }
             return false;
@@ -1113,7 +1115,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_新成员查看历史消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_新成员查看历史消息");
             }
             return false;
@@ -1131,7 +1133,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_邀请方式设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_邀请方式设置");
             }
             return false;
@@ -1150,7 +1152,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回消息_群聊, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -1179,7 +1181,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回消息_私聊本身, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -1208,7 +1210,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置位置共享, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置位置共享");
             }
             return false;
@@ -1227,7 +1229,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上报当前位置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上报当前位置");
             }
             return false;
@@ -1244,7 +1246,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=是否被禁言, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 是否被禁言");
             }
             return 0;
@@ -1266,7 +1268,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=处理群验证事件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -1299,7 +1301,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=处理好友验证事件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 处理好友验证事件");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
@@ -1322,7 +1324,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查看转发聊天记录内容, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 查看转发聊天记录内容");
             }
         }
@@ -1340,7 +1342,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群文件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群文件");
             }
             return "";
@@ -1358,7 +1360,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=创建群文件夹, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建群文件夹");
             }
             return "";
@@ -1377,7 +1379,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=重命名群文件夹, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 重命名群文件夹");
             }
             return "";
@@ -1395,7 +1397,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群文件夹, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群文件夹");
             }
             return "";
@@ -1414,7 +1416,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群文件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群文件");
             }
             return "";
@@ -1432,7 +1434,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=保存文件到微云, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 保存文件到微云");
             }
             return "";
@@ -1452,7 +1454,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=移动群文件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 移动群文件");
             }
             return "";
@@ -1471,7 +1473,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群文件列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群文件列表");
             }
             return "";
@@ -1490,7 +1492,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置在线状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置在线状态");
             }
             return false;
@@ -1520,7 +1522,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ点赞, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -1543,7 +1545,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取图片下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             //TODO: 补全
             if (arg1 != AppConfig.Instance.CurrentQQ)
@@ -1567,7 +1569,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询好友信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
@@ -1601,7 +1603,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询群信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
             var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
             var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
@@ -1650,7 +1652,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群文件转发至群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群文件转发至群");
             }
             return false;
@@ -1674,7 +1676,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群文件转发至好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群文件转发至好友");
             }
             return false;
@@ -1697,7 +1699,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友文件转发至好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友文件转发至好友");
             }
             return false;
@@ -1715,7 +1717,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置群消息接收, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置群消息接收");
             }
             return false;
@@ -1732,7 +1734,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友在线状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取好友在线状态");
             }
             return "";
@@ -1749,7 +1751,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取QQ钱包个人信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取QQ钱包个人信息");
             }
             return "";
@@ -1767,7 +1769,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取订单详情, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取订单详情");
             }
             return "";
@@ -1786,7 +1788,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=提交支付验证码, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 提交支付验证码");
             }
             return "";
@@ -1810,7 +1812,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=分享音乐, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 分享音乐");
             }
             return false;
@@ -1827,7 +1829,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=更改群聊消息内容, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 更改群聊消息内容");
             }
             return false;
@@ -1844,7 +1846,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=更改私聊消息内容, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 更改私聊消息内容");
             }
             return false;
@@ -1867,7 +1869,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊口令红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊口令红包");
             }
             return "";
@@ -1891,7 +1893,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊拼手气红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊拼手气红包");
             }
             return "";
@@ -1915,7 +1917,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊普通红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊普通红包");
             }
             return "";
@@ -1938,7 +1940,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊画图红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊画图红包");
             }
             return "";
@@ -1961,7 +1963,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊语音红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊语音红包");
             }
             return "";
@@ -1984,7 +1986,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊接龙红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊接龙红包");
             }
             return "";
@@ -2009,7 +2011,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊专属红包");
             }
             return "";
@@ -2032,7 +2034,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友口令红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友口令红包");
             }
             return "";
@@ -2056,7 +2058,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友普通红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友普通红包");
             }
             return "";
@@ -2079,7 +2081,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友画图红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友画图红包");
             }
             return "";
@@ -2102,7 +2104,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友语音红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友语音红包");
             }
             return "";
@@ -2125,7 +2127,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友接龙红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友接龙红包");
             }
             return "";
@@ -2144,7 +2146,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置专属头衔, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置专属头衔");
             }
             return false;
@@ -2160,7 +2162,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=下线指定QQ, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 下线指定QQ");
             }
             return false;
@@ -2176,7 +2178,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=登录指定QQ, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 登录指定QQ");
             }
             return false;
@@ -2194,7 +2196,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群未领红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群未领红包");
             }
             return 0;
@@ -2212,7 +2214,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送输入状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送输入状态");
             }
             return false;
@@ -2237,7 +2239,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改资料, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改资料");
             }
             return false;
@@ -2256,7 +2258,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群文件下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群文件下载地址");
             }
             return "";
@@ -2273,7 +2275,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=打好友电话, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 打好友电话");
             }
         }
@@ -2289,7 +2291,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=头像双击_好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 头像双击_好友");
             }
             return false;
@@ -2307,7 +2309,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=头像双击_群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 头像双击_群");
             }
             return false;
@@ -2325,7 +2327,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群成员简略信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群成员简略信息");
             }
             return "";
@@ -2343,7 +2345,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊置顶, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊置顶");
             }
             return false;
@@ -2361,7 +2363,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=私聊置顶, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 私聊置顶");
             }
             return false;
@@ -2378,7 +2380,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取加群链接, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取加群链接");
             }
             return "";
@@ -2397,7 +2399,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设为精华, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设为精华");
             }
             return false;
@@ -2415,7 +2417,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_设置群昵称规则, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_设置群昵称规则");
             }
             return false;
@@ -2433,7 +2435,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_设置群发言频率, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_设置群发言频率");
             }
             return false;
@@ -2451,7 +2453,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_设置群查找方式, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_设置群查找方式");
             }
             return false;
@@ -2470,7 +2472,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=邀请好友加群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 邀请好友加群");
             }
             return false;
@@ -2489,7 +2491,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置群内消息通知, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置群内消息通知");
             }
             return false;
@@ -2507,7 +2509,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改群名称, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改群名称");
             }
             return false;
@@ -2523,7 +2525,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=重载自身, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 重载自身");
             }
         }
@@ -2540,7 +2542,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=下线其他设备, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 下线其他设备");
             }
         }
@@ -2559,7 +2561,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=登录网页取ck, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 登录网页取ck");
             }
             return false;
@@ -2585,7 +2587,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, arg10={arg10}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送群公告, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, arg10={arg10}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送群公告");
             }
             return "";
@@ -2618,13 +2620,13 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群成员信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群成员信息");
             }
 
             var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
             var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
-            var item = list.FirstOrDefault(x=>x.Group == arg1 && x.QQ == arg2);
+            var item = list.FirstOrDefault(x => x.Group == arg1 && x.QQ == arg2);
             if (item == null)
             {
                 return null;
@@ -2659,7 +2661,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取钱包cookie, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取钱包cookie");
             }
             return "";
@@ -2675,7 +2677,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群网页cookie, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群网页cookie");
             }
             return "";
@@ -2698,7 +2700,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=转账, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 转账");
             }
             return "";
@@ -2716,7 +2718,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取收款链接, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取收款链接");
             }
             return "";
@@ -2737,7 +2739,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群小视频下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群小视频下载地址");
             }
             return "";
@@ -2757,7 +2759,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取私聊小视频下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取私聊小视频下载地址");
             }
             return "";
@@ -2779,7 +2781,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传小视频, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传小视频");
             }
             return "";
@@ -2799,7 +2801,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送好友xml消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送好友xml消息");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
@@ -2822,7 +2824,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送群xml消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送群xml消息");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
@@ -2843,7 +2845,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群成员概况, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群成员概况");
             }
             return "";
@@ -2860,7 +2862,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=添加好友_取验证类型, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 添加好友_取验证类型");
             }
             return "";
@@ -2877,7 +2879,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊打卡, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊打卡");
             }
             return "";
@@ -2895,7 +2897,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊签到, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊签到");
             }
             return false;
@@ -2913,7 +2915,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置群聊备注, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置群聊备注");
             }
             return false;
@@ -2932,7 +2934,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=红包转发, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 红包转发");
             }
             return "";
@@ -2951,7 +2953,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送数据包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送数据包");
             }
             return false;
@@ -2967,7 +2969,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=请求ssoseq, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 请求ssoseq");
             }
             return 0;
@@ -2983,7 +2985,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取sessionkey, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取sessionkey");
             }
             return "";
@@ -3000,7 +3002,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取bkn_gtk, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取bkn_gtk");
             }
             return "";
@@ -3018,7 +3020,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置好友验证方式, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置好友验证方式");
             }
             return false;
@@ -3035,7 +3037,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传照片墙图片, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传照片墙图片");
             }
             return "";
@@ -3055,7 +3057,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=付款, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 付款");
             }
             return "";
@@ -3073,7 +3075,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改支付密码, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改支付密码");
             }
             return "";
@@ -3090,7 +3092,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=账号搜索, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 账号搜索");
             }
             return "";
@@ -3107,7 +3109,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=添加群_取验证类型, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 添加群_取验证类型");
             }
             return "";
@@ -3126,7 +3128,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取红包领取详情, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取红包领取详情");
             }
             return "";
@@ -3144,7 +3146,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友文件下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取好友文件下载地址");
             }
             return "";
@@ -3163,7 +3165,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群成员_批量, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群成员_批量");
             }
             return false;
@@ -3180,7 +3182,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取扩列资料, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取扩列资料");
             }
             return "";
@@ -3198,7 +3200,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取资料展示设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取资料展示设置");
             }
             return "";
@@ -3215,7 +3217,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置资料展示, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置资料展示");
             }
             return "";
@@ -3232,7 +3234,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取当前登录设备信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取当前登录设备信息");
             }
             return "";
@@ -3250,7 +3252,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=提取图片文字, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 提取图片文字");
             }
             return false;
@@ -3281,7 +3283,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=TEA加密, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API TEA加密");
             }
         }
@@ -3297,7 +3299,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=TEA解密, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API TEA解密");
             }
         }
@@ -3313,7 +3315,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=红包数据加密, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 红包数据加密");
             }
             return "";
@@ -3330,7 +3332,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=红包数据解密, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 红包数据解密");
             }
             return "";
@@ -3346,7 +3348,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=红包msgno计算, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 红包msgno计算");
             }
             return "";
@@ -3365,7 +3367,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取消精华, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取消精华");
             }
             return false;
@@ -3385,7 +3387,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_设置加群方式, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_设置加群方式");
             }
             return false;
@@ -3403,7 +3405,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_群幸运字符, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_群幸运字符");
             }
             return false;
@@ -3421,7 +3423,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群权限_一起写, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群权限_一起写");
             }
             return false;
@@ -3437,7 +3439,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取QQ空间cookie, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取QQ空间cookie");
             }
             return "";
@@ -3468,7 +3470,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改指定QQ缓存密码, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改指定QQ缓存密码");
             }
             return false;
@@ -3490,7 +3492,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=处理群验证事件_风险号, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 处理群验证事件_风险号");
             }
         }
@@ -3506,7 +3508,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询网址安全性, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 查询网址安全性");
             }
             return 0;
@@ -3527,7 +3529,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=消息合并转发至好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 消息合并转发至好友");
             }
             return "";
@@ -3547,7 +3549,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=消息合并转发至群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 消息合并转发至群");
             }
             return "";
@@ -3563,7 +3565,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取卡片消息代码, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取卡片消息代码");
             }
             return "";
@@ -3583,7 +3585,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=禁言群匿名, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 禁言群匿名");
             }
             return false;
@@ -3603,7 +3605,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置文件下载, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置文件下载");
             }
             return 0;
@@ -3622,7 +3624,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=领取私聊普通红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 领取私聊普通红包");
             }
             return "";
@@ -3641,7 +3643,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=领取群聊专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 领取群聊专属红包");
             }
             return "";
@@ -3657,7 +3659,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=加载网页, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 加载网页");
             }
             return false;
@@ -3676,7 +3678,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=压缩包_7za解压, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 压缩包_7za解压");
             }
         }
@@ -3695,7 +3697,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=压缩包_7za压缩, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 压缩包_7za压缩");
             }
         }
@@ -3712,7 +3714,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送讨论组消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送讨论组消息");
             }
             return "";
@@ -3730,7 +3732,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送讨论组json消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送讨论组json消息");
             }
             return "";
@@ -3748,7 +3750,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送讨论组xml消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送讨论组xml消息");
             }
             return "";
@@ -3769,7 +3771,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送讨论组临时消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送讨论组临时消息");
             }
             return "";
@@ -3788,7 +3790,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回消息_讨论组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 撤回消息_讨论组");
             }
             return false;
@@ -3809,7 +3811,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=回复QQ咨询会话, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 回复QQ咨询会话");
             }
             return "";
@@ -3829,7 +3831,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送订阅号私聊消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送订阅号私聊消息");
             }
             return "";
@@ -3845,7 +3847,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取讨论组名称_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取讨论组名称_从缓存");
             }
             return "";
@@ -3863,7 +3865,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改讨论组名称, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改讨论组名称");
             }
             return false;
@@ -3881,7 +3883,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取讨论组成员列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取讨论组成员列表");
             }
             return 0;
@@ -3898,7 +3900,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=强制取自身匿名Id, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 强制取自身匿名Id");
             }
             return 0;
@@ -3915,7 +3917,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取订阅号列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取订阅号列表");
             }
             return 0;
@@ -3932,7 +3934,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取讨论组列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取讨论组列表");
             }
             return 0;
@@ -3951,7 +3953,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=邀请好友加群_批量, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 邀请好友加群_批量");
             }
             return false;
@@ -3970,7 +3972,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=邀请好友加入讨论组_批量, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 邀请好友加入讨论组_批量");
             }
             return false;
@@ -4007,7 +4009,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组口令红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组口令红包");
             }
             return "";
@@ -4031,7 +4033,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组拼手气红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组拼手气红包");
             }
             return "";
@@ -4055,7 +4057,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组普通红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组普通红包");
             }
             return "";
@@ -4078,7 +4080,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组画图红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组画图红包");
             }
             return "";
@@ -4101,7 +4103,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组语音红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组语音红包");
             }
             return "";
@@ -4124,7 +4126,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组接龙红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组接龙红包");
             }
             return "";
@@ -4149,7 +4151,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组专属红包");
             }
             return "";
@@ -4168,7 +4170,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=领取讨论组专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 领取讨论组专属红包");
             }
             return "";
@@ -4186,7 +4188,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取讨论组未领红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取讨论组未领红包");
             }
             return 0;
@@ -4205,7 +4207,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取讨论组文件下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取讨论组文件下载地址");
             }
             return "";
@@ -4225,7 +4227,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送QQ咨询会话, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送QQ咨询会话");
             }
             return "";
@@ -4244,7 +4246,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=创建群聊, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建群聊");
             }
             return "";
@@ -4262,7 +4264,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群应用列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群应用列表");
             }
             return 0;
@@ -4279,7 +4281,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=退出讨论组, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 退出讨论组");
             }
             return false;
@@ -4298,7 +4300,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群验证消息接收设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群验证消息接收设置");
             }
             return false;
@@ -4316,7 +4318,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=转让群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 转让群");
             }
             return false;
@@ -4334,7 +4336,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改好友备注, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改好友备注");
             }
             return false;
@@ -4352,7 +4354,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除讨论组成员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除讨论组成员");
             }
             return false;
@@ -4373,7 +4375,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组文件转发至群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组文件转发至群");
             }
             return false;
@@ -4397,7 +4399,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组文件转发至好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组文件转发至好友");
             }
             return false;
@@ -4414,7 +4416,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取QQ头像, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
             return $"https://q.qlogo.cn/g?b=qq&nk={arg0}&s=160";
         }
@@ -4429,7 +4431,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群头像, authCode={authCode}, arg0={arg0}, ");
             }
             return $"http://p.qlogo.cn/gh/{arg0}/{arg0}/0";
         }
@@ -4446,7 +4448,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取大表情图片下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取大表情图片下载地址");
             }
             return "";
@@ -4466,7 +4468,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=拉起群收款, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 拉起群收款");
             }
             return "";
@@ -4483,7 +4485,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=结束群收款, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 结束群收款");
             }
             return "";
@@ -4501,7 +4503,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询群收款状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 查询群收款状态");
             }
             return "";
@@ -4523,7 +4525,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=支付群收款, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 支付群收款");
             }
             return "";
@@ -4542,7 +4544,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=消息合并转发至讨论组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 消息合并转发至讨论组");
             }
             return "";
@@ -4559,7 +4561,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群收款_催单, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群收款_催单");
             }
             return "";
@@ -4577,7 +4579,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友Diy名片数据, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取好友Diy名片数据");
             }
             return false;
@@ -4594,7 +4596,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置Diy名片, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置Diy名片");
             }
             return "";
@@ -4631,7 +4633,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=好友生僻字红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 好友生僻字红包");
             }
             return "";
@@ -4654,7 +4656,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=群聊生僻字红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 群聊生僻字红包");
             }
             return "";
@@ -4677,7 +4679,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=讨论组生僻字红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 讨论组生僻字红包");
             }
             return "";
@@ -4698,7 +4700,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=支付代付请求, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 支付代付请求");
             }
             return "";
@@ -4716,7 +4718,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询代付状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 查询代付状态");
             }
             return "";
@@ -4734,7 +4736,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=拉起代付, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 拉起代付");
             }
             return "";
@@ -4753,7 +4755,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友能量值与QID, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取好友能量值与QID");
             }
             return false;
@@ -4785,7 +4787,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=文字转语音, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 文字转语音");
             }
             return "";
@@ -4805,7 +4807,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=翻译, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 翻译");
             }
             return "";
@@ -4824,7 +4826,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回消息_群聊s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 撤回消息_群聊s");
             }
             return "";
@@ -4842,7 +4844,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ列表_添加手表协议QQ, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ列表_添加手表协议QQ");
             }
             return "";
@@ -4859,7 +4861,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ列表_二维码登录_拉取二维码, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ列表_二维码登录_拉取二维码");
             }
             return "";
@@ -4875,7 +4877,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ列表_二维码登录_查询二维码状态, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ列表_二维码登录_查询二维码状态");
             }
             return "";
@@ -4892,7 +4894,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=拍一拍好友在线状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 拍一拍好友在线状态");
             }
             return false;
@@ -4912,7 +4914,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送验证消息会话消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送验证消息会话消息");
             }
             return "";
@@ -4933,7 +4935,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=回复验证消息会话消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 回复验证消息会话消息");
             }
             return "";
@@ -4952,7 +4954,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群文件内存利用状态, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群文件内存利用状态");
             }
             return "";
@@ -4971,7 +4973,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群文件总数, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群文件总数");
             }
             return "";
@@ -4989,7 +4991,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传涂鸦, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传涂鸦");
             }
             return "";
@@ -5007,7 +5009,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群成员_批量s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群成员_批量s");
             }
             return false;
@@ -5028,7 +5030,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传好友文件s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传好友文件s");
             }
             return "";
@@ -5048,7 +5050,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群文件s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群文件s");
             }
             return "";
@@ -5065,7 +5067,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群艾特全体剩余次数, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群艾特全体剩余次数");
             }
             return 0;
@@ -5082,7 +5084,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=是否已开启QQ咨询, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 是否已开启QQ咨询");
             }
             return 0;
@@ -5101,7 +5103,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=创建群相册, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建群相册");
             }
             return "";
@@ -5119,7 +5121,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群相册, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群相册");
             }
             return "";
@@ -5136,7 +5138,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群相册列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群相册列表");
             }
             return "";
@@ -5155,7 +5157,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群相册照片列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群相册照片列表");
             }
             return "";
@@ -5174,7 +5176,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除群相册照片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除群相册照片");
             }
             return "";
@@ -5195,7 +5197,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改群相册信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改群相册信息");
             }
             return "";
@@ -5211,7 +5213,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取群Id_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群Id_从缓存");
             }
             return 0;
@@ -5233,7 +5235,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传频道图片, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传频道图片");
             }
             return "";
@@ -5252,7 +5254,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送频道消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送频道消息");
             }
             return "";
@@ -5271,7 +5273,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送频道私信消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送频道私信消息");
             }
             return "";
@@ -5291,7 +5293,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取私信频道Id, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取私信频道Id");
             }
             return false;
@@ -5313,7 +5315,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道消息粘贴表情, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道消息粘贴表情");
             }
             return false;
@@ -5332,7 +5334,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回频道消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 撤回频道消息");
             }
             return "";
@@ -5351,7 +5353,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=撤回频道私信消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 撤回频道私信消息");
             }
             return "";
@@ -5371,7 +5373,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置子频道精华消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置子频道精华消息");
             }
             return false;
@@ -5390,7 +5392,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=禁言频道成员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 禁言频道成员");
             }
             return false;
@@ -5408,7 +5410,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置频道全员禁言, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置频道全员禁言");
             }
             return false;
@@ -5427,7 +5429,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=移除频道成员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 移除频道成员");
             }
             return false;
@@ -5446,7 +5448,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=移除频道成员_批量, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 移除频道成员_批量");
             }
             return false;
@@ -5463,7 +5465,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=退出频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 退出频道");
             }
             return false;
@@ -5482,7 +5484,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=更改频道名称, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 更改频道名称");
             }
             return false;
@@ -5500,7 +5502,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改频道简介, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改频道简介");
             }
             return false;
@@ -5518,7 +5520,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置我的频道昵称, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置我的频道昵称");
             }
             return false;
@@ -5541,7 +5543,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置子频道观看权限, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置子频道观看权限");
             }
             return false;
@@ -5564,7 +5566,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=置子频道发言权限, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 置子频道发言权限");
             }
             return false;
@@ -5583,7 +5585,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=子频道消息提醒设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 子频道消息提醒设置");
             }
             return false;
@@ -5602,7 +5604,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=子频道慢速模式设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 子频道慢速模式设置");
             }
             return false;
@@ -5621,7 +5623,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改子频道名称, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改子频道名称");
             }
             return false;
@@ -5639,7 +5641,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除子频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除子频道");
             }
             return false;
@@ -5656,7 +5658,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改我的频道用户信息_昵称, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改我的频道用户信息_昵称");
             }
             return false;
@@ -5673,7 +5675,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改我的频道用户信息_性别, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改我的频道用户信息_性别");
             }
             return false;
@@ -5690,7 +5692,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改我的频道用户信息_年龄, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改我的频道用户信息_年龄");
             }
             return false;
@@ -5712,7 +5714,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改我的频道用户信息_所在地, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改我的频道用户信息_所在地");
             }
             return false;
@@ -5729,7 +5731,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置是否允许别人私信我, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置是否允许别人私信我");
             }
             return false;
@@ -5749,7 +5751,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置频道加入验证方式, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置频道加入验证方式");
             }
             return false;
@@ -5768,7 +5770,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=搜索频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 搜索频道");
             }
             return 0;
@@ -5784,7 +5786,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道封面, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道封面");
             }
             return "";
@@ -5801,7 +5803,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道头像, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道头像");
             }
             return "";
@@ -5821,7 +5823,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取频道成员列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取频道成员列表");
             }
             return 0;
@@ -5839,7 +5841,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道信息");
             }
             return false;
@@ -5858,7 +5860,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道加入验证方式, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道加入验证方式");
             }
             return false;
@@ -5878,7 +5880,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=申请加入频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 申请加入频道");
             }
             return "";
@@ -5898,7 +5900,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道文件下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道文件下载地址");
             }
             return "";
@@ -5923,7 +5925,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道拼手气红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道拼手气红包");
             }
             return "";
@@ -5948,7 +5950,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道普通红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道普通红包");
             }
             return "";
@@ -5973,7 +5975,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道专属红包");
             }
             return "";
@@ -5993,7 +5995,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=领取频道专属红包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 领取频道专属红包");
             }
             return "";
@@ -6012,7 +6014,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道成员身份组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道成员身份组");
             }
             return 0;
@@ -6032,7 +6034,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置频道成员身份组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置频道成员身份组");
             }
             return false;
@@ -6053,7 +6055,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改身份组信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改身份组信息");
             }
             return false;
@@ -6071,7 +6073,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除身份组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除身份组");
             }
             return false;
@@ -6091,7 +6093,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=新增身份组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 新增身份组");
             }
             return 0;
@@ -6109,7 +6111,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道身份组列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道身份组列表");
             }
             return 0;
@@ -6127,7 +6129,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取子频道列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取子频道列表");
             }
             return 0;
@@ -6145,7 +6147,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道用户个性档案, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道用户个性档案");
             }
             return 0;
@@ -6163,7 +6165,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道用户资料, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道用户资料");
             }
             return false;
@@ -6179,7 +6181,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=刷新频道列表缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 刷新频道列表缓存");
             }
             return false;
@@ -6195,7 +6197,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道列表_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道列表_从缓存");
             }
             return "";
@@ -6211,7 +6213,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道用户昵称_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道用户昵称_从缓存");
             }
             return "";
@@ -6227,7 +6229,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道名称_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道名称_从缓存");
             }
             return "";
@@ -6244,7 +6246,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取子频道名称_从缓存, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取子频道名称_从缓存");
             }
             return "";
@@ -6261,7 +6263,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道昵称_从缓存, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道昵称_从缓存");
             }
             return "";
@@ -6279,7 +6281,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取子频道分组列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取子频道分组列表");
             }
             return 0;
@@ -6295,7 +6297,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取私信频道列表_从缓存, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取私信频道列表_从缓存");
             }
             return "";
@@ -6317,7 +6319,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传频道文件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传频道文件");
             }
             return "";
@@ -6334,7 +6336,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=更改频道消息内容, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 更改频道消息内容");
             }
             return false;
@@ -6350,7 +6352,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=Emoji转频道EmojiId, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API Emoji转频道EmojiId");
             }
             return "";
@@ -6366,7 +6368,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道EmojiId转Emoji, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道EmojiId转Emoji");
             }
             return "";
@@ -6382,7 +6384,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=Emoji转QQ空间EmId, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API Emoji转QQ空间EmId");
             }
             return "";
@@ -6398,7 +6400,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ空间EmId转Emoji, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ空间EmId转Emoji");
             }
             return "";
@@ -6414,7 +6416,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=小黄豆Id转QQ空间EmId, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 小黄豆Id转QQ空间EmId");
             }
             return "";
@@ -6430,7 +6432,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ空间EmId转小黄豆Id, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ空间EmId转小黄豆Id");
             }
             return "";
@@ -6450,7 +6452,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取特定身份组成员列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取特定身份组成员列表");
             }
             return 0;
@@ -6467,7 +6469,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取子频道分组结构, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取子频道分组结构");
             }
             return "";
@@ -6485,7 +6487,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置子频道分组结构, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置子频道分组结构");
             }
             return "";
@@ -6503,7 +6505,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除子频道_批量, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除子频道_批量");
             }
             return false;
@@ -6531,7 +6533,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, arg10={arg10}, arg11={arg11}, arg12={arg12}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=创建子频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, arg10={arg10}, arg11={arg11}, arg12={arg12}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建子频道");
             }
             return false;
@@ -6549,7 +6551,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=构造卡片消息文本代码, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 构造卡片消息文本代码");
             }
             return "";
@@ -6573,7 +6575,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=分享音乐_频道, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 分享音乐_频道");
             }
             return false;
@@ -6590,7 +6592,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改频道排序, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改频道排序");
             }
             return false;
@@ -6608,7 +6610,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=处理频道加入申请, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 处理频道加入申请");
             }
             return false;
@@ -6625,7 +6627,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=查询群设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 查询群设置");
             }
             return "";
@@ -6644,7 +6646,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取子频道管理列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取子频道管理列表");
             }
             return 0;
@@ -6664,7 +6666,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置子频道管理, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置子频道管理");
             }
             return false;
@@ -6684,7 +6686,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置指定身份组子频道观看权限, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置指定身份组子频道观看权限");
             }
             return false;
@@ -6704,7 +6706,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置指定身份组子频道发言权限, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置指定身份组子频道发言权限");
             }
             return false;
@@ -6724,7 +6726,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置直播子频道主播, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置直播子频道主播");
             }
             return false;
@@ -6741,7 +6743,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取频道分享链接, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取频道分享链接");
             }
             return "";
@@ -6759,7 +6761,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取子频道分享链接, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取子频道分享链接");
             }
             return "";
@@ -6778,7 +6780,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=子频道消息通知设置, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 子频道消息通知设置");
             }
             return false;
@@ -6799,7 +6801,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取红包领取详情s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取红包领取详情s");
             }
             return "";
@@ -6819,7 +6821,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取话题子频道帖子列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取话题子频道帖子列表");
             }
             return 0;
@@ -6839,7 +6841,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取日程列表, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取日程列表");
             }
             return 0;
@@ -6858,7 +6860,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=获取日程链接, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 获取日程链接");
             }
             return "";
@@ -6878,7 +6880,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取日程信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取日程信息");
             }
             return false;
@@ -6903,7 +6905,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=创建日程, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, arg8={arg8}, arg9={arg9}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 创建日程");
             }
             return false;
@@ -6920,7 +6922,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取QQ头像K值, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取QQ头像K值");
             }
             return "";
@@ -6939,7 +6941,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除日程, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除日程");
             }
             return false;
@@ -6958,7 +6960,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送通行证到群, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送通行证到群");
             }
             return false;
@@ -6976,7 +6978,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送通行证到好友, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送通行证到好友");
             }
             return false;
@@ -6994,7 +6996,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=屏蔽频道用户私信, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 屏蔽频道用户私信");
             }
             return false;
@@ -7012,7 +7014,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=频道用户私信免打扰, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 频道用户私信免打扰");
             }
             return false;
@@ -7033,7 +7035,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ列表_添加QQ, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ列表_添加QQ");
             }
             return "";
@@ -7050,7 +7052,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=QQ列表_删除QQ, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API QQ列表_删除QQ");
             }
             return "";
@@ -7066,7 +7068,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=登录指定QQ_二次登录, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 登录指定QQ_二次登录");
             }
             return false;
@@ -7082,7 +7084,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=是否已设置QQ密码, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 是否已设置QQ密码");
             }
             return false;
@@ -7112,7 +7114,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取在线移动设备列表, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取在线移动设备列表");
             }
             return "";
@@ -7131,7 +7133,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置频道全局公告_指定消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置频道全局公告_指定消息");
             }
             return false;
@@ -7148,7 +7150,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道号, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道号");
             }
             return "";
@@ -7169,7 +7171,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=设置位置共享s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 设置位置共享s");
             }
             return false;
@@ -7189,7 +7191,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上报当前位置s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上报当前位置s");
             }
             return false;
@@ -7207,7 +7209,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=移动好友分组, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 移动好友分组");
             }
             return false;
@@ -7225,7 +7227,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=修改好友分组名, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 修改好友分组名");
             }
             return false;
@@ -7242,7 +7244,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除好友分组, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除好友分组");
             }
             return false;
@@ -7258,7 +7260,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取好友分组列表, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取好友分组列表");
             }
             return "";
@@ -7275,7 +7277,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=新增好友分组, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 新增好友分组");
             }
             return 0;
@@ -7297,7 +7299,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取频道红包pre_grap_token, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取频道红包pre_grap_token");
             }
             return "";
@@ -7320,7 +7322,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=语音红包匹配, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 语音红包匹配");
             }
             return "";
@@ -7338,7 +7340,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群聊语音红包匹配语音, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群聊语音红包匹配语音");
             }
             return "";
@@ -7355,7 +7357,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取合并转发消息内容, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取合并转发消息内容");
             }
             return "";
@@ -7374,7 +7376,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传合并转发消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传合并转发消息");
             }
             return "";
@@ -7392,7 +7394,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=语音转文字, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 语音转文字");
             }
             return "";
@@ -7411,7 +7413,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发送功能包, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发送功能包");
             }
             return false;
@@ -7428,7 +7430,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=二维码扫一扫授权登录其他应用, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 二维码扫一扫授权登录其他应用");
             }
             return "";
@@ -7444,7 +7446,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取历史登录设备guid列表, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取历史登录设备guid列表");
             }
             return "";
@@ -7461,7 +7463,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=二维码扫一扫授权其他设备资料辅助验证登录, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 二维码扫一扫授权其他设备资料辅助验证登录");
             }
             return "";
@@ -7477,7 +7479,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=关闭设备锁, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 关闭设备锁");
             }
             return false;
@@ -7493,7 +7495,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=恢复设备锁, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 恢复设备锁");
             }
             return false;
@@ -7512,7 +7514,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=余额提现, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 余额提现");
             }
             return "";
@@ -7528,7 +7530,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取h5钱包cookie, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取h5钱包cookie");
             }
             return "";
@@ -7544,7 +7546,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取QQ会员中心cookie, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取QQ会员中心cookie");
             }
             return "";
@@ -7563,7 +7565,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=说说点赞, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 说说点赞");
             }
             return false;
@@ -7582,7 +7584,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=说说评论, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 说说评论");
             }
             return false;
@@ -7598,7 +7600,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=取最新动态列表, authCode={authCode}, arg0={arg0}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 取最新动态列表");
             }
             return "";
@@ -7615,7 +7617,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=搜索表情包, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 搜索表情包");
             }
             return "";
@@ -7632,7 +7634,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=发布说说, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 发布说说");
             }
             return "";
@@ -7650,7 +7652,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=经纬度定位查询详细地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 经纬度定位查询详细地址");
             }
             return "";
@@ -7687,7 +7689,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=上传群临时文件s, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, arg5={arg5}, arg6={arg6}, arg7={arg7}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 上传群临时文件s");
             }
             return "";
@@ -7704,7 +7706,7 @@ namespace Another_Mirai_Native.Export
         {
             if (AppConfig.Instance.DebugMode)
             {
-                LogHelper.LocalDebug("小栗子API", $"authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
+                LogHelper.LocalDebug("小栗子API", $"API=删除说说, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
                 LogHelper.Error("小栗子API", "使用了未实现了API 删除说说");
             }
             return false;
