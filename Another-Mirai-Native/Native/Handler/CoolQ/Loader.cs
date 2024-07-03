@@ -57,13 +57,13 @@ namespace Another_Mirai_Native.Native.Handler.CoolQ
 
                 foreach (var item in AppInfo._event)
                 {
-                    LogHelper.Debug("创建方法委托", $"{item.id}: {item.function}");
-                    if (!FindEventEnum(item.id))
+                    LogHelper.Debug("创建方法委托", $"{item.type}: {item.function}");
+                    if (!FindEventEnum(item.type))
                     {
-                        LogHelper.Error("创建方法委托", $"事件ID: {item.id} 无效");
+                        LogHelper.Error("创建方法委托", $"事件ID: {item.type} 无效");
                         continue;
                     }
-                    switch ((PluginEventType)item.id)
+                    switch ((PluginEventType)item.type)
                     {
                         case PluginEventType.PrivateMsg:
                             PrivateMsg = CreateDelegateFromUnmanaged<Type_PrivateMsg>(item.function);
