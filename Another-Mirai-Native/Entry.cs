@@ -387,6 +387,10 @@ namespace Another_Mirai_Native
                 {
                     AppConfig.Instance.Core_WSURL = args[i + 1];
                 }
+                if (args[i].ToLower() == "-qq")
+                {
+                    AppConfig.Instance.CurrentQQ = long.Parse(args[i + 1]);
+                }
             }
         }
     }

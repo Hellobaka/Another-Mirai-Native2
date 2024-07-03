@@ -49,6 +49,16 @@ namespace Another_Mirai_Native.RPC.Interface
                     {
                         HeartBeatLostCount = 0;
                     }
+                    else if (caller.Function == "CurrentQQChanged")
+                    {
+                        if (caller.Args.Length == 2 
+                            && long.TryParse(caller.Args[0].ToString(), out long v)
+                            && string.IsNullOrEmpty(caller.Args[1]?.ToString()))
+                        {
+                            AppConfig.Instance.CurrentQQ = v;
+                            AppConfig.Instance.CurrentNickName = caller.Args[1].ToString();
+                        }
+                    }
                 }
                 else
                 {

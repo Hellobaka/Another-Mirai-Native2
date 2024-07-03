@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
+using Another_Mirai_Native.RPC;
 using System.IO;
 using System.Reflection;
 
@@ -34,6 +35,7 @@ namespace Another_Mirai_Native
             if (flag)
             {
                 CurrentProtocol = protocol;
+                ServerManager.Server.NotifyCurrentQQChanged(AppConfig.Instance.CurrentQQ, AppConfig.Instance.CurrentNickName);
             }
             LogHelper.Info("加载协议", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             return flag;

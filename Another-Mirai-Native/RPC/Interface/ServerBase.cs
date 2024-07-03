@@ -262,6 +262,14 @@ namespace Another_Mirai_Native.RPC.Interface
             WaitingMessage.Remove(guid);
         }
 
+        public void NotifyCurrentQQChanged(long currentQQ, string nickName)
+        {
+            foreach (var item in Connections)
+            {
+                SendMessage(item, new InvokeBody() { Function = "CurrentQQChanged", Args = [currentQQ, nickName] }.ToJson());
+            }
+        }
+
         #region Virtual
 
         public virtual void ClientDisconnect(CQPluginProxy plugin)
