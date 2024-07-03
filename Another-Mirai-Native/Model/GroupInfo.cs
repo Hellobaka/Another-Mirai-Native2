@@ -44,11 +44,10 @@ namespace Another_Mirai_Native.Model
             GroupInfo info = new();
 
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
-            info.Group = binaryReader.ReadInt64();
-            short length = binaryReader.ReadInt16();
-            info.Name = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            info.CurrentMemberCount = binaryReader.ReadInt32();
-            info.MaxMemberCount = binaryReader.ReadInt32();
+            info.Group = binaryReader.ReadInt64_Ex();
+            info.Name = binaryReader.ReadString_Ex();
+            info.CurrentMemberCount = binaryReader.ReadInt32_Ex();
+            info.MaxMemberCount = binaryReader.ReadInt32_Ex();
 
             return info;
         }
@@ -77,11 +76,10 @@ namespace Another_Mirai_Native.Model
             List<GroupInfo> list = [];
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
 
-            int count = binaryReader.ReadInt32();
+            int count = binaryReader.ReadInt32_Ex();
             for (int i = 0; i < count; i++)
             {
-                short length = binaryReader.ReadInt16();
-                list.Add(FromNative(binaryReader.ReadBytes(length)));
+                list.Add(FromNative(binaryReader.ReadToken_Ex()));
             }
             return list;
         }

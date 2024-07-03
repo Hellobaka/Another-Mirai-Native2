@@ -36,11 +36,10 @@ namespace Another_Mirai_Native.Model
             FriendInfo info = new();
 
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
-            info.QQ = binaryReader.ReadInt64();
-            short length = binaryReader.ReadInt16();
-            info.Nick = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            length = binaryReader.ReadInt16();
-            info.Postscript = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
+
+            info.QQ = binaryReader.ReadInt64_Ex();
+            info.Nick = binaryReader.ReadString_Ex();
+            info.Postscript = binaryReader.ReadString_Ex();
             
             return info;
         }
@@ -64,11 +63,10 @@ namespace Another_Mirai_Native.Model
             List<FriendInfo> list = [];
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
 
-            int count = binaryReader.ReadInt32();
+            int count = binaryReader.ReadInt32_Ex();
             for(int i = 0; i < count; i++)
             {
-                short length = binaryReader.ReadInt16();
-                list.Add(FromNative(binaryReader.ReadBytes(length)));
+                list.Add(FromNative(binaryReader.ReadToken_Ex()));
             }
             return list;
         }

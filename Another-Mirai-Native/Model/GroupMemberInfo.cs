@@ -108,26 +108,21 @@ namespace Another_Mirai_Native.Model
             GroupMemberInfo info = new();
 
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
-            info.Group = binaryReader.ReadInt64();
-            info.QQ = binaryReader.ReadInt64();
-            short length = binaryReader.ReadInt16();
-            info.Nick = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            length = binaryReader.ReadInt16();
-            info.Card = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            info.Sex = (QQSex)binaryReader.ReadInt32();
-            info.Age = binaryReader.ReadInt32();
-            length = binaryReader.ReadInt16();
-            info.Area = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            info.JoinGroupDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32());
-            info.LastSpeakDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32());
-            length = binaryReader.ReadInt16();
-            info.Level = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            info.MemberType = (QQGroupMemberType)binaryReader.ReadInt32();
-            length = binaryReader.ReadInt16();
-            info.IsBadRecord = binaryReader.ReadInt32() == 1;
-            info.ExclusiveTitle = Helper.GB18030.GetString(binaryReader.ReadBytes(length));
-            info.ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32());
-            info.IsAllowEditorCard = binaryReader.ReadInt32() == 1;
+            info.Group = binaryReader.ReadInt64_Ex();
+            info.QQ = binaryReader.ReadInt64_Ex();
+            info.Nick = binaryReader.ReadString_Ex();
+            info.Card = binaryReader.ReadString_Ex();
+            info.Sex = (QQSex)binaryReader.ReadInt32_Ex();
+            info.Age = binaryReader.ReadInt32_Ex();
+            info.Area = binaryReader.ReadString_Ex();
+            info.JoinGroupDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.LastSpeakDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.Level = binaryReader.ReadString_Ex();
+            info.MemberType = (QQGroupMemberType)binaryReader.ReadInt32_Ex();
+            info.IsBadRecord = binaryReader.ReadInt32_Ex() == 1;
+            info.ExclusiveTitle = binaryReader.ReadString_Ex();
+            info.ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.IsAllowEditorCard = binaryReader.ReadInt32_Ex() == 1;
 
             return info;
         }
@@ -156,11 +151,10 @@ namespace Another_Mirai_Native.Model
             List<GroupMemberInfo> list = [];
             using BinaryReader binaryReader = new(new MemoryStream(buffer));
 
-            int count = binaryReader.ReadInt32();
+            int count = binaryReader.ReadInt32_Ex();
             for (int i = 0; i < count; i++)
             {
-                short length = binaryReader.ReadInt16();
-                list.Add(FromNative(binaryReader.ReadBytes(length)));
+                list.Add(FromNative(binaryReader.ReadToken_Ex()));
             }
             return list;
         }
