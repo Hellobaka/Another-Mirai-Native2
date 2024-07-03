@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
+using Another_Mirai_Native.Native.Handler.XiaoLiZi;
 
 namespace Another_Mirai_Native.Export
 {
@@ -113,6 +114,7 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
+            arg2 = MessageParser.ParseToCQCode(arg2);
             long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, arg2).ToLong();
             if (msgId > 0)
             {
@@ -143,6 +145,7 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
+            arg2 = MessageParser.ParseToCQCode(arg2);
             int msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, authCode, arg1, arg2).ToInt();
             return "";
         }
@@ -168,6 +171,7 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
+            arg3 = MessageParser.ParseToCQCode(arg3);
             return Function_6(authCode, arg0, arg2, arg3, ref arg4, ref arg5);
         }
 
@@ -494,7 +498,11 @@ namespace Another_Mirai_Native.Export
                 LogHelper.LocalDebug("小栗子API", $"API=取昵称_从缓存, authCode={authCode}, arg0={arg0}, ");
             }
 
-            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false)?.ToString();
+            if (string.IsNullOrEmpty(friendList))
+            {
+                return "";
+            }
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
             var item = list.FirstOrDefault(x => x.QQ.ToString() == arg0);
             if (item == null)
@@ -533,8 +541,12 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=取群名称_从缓存, authCode={authCode}, arg0={arg0}, ");
             }
-            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
-            var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
+            var groupList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode)?.ToString();
+            if (string.IsNullOrEmpty(groupList))
+            {
+                return "";
+            }
+            var list = GroupInfo.RawToList(Convert.FromBase64String(groupList));
             var item = list.FirstOrDefault(x => x.Group.ToString() == arg0);
             if (item == null)
             {
@@ -604,7 +616,8 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=取框架QQ, authCode={authCode}");
             }
-            return AppConfig.Instance.CurrentQQ.ToString();
+            var qq = ClientManager.Client.InvokeCQPFuntcion("CQ_getLoginQQ", true, authCode)?.ToString();
+            return qq;
         }
 
         /// <summary>
@@ -626,6 +639,10 @@ namespace Another_Mirai_Native.Export
                 return 0;
             }
             var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            if (string.IsNullOrEmpty(friendList))
+            {
+                return 0;
+            }
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
             Model.Other.XiaoLiZi.FriendInfo[] friendInfos = new Model.Other.XiaoLiZi.FriendInfo[list.Count];
             for (int i = 0; i < list.Count; i++)
@@ -661,23 +678,35 @@ namespace Another_Mirai_Native.Export
             {
                 return 0;
             }
-            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
-            var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
-            Model.Other.XiaoLiZi.GroupInfo[] groupInfos = new Model.Other.XiaoLiZi.GroupInfo[list.Count];
+            var groupList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode)?.ToString();
+            if (string.IsNullOrEmpty(groupList))
+            {
+                return 0;
+            }
+            var list = GroupInfo.RawToList(Convert.FromBase64String(groupList));
+            Model.Other.XiaoLiZi.GroupDataList ptrList = new();
+            ptrList.index = 0;
+            ptrList.Amount = list.Count;
+            ptrList.pAddrList = new IntPtr[list.Count];
+
             for (int i = 0; i < list.Count; i++)
             {
                 var groupInfo = list[i];
-                groupInfos[i] = new Model.Other.XiaoLiZi.GroupInfo
+                var info = new Model.Other.XiaoLiZi.GroupInfo
                 {
                     GroupQQ = groupInfo.Group,
                     GroupName = groupInfo.Name,
                     GroupMemberCount = groupInfo.CurrentMemberCount,
                 };
+
+                var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(info));
+                Marshal.StructureToPtr(info, ptr, false);
+                ptrList.pAddrList[i] = ptr;
             }
 
-            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(groupInfos));
-            Marshal.StructureToPtr(groupInfos, arg1, false);
-            return friendList.Length;
+            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(ptrList));
+            Marshal.StructureToPtr(ptrList, arg1, false);
+            return groupList.Length;
         }
 
         /// <summary>
@@ -698,7 +727,11 @@ namespace Another_Mirai_Native.Export
             {
                 return 0;
             }
-            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1)?.ToString();
+            if (string.IsNullOrEmpty(memberList))
+            {
+                return 0;
+            }
             var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
             Model.Other.XiaoLiZi.GroupMemberInfo[] memberInfos = new Model.Other.XiaoLiZi.GroupMemberInfo[list.Count];
             for (int i = 0; i < list.Count; i++)
@@ -764,7 +797,11 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1)?.ToString();
+            if (string.IsNullOrEmpty(memberList))
+            {
+                return "";
+            }
             var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
             StringBuilder sb = new();
             foreach (var member in list.Where(x => x.MemberType == QQGroupMemberType.Manage || x.MemberType == QQGroupMemberType.Creator))
@@ -792,7 +829,11 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            var memberInfo = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberInfoV2", true, authCode, arg1, arg2).ToString();
+            var memberInfo = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberInfoV2", true, authCode, arg1, arg2)?.ToString();
+            if (string.IsNullOrEmpty(memberInfo))
+            {
+                return "";
+            }
             var info = GroupMemberInfo.FromNative(Convert.FromBase64String(memberInfo));
             return info.Card;
         }
@@ -1508,7 +1549,7 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
             }
-            return ClientManager.Client.InvokeCQPFuntcion("CQ_getAppDirectory", true, authCode).ToString();
+            return ClientManager.Client.InvokeCQPFuntcion("CQ_getAppDirectory", true, authCode)?.ToString();
         }
 
         /// <summary>
@@ -1552,7 +1593,7 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            string r = ClientManager.Client.InvokeCQPFuntcion("CQ_getImage", true, authCode, arg0).ToString();
+            string r = ClientManager.Client.InvokeCQPFuntcion("CQ_getImage", true, authCode, arg0)?.ToString();
 
             return r.ToString();
         }
@@ -1571,7 +1612,11 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=查询好友信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
-            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false).ToString();
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false)?.ToString();
+            if (string.IsNullOrEmpty(friendList))
+            {
+                return false;
+            }
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
             var item = list.FirstOrDefault(x => x.QQ == arg1);
             if (item == null)
@@ -1605,7 +1650,11 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=查询群信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
-            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode).ToString();
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, authCode)?.ToString();
+            if (string.IsNullOrEmpty(friendList))
+            {
+                return false;
+            }
             var list = GroupInfo.RawToList(Convert.FromBase64String(friendList));
 
             var item = list.FirstOrDefault(x => x.Group == arg1);
@@ -2624,12 +2673,16 @@ namespace Another_Mirai_Native.Export
                 LogHelper.Error("小栗子API", "使用了未实现了API 取群成员信息");
             }
 
-            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1).ToString();
+            var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1)?.ToString();
+            if (string.IsNullOrEmpty(memberList))
+            {
+                return "";
+            }
             var list = GroupMemberInfo.RawToList(Convert.FromBase64String(memberList));
             var item = list.FirstOrDefault(x => x.Group == arg1 && x.QQ == arg2);
             if (item == null)
             {
-                return null;
+                return "";
             }
 
             var info = new Model.Other.XiaoLiZi.GroupMemberInfo
