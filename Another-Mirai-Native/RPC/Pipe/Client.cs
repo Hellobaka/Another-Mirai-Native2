@@ -51,11 +51,11 @@ namespace Another_Mirai_Native.RPC.Pipe
         {
             lock (_lock) 
             {
-                SendMessage(message).Wait();
+                SendMessage(message);
             }
         }
 
-        public async Task SendMessage(string message)
+        public void SendMessage(string message)
         {
             try
             {
@@ -63,11 +63,11 @@ namespace Another_Mirai_Native.RPC.Pipe
                 {
                     LogHelper.LocalDebug("Pipe_Send", message);
 
-                    byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    byte[] buffer = Encoding.UTF8.GetBytes(message + "\0");
 #if NET5_0_OR_GREATER
-                    await PipeClient.WriteAsync(new Memory<byte>(buffer));
+                    PipeClient.Write(new ReadOnlySpan<byte>(buffer));
 #else
-                    await PipeClient.WriteAsync(buffer, 0, buffer.Length);
+                    PipeClient.Write(buffer, 0, buffer.Length);
 #endif
                     LogHelper.LocalDebug("Pipe_Send", "Send Ok.");
                 }
@@ -109,7 +109,8 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         private async Task ListenForMessages()
         {
-            var buffer = new byte[65535];
+            var buffer = new byte[1024];
+            var stringBuilder = new StringBuilder();
             while (PipeClient.IsConnected)
             {
                 try
@@ -122,8 +123,26 @@ namespace Another_Mirai_Native.RPC.Pipe
                     LogHelper.LocalDebug("Pipe_Receive", "");
                     if (bytesRead > 0)
                     {
-                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        new Thread(() => HandleMessage(message)).Start();
+                        string messagePart = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        stringBuilder.Append(messagePart);
+
+                        // 查找完整消息的定界符
+                        string completeMessage = stringBuilder.ToString();
+                        int nullCharIndex;
+                        while ((nullCharIndex = completeMessage.IndexOf('\0')) != -1)
+                        {
+                            // 提取完整消息
+                            string message = completeMessage.Substring(0, nullCharIndex);
+                            // 移除已处理的消息部分
+                            completeMessage = completeMessage.Substring(nullCharIndex + 1);
+
+                            // 处理消息
+                            new Thread(() => HandleMessage(message)).Start();
+                        }
+
+                        // 将剩余的部分放回 StringBuilder
+                        stringBuilder.Clear();
+                        stringBuilder.Append(completeMessage);
                     }
                     else
                     {

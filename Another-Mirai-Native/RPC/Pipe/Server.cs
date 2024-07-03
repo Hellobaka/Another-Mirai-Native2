@@ -101,7 +101,8 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         private async Task HandleClient(NamedPipe pipe)
         {
-            var buffer = new byte[65535];
+            var buffer = new byte[1024];
+            var stringBuilder = new StringBuilder();
             var client = pipe.ServerInstance;
             while (IsRunning && client.IsConnected)
             {
@@ -114,9 +115,28 @@ namespace Another_Mirai_Native.RPC.Pipe
 #endif
                     if (bytesRead > 0)
                     {
-                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        LogHelper.Debug("收到客户端消息", message);
-                        new Thread(() => HandleClientMessage(message, pipe)).Start();
+                        string messagePart = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        LogHelper.Debug("收到客户端消息", messagePart);
+
+                        stringBuilder.Append(messagePart);
+
+                        // 查找完整消息的定界符
+                        string completeMessage = stringBuilder.ToString();
+                        int nullCharIndex;
+                        while ((nullCharIndex = completeMessage.IndexOf('\0')) != -1)
+                        {
+                            // 提取完整消息
+                            string message = completeMessage.Substring(0, nullCharIndex);
+                            // 移除已处理的消息部分
+                            completeMessage = completeMessage.Substring(nullCharIndex + 1);
+
+                            // 处理消息
+                            new Thread(() => HandleClientMessage(message, pipe)).Start();
+                        }
+
+                        // 将剩余的部分放回 StringBuilder
+                        stringBuilder.Clear();
+                        stringBuilder.Append(completeMessage);
                     }
                     else
                     {
@@ -165,7 +185,7 @@ namespace Another_Mirai_Native.RPC.Pipe
         {
             if (connection is NamedPipe pipe && !string.IsNullOrEmpty(message))
             {
-                SendMessage(client: pipe.ServerInstance, message).Wait();
+                SendMessage(client: pipe.ServerInstance, message);
             }
         }
 
@@ -174,13 +194,13 @@ namespace Another_Mirai_Native.RPC.Pipe
             return true;
         }
 
-        public async Task SendMessage(NamedPipeServerStream client, string message)
+        public void SendMessage(NamedPipeServerStream client, string message)
         {
             if (client.IsConnected)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                byte[] buffer = Encoding.UTF8.GetBytes(message + "\0");
 #if NET5_0_OR_GREATER
-                await client.WriteAsync(new Memory<byte>(buffer));
+                client.Write(new ReadOnlySpan<byte>(buffer));
 #else
                 client.Write(buffer, 0, buffer.Length);
 #endif
