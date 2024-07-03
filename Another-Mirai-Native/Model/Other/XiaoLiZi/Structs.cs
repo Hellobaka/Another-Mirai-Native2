@@ -644,8 +644,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
 
         public int Amount;//数组元素数量
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024 * 10)]//5000人群 5000/4+8 =1258
-        public byte[] pAddrList;//每个元素的指针
+        public IntPtr[] pAddrList;//每个元素的指针
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
