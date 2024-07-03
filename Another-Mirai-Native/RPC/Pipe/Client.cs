@@ -14,7 +14,7 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         public bool Reconnecting { get; private set; }
 
-        private static string PipeName => "Another_Mirai_Native2_NamedPipe";
+        private static string PipeName => $"Another_Mirai_Native2_NamedPipe_{AppConfig.Instance.Core_PID}";
 
         private NamedPipeClientStream PipeClient { get; set; }
 

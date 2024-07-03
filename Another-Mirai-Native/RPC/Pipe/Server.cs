@@ -5,6 +5,7 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
 using Fleck;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
 
@@ -42,7 +43,7 @@ namespace Another_Mirai_Native.RPC.Pipe
 
     public class Server : ServerBase
     {
-        private static string PipeName => "Another_Mirai_Native2_NamedPipe";
+        private static string PipeName => $"Another_Mirai_Native2_NamedPipe_{Process.GetCurrentProcess().Id}";
 
         private bool IsRunning { get; set; }
 
