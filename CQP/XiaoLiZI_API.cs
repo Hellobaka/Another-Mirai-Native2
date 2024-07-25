@@ -668,7 +668,7 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("取群列表")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static int Function_33(string authCode, long arg0, ref IntPtr arg1)
+        public static int Function_33(string authCode, long arg0, ref Model.Other.XiaoLiZi.GroupDataList[] arg1)
         {
             if (AppConfig.Instance.DebugMode)
             {
@@ -684,10 +684,9 @@ namespace Another_Mirai_Native.Export
                 return 0;
             }
             var list = GroupInfo.RawToList(Convert.FromBase64String(groupList));
-            Model.Other.XiaoLiZi.GroupDataList ptrList = new();
-            ptrList.index = 0;
-            ptrList.Amount = list.Count;
-            ptrList.pAddrList = new IntPtr[list.Count];
+            arg1[0].index = 0;
+            arg1[0].Amount = list.Count;
+            arg1[0].pAddrList = new IntPtr[list.Count];
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -701,12 +700,13 @@ namespace Another_Mirai_Native.Export
 
                 var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(info));
                 Marshal.StructureToPtr(info, ptr, false);
-                ptrList.pAddrList[i] = ptr;
+                var buffer = BitConverter.GetBytes(ptr.ToInt32());
+                Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");
+                //Array.Copy(buffer, 0, arg1[0].pAddrList, i * 4, 4);
+                arg1[0].pAddrList[i] = ptr;
             }
 
-            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(ptrList));
-            Marshal.StructureToPtr(ptrList, arg1, false);
-            return groupList.Length;
+            return list.Count;
         }
 
         /// <summary>
@@ -1326,7 +1326,7 @@ namespace Another_Mirai_Native.Export
                 _ => 2,
             };
 
-            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAddRequestV2", true, authCode, arg2, arg5, arg4, arg6).ToInt();
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAddRequestV2", true, authCode, arg3.ToString(), arg5, arg4, arg6).ToInt();
         }
 
         /// <summary>
@@ -1350,7 +1350,7 @@ namespace Another_Mirai_Native.Export
                 return;
             }
 
-            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setFriendAddRequest", true, authCode, arg2, arg3, "").ToInt();
+            var r = ClientManager.Client.InvokeCQPFuntcion("CQ_setFriendAddRequest", true, authCode, arg2.ToString(), arg3, "").ToInt();
         }
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
         /// <summary>
         /// 消息Req
         /// </summary>
-        public uint MessageReq;
+        public int MessageReq;
 
         /// <summary>
         /// 消息Seq
@@ -78,7 +78,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
         /// <summary>
         /// 消息接收时间
         /// </summary>
-        public uint MessageReceiveTime;
+        public int MessageReceiveTime;
 
         /// <summary>
         /// 消息群号 当为群临时会话时可取
@@ -88,7 +88,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
         /// <summary>
         /// 消息发送时间
         /// </summary>
-        public uint MessageSendTime;
+        public int MessageSendTime;
 
         /// <summary>
         /// 消息Random
@@ -644,6 +644,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
 
         public int Amount;//数组元素数量
 
+        [MarshalAs(UnmanagedType.ByValArray)]
         public IntPtr[] pAddrList;//每个元素的指针
     }
 

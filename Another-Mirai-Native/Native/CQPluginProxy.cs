@@ -120,6 +120,11 @@ namespace Another_Mirai_Native.Native
                 File.Copy(PluginBasePath, newPath, true);
                 File.Copy(Path.ChangeExtension(PluginBasePath, ".json"), Path.ChangeExtension(newPath, ".json"), true);
                 PluginPath = newPath;
+
+                if (File.Exists(Path.ChangeExtension(PluginBasePath, ".dll.json")))
+                {
+                    File.Copy(Path.ChangeExtension(PluginBasePath, ".dll.json"), Path.ChangeExtension(newPath, ".dll.json"), true);
+                }
             }
             catch (Exception e)
             {
