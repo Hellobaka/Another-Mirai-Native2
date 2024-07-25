@@ -165,6 +165,7 @@ namespace Another_Mirai_Native.RPC.Interface
             }
             else if (caller.Function == "HeartBeat")
             {
+                // TODO: 管理心跳
                 SendMessage(connection, new InvokeBody() { Function = "HeartBeat" }.ToJson());
                 return;
             }
