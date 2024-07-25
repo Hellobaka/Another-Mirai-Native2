@@ -1588,12 +1588,29 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=取图片下载地址, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, ");
             }
-            //TODO: 补全
             if (arg1 != AppConfig.Instance.CurrentQQ)
             {
                 return "";
             }
-            string r = ClientManager.Client.InvokeCQPFuntcion("CQ_getImage", true, authCode, arg0)?.ToString();
+            if (arg0.Contains("[pic,hash=") is false)
+            {
+                return "";
+            }
+            var spilt = arg0.Split(',');
+            string hash = "";
+            foreach(var item in spilt)
+            {
+                if (item.Contains("hash="))
+                {
+                    hash = item.Split('=').Last().Replace("]", "");
+                    break;
+                }
+            }
+            if (string.IsNullOrEmpty(hash))
+            {
+                return "";
+            }
+            string r = ClientManager.Client.InvokeCQPFuntcion("CQ_getImage", true, authCode, hash)?.ToString();
 
             return r.ToString();
         }
