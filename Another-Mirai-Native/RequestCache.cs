@@ -13,6 +13,8 @@ namespace Another_Mirai_Native
 
         public static List<(long, string)> Message { get; set; } = new();
 
+        public static Dictionary<string, string> CachedStrings { get; set; } = new();
+
         public static void AddMessageCache(long msgId, string message)
         {
             Message.Add((msgId, message));

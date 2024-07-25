@@ -323,6 +323,17 @@ namespace Another_Mirai_Native.Native
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             long fromId = 0; string nick = "";
+            if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
+            {
+                if (RequestCache.CachedStrings.TryGetValue("", out string seq))
+                {
+                    identifying = seq;
+                }
+                else
+                {
+                    LogHelper.Error("处理好友添加请求", $"Seq={identifying} 没有被缓存，框架可能未正确处理事件");
+                }
+            }
             if (RequestCache.FriendRequest.TryGetValue(identifying, out (long, string) value))
             {
                 fromId = value.Item1;
@@ -342,6 +353,17 @@ namespace Another_Mirai_Native.Native
             int logId;
             long fromId = 0, groupId = 0;
             string nick = "", groupName = "";
+            if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
+            {
+                if (RequestCache.CachedStrings.TryGetValue("", out string seq))
+                {
+                    identifying = seq;
+                }
+                else
+                {
+                    LogHelper.Error("处理群添加请求", $"Seq={identifying} 没有被缓存，框架可能未正确处理事件");
+                }
+            }
             if (RequestCache.GroupRequest.TryGetValue(identifying, out (long, string, long, string) value))
             {
                 fromId = value.Item1;
