@@ -325,7 +325,7 @@ namespace Another_Mirai_Native.Native
             long fromId = 0; string nick = "";
             if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
             {
-                if (RequestCache.CachedStrings.TryGetValue("", out string seq))
+                if (RequestCache.CachedStrings.TryGetValue(identifying, out string seq))
                 {
                     identifying = seq;
                 }
@@ -355,7 +355,7 @@ namespace Another_Mirai_Native.Native
             string nick = "", groupName = "";
             if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
             {
-                if (RequestCache.CachedStrings.TryGetValue("", out string seq))
+                if (RequestCache.CachedStrings.TryGetValue(identifying, out string seq))
                 {
                     identifying = seq;
                 }
