@@ -11,11 +11,7 @@ namespace Another_Mirai_Native.UI
     {
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
         {
-            ObservableCollection<T> list = new();
-            foreach (T item in source)
-            {
-                list.Add(item);
-            }
+            ObservableCollection<T> list = [.. source];
             return list;
         }
 

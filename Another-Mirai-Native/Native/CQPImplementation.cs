@@ -134,7 +134,7 @@ namespace Another_Mirai_Native.Native
                 return 1;
             }
             Stopwatch stopwatch = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊消息", $"群:{groupId} 消息:{msg}", "处理中...");
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群引用消息", $"群:{groupId} 消息:{msg}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, msg, msgId);
             OnGroupMessageSend?.Invoke(ret, groupId, msg, CurrentPlugin);
             stopwatch.Stop();
