@@ -341,11 +341,29 @@ namespace Another_Mirai_Native.Native
 
         // 以下是封装好参数的调用，协议请调用这个
 
+        /// <summary>
+        /// Type: 101
+        /// 群管理变动事件
+        /// </summary>
+        /// <param name="subType">子类型 取消: 1 设置: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnAdminChange(CQPluginProxy target, int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 101
+        /// 群管理变动事件
+        /// </summary>
+        /// <param name="subType">子类型 取消: 1 设置: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnAdminChange(int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
             new Thread(() =>
@@ -363,51 +381,116 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.AdminChange, subType, sendTime, fromGroup, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 1004
+        /// 应用禁用
+        /// </summary>
+        /// <returns>无特殊定义</returns>
         public int Event_OnDisable(CQPluginProxy target)
         {
             return InvokeEvent(target, PluginEventType.Disable);
         }
 
+        /// <summary>
+        /// Type: 1004
+        /// 应用禁用
+        /// </summary>
         public CQPluginProxy Event_OnDisable()
         {
             return InvokeEvent(PluginEventType.Disable);
         }
 
+        /// <summary>
+        /// Type: 4
+        /// 收到讨论组消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromNative">消息来源讨论组ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="msg">消息来源文本</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnDiscussMsg(CQPluginProxy target, int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
         {
             return InvokeEvent(target, PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
         }
 
+        /// <summary>
+        /// Type: 4
+        /// 收到讨论组消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromNative">消息来源讨论组ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="msg">消息来源文本</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
         {
             return InvokeEvent(PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
         }
 
+        /// <summary>
+        /// Type: 1003
+        /// 应用启用
+        /// </summary>
+        /// <returns>无特殊定义</returns>
         public int Event_OnEnable(CQPluginProxy target)
         {
             return InvokeEvent(target, PluginEventType.Enable);
         }
 
+        /// <summary>
+        /// Type: 1003
+        /// 应用启用
+        /// </summary>
         public CQPluginProxy Event_OnEnable()
         {
             return InvokeEvent(PluginEventType.Enable);
         }
 
+        /// <summary>
+        /// Type: 1002
+        /// 框架退出
+        /// </summary>
+        /// <returns>无特殊定义</returns>
         public int Event_OnExit(CQPluginProxy target)
         {
             return InvokeEvent(target, PluginEventType.Exit);
         }
 
+        /// <summary>
+        /// Type: 1002
+        /// 框架退出
+        /// </summary>
         public CQPluginProxy Event_OnExit()
         {
             return InvokeEvent(PluginEventType.Exit);
         }
 
+        /// <summary>
+        /// Type: 201
+        /// 好友已添加
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnFriendAdded(CQPluginProxy target, int subType, long sendTime, long fromQQ)
         {
             return InvokeEvent(target, PluginEventType.FriendAdded, subType, sendTime, fromQQ);
         }
 
+        /// <summary>
+        /// Type: 201
+        /// 好友已添加
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnFriendAdded(int subType, long sendTime, long fromQQ)
         {
             new Thread(() =>
@@ -424,31 +507,95 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.FriendAdded, subType, sendTime, fromQQ);
         }
 
+        /// <summary>
+        /// Type: 301
+        /// 好友添加请求
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="msg">附加消息</param>
+        /// <param name="responseFlag">响应标识</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnFriendAddRequest(CQPluginProxy target, int subType, long sendTime, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(target, PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
         }
 
+        /// <summary>
+        /// Type: 301
+        /// 好友添加请求
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="msg">附加消息</param>
+        /// <param name="responseFlag">响应标识</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnFriendAddRequest(int subType, long sendTime, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
         }
 
+        /// <summary>
+        /// Type: 302
+        /// 群添加请求
+        /// </summary>
+        /// <param name="subType">子类型 申请入群: 1 邀请入群: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="msg">附加消息</param>
+        /// <param name="responseFlag">响应标识</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnGroupAddRequest(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(target, PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
         }
 
+        /// <summary>
+        /// Type: 302
+        /// 群添加请求
+        /// </summary>
+        /// <param name="subType">子类型 申请入群: 1 邀请入群: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="msg">附加消息</param>
+        /// <param name="responseFlag">响应标识</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupAddRequest(int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
         }
 
+        /// <summary>
+        /// Type: 104
+        /// 群禁言事件
+        /// </summary>
+        /// <param name="subType">子类型 解除禁言: 1 禁言: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <param name="duration">禁言时长(s) 仅在禁言时生效</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnGroupBan(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
             return InvokeEvent(target, PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
+        /// <summary>
+        /// Type: 104
+        /// 群禁言事件
+        /// </summary>
+        /// <param name="subType">子类型 解除禁言: 1 禁言: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <param name="duration">禁言时长(s) 仅在禁言时生效</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
             new Thread(() =>
@@ -465,11 +612,31 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.GroupBan, subType, sendTime, fromGroup, fromQQ, beingOperateQQ, duration);
         }
 
+        /// <summary>
+        /// Type: 102
+        /// 群成员减少事件
+        /// </summary>
+        /// <param name="subType">子类型 主动退出: 1 被踢出: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnGroupMemberDecrease(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 102
+        /// 群成员减少事件
+        /// </summary>
+        /// <param name="subType">子类型 主动退出: 1 被踢出: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupMemberDecrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             new Thread(() =>
@@ -486,11 +653,31 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.GroupMemberDecrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 103
+        /// 群成员添加事件
+        /// </summary>
+        /// <param name="subType">子类型 主动进群: 1 邀请入群: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnGroupMemberIncrease(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             return InvokeEvent(target, PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 103
+        /// 群成员添加事件
+        /// </summary>
+        /// <param name="subType">子类型 主动进群: 1 邀请入群: 2</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">来源QQ</param>
+        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupMemberIncrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             new Thread(() =>
@@ -507,11 +694,35 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.GroupMemberIncrease, subType, sendTime, fromGroup, fromQQ, beingOperateQQ);
         }
 
+        /// <summary>
+        /// Type: 2
+        /// 收到群消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromGroup">消息来源ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="fromAnonymous">匿名标识</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnGroupMsg(CQPluginProxy target, int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
             return InvokeEvent(target, PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
+        /// <summary>
+        /// Type: 2
+        /// 收到群消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromGroup">消息来源ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="fromAnonymous">匿名标识</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font, DateTime time)
         {
             new Thread(() =>
@@ -528,11 +739,31 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.GroupMsg, subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
         }
 
+        /// <summary>
+        /// Type: 21
+        /// 收到好友消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为11</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnPrivateMsg(CQPluginProxy target, int subType, int msgId, long fromQQ, string msg, int font)
         {
             return InvokeEvent(target, PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
+        /// <summary>
+        /// Type: 21
+        /// 收到好友消息
+        /// </summary>
+        /// <param name="subType">子类型 固定为11</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="fromQQ">消息来源QQ</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="font">字体ID</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font, DateTime time)
         {
             new Thread(() =>
@@ -549,21 +780,51 @@ namespace Another_Mirai_Native.Native
             return InvokeEvent(PluginEventType.PrivateMsg, subType, msgId, fromQQ, msg, font);
         }
 
+        /// <summary>
+        /// Type: 1001
+        /// 框架启动事件
+        /// </summary>
+        /// <returns>无定义</returns>
         public int Event_OnStartUp(CQPluginProxy target)
         {
             return InvokeEvent(target, PluginEventType.StartUp);
         }
 
+        /// <summary>
+        /// Type: 1001
+        /// 框架启动事件
+        /// </summary>
+        /// <returns>无定义</returns>
         public CQPluginProxy Event_OnStartUp()
         {
             return InvokeEvent(PluginEventType.StartUp);
         }
 
+        /// <summary>
+        /// Type: 11
+        /// 群文件上传事件
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">文件来源QQ</param>
+        /// <param name="file">文件名</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public int Event_OnUpload(CQPluginProxy target, int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(target, PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
         }
 
+        /// <summary>
+        /// Type: 11
+        /// 群文件上传事件
+        /// </summary>
+        /// <param name="subType">子类型 固定为1</param>
+        /// <param name="sendTime">发生时间</param>
+        /// <param name="fromGroup">来源群ID</param>
+        /// <param name="fromQQ">文件来源QQ</param>
+        /// <param name="file">文件名</param>
+        /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnUpload(int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
