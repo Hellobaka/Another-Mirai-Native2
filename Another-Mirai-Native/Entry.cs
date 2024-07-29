@@ -175,21 +175,27 @@ namespace Another_Mirai_Native
                     menu.Items.Add(TaskBarMenuParent);
                     menu.Items.Add("-");
                     ToolStripMenuItem reloadItem = new() { Text = "重载插件" };
-                    reloadItem.Click += (a, b) =>
+                    reloadItem.Click += async (a, b) =>
                     {
-                        if (MessageBox.Show("确定要重载插件吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        await Task.Run(() =>
                         {
-                            PluginManagerProxy.Instance.ReloadAllPlugins();
-                        }
+                            if (MessageBox.Show("确定要重载插件吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                PluginManagerProxy.Instance.ReloadAllPlugins();
+                            }
+                        });
                     };
                     menu.Items.Add(reloadItem);
                     ToolStripMenuItem exitItem = new() { Text = "退出" };
-                    exitItem.Click += (a, b) =>
+                    exitItem.Click += async (a, b) =>
                     {
-                        if (MessageBox.Show("确定要退出框架吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        await Task.Run(() =>
                         {
-                            Environment.Exit(0);
-                        }
+                            if (MessageBox.Show("确定要退出框架吗？", "嗯？", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                Environment.Exit(0);
+                            }
+                        });
                     };
                     menu.Items.Add(exitItem);
 
@@ -212,47 +218,59 @@ namespace Another_Mirai_Native
                 ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}", Tag = item };
                 ToolStripMenuItem enableItem = new() { Text = item.Enabled ? "√ 启用" : "启用", Tag = item };
                 ToolStripMenuItem disableItem = new() { Text = !item.Enabled ? "√ 禁用" : "禁用", Tag = item };
-                enableItem.Click += (sender, b) =>
+                enableItem.Click += async (sender, b) =>
                 {
-                    if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                    await Task.Run(() =>
                     {
-                        return;
-                    }
+                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                        {
+                            return;
+                        }
 
-                    if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
-                    {
-                        enableItem.Text = "√ 启用";
-                        disableItem.Text = "禁用";
+                        if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
+                        {
+                            Invoke(() =>
+                            {
+                                enableItem.Text = "√ 启用";
+                                disableItem.Text = "禁用";
+                            });
 
-                        AppConfig.Instance.AutoEnablePlugin.Add(plugin.PluginName);
-                        AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
-                        AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
-                    }
-                    else
-                    {
-                        MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                            AppConfig.Instance.AutoEnablePlugin.Add(plugin.PluginName);
+                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                        }
+                        else
+                        {
+                            MessageBox.Show("插件启用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    });
                 };
-                disableItem.Click += (sender, b) =>
+                disableItem.Click += async (sender, b) =>
                 {
-                    if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                    await Task.Run(() =>
                     {
-                        return;
-                    }
+                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                        {
+                            return;
+                        }
 
-                    if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, false))
-                    {
-                        enableItem.Text = "启用";
-                        disableItem.Text = "√ 禁用";
+                        if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, false))
+                        {
+                            Invoke(() =>
+                            {
+                                enableItem.Text = "启用";
+                                disableItem.Text = "√ 禁用";
+                            });
 
-                        AppConfig.Instance.AutoEnablePlugin.Remove(plugin.PluginName);
-                        AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
-                        AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
-                    }
-                    else
-                    {
-                        MessageBox.Show("插件禁用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                            AppConfig.Instance.AutoEnablePlugin.Remove(plugin.PluginName);
+                            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+                        }
+                        else
+                        {
+                            MessageBox.Show("插件禁用失败", "啊嘞？", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    });
                 };
                 menuItem.DropDownItems.Add(enableItem);
                 menuItem.DropDownItems.Add(disableItem);
@@ -263,22 +281,22 @@ namespace Another_Mirai_Native
                 foreach (var subMenu in item.AppInfo.menu)
                 {
                     ToolStripMenuItem subMenuItem = new() { Text = subMenu.name, Tag = item };
-                    subMenuItem.Click += (sender, b) =>
+                    subMenuItem.Click += async (sender, b) =>
                     {
-                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
-                        {
-                            return;
-                        }
+                        await Task.Run(() =>
+                         {
+                             if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                             {
+                                 return;
+                             }
 
-                        if (plugin.Enabled is false)
-                        {
-                            MessageBox.Show("当前插件未启用，无法调用窗口事件", "嗯哼", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        Task.Run(() =>
-                        {
-                            PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, subMenu.function);
-                        });
+                             if (plugin.Enabled is false)
+                             {
+                                 MessageBox.Show("当前插件未启用，无法调用窗口事件", "嗯哼", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                 return;
+                             }
+                             PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, subMenu.function);
+                         });
                     };
                     menuItem.DropDownItems.Add(subMenuItem);
                 }
