@@ -526,7 +526,20 @@ namespace Another_Mirai_Native.Export
             {
                 LogHelper.LocalDebug("小栗子API", $"API=强制取昵称, authCode={authCode}, arg0={arg0}, arg1={arg1}, ");
             }
-            return Function_25(authCode, arg1);
+
+            var friendList = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, authCode, false)?.ToString();
+            if (string.IsNullOrEmpty(friendList))
+            {
+                return arg1;
+            }
+            var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
+            var item = list.FirstOrDefault(x => x.QQ.ToString() == arg1);
+            if (item == null)
+            {
+                return arg1;
+            }
+
+            return item.Nick;
         }
 
         /// <summary>
