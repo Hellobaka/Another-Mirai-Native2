@@ -160,6 +160,7 @@ namespace Another_Mirai_Native
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
+                    WinNative.SetProcessDPIAware();
 
                     NotifyIcon = new NotifyIcon();
                     NotifyIcon.Icon = new Icon(new MemoryStream(Convert.FromBase64String(Resources.TaskBarIconResources.IconBase64)));
