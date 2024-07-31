@@ -723,7 +723,7 @@ namespace Another_Mirai_Native.Export
                 };
 
                 var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
-                LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
+                // LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
                 Marshal.StructureToPtr(info, ptr, false);
                 //var buffer = BitConverter.GetBytes(ptr.ToInt32());
                 //Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");

@@ -41,6 +41,7 @@ namespace Another_Mirai_Native.RPC.Interface
             }
             else
             {
+                LogHelper.Error("插件客户端启动", "无效AppID或对应的插件");
                 return;
             }
             PluginManagerProxy.SetProxyConnected(proxy);
