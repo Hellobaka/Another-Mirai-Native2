@@ -72,7 +72,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         public static string ParseToCQCode(string message)
         {
-            var splits = message.SplitV2("\\[(.*?)\\]");
+            var splits = message.SplitV2("\\[.*?\\]");
             StringBuilder sb = new();
             foreach (var s in splits)
             {
@@ -91,9 +91,9 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                     sb.Append(s.Replace("[bq", "[CQ:face,id="));
                     continue;
                 }
-                var items = s.Substring(1, s.Length - 1).Split(',');
+                var items = s.Trim().Substring(1, s.Length - 2).Split(',');
                 var keyValues = GetKeyValues(items);
-                if (items.Length > 2)
+                if (items.Length >= 2)
                 {
                     string? value = "";
                     switch (items[0])

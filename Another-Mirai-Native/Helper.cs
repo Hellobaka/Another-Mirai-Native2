@@ -101,10 +101,7 @@ namespace Another_Mirai_Native
 
         public static string[] SplitV2(this string message, string pattern)
         {
-            // 正则表达式：(?<=模式)|(?=模式)
-            // 这个表达式会在模式之前或之后分割字符串，但同时保留模式本身
-            string regexPattern = $"(?<={pattern})|(?={pattern})";
-
+            string regexPattern = $"({pattern})";
             var parts = Regex.Split(message, regexPattern);
 
             var ls = parts.ToList();
