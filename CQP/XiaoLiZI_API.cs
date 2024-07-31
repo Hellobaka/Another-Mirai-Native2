@@ -644,20 +644,29 @@ namespace Another_Mirai_Native.Export
                 return 0;
             }
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
-            Model.Other.XiaoLiZi.FriendInfo[] friendInfos = new Model.Other.XiaoLiZi.FriendInfo[list.Count];
+
+            int dataListSize = Marshal.SizeOf(typeof(int)) * 2 + Marshal.SizeOf(typeof(int)) * list.Count;
+            var rawPtr = Marshal.AllocHGlobal(dataListSize);
+            Marshal.WriteInt32(rawPtr, 1);
+            Marshal.WriteInt32(rawPtr + 4, list.Count);
+
             for (int i = 0; i < list.Count; i++)
             {
                 var friendInfo = list[i];
-                friendInfos[i] = new Model.Other.XiaoLiZi.FriendInfo
+                var info = new Model.Other.XiaoLiZi.FriendInfo
                 {
                     QQNumber = friendInfo.QQ,
                     Name = friendInfo.Nick,
                     Note = friendInfo.Postscript,
                 };
+
+                var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
+                LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
+                Marshal.StructureToPtr(info, ptr, false);
+                Marshal.WriteInt32(rawPtr + 8 + i * 4, (int)ptr);
             }
 
-            arg1 = Marshal.AllocHGlobal(Marshal.SizeOf(friendInfos));
-            Marshal.StructureToPtr(friendInfos, arg1, false);
+            arg1 = rawPtr;
             return friendList.Length;
         }
 
@@ -703,8 +712,8 @@ namespace Another_Mirai_Native.Export
                 var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
                 LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
                 Marshal.StructureToPtr(info, ptr, false);
-                var buffer = BitConverter.GetBytes(ptr.ToInt32());
-                Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");
+                //var buffer = BitConverter.GetBytes(ptr.ToInt32());
+                //Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");
                 // Array.Copy(buffer, 0, raw.pAddrList, i * 4, 4);
                 // raw.pAddrList[i] = ptr;
                 Marshal.WriteInt32(rawPtr + 8 + i * 4, (int)ptr);
