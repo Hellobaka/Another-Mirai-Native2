@@ -644,8 +644,7 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
 
         public int Amount;//数组元素数量
 
-        [MarshalAs(UnmanagedType.ByValArray)]
-        public IntPtr[] pAddrList;//每个元素的指针
+        public byte[] pAddrList;//每个元素的指针
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

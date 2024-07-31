@@ -668,7 +668,7 @@ namespace Another_Mirai_Native.Export
         /// </summary>
         [ProxyAPIName("取群列表")]
         [DllExport(CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
-        public static int Function_33(string authCode, long arg0, ref Model.Other.XiaoLiZi.GroupDataList[] arg1)
+        public static int Function_33(string authCode, long arg0, ref IntPtr arg1)
         {
             if (AppConfig.Instance.DebugMode)
             {
@@ -684,9 +684,11 @@ namespace Another_Mirai_Native.Export
                 return 0;
             }
             var list = GroupInfo.RawToList(Convert.FromBase64String(groupList));
-            arg1[0].index = 0;
-            arg1[0].Amount = list.Count;
-            arg1[0].pAddrList = new IntPtr[list.Count];
+
+            int dataListSize = Marshal.SizeOf(typeof(int)) * 2 + Marshal.SizeOf(typeof(int)) * list.Count;
+            var rawPtr = Marshal.AllocHGlobal(dataListSize);
+            Marshal.WriteInt32(rawPtr, 1);
+            Marshal.WriteInt32(rawPtr + 4, list.Count);
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -698,13 +700,18 @@ namespace Another_Mirai_Native.Export
                     GroupMemberCount = groupInfo.CurrentMemberCount,
                 };
 
-                var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(info));
+                var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
+                LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
                 Marshal.StructureToPtr(info, ptr, false);
                 var buffer = BitConverter.GetBytes(ptr.ToInt32());
                 Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");
-                //Array.Copy(buffer, 0, arg1[0].pAddrList, i * 4, 4);
-                arg1[0].pAddrList[i] = ptr;
+                // Array.Copy(buffer, 0, raw.pAddrList, i * 4, 4);
+                // raw.pAddrList[i] = ptr;
+                Marshal.WriteInt32(rawPtr + 8 + i * 4, (int)ptr);
             }
+
+            //Marshal.StructureToPtr(raw, rawPtr, false);
+            arg1 = rawPtr;
 
             return list.Count;
         }

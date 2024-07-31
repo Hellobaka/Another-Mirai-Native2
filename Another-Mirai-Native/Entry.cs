@@ -99,6 +99,10 @@ namespace Another_Mirai_Native
                     return;
                 }
                 int count = 0;
+                if (AppConfig.Instance.ShowTaskBar)
+                {
+                    BuildTaskBar();
+                }
                 foreach (var item in PluginManagerProxy.Proxies)
                 {
                     if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
@@ -109,10 +113,6 @@ namespace Another_Mirai_Native
                             UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
                         }
                     }
-                }
-                if (AppConfig.Instance.ShowTaskBar)
-                {
-                    BuildTaskBar();
                 }
                 PluginManagerProxy.Instance.OnPluginLoaded();
             }
