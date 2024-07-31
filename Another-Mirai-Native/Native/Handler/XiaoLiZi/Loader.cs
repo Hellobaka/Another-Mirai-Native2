@@ -203,7 +203,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 {
                     continue;
                 }
-                IntPtr handle = GetProcAddress(base.CQPHandle, item.Value);
+                IntPtr handle = WinNative.GetProcAddress(base.CQPHandle, item.Value);
                 if (handle == IntPtr.Zero)
                 {
                     Console.WriteLine(item.Value);

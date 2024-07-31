@@ -106,7 +106,7 @@ namespace Another_Mirai_Native.Native.Handler
 
         public T? CreateDelegateFromUnmanaged<T>(string apiName) where T : Delegate
         {
-            IntPtr api = GetProcAddress(NativeHandle, apiName);
+            IntPtr api = WinNative.GetProcAddress(NativeHandle, apiName);
             return api == IntPtr.Zero ? null : (T?)Marshal.GetDelegateForFunctionPointer(api, typeof(T));
         }
 
@@ -160,17 +160,17 @@ namespace Another_Mirai_Native.Native.Handler
         [SecurityCritical]
         public virtual bool LoadPlugin()
         {
-            CQPHandle = LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
+            CQPHandle = WinNative.LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
             if (CQPHandle == IntPtr.Zero)
             {
-                LogHelper.Error("加载插件", $"CQP.dll加载失败, GetLastError={GetLastError()}");
+                LogHelper.Error("加载插件", $"CQP.dll加载失败, GetLastError={WinNative.GetLastError()}");
             }
             try
             {
-                NativeHandle = LoadLibrary(PluginPath);
+                NativeHandle = WinNative.LoadLibrary(PluginPath);
                 if (NativeHandle == IntPtr.Zero)
                 {
-                    LogHelper.Error("加载插件", $"{Path.GetFileName(PluginPath)} 加载失败, GetLastError={GetLastError()}");
+                    LogHelper.Error("加载插件", $"{Path.GetFileName(PluginPath)} 加载失败, GetLastError={WinNative.GetLastError()}");
                     return false;
                 }
                 if (LoadAppInfo() && CreateMethodDelegates())
@@ -185,18 +185,9 @@ namespace Another_Mirai_Native.Native.Handler
             }
             catch (Exception exc)
             {
-                LogHelper.Error("加载插件", $"{PluginPath} 加载失败, GetLastError={GetLastError()}, Exception: {exc.Message} {exc.StackTrace}");
+                LogHelper.Error("加载插件", $"{PluginPath} 加载失败, GetLastError={WinNative.GetLastError()}, Exception: {exc.Message} {exc.StackTrace}");
             }
             return NativeHandle != IntPtr.Zero;
         }
-
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr GetProcAddress(IntPtr lib, string funcName);
-
-        [DllImport("kernel32.dll")]
-        private static extern int GetLastError();
-
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr LoadLibrary(string path);
     }
 }
