@@ -123,7 +123,7 @@ namespace Another_Mirai_Native.Export
 
                 MessageCache.Add((arg3, arg4), msgId);
             }
-            return "";// time? 什么格式的time
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Another_Mirai_Native.Export
             }
             arg2 = MessageParser.ParseToCQCode(arg2);
             int msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, authCode, arg1, arg2).ToInt();
-            return "";
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -172,7 +172,12 @@ namespace Another_Mirai_Native.Export
                 return "";
             }
             arg3 = MessageParser.ParseToCQCode(arg3);
-            return Function_6(authCode, arg0, arg2, arg3, ref arg4, ref arg5);
+            long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg2, arg3).ToLong();
+            if (msgId > 0)
+            {
+                MessageCache.Add((arg4, arg5), msgId);
+            }
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -285,7 +290,15 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            return Function_6(authCode, arg0, arg1, $"[CQ:json,content={arg2}]", ref arg3, ref arg4);
+            long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, $"[CQ:json,content={arg2}]").ToLong();
+            if (msgId > 0)
+            {
+                arg3 = Static.Random.Next();
+                arg4 = Static.Random.Next();
+
+                MessageCache.Add((arg3, arg4), msgId);
+            }
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -307,7 +320,8 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            return Function_7(authCode, arg0, arg1, $"[CQ:json,content={arg2}]", arg3);
+            int msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, authCode, arg1, $"[CQ:json,content={arg2}]").ToInt();
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -2907,7 +2921,15 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            return Function_6(authCode, arg0, arg1, $"[CQ:xml,content={arg2}]", ref arg3, ref arg4);
+            long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, $"[CQ:xml,content={arg2}]").ToLong();
+            if (msgId > 0)
+            {
+                arg3 = Static.Random.Next();
+                arg4 = Static.Random.Next();
+
+                MessageCache.Add((arg3, arg4), msgId);
+            }
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
@@ -2930,7 +2952,8 @@ namespace Another_Mirai_Native.Export
             {
                 return "";
             }
-            return Function_7(authCode, arg0, arg1, $"[CQ:xml,content={arg2}]", arg3);
+            int msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, authCode, arg1, $"[CQ:xml,content={arg2}]").ToInt();
+            return Helper.TimeStamp.ToString();
         }
 
         /// <summary>
