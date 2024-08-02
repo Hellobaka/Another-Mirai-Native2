@@ -60,7 +60,7 @@ namespace Another_Mirai_Native.Export
         /// <param name="msg">消息内容</param>
         /// <returns></returns>
         [DllExport(ExportName = "CQ_sendDiscussMsg", CallingConvention = CallingConvention.StdCall)]
-        public int CQ_sendDiscussMsg(int authCode, long discussId, IntPtr msg)
+        public static int CQ_sendDiscussMsg(int authCode, long discussId, IntPtr msg)
         {
             string text = msg.ToString(Helper.GB18030);
             return CallCore(authCode, discussId, text).ToInt();
