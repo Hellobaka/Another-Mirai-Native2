@@ -28,13 +28,13 @@
                 <div style="display: flex; align-items: center;">
                     <MudDateRangePicker PickerOpened="@(() => FilterDateRange_Backup = FilterDateRange)" StartMonth="@DateTime.Now.AddMonths(-1)" AutoClose="false" TitleDateFormat="yyyy/MM/dd" @ref="DateRangePicker" PickerVariant="PickerVariant.Dialog" Variant="Variant.Outlined" Margin="Margin.Dense" Label="筛选日期" @bind-DateRange="@FilterDateRange_Backup" PlaceholderStart="开始日期" PlaceholderEnd="结束日期">
                         <PickerActions>
-                            <MudButton Class="mr-auto align-self-start" Color="Color.Error" OnClick="@(() => DateRangePicker.Clear())">重置</MudButton>
+                            <MudButton Class="mr-auto align-self-start" Color="Color.Error" OnClick="@(async () => await DateRangePicker.ClearAsync())">重置</MudButton>
                             <MudButton Class="mr-auto align-self-start" Color="Color.Success" OnClick="@(() => {DateTime dateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); DateRangePicker.PickerMonth = dateTime.AddMonths(-1);})">今天</MudButton>
                             <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddDays(-1), DateTime.Now))">天</MudButton>
                             <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddDays(-7), DateTime.Now))">周</MudButton>
                             <MudButton Color="Color.Warning" OnClick="@(() => FilterDateRange_Backup = new DateRange(DateTime.Now.AddMonths(-1), DateTime.Now))">月</MudButton>
-                            <MudButton Color="Color.Secondary" OnClick="@(() => { FilterDateRange_Backup = FilterDateRange; DateRangePicker.Close(false); })">取消</MudButton>
-                            <MudButton Color="Color.Primary" OnClick="@(() => { DateRangePicker.Close(); FilterDateRange = FilterDateRange_Backup; DoLogFilter(); })">确认</MudButton>
+                            <MudButton Color="Color.Secondary" OnClick="@(async() => { FilterDateRange_Backup = FilterDateRange; await DateRangePicker.CloseAsync(false); })">取消</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(async() => { await DateRangePicker.CloseAsync(); FilterDateRange = FilterDateRange_Backup; DoLogFilter(); })">确认</MudButton>
                         </PickerActions>
                     </MudDateRangePicker>
                 </div>
@@ -207,7 +207,7 @@
 
     private Func<LogDisplay, string> _cellClassFunc => (x) =>
     {
-        var pattle = Shared.IsDarkMode ? Theme.PaletteDark : Theme.Palette;
+        // var pattle = Shared.IsDarkMode ? Theme.PaletteDark : Theme.PaletteLight;
         string itemClass = (LogLevel)x.Priority switch
         {
             LogLevel.Debug => "",

@@ -33,9 +33,9 @@
         <div style="display: flex;">
             <MudTooltip Text="图片">
                 <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
-                    <ButtonTemplate>
-                        <MudIconButton HtmlTag="label" Icon="@Icons.Material.Filled.Image" Color="Color.Secondary" for="@context.Id"></MudIconButton>
-                    </ButtonTemplate>
+                    <ActivatorContent>
+                        <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+                    </ActivatorContent>
                 </MudFileUpload>
             </MudTooltip>
             <MudTooltip Text="At Bot">

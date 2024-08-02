@@ -12,7 +12,7 @@
 
   
   <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="6.*" />
+    <PackageReference Include="MudBlazor" Version="7.5.0" />
   </ItemGroup>
 
   
@@ -20,7 +20,7 @@
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj">
       <Private>True</Private>
     </ProjectReference>
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
     <PackageReference Include="System.Management" Version="8.*" />
   </ItemGroup>
   

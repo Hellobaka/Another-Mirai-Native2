@@ -60,7 +60,7 @@
                     <MudText Style="margin-top: 5px;">@SelectedItem.TargetPlugin.AppInfo.description</MudText>
 
                     <MudText Typo="Typo.h5" Style="margin-top: 15px;">插件权限</MudText>
-                    <MudList Clickable="true" Dense="true">
+                    <MudList T="string" Dense="true">
                         @foreach (var item in SelectedItem.TargetPlugin.AppInfo.auth)
                         {
                             <MudListItem>@AuthChineseName[item]</MudListItem>
