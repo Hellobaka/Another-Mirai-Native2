@@ -85,8 +85,11 @@ namespace Another_Mirai_Native.Native
 
         public void KillProcess()
         {
-            PluginProcess?.Kill();
-            PluginProcess.WaitForExit();
+            if (PluginProcess != null && PluginProcess.HasExited is false)
+            {
+                PluginProcess.Kill();
+                PluginProcess.WaitForExit();
+            }
         }
 
         public bool Load()
