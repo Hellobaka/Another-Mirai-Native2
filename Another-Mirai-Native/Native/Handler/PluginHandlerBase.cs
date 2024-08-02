@@ -160,6 +160,19 @@ namespace Another_Mirai_Native.Native.Handler
         [SecurityCritical]
         public virtual bool LoadPlugin()
         {
+            Directory.CreateDirectory("libraries");
+            foreach (var item in new DirectoryInfo("libraries").GetFiles().Where(x => x.Extension == ".dll" || x.Extension == ".exe"))
+            {
+                if (WinNative.LoadLibrary(item.FullName) != IntPtr.Zero)
+                {
+                    LogHelper.Info("依赖载入", $"载入第三方库: {item.Name}, 载入成功");
+                }
+                else
+                {
+                    LogHelper.Info("依赖载入", $"载入第三方库: {item.Name}, 载入失败");
+                }
+            }
+
             CQPHandle = WinNative.LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CQP.dll"));
             if (CQPHandle == IntPtr.Zero)
             {
