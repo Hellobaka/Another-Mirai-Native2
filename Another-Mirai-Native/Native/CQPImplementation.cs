@@ -325,20 +325,16 @@ namespace Another_Mirai_Native.Native
             long fromId = 0; string nick = "";
             if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
             {
-                if (RequestCache.CachedStrings.TryGetValue(identifying, out string seq))
-                {
-                    identifying = seq;
-                }
-                else
+                if (!RequestCache.CachedStrings.TryGetValue(identifying, out identifying))
                 {
                     LogHelper.Error("处理好友添加请求", $"Seq={identifying} 没有被缓存，框架可能未正确处理事件");
+                    return 1;
                 }
             }
             if (RequestCache.FriendRequest.TryGetValue(identifying, out (long, string) value))
             {
                 fromId = value.Item1;
                 nick = value.Item2;
-                RequestCache.FriendRequest.Remove(identifying);
             }
             int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 0 ? "同意" : "拒绝")}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(identifying, requestType, appendMsg);
@@ -370,7 +366,6 @@ namespace Another_Mirai_Native.Native
                 nick = value.Item2;
                 groupId = value.Item3;
                 groupName = value.Item4;
-                RequestCache.GroupRequest.Remove(identifying);
             }
             logId = requestType == 2
                 ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群邀请添加申请", $"来源群: {groupId}({groupName}) 来源人: {fromId}({nick}) 操作: {appendMsg}", "处理中...")
@@ -384,13 +379,13 @@ namespace Another_Mirai_Native.Native
         private int CQ_addLog(int authCode, int priority, string type, string msg)
         {
             LogHelper.WriteLog(CurrentPlugin, (LogLevel)priority, type, msg, "");
-            return 1;
+            return 0;
         }
 
         private int CQ_setFatal(int authCode, string errorMsg)
         {
             LogHelper.WriteLog(CurrentPlugin, LogLevel.Fatal, "致命错误", errorMsg, "");
-            return 1;
+            return 0;
         }
 
         private string CQ_getGroupMemberInfoV2(int authCode, long groupId, long qqId, bool isCache)

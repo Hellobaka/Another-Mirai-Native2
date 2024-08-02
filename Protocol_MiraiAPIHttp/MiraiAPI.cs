@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Enums;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Enums;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse;
@@ -53,7 +54,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 messageId = msgId
             };
             JObject json = CallMiraiAPI(MiraiApiType.recall, request);
-            return json == null ? 0 : ((int)json["code"]) == 0 ? 1 : 0;
+            return json == null ? 0 : ((int)json["code"]) == 0 ? 0 : 1;
         }
 
         public bool Disconnect()
@@ -239,7 +240,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public int SendDiscussMsg(long discussId, string msg)
         {
-            return 0;
+            return 1;
         }
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
@@ -251,7 +252,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             if (msgChains.Length <= 0)
             {
-                return -1;
+                return 0;
             }
             object request;
             if (msgId > 0)
@@ -279,7 +280,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public int SendLike(long qqId, int count)
         {
-            return 0;
+            return 1;
         }
 
         public int SendPrivateMessage(long qqId, string msg)
@@ -287,7 +288,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             IMiraiMessageBase[] msgChains = CQCodeBuilder.BuildMessageChains(msg, out int quoteId).ToArray();
             if (msgChains.Length <= 0)
             {
-                return -1;
+                return 0;
             }
             object request;
             if (quoteId > 0)
@@ -338,28 +339,56 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public int SetDiscussLeave(long discussId)
         {
-            return 0;
+            return 1;
         }
 
         public int SetFriendAddRequest(string identifying, int responseType, string appendMsg)
         {
+            long qqId = 0;
+            if (RequestCache.FriendRequest.TryGetValue(identifying, out (long, string) value))
+            {
+                qqId = value.Item1;
+                RequestCache.FriendRequest.Remove(identifying);
+            }
+            if (qqId == 0)
+            {
+                LogHelper.Error("处理好友添加请求", "无法从缓存获取请求来源");
+                return 1;
+            }
+
             object request = new
             {
                 sessionKey = SessionKey_Message,
                 eventId = Convert.ToInt64(identifying),
                 operate = responseType == 1 ? 0 : 1,
+                fromId = qqId,
+                groupId = 0,
                 message = appendMsg
             };
             JObject json = CallMiraiAPI(MiraiApiType.resp_newFriendRequestEvent, request);
-            return json == null ? 0 : 1;
+            return json == null ? 1 : 0;
         }
 
         public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
+            long groupId = 0, qqId = 0;
+            if (RequestCache.GroupRequest.TryGetValue(identifying, out (long, string, long, string) value))
+            {
+                qqId = value.Item1;
+                groupId = value.Item3;
+                RequestCache.GroupRequest.Remove(identifying);
+            }
+            if (groupId == 0 || qqId == 0)
+            {
+                LogHelper.Error("处理群添加请求", "无法从缓存获取请求来源");
+                return 1;
+            }
             object request = new
             {
                 sessionKey = SessionKey_Message,
                 eventId = Convert.ToInt64(identifying),
+                fromId = qqId,
+                groupId = groupId,
                 operate = responseType == 1 ? 0 : 1,
                 message = appendMsg
             };
@@ -372,7 +401,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 json = CallMiraiAPI(MiraiApiType.resp_botInvitedJoinGroupRequestEvent, request);
             }
-            return json == null ? 0 : 1;
+            return json == null ? 1 : 0;
         }
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet)
@@ -385,7 +414,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 assign = isSet
             };
             JObject json = CallMiraiAPI(MiraiApiType.memberAdmin, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupAnonymous(long groupId, bool isOpen)
@@ -400,12 +429,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
             };
             JObject json = CallMiraiAPI(MiraiApiType.groupConfig_update, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime)
         {
-            return 0;
+            return 1;
         }
 
         public int SetGroupBan(long groupId, long qqId, long banTime)
@@ -418,7 +447,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 time = banTime
             };
             JObject json = CallMiraiAPI(banTime > 0 ? MiraiApiType.mute : MiraiApiType.unmute, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupCard(long groupId, long qqId, string newCard)
@@ -434,7 +463,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
             };
             JObject json = CallMiraiAPI(MiraiApiType.memberInfo_update, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupKick(long groupId, long qqId, bool refuses)
@@ -447,7 +476,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 block = refuses
             };
             JObject json = CallMiraiAPI(MiraiApiType.kick, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupLeave(long groupId, bool isDisband)
@@ -459,7 +488,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 target = groupId
             };
             JObject json = CallMiraiAPI(MiraiApiType.quit, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
@@ -475,7 +504,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 }
             };
             JObject json = CallMiraiAPI(MiraiApiType.memberInfo_update, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         public int SetGroupWholeBan(long groupId, bool isOpen)
@@ -486,7 +515,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 target = groupId,
             };
             JObject json = CallMiraiAPI(isOpen ? MiraiApiType.unmuteAll : MiraiApiType.muteAll, request);
-            return json == null ? 0 : (int)json["code"] == 0 ? 1 : 0;
+            return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
         private ProfilerResponse GetBotProfilerInternal()
