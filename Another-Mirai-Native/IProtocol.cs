@@ -178,7 +178,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群 ID</param>
         /// <param name="msg">欲发送的消息</param>
         /// <param name="msgId">引用消息 ID; 当 ID = 0 时表示不引用发送</param>
-        /// <returns>消息ID</returns>
+        /// <returns>消息ID 失败时返回0</returns>
         public int SendGroupMessage(long groupId, string msg, int msgId = 0);
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="qqId">欲发送的 ID</param>
         /// <param name="count">发送数量</param>
-        /// <returns>1为 <see cref="bool">成功</see>; 0为 <see cref="bool">失败</see></returns>
+        /// <returns>0为 <see cref="bool">成功</see>; 1为 <see cref="bool">失败</see></returns>
         public int SendLike(long qqId, int count);
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="qqId">群 ID</param>
         /// <param name="msg">欲发送的消息</param>
-        /// <returns>消息ID</returns>
+        /// <returns>消息ID 失败时返回0</returns>
         public int SendPrivateMessage(long qqId, string msg);
 
         /// <summary>
@@ -202,14 +202,14 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="discussId">讨论组 ID</param>
         /// <param name="msg">欲发送的消息</param>
-        /// <returns>消息ID</returns>
+        /// <returns>消息ID 失败时返回0</returns>
         public int SendDiscussMsg(long discussId, string msg);
 
         /// <summary>
         /// 主动离开讨论组
         /// </summary>
         /// <param name="discussId">讨论组 ID</param>
-        /// <returns>1为 <see cref="bool">成功</see>; 0为 <see cref="bool">失败</see></returns>
+        /// <returns>0为 <see cref="bool">成功</see>; 1为 <see cref="bool">失败</see></returns>
         public int SetDiscussLeave(long discussId);
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Another_Mirai_Native
         /// <param name="identifying">请求标识</param>
         /// <param name="responseType">处理结果: 1 为通过; 2 为拒绝</param>
         /// <param name="appendMsg">备注消息</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetFriendAddRequest(string identifying, int responseType, string appendMsg);
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace Another_Mirai_Native
         /// <param name="requestType">添加类型: 1 为主动进群; 2 为邀请进群</param>
         /// <param name="responseType">处理结果: 1 为通过; 2 为拒绝</param>
         /// <param name="appendMsg">备注消息</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg);
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群组 ID</param>
         /// <param name="qqId">被操作者 ID</param>
         /// <param name="isSet"><see cref="bool">True</see> 为设置; <see cref="bool">False</see> 为罢免</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupAdmin(long groupId, long qqId, bool isSet);
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="groupId">群组 ID</param>
         /// <param name="isOpen">是否开启匿名</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupAnonymous(long groupId, bool isOpen);
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群组 ID</param>
         /// <param name="anonymous">匿名 ID</param>
         /// <param name="banTime">禁言时长 (单位: 秒)</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime);
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群组 ID</param>
         /// <param name="qqId">成员 ID</param>
         /// <param name="banTime">禁言时长 (单位: 秒)</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupBan(long groupId, long qqId, long banTime);
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群组 ID</param>
         /// <param name="qqId">成员 ID</param>
         /// <param name="newCard">新名片</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupCard(long groupId, long qqId, string newCard);
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace Another_Mirai_Native
         /// <param name="groupId">群组 ID</param>
         /// <param name="qqId">成员 ID</param>
         /// <param name="refuses">是否拒绝后续入群</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupKick(long groupId, long qqId, bool refuses);
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="groupId">群组 ID</param>
         /// <param name="isDisband"><see cref="bool">True</see> 为解散; <see cref="bool">False</see> 为离开</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupLeave(long groupId, bool isDisband);
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace Another_Mirai_Native
         /// <param name="qqId">成员 ID</param>
         /// <param name="title">头衔</param>
         /// <param name="durationTime">过期时间</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime);
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="groupId">群组 ID</param>
         /// <param name="isDisband"><see cref="bool">True</see> 为开启; <see cref="bool">False</see> 为关闭</param>
-        /// <returns>1为 <see cref="bool">操作成功</see>; 0为 <see cref="bool">操作失败</see></returns>
+        /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupWholeBan(long groupId, bool isOpen);
     }
 }

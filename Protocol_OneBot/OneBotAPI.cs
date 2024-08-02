@@ -46,7 +46,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.can_send_image, new Dictionary<string, object>
             {
             });
-            return r != null ? r["yes"].ToObject<bool>() ? 1 : 0 : 0;
+            return r != null ? (r["yes"].ToObject<bool>() ? 1 : 0) : 0;
         }
 
         public int CanSendRecord()
@@ -54,7 +54,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.can_send_record, new Dictionary<string, object>
             {
             });
-            return r != null ? r["yes"].ToObject<bool>() ? 1 : 0 : 0;
+            return r != null ? (r["yes"].ToObject<bool>() ? 1 : 0) : 0;
         }
 
         public bool Connect()
@@ -69,7 +69,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return CallOneBotAPI(APIType.delete_msg, new Dictionary<string, object>
             {
                 { "message_id", msgId },
-            }) != null ? 1 : 0;
+            }) != null ? 0 : 1;
         }
 
         public bool Disconnect()
@@ -145,7 +145,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_login_info, new Dictionary<string, object>
             {
             });
-            return r != null ? (long)r["user_id"] : 10001;
+            return r != null ? (long)r["user_id"] : 0;
         }
 
         public List<FriendInfo> GetRawFriendList(bool reserved)
@@ -272,7 +272,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SendDiscussMsg(long discussId, string msg)
         {
-            return 0;
+            return 1;
         }
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
@@ -284,7 +284,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             msg = RepackCQCode(msg);
             if (string.IsNullOrEmpty(msg))
             {
-                return -1;
+                return 0;
             }
             if (MessageType == "Array")
             {
@@ -359,7 +359,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 {"user_id", qqId },
                 {"times", count },
-            }) != null ? 1 : 0;
+            }) != null ? 0 : 1;
         }
 
         public int SendPrivateMessage(long qqId, string msg)
@@ -412,22 +412,25 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SetDiscussLeave(long discussId)
         {
-            return 0;
+            return 1;
         }
 
         public int SetFriendAddRequest(string identifying, int responseType, string appendMsg)
         {
+            RequestCache.FriendRequest.Remove(identifying);
+
             var r = CallOneBotAPI(APIType.set_friend_add_request, new Dictionary<string, object>
             {
                 {"flag", identifying },
                 {"approve", responseType == 1 },
                 {"remark", appendMsg },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
+            RequestCache.FriendRequest.Remove(identifying);
             var r = CallOneBotAPI(APIType.set_group_add_request, new Dictionary<string, object>
             {
                 {"flag", identifying },
@@ -435,7 +438,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"approve", responseType == 1 },
                 {"remark", appendMsg },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet)
@@ -446,7 +449,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"enable", isSet },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupAnonymous(long groupId, bool isOpen)
@@ -456,7 +459,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"enable", isOpen },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime)
@@ -467,7 +470,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"anonymous_flag", anonymous },
                 {"duration", banTime },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupBan(long groupId, long qqId, long banTime)
@@ -478,7 +481,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"duration", banTime },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupCard(long groupId, long qqId, string newCard)
@@ -489,7 +492,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"card", newCard },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupKick(long groupId, long qqId, bool refuses)
@@ -500,7 +503,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"reject_add_request", refuses },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupLeave(long groupId, bool isDisband)
@@ -510,7 +513,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"is_dismiss", isDisband }
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
@@ -522,7 +525,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"special_title", title },
                 {"duration", durationTime },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         public int SetGroupWholeBan(long groupId, bool isOpen)
@@ -532,7 +535,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {"group_id", groupId },
                 {"enable", isOpen },
             });
-            return r != null ? 1 : 0;
+            return r != null ? 0 : 1;
         }
 
         private string? GetGroupName(long groupId, bool withBracket = false)

@@ -3,11 +3,8 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Protocol.Satori.Models;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Net.Http;
 using System.Net.WebSockets;
-using System.Security.Policy;
-using System.Xml.Linq;
 
 namespace Another_Mirai_Native.Protocol.Satori
 {
@@ -121,13 +118,13 @@ namespace Another_Mirai_Native.Protocol.Satori
                 var info = SendRequest("message.delete", new { channel_id = msg.ParentId, message_id = msg.RawMessageId }.ToJson());
                 if (info.ContainsKey("ret"))
                 {
-                    return 0;
+                    return 1;
                 }
-                return 1;
+                return 0;
             }
             else
             {
-                return 0;
+                return 1;
             }
         }
 
@@ -302,7 +299,7 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public int SendDiscussMsg(long discussId, string msg)
         {
-            return 0;
+            return 1;
         }
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
@@ -335,7 +332,7 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public int SendLike(long qqId, int count)
         {
-            return 0;
+            return 1;
         }
 
         public int SendPrivateMessage(long qqId, string msg)
@@ -384,32 +381,36 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public int SetDiscussLeave(long discussId)
         {
-            return 0;
+            return 1;
         }
 
         public int SetFriendAddRequest(string identifying, int responseType, string appendMsg)
         {
+            RequestCache.FriendRequest.Remove(identifying);
+
             var info = SendRequest("friend.approve", new { message_id = identifying, approve = responseType == 1, comment = appendMsg }.ToJson());
             if (info.ContainsKey("ret"))
             {
-                return 0;
+                return 1;
             }
-            return 1;
+            return 0;
         }
 
         public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
+            RequestCache.FriendRequest.Remove(identifying);
+
             var info = SendRequest("guild.member.approve", new { message_id = identifying, approve = responseType == 1, comment = appendMsg }.ToJson());
             if (info.ContainsKey("ret"))
             {
-                return 0;
+                return 1;
             }
-            return 1;
+            return 0;
         }
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet)
         {
-            return 0;
+            return 1;
             // 暂无对应文档
             List<GuildRole> roles = SendRequest("guild.role.list", new { guild_id = groupId.ToString() }.ToJson()).ToObject<List<GuildRole>>();
             string adminRoleId = "0";
@@ -428,12 +429,12 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public int SetGroupAnonymous(long groupId, bool isOpen)
         {
-            return 0;
+            return 1;
         }
 
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime)
         {
-            return 0;
+            return 1;
         }
 
         public int SetGroupBan(long groupId, long qqId, long banTime)
@@ -441,14 +442,14 @@ namespace Another_Mirai_Native.Protocol.Satori
             var info = SendRequest("guild.member.mute", new { channel_id = groupId.ToString(), user_id = qqId.ToString(), duration = banTime }.ToJson());
             if (info.ContainsKey("ret"))
             {
-                return 0;
+                return 1;
             }
-            return 1;
+            return 0;
         }
 
         public int SetGroupCard(long groupId, long qqId, string newCard)
         {
-            return 0;
+            return 1;
         }
 
         public int SetGroupKick(long groupId, long qqId, bool refuses)
@@ -456,9 +457,9 @@ namespace Another_Mirai_Native.Protocol.Satori
             var info = SendRequest("guild.member.kick", new { guild_id = groupId.ToString(), user_id = qqId.ToString(), permanent = refuses }.ToJson());
             if (info.ContainsKey("ret"))
             {
-                return 0;
+                return 1;
             }
-            return 1;
+            return 0;
         }
 
         public int SetGroupLeave(long groupId, bool isDisband)
@@ -468,16 +469,16 @@ namespace Another_Mirai_Native.Protocol.Satori
                 var info = SendRequest("unsafe.guild.remove", new { guild_id = groupId.ToString() }.ToJson());
                 if (info.ContainsKey("ret"))
                 {
-                    return 0;
+                    return 1;
                 }
-                return 1;
+                return 0;
             }
-            return 0;
+            return 1;
         }
 
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
         {
-            return 0;
+            return 1;
         }
 
         public int SetGroupWholeBan(long groupId, bool isOpen)
@@ -487,11 +488,11 @@ namespace Another_Mirai_Native.Protocol.Satori
                 var info = SendRequest("unsafe.channel.mute", new { channel_id = groupId.ToString(), enable = !isOpen }.ToJson());
                 if (info.ContainsKey("ret"))
                 {
-                    return 0;
+                    return 1;
                 }
-                return 1;
+                return 0;
             }
-            return 0;
+            return 1;
         }
     }
 }

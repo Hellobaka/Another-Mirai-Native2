@@ -281,7 +281,7 @@ namespace Protocol_NoConnection
 
         public int SendLike(long qqId, int count)
         {
-            return 1;
+            return 0;
         }
 
         public int SendPrivateMessage(long qqId, string msg)
@@ -299,62 +299,62 @@ namespace Protocol_NoConnection
 
         public int SetDiscussLeave(long discussId)
         {
-            return 1;
+            return 0;
         }
 
         public int SetFriendAddRequest(string identifying, int requestType, string appendMsg)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupAddRequest(string identifying, int requestType, int responseType, string appendMsg)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupAdmin(long groupId, long qqId, bool isSet)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupAnonymous(long groupId, bool isOpen)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupAnonymousBan(long groupId, string anonymous, long banTime)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupBan(long groupId, long qqId, long time)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupCard(long groupId, long qqId, string newCard)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupKick(long groupId, long qqId, bool refuses)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupLeave(long groupId, bool isDisband)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupSpecialTitle(long groupId, long qqId, string title, long durationTime)
         {
-            return 1;
+            return 0;
         }
 
         public int SetGroupWholeBan(long groupId, bool isOpen)
         {
-            return 1;
+            return 0;
         }
 
         private GroupMemberInfo BuildSelfMockData(long groupId)
