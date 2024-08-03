@@ -41,10 +41,7 @@
                     Content="事件测试"
                     IsEnabled="False"
                     Tag="Test_EventPage" />
-                <ui:NavigationViewItem
-                    Content="API测试"
-                    IsEnabled="False"
-                    Tag="Test_APIPage" />
+                <ui:NavigationViewItem Content="API测试" Tag="Test_APIPage" />
             </ui:NavigationView.MenuItems>
             <ui:Frame x:Name="MainFrame" Style="{DynamicResource CascadeDataContextFrame}" />
         </ui:NavigationView>
