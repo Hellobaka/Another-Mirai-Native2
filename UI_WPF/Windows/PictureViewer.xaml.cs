@@ -183,5 +183,13 @@ namespace Another_Mirai_Native.UI.Windows
             ResetScale();
             ImageDisplayer_Loaded(sender, e);
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+        }
     }
 }
