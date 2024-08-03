@@ -25,6 +25,11 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         public int MaxMemberCount { get; set; } = 10;
 
+        public override string ToString()
+        {
+            return $"ID={Group}; 名称={Name}; 当前人数={CurrentMemberCount}; 最大人数={MaxMemberCount}";
+        }
+
         public byte[] ToNative(bool isGroupList)
         {
             MemoryStream stream = new();

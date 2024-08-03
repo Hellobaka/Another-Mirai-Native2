@@ -21,6 +21,11 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         public string Postscript { get; set; } = "";
 
+        public override string ToString()
+        {
+            return $"QQ={QQ}; 昵称={Nick}; 备注={Postscript};";
+        }
+
         public byte[] ToNative()
         {
             MemoryStream stream = new();

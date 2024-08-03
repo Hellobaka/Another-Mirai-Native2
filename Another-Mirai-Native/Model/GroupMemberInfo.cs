@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using System.IO;
+using System.Text;
 
 namespace Another_Mirai_Native.Model
 {
@@ -80,6 +81,24 @@ namespace Another_Mirai_Native.Model
         /// 获取一个值, 指示当前群成员是否允许修改群名片
         /// </summary>
         public bool IsAllowEditorCard { get; set; }
+
+        public override string ToString()
+        {
+            return $"群: {Group}; " +
+                $"QQ: {QQ}; " +
+                $"昵称: {Nick}; " +
+                $"名片: {Card}; " +
+                $"性别: {Sex}; " +
+                $"地区: {Area}; " +
+                $"入群时间: {JoinGroupDateTime:yyyy-MM-dd HH:mm:ss}; " +
+                $"最后发言时间: {LastSpeakDateTime:yyyy-MM-dd HH:mm:ss}; " +
+                $"成员等级: {Level}; " +
+                $"成员类型: {MemberType.GetDescription()}; " +
+                $"专属头衔: {ExclusiveTitle}; " +
+                $"专属头衔过期时间: {(ExclusiveTitleExpirationTime != null ? ExclusiveTitleExpirationTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : "永久")}; " +
+                $"不良记录成员: {(IsBadRecord ? "是" : "否")}; " +
+                $"允许修改名片: {(IsAllowEditorCard ? "是" : "否")}"; 
+        }
 
         public byte[] ToNative()
         {

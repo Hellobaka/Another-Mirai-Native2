@@ -26,6 +26,11 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         public int Age { get; set; } = 0;
 
+        public override string ToString()
+        {
+            return $"QQ={QQ}; 昵称={Nick}; 性别={Sex.GetDescription()}; 年龄={Age}";
+        }
+
         public byte[] ToNative()
         {
             MemoryStream stream = new();
