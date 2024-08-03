@@ -566,7 +566,7 @@ namespace Another_Mirai_Native.UI.Controls
             }
             catch (Exception ex)
             {
-                LogHelper.Error("DownloadImageAsync", ex.Message + ex.StackTrace);
+                LogHelper.WriteLog((int)Model.Enums.LogLevel.Debug, "DownloadImageAsync", ex.Message + ex.StackTrace);
                 return null;
             }
         }
