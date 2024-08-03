@@ -58,6 +58,8 @@ namespace Another_Mirai_Native.UI.Controls
             }
 
             ImageConatainer.Children.Clear();
+            Directory.CreateDirectory(CollectedImagePath);
+
             foreach (var item in Directory.GetFiles(CollectedImagePath))
             {
                 if (Uri.TryCreate(Path.GetFullPath(item), UriKind.Absolute, out Uri uri))
