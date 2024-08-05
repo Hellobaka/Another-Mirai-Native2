@@ -84,7 +84,6 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-
                 <ui:NavigationViewItem
                     x:Name="LogMenuItem"
                     Content="日志"
@@ -94,11 +93,7 @@
                         <ui:PathIcon Style="{StaticResource PathIconDataPaperRollOutline}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem
-                    x:Name="TestMenuItem"
-                    Content="测试"
-                    Icon="59728"
-                    Tag="TestPage" />
+
                 <ui:NavigationViewItem
                     x:Name="ChatMenuItem"
                     Content="聊天"
@@ -110,6 +105,13 @@
                             Glyph="&#xE8F2;" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem
+                    x:Name="TestMenuItem"
+                    Content="测试"
+                    Icon="59728"
+                    Tag="TestPage" />
+
                 <ui:NavigationViewItem
                     x:Name="WebUIMenuItem"
                     Content="WebUI"
@@ -123,6 +125,7 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
+
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置" Tag="SettingPage">
                     <ui:NavigationViewItem.Icon>

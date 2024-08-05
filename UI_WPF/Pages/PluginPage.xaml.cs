@@ -152,6 +152,7 @@ namespace Another_Mirai_Native.UI.Pages
             ReloadAllRunningStatus = false;
             ReloadRunningStatus = false;
             ToggleEnableRunningStatus = false;
+            TestBtn.IsEnabled = AppConfig.Instance.DebugMode;
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
             PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;

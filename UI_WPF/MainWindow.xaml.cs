@@ -202,6 +202,7 @@ namespace Another_Mirai_Native.UI
                 "None" => Material.None,
                 _ => Material.None
             };
+            TestMenuItem.IsEnabled = AppConfig.Instance.DebugMode;
             ChatMenuItem.IsEnabled = UIConfig.Instance.ChatEnabled;
 #if NET5_0_OR_GREATER
             WebUIMenuItem.IsEnabled = true;
