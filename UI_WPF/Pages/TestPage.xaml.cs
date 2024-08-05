@@ -63,5 +63,18 @@ namespace Another_Mirai_Native.UI.Pages
                 PageTitle.Text = $"当前测试插件: {CurrentPlugin.PluginName}";
             }
         }
+
+        public class Remark
+        {
+            public string Name { get; set; } = "";
+            
+            public string DisplayName { get; set; } = "";
+
+            public Dictionary<string, string> ArgumentList { get; set; } = [];
+            
+            public string ReturnDescription { get; set; } = "";
+
+            public string SummaryDescription { get; set; } = "";
+        }
     }
 }
