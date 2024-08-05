@@ -72,7 +72,9 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         FontFamily="Consolas"
-                        IsReadOnly="True" />
+                        HorizontalScrollBarVisibility="Auto"
+                        IsReadOnly="True"
+                        VerticalScrollBarVisibility="Auto" />
                 </ScrollViewer>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -89,6 +91,7 @@
                 </Grid>
             </Grid>
         </Grid>
+
         <TextBlock
             Grid.Row="3"
             Margin="5"
@@ -107,7 +110,9 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         FontFamily="Consolas"
-                        IsReadOnly="True" />
+                        HorizontalScrollBarVisibility="Auto"
+                        IsReadOnly="True"
+                        VerticalScrollBarVisibility="Auto" />
                 </ScrollViewer>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>

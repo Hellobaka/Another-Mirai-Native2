@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.Pages
 {
@@ -159,19 +160,38 @@ namespace Another_Mirai_Native.UI.Pages
 
             public event Action<string> OnWrite;
 
+            private Debouncer Debouncer { get; set; } = new();
+
+            private StringBuilder StringBuilder { get; set; } = new();
+
             public override void Write(char value)
             {
-                OnWrite?.Invoke(value.ToString());
+                StringBuilder.Append(value);
+                Debouncer.Debounce(() =>
+                {
+                    OnWrite?.Invoke(StringBuilder.ToString());
+                    StringBuilder.Clear();
+                }, 500);
             }
 
             public override void Write(string value)
             {
-                OnWrite?.Invoke(value);
+                StringBuilder.Append(value);
+                Debouncer.Debounce(() =>
+                {
+                    OnWrite?.Invoke(StringBuilder.ToString());
+                    StringBuilder.Clear();
+                }, 500);
             }
 
             public override void WriteLine(string value)
             {
-                OnWrite?.Invoke(value + Environment.NewLine);
+                StringBuilder.AppendLine(value);
+                Debouncer.Debounce(() =>
+                {
+                    OnWrite?.Invoke(StringBuilder.ToString());
+                    StringBuilder.Clear();
+                }, 500);
             }
         }
     }
