@@ -57,4 +57,4 @@
 
 ## 可加载插件
 - [x] 酷Q
-- [x] 小栗子
+- [x] [小栗子](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E5%8A%A0%E8%BD%BD%E5%B0%8F%E6%A0%97%E5%AD%90%E6%8F%92%E4%BB%B6)
