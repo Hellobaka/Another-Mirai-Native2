@@ -12,11 +12,11 @@ xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\x86" "%ROOT%\build\Console\net48\x86" /
 echo Copy CQP.dll
 copy /Y "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\build\Console\net48"
 echo Clean Unnecessary Files
-del /S /Q "%ROOT%\build\Console\net48\*.pdb"
-del /S /Q "%ROOT%\build\Console\net48\*.config"
+del /Q "%ROOT%\build\Console\net48\*.pdb"
+del /Q "%ROOT%\build\Console\net48\*.config"
 for %%f in ("%ROOT%\build\Console\net48\*.dll") do (
     if /I not "%%~nxf"=="CQP.dll" (
-        del /S /Q "%%f"
+        del /Q "%%f"
     )
 )
 
@@ -26,10 +26,10 @@ xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders" "%ROOT%\build\Web\loa
 echo Copy Protocols
 xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" "%ROOT%\build\Web\protocols" /E /I /H /Y
 echo Clean Unnecessary Files
-del /S /Q "%ROOT%\build\Web\*.pdb"
-del /S /Q "%ROOT%\build\Web\*.config"
-del /S /Q "%ROOT%\build\Web\Another-Mirai-Native.exe"
-del /S /Q "%ROOT%\build\Web\Another-Mirai-Native.runtimeconfig.json"
+del /Q "%ROOT%\build\Web\*.pdb"
+del /Q "%ROOT%\build\Web\*.config"
+del /Q "%ROOT%\build\Web\Another-Mirai-Native.exe"
+del /Q "%ROOT%\build\Web\Another-Mirai-Native.runtimeconfig.json"
 
 echo Generate WPF(.net48)
 echo Copy Loaders
@@ -41,11 +41,11 @@ xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\x86" "%ROOT%\build\WPF\net48\x86" /E /I
 echo Copy CQP.dll
 copy /Y "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\build\WPF\net48"
 echo Clean Unnecessary Files
-del /S /Q "%ROOT%\build\WPF\net48\*.pdb"
-del /S /Q "%ROOT%\build\WPF\net48\*.config"
+del /Q "%ROOT%\build\WPF\net48\*.pdb"
+del /Q "%ROOT%\build\WPF\net48\*.config"
 for %%f in ("%ROOT%\build\WPF\net48\*.dll") do (
     if /I not "%%~nxf"=="CQP.dll" (
-        del /S /Q "%%f"
+        del /Q "%%f"
     )
 )
 
@@ -57,12 +57,12 @@ xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" "%ROOT%\build\WPF\n
 echo Copy wwwroot
 xcopy "%ROOT%\build\Web\wwwroot" "%ROOT%\build\WPF\net8\wwwroot" /E /I /H /Y
 echo Clean Unnecessary Files
-del /S /Q "%ROOT%\build\WPF\net8\*.pdb"
-del /S /Q "%ROOT%\build\WPF\net8\*.config"
-del /S /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.exe"
-del /S /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.runtimeconfig.json"
-del /S /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.exe"
-del /S /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.runtimeconfig.json"
+del /Q "%ROOT%\build\WPF\net8\*.pdb"
+del /Q "%ROOT%\build\WPF\net8\*.config"
+del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.exe"
+del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.runtimeconfig.json"
+del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.exe"
+del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.runtimeconfig.json"
 
 echo Create zip Archives
 where 7z.exe >nul 2>&1
