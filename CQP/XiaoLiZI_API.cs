@@ -813,7 +813,6 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"API=设置管理员, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 设置管理员");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -1386,7 +1385,6 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"API=处理好友验证事件, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 处理好友验证事件");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -2730,7 +2728,6 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"API=取群成员信息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 取群成员信息");
             }
 
             var memberList = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, authCode, arg1)?.ToString();
@@ -2915,7 +2912,6 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"API=发送好友xml消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, arg4={arg4}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送好友xml消息");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
@@ -2946,7 +2942,6 @@ namespace Another_Mirai_Native.Export
             if (AppConfig.Instance.DebugMode)
             {
                 LogHelper.LocalDebug("小栗子API", $"API=发送群xml消息, authCode={authCode}, arg0={arg0}, arg1={arg1}, arg2={arg2}, arg3={arg3}, ");
-                LogHelper.Error("小栗子API", "使用了未实现了API 发送群xml消息");
             }
             if (arg0 != AppConfig.Instance.CurrentQQ)
             {
