@@ -73,7 +73,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 if (result.ContainsKey("retcode") && result["retcode"].ToString() != "0")
                 {
                     LogHelper.Debug("OneBotAPI", $"retcode: {result["retcode"]}");
-                    result = null;
+                    return null;
                 }
             }
             return result["data"];
@@ -456,6 +456,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     string cqCode = $"[CQ:{json["type"]},";
                     foreach (JProperty key in json["data"].Values<JProperty>())
                     {
+                        if (json["type"].ToString() == "at" && key.Name != "qq")
+                        {
+                            continue;
+                        }
                         cqCode += $"{key.Name}={EscapeRawMessage(key.Value.ToString())},";
                     }
                     cqCode = cqCode.Substring(0, cqCode.Length - 1) + "]";
