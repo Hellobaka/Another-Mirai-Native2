@@ -277,7 +277,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
-            if (msgId > 0)
+            if (msgId != 0)
             {
                 msg = $"[CQ:reply,id={msgId}]" + msg;
             }
