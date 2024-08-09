@@ -8,9 +8,13 @@ namespace Another_Mirai_Native.Config
     /// </summary>
     public class ConfigBase
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="configPath">相对路径</param>
         public ConfigBase(string configPath)
         {
-            ConfigPath = configPath;
+            ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), configPath);
         }
 
         public string ConfigPath { get; set; } = @"conf/Config.json";

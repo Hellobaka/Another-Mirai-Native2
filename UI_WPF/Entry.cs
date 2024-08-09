@@ -12,6 +12,11 @@ namespace Another_Mirai_Native.UI
         [STAThread]
         public static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            }
+
             AppConfig.Instance.StartTime = DateTime.Now;
 
 #if NET5_0_OR_GREATER

@@ -29,6 +29,11 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         public static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            }
+
             AppConfig.Instance.StartTime = DateTime.Now;
 
 #if NET5_0_OR_GREATER
@@ -39,6 +44,7 @@ namespace Another_Mirai_Native
                 _quitEvent.Set();
                 eArgs.Cancel = true;
             };
+
             // 创建初始文件夹
             CreateInitFolders();
             // 重定向异常
