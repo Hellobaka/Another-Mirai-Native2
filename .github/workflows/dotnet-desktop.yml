@@ -39,24 +39,6 @@ jobs:
       
     - name: Run MSBuild
       run: msbuild Another-Mirai-Native2.sln -p:Configuration=Debug -p:Platform=x86
-
-    - name: Copy Build Result
-      run: .\copy.bat 
-
-    - name: Publish Release(Console_net8)
-      run: dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
-
-    - name: Publish Release(Console_net48)
-      run: dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net48.pubxml -f net48
-
-    - name: Publish Release(Blazor)
-      run: dotnet publish UI_Blazor\UI_Blazor.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
-
-    - name: Publish Release(WPF_net48)
-      run: dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net48.pubxml -f net48
-
-    - name: Publish Release(WPF_net8)
-      run: dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
       
     - name: Build Publish Result
       run: .\Release.bat 

@@ -1,20 +1,30 @@
 @echo off
 setlocal
-set ROOT=.
+
+echo Release...
+dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
+dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net48.pubxml -f net48
+dotnet publish UI_Blazor\UI_Blazor.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
+dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net48.pubxml -f net48
+dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
+
+echo Loaders...
+mkdir ".\build\loaders\NetFramework48"
+xcopy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\x86" ".\build\loaders\NetFramework48\x86" /E /I /H /Y
+copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe" ".\build\loaders\NetFramework48" /Y
+copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe.config" ".\build\loaders\NetFramework48" /Y
+copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\CQP.dll" ".\build\loaders\NetFramework48" /Y
 
 echo Generate Minimal Console(.net48)
-echo Copy Loaders
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders" "%ROOT%\build\Console\net48\loaders" /E /I /H /Y
 echo Copy Protocols
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\protocols" "%ROOT%\build\Console\net48\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net48\protocols" ".\build\Console\net48\protocols" /E /I /H /Y
 echo Copy SQLite.Interop.dll
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\x86" "%ROOT%\build\Console\net48\x86" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net48\x86" ".\build\Console\net48\x86" /E /I /H /Y
 echo Copy CQP.dll
-copy /Y "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\build\Console\net48"
+copy /Y ".\CQP\bin\x86\Debug\CQP.dll" ".\build\Console\net48"
 echo Clean Unnecessary Files
-del /Q "%ROOT%\build\Console\net48\*.pdb"
-del /Q "%ROOT%\build\Console\net48\*.config"
-for %%f in ("%ROOT%\build\Console\net48\*.dll") do (
+del /Q ".\build\Console\net48\*.pdb"
+for %%f in (".\build\Console\net48\*.dll") do (
     if /I not "%%~nxf"=="CQP.dll" (
         del /Q "%%f"
     )
@@ -22,28 +32,26 @@ for %%f in ("%ROOT%\build\Console\net48\*.dll") do (
 
 echo Generate WebUI(.net8)
 echo Copy Loaders
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders" "%ROOT%\build\Web\loaders" /E /I /H /Y
+xcopy ".\build\loaders" ".\build\Web\loaders" /E /I /H /Y
 echo Copy Protocols
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" "%ROOT%\build\Web\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" ".\build\Web\protocols" /E /I /H /Y
 echo Clean Unnecessary Files
-del /Q "%ROOT%\build\Web\*.pdb"
-del /Q "%ROOT%\build\Web\*.config"
-del /Q "%ROOT%\build\Web\Another-Mirai-Native.exe"
-del /Q "%ROOT%\build\Web\Another-Mirai-Native.runtimeconfig.json"
+del /Q ".\build\Web\*.pdb"
+del /Q ".\build\Web\Another-Mirai-Native.exe"
+del /Q ".\build\Web\Another-Mirai-Native.runtimeconfig.json"
 
 echo Generate WPF(.net48)
 echo Copy Loaders
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders" "%ROOT%\build\WPF\net48\loaders" /E /I /H /Y
+xcopy ".\build\loaders" ".\build\WPF\net48\loaders" /E /I /H /Y
 echo Copy Protocols
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\protocols" "%ROOT%\build\WPF\net48\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net48\protocols" ".\build\WPF\net48\protocols" /E /I /H /Y
 echo Copy SQLite.Interop.dll
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net48\x86" "%ROOT%\build\WPF\net48\x86" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net48\x86" ".\build\WPF\net48\x86" /E /I /H /Y
 echo Copy CQP.dll
-copy /Y "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\build\WPF\net48"
+copy /Y ".\CQP\bin\x86\Debug\CQP.dll" ".\build\WPF\net48"
 echo Clean Unnecessary Files
-del /Q "%ROOT%\build\WPF\net48\*.pdb"
-del /Q "%ROOT%\build\WPF\net48\*.config"
-for %%f in ("%ROOT%\build\WPF\net48\*.dll") do (
+del /Q ".\build\WPF\net48\*.pdb"
+for %%f in (".\build\WPF\net48\*.dll") do (
     if /I not "%%~nxf"=="CQP.dll" (
         del /Q "%%f"
     )
@@ -51,18 +59,17 @@ for %%f in ("%ROOT%\build\WPF\net48\*.dll") do (
 
 echo Generate WPF(.net8)
 echo Copy Loaders
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\loaders" "%ROOT%\build\WPF\net8\loaders" /E /I /H /Y
+xcopy ".\build\loaders" ".\build\WPF\net8\loaders" /E /I /H /Y
 echo Copy Protocols
-xcopy "%ROOT%\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" "%ROOT%\build\WPF\net8\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" ".\build\WPF\net8\protocols" /E /I /H /Y
 echo Copy wwwroot
-xcopy "%ROOT%\build\Web\wwwroot" "%ROOT%\build\WPF\net8\wwwroot" /E /I /H /Y
+xcopy ".\build\Web\wwwroot" ".\build\WPF\net8\wwwroot" /E /I /H /Y
 echo Clean Unnecessary Files
-del /Q "%ROOT%\build\WPF\net8\*.pdb"
-del /Q "%ROOT%\build\WPF\net8\*.config"
-del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.exe"
-del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native.runtimeconfig.json"
-del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.exe"
-del /Q "%ROOT%\build\WPF\net8\Another-Mirai-Native-WebUI.runtimeconfig.json"
+del /Q ".\build\WPF\net8\*.pdb"
+del /Q ".\build\WPF\net8\Another-Mirai-Native.exe"
+del /Q ".\build\WPF\net8\Another-Mirai-Native.runtimeconfig.json"
+del /Q ".\build\WPF\net8\Another-Mirai-Native-WebUI.exe"
+del /Q ".\build\WPF\net8\Another-Mirai-Native-WebUI.runtimeconfig.json"
 
 echo Create zip Archives
 where 7z.exe >nul 2>&1
@@ -71,9 +78,9 @@ if %errorlevel% neq 0 (
     endlocal
     exit /b
 )
-7z.exe a -tzip "%ROOT%\build\Minimal_Console.zip" "%ROOT%\build\Console\net48\*"
-7z.exe a -tzip "%ROOT%\build\WebUI.zip" "%ROOT%\build\Web\*"
-7z.exe a -tzip "%ROOT%\build\WPF_net8.zip" "%ROOT%\build\WPF\net8\*"
-7z.exe a -tzip "%ROOT%\build\WPF_net48.zip" "%ROOT%\build\WPF\net48\*"
+7z.exe a -tzip ".\build\Minimal_Console.zip" ".\build\Console\net48\*"
+7z.exe a -tzip ".\build\WebUI.zip" ".\build\Web\*"
+7z.exe a -tzip ".\build\WPF_net8.zip" ".\build\WPF\net8\*"
+7z.exe a -tzip ".\build\WPF_net48.zip" ".\build\WPF\net48\*"
 
 endlocal
