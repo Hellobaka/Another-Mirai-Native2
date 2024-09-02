@@ -229,7 +229,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             try
             {
-                Console.WriteLine(message);
                 var api = JsonConvert.DeserializeObject<APIResponse>(message);
                 if (api.data == null)
                 {
