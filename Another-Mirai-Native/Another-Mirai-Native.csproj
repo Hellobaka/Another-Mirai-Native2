@@ -10,7 +10,7 @@
 		<RootNamespace>Another_Mirai_Native</RootNamespace>
 		<Platforms>AnyCPU;x86</Platforms>
 		<LangVersion>12</LangVersion>
-		<Version>2.6.1</Version>
+		<Version>2.6.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
