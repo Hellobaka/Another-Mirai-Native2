@@ -7,7 +7,9 @@ echo Net48...
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders"
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48"
 copy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\Another-Mirai-Native.exe" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" /Y
+copy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\Another-Mirai-Native.exe.config" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" /Y
 copy "%ROOT%\CQP\bin\x86\Debug\CQP.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" /Y
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\x86" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\x86" /E /I /H /Y
 
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols"
 copy "%ROOT%\Protocol_OneBot\bin\x86\Debug\net48\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
