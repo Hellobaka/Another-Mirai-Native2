@@ -32,7 +32,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 message = message.Replace(item.ToString(), "<!cqCode!>");// 将CQ码的位置使用占空文本替换
             }
-            var p = message.Split("<!cqCode!>");
+            var p = message.SplitV1("<!cqCode!>");
             int cqCode_index = 0;
             for (int i = 0; i < p.Length; i++)
             {

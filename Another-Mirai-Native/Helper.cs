@@ -72,7 +72,7 @@ namespace Another_Mirai_Native
             return Convert.ToBase64String(buffer);
         }
 
-        public static string[] Split(this string message, string pattern)
+        public static string[] SplitV1(this string message, string pattern)
         {
             List<string> p = new();// 记录下文本与CQ码的位置关系
             string tmp = "";
