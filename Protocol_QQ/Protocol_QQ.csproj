@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
+	<RootNamespace>Another_Mirai_Native.Protocol.QQ</RootNamespace>
+	<Platforms>AnyCPU;x86</Platforms>
+	<ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<LangVersion>12</LangVersion>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
+	</ItemGroup>
+</Project>
