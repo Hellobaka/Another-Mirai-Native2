@@ -61,6 +61,8 @@ namespace Another_Mirai_Native.Native
 
         private static int PID => Process.GetCurrentProcess().Id;
 
+        private bool HasShownNoLoaderMessage { get; set; }
+
         public bool CheckPluginCanInvoke(string invokeName)
         {
             invokeName = invokeName.Replace("CQ_", "");
@@ -166,7 +168,11 @@ namespace Another_Mirai_Native.Native
 
                 if (File.Exists(LoaderProcessPath) is false)
                 {
-                    LogHelper.Error("加载插件", $"指定的加载器文件不存在，将尝试使用主程序加载");
+                    if (!HasShownNoLoaderMessage)
+                    {
+                        HasShownNoLoaderMessage = true;
+                        LogHelper.Error("加载插件", $"指定的加载器文件不存在，将尝试使用主程序加载");
+                    }
                     LoaderProcessPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}";
                 }
                 LogHelper.Info("加载插件", $"{AppInfo.name} 插件信息读取成功");
