@@ -362,3 +362,4 @@ FodyWeavers.xsd
 *.lnk
 /build
 /.idea
+/UI_Blazor/.config
