@@ -92,32 +92,6 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
-        private async void ErrorWriter_OnWrite(string msg)
-        {
-            await Dispatcher.InvokeAsync(() =>
-            {
-                if (Terminal_Error.Text.Length > 10000)
-                {
-                    Terminal_Error.Text = "";
-                }
-                Terminal_Error.AppendText(msg);
-                ScrollContainer_Error.ScrollToEnd();
-            });
-        }
-
-        private async void Writer_OnWrite(string msg)
-        {
-            await Dispatcher.InvokeAsync(() =>
-            {
-                if (Terminal_Output.Text.Length > 10000)
-                {
-                    Terminal_Output.Text = "";
-                }
-                Terminal_Output.AppendText(msg);
-                ScrollContainer_Output.ScrollToEnd();
-            });
-        }
-
         private async void WebUIStopButton_Click(object sender, RoutedEventArgs e)
         {
 #if NET5_0_OR_GREATER
