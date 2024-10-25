@@ -137,12 +137,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             PageLoaded = true;
 #if NET5_0_OR_GREATER
-            ObservableTextWriter writer = new();
-            writer.OnWrite += Writer_OnWrite;
-            ObservableTextWriter errorWriter = new();
-            errorWriter.OnWrite += ErrorWriter_OnWrite;
-            Console.SetOut(writer);
-            Console.SetError(errorWriter);
+            BlazorUI.Logging.Instance.Logger.LogEvent += Logger_LogEvent;
 
             BlazorUI.Entry_Blazor.OnBlazorServiceStarted += Program_OnBlazorServiceStarted;
             BlazorUI.Entry_Blazor.OnBlazorServiceStopped += Program_OnBlazorServiceStoped;
@@ -150,6 +145,31 @@ namespace Another_Mirai_Native.UI.Pages
             WebUIStartButton.IsEnabled = false;
             WebUIStopButton.IsEnabled = false;
 #endif
+        }
+
+        private async void Logger_LogEvent(bool error, string msg, Exception exception)
+        {
+            await Dispatcher.InvokeAsync(() =>
+            {
+                if (error)
+                {
+                    if (Terminal_Error.Text.Length > 10000)
+                    {
+                        Terminal_Error.Text = "";
+                    }
+                    Terminal_Error.AppendText(msg);
+                    ScrollContainer_Error.ScrollToEnd();
+                }
+                else
+                {
+                    if (Terminal_Output.Text.Length > 10000)
+                    {
+                        Terminal_Output.Text = "";
+                    }
+                    Terminal_Output.AppendText(msg);
+                    ScrollContainer_Output.ScrollToEnd();
+                }
+            });
         }
 
         private void TerminalOutputClearButton_Click(object sender, RoutedEventArgs e)
@@ -160,47 +180,6 @@ namespace Another_Mirai_Native.UI.Pages
         private void TerminalErrorClearButton_Click(object sender, RoutedEventArgs e)
         {
             Terminal_Error.Text = "";
-        }
-
-        private class ObservableTextWriter : TextWriter
-        {
-            public override Encoding Encoding => Encoding.Default;
-
-            public event Action<string> OnWrite;
-
-            private Debouncer Debouncer { get; set; } = new();
-
-            private StringBuilder StringBuilder { get; set; } = new();
-
-            public override void Write(char value)
-            {
-                StringBuilder.Append(value);
-                Debouncer.Debounce(() =>
-                {
-                    OnWrite?.Invoke(StringBuilder.ToString());
-                    StringBuilder.Clear();
-                }, 500);
-            }
-
-            public override void Write(string value)
-            {
-                StringBuilder.Append(value);
-                Debouncer.Debounce(() =>
-                {
-                    OnWrite?.Invoke(StringBuilder.ToString());
-                    StringBuilder.Clear();
-                }, 500);
-            }
-
-            public override void WriteLine(string value)
-            {
-                StringBuilder.AppendLine(value);
-                Debouncer.Debounce(() =>
-                {
-                    OnWrite?.Invoke(StringBuilder.ToString());
-                    StringBuilder.Clear();
-                }, 500);
-            }
         }
     }
 }

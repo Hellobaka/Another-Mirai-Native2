@@ -385,7 +385,7 @@ namespace Another_Mirai_Native.UI.Pages
                         {
                             r = groupId.ToString();
                         }
-                        r = GroupInfoCache[groupId].Name;
+                        r = GroupInfoCache[groupId]?.Name ?? groupId.ToString();
                     });
                     return r;
                 }

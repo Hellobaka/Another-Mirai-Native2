@@ -18,12 +18,15 @@ namespace Another_Mirai_Native.BlazorUI
 
         private static ManualResetEvent ConsoleStartedSignal { get; set; }
 
+        private static bool ConsoleMode { get; set; }
+
         /// <summary>
         /// Console Start Entry
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            ConsoleMode = true;
             ConsoleStartedSignal = new(false);
             Entry.ServerStarted += Entry_ServerStarted;
 
@@ -56,6 +59,12 @@ namespace Another_Mirai_Native.BlazorUI
             builder.Services.AddScoped<Shared>();
             builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
             builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
+            if (!ConsoleMode)
+            {
+                // 清除所有默认日志提供程序
+                builder.Logging.ClearProviders();
+                builder.Logging.AddProvider(Logging.Instance);
+            }
 
             builder.WebHost.ConfigureKestrel(serverOptions =>
             {
