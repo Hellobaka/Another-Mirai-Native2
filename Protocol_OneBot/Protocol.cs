@@ -332,10 +332,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 case NoticeType.group_recall:
                     GroupMessageRecall groupMessageRecall = notice.ToObject<GroupMessageRecall>();
                     string msg = "内容未捕获";
-                    var msgCache = RequestCache.Message.Last(x => x.Item1 == groupMessageRecall.message_id);
-                    if (!string.IsNullOrEmpty(msgCache.Item2))
+                    if (RequestCache.Message.Any(x=> x.Item1 == groupMessageRecall.message_id))
                     {
-                        msg = msgCache.Item2;
+                        var msgCache = RequestCache.Message.Last(x => x.Item1 == groupMessageRecall.message_id);
+                        if (!string.IsNullOrEmpty(msgCache.Item2))
+                        {
+                            msg = msgCache.Item2;
+                        }
                     }
 
                     PluginManagerProxy.Instance.Event_OnGroupMsgRecall((int)groupMessageRecall.message_id, groupMessageRecall.group_id, msg);
@@ -345,10 +348,13 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 case NoticeType.friend_recall:
                     FriendMessageRecall friendMessageRecall = notice.ToObject<FriendMessageRecall>();
                     string friendRecallMsg = "内容未捕获";
-                    var friendRecallMsgCache = RequestCache.Message.Last(x => x.Item1 == friendMessageRecall.message_id);
-                    if (!string.IsNullOrEmpty(friendRecallMsgCache.Item2))
+                    if (RequestCache.Message.Any(x => x.Item1 == friendMessageRecall.message_id))
                     {
-                        friendRecallMsg = friendRecallMsgCache.Item2;
+                        var friendRecallMsgCache = RequestCache.Message.Last(x => x.Item1 == friendMessageRecall.message_id);
+                        if (!string.IsNullOrEmpty(friendRecallMsgCache.Item2))
+                        {
+                            friendRecallMsg = friendRecallMsgCache.Item2;
+                        }
                     }
 
                     PluginManagerProxy.Instance.Event_OnPrivateMsgRecall((int)friendMessageRecall.message_id, friendMessageRecall.user_id, friendRecallMsg);
