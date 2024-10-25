@@ -62,7 +62,7 @@ namespace Another_Mirai_Native.Config
 
         public long CurrentQQ { get; set; } = 10001;
 
-        public ServerType ServerType { get; set; } = ServerType.WebSocket;
+        public ServerType ServerType { get; set; } = ServerType.Pipe;
 
         public List<string> AutoEnablePlugin { get; set; } = new();
 
@@ -90,7 +90,7 @@ namespace Another_Mirai_Native.Config
             DebugLazyLoad = GetConfig("DebugLazyLoad", false);
             LoadTimeout = GetConfig("LoadTimeout", 10 * 1000);
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
-            ServerType = (ServerType)GetConfig("ServerType", 0);
+            ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
         }
     }
