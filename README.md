@@ -58,3 +58,6 @@
 ## 可加载插件
 - [x] 酷Q
 - [x] [小栗子](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E5%8A%A0%E8%BD%BD%E5%B0%8F%E6%A0%97%E5%AD%90%E6%8F%92%E4%BB%B6)
+
+## 音频支持
+- [音频支持](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E9%9F%B3%E9%A2%91%E6%94%AF%E6%8C%81)
