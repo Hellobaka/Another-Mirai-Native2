@@ -36,6 +36,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
         /// </summary>
         public string WsURL { get; set; } = "";
 
+        /// <summary>
+        /// 标志是否需要进行消息处理
+        /// </summary>
+        private bool Handing { get; set; } = true;
+
         public JToken CallOneBotAPI(APIType type, Dictionary<string, object> param)
         {
             int syncId;
@@ -207,7 +212,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchMessage(JObject message)
         {
-            if (message == null || message.ContainsKey("message_type") is false)
+            if (message == null || message.ContainsKey("message_type") is false || !Handing)
             {
                 return;
             }
@@ -224,7 +229,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchNotice(JObject notice)
         {
-            if (notice == null || (!notice.ContainsKey("notice_type") && !notice.ContainsKey("sub_type")))
+            if (notice == null || (!notice.ContainsKey("notice_type") && !notice.ContainsKey("sub_type")) || !Handing)
             {
                 return;
             }
@@ -477,7 +482,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchRequest(JObject request)
         {
-            if (request == null)
+            if (request == null || !Handing)
             {
                 return;
             }
@@ -591,7 +596,22 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         DispatchRequest(e);
                         break;
 
-                    case EventType.meta_event: // Ignore
+                    case EventType.meta_event:
+                        if (e.TryGetValue("meta_event_type", out var type)
+                            && type.ToString() == "heartbeat"
+                            && e.TryGetValue("status", out type) && type is JObject obj
+                            && obj.TryGetValue("online", out type))
+                        {
+                            var online = (bool)type;
+                            if (online != Handing)
+                            {
+                                LogHelper.Info("框架在线状态变化", $"框架 Online 变化为：{type}");
+                            }
+                            if (DiscardOfflineMessage)
+                            {
+                                Handing = online;
+                            }
+                        }
                         break;
 
                     default:

@@ -35,6 +35,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public string Name { get; set; } = "OneBot v11";
 
+        private bool DiscardOfflineMessage { get; set; } = true;
+
         private List<FriendInfo> FriendInfoList { get; set; } = new();
 
         private List<GroupInfo> GroupInfoList { get; set; } = new();
@@ -268,6 +270,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             WsURL = GetConfig("WebSocketURL", "");
             AuthKey = GetConfig("AuthKey", "");
             MessageType = GetConfig("MessageType", "Array");
+            DiscardOfflineMessage = GetConfig("DiscardOfflineMessage", true);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
