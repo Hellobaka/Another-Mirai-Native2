@@ -6,7 +6,7 @@
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
-<MudGrid>
+<MudGrid Style="padding: 16px;">
     <MudItem sm="12" md="6">
         <MudPaper Elevation="4">
             <MudDataGrid RowStyle="cursor: pointer;" RowClassFunc="@RowClassFunc" Loading="@Loading" FixedHeader="true" Hover="true" SelectOnRowClick="true" SortMode="SortMode.None" Items="CQPlugins" SelectedItem="@SelectedItem" T="CQPluginProxyWrapper" SelectedItemChanged="SelectedItemChanged" MultiSelection="false">

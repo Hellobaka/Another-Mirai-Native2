@@ -7,8 +7,9 @@
 @inject Shared Shared
 @implements IDisposable
 @inject IScrollManager ScrollManager
+@using Another_Mirai_Native.BlazorUI.Components.Pages.Components
 
-<div style="height: 90vh; display: flex; flex-direction: column;">
+<div style="height: 90vh; display: flex; flex-direction: column; padding: 16px;">
     <MudGrid>
         <MudItem sm="12">
             <MudText>当前测试插件: @(TestingPlugin == null ? "空" : TestingPlugin.PluginName)</MudText>

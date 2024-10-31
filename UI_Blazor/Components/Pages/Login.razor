@@ -10,7 +10,7 @@
             <h3>后台存储的密码</h3>
         </MudCardHeader>
         <MudCardContent>
-            <MudTextField @bind-Value="Password" Label="密码" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="显示密码" />
+            <MudTextField @ref="PasswordTextField" OnKeyDown="OnPasswordKeyDown" @bind-Value="Password" Label="密码" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="显示密码" />
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Filled" Color=" Color.Primary" @onclick="LoginClick">连接</MudButton>
@@ -19,11 +19,12 @@
 </MudContainer>
 
 @code {
-    public string Password { get; set; } = "1234567";
+    public string Password { get; set; } = "";
 
     private bool isShow;
     private InputType PasswordInput = InputType.Password;
     private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    private MudTextField<string> PasswordTextField = null;
 
     protected override void OnInitialized()
     {
@@ -35,6 +36,15 @@
         if (firstRender)
         {
             // await JS.InvokeVoidAsync("setTitle", "连接 - AMN2 WebUI");
+        }
+    }
+
+    private async Task OnPasswordKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await PasswordTextField.BlurAsync();
+            await LoginClick();
         }
     }
 
@@ -54,7 +64,7 @@
         }
     }
 
-    private async void LoginClick()
+    private async Task LoginClick()
     {
         if (!await _authProvider.AuthenticateUser(Password))
         {

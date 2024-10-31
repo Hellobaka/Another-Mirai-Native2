@@ -1,0 +1,118 @@
+﻿<div style="display: flex">
+    <MudAvatar Style="margin-top: 5px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+        <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
+        @if (ShowFallbackName)
+        {
+            <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
+        }
+    </MudAvatar>
+    <div style="margin-left: 10px; width: calc(100% - 50px);">
+        <div style="display: flex; justify-content: space-between;">
+            <MudText Class="hideText"><b>@Item.GroupName</b></MudText>
+            <MudText Typo="Typo.body2" Class="hideText">@GetCurrentTimeDisplay(Item.Time)</MudText>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <MudBadge Content="100" Style="width: calc(100% - 20px);" Overlap Color="Color.Primary" Origin="Origin.CenterRight">
+                <MudText Typo="Typo.body2" Class="hideText" Style="margin-right: 12px;">@Item.Detail</MudText>
+            </MudBadge>
+        </div>
+    </div>
+</div>
+<style>
+    .hideText{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public ChatHistoryItem Item { get; set; }
+
+    private bool ShowFallbackName { get; set; } = false;
+    private MudImage AvatarImage { get; set; }
+    private MudText AvatarText { get; set; }
+
+    private static string[] FallbackColors { get; set; } = new[]
+    {
+        $"rgb(255, 87, 51)", // Crimson
+        $"rgb(52, 152, 219)", // SkyBlue
+        $"rgb(46, 204, 113)", // Emerald
+        $"rgb(155, 89, 182)", // Amethyst
+        $"rgb(52, 73, 94)", // Asphalt
+        $"rgb(22, 160, 133)", // Turquoise
+        $"rgb(39, 174, 96)", // Nephritis
+        $"rgb(41, 128, 185)", // BelizeHole
+        $"rgb(142, 68, 173)", // Wisteria
+        $"rgb(241, 196, 15)", // Sunflower
+        $"rgb(230, 126, 34)", // Carrot
+        $"rgb(231, 76, 60)", // Alizarin
+        $"rgb(236, 240, 241)", // Clouds
+        $"rgb(149, 165, 166)", // Concrete
+        $"rgb(243, 156, 18)", // Orange
+        $"rgb(211, 84, 0)", // Pumpkin
+        $"rgb(192, 57, 43)", // Pomegranate
+        $"rgb(189, 195, 199)", // Silver
+        $"rgb(127, 140, 141)", // Asbestos
+        $"rgb(44, 62, 80)" // MidnightBlue
+    }; 
+
+    private void OnAvatarLoadFail()
+    {
+        AvatarImage.Style = "display: none";
+        ShowFallbackName = true;
+    }
+
+    private string GetAvatarSource()
+    {
+        string imgUrl = "";
+        switch (Item.Avatar.AvatarType)
+        {
+            case AvatarTypes.QQPrivate:
+                imgUrl = $"https://q.qlogo.cn/g?b=qq&nk={Item.Avatar.Id}&s=160";
+                break;
+
+            case AvatarTypes.QQGroup:
+                imgUrl = $"http://p.qlogo.cn/gh/{Item.Avatar.Id}/{Item.Avatar.Id}/0";
+                break;
+
+            case AvatarTypes.Fallback:
+                break;
+        }
+        return imgUrl;
+    }
+
+    private string GetCurrentTimeDisplay(DateTime time)
+    {
+        if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day == time.Day)
+        {
+            return time.ToString("T");
+        }
+        else if ((DateTime.Now - time).Days < 1 && DateTime.Now.Day != time.Day
+            || (DateTime.Now - time).Days == 1)
+        {
+            return "昨天";
+        }
+        else if ((DateTime.Now - time).Days == 2)
+        {
+            return "前天";
+        }
+        else if ((DateTime.Now - time).Days <= 7)
+        {
+            bool flag = false;
+            for (DateTime date = time; date < DateTime.Now; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek == DayOfWeek.Monday)
+                {
+                    flag = true;
+                }
+            }
+            return flag ? time.ToString("D") : time.ToString("dddd");
+        }
+        else
+        {
+            return time.ToString("D");
+        }
+    }
+}

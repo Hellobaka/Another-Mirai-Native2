@@ -1,6 +1,135 @@
 ﻿@page "/chat"
-<h3>Chat</h3>
+@using Another_Mirai_Native.BlazorUI.Components.Pages.Components
+@using Another_Mirai_Native.Config
+@using Another_Mirai_Native.DB
+@inject IJSRuntime JS
+
+<div style="display: flex; height: calc(100vh - var(--mud-appbar-height));">
+    <div id="ChatHistoryList">
+        <MudTextField T="string" Label="检索" Variant="Variant.Filled"></MudTextField>
+        <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValueChanged="SelectedHistoryItemChanged" SelectionMode="SelectionMode.SingleSelection" SelectedValue="SelectedHistoryItem" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
+            @foreach (var item in HistoryItems)
+            {
+                <MudListItem T="ChatHistoryItem" Value="item">
+                    <HistoryItem Item="@item" />
+                </MudListItem>
+            }
+        </MudList>
+        <div id="Shinker" @onclick="ShinkerClicked">
+            &lt;
+        </div>
+    </div>
+    <div id="ChatMainContent">
+    </div>
+</div>
+<MudOverlay DarkBackground="true" AutoClose="false" @bind-Visible="Unavailable">
+    <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate />
+</MudOverlay>
+
+<style>
+    .short {
+        width: 65px !important;
+    }
+
+    #ChatHistoryList {
+        max-width: 400px;
+        width: 30%;
+        height: 100%;
+        color: var(--mud-palette-text-primary);
+        background-color: var(--mud-palette-background-gray);
+        --mud-drawer-content-height: 0;
+        border-radius: var(--mud-default-borderradius);
+        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        position: relative;
+    }
+
+    #ChatMainContent {
+        width: 70%;
+        height: 100%;
+    }
+
+    #Shinker {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translate(100%, -50%);
+        cursor: pointer;
+        height: 100px;
+        background-color: var(--mud-palette-background-gray);
+        line-height: 100px;
+        width: 10px;
+        text-align: center;
+        border-radius: 0 25px 25px 0;
+        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 300ms;
+        overflow: hidden;
+    }
+</style>
+
+<script>
+    function toggleContainerLength() {
+        const shinker = document.getElementById('Shinker')
+        const list = document.getElementById('ChatHistoryList')
+        const long = shinker.innerText === '<';
+        if (long) {
+            shinker.innerText = '>'
+            list.classList.add('short')
+        } else {
+            shinker.innerText = '<'
+            list.classList.remove('short')
+        }
+    }
+</script>
 
 @code {
+    private ChatHistoryItem SelectedHistoryItem { get; set; } = null;
+    private List<ChatHistoryItem> HistoryItems { get; set; } = [];
+    private List<ChatHistory> Histories { get; set; } = [];
+    private bool Unavailable { get; set; } = true;
 
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadChatHistory();
+            Unavailable = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadChatHistory()
+    {
+        Histories = ChatHistoryHelper.GetHistoryCategroies();
+        HistoryItems = [];
+        foreach (var item in Histories)
+        {
+            var history = new ChatHistoryItem
+            {
+                AvatarType = item.Type == ChatHistoryType.Private ? AvatarTypes.QQPrivate : AvatarTypes.QQGroup,
+                Detail = item.Message,
+                GroupName = item.Type == ChatHistoryType.Private ? await ChatHistoryHelper.GetFriendNick(item.ParentID) : await ChatHistoryHelper.GetGroupName(item.ParentID),
+                Id = item.ParentID,
+                Time = item.Time,
+                UnreadCount = 0,
+
+            };
+            history.Avatar = new()
+            {
+                AvatarType = history.AvatarType,
+                FallbackName = history.GroupName,
+                Id = history.Id,
+                IsRound = true
+            };
+            HistoryItems.Add(history);
+        }
+    }
+
+    private async Task ShinkerClicked()
+    {
+        await JS.InvokeVoidAsync("toggleContainerLength");
+    }
+
+    private async Task SelectedHistoryItemChanged(ChatHistoryItem historyItem)
+    {
+
+    }
 }
