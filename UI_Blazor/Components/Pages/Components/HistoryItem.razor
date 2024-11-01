@@ -1,20 +1,26 @@
 ﻿<div style="display: flex">
-    <MudAvatar Style="margin-top: 5px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+    <MudAvatar Style="margin-top: 5px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.IsRound)">
         <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
         @if (ShowFallbackName)
         {
-            <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
+            <MudText @ref="AvatarText">@Item.Name[0..1]</MudText>
         }
     </MudAvatar>
     <div style="margin-left: 10px; width: calc(100% - 50px);">
         <div style="display: flex; justify-content: space-between;">
-            <MudText Class="hideText"><b>@Item.GroupName</b></MudText>
+            <MudText Class="hideText"><b>@Item.Name</b></MudText>
             <MudText Typo="Typo.body2" Class="hideText">@GetCurrentTimeDisplay(Item.Time)</MudText>
         </div>
         <div style="display: flex; justify-content: space-between;">
-            <MudBadge Content="100" Style="width: calc(100% - 20px);" Overlap Color="Color.Primary" Origin="Origin.CenterRight">
-                <MudText Typo="Typo.body2" Class="hideText" Style="margin-right: 12px;">@Item.Detail</MudText>
-            </MudBadge>
+            @if(Item.UnreadCount > 0)
+            {
+                <MudText Typo="Typo.body2" Class="hideText" Style="margin-right: 5px;">@Item.Detail</MudText>
+                <div style="position: unset; cursor: pointer;" @onclick="@(() => ResetUnread())" role="status" aria-live="polite" class="mud-badge mud-badge-center right mud-elevation-0 mud-theme-primary mud-badge-overlap">@Item.UnreadCount</div>
+            }
+            else
+            {
+                <MudText Typo="Typo.body2" Class="hideText" Style="margin-right: 5px;">@Item.Detail</MudText>
+            }
         </div>
     </div>
 </div>
@@ -67,14 +73,14 @@
     private string GetAvatarSource()
     {
         string imgUrl = "";
-        switch (Item.Avatar.AvatarType)
+        switch (Item.AvatarType)
         {
             case AvatarTypes.QQPrivate:
-                imgUrl = $"https://q.qlogo.cn/g?b=qq&nk={Item.Avatar.Id}&s=160";
+                imgUrl = $"https://q.qlogo.cn/g?b=qq&nk={Item.Id}&s=160";
                 break;
 
             case AvatarTypes.QQGroup:
-                imgUrl = $"http://p.qlogo.cn/gh/{Item.Avatar.Id}/{Item.Avatar.Id}/0";
+                imgUrl = $"http://p.qlogo.cn/gh/{Item.Id}/{Item.Id}/0";
                 break;
 
             case AvatarTypes.Fallback:
@@ -114,5 +120,11 @@
         {
             return time.ToString("D");
         }
+    }
+
+    public void ResetUnread()
+    {
+        Item.UnreadCount = 0;
+        StateHasChanged();
     }
 }

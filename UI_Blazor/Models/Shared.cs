@@ -8,6 +8,8 @@
 
         public bool TestGroup { get; set; } = true;
 
+        public long SelectChatHistoryId { get; set; }
+
         public List<ChatItemModel> TestMessages { get; set; } = [];
     }
 }

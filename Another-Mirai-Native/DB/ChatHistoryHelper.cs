@@ -9,11 +9,11 @@ namespace Another_Mirai_Native.DB
     {
         private static SemaphoreSlim APILock { get; set; } = new(1, 1);
 
-        private static Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
-      
-        private static Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
-      
-        private static Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
+        public static Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
+
+        public static Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
+
+        public static Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
         private static string GetDBPath(long id, ChatHistoryType type)
         {

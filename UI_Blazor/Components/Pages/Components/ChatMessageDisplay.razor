@@ -1,0 +1,116 @@
+﻿@inject IScrollManager ScrollManager
+@inject IJSRuntime JS
+<MudPaper id="chatContainer" style="@BaseStyle" Elevation="3">
+
+    @if (Reloading)
+    {
+        <div style="display: flex; justify-content: center;">
+            <MudProgressCircular Indeterminate Size="Size.Small" Color="Color.Secondary"/>
+        </div>
+    }
+    @foreach (var item in ChatItems)
+    {
+        <ChatItem Item="@item" ReplyEnabled="false" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" />
+    }
+    <MudFab id="scrollToBottom" Class="hidden" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleDown" OnClick="ScrollToBottom" Style="position: fixed; right: 10px; bottom: 150px;" />
+</MudPaper>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<script>
+    var lastScrollBottom = 0;
+    var messageDisplay = null
+    function onContainerScroll(e) {
+        const scrollBottom = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight
+        const scroller = document.getElementById('scrollToBottom')
+        if (scrollBottom > 200 && scrollBottom < lastScrollBottom) {
+            scroller.classList.remove('hidden')
+        } else {
+            scroller.classList.add('hidden')
+        }
+
+        if (scrollBottom > 200 && e.target.scrollTop < 200 && messageDisplay) {
+            messageDisplay.invokeMethodAsync('CallReload')
+        } else {
+            lastScrollBottom = scrollBottom
+        }
+    }
+
+    function init_MsgContainer(obj){
+        const container = document.getElementById('chatContainer')
+        container.onscroll = onContainerScroll
+        container.scrollTop = container.scrollHeight;
+        if (obj) {
+            messageDisplay = obj
+        }
+    }
+
+    function updateScrollBottom () {
+        const container = document.getElementById('chatContainer')
+        container.scrollTop = container.scrollHeight - lastScrollBottom - container.clientHeight
+    }
+</script>
+@code {
+    [Parameter]
+    public List<ChatItemModel> ChatItems { get; set; } = [];
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnCopy { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnRepeat { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnAt { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnReply { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoadAvaliable { get; set; }
+
+    private bool Reloading { get; set; } = false;
+    private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden;";
+    private DotNetObjectReference<ChatMessageDisplay>? IntercallInstance{ get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IntercallInstance = DotNetObjectReference.Create(this);
+            JS.InvokeVoidAsync("init_MsgContainer", IntercallInstance);
+        }
+    }
+
+    public void OnItemsChange()
+    {
+        JS.InvokeVoidAsync("init_MsgContainer");
+    }
+
+    public async Task ScrollToBottom()
+    {
+        await ScrollManager.ScrollToBottomAsync("#chatContainer", ScrollBehavior.Smooth);
+    }
+
+    public async Task ReloadFinish(bool avaliable)
+    {
+        if (avaliable)
+        {
+            await JS.InvokeVoidAsync("updateScrollBottom");
+        }
+        Reloading = false;
+    }
+
+    [JSInvokable]
+    public void CallReload()
+    {
+        if (Reloading)
+        {
+            return;
+        }
+        Reloading = true;
+        OnLoadAvaliable.InvokeAsync();
+    }
+}

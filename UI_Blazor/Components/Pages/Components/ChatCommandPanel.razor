@@ -1,0 +1,104 @@
+﻿@using Another_Mirai_Native.Config
+@inject ISnackbar Snackbar
+
+<MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
+    <div style="display: flex;">
+        <MudTooltip Text="图片">
+            <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
+                <ActivatorContent>
+                    <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+                </ActivatorContent>
+            </MudFileUpload>
+        </MudTooltip>
+        <MudTooltip Text="At Bot">
+            <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
+        </MudTooltip>
+        <MudTooltip Text="清空">
+            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="ClearSendText"></MudIconButton>
+        </MudTooltip>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <MudTextField id="sendTextInput" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
+        <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
+    </div>
+</MudPaper>
+
+@code {
+    private MudTextField<string> SendTextElement { get; set; }
+    public string SendText { get; set; } = "";
+    public List<string> SendHistories { get; set; } = [];
+    private int MessageHistoryIndex { get; set; } = 0;
+
+    private async Task AtBotClicked()
+    {
+        await SendTextElement.BlurAsync();
+        await SendTextElement.SetText(SendText + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
+    }
+
+    private async void SendTextKeyDown(KeyboardEventArgs key)
+    {
+        if (key.Key == "Enter")
+        {
+            // await SendTestMessage();
+        }
+        else if (key.Key == "ArrowUp")
+        {
+            MessageHistoryIndex++;
+            if (MessageHistoryIndex > SendHistories.Count)
+            {
+                MessageHistoryIndex = SendHistories.Count;
+            }
+            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
+            await SendTextElement.SetText(text);
+        }
+        else if (key.Key == "ArrowDown")
+        {
+            MessageHistoryIndex--;
+            if (MessageHistoryIndex <= 0)
+            {
+                MessageHistoryIndex = 0;
+                await SendTextElement.SetText("");
+                return;
+            }
+            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
+            await SendTextElement.SetText(text);
+        }
+    }
+
+    private async void ClearSendText()
+    {
+        await SendTextElement.Clear();
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async Task UploadFile(IBrowserFile upload)
+    {
+        int minFileSize = 4 * 1024, maxFileSize = 5 * 1024 * 1024;
+        if (upload.Size < minFileSize || upload.Size > maxFileSize)
+        {
+            Snackbar.Add("上传图片文件尺寸不得大于 5MB 且不得小于 4KB", Severity.Error);
+            return;
+        }
+        // byte[] buffer = new byte[upload.Size];
+        // await upload.OpenReadStream().ReadAsync(buffer);
+        string fileName = Path.GetFileName(upload.Name);
+        string imageDirectory = @"data\image\cached";
+        string cqCode = $"[CQ:image,file=cached\\{fileName.Replace(".cqimg", "")}]";
+        string path = Path.Combine(imageDirectory, fileName);
+
+        if (upload.Name.EndsWith("cqimg"))
+        {
+            imageDirectory = @"data\image";
+        }
+
+        if (!File.Exists(path))
+        {
+            Directory.CreateDirectory(imageDirectory);
+            await using FileStream fileStream = new(path, FileMode.Create);
+            await upload.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
+        }
+
+        await SendTextElement.BlurAsync();
+        await SendTextElement.SetText(SendText + cqCode);
+    }
+}

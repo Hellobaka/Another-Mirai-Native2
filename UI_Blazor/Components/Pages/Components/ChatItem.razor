@@ -8,12 +8,12 @@
     </MudAvatar>
     <div style="margin: 0 1rem;">
         <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
-        <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true"  Style="cursor: default;">
+        <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" FullWidth Style="cursor: default;">
             <ActivatorContent>
                 <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
                     @foreach (var line in MessageLines)
                     {
-                        <MudText Style="text-align: left;">@line</MudText>
+                        <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word;">@line</MudText>
                     }
                 </MudPaper>
             </ActivatorContent>
@@ -42,6 +42,7 @@
 </style>
 
 @code {
+    // TODO: 实现Notice
     [Parameter]
     public ChatItemModel Item { get; set; }
 
@@ -101,6 +102,21 @@
     protected override void OnParametersSet()
     {
         MessageLines = Item.Message.Split('\n');
+        Task.Run(async () =>
+        {
+            string name = "";
+            if(Item.ParentType == AvatarTypes.QQGroup)
+            {
+                name = await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, Item.Id);
+            }
+            else
+            {
+                name = await ChatHistoryHelper.GetFriendNick(Item.Id);
+            }
+            Item.DisplayName = name;
+            Item.Avatar.FallbackName = name;
+            await InvokeAsync(() => StateHasChanged());
+        });
     }
 
     private string GetAvatarSource()

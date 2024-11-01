@@ -6,7 +6,7 @@
 
         public string Detail { get; set; } = "";
 
-        public string GroupName { get; set; } = "";
+        public string Name { get; set; } = "";
 
         public long Id { get; set; }
 
@@ -14,6 +14,6 @@
 
         public int UnreadCount { get; set; }
 
-        public AvatarModel Avatar { get; set; } = new AvatarModel();
+        public bool IsRound { get; set; } = true;
     }
 }
