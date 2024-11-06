@@ -235,11 +235,13 @@ namespace Another_Mirai_Native.RPC.Interface
                 }
                 else
                 {
+                    LogHelper.Error("响应超时", $"插件 {target.PluginName} 响应 {eventType} 事件返回值无效");
                     return null;
                 }
             }
             else
             {
+                LogHelper.Error("响应超时", $"插件 {target.PluginName} 响应 {eventType} 事件超时");
                 return null;
             }
         }
