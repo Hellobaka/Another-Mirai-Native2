@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Another_Mirai_Native.RPC.Interface
@@ -221,6 +222,7 @@ namespace Another_Mirai_Native.RPC.Interface
             {
                 return null;
             }
+            Stopwatch stopwatch = Stopwatch.StartNew();
             string guid = Guid.NewGuid().ToString();
             SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
             WaitingMessage.Add(guid, new InvokeResult());
@@ -231,17 +233,28 @@ namespace Another_Mirai_Native.RPC.Interface
                 WaitingMessage.Remove(guid);
                 if (result.Success && int.TryParse(result.Result.ToString(), out int r))
                 {
+                    if (AppConfig.Instance.DebugMode)
+                    {
+                        LogHelper.WriteLog(LogLevel.Debug, logOrigin:"AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
+                    }
                     return r;
                 }
                 else
                 {
+                    if (AppConfig.Instance.DebugMode)
+                    {
+                        LogHelper.WriteLog(LogLevel.Debug, logOrigin: "AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
+                    }
                     LogHelper.Error("响应超时", $"插件 {target.PluginName} 响应 {eventType} 事件返回值无效");
                     return null;
                 }
             }
             else
             {
-                LogHelper.Error("响应超时", $"插件 {target.PluginName} 响应 {eventType} 事件超时");
+                if (AppConfig.Instance.DebugMode)
+                {
+                    LogHelper.WriteLog(LogLevel.Debug, logOrigin: "AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
+                }
                 return null;
             }
         }
