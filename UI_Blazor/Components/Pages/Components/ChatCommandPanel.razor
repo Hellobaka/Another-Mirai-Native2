@@ -1,5 +1,6 @@
 ﻿@using Another_Mirai_Native.Config
 @inject ISnackbar Snackbar
+@inject IJSRuntime JS
 
 <MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
     <div style="display: flex;">
@@ -18,8 +19,8 @@
         </MudTooltip>
     </div>
     <div style="display: flex; align-items: center;">
-        <MudTextField id="sendTextInput" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
-        <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
+        <MudTextField Disabled="Sending" id="sendTextInput" Lines="3" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="Shift + Enter换行"></MudTextField>
+        <MudIconButton Disabled="Sending" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin: 6px 0 22px 6px;" Color="Color.Primary" OnClick="OnSendButtonClick"></MudIconButton>
     </div>
 </MudPaper>
 
@@ -28,18 +29,41 @@
     public string SendText { get; set; } = "";
     public List<string> SendHistories { get; set; } = [];
     private int MessageHistoryIndex { get; set; } = 0;
+    private bool PreventDefault { get; set; }
+    private bool sending = false;
+
+    [Parameter]
+    public EventCallback<string> OnMessageSend { get; set; }
+
+    [Parameter]
+    public bool Sending
+    {
+        get => sending;
+        set
+        {
+            sending = value;
+            if (!sending)
+            {
+                InvokeAsync(async () =>
+                {
+                    await ClearSendText();
+                });
+            }
+        }
+    }
 
     private async Task AtBotClicked()
     {
-        await SendTextElement.BlurAsync();
         await SendTextElement.SetText(SendText + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
     }
 
-    private async void SendTextKeyDown(KeyboardEventArgs key)
+    private async Task SendTextKeyDown(KeyboardEventArgs key)
     {
-        if (key.Key == "Enter")
+        PreventDefault = false;
+        if (key.Key == "Enter" && !key.ShiftKey)
         {
-            // await SendTestMessage();
+            PreventDefault = true;
+            await CallSendMessage();
         }
         else if (key.Key == "ArrowUp")
         {
@@ -47,6 +71,10 @@
             if (MessageHistoryIndex > SendHistories.Count)
             {
                 MessageHistoryIndex = SendHistories.Count;
+            }
+            if (SendHistories.Count == 0)
+            {
+                return;
             }
             string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
             await SendTextElement.SetText(text);
@@ -65,10 +93,32 @@
         }
     }
 
-    private async void ClearSendText()
+    public async Task ClearSendText()
     {
         await SendTextElement.Clear();
-        await InvokeAsync(() => StateHasChanged());
+        await SendTextElement.BlurAsync();
+        await SendTextElement.FocusAsync();
+    }
+
+    public async Task AppendText(string text)
+    {
+        await SendTextElement.SetText(SendText + text);
+    }
+
+    public async Task OnSendButtonClick()
+    {
+        await CallSendMessage();
+    }
+
+    private async Task CallSendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(SendText))
+        {
+            await ClearSendText();
+            return;
+        }
+        Sending = true;
+        await OnMessageSend.InvokeAsync(SendText);
     }
 
     private async Task UploadFile(IBrowserFile upload)
@@ -79,26 +129,36 @@
             Snackbar.Add("上传图片文件尺寸不得大于 5MB 且不得小于 4KB", Severity.Error);
             return;
         }
-        // byte[] buffer = new byte[upload.Size];
-        // await upload.OpenReadStream().ReadAsync(buffer);
-        string fileName = Path.GetFileName(upload.Name);
-        string imageDirectory = @"data\image\cached";
-        string cqCode = $"[CQ:image,file=cached\\{fileName.Replace(".cqimg", "")}]";
-        string path = Path.Combine(imageDirectory, fileName);
-
-        if (upload.Name.EndsWith("cqimg"))
+        Sending = true;
+        try
         {
-            imageDirectory = @"data\image";
-        }
+            byte[] buffer = new byte[upload.Size];
+            await upload.OpenReadStream().ReadAsync(buffer);
 
-        if (!File.Exists(path))
+            string fileName = Path.GetFileName(upload.Name);
+            string imageDirectory = @"data\image";
+            string cqCode = $"[CQ:image,file={fileName.Replace(".cqimg", "")}]";
+            if (fileName.EndsWith(".cqimg"))
+            {
+                File.WriteAllBytes(Path.Combine(imageDirectory, fileName), buffer);
+            }
+            else
+            {
+                cqCode = $"[CQ:image,file=cached\\{fileName}]";
+                imageDirectory = Path.Combine(imageDirectory, "cached");
+                Directory.CreateDirectory(imageDirectory);
+                File.WriteAllBytes(Path.Combine(imageDirectory, fileName), buffer);
+            }
+
+            await SendTextElement.SetText(SendText + cqCode);
+        }
+        catch (Exception e)
         {
-            Directory.CreateDirectory(imageDirectory);
-            await using FileStream fileStream = new(path, FileMode.Create);
-            await upload.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
+            Snackbar.Add($"图片上传失败：{e.Message}", Severity.Error);
         }
-
-        await SendTextElement.BlurAsync();
-        await SendTextElement.SetText(SendText + cqCode);
+        finally
+        {
+            Sending = false;
+        }
     }
 }

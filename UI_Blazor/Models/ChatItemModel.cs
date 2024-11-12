@@ -70,6 +70,12 @@
         /// </summary>
         public DateTime Time { get; set; }
 
+        public bool Sending { get; set; }
+
+        public bool Failed => MsgId == 0;
+
+        public int HistoryId { get; set; }
+
         public AvatarModel Avatar { get; set; } = new AvatarModel();
     }
 }

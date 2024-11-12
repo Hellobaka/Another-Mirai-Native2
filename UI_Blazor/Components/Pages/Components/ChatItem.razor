@@ -1,39 +1,59 @@
-﻿<div style="@GetContainerStyle()">
-    <MudAvatar Style="margin-top: 1.25rem;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
-        <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
-        @if (ShowFallbackName)
-        {
-            <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
-        }
-    </MudAvatar>
-    <div style="margin: 0 1rem;">
-        <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
-        <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" FullWidth Style="cursor: default;">
-            <ActivatorContent>
-                <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
-                    @foreach (var line in MessageLines)
-                    {
-                        <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word;">@line</MudText>
-                    }
-                </MudPaper>
-            </ActivatorContent>
-            <ChildContent>
-                <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled">复制</MudMenuItem>
-                <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled">+1</MudMenuItem>
-                <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled">@@</MudMenuItem>
-                <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled">回复</MudMenuItem>
-            </ChildContent>
-        </MudMenu>
-        <div style="display: flex; align-items: center;">
-            <MudProgressCircular Indeterminate="@Loading" Size="Size.Small" Style="@("height: 0.75rem; width: 0.75rem; margin-right: 0.25rem;" + (Loading ? "" : "display: none;"))" />
-            <MudText Style="font-size: 0.75rem;">@Item.Time</MudText>
-            @if (Item.Recalled)
+﻿@if (Item.DetailItemType == DetailItemType.Notice)
+{
+    <div style="display:flex; justify-content:center;">
+        <MudChip T="string">@Item.Message</MudChip>
+    </div>
+}
+else
+{
+    <div style="@GetContainerStyle()">
+        <MudAvatar Style="margin: 1.25rem 10px 0 10px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+            <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
+            @if (ShowFallbackName)
             {
-                <MudText Style="font-size: 0.75rem;margin-left: 0.25rem;">[已撤回]</MudText>
+                <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
+            }
+        </MudAvatar>
+        <div>
+            <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
+            <div>
+                <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default;">
+                    <ActivatorContent>
+                        <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
+                            @foreach (var line in MessageLines)
+                            {
+                                <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word; user-select: text;">@line</MudText>
+                            }
+                        </MudPaper>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled">复制</MudMenuItem>
+                        <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled">+1</MudMenuItem>
+                        <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled">@@</MudMenuItem>
+                        <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled">回复</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <MudText Style="font-size: 0.75rem;">@Item.Time</MudText>
+                @if (Item.Recalled)
+                {
+                    <MudText Style="font-size: 0.75rem;margin-left: 0.25rem;">[已撤回]</MudText>
+                }
+            </div>
+        </div>
+        <div style="display:flex; align-items:center;flex-direction: column;justify-content: center;">
+            @if (Item.Sending)
+            {
+                <MudProgressCircular Indeterminate Size="Size.Small" />
+            }
+            @if (Item.Failed)
+            {
+                <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Error" Color="Color.Error" OnClick="OnResendButtonClick"></MudIconButton>
             }
         </div>
     </div>
-</div>
+}
 
 <style>
     .mud-menu *{
@@ -42,7 +62,6 @@
 </style>
 
 @code {
-    // TODO: 实现Notice
     [Parameter]
     public ChatItemModel Item { get; set; }
 
@@ -58,7 +77,6 @@
     [Parameter]
     public bool ReplyEnabled { get; set; } = true;
 
-    private bool Loading { get; set; } = false;
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
     private MudText AvatarText { get; set; }
@@ -98,6 +116,9 @@
 
     [Parameter]
     public EventCallback<ChatItemModel> OnReply { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnResend { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -195,5 +216,10 @@
             return;
         }
         await OnReply.InvokeAsync(Item);
+    }
+
+    private async Task OnResendButtonClick()
+    {
+        await OnResend.InvokeAsync(Item);
     }
 }

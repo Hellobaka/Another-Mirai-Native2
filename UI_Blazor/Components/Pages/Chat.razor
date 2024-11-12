@@ -4,17 +4,19 @@
 @using Another_Mirai_Native.DB
 @using Another_Mirai_Native.Model.Enums
 @using Another_Mirai_Native.Native
+@using System.Diagnostics
 @inject IJSRuntime JS
+@inject ISnackbar Snackbar
 @inject Shared Shared
 @implements IDisposable
 
-<div style="display: flex; height: calc(100vh - var(--mud-appbar-height));">
+<div style="display: flex; height: calc(100vh - var(--mud-appbar-height)); position: relative;">
     <div id="ChatHistoryList">
         <MudTextField T="string" Label="检索" Variant="Variant.Filled"></MudTextField>
-        <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValueChanged="SelectedHistoryItemChanged" SelectionMode="SelectionMode.SingleSelection" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
+        <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValueChanged="SelectedHistoryItemChanged" @ref="ChatHistoryList" SelectionMode="SelectionMode.SingleSelection" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
             @foreach (var item in HistoryItems)
             {
-                <MudListItem T="ChatHistoryItem" Value="item" Style="cursor: default">
+                <MudListItem @key="item" T="ChatHistoryItem" Value="item" Style="cursor: default">
                     <HistoryItem Item="@item" />
                 </MudListItem>
             }
@@ -30,8 +32,8 @@
                 <div style="height: 62px; background-color: var(--mud-palette-background-gray);">
                     <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
                 </div>
-                <ChatMessageDisplay @ref="ChatMessageDisplay" ChatItems="Messages" OnLoadAvaliable="LoadMessageHistoryNextPage"></ChatMessageDisplay>
-                <ChatCommandPanel></ChatCommandPanel>
+                <ChatMessageDisplay @ref="ChatMessageDisplay" ChatItems="Messages" OnLoadAvaliable="LoadMessageHistoryNextPage" OnAt="OnChatItemAt" OnCopy="OnChatItemCopy" OnRepeat="OnChatItemRepeat" OnReply="OnChatItemReply" OnResend="OnChatItemResend"></ChatMessageDisplay>
+                <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
                 <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate />
@@ -80,6 +82,7 @@
         border-radius: 0 25px 25px 0;
         transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 300ms;
         overflow: hidden;
+        z-index: 9
     }
 </style>
 
@@ -108,6 +111,8 @@
     private long CurrentSelectedId => SelectedHistoryItem?.Id ?? 0;
     private int CurrentPageIndex { get; set; }
     private int PageSize { get; set; } = 15;
+    private MudList<ChatHistoryItem> ChatHistoryList { get; set; } = null;
+    private ChatCommandPanel MessageCommandPanel { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
     {
@@ -208,7 +213,7 @@
         MessageUnavailable = false;
     }
 
-    private ChatItemModel ParseChatHistoryToChatItemModel(ChatHistory item)
+    private ChatItemModel ParseChatHistoryToChatItemModel(ChatHistory item, bool sending = false)
     {
         var r = new ChatItemModel
         {
@@ -226,7 +231,9 @@
             Time = item.Time,
             Recalled = item.Recalled,
             ParentType = item.Type == ChatHistoryType.Group ? AvatarTypes.QQGroup : AvatarTypes.QQPrivate,
-            DisplayName = item.SenderID.ToString()
+            DisplayName = item.SenderID.ToString(),
+            Sending = sending,
+            HistoryId = item.ID
         };
         r.DetailItemType = item.Type switch
         {
@@ -280,7 +287,7 @@
     /// <param name="msgId">消息ID</param>
     /// <param name="plugin">发送来源插件</param>
     /// <returns>消息持久化的ID</returns>
-    private async Task<ChatHistory> AddChatItem(long id, long qq, string msg, ChatHistoryType type, DateTime time, int msgId = 0, CQPluginProxy plugin = null)
+    private async Task<(ChatHistory, ChatItemModel)> AddChatItem(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy plugin = null)
     {
         var history = new ChatHistory
         {
@@ -292,18 +299,19 @@
             PluginName = plugin?.PluginName ?? "",
             Time = time,
         };
-
+        ChatItemModel chatItem = null;
         history.ID = ChatHistoryHelper.InsertHistory(history);
         if (type != ChatHistoryType.Notice)
         {
             ChatHistoryHelper.UpdateHistoryCategory(history);
         }
-        AddOrUpdateChatList(history);
         if (CurrentSelectedId == id)
         {
-            Messages.Add(ParseChatHistoryToChatItemModel(history));
+            chatItem = ParseChatHistoryToChatItemModel(history, sending);
+            Messages.Add(chatItem);
         }
-        return history;
+        AddOrUpdateChatList(history);
+        return (history, chatItem);
     }
 
     private async Task<string> GetGroupCardOrNick(long id, long qq, ChatHistoryType type)
@@ -362,6 +370,7 @@
     {
         HistoryItems = HistoryItems.OrderByDescending(x => x.Time).ToList();
         SelectedHistoryItem = HistoryItems.FirstOrDefault(x => x.Id == SelectedHistoryItem.Id);
+        SelectedHistoryItem.UnreadCount = 0;
         await InvokeAsync(() => StateHasChanged());
         await ChatMessageDisplay.ScrollToBottom();
     }
@@ -402,8 +411,7 @@
 
     private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
     {
-        var history = await AddChatItem(group, qq, msg, ChatHistoryType.Group, time, msgId);
-        AddOrUpdateChatList(history);
+        await AddChatItem(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
     }
 
     private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
@@ -418,8 +426,7 @@
 
     private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
     {
-        var history = await AddChatItem(qq, qq, msg, ChatHistoryType.Private, time, msgId);
-        AddOrUpdateChatList(history);
+        await AddChatItem(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
     }
 
     private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
@@ -462,12 +469,105 @@
     private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
     {
         // AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
-        await AddChatItem(group, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Group, DateTime.Now, msgId, plugin: plugin);
+        await AddChatItem(group, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Group, DateTime.Now, msgId: msgId, plugin: plugin);
     }
 
     private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
     {
         // AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
-        await AddChatItem(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId, plugin: plugin);
+        await AddChatItem(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId: msgId, plugin: plugin);
+    }
+
+    private async Task OnMessageSend(string msg)
+    {
+        var item = await AddChatItem(SelectedHistoryItem.Id, AppConfig.Instance.CurrentQQ, msg, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, DateTime.Now, true);
+        DelayScrollToBottom(50);
+        DelayClearSendText(50);
+        var msgId = await CallMessageSend(SelectedHistoryItem.Id, msg, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup);
+        MessageCommandPanel.Sending = false;
+        await MessageCommandPanel.ClearSendText();
+        item.Item2.Sending = false;
+        item.Item2.MsgId = msgId;
+        item.Item2.HistoryId = item.Item1.ID;
+        ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
+            , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
+            , item.Item2.HistoryId
+            , msgId);
+        StateHasChanged();
+    }
+
+    private void DelayScrollToBottom(int delay)
+    {
+        Task.Run(async () =>
+        {
+            await Task.Delay(delay);
+            await InvokeAsync(() => StateHasChanged());
+            await ChatMessageDisplay.ScrollToBottom();
+        });
+    }
+
+    private void DelayClearSendText(int delay)
+    {
+        Task.Run(async () =>
+        {
+            await Task.Delay(delay);
+            await InvokeAsync(() => MessageCommandPanel.ClearSendText());
+        });
+    }
+
+    public async Task<int> CallMessageSend(long id, string message, bool group)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        int logId = 0;
+        int msgId = 0;
+        await Task.Run(() =>
+        {
+            if (group)
+            {
+                logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{id} 消息:{message}", "处理中...");
+                msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(id, message);
+            }
+            else
+            {
+                logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{id} 消息:{message}", "处理中...");
+                msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(id, message);
+            }
+        });
+        sw.Stop();
+        LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+        return msgId;
+    }
+
+    private async Task OnChatItemAt(ChatItemModel chatItem)
+    {
+        await MessageCommandPanel.AppendText($" [CQ:at,qq={chatItem.ParentId}]");
+    }
+
+    private async Task OnChatItemReply(ChatItemModel chatItem)
+    {
+        await MessageCommandPanel.AppendText($" [CQ:reply,id={chatItem.MsgId}]");
+    }
+
+    private async Task OnChatItemCopy(ChatItemModel chatItem)
+    {
+        await JS.InvokeVoidAsync("copyTextToClipboard", chatItem.Message);
+        Snackbar.Add("复制成功", Severity.Success);
+    }
+
+    private async Task OnChatItemRepeat(ChatItemModel chatItem)
+    {
+        await OnMessageSend(chatItem.Message);
+    }
+
+    private async Task OnChatItemResend(ChatItemModel chatItem)
+    {
+        var msgId = await CallMessageSend(SelectedHistoryItem.Id, chatItem.Message, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup);
+        chatItem.Sending = false;
+        chatItem.MsgId = msgId;
+        ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
+            , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
+            , chatItem.HistoryId
+            , msgId);
+        StateHasChanged();
     }
 }
