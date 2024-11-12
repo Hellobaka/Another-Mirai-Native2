@@ -224,8 +224,8 @@ namespace Another_Mirai_Native.RPC.Interface
             }
             Stopwatch stopwatch = Stopwatch.StartNew();
             string guid = Guid.NewGuid().ToString();
-            SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
             WaitingMessage.Add(guid, new InvokeResult());
+            SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
 
             if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, out _)
                     && WaitingMessage.TryGetValue(guid, out InvokeResult result))
@@ -235,7 +235,7 @@ namespace Another_Mirai_Native.RPC.Interface
                 {
                     if (AppConfig.Instance.DebugMode)
                     {
-                        LogHelper.WriteLog(LogLevel.Debug, logOrigin:"AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
+                        LogHelper.WriteLog(LogLevel.Debug, logOrigin:"AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件结果：成功，耗时 {stopwatch.ElapsedMilliseconds} ms");
                     }
                     return r;
                 }
@@ -243,7 +243,7 @@ namespace Another_Mirai_Native.RPC.Interface
                 {
                     if (AppConfig.Instance.DebugMode)
                     {
-                        LogHelper.WriteLog(LogLevel.Debug, logOrigin: "AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
+                        LogHelper.WriteLog(LogLevel.Debug, logOrigin: "AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件结果：失败，耗时 {stopwatch.ElapsedMilliseconds} ms");
                     }
                     LogHelper.Error("响应超时", $"插件 {target.PluginName} 响应 {eventType} 事件返回值无效");
                     return null;
