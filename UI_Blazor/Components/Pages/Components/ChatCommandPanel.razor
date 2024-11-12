@@ -2,7 +2,8 @@
 @inject ISnackbar Snackbar
 @inject IJSRuntime JS
 
-<MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
+<InputFile OnChange="@OnNativeUpload" @ref="InputFile" id="nativeUpload" style="display: none" />
+<MudPaper style="padding: 10px; margin-top: 10px; position: relative;" Elevation="3">
     <div style="display: flex;">
         <MudTooltip Text="图片">
             <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
@@ -22,42 +23,68 @@
         <MudTextField Disabled="Sending" id="sendTextInput" Lines="3" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="Shift + Enter换行"></MudTextField>
         <MudIconButton Disabled="Sending" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin: 6px 0 22px 6px;" Color="Color.Primary" OnClick="OnSendButtonClick"></MudIconButton>
     </div>
+    <MudOverlay Visible="@Sending" DarkBackground="true" Absolute="true">
+        <MudProgressCircular Color="Color.Primary" Value="@UploadProgress" />
+    </MudOverlay>
 </MudPaper>
+<script>
+    async function handleUpload(){
+        try {
+            const clipboardContents = await navigator.clipboard.read();
+            for (const item of clipboardContents) {
+                // 寻找图片元素
+                const type = item.types.find(x => x.includes('image/'))
+                if (!type || type.split('/').length !== 2) {
+                    continue
+                }
+                const extension = type.split('/')[1]
+                const blob = await item.getType(type);
+                const file = new File([blob], `.${extension}`)
 
+                const nativeUpload = document.getElementById('nativeUpload')
+                if (!nativeUpload) {
+                    continue
+                }
+                // 构造InputFile参数
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file)
+
+                // 检测是否已经修改过
+                if (!nativeUpload.modify) {
+                    Object.defineProperty(nativeUpload, 'files', {
+                        value: dataTransfer.files,
+                        writable: true // 将元素设定为可修改
+                    });
+                    nativeUpload.modify = true
+                } else {
+                    nativeUpload.files = dataTransfer.files
+                }
+                //事件触发
+                nativeUpload.dispatchEvent(new Event('change', { bubbles: true }))
+            }
+        } catch (error) {
+            console.log(error.message);
+        }    
+    }
+</script>
 @code {
     // TODO: 表情、图片选择窗口
     // TODO: @选人界面
-    // TODO: 粘贴图片
     private MudTextField<string> SendTextElement { get; set; }
     public string SendText { get; set; } = "";
     public List<string> SendHistories { get; set; } = [];
     private int MessageHistoryIndex { get; set; } = 0;
     private bool PreventDefault { get; set; }
-    private bool sending = false;
+    private InputFile InputFile { get; set; } = new();
+    private double UploadProgress { get; set; } = 0;
+    public bool Sending { get; set; }
 
     [Parameter]
     public EventCallback<string> OnMessageSend { get; set; }
 
-    [Parameter]
-    public bool Sending
-    {
-        get => sending;
-        set
-        {
-            sending = value;
-            if (!sending)
-            {
-                InvokeAsync(async () =>
-                {
-                    await ClearSendText();
-                });
-            }
-        }
-    }
-
     private async Task AtBotClicked()
     {
-        await SendTextElement.SetText(SendText + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
+        await SendTextElement.SetText((SendText ?? "") + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
     }
 
     private async Task SendTextKeyDown(KeyboardEventArgs key)
@@ -94,6 +121,10 @@
             string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
             await SendTextElement.SetText(text);
         }
+        else if (key.CtrlKey && key.Code == "KeyV")
+        {
+            await JS.InvokeVoidAsync("handleUpload");
+        }
     }
 
     public async Task ClearSendText()
@@ -105,7 +136,7 @@
 
     public async Task AppendText(string text)
     {
-        await SendTextElement.SetText(SendText + text);
+        await SendTextElement.SetText((SendText ?? "") + text);
     }
 
     public async Task OnSendButtonClick()
@@ -124,6 +155,11 @@
         await OnMessageSend.InvokeAsync(SendText);
     }
 
+    private async Task OnNativeUpload(InputFileChangeEventArgs e)
+    {
+        await UploadFile(e.File);
+    }
+
     private async Task UploadFile(IBrowserFile upload)
     {
         int minFileSize = 4 * 1024, maxFileSize = 5 * 1024 * 1024;
@@ -135,25 +171,37 @@
         Sending = true;
         try
         {
-            byte[] buffer = new byte[upload.Size];
-            await upload.OpenReadStream().ReadAsync(buffer);
-
             string fileName = Path.GetFileName(upload.Name);
+            if (fileName.StartsWith("."))
+            {
+                fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + fileName;
+            }
             string imageDirectory = @"data\image";
             string cqCode = $"[CQ:image,file={fileName.Replace(".cqimg", "")}]";
-            if (fileName.EndsWith(".cqimg"))
-            {
-                File.WriteAllBytes(Path.Combine(imageDirectory, fileName), buffer);
-            }
-            else
+
+            if (!fileName.EndsWith(".cqimg"))
             {
                 cqCode = $"[CQ:image,file=cached\\{fileName}]";
                 imageDirectory = Path.Combine(imageDirectory, "cached");
                 Directory.CreateDirectory(imageDirectory);
-                File.WriteAllBytes(Path.Combine(imageDirectory, fileName), buffer);
             }
 
-            await SendTextElement.SetText(SendText + cqCode);
+            await using FileStream writeStream = new(Path.Combine(imageDirectory, fileName), FileMode.OpenOrCreate);
+
+            using var readStream = upload.OpenReadStream(maxFileSize);
+            var bytesRead = 0;
+            var totalRead = 0;
+            var buffer = new byte[1024 * 10];
+
+            while ((bytesRead = await readStream.ReadAsync(buffer)) != 0)
+            {
+                totalRead += bytesRead;
+                await writeStream.WriteAsync(buffer, 0, bytesRead);
+                UploadProgress = (totalRead / upload.Size) * 100;
+                StateHasChanged();
+            }
+
+            await SendTextElement.SetText((SendText ?? "") + cqCode);
         }
         catch (Exception e)
         {

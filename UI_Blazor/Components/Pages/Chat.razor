@@ -563,7 +563,8 @@
     private async Task OnChatItemResend(ChatItemModel chatItem)
     {
         var msgId = await CallMessageSend(SelectedHistoryItem.Id, chatItem.Message, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup);
-        chatItem.Sending = false;
+        MessageCommandPanel.Sending = false;
+        await MessageCommandPanel.ClearSendText();
         chatItem.MsgId = msgId;
         ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
             , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
