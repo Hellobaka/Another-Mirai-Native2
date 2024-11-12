@@ -10,7 +10,7 @@
             <h3>后台存储的密码</h3>
         </MudCardHeader>
         <MudCardContent>
-            <MudTextField @ref="PasswordTextField" OnKeyDown="OnPasswordKeyDown" @bind-Value="Password" Label="密码" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="显示密码" />
+            <MudTextField Immediate @ref="PasswordTextField" OnKeyDown="OnPasswordKeyDown" @bind-Value="Password" Label="密码" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePassword" AdornmentAriaLabel="显示密码" />
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Filled" Color=" Color.Primary" @onclick="LoginClick">连接</MudButton>
@@ -43,7 +43,6 @@
     {
         if (e.Key == "Enter")
         {
-            await PasswordTextField.BlurAsync();
             await LoginClick();
         }
     }
