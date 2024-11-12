@@ -291,7 +291,6 @@ else
 
     private List<RenderChatItem> ParseMessageToRenderItems(string plain)
     {
-        Stopwatch sw = Stopwatch.StartNew();
         List<RenderChatItem> result = [];
 
         var parts = CQCodeRegex.Split(plain);
@@ -352,9 +351,6 @@ else
                 }
             }
         }
-        
-        sw.Stop();
-        Console.WriteLine($"Parse {plain} cost: {sw.ElapsedMilliseconds}ms");
         return result;
     }
 
