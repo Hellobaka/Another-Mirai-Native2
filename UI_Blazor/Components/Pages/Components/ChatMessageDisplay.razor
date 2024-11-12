@@ -9,7 +9,7 @@
     }
     @foreach (var item in ChatItems)
     {
-        <ChatItem Item="@item" ReplyEnabled="false" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" OnResend="OnResend" />
+        <ChatItem Item="@item" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" OnResend="OnResend" />
     }
 </MudPaper>
 <MudFab id="scrollToBottom" Class="hidden" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleDown" OnClick="ScrollToBottom" Style="position: absolute; right: 10px;" />
@@ -54,6 +54,9 @@
         if (obj) {
             messageDisplay = obj
         }
+        document.getElementById('chatContainer').onresize = () => {
+            setButtonPosition()
+        }
     }
 
     function updateScrollBottom () {
@@ -66,6 +69,7 @@
     }
 </script>
 @code {
+    // TODO: Reply跳转
     [Parameter]
     public List<ChatItemModel> ChatItems { get; set; } = [];
 

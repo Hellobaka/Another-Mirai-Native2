@@ -20,10 +20,7 @@ else
                 <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default;">
                     <ActivatorContent>
                         <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
-                            @foreach (var line in MessageLines)
-                            {
-                                <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word; user-select: text;">@line</MudText>
-                            }
+                            <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word; user-select: text; white-space: pre-wrap;">@Item.Message</MudText>
                         </MudPaper>
                     </ActivatorContent>
                     <ChildContent>
@@ -62,6 +59,12 @@ else
 </style>
 
 @code {
+    // TODO: 元素样式：图片、URL、At、表情、Reply
+    // TODO: 折叠无法解析的CQ码
+    // TODO: 头像菜单
+    // TODO: 撤回
+    // TODO: 点击Reply事件
+    // TODO: 图片预览
     [Parameter]
     public ChatItemModel Item { get; set; }
 
@@ -80,7 +83,6 @@ else
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
     private MudText AvatarText { get; set; }
-    private string[] MessageLines{ get; set; }
     private static string[] FallbackColors { get; set; } = new[]
     {
         $"rgb(255, 87, 51)", // Crimson
@@ -122,7 +124,6 @@ else
 
     protected override void OnParametersSet()
     {
-        MessageLines = Item.Message.Split('\n');
         Task.Run(async () =>
         {
             string name = "";
@@ -171,11 +172,12 @@ else
         switch (Item.DetailItemType)
         {
             case DetailItemType.Send:
-                baseStyle += " flex-direction: row-reverse; text-align: right;";
+                baseStyle += " flex-direction: row-reverse; text-align: right; margin-left: 30px;";
                 break;
 
             default:
             case DetailItemType.Receive:
+                baseStyle += " margin-right: 30px;";
                 break;
 
         }
