@@ -105,7 +105,7 @@
     public bool AutoScroll { get; set; } = true;
     public bool ShowMoreFilter { get; set; } = false;
     private IScrollListener? _scrollListener;
-    private int SelectedLogLevel { get; set; }
+    private int SelectedLogLevel { get; set; } = 10;
     private string LogSearchText { get; set; } = "";
     private DateRange FilterDateRange { get; set; }
     private DateRange FilterDateRange_Backup { get; set; }
