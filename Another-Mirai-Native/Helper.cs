@@ -170,9 +170,13 @@ namespace Another_Mirai_Native
         public static string GetPicUrlFromCQImg(string cqimg)
         {
             string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", cqimg);
-            if (!File.Exists(picPath))
+            if (!cqimg.Contains('.'))
             {
-                string picUrl = File.ReadAllText(picPath + ".cqimg");
+                picPath += ".cqimg";
+            }
+            if (File.Exists(picPath))
+            {
+                string picUrl = File.ReadAllText(picPath);
                 picUrl = picUrl.Split('\n').Last().Replace("url=", "");
                 return picUrl;
             }

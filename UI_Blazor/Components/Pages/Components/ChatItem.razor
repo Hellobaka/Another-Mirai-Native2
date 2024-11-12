@@ -1,4 +1,8 @@
-﻿@if (Item.DetailItemType == DetailItemType.Notice)
+﻿@using System.Text.RegularExpressions
+@using System.Diagnostics
+@using System.Text
+@inject ISnackbar Snackbar
+@if (Item.DetailItemType == DetailItemType.Notice)
 {
     <div style="display:flex; justify-content:center;">
         <MudChip T="string">@Item.Message</MudChip>
@@ -20,7 +24,57 @@ else
                 <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default;">
                     <ActivatorContent>
                         <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
-                            <MudText Style="text-align: left; word-break: break-all; word-wrap: break-word; user-select: text; white-space: pre-wrap;">@Item.Message</MudText>
+                            <div style="@(Item.DetailItemType == DetailItemType.Send ? "text-align: left" : "")">
+                                @foreach (var item in RenderItems)
+                                {
+                                    switch (item.RenderType)
+                                    {
+                                        case RenderType.At:
+                                            <MudLink Color="Color.Warning" Underline="Underline.None" Style="cursor: pointer;">@item.AtNick</MudLink>
+                                            break;
+
+                                        case RenderType.Face:
+                                            <MudText Inline>
+                                                @item.Text
+                                            </MudText>
+                                            break;
+
+                                        case RenderType.Image:
+                                            <MudImage Src="@item.ImageUrl"></MudImage>
+                                            break;
+
+                                        case RenderType.Reply:
+                                            if (item.ReplyId != 0)
+                                            {
+                                                <MudPaper>
+                                                </MudPaper>
+                                            }
+                                            break;
+                                        case RenderType.Text:
+                                            if (!string.IsNullOrEmpty(item.Text))
+                                            {
+                                                <span class="mud-typography mud-typography-body1" style="text-align: left; user-select: text; white-space: pre-wrap;">
+                                                    @item.Text
+                                                </span>
+                                            }
+                                            break;
+                                        case RenderType.Url:
+                                            <MudLink Color="Color.Warning" Href="@item.Text" Target="_blank" Underline="Underline.Always" Style="cursor: pointer;">@item.Text</MudLink>
+                                            break;
+                                        case RenderType.Other:
+                                            <MudPaper>
+                                                <MudStack Spacing="2">
+                                                    <MudButton OnClick="@(() => OtherExpand = !OtherExpand)">CQ码</MudButton>
+                                                    <MudDivider />
+                                                    <MudCollapse Expanded="OtherExpand">
+                                                        @item.Text
+                                                    </MudCollapse>
+                                                </MudStack>
+                                            </MudPaper>
+                                            break;
+                                    }
+                                }
+                            </div>
                         </MudPaper>
                     </ActivatorContent>
                     <ChildContent>
@@ -83,6 +137,11 @@ else
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
     private MudText AvatarText { get; set; }
+    private List<RenderChatItem> RenderItems { get; set; } = [];
+    private static Regex CQCodeRegex { get; set; } = new Regex(@"(\[CQ:.*?,.*?\])");
+    private static Regex URLRegex { get; set; } = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
+    private bool OtherExpand { get; set; }
+
     private static string[] FallbackColors { get; set; } = new[]
     {
         $"rgb(255, 87, 51)", // Crimson
@@ -137,6 +196,11 @@ else
             }
             Item.DisplayName = name;
             Item.Avatar.FallbackName = name;
+            await InvokeAsync(() => StateHasChanged());
+        });
+        Task.Run(async () =>
+        {
+            RenderItems = ParseMessageToRenderItems(Item.Message);
             await InvokeAsync(() => StateHasChanged());
         });
     }
@@ -223,5 +287,129 @@ else
     private async Task OnResendButtonClick()
     {
         await OnResend.InvokeAsync(Item);
+    }
+
+    private List<RenderChatItem> ParseMessageToRenderItems(string plain)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        List<RenderChatItem> result = [];
+
+        var parts = CQCodeRegex.Split(plain);
+        foreach (var part in parts.Where(x => !string.IsNullOrEmpty(x)))
+        {
+            var cqcodes = CQCode.Parse(part);
+            if (cqcodes.Count == 0)
+            {
+                result = result.Concat(ParsePlainText(part)).ToList();
+            }
+            else
+            {
+                foreach(var item in cqcodes)
+                {
+                    try
+                    {
+                        RenderChatItem renderItem = new();
+                        renderItem.Text = part;
+                        switch (item.Function)
+                        {
+                            case Model.Enums.CQCodeType.Image:
+                                renderItem.RenderType = RenderType.Image;
+                                renderItem.ImageUrl = GetImageUrlFromCQCode(item);
+                                break;
+
+                            case Model.Enums.CQCodeType.Reply:
+                                renderItem.RenderType = RenderType.Reply;
+                                renderItem.ReplyId = int.Parse(item.Items["id"]);
+                                result.Insert(0, renderItem);
+                                continue;
+
+                            case Model.Enums.CQCodeType.At:
+                                renderItem.RenderType = RenderType.At;
+                                renderItem.AtTarget = long.Parse(item.Items["qq"]);
+                                renderItem.AtNick = "@" + renderItem.AtTarget.ToString();
+                                Task.Run(async () =>
+                                {
+                                    renderItem.AtNick = "@" + await ChatHistoryHelper.GetFriendNick(renderItem.AtTarget);
+                                    await InvokeAsync(() => StateHasChanged());
+                                });
+                                break;
+
+                            case Model.Enums.CQCodeType.Face:
+                                renderItem.RenderType = RenderType.Face;
+                                renderItem.FaceId = int.Parse(item.Items["id"]);
+                                break;
+
+                            default:
+                                renderItem.RenderType = RenderType.Other;
+                                break;
+                        }
+                        result.Add(renderItem);
+                    }
+                    catch
+                    {
+                        Snackbar.Add($"转换CQ码失败，内容：{item}", Severity.Error);
+                    }                    
+                }
+            }
+        }
+        
+        sw.Stop();
+        Console.WriteLine($"Parse {plain} cost: {sw.ElapsedMilliseconds}ms");
+        return result;
+    }
+
+    private string? GetImageUrlFromCQCode(CQCode cqCode)
+    {
+        if (cqCode.IsImageCQCode)
+        {
+            string path = cqCode.Items["file"];
+            if (path.Contains('.'))
+            {
+                path = Path.Combine("data", "image", path);
+                if (File.Exists(path))
+                {
+                    string imagePath = Path.Combine("wwwroot", "images");
+                    string newPath = Path.Combine(imagePath, Path.GetFileName(path));
+                    Directory.CreateDirectory(imagePath);
+                    File.Copy(path, newPath, true);
+
+                    return $"/images/{Path.GetFileName(newPath)}";
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return Helper.GetPicUrlFromCQImg(cqCode.ToString());
+            }
+        }
+        return null;
+    }
+
+    private List<RenderChatItem> ParsePlainText(string plain)
+    {
+        List<RenderChatItem> result = [];
+        foreach(var item in URLRegex.Split(plain).Where(x => !string.IsNullOrEmpty(x)))
+        {
+            if (item.StartsWith("http"))
+            {
+                result.Add(new RenderChatItem
+                {
+                    Text = item,
+                    RenderType = RenderType.Url
+                });
+            }
+            else
+            {
+                result.Add(new RenderChatItem
+                {
+                    Text = item,
+                    RenderType = RenderType.Text
+                });
+            }
+        }
+        return result;
     }
 }
