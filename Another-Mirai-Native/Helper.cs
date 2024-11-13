@@ -327,6 +327,10 @@ namespace Another_Mirai_Native
 
         public static void CreateDirectoryLink(string path1, string path2)
         {
+            if (Directory.Exists(path1))
+            {
+                return;
+            }
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 Process.Start("cmd.exe", $"/C mklink /J {path1} {path2}").WaitForExit();
