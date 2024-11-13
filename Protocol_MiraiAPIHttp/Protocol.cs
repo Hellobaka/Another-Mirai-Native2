@@ -497,7 +497,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.MemberJoinEvent:
                     var memberJoin = msg.ToObject<MemberJoinEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员增加", $"群:{memberJoin.member.group.id}({memberJoin.member.group.name}) QQ:{memberJoin.member.id}({memberJoin.member.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(memberJoin.invitor == null ? 1 : 2, Helper.TimeStamp, memberJoin.member.group.id, 10001, memberJoin.member.id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(memberJoin.invitor == null ? 1 : 2, Helper.TimeStamp, memberJoin.member.group.id, memberJoin.member.id, memberJoin.invitor.id);
                     break;
 
                 case MiraiEvents.MemberLeaveEventKick:
