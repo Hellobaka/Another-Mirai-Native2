@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 
 <InputFile OnChange="@OnNativeUpload" @ref="InputFile" id="nativeUpload" style="display: none" />
-<MudPaper style="padding: 10px; margin-top: 10px; position: relative;" Elevation="3">
+<MudPaper style="padding: 10px; margin-top: 10px; position: relative; background-color: var(--mud-palette-background);" Elevation="3">
     <div style="display: flex;">
         <MudTooltip Text="图片">
             <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">

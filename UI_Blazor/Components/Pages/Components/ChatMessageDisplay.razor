@@ -64,9 +64,10 @@
         container.scrollTop = container.scrollHeight - lastScrollBottom - container.clientHeight
     }
 
-    window.onresize = () => {
+    window.addEventListener('onresize', () => {
         setButtonPosition()
-    }
+    });
+
 </script>
 @code {
     // TODO: Reply跳转
@@ -92,7 +93,7 @@
     public EventCallback OnLoadAvaliable { get; set; }
 
     private bool Reloading { get; set; } = false;
-    private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden;";
+    private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden; background-color: var(--mud-palette-background);";
     private DotNetObjectReference<ChatMessageDisplay>? IntercallInstance{ get; set; }
 
     protected override void OnAfterRender(bool firstRender)
@@ -104,9 +105,10 @@
         }
     }
 
-    public void OnItemsChange()
+    public async Task OnItemsChange()
     {
-        JS.InvokeVoidAsync("init_MsgContainer");
+        await JS.InvokeVoidAsync("init_MsgContainer");
+        await ScrollToBottom();
     }
 
     public async Task ScrollToBottom()
