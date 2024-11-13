@@ -23,59 +23,68 @@ else
             <div>
                 <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default;">
                     <ActivatorContent>
-                        <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "mud-theme-primary" : "mud-theme-info")" Style="padding: 12px;">
-                            <div style="@(Item.DetailItemType == DetailItemType.Send ? "text-align: left" : "")">
-                                @foreach (var item in RenderItems)
-                                {
-                                    switch (item.RenderType)
-                                    {
-                                        case RenderType.At:
-                                            <MudLink Color="Color.Warning" Underline="Underline.None" Style="cursor: pointer;">@item.AtNick</MudLink>
-                                            break;
-
-                                        case RenderType.Face:
-                                            <MudText Inline>
-                                                @item.Text
-                                            </MudText>
-                                            break;
-
-                                        case RenderType.Image:
-                                            <MudImage Src="@item.ImageUrl"></MudImage>
-                                            break;
-
-                                        case RenderType.Reply:
-                                            if (item.ReplyId != 0)
-                                            {
-                                                <MudPaper>
-                                                </MudPaper>
-                                            }
-                                            break;
-                                        case RenderType.Text:
-                                            if (!string.IsNullOrEmpty(item.Text))
-                                            {
-                                                <span class="mud-typography mud-typography-body1" style="text-align: left; user-select: text; white-space: pre-wrap;">
-                                                    @item.Text
-                                                </span>
-                                            }
-                                            break;
-                                        case RenderType.Url:
-                                            <MudLink Color="Color.Warning" Href="@item.Text" Target="_blank" Underline="Underline.Always" Style="cursor: pointer;">@item.Text</MudLink>
-                                            break;
-                                        case RenderType.Other:
-                                            <MudPaper>
-                                                <MudStack Spacing="2">
-                                                    <MudButton OnClick="@(() => OtherExpand = !OtherExpand)">CQ码</MudButton>
-                                                    <MudDivider />
-                                                    <MudCollapse Expanded="OtherExpand">
-                                                        @item.Text
-                                                    </MudCollapse>
-                                                </MudStack>
-                                            </MudPaper>
-                                            break;
-                                    }
-                                }
+                        @if (SingleImageMode)
+                        {
+                            <div class="singleImageContainer">
+                                <MudImage Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 100%; max-height: 500px;"></MudImage>
                             </div>
-                        </MudPaper>
+                        }
+                        else
+                        {
+                            <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "" : "mud-theme-primary")" Elevation="3" Style="padding: 12px;">
+                                <div style="@(Item.DetailItemType == DetailItemType.Send ? "text-align: left" : "")">
+                                    @foreach (var item in RenderItems)
+                                    {
+                                        switch (item.RenderType)
+                                        {
+                                            case RenderType.At:
+                                                <MudLink Color="Color.Warning" Underline="Underline.None" Style="cursor: pointer;">@item.AtNick</MudLink>
+                                                break;
+
+                                            case RenderType.Face:
+                                                <MudText Inline>
+                                                    @item.Text
+                                                </MudText>
+                                                break;
+
+                                            case RenderType.Image:
+                                                <MudImage Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 50%; max-height: 500px;"></MudImage>
+                                                break;
+
+                                            case RenderType.Reply:
+                                                if (item.ReplyId != 0)
+                                                {
+                                                    <MudPaper>
+                                                    </MudPaper>
+                                                }
+                                                break;
+                                            case RenderType.Text:
+                                                if (!string.IsNullOrEmpty(item.Text))
+                                                {
+                                                    <span class="mud-typography mud-typography-body1" style="text-align: left; user-select: text; white-space: pre-wrap;">
+                                                        @item.Text
+                                                    </span>
+                                                }
+                                                break;
+                                            case RenderType.Url:
+                                                <MudLink Color="Color.Warning" Href="@item.Text" Target="_blank" Underline="Underline.Always" Style="cursor: pointer;">@item.Text</MudLink>
+                                                break;
+                                            case RenderType.Other:
+                                                <MudPaper>
+                                                    <MudStack Spacing="2">
+                                                        <MudButton OnClick="@(() => OtherExpand = !OtherExpand)">CQ码</MudButton>
+                                                        <MudDivider />
+                                                        <MudCollapse Expanded="OtherExpand">
+                                                            @item.Text
+                                                        </MudCollapse>
+                                                    </MudStack>
+                                                </MudPaper>
+                                                break;
+                                        }
+                                    }
+                                </div>
+                            </MudPaper>
+                        }
                     </ActivatorContent>
                     <ChildContent>
                         <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled">复制</MudMenuItem>
@@ -85,7 +94,7 @@ else
                     </ChildContent>
                 </MudMenu>
             </div>
-            <div style="display: flex; align-items: center;">
+            <div style="@("display: flex; align-items: center;" + (Item.DetailItemType == DetailItemType.Receive ? "" : "flex-direction: row-reverse;"))">
                 <MudText Style="font-size: 0.75rem;">@Item.Time</MudText>
                 @if (Item.Recalled)
                 {
@@ -141,6 +150,7 @@ else
     private static Regex CQCodeRegex { get; set; } = new Regex(@"(\[CQ:.*?,.*?\])");
     private static Regex URLRegex { get; set; } = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
     private bool OtherExpand { get; set; }
+    private bool SingleImageMode { get; set; }
 
     private static string[] FallbackColors { get; set; } = new[]
     {
@@ -201,6 +211,7 @@ else
         Task.Run(async () =>
         {
             RenderItems = ParseMessageToRenderItems(Item.Message);
+            SingleImageMode = RenderItems.Count == 1 && RenderItems.First().RenderType == RenderType.Image;
             await InvokeAsync(() => StateHasChanged());
         });
     }
@@ -368,7 +379,7 @@ else
                     string newPath = Path.Combine(imagePath, Path.GetFileName(path));
                     Directory.CreateDirectory(imagePath);
                     File.Copy(path, newPath, true);
-
+                    // TODO: 反向目录链接
                     return $"/images/{Path.GetFileName(newPath)}";
                 }
                 else
