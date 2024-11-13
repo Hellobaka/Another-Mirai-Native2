@@ -428,7 +428,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     anonymousChat = isOpen
                 }
             };
-            JObject json = CallMiraiAPI(MiraiApiType.groupConfig_update, request);
+            JObject json = CallMiraiAPI(MiraiApiType.SubgroupConfig_update, request);
             return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
@@ -462,7 +462,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     name = newCard
                 }
             };
-            JObject json = CallMiraiAPI(MiraiApiType.memberInfo_update, request);
+            JObject json = CallMiraiAPI(MiraiApiType.SubmemberInfo_update, request);
             return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 
@@ -503,7 +503,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     specialTitle = title
                 }
             };
-            JObject json = CallMiraiAPI(MiraiApiType.memberInfo_update, request);
+            JObject json = CallMiraiAPI(MiraiApiType.SubmemberInfo_update, request);
             return json == null ? 0 : (int)json["code"] == 0 ? 0 : 1;
         }
 

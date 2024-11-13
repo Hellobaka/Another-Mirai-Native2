@@ -70,9 +70,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             string apiType = Enum.GetName(typeof(MiraiApiType), type);
             string command = apiType, subCommand = "";
-            if (apiType.Contains('_'))// 子命令
+            if (apiType.StartsWith("Sub"))// 子命令
             {
-                var c = apiType.Split('_');
+                var c = apiType.Substring("Sub".Length).Split('_');
                 command = c[0];
                 subCommand = c[1];
             }
@@ -102,6 +102,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             };
             WaitingMessages.Add(syncId, msg);
             MessageConnection.Send(obj.ToJson());
+            LogHelper.Debug("调用MiraiAPI", obj.ToJson());
             if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout, out _))
             {
                 WaitingMessages.Remove(syncId);

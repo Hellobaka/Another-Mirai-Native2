@@ -542,8 +542,8 @@ namespace Another_Mirai_Native.Native
                 groupName = value.Item4;
             }
             logId = requestType == 2
-                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群邀请添加申请", $"来源群: {groupId}({groupName}) 来源人: {fromId}({nick}) 操作: {appendMsg}", "处理中...")
-                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群添加申请", $"来源: {fromId}({nick}) 目标群: {groupId}({groupName}) 操作: {appendMsg}", "处理中...");
+                ? LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群邀请添加申请", $"来源群: {groupId}({groupName}) 来源人: {fromId}({nick}) 操作: {(responseType == 1 ? "同意" : "拒绝")}", "处理中...")
+                : LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"群添加申请", $"来源: {fromId}({nick}) 目标群: {groupId}({groupName}) 操作: {(responseType == 1 ? "同意" : "拒绝")}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SetGroupAddRequest(identifying, requestType, responseType, appendMsg);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");

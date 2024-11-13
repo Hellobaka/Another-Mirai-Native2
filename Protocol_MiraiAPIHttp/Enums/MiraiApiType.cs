@@ -62,13 +62,13 @@
 
         setEssence,
 
-        groupConfig_get,
+        SubgroupConfig_get,
 
-        groupConfig_update,
+        SubgroupConfig_update,
 
-        memberInfo_get,
+        SubmemberInfo_get,
 
-        memberInfo_update,
+        SubmemberInfo_update,
 
         memberAdmin,
 
