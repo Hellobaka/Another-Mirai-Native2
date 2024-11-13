@@ -101,9 +101,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 ProfilerRequest = isProfilerRequest
             };
             WaitingMessages.Add(syncId, msg);
-            MessageConnection.Send(obj.ToJson());
             LogHelper.Debug("调用MiraiAPI", obj.ToJson());
-            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout, out _))
+            if (RequestWaiter.Wait(syncId, MessageConnection, AppConfig.Instance.PluginInvokeTimeout,
+                () =>
+                {
+                    MessageConnection.Send(obj.ToJson());
+                }, out _))
             {
                 WaitingMessages.Remove(syncId);
                 return msg.Result;

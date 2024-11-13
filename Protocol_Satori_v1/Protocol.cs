@@ -41,7 +41,8 @@ namespace Another_Mirai_Native.Protocol.Satori
             EventClient.Connect();
             MessageDict.CreateDB();
 
-            bool waitFlag = RequestWaiter.Wait("Satori_Identity", EventClient, 5000, out object success);
+            bool waitFlag = RequestWaiter.Wait("Satori_Identity", EventClient, 5000,
+                () => { },out object success);
             return (bool)success && EventClient.ReadyState == WebSocketState.Open;
         }
 

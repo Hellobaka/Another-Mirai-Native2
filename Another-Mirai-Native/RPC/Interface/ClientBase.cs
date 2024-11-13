@@ -120,13 +120,16 @@ namespace Another_Mirai_Native.RPC.Interface
                 function = "InvokeCQP_" + function;
             }
             WaitingMessage.Add(guid, new InvokeResult());
-            Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
             if (!waiting)
             {
+                Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
                 WaitingMessage.Remove(guid);
                 return null;
             }
-            if (RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout, out _) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
+            if (RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout,
+                () => {
+                    Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
+                }, out _) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
             {
                 var result = value;
                 WaitingMessage.Remove(guid);

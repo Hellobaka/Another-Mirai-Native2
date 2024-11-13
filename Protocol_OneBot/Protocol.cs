@@ -61,9 +61,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             var msg = new WaitingMessage();
             WaitingMessages.Add(syncId, msg);
-            APIClient.Send(obj.ToJson());
+            
             JObject result = null;
-            if (RequestWaiter.Wait(syncId, APIClient, AppConfig.Instance.PluginInvokeTimeout, out _))
+            if (RequestWaiter.Wait(syncId, APIClient, AppConfig.Instance.PluginInvokeTimeout,
+                () => {
+                    APIClient.Send(obj.ToJson());
+                },out _))
             {
                 WaitingMessages.Remove(syncId);
                 result = msg.Result;
