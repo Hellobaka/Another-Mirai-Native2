@@ -32,7 +32,7 @@
                 <div style="height: 62px; background-color: var(--mud-palette-background-gray);">
                     <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
                 </div>
-                <ChatMessageDisplay @ref="ChatMessageDisplay" ChatItems="Messages" OnLoadAvaliable="LoadMessageHistoryNextPage" OnAt="OnChatItemAt" OnCopy="OnChatItemCopy" OnRepeat="OnChatItemRepeat" OnReply="OnChatItemReply" OnResend="OnChatItemResend"></ChatMessageDisplay>
+                <ChatMessageDisplay @ref="ChatMessageDisplay" ChatItems="Messages" OnLoadAvaliable="LoadMessageHistoryNextPage" OnAt="OnChatItemAt" OnCopy="OnChatItemCopy" OnRepeat="OnChatItemRepeat" OnReply="OnChatItemReply" OnResend="OnChatItemResend" OnAtElementClicked="OnAtElementClicked" OnReplyJumpReuquest="OnReplyJumpReuquest"></ChatMessageDisplay>
                 <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
@@ -571,5 +571,40 @@
             , chatItem.HistoryId
             , msgId);
         StateHasChanged();
+    }
+
+    private async Task OnAtElementClicked(long id)
+    {
+        await MessageCommandPanel.AppendText($" [CQ:at,qq={id}]");
+    }
+
+    private async Task OnReplyJumpReuquest(int id)
+    {
+        var history = ChatHistoryHelper.GetHistoriesByMsgId(SelectedHistoryItem.Id, id, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+        if (history == null) // 查询失败
+        {
+            return;
+        }
+        var item = Messages.FirstOrDefault(x => x.MsgId == id);
+        if (item != null)
+        {
+            // 当前列表存在此消息，直接跳转
+            await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+        }
+        else
+        {
+            // 不存在消息，从历史记录加载所需
+            int lastId = Messages.First().HistoryId;
+            int count = lastId - history.ID;
+            Unavailable = true;
+            do
+            {
+                await LoadMessageHistoryNextPage();
+                item = Messages.FirstOrDefault(x => x.MsgId == id);
+            } while (item == null);
+            Unavailable = false;
+
+            await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+        }
     }
 }

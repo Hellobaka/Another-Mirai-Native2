@@ -31,11 +31,6 @@
         public string DisplayName { get; set; }
 
         /// <summary>
-        /// 消息块的GUID
-        /// </summary>
-        public string GUID { get; set; }
-
-        /// <summary>
         /// 消息所属的QQ
         /// </summary>
         public long Id { get; set; }

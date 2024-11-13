@@ -30,5 +30,9 @@ namespace Another_Mirai_Native.BlazorUI.Models
         public string AtNick { get; set; }
 
         public int ReplyId { get; set; }
+
+        public string ReplyNickName { get; set; }
+
+        public string ReplyContent { get; set; }
     }
 }

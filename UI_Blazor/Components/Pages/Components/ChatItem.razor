@@ -4,13 +4,13 @@
 @inject ISnackbar Snackbar
 @if (Item.DetailItemType == DetailItemType.Notice)
 {
-    <div style="display:flex; justify-content:center;">
+    <div style="display:flex; justify-content:center;" id="@($"chatItem_{Item.HistoryId}")">
         <MudChip T="string">@Item.Message</MudChip>
     </div>
 }
 else
 {
-    <div style="@GetContainerStyle()">
+    <div style="@GetContainerStyle()" id="@($"chatItem_{Item.HistoryId}")">
         <MudAvatar Style="margin: 1.25rem 10px 0 10px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
             <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
             @if (ShowFallbackName)
@@ -47,7 +47,7 @@ else
                                         switch (item.RenderType)
                                         {
                                             case RenderType.At:
-                                                <MudLink Color="Color.Warning" Underline="Underline.None" Style="cursor: pointer;">@item.AtNick</MudLink>
+                                                <MudLink OnClick="() => AtElementClicked(item.AtTarget)" Color="Color.Warning" Underline="Underline.None" Style="cursor: pointer;">@item.AtNick</MudLink>
                                                 break;
 
                                             case RenderType.Face:
@@ -72,7 +72,9 @@ else
                                             case RenderType.Reply:
                                                 if (item.ReplyId != 0)
                                                 {
-                                                    <MudPaper>
+                                                    <MudPaper Class="replyItem" Elevation="0" @onclick="() => ReplyClicked(item.ReplyId)">
+                                                        <MudText Typo="Typo.body2" Class="replySubItem">@item.ReplyNickName</MudText>
+                                                        <MudText Typo="Typo.body2" Class="replySubItem">@item.ReplyContent</MudText>
                                                     </MudPaper>
                                                 }
                                                 break;
@@ -90,8 +92,8 @@ else
                                                 break;
 
                                             case RenderType.Other:
-                                                <MudExpansionPanels>
-                                                    <MudExpansionPanel Text="CQ码">
+                                                <MudExpansionPanels Style="background: transparent;">
+                                                    <MudExpansionPanel Text="CQ码" Style="background: transparent;">
                                                         <span class="mud-typography mud-typography-body1" style="text-align: left; user-select: text; white-space: pre-wrap; word-break: break-word;">
                                                             @item.Text
                                                         </span>
@@ -137,14 +139,33 @@ else
     .mud-menu *{
         cursor: auto;
     }
+    .replyItem {
+        padding: 9px;
+        border: 1px solid var(--mud-palette-text-primary);
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 0;
+        transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        cursor: pointer;
+        background: #ffffff00;
+        margin-bottom: 10px;
+    }
+    .replySubItem {
+        cursor: inherit;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+        white-space: nowrap;
+    }
+    .replyItem:hover{
+        background: #ffffff40;
+    }
 </style>
 
 @code {
-    // TODO: 元素样式：图片、URL、At、表情、Reply
-    // TODO: 折叠无法解析的CQ码
+    // TODO: 元素样式：表情
     // TODO: 头像菜单
     // TODO: 撤回
-    // TODO: 点击Reply事件
     // TODO: 图片预览
     [Parameter]
     public ChatItemModel Item { get; set; }
@@ -208,6 +229,12 @@ else
 
     [Parameter]
     public EventCallback<ChatItemModel> OnResend { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnReplyJumpReuquest { get; set; }
+
+    [Parameter]
+    public EventCallback<long> OnAtElementClicked { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -313,6 +340,16 @@ else
         await OnReply.InvokeAsync(Item);
     }
 
+    private async Task ReplyClicked(int id)
+    {
+        await OnReplyJumpReuquest.InvokeAsync(id);
+    }
+
+    private async Task AtElementClicked(long id)
+    {
+        await OnAtElementClicked.InvokeAsync(id);
+    }
+
     private async Task OnResendButtonClick()
     {
         await OnResend.InvokeAsync(Item);
@@ -350,6 +387,22 @@ else
                                 renderItem.RenderType = RenderType.Reply;
                                 renderItem.ReplyId = int.Parse(item.Items["id"]);
                                 result.Insert(0, renderItem);
+                                Task.Run(async () =>
+                                {
+                                    var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(Item.ParentId, renderItem.ReplyId, Item.ParentType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+                                    if (messageItem == null)
+                                    {
+                                        Snackbar.Add($"无法找到ID={renderItem.ReplyId}的历史消息", Severity.Error);
+                                        result.Remove(renderItem);
+                                        return;
+                                    }
+                                    renderItem.ReplyNickName = Item.ParentType == AvatarTypes.QQGroup ?
+                                        await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, Item.Id) :
+                                        await ChatHistoryHelper.GetFriendNick(Item.Id);
+                                    renderItem.ReplyContent = messageItem.Message;
+
+                                    await InvokeAsync(() => StateHasChanged());
+                                });
                                 continue;
 
                             case Model.Enums.CQCodeType.At:

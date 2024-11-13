@@ -9,7 +9,7 @@
     }
     @foreach (var item in ChatItems)
     {
-        <ChatItem Item="@item" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" OnResend="OnResend" />
+        <ChatItem Item="@item" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" OnResend="OnResend" OnAtElementClicked="OnAtElementClicked" OnReplyJumpReuquest="OnReplyJumpReuquest" />
     }
 </MudPaper>
 <MudFab id="scrollToBottom" Class="hidden" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleDown" OnClick="ScrollToBottom" Style="position: absolute; right: 10px;" />
@@ -91,6 +91,12 @@
 
     [Parameter]
     public EventCallback OnLoadAvaliable { get; set; }
+    
+    [Parameter]
+    public EventCallback<int> OnReplyJumpReuquest { get; set; }
+
+    [Parameter]
+    public EventCallback<long> OnAtElementClicked { get; set; }
 
     private bool Reloading { get; set; } = false;
     private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden; background-color: var(--mud-palette-background);";
@@ -114,6 +120,11 @@
     public async Task ScrollToBottom()
     {
         await ScrollManager.ScrollToBottomAsync("#chatContainer", ScrollBehavior.Smooth);
+    }
+
+    public async Task ScrollToItem(int historyId)
+    {
+        await ScrollManager.ScrollIntoViewAsync($"#chatItem_{historyId}", ScrollBehavior.Smooth);
     }
 
     public async Task ReloadFinish(bool avaliable)
