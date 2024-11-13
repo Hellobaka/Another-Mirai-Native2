@@ -32,7 +32,19 @@
                 <div style="height: 62px; background-color: var(--mud-palette-background-gray);">
                     <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
                 </div>
-                <ChatMessageDisplay @ref="ChatMessageDisplay" ChatItems="Messages" OnLoadAvaliable="LoadMessageHistoryNextPage" OnAt="OnChatItemAt" OnCopy="OnChatItemCopy" OnRepeat="OnChatItemRepeat" OnReply="OnChatItemReply" OnResend="OnChatItemResend" OnAtElementClicked="OnAtElementClicked" OnReplyJumpReuquest="OnReplyJumpReuquest"></ChatMessageDisplay>
+                <ChatMessageDisplay @ref="ChatMessageDisplay"
+                    ChatItems="Messages"
+                    OnLoadAvaliable="LoadMessageHistoryNextPage"
+                    OnAt="OnChatItemAt"
+                    OnCopy="OnChatItemCopy"
+                    OnRepeat="OnChatItemRepeat"
+                    OnReply="OnChatItemReply"
+                    OnResend="OnChatItemResend"
+                    OnAtElementClicked="OnAtElementClicked"
+                    OnReplyJumpReuquest="OnReplyJumpReuquest"
+                    OnCopyNick="OnCopyNick"
+                    OnCopyQQ="OnCopyQQ"
+                    OnRevoke="OnRevoke"></ChatMessageDisplay>
                 <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
@@ -541,7 +553,7 @@
 
     private async Task OnChatItemAt(ChatItemModel chatItem)
     {
-        await MessageCommandPanel.AppendText($" [CQ:at,qq={chatItem.ParentId}]");
+        await MessageCommandPanel.AppendText($" [CQ:at,qq={chatItem.Id}]");
     }
 
     private async Task OnChatItemReply(ChatItemModel chatItem)
@@ -605,6 +617,37 @@
             Unavailable = false;
 
             await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+        }
+    }
+
+    private async Task OnCopyNick(ChatItemModel item)
+    {
+        await JS.InvokeVoidAsync("copyTextToClipboard", item.DisplayName);
+        Snackbar.Add("复制成功", Severity.Success);
+    }
+
+    private async Task OnCopyQQ(ChatItemModel item)
+    {
+        await JS.InvokeVoidAsync("copyTextToClipboard", item.Id);
+        Snackbar.Add("复制成功", Severity.Success);
+    }
+
+    private async Task OnRevoke(ChatItemModel item)
+    {
+        bool success = false;
+        await Task.Run(() =>
+        {
+            success = ProtocolManager.Instance.CurrentProtocol.DeleteMsg(item.MsgId) == 1;
+        });
+        if (success)
+        {
+            item.Recalled = true;
+            ChatHistoryHelper.UpdateHistoryRecall(item.ParentId, item.MsgId, item.ParentType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, true);
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("消息撤回失败", Severity.Error);
         }
     }
 }

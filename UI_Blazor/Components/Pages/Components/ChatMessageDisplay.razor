@@ -9,7 +9,17 @@
     }
     @foreach (var item in ChatItems)
     {
-        <ChatItem Item="@item" OnAt="OnAt" OnCopy="OnCopy" OnRepeat="OnRepeat" OnReply="OnReply" OnResend="OnResend" OnAtElementClicked="OnAtElementClicked" OnReplyJumpReuquest="OnReplyJumpReuquest" />
+        <ChatItem Item="@item"
+            OnAt="OnAt"
+            OnCopy="OnCopy"
+            OnRepeat="OnRepeat"
+            OnReply="OnReply"
+            OnResend="OnResend"
+            OnAtElementClicked="OnAtElementClicked"
+            OnReplyJumpReuquest="OnReplyJumpReuquest"
+            OnCopyNick="OnCopyNick"
+            OnCopyQQ="OnCopyQQ"
+            OnRevoke="OnRevoke"/>
     }
 </MudPaper>
 <MudFab id="scrollToBottom" Class="hidden" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleDown" OnClick="ScrollToBottom" Style="position: absolute; right: 10px;" />
@@ -87,7 +97,16 @@
     public EventCallback<ChatItemModel> OnReply { get; set; }
 
     [Parameter]
+    public EventCallback<ChatItemModel> OnRevoke { get; set; }
+
+    [Parameter]
     public EventCallback<ChatItemModel> OnResend { get; set; }
+    
+    [Parameter]
+    public EventCallback<ChatItemModel> OnCopyNick { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnCopyQQ { get; set; }
 
     [Parameter]
     public EventCallback OnLoadAvaliable { get; set; }

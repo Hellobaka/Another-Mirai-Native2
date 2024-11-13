@@ -10,14 +10,24 @@
 }
 else
 {
-    <div style="@GetContainerStyle()" id="@($"chatItem_{Item.HistoryId}")">
-        <MudAvatar Style="margin: 1.25rem 10px 0 10px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
-            <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
-            @if (ShowFallbackName)
-            {
-                <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
-            }
-        </MudAvatar>
+    <div id="@($"chatItem_{Item.HistoryId}")" style="@GetContainerStyle()">
+
+        <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default; margin: 1.25rem 10px 0 10px; align-self: unset;">
+            <ActivatorContent>
+                <MudAvatar Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+                    <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
+                    @if (ShowFallbackName)
+                    {
+                        <MudText @ref="AvatarText">@Item.Avatar.FallbackName[0..1]</MudText>
+                    }
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem OnClick="CopyNickClicked">复制昵称</MudMenuItem>
+                <MudMenuItem OnClick="CopyQQClicked">复制QQ</MudMenuItem>
+                <MudMenuItem OnClick="AtClicked">@@</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
         <div>
             <MudText Style="font-size: 0.75rem;">@Item.DisplayName</MudText>
             <div>
@@ -111,6 +121,8 @@ else
                         <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled">+1</MudMenuItem>
                         <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled">@@</MudMenuItem>
                         <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled">回复</MudMenuItem>
+                        <MudDivider/>
+                        <MudMenuItem OnClick="RevokeClicked" Disabled="!RevokeEnabled">撤回</MudMenuItem>
                     </ChildContent>
                 </MudMenu>
             </div>
@@ -164,8 +176,6 @@ else
 
 @code {
     // TODO: 元素样式：表情
-    // TODO: 头像菜单
-    // TODO: 撤回
     // TODO: 图片预览
     [Parameter]
     public ChatItemModel Item { get; set; }
@@ -181,6 +191,9 @@ else
 
     [Parameter]
     public bool ReplyEnabled { get; set; } = true;
+
+    [Parameter]
+    public bool RevokeEnabled { get; set; } = true;
 
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
@@ -219,6 +232,12 @@ else
     public EventCallback<ChatItemModel> OnCopy { get; set; }
 
     [Parameter]
+    public EventCallback<ChatItemModel> OnCopyNick { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnCopyQQ { get; set; }
+
+    [Parameter]
     public EventCallback<ChatItemModel> OnRepeat { get; set; }
 
     [Parameter]
@@ -229,6 +248,9 @@ else
 
     [Parameter]
     public EventCallback<ChatItemModel> OnResend { get; set; }
+
+    [Parameter]
+    public EventCallback<ChatItemModel> OnRevoke { get; set; }
 
     [Parameter]
     public EventCallback<int> OnReplyJumpReuquest { get; set; }
@@ -313,6 +335,16 @@ else
         await OnCopy.InvokeAsync(Item);
     }
 
+    private async Task CopyNickClicked()
+    {
+        await OnCopyNick.InvokeAsync(Item);
+    }
+
+    private async Task CopyQQClicked()
+    {
+        await OnCopyQQ.InvokeAsync(Item);
+    }
+
     private async Task RepeatClicked()
     {
         if (RepeatEnabled is false)
@@ -338,6 +370,15 @@ else
             return;
         }
         await OnReply.InvokeAsync(Item);
+    }
+
+    private async Task RevokeClicked()
+    {
+        if (RevokeEnabled is false)
+        {
+            return;
+        }
+        await OnRevoke.InvokeAsync(Item);
     }
 
     private async Task ReplyClicked(int id)
