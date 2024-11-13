@@ -23,6 +23,8 @@ namespace Another_Mirai_Native.BlazorUI.Models
 
         public string? ImageUrl { get; set; }
 
+        public bool ImageFailed { get; set; }
+
         public long AtTarget { get; set; }
 
         public string AtNick { get; set; }
