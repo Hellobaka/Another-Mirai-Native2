@@ -225,9 +225,12 @@ namespace Another_Mirai_Native.RPC.Interface
             Stopwatch stopwatch = Stopwatch.StartNew();
             string guid = Guid.NewGuid().ToString();
             WaitingMessage.Add(guid, new InvokeResult());
-            SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
+            LogHelper.Debug($"InvokeEvent_{eventType}", $"GUID = {guid}");
 
-            if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, out _)
+            if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, () =>
+                    {
+                        SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
+                    }, out _)
                     && WaitingMessage.TryGetValue(guid, out InvokeResult result))
             {
                 WaitingMessage.Remove(guid);

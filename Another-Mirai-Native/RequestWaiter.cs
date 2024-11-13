@@ -99,7 +99,7 @@ namespace Another_Mirai_Native
         /// <param name="key">标识</param>
         /// <param name="timeout">超时时长 (单位ms)</param>
         /// <returns>是否超时</returns>
-        public static bool Wait(object key, CQPluginProxy plugin, int timeout, out object result)
+        public static bool Wait(object key, CQPluginProxy plugin, int timeout, Action callBack, out object result)
         {
             ManualResetEvent signal = new(false);
             WaiterInfo waiterInfo = new()
@@ -108,6 +108,7 @@ namespace Another_Mirai_Native
                 WaitSignal = signal,
             };
             CommonWaiter.TryAdd(key, waiterInfo);
+            callBack?.Invoke();
             bool timeoutFlag;
             if (timeout > 0)
             {

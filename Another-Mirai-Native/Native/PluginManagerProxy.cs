@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.RPC;
+using System;
 using System.Diagnostics;
 
 namespace Another_Mirai_Native.Native
@@ -147,9 +148,11 @@ namespace Another_Mirai_Native.Native
                 int ret = InvokeEvent(item, eventType, args);
                 if (ret == 1)
                 {
+                    LogHelper.Debug($"InvokeEvent_{eventType}", $"调用结束，阻塞插件={item.PluginName}");
                     return item;
                 }
             }
+            LogHelper.Debug($"InvokeEvent_{eventType}", $"调用结束，没有阻塞插件");
             return null;
         }
 
