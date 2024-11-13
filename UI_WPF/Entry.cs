@@ -2,6 +2,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.RPC;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -16,7 +17,10 @@ namespace Another_Mirai_Native.UI
             {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             }
-
+            if (Directory.Exists("wwwroot"))
+            {
+                Helper.CreateDirectoryLink(@"wwwroot\image", @"data\image");
+            }
             AppConfig.Instance.StartTime = DateTime.Now;
 
 #if NET5_0_OR_GREATER

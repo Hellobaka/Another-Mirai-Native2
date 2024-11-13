@@ -363,3 +363,4 @@ FodyWeavers.xsd
 /build
 /.idea
 /UI_Blazor/.config
+/UI_Blazor/wwwroot/image

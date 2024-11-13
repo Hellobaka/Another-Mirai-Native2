@@ -325,5 +325,17 @@ namespace Another_Mirai_Native
             }
         }
 
+        public static void CreateDirectoryLink(string path1, string path2)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                Process.Start("cmd.exe", $"/C mklink /J {path1} {path2}").WaitForExit();
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("Only Support Windows");
+            }
+        }
+
     }
 }

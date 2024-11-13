@@ -485,15 +485,9 @@ else
             string path = cqCode.Items["file"];
             if (path.Contains('.'))
             {
-                path = Path.Combine("data", "image", path);
-                if (File.Exists(path))
+                if (File.Exists(Path.Combine("data", "image", path)))
                 {
-                    string imagePath = Path.Combine("wwwroot", "images");
-                    string newPath = Path.Combine(imagePath, Path.GetFileName(path));
-                    Directory.CreateDirectory(imagePath);
-                    File.Copy(path, newPath, true);
-                    // TODO: 反向目录链接
-                    return $"/images/{Path.GetFileName(newPath)}";
+                    return $"/image/{path}";
                 }
                 else
                 {
