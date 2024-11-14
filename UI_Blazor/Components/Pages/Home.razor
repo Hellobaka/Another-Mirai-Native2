@@ -43,6 +43,12 @@
                 <MudSpacer />
                 <MudText Style="text-align: right">@StartedTime</MudText>
             </div>
+            <div style="display: flex; margin-top: 5px">
+                <MudIcon Icon="@Icons.Material.Filled.Api"></MudIcon>
+                <MudText>框架版本：</MudText>
+                <MudSpacer />
+                <MudText Style="text-align: right">@(AppConfig.Instance.GetType().Assembly.GetName().Version)</MudText>
+            </div>
         </MudPaper>
 
         <MudPaper Style="margin-top: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center;">
