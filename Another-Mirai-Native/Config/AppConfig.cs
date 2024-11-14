@@ -70,6 +70,8 @@ namespace Another_Mirai_Native.Config
 
         public DateTime StartTime { get; set; }
 
+        public bool EnableChat { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -92,6 +94,7 @@ namespace Another_Mirai_Native.Config
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
             ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
+            EnableChat = GetConfig("EnableChat", true);
         }
     }
 }

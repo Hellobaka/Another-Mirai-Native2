@@ -117,16 +117,16 @@
 
 @code {
     // TODO: 代码整理
-    private ChatHistoryItem SelectedHistoryItem { get; set; } = null;
+    private ChatHistoryItem? SelectedHistoryItem { get; set; } = null;
     private List<ChatHistoryItem> HistoryItems { get; set; } = [];
     private List<ChatItemModel> Messages { get; set; } = [];
     private bool Unavailable { get; set; } = true;
     private bool MessageUnavailable { get; set; } = true;
-    private ChatMessageDisplay ChatMessageDisplay { get; set; } = null;
+    private ChatMessageDisplay? ChatMessageDisplay { get; set; } = null;
     private long CurrentSelectedId => SelectedHistoryItem?.Id ?? 0;
     private int CurrentPageIndex { get; set; }
     private int PageSize { get; set; } = 15;
-    private MudList<ChatHistoryItem> ChatHistoryList { get; set; } = null;
+    private MudList<ChatHistoryItem>? ChatHistoryList { get; set; } = null;
     private ChatCommandPanel MessageCommandPanel { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
@@ -145,14 +145,10 @@
         PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
         PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
         PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
-        PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
         PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
         PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
         PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
         PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
-        PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
-        PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
-        PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
 
         CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
         CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
@@ -164,14 +160,10 @@
         PluginManagerProxy.OnGroupAdded -= PluginManagerProxy_OnGroupAdded;
         PluginManagerProxy.OnGroupMsg -= PluginManagerProxy_OnGroupMsg;
         PluginManagerProxy.OnGroupLeft -= PluginManagerProxy_OnGroupLeft;
-        PluginManagerProxy.OnAdminChanged -= PluginManagerProxy_OnAdminChanged;
         PluginManagerProxy.OnFriendAdded -= PluginManagerProxy_OnFriendAdded;
         PluginManagerProxy.OnPrivateMsg -= PluginManagerProxy_OnPrivateMsg;
         PluginManagerProxy.OnGroupMsgRecall -= PluginManagerProxy_OnGroupMsgRecall;
         PluginManagerProxy.OnPrivateMsgRecall -= PluginManagerProxy_OnPrivateMsgRecall;
-        PluginManagerProxy.OnGroupMemberCardChanged -= PluginManagerProxy_OnGroupMemberCardChanged;
-        PluginManagerProxy.OnGroupNameChanged -= PluginManagerProxy_OnGroupNameChanged;
-        PluginManagerProxy.OnFriendNickChanged -= PluginManagerProxy_OnFriendNickChanged;
 
         CQPImplementation.OnPrivateMessageSend -= CQPImplementation_OnPrivateMessageSend;
         CQPImplementation.OnGroupMessageSend -= CQPImplementation_OnGroupMessageSend;
@@ -220,16 +212,27 @@
             Messages = [];
             foreach (var item in histories)
             {
-                Messages.Add(ParseChatHistoryToChatItemModel(item));
+                var i = ParseChatHistoryToChatItemModel(item);
+                if (i != null)
+                {
+                    Messages.Add(i);
+                }
             }
         });
         StateHasChanged();
-        await ChatMessageDisplay.OnItemsChange();
+        if (ChatMessageDisplay != null)
+        {
+            await ChatMessageDisplay.OnItemsChange();
+        }
         MessageUnavailable = false;
     }
 
-    private ChatItemModel ParseChatHistoryToChatItemModel(ChatHistory item, bool sending = false)
+    private ChatItemModel? ParseChatHistoryToChatItemModel(ChatHistory item, bool sending = false)
     {
+        if (item == null)
+        {
+            return null;
+        }
         var r = new ChatItemModel
         {
             Avatar = new AvatarModel
@@ -262,6 +265,10 @@
     public async Task LoadMessageHistoryNextPage()
     {
         int updateCount = 0;
+        if (SelectedHistoryItem == null)
+        {
+            return;
+        }
         await Task.Run(() =>
         {
             CurrentPageIndex++;
@@ -271,25 +278,17 @@
             updateCount = messages.Count;
             for (int i = 0; i < messages.Count; i++)
             {
-                Messages.Insert(i, ParseChatHistoryToChatItemModel(messages[i]));
+                var item = ParseChatHistoryToChatItemModel(messages[i]);
+                if (item != null)
+                {
+                    Messages.Insert(i, item);
+                }
             }
         });
         StateHasChanged();
-        await ChatMessageDisplay.ReloadFinish(updateCount > 0);
-    }
-
-    private void PluginManagerProxy_OnAdminChanged(long group, long qq, QQGroupMemberType type)
-    {
-        if (ChatHistoryHelper.GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
+        if (ChatMessageDisplay != null)
         {
-            if (info.MemberType != QQGroupMemberType.Creator)
-            {
-                info.MemberType = type;
-            }
-            else
-            {
-                // 群主 未定义操作
-            }
+            await ChatMessageDisplay.ReloadFinish(updateCount > 0);
         }
     }
 
@@ -303,31 +302,16 @@
     /// <param name="msgId">消息ID</param>
     /// <param name="plugin">发送来源插件</param>
     /// <returns>消息持久化的ID</returns>
-    private async Task<(ChatHistory, ChatItemModel)> AddChatItem(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy plugin = null)
+    private ChatItemModel? AddChatItem(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy? plugin = null)
     {
-        var history = new ChatHistory
+        var history = ChatHistoryHelper.GetHistoriesByMsgId(id, msgId, type);
+        ChatItemModel? chatItem = ParseChatHistoryToChatItemModel(history, sending);
+        if (CurrentSelectedId == id && chatItem != null)
         {
-            Message = msg,
-            ParentID = id,
-            SenderID = qq,
-            Type = type,
-            MsgId = msgId,
-            PluginName = plugin?.PluginName ?? "",
-            Time = time,
-        };
-        ChatItemModel chatItem = null;
-        history.ID = ChatHistoryHelper.InsertHistory(history);
-        if (type != ChatHistoryType.Notice)
-        {
-            ChatHistoryHelper.UpdateHistoryCategory(history);
-        }
-        if (CurrentSelectedId == id)
-        {
-            chatItem = ParseChatHistoryToChatItemModel(history, sending);
             Messages.Add(chatItem);
         }
         AddOrUpdateChatList(history);
-        return (history, chatItem);
+        return chatItem;
     }
 
     private async Task<string> GetGroupCardOrNick(long id, long qq, ChatHistoryType type)
@@ -387,10 +371,12 @@
         HistoryItems = HistoryItems.OrderByDescending(x => x.Time).ToList();
         if (SelectedHistoryItem != null)
         {
-            SelectedHistoryItem = HistoryItems.FirstOrDefault(x => x.Id == SelectedHistoryItem.Id);
             SelectedHistoryItem.UnreadCount = 0;
             await InvokeAsync(() => StateHasChanged());
-            await ChatMessageDisplay?.ScrollToBottom();
+            if (ChatMessageDisplay != null)
+            {
+                await ChatMessageDisplay.ScrollToBottom();
+            }
             return;
         }
         else
@@ -408,7 +394,7 @@
     {
         if (ChatHistoryHelper.GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
         {
-            await AddChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 加入了本群", ChatHistoryType.Notice, DateTime.Now);
+            AddChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 加入了本群", ChatHistoryType.Notice, DateTime.Now);
         }
     }
 
@@ -416,7 +402,7 @@
     {
         if (ChatHistoryHelper.GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
         {
-            await AddChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 禁言了 {await ChatHistoryHelper.GetGroupMemberNick(group, operatedQQ)} {time}秒", ChatHistoryType.Notice, DateTime.Now);
+            AddChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 禁言了 {await ChatHistoryHelper.GetGroupMemberNick(group, operatedQQ)} {time}秒", ChatHistoryType.Notice, DateTime.Now);
         }
     }
 
@@ -425,22 +411,21 @@
         if (ChatHistoryHelper.GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
         {
             dict.Remove(qq);
-            await AddChatItem(group, AppConfig.Instance.CurrentQQ, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 离开了群", ChatHistoryType.Notice, DateTime.Now);
+            AddChatItem(group, AppConfig.Instance.CurrentQQ, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 离开了群", ChatHistoryType.Notice, DateTime.Now);
         }
         else
         {
-            await AddChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", ChatHistoryType.Notice, DateTime.Now);
+            AddChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", ChatHistoryType.Notice, DateTime.Now);
         }
     }
 
-    private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
+    private void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
     {
-        await AddChatItem(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
+        AddChatItem(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
     }
 
     private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
     {
-        ChatHistoryHelper.UpdateHistoryRecall(groupId, msgId, ChatHistoryType.Group, true);
         var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
         if (item != null)
         {
@@ -448,74 +433,69 @@
         }
     }
 
-    private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
+    private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
     {
-        await AddChatItem(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
+        AddChatItem(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
     }
 
     private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
     {
-        ChatHistoryHelper.UpdateHistoryRecall(qq, msgId, ChatHistoryType.Private, true);
         var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
         if (item != null)
         {
             item.Recalled = true;
-        }
-    }
-
-    private void PluginManagerProxy_OnFriendNickChanged(long qq, string nick)
-    {
-        if (ChatHistoryHelper.FriendInfoCache.TryGetValue(qq, out var info) && info != null)
-        {
-            info.Nick = nick;
-        }
-    }
-
-    private void PluginManagerProxy_OnGroupNameChanged(long group, string name)
-    {
-        if (ChatHistoryHelper.GroupInfoCache.TryGetValue(group, out var info) && info != null)
-        {
-            info.Name = name;
-        }
-    }
-
-    private void PluginManagerProxy_OnGroupMemberCardChanged(long group, long qq, string card)
-    {
-        if (ChatHistoryHelper.GroupMemberCache.TryGetValue(group, out var member) && member.TryGetValue(qq, out var info) && info != null)
-        {
-            info.Card = card;
         }
     }
 
     /// <summary>
     /// CQP事件_群消息发送
     /// </summary>
-    private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
+    private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
     {
-        // AddOrUpdateGroupChatList(group, AppConfig.Instance.CurrentQQ, msg);
-        await AddChatItem(group, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Group, DateTime.Now, msgId: msgId, plugin: plugin);
+        AddChatItem(group, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Group, DateTime.Now, msgId: msgId, plugin: plugin);
     }
 
-    private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
+    private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
     {
-        // AddOrUpdatePrivateChatList(qq, AppConfig.Instance.CurrentQQ, msg);
-        await AddChatItem(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId: msgId, plugin: plugin);
+        AddChatItem(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId: msgId, plugin: plugin);
     }
 
     private async Task OnMessageSend(string msg)
     {
-        var item = await AddChatItem(SelectedHistoryItem.Id, AppConfig.Instance.CurrentQQ, msg, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, DateTime.Now, true);
+        if (SelectedHistoryItem == null)
+        {
+            return;
+        }
+
+        var type = SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private;
+        var history = new ChatHistory
+        {
+            Message = msg,
+            ParentID = SelectedHistoryItem.Id,
+            SenderID = AppConfig.Instance.CurrentQQ,
+            Type = type,
+            MsgId = 0,
+            PluginName = "",
+            Time = DateTime.Now,
+        };
+        history.ID = ChatHistoryHelper.InsertHistory(history);
+
+        var item = AddChatItem(SelectedHistoryItem.Id, AppConfig.Instance.CurrentQQ, msg, type, DateTime.Now, true);
+        if (item == null)
+        {
+            return;
+        }
         DelayScrollToBottom(50);
         DelayClearSendText(50);
         var msgId = await CallMessageSend(SelectedHistoryItem.Id, msg, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup);
         MessageCommandPanel.Sending = false;
         await MessageCommandPanel.ClearSendText();
-        item.Item2.Sending = false;
-        item.Item2.MsgId = msgId;
-        item.Item2.HistoryId = item.Item1.ID;
+        item.Sending = false;
+        item.MsgId = msgId;
+        item.HistoryId = history.ID;
         ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
             , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
-            , item.Item2.HistoryId
+            , item.HistoryId
             , msgId);
         StateHasChanged();
     }
@@ -526,7 +506,10 @@
         {
             await Task.Delay(delay);
             await InvokeAsync(() => StateHasChanged());
-            await ChatMessageDisplay.ScrollToBottom();
+            if (ChatMessageDisplay != null)
+            {
+                await ChatMessageDisplay.ScrollToBottom();
+            }
         });
     }
 
@@ -585,6 +568,11 @@
 
     private async Task OnChatItemResend(ChatItemModel chatItem)
     {
+        if (SelectedHistoryItem == null)
+        {
+            return;
+        }
+
         var msgId = await CallMessageSend(SelectedHistoryItem.Id, chatItem.Message, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup);
         chatItem.Sending = false;
         await MessageCommandPanel.ClearSendText();
@@ -603,6 +591,11 @@
 
     private async Task OnReplyJumpReuquest(int id)
     {
+        if (SelectedHistoryItem == null)
+        {
+            return;
+        }
+
         var history = ChatHistoryHelper.GetHistoriesByMsgId(SelectedHistoryItem.Id, id, SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
         if (history == null) // 查询失败
         {
@@ -612,7 +605,10 @@
         if (item != null)
         {
             // 当前列表存在此消息，直接跳转
-            await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+            if (ChatMessageDisplay != null)
+            {
+                await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+            }
         }
         else
         {
@@ -626,8 +622,11 @@
                 item = Messages.FirstOrDefault(x => x.MsgId == id);
             } while (item == null);
             Unavailable = false;
-
-            await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+            if (ChatMessageDisplay != null)
+            {
+                await Task.Delay(50);
+                await ChatMessageDisplay.ScrollToItem(item.HistoryId);
+            }
         }
     }
 

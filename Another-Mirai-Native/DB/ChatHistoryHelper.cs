@@ -1,5 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using SqlSugar;
 using System.Diagnostics;
 
@@ -269,6 +271,158 @@ namespace Another_Mirai_Native.DB
             {
                 APILock.Release();
             }
+        }
+
+        public static void Initialize()
+        {
+            if (AppConfig.Instance.EnableChat is false)
+            {
+                return;
+            }
+            PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
+            PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
+            PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
+            PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
+            PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
+            PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
+            PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
+            PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
+            PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
+            PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
+            PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
+            PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
+
+            CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
+            CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+        }
+
+        private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy plugin = null)
+        {
+            var history = new ChatHistory
+            {
+                Message = msg,
+                ParentID = id,
+                SenderID = qq,
+                Type = type,
+                MsgId = msgId,
+                PluginName = plugin?.PluginName ?? "",
+                Time = time,
+            };
+            history.ID = InsertHistory(history);
+            return history;
+        }
+
+        private static void PluginManagerProxy_OnAdminChanged(long group, long qq, QQGroupMemberType type)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var memberInfo))
+            {
+                memberInfo.MemberType = type;
+            }
+        }
+
+        private static async void PluginManagerProxy_OnFriendAdded(long qq)
+        {
+            FriendInfoCache.Remove(qq);
+            await GetFriendNick(qq);
+        }
+
+        private static async void PluginManagerProxy_OnGroupAdded(long group, long qq)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var dict))
+            {
+                dict.Remove(qq);
+            }
+            InsertHistory(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", ChatHistoryType.Notice, DateTime.Now);
+        }
+
+        private static async void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
+            {
+                InsertHistory(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", ChatHistoryType.Notice, DateTime.Now);
+            }
+            else
+            {
+                InsertHistory(group, AppConfig.Instance.CurrentQQ, $"{qq} 禁言了 {operatedQQ} {time}秒", ChatHistoryType.Notice, DateTime.Now);
+            }
+        }
+
+        private static async void PluginManagerProxy_OnGroupLeft(long group, long qq)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
+            {
+                dict.Remove(qq);
+                InsertHistory(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", ChatHistoryType.Notice, DateTime.Now);
+            }
+            else
+            {
+                InsertHistory(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", ChatHistoryType.Notice, DateTime.Now);
+            }
+        }
+
+        private static void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
+        {
+            var history = InsertHistory(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
+            if (history.Type != ChatHistoryType.Notice)
+            {
+                UpdateHistoryCategory(history);
+            }
+        }
+
+        private static void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
+        {
+            UpdateHistoryRecall(groupId, msgId, ChatHistoryType.Group, true);
+        }
+
+        private static void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
+        {
+            var history = InsertHistory(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
+            if (history.Type != ChatHistoryType.Notice)
+            {
+                UpdateHistoryCategory(history);
+            }
+        }
+
+        private static void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        {
+            UpdateHistoryRecall(qq, msgId, ChatHistoryType.Private, true);
+        }
+
+        private static void PluginManagerProxy_OnFriendNickChanged(long qq, string nick)
+        {
+            if (FriendInfoCache.TryGetValue(qq, out var info) && info != null)
+            {
+                info.Nick = nick;
+            }
+        }
+
+        private static void PluginManagerProxy_OnGroupNameChanged(long group, string name)
+        {
+            if (GroupInfoCache.TryGetValue(group, out var info) && info != null)
+            {
+                info.Name = name;
+            }
+        }
+
+        private static void PluginManagerProxy_OnGroupMemberCardChanged(long group, long qq, string card)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var member) && member.TryGetValue(qq, out var info) && info != null)
+            {
+                info.Card = card;
+            }
+        }
+
+        /// <summary>
+        /// CQP事件_群消息发送
+        /// </summary>
+        private static void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
+        {
+            InsertHistory(group, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Group, DateTime.Now, msgId: msgId, plugin: plugin);
+        }
+
+        private static void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
+        {
+            InsertHistory(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId: msgId, plugin: plugin);
         }
 
         private static SqlSugarClient GetInstance(string path)

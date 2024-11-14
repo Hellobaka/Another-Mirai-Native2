@@ -157,7 +157,7 @@ namespace Another_Mirai_Native
                 }
                 UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.PluginName}]");
             }
-
+            ChatHistoryHelper.Initialize();
             ServerStarted?.Invoke();
             _quitEvent.WaitOne();
         }
