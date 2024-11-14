@@ -5,7 +5,7 @@
             <MudNavLink Href="plugins" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Cable">插件管理</MudNavLink>
             <MudNavLink Href="logs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AutoAwesome">日志</MudNavLink>
             <MudNavLink Href="test" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccessibleForward">插件测试</MudNavLink>
-            <MudNavLink Href="chat" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Cyclone">会话管理</MudNavLink>
+            <MudNavLink Href="chat" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Cyclone" Disabled="@(!Another_Mirai_Native.Config.AppConfig.Instance.EnableChat)">会话管理</MudNavLink>
         </Authorized>
          <NotAuthorized>
             <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Login">登录</MudNavLink>
