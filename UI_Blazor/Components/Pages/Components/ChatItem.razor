@@ -38,7 +38,7 @@ else
                             <div>
                                 @if (!RenderItems.First().ImageFailed)
                                 {
-                                    <MudImage @onerror="() => OnImageFailed(RenderItems.First())" @onclick="() => OnImageClicked(RenderItems.First())" Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 100%; max-height: 500px; cursor: pointer;"></MudImage>
+                                    <MudImage referrerpolicy="no-referrer" @onerror="() => OnImageFailed(RenderItems.First())" @onclick="() => OnImageClicked(RenderItems.First())" Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 100%; max-height: 500px; cursor: pointer;"></MudImage>
                                 }
                                 else
                                 {
@@ -70,7 +70,7 @@ else
                                             case RenderType.Image:
                                                 if (!item.ImageFailed)
                                                 {
-                                                    <MudImage @onerror="() => OnImageFailed(item)" @onclick="() => OnImageClicked(item)" Src="@item.ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 50%; max-height: 500px; cursor: pointer;"></MudImage>
+                                                    <MudImage referrerpolicy="no-referrer" @onerror="() => OnImageFailed(item)" @onclick="() => OnImageClicked(item)" Src="@item.ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 50%; max-height: 500px; cursor: pointer;"></MudImage>
                                                 }
                                                 else
                                                 {
@@ -436,13 +436,13 @@ else
                                     var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(Item.ParentId, renderItem.ReplyId, Item.ParentType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
                                     if (messageItem == null)
                                     {
-                                        Snackbar.Add($"无法找到ID={renderItem.ReplyId}的历史消息", Severity.Error);
+                                        // Snackbar.Add($"无法找到ID={renderItem.ReplyId}的历史消息", Severity.Error);
                                         result.Remove(renderItem);
                                         return;
                                     }
                                     renderItem.ReplyNickName = Item.ParentType == AvatarTypes.QQGroup ?
-                                        await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, Item.Id) :
-                                        await ChatHistoryHelper.GetFriendNick(Item.Id);
+                                        await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, messageItem.SenderID) :
+                                        await ChatHistoryHelper.GetFriendNick(messageItem.SenderID);
                                     renderItem.ReplyContent = messageItem.Message;
 
                                     await InvokeAsync(() => StateHasChanged());
@@ -455,7 +455,9 @@ else
                                 renderItem.AtNick = "@" + renderItem.AtTarget.ToString();
                                 Task.Run(async () =>
                                 {
-                                    renderItem.AtNick = "@" + await ChatHistoryHelper.GetFriendNick(renderItem.AtTarget);
+                                    renderItem.AtNick = "@" + (Item.ParentType == AvatarTypes.QQGroup ?
+                                        await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, renderItem.AtTarget) :
+                                        await ChatHistoryHelper.GetFriendNick(renderItem.AtTarget));
                                     await InvokeAsync(() => StateHasChanged());
                                 });
                                 break;
@@ -473,7 +475,7 @@ else
                     }
                     catch
                     {
-                        Snackbar.Add($"转换CQ码失败，内容：{item}", Severity.Error);
+                        // Snackbar.Add($"转换CQ码失败，内容：{item}", Severity.Error);
                     }                    
                 }
             }
@@ -499,7 +501,7 @@ else
             }
             else
             {
-                return Helper.GetPicUrlFromCQImg(cqCode.ToString());
+                return Helper.GetPicUrlFromCQImg(path);
             }
         }
         return null;
