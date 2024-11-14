@@ -34,19 +34,19 @@
                     <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
                 </div>
                 <ChatMessageDisplay @ref="ChatMessageDisplay"
-                    ChatItems="Messages"
-                    OnLoadAvaliable="LoadMessageHistoryNextPage"
-                    OnAt="OnChatItemAt"
-                    OnCopy="OnChatItemCopy"
-                    OnRepeat="OnChatItemRepeat"
-                    OnReply="OnChatItemReply"
-                    OnResend="OnChatItemResend"
-                    OnAtElementClicked="OnAtElementClicked"
-                    OnReplyJumpReuquest="OnReplyJumpReuquest"
-                    OnCopyNick="OnCopyNick"
-                    OnCopyQQ="OnCopyQQ"
-                    OnRevoke="OnRevoke"
-                    OnImagePreview="OnImagePreview"></ChatMessageDisplay>
+                ChatItems="Messages"
+                OnLoadAvaliable="LoadMessageHistoryNextPage"
+                OnAt="OnChatItemAt"
+                OnCopy="OnChatItemCopy"
+                OnRepeat="OnChatItemRepeat"
+                OnReply="OnChatItemReply"
+                OnResend="OnChatItemResend"
+                OnAtElementClicked="OnAtElementClicked"
+                OnReplyJumpReuquest="OnReplyJumpReuquest"
+                OnCopyNick="OnCopyNick"
+                OnCopyQQ="OnCopyQQ"
+                OnRevoke="OnRevoke"
+                OnImagePreview="OnImagePreview"></ChatMessageDisplay>
                 <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
@@ -102,16 +102,16 @@
 
 <script>
     function toggleContainerLength() {
-        const shinker = document.getElementById('Shinker')
-        const list = document.getElementById('ChatHistoryList')
-        const long = shinker.innerText === '<';
-        if (long) {
-            shinker.innerText = '>'
-            list.classList.add('short')
-        } else {
-            shinker.innerText = '<'
-            list.classList.remove('short')
-        }
+    const shinker = document.getElementById('Shinker')
+    const list = document.getElementById('ChatHistoryList')
+    const long = shinker.innerText === '<';
+    if (long) {
+    shinker.innerText = '>'
+    list.classList.add('short')
+    } else {
+    shinker.innerText = '<'
+    list.classList.remove('short')
+    }
     }
 </script>
 
@@ -479,7 +479,7 @@
             Time = DateTime.Now,
         };
         history.ID = ChatHistoryHelper.InsertHistory(history);
-
+        ChatHistoryHelper.UpdateHistoryCategory(history);
         var item = AddChatItem(SelectedHistoryItem.Id, AppConfig.Instance.CurrentQQ, msg, type, DateTime.Now, true);
         if (item == null)
         {
