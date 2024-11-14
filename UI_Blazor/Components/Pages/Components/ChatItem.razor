@@ -140,7 +140,7 @@ else
             {
                 <MudProgressCircular Indeterminate Size="Size.Small" />
             }
-            @if (Item.Failed)
+            @if (Item.Failed && !Item.Sending)
             {
                 <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Error" Color="Color.Error" OnClick="OnResendButtonClick"></MudIconButton>
             }
