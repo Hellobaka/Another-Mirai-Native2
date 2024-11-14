@@ -20,8 +20,8 @@
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj">
       <Private>True</Private>
     </ProjectReference>
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
-    <PackageReference Include="System.Management" Version="8.*" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.0" />
+    <PackageReference Include="System.Management" Version="9.0.0" />
   </ItemGroup>
   
 </Project>

@@ -16,11 +16,12 @@
 	<ItemGroup>
 		<PackageReference Include="Fleck" Version="1.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+		<PackageReference Include="System.Data.SQLite" Version="1.0.119" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 
-	<PackageReference Include="Fody" Version="6.8.1">
+	<PackageReference Include="Fody" Version="6.8.2">
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
@@ -28,15 +29,17 @@
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+	<PackageReference Include="System.Private.Uri" Version="4.3.2" />
+	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-		<PackageReference Include="SqlSugar" Version="5.1.4.166" />
+		<PackageReference Include="SqlSugar" Version="5.1.4.170" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
 		<PackageReference Include="SqlSugarCore">
-			<Version>5.1.4.166</Version>
+			<Version>5.1.4.170</Version>
 		</PackageReference>
 	</ItemGroup>
 
