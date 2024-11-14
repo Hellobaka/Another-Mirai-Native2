@@ -384,10 +384,18 @@
     private async Task ReorderHistory()
     {
         HistoryItems = HistoryItems.OrderByDescending(x => x.Time).ToList();
-        SelectedHistoryItem = HistoryItems.FirstOrDefault(x => x.Id == SelectedHistoryItem.Id);
-        SelectedHistoryItem.UnreadCount = 0;
-        await InvokeAsync(() => StateHasChanged());
-        await ChatMessageDisplay.ScrollToBottom();
+        if (SelectedHistoryItem != null)
+        {
+            SelectedHistoryItem = HistoryItems.FirstOrDefault(x => x.Id == SelectedHistoryItem.Id);
+            SelectedHistoryItem.UnreadCount = 0;
+            await InvokeAsync(() => StateHasChanged());
+            await ChatMessageDisplay?.ScrollToBottom();
+            return;
+        }
+        else
+        {
+            await InvokeAsync(() => StateHasChanged());
+        }
     }
 
     private void PluginManagerProxy_OnFriendAdded(long qq)
