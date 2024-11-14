@@ -19,7 +19,8 @@
             OnReplyJumpReuquest="OnReplyJumpReuquest"
             OnCopyNick="OnCopyNick"
             OnCopyQQ="OnCopyQQ"
-            OnRevoke="OnRevoke"/>
+            OnRevoke="OnRevoke"
+            OnImagePreview="OnImagePreview" />
     }
 </MudPaper>
 <MudFab id="scrollToBottom" Class="hidden" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleDown" OnClick="ScrollToBottom" Style="position: absolute; right: 10px;" />
@@ -115,6 +116,9 @@
 
     [Parameter]
     public EventCallback<long> OnAtElementClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<RenderChatItem> OnImagePreview { get; set; }
 
     private bool Reloading { get; set; } = false;
     private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden; background-color: var(--mud-palette-background);";

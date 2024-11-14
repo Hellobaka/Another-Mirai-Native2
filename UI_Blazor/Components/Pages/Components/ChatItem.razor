@@ -38,7 +38,7 @@ else
                             <div>
                                 @if (!RenderItems.First().ImageFailed)
                                 {
-                                    <MudImage @onerror="() => OnImageFailed(RenderItems.First())" Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 100%; max-height: 500px;"></MudImage>
+                                    <MudImage @onerror="() => OnImageFailed(RenderItems.First())" @onclick="() => OnImageClicked(RenderItems.First())" Src="@RenderItems.First().ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 100%; max-height: 500px; cursor: pointer;"></MudImage>
                                 }
                                 else
                                 {
@@ -70,7 +70,7 @@ else
                                             case RenderType.Image:
                                                 if (!item.ImageFailed)
                                                 {
-                                                    <MudImage @onerror="() => OnImageFailed(item)" Src="@item.ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 50%; max-height: 500px;"></MudImage>
+                                                    <MudImage @onerror="() => OnImageFailed(item)" @onclick="() => OnImageClicked(item)" Src="@item.ImageUrl" Class="rounded-lg" ObjectFit="ObjectFit.Contain" Style="min-width: 100px; min-height: 100px; max-width: 50%; max-height: 500px; cursor: pointer;"></MudImage>
                                                 }
                                                 else
                                                 {
@@ -257,6 +257,9 @@ else
 
     [Parameter]
     public EventCallback<long> OnAtElementClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<RenderChatItem> OnImagePreview { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -531,5 +534,10 @@ else
     {
         item.ImageFailed = true;
         StateHasChanged();
+    }
+
+    private async Task OnImageClicked(RenderChatItem item)
+    {
+        await OnImagePreview.InvokeAsync(item);
     }
 }

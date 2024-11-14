@@ -8,6 +8,7 @@
 @inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @inject Shared Shared
+@inject IDialogService DialogService
 @implements IDisposable
 
 <div style="display: flex; height: calc(100vh - var(--mud-appbar-height)); position: relative;">
@@ -44,7 +45,8 @@
                     OnReplyJumpReuquest="OnReplyJumpReuquest"
                     OnCopyNick="OnCopyNick"
                     OnCopyQQ="OnCopyQQ"
-                    OnRevoke="OnRevoke"></ChatMessageDisplay>
+                    OnRevoke="OnRevoke"
+                    OnImagePreview="OnImagePreview"></ChatMessageDisplay>
                 <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
@@ -649,5 +651,15 @@
         {
             Snackbar.Add("消息撤回失败", Severity.Error);
         }
+    }
+
+    private async Task OnImagePreview(RenderChatItem item)
+    {
+        if (item.RenderType != RenderType.Image)
+        {
+            return;
+        }
+
+        await DialogService.ShowAsync<ImagePreviewer>("图片预览", new DialogParameters<ImagePreviewer> { { x => x.Item, item } }, new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Medium });
     }
 }

@@ -1,0 +1,102 @@
+﻿@inject IJSRuntime JS
+@implements IAsyncDisposable
+<MudDialog>
+    <TitleContent>
+        图片预览
+    </TitleContent>
+    <DialogContent>
+        <MudImage id="imagePreview" Src="@Item.ImageUrl" Fluid ObjectFit="ObjectFit.Cover"></MudImage>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Disabled OnClick="Collect" StartIcon="@Icons.Material.Filled.Favorite" Color="Color.Error">收藏</MudButton>
+        <MudSpacer/>
+        <MudButton Color="Color.Primary" OnClick="Close" StartIcon="@Icons.Material.Filled.Close">关闭</MudButton>
+    </DialogActions>
+</MudDialog>
+<script>
+    var scale = 1;
+    var originX = 0;
+    var originY = 0;
+    var isDragging = false;
+    var startX, startY;
+    var image = null;
+    var container = null
+
+    function initPreview() {
+        image = document.getElementById('imagePreview');
+        container = image.parentElement
+
+        scale = 1;
+        originX = 0;
+        originY = 0;
+        isDragging = false;
+        startX, startY;
+
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            scale = Math.min(Math.max(0.5, scale + delta), 3);
+            image.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+        });
+
+        container.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            container.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', window_mouseMove);
+        window.addEventListener('mouseup', window_mouseUp);
+    }
+
+    function disposePreview() {
+        window.removeEventListener('mousemove', window_mouseMove);
+        window.removeEventListener('mouseup', window_mouseUp);
+    }
+
+    function window_mouseUp(){
+        isDragging = false;
+        container.style.cursor = 'default';
+    }
+
+    function window_mouseMove(e){
+        if (!isDragging) return;
+        e.preventDefault();
+        const dx = (e.clientX - startX) / scale;
+        const dy = (e.clientY - startY) / scale;
+        originX += dx;
+        originY += dy;
+        image.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+        startX = e.clientX;
+        startY = e.clientY;
+    }
+</script>
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public RenderChatItem Item { get; set; }
+
+    private void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initPreview");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await JS.InvokeVoidAsync("disposePreview");
+    }
+
+    private async Task Collect()
+    {
+
+    }
+}
