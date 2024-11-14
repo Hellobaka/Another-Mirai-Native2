@@ -23,9 +23,9 @@ else
                 </MudAvatar>
             </ActivatorContent>
             <ChildContent>
-                <MudMenuItem OnClick="CopyNickClicked">复制昵称</MudMenuItem>
-                <MudMenuItem OnClick="CopyQQClicked">复制QQ</MudMenuItem>
-                <MudMenuItem OnClick="AtClicked">@@</MudMenuItem>
+                <MudMenuItem OnClick="CopyNickClicked" Icon="@Icons.Material.Filled.ContentCopy">复制昵称</MudMenuItem>
+                <MudMenuItem OnClick="CopyQQClicked" Icon="@Icons.Material.Filled.ContentCopy">复制QQ</MudMenuItem>
+                <MudMenuItem OnClick="AtClicked" Icon="@Icons.Material.Filled.AlternateEmail">@@TA</MudMenuItem>
             </ChildContent>
         </MudMenu>
         <div>
@@ -118,12 +118,12 @@ else
                         }
                     </ActivatorContent>
                     <ChildContent>
-                        <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled">复制</MudMenuItem>
-                        <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled">+1</MudMenuItem>
-                        <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled">@@</MudMenuItem>
-                        <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled">回复</MudMenuItem>
+                        <MudMenuItem OnClick="CopyClicked" Disabled="!CopyEnabled" Icon="@Icons.Material.Filled.ContentCopy">复制</MudMenuItem>
+                        <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled" Icon="@Icons.Material.Filled.PlusOne">复读</MudMenuItem>
+                        <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled" Icon="@Icons.Material.Filled.AlternateEmail">@@TA</MudMenuItem>
+                        <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled" Icon="@Icons.Material.Filled.Reply">回复</MudMenuItem>
                         <MudDivider/>
-                        <MudMenuItem OnClick="RevokeClicked" Disabled="!RevokeEnabled">撤回</MudMenuItem>
+                        <MudMenuItem OnClick="RevokeClicked" Disabled="!RevokeEnabled" Icon="@Icons.Material.Filled.Delete">撤回</MudMenuItem>
                     </ChildContent>
                 </MudMenu>
             </div>
