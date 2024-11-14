@@ -248,7 +248,8 @@
             ParentType = item.Type == ChatHistoryType.Group ? AvatarTypes.QQGroup : AvatarTypes.QQPrivate,
             DisplayName = item.SenderID.ToString(),
             Sending = sending,
-            HistoryId = item.ID
+            HistoryId = item.ID,
+            PluginName = item.PluginName
         };
         r.DetailItemType = item.Type switch
         {

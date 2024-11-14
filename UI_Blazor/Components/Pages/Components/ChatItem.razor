@@ -275,7 +275,11 @@ else
                 name = await ChatHistoryHelper.GetFriendNick(Item.Id);
             }
             Item.DisplayName = name;
-            Item.Avatar.FallbackName = name;
+            if (!string.IsNullOrEmpty(Item.PluginName))
+            {
+                Item.DisplayName += $" [{Item.PluginName}]";
+            }
+            Item.Avatar.FallbackName = Item.DisplayName;
             await InvokeAsync(() => StateHasChanged());
         });
         Task.Run(async () =>

@@ -72,5 +72,7 @@
         public int HistoryId { get; set; }
 
         public AvatarModel Avatar { get; set; } = new AvatarModel();
+
+        public string PluginName { get; set; } = "";
     }
 }
