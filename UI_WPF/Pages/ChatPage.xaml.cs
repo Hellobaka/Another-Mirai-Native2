@@ -192,9 +192,21 @@ namespace Another_Mirai_Native.UI.Pages
             }
             int sendMsgId = 0, sqlId = 0;
             ManualResetEvent sendSignal = new(false);
+            var history = new ChatHistory
+            {
+                Message = message,
+                ParentID = id,
+                SenderID = AppConfig.Instance.CurrentQQ,
+                Type = avatar == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private,
+                MsgId = 0,
+                PluginName = "",
+                Time = DateTime.Now,
+            };
+            sqlId = ChatHistoryHelper.InsertHistory(history);
+
             if (avatar == ChatAvatar.AvatarTypes.QQGroup)
             {
-                sqlId = await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
+                await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
                     itemAdded: (guid) =>
                     {
                         UpdateSendStatus(guid, true);
@@ -215,7 +227,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else
             {
-                sqlId = await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
+                await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
                      itemAdded: (guid) =>
                      {
                          UpdateSendStatus(guid, true);
@@ -483,20 +495,7 @@ namespace Another_Mirai_Native.UI.Pages
                 nick = $"{nick} [{plugin.PluginName}]";
             }
             ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQGroup, itemType);
-            var history = new ChatHistory
-            {
-                Message = msg,
-                ParentID = group,
-                SenderID = qq,
-                Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Group,
-                MsgId = msgId,
-                PluginName = plugin == null ? "" : plugin.PluginName,
-                Time = time,
-            };
-
-            int historyId = ChatHistoryHelper.InsertHistory(history);
-            history.Message = $"{await GetGroupMemberNick(group, qq)}: {msg}";
-            ChatHistoryHelper.UpdateHistoryCategory(history);
+            var history = ChatHistoryHelper.GetHistoriesByMsgId(group, msgId, ChatHistoryType.Group);
             AddOrUpdateGroupChatList(group, qq, msg);
             await Dispatcher.BeginInvoke(() =>
             {
@@ -508,7 +507,7 @@ namespace Another_Mirai_Native.UI.Pages
             });
             itemAdded?.Invoke(item?.GUID);
 
-            return historyId;
+            return history.ID;
         }
 
         /// <summary>
@@ -638,18 +637,7 @@ namespace Another_Mirai_Native.UI.Pages
                 nick = $"{nick} [{plugin.PluginName}]";
             }
             ChatDetailItemViewModel item = BuildChatDetailItem(msgId, sender, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
-            var history = new ChatHistory
-            {
-                Message = msg,
-                ParentID = qq,
-                SenderID = sender,
-                Type = itemType == DetailItemType.Notice ? ChatHistoryType.Notice : ChatHistoryType.Private,
-                MsgId = msgId,
-                PluginName = plugin == null ? "" : plugin.PluginName,
-                Time = time
-            };
-            int logId = ChatHistoryHelper.InsertHistory(history);
-            history.Message = $"{await GetFriendNick(sender)}: {msg}";
+            var history = ChatHistoryHelper.GetHistoriesByMsgId(qq, msgId, ChatHistoryType.Private);
             ChatHistoryHelper.UpdateHistoryCategory(history);
             AddOrUpdatePrivateChatList(qq, sender, msg);
             await Dispatcher.BeginInvoke(() =>
@@ -661,7 +649,7 @@ namespace Another_Mirai_Native.UI.Pages
                 }
             });
             itemAdded?.Invoke(item?.GUID);
-            return logId;
+            return history.ID;
         }
 
         private void AtBtn_Click(object sender, RoutedEventArgs e)
@@ -1149,14 +1137,9 @@ namespace Another_Mirai_Native.UI.Pages
             PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
             PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
             PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
-            PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
-            PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
             PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
             PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
-            PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
-            PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
-            PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
 
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
@@ -1164,30 +1147,6 @@ namespace Another_Mirai_Native.UI.Pages
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
             await LoadChatHistory();
             await ReorderChatList();
-        }
-
-        private void PluginManagerProxy_OnFriendNickChanged(long qq, string nick)
-        {
-            if (FriendInfoCache.TryGetValue(qq, out var info) && info != null)
-            {
-                info.Nick = nick;
-            }
-        }
-
-        private void PluginManagerProxy_OnGroupNameChanged(long group, string name)
-        {
-            if (GroupInfoCache.TryGetValue(group, out var info) && info != null)
-            {
-                info.Name = name;
-            }
-        }
-
-        private void PluginManagerProxy_OnGroupMemberCardChanged(long group, long qq, string card)
-        {
-            if (GroupMemberCache.TryGetValue(group, out var member) && member.TryGetValue(qq, out var info) && info != null)
-            {
-                info.Card = card;
-            }
         }
 
         /// <summary>
@@ -1248,26 +1207,6 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void PluginManagerProxy_OnAdminChanged(long group, long qq, QQGroupMemberType type)
-        {
-            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
-            {
-                if (info.MemberType != QQGroupMemberType.Creator)
-                {
-                    info.MemberType = type;
-                }
-                else
-                {
-                    // 群主 未定义操作
-                }
-            }
-        }
-
-        private void PluginManagerProxy_OnFriendAdded(long qq)
-        {
-            // 额外实现
-        }
-
         private async void PluginManagerProxy_OnGroupAdded(long group, long qq)
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
@@ -1305,7 +1244,6 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
         {
-            ChatHistoryHelper.UpdateHistoryRecall(groupId, msgId, ChatHistoryType.Group, true);
             MsgRecalled?.Invoke(msgId);
         }
 
@@ -1317,7 +1255,6 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
         {
-            ChatHistoryHelper.UpdateHistoryRecall(qq, msgId, ChatHistoryType.Private, true);
             MsgRecalled?.Invoke(msgId);
         }
 

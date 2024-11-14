@@ -275,7 +275,7 @@ namespace Another_Mirai_Native.DB
 
         public static void Initialize()
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (AppConfig.Instance.EnableChat is false || !AppConfig.Instance.IsCore)
             {
                 return;
             }
