@@ -61,9 +61,10 @@ else
                                                 break;
 
                                             case RenderType.Face:
-                                                <MudText Inline>
-                                                    @item.Text
-                                                </MudText>
+                                                if (!item.ImageFailed)
+                                                {
+                                                    <MudImage @onerror="() => OnImageFailed(item)" Src="@($"/qq-face/{item.FaceId}.png")" Style="width:24px;height:24px;transform: translateY(7px);"></MudImage>
+                                                }
                                                 break;
 
                                             case RenderType.Image:
@@ -175,7 +176,6 @@ else
 </style>
 
 @code {
-    // TODO: 元素样式：表情
     // TODO: 图片预览
     [Parameter]
     public ChatItemModel Item { get; set; }
