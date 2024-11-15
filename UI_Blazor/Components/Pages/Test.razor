@@ -9,60 +9,55 @@
 @inject IScrollManager ScrollManager
 @using Another_Mirai_Native.BlazorUI.Components.Pages.Components
 
-<div style="height: 90vh; display: flex; flex-direction: column; padding: 16px;">
+<div style="height: 92vh; display: flex; flex-direction: column; padding: 16px; padding-bottom: 0;">
     <MudGrid>
-        <MudItem sm="12">
-            <MudText>当前测试插件: @(TestingPlugin == null ? "空" : TestingPlugin.PluginName)</MudText>
+        <MudItem xs="12">
+            <div style="display:flex">
+                <MudText>当前测试插件: @(TestingPlugin == null ? "空" : TestingPlugin.PluginName)</MudText>
+                @if(ShowActionButton)
+                {
+                    <MudSpacer />
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.MoreVert" OnClick="@(() => DisplayControlPanel = !DisplayControlPanel)" />
+                }
+            </div>
         </MudItem>
-        <MudItem sm="12" md="2">
-            <MudSwitch @bind-Value="@Group" T="bool" CheckedChanged="TestGroupChanged" Style="margin: 10px;" Color="Color.Primary">使用群组</MudSwitch>
-        </MudItem>
-        <MudItem sm="12" md="5">
-            <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
-        </MudItem>
-        <MudItem sm="12" md="5">
-            <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
+        <MudItem xs="12" Style="padding-top: 5px;margin-bottom: 10px">
+            <MudCollapse Expanded="DisplayControlPanel">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <div style="display: flex;">
+                            <MudSwitch @bind-Value="@Group" T="bool" Color="Color.Primary" Label="使用群组"></MudSwitch>
+                            <MudTextField Style="margin-right: 10px;" @bind-Value="GroupId" Label="群" Variant="Variant.Text"></MudTextField>
+                        </div>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="QQId" Label="QQ" Variant="Variant.Text"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+            </MudCollapse>
         </MudItem>
     </MudGrid>
-    <MudPaper id="chatContainer" style="padding: 10px; flex-grow: 7; height: 100%; overflow: scroll; overflow-x: hidden;" Elevation="3">
-        @foreach(var item in ChatItems)
-        {
-            <ChatItem Item="@item" ReplyEnabled="false" OnAt="ChatItem_At" OnCopy="ChatItem_Copy" OnRepeat="ChatItem_Repeat"/>
-        }
-    </MudPaper>
-    <MudPaper style="padding: 10px; margin-top: 10px;" Elevation="3">
-        <div style="display: flex;">
-            <MudTooltip Text="图片">
-                <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
-                    <ActivatorContent>
-                        <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
-                    </ActivatorContent>
-                </MudFileUpload>
-            </MudTooltip>
-            <MudTooltip Text="At Bot">
-                <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
-            </MudTooltip>
-            <MudTooltip Text="清空">
-                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="ClearSendText"></MudIconButton>
-            </MudTooltip>
-        </div>
-        <div style="display: flex; align-items: center;">
-            <MudTextField id="sendTextInput" @ref="SendTextElement" OnKeyDown="SendTextKeyDown" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本"></MudTextField>
-            <MudIconButton OnClick="@SendTestMessage" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin-right: 5px;" Color="Color.Primary"></MudIconButton>
-        </div>
-    </MudPaper>
+    <ChatMessageDisplay ChatItems="ChatItems" @ref="ChatMessageDisplay" EnableErrorIcon="false"
+    OnAt="ChatItem_At"
+    OnCopy="ChatItem_Copy"
+    OnRepeat="ChatItem_Repeat" />
+
+    <ChatCommandPanel OnMessageSend="SendTestMessage" @ref="MessageCommandPanel"></ChatCommandPanel>
 </div>
 <MudOverlay DarkBackground="true" AutoClose="false" @bind-Visible="Unavailable">
     <MudText>请在插件管理选择一个测试插件</MudText>
 </MudOverlay>
-<script>
-    function getSendTextInput(){
-        return document.getElementById('sendTextInput').value;
-    }
-</script>
+
 @code
 {
-    public bool Group { get; set; } = true;
+    private bool _testGroup;
+    public bool Group {
+        get => _testGroup;
+        set {
+            _testGroup = value;
+            Shared.TestGroup = value;
+        }
+    }
     public long GroupId { get; set; }
     public long QQId { get; set; }
     public string SendText { get; set; } = "";
@@ -71,7 +66,10 @@
     private int MessageHistoryIndex { get; set; } = 0;
     private CQPluginProxy? TestingPlugin { get; set; }
     private bool Unavailable { get{ return TestingPlugin == null; } set { _ = value; } }
-    private MudTextField<string> SendTextElement { get; set; }
+    private ChatMessageDisplay ChatMessageDisplay { get; set; }
+    private ChatCommandPanel MessageCommandPanel { get; set; }
+    private bool DisplayControlPanel { get; set; } = true;
+    private bool ShowActionButton { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -84,8 +82,23 @@
         Group = Shared.TestGroup;
         PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
         PluginManagerProxy.OnTestInvoked += PluginManagerProxy_OnTestInvoked;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
+        Shared.CurrentBreakPointChanged += CurrentBreakPointChanged;
+        CurrentBreakPointChanged(Shared.CurrentBreakPoint);
+    }
+
+    private void CurrentBreakPointChanged(Breakpoint breakpoint)
+    {
+        ShowActionButton = breakpoint switch
+        {
+            Breakpoint.Lg => false,
+            Breakpoint.Xl => false,
+            Breakpoint.Md => false,
+            _ => true
+        };
+        DisplayControlPanel = !ShowActionButton;
+        InvokeAsync(() => StateHasChanged());
     }
 
     private void OnBlazorStopped()
@@ -93,57 +106,10 @@
         Dispose();
     }
 
-    public void TestGroupChanged(bool target)
-    {
-        Shared.TestGroup = Group;
-    }
-
     public void Dispose()
     {
         PluginManagerProxy.OnTestInvoked -= PluginManagerProxy_OnTestInvoked;
-    }
-
-    private async Task AtBotClicked()
-    {
-        await SendTextElement.SetText(await GetRawInputValue() + $" [CQ:at,qq={AppConfig.Instance.CurrentQQ}]");
-    }
-
-    private async void ClearSendText()
-    {
-        ChatItems.Clear();
-        Shared.TestMessages.Clear();
-        await SendTextElement.Clear();
-        await InvokeAsync(() => StateHasChanged());
-    } 
-
-    private async void SendTextKeyDown(KeyboardEventArgs key)
-    {
-        if (key.Key == "Enter")
-        {
-            await SendTestMessage();
-        }
-        else if (key.Key == "ArrowUp")
-        {
-            MessageHistoryIndex++;
-            if (MessageHistoryIndex > SendHistories.Count)
-            {
-                MessageHistoryIndex = SendHistories.Count;
-            }
-            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
-            await SendTextElement.SetText(text);
-        }
-        else if (key.Key == "ArrowDown")
-        {
-            MessageHistoryIndex--;
-            if (MessageHistoryIndex <= 0)
-            {
-                MessageHistoryIndex = 0;
-                await SendTextElement.SetText("");
-                return;
-            }
-            string text = SendHistories[SendHistories.Count - MessageHistoryIndex];
-            await SendTextElement.SetText(text);
-        }
+        Shared.CurrentBreakPointChanged -= CurrentBreakPointChanged;
     }
 
     private async void PluginManagerProxy_OnTestInvoked(string functionName, Dictionary<string, object> obj)
@@ -196,44 +162,8 @@
         await ScrollManager.ScrollToBottomAsync("#chatContainer", ScrollBehavior.Smooth);
     }
 
-    private async Task<string> GetRawInputValue()
+    private async Task SendTestMessage(string msg)
     {
-        return await JS.InvokeAsync<string>("getSendTextInput", "");
-    }
-
-    private async Task UploadFile(IBrowserFile upload)
-    {
-        int minFileSize = 4 * 1024, maxFileSize = 5 * 1024 * 1024;
-        if (upload.Size < minFileSize || upload.Size > maxFileSize)
-        {
-            Snackbar.Add("上传图片文件尺寸不得大于 5MB 且不得小于 4KB", Severity.Error);
-            return;
-        }
-        // byte[] buffer = new byte[upload.Size];
-        // await upload.OpenReadStream().ReadAsync(buffer);
-        string fileName = Path.GetFileName(upload.Name);
-        string imageDirectory = @"data\image\cached";
-        string cqCode = $"[CQ:image,file=cached\\{fileName.Replace(".cqimg", "")}]";
-        string path = Path.Combine(imageDirectory, fileName);
-
-        if (upload.Name.EndsWith("cqimg"))
-        {
-            imageDirectory = @"data\image";
-        }
-
-        if (!File.Exists(path))
-        {
-            Directory.CreateDirectory(imageDirectory);
-            await using FileStream fileStream = new(path, FileMode.Create);
-            await upload.OpenReadStream(maxFileSize).CopyToAsync(fileStream);
-        }
-
-        await SendTextElement.SetText(await GetRawInputValue() + cqCode);
-    }
-
-    private async Task SendTestMessage()
-    {
-        string msg = await GetRawInputValue();
         if (string.IsNullOrEmpty(msg))
         {
             return;
@@ -241,7 +171,7 @@
         await AddChatBlock(msg, "Tester", QQId, DetailItemType.Send);
         CommonConfig.SetConfig("TesterGroup", GroupId, @"conf\Test.json");
         CommonConfig.SetConfig("TesterQQ", QQId, @"conf\Test.json");
-        await SendTextElement.Clear();
+        await MessageCommandPanel.ClearSendText();
         if (SendHistories.Contains(msg))
         {
             SendHistories.Remove(msg);
@@ -252,6 +182,7 @@
         Stopwatch sw = Stopwatch.StartNew();
         bool flag = Group ? SendGroupMessage(msg) : SendPrivateMessage(msg);
         await AddChatBlock($"插件{(flag ? "结束" : "放弃")}了处理({sw.ElapsedMilliseconds}ms)", TestingPlugin?.PluginName, AppConfig.Instance.CurrentQQ, DetailItemType.Receive);
+        MessageCommandPanel.Sending = false;
     }
 
     private bool SendGroupMessage(string msg)
@@ -263,8 +194,7 @@
                 Snackbar.Add($"无法调用 GroupMsg 方法，测试插件为 null", Severity.Error);
                 return false;
             }
-            return PluginManagerProxy.Instance
-                .Event_OnGroupMsg(TestingPlugin, 1, 1, GroupId, QQId, "", msg, 0)
+            return PluginManagerProxy.Instance.Event_OnGroupMsg(TestingPlugin, 1, 1, GroupId, QQId, "", msg, 0)
                 == 1;
         }
         catch (Exception ex)
@@ -284,8 +214,7 @@
                 return false;
             }
 
-            return PluginManagerProxy.Instance
-                .Event_OnPrivateMsg(TestingPlugin, 1, 1, QQId, msg, 0)
+            return PluginManagerProxy.Instance.Event_OnPrivateMsg(TestingPlugin, 1, 1, QQId, msg, 0)
                 == 1;
         }
         catch (Exception ex)
@@ -297,19 +226,17 @@
 
     private async Task ChatItem_At(ChatItemModel item)
     {
-        await AtBotClicked();
-        await SendTextElement.FocusAsync();
+        await MessageCommandPanel.AppendText($"[CQ:at,qq={item.Id}]");
     }
 
     private async Task ChatItem_Copy(ChatItemModel item)
     {
         await JS.InvokeVoidAsync("copyTextToClipboard", item.Message);
-        await SendTextElement.FocusAsync();
+        Snackbar.Add("复制成功", Severity.Success);
     }
 
     private async Task ChatItem_Repeat(ChatItemModel item)
     {
-        await SendTextElement.SetText(item.Message);
-        await SendTextElement.FocusAsync();
+        await SendTestMessage(item.Message);
     }
 }
