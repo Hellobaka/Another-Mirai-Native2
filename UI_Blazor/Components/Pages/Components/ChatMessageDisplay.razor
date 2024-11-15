@@ -9,7 +9,7 @@
     }
     @foreach (var item in ChatItems)
     {
-        <ChatItem Item="@item"
+        <ChatItem Item="@item" EnableErrorIcon="EnableErrorIcon"
             OnAt="OnAt"
             OnCopy="OnCopy"
             OnRepeat="OnRepeat"
@@ -119,6 +119,9 @@
 
     [Parameter]
     public EventCallback<RenderChatItem> OnImagePreview { get; set; }
+
+    [Parameter]
+    public bool EnableErrorIcon { get; set; }
 
     private bool Reloading { get; set; } = false;
     private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden; background-color: var(--mud-palette-background);";

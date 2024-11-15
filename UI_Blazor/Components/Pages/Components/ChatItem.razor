@@ -140,7 +140,7 @@ else
             {
                 <MudProgressCircular Indeterminate Size="Size.Small" />
             }
-            @if (Item.Failed && !Item.Sending)
+            @if (Item.Failed && !Item.Sending && EnableErrorIcon)
             {
                 <MudIconButton Size="Size.Medium" Icon="@Icons.Material.Filled.Error" Color="Color.Error" OnClick="OnResendButtonClick"></MudIconButton>
             }
@@ -176,7 +176,6 @@ else
 </style>
 
 @code {
-    // TODO: 图片预览
     [Parameter]
     public ChatItemModel Item { get; set; }
 
@@ -194,6 +193,9 @@ else
 
     [Parameter]
     public bool RevokeEnabled { get; set; } = true;
+
+    [Parameter]
+    public bool EnableErrorIcon { get; set; } = true;
 
     private bool ShowFallbackName { get; set; } = false;
     private MudImage AvatarImage { get; set; }
