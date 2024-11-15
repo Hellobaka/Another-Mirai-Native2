@@ -1,20 +1,21 @@
 ﻿@page "/plugins"
+@using Another_Mirai_Native.BlazorUI.Components.Layout
 @using Another_Mirai_Native.Config
 @using Another_Mirai_Native.Native
 @using System.Collections.ObjectModel
 @implements IDisposable
 @inject IDialogService DialogService
-@inject NavigationManager NavigationManager
+@inject Shared Shared
 
 <MudGrid Style="padding: 16px;">
-    <MudItem sm="12" md="6">
+    <MudItem xs="12" md="6">
         <MudPaper Elevation="4">
             <MudDataGrid RowStyle="cursor: pointer;" RowClassFunc="@RowClassFunc" Loading="@Loading" FixedHeader="true" Hover="true" SelectOnRowClick="true" SortMode="SortMode.None" Items="CQPlugins" SelectedItem="@SelectedItem" T="CQPluginProxyWrapper" SelectedItemChanged="SelectedItemChanged" MultiSelection="false">
                 <ToolBarContent>
                     <MudText>已加载 @CQPlugins.Count 个插件 已启动 @CQPlugins.Count(x => x.TargetPlugin.Enabled) 个插件</MudText>
                 </ToolBarContent>
                 <Columns>
-                    <PropertyColumn Property="x => x.TargetPlugin.Enabled" Title=" " HeaderStyle="width: 6em;" CellClassFunc="@CellClassFunc">
+                    <PropertyColumn Property="x => x.TargetPlugin.Enabled" Title="插件状态" HeaderStyle="width: 6em;" CellClassFunc="@CellClassFunc">
                         <CellTemplate>
                             <div style="text-align: center; display: flex; justify-content: center; align-items: center;">
                                 @if (context.Item.TargetPlugin.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
@@ -46,82 +47,33 @@
             </div>
         </MudPaper>
     </MudItem>
-    <MudItem sm="12" md="6">
-        <MudPaper Elevation="4">
-            <MudContainer Style="padding: 20px;">
-                @if (SelectedItem != null)
-                {
-                    <MudText Typo="Typo.h5">插件信息</MudText>
-                    <MudText Style="margin-top: 5px;">AppId: @SelectedItem.TargetPlugin.AppInfo.AppId</MudText>
-                    <MudText Style="margin-top: 5px;">作者: @SelectedItem.TargetPlugin.AppInfo.author</MudText>
-                    <MudText Style="margin-top: 5px;">版本: @SelectedItem.TargetPlugin.AppInfo.version</MudText>
-
-                    <MudText Typo="Typo.h5" Style="margin-top: 15px;">插件描述</MudText>
-                    <MudText Style="margin-top: 5px;">@SelectedItem.TargetPlugin.AppInfo.description</MudText>
-
-                    <MudText Typo="Typo.h5" Style="margin-top: 15px;">插件权限</MudText>
-                    <MudList T="string" Dense="true">
-                        @foreach (var item in SelectedItem.TargetPlugin.AppInfo.auth)
-                        {
-                            <MudListItem>@AuthChineseName[item]</MudListItem>
-                        }
-                    </MudList>
-
-                    <div style="margin: 10px;display: flex;justify-content: flex-start;align-content: center;align-items: center;">
-                        <MudButton Color="Color.Primary" @onclick="ToggleEnableClick">
-                            <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" style="@(ToggleEnableRunningStatus ? "" : "display: none;")" />
-                            @(SelectedPlugin.Enabled ? "禁用" : "启用")
-                        </MudButton>
-                        <MudButton Color="Color.Secondary" @onclick="TestClick">测试</MudButton>
-                        <MudButton Color="Color.Info" @onclick="ReloadClick">
-                            <MudProgressCircular Color="Color.Info" Size="Size.Small" Indeterminate="true" style="@(ReloadRunningStatus ? "" : "display: none;")" />
-                            重载
-                        </MudButton>
-                    </div>
-                }
-                else
-                {
-                    <MudText Align="Align.Center" Style="margin: 100px;">从左侧点击一个插件以浏览信息</MudText>
-                }
-            </MudContainer>
-        </MudPaper>
-    </MudItem>
+    @if (ShowActionDrawer)
+    {
+        <MudDrawer Width="80%" @bind-Open="@ActionDrawerOpen" Anchor="@Anchor.Right" Elevation="10" Variant="@DrawerVariant.Temporary" OverlayAutoClose="true">
+            <div style="padding: 16px;">
+                <PluginManageDrawer CurrentPlugin="SelectedItem" />
+            </div>
+        </MudDrawer>
+    }
+    else 
+    {
+        <MudItem xs="12" md="6">
+            <MudPaper Elevation="4">
+                <MudContainer Style="padding: 20px;">
+                    <PluginManageDrawer CurrentPlugin="SelectedItem" />
+                </MudContainer>
+            </MudPaper>
+        </MudItem>
+    }
 </MudGrid>
 
 @code {
     private ObservableCollection<CQPluginProxyWrapper> CQPlugins { get; set; } = new();
     private CQPluginProxyWrapper SelectedItem { get; set; }
     private bool Loading { get; set; }
-    private bool ToggleEnableRunningStatus { get; set; }
     private bool ReloadAllRunningStatus { get; set; }
-    private bool ReloadRunningStatus { get; set; }
-    private Dictionary<int, string> AuthChineseName { get; set; } = new() {
-            {20, "[敏感]取Cookies"},
-            {30, "接收语音"},
-            {101, "发送群消息"},
-            {103, "发送讨论组消息"},
-            {106, "发送私聊消息"},
-            {110, "[敏感]发送赞"},
-            {120, "置群员移除"},
-            {121, "置群员禁言"},
-            {122, "置群管理员"},
-            {123, "置全群禁言"},
-            {124, "置匿名群员禁言"},
-            {125, "置群匿名设置"},
-            {126, "置群成员名片"},
-            {127, "[敏感]置群退出"},
-            {128, "置群成员专属头衔"},
-            {130, "取群成员信息"},
-            {131, "取陌生人信息"},
-            {132, "取群信息"},
-            {140, "置讨论组退出"},
-            {150, "置好友添加请求"},
-            {151, "置群添加请求"},
-            {160, "取群成员列表"},
-            {161, "取群列表"},
-            {162, "取好友列表"},
-            {180, "撤回消息"},
-        };
+    private bool ShowActionDrawer { get; set; }
+    private bool ActionDrawerOpen { get; set; }
     private CQPluginProxy SelectedPlugin => SelectedItem?.TargetPlugin;
 
     protected override void OnInitialized()
@@ -133,15 +85,29 @@
         PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
 
+        Shared.CurrentBreakPointChanged += CurrentBreakPointChanged;
+        CurrentBreakPointChanged(Shared.CurrentBreakPoint);
         LoadPluginList();
     }
 
     private void OnBlazorStopped()
     {
         Dispose();
+    }
+
+    private void CurrentBreakPointChanged(Breakpoint breakpoint)
+    {
+        ShowActionDrawer = breakpoint switch
+        {
+            Breakpoint.Lg => false,
+            Breakpoint.Xl => false,
+            Breakpoint.Md => false,
+            _ => true
+        };
+        ActionDrawerOpen = false;
     }
 
     private void LoadPluginList()
@@ -159,7 +125,7 @@
         PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
         PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
     }
 
     private void SelectedItemChanged(CQPluginProxyWrapper selected)
@@ -173,6 +139,7 @@
             selected.Selected = true;
             SelectedItem = selected;
         }
+        ActionDrawerOpen = true;
     }
 
     private async void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
@@ -202,88 +169,6 @@
     {
         return item.Selected ? "mud-primary-text" : "";
     };
-
-    private async void ToggleEnableClick()
-    {
-        if (SelectedItem == null)
-        {
-            return;
-        }
-        bool? r = await DialogService.ShowMessageBox("结束进程", $"确认要{(SelectedPlugin.Enabled ? "禁用" : "启用")}插件 {SelectedPlugin.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
-        if (r == null || !r.Value)
-        {
-            return;
-        }
-
-        ToggleEnableRunningStatus = true;
-        bool toggleSuccess = true;
-        await Task.Run(() =>
-        {
-            bool success = PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
-            if (!success)
-            {
-                ToggleEnableRunningStatus = false;
-                toggleSuccess = false;
-                return;
-            }
-            if (SelectedPlugin.Enabled)
-            {
-                AppConfig.Instance.AutoEnablePlugin.Add(SelectedPlugin.PluginName);
-            }
-            else
-            {
-                AppConfig.Instance.AutoEnablePlugin.Remove(SelectedPlugin.PluginName);
-            }
-            AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
-            AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
-            ToggleEnableRunningStatus = false;
-        });
-        if (!toggleSuccess)
-        {
-            await DialogService.ShowMessageBox("哎呀", "切换插件状态失败了", options: new DialogOptions { FullWidth = true });
-        }
-        await InvokeAsync(() => StateHasChanged());
-    }
-
-    private async void TestClick()
-    {
-        if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode && !(await DialogService.ShowMessageBox("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true }) ?? false))
-        {
-            return;
-        }
-        if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode)
-        {
-            AppConfig.Instance.TestingAuthCode = SelectedPlugin.AppInfo.AuthCode;
-            NavigationManager.NavigateTo("/test");
-        }
-        else
-        {
-            AppConfig.Instance.TestingAuthCode = 0;
-            await DialogService.ShowMessageBox("测试已停止", "", options: new DialogOptions { FullWidth = true });
-        }
-        await InvokeAsync(() => StateHasChanged());
-    }
-
-    private async void ReloadClick()
-    {
-        bool? result = await DialogService.ShowMessageBox("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
-        if (result == null || !result.Value)
-        {
-            return;
-        }
-        if (SelectedPlugin.Enabled == false)
-        {
-            await DialogService.ShowMessageBox("嗯？", $"{SelectedPlugin.PluginName} 处于禁用状态，无法重启");
-            return;
-        }
-        ReloadRunningStatus = true;
-        await Task.Run(() =>
-        {
-            PluginManagerProxy.Instance.ReloadPlugin(SelectedPlugin);
-            ReloadRunningStatus = false;
-        });
-        await InvokeAsync(() => StateHasChanged());
-    }
 
     private async void ReloadAllClick()
     {

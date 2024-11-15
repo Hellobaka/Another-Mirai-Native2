@@ -5,6 +5,8 @@
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @implements IDisposable
+@inject IBrowserViewportService BrowserViewportService
+@implements IBrowserViewportObserver
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" @ref="@_mudThemeProvider" />
 <MudDialogProvider />
@@ -18,7 +20,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.BrightnessMedium" @onclick="ToggleTheme" />
         <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.ExitToApp" @onclick="Logout" />
     </MudAppBar>
-    <MudDrawer Variant="@DrawerVariant.Mini" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer Variant="@CurrentDrawerVariant" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />            
         <MudSpacer></MudSpacer>
         <MudNavMenu Bordered="true" Color="Color.Primary" Rounded="false">
@@ -41,6 +43,27 @@
     public static bool _drawerOpen = false;
     private bool _isDarkMode = true;
     private MudThemeProvider _mudThemeProvider;
+    private DrawerVariant CurrentDrawerVariant { get; set; } = DrawerVariant.Mini;
+    Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+    ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+    {
+        ReportRate = 250,
+        NotifyOnBreakpointOnly = true
+    };
+
+    Task IBrowserViewportObserver.NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs e)
+    {
+        Shared.CurrentBreakPoint = e.Breakpoint;
+        CurrentDrawerVariant = e.Breakpoint switch
+        {
+            Breakpoint.Lg => DrawerVariant.Mini,
+            Breakpoint.Xl => DrawerVariant.Mini,
+            Breakpoint.Md => DrawerVariant.Mini,
+            _ => DrawerVariant.Temporary
+        };
+        Shared.TriggerBreakPointChanged(e.Breakpoint);
+        return InvokeAsync(StateHasChanged);
+    }
 
     protected override void OnInitialized()
     {
@@ -48,8 +71,8 @@
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
         LogHandler.OnErrorLogReceived -= OnErrorLogReceived;
         LogHandler.OnErrorLogReceived += OnErrorLogReceived;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
     }
 
     private void OnBlazorStopped()
@@ -60,8 +83,9 @@
     public void Dispose()
     {
         AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
         LogHandler.OnErrorLogReceived -= OnErrorLogReceived;
+        BrowserViewportService.UnsubscribeAsync(this);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -76,6 +100,7 @@
             {
                 await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);                
             }
+            await BrowserViewportService.SubscribeAsync(this, fireImmediately: true);
         }
 
         // if (firstRender)
