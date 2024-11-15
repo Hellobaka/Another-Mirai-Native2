@@ -43,7 +43,7 @@
     public static bool _drawerOpen = false;
     private bool _isDarkMode = true;
     private MudThemeProvider _mudThemeProvider;
-    private DrawerVariant CurrentDrawerVariant { get; set; } = DrawerVariant.Mini;
+    private DrawerVariant CurrentDrawerVariant { get; set; } = DrawerVariant.Persistent;
     Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
     ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
     {
