@@ -67,12 +67,10 @@
 
     protected override void OnInitialized()
     {
-        AuthService.OnAuthChanged -= AuthService_OnAuthChanged;
         AuthService.OnAuthChanged += AuthService_OnAuthChanged;
-        LogHandler.OnErrorLogReceived -= OnErrorLogReceived;
         LogHandler.OnErrorLogReceived += OnErrorLogReceived;
-        BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
         BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
+        LogHandler.StartSaveLogs();
     }
 
     private void OnBlazorStopped()

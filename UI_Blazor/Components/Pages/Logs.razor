@@ -58,15 +58,15 @@
 
 <style>
     .mud-toolbar.mud-toolbar-gutters.mud-table-toolbar {
-        z-index: 10;
-        top: var(--mud-appbar-height);
-        background-color: var(--mud-palette-surface);
-        display: block;
-        height: auto;
-        position: sticky;
+    z-index: 10;
+    top: var(--mud-appbar-height);
+    background-color: var(--mud-palette-surface);
+    display: block;
+    height: auto;
+    position: sticky;
     }
     .mud-table-container {
-        height: calc(94vh - var(--mud-appbar-height) - 78px);
+    height: calc(94vh - var(--mud-appbar-height) - 78px);
     }
 </style>
 
@@ -91,7 +91,6 @@
     protected override void OnInitialized()
     {
         AutoScroll = Shared.AutoScroll;
-        LogHandler.StartSaveLogs();
         LogHandler.Logs.CollectionChanged += OnLogHandlerLogChanged;
         LogHelper.LogStatusUpdated += OnLogStatusUpdated;
         BlazorUI.Entry_Blazor.OnBlazorServiceStopped += OnBlazorStopped;
@@ -162,6 +161,7 @@
             TotalItem++;
         }
         await InvokeAsync(() => StateHasChanged());
+        DelayScrollToBottom(50);
     }
 
     private Func<LogDisplay, string> _cellClassFunc => (x) =>
