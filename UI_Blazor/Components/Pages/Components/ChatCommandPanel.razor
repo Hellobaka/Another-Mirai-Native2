@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 
 <InputFile OnChange="@OnNativeUpload" @ref="InputFile" id="nativeUpload" style="display: none" />
-<MudPaper style="padding: 10px; margin-top: 10px; position: relative; background-color: var(--mud-palette-background);" Elevation="3">
+<MudPaper style="padding: 10px; padding-bottom: 0; margin-top: 10px; position: relative; background-color: var(--mud-palette-background);" Elevation="3">
     <div style="display: flex;">
         <MudTooltip Text="图片">
             <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
@@ -20,7 +20,7 @@
         </MudTooltip>
     </div>
     <div style="display: flex; align-items: center;">
-        <MudTextField Disabled="Sending" id="sendTextInput" Lines="3" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="Shift + Enter换行"></MudTextField>
+        <MudTextField Disabled="Sending" id="sendTextInput" Lines="1" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="Shift + Enter换行"></MudTextField>
         <MudIconButton Disabled="Sending" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin: 6px 0 22px 6px;" Color="Color.Primary" OnClick="OnSendButtonClick"></MudIconButton>
     </div>
     <MudOverlay Visible="@Sending" DarkBackground="true" Absolute="true">
