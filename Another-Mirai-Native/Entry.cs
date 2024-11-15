@@ -19,6 +19,8 @@ namespace Another_Mirai_Native
 
         private static ToolStripMenuItem TaskBarMenuParent { get; set; }
 
+        private static IntPtr ConsoleHandle { get; set; }
+
         public static event Action ServerStarted;
 
         // 定义启动参数:
@@ -124,6 +126,7 @@ namespace Another_Mirai_Native
                         }
                     }
                 }
+                LogHelper.Info("加载插件", $"插件启动完成，开始处理事件");
                 PluginManagerProxy.Instance.OnPluginLoaded();
             }
             else
@@ -168,6 +171,7 @@ namespace Another_Mirai_Native
             {
                 UIThread = new Thread(() =>
                 {
+                    ConsoleHandle = WinNative.GetConsoleWindow();
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     WinNative.SetProcessDPIAware();
@@ -182,7 +186,6 @@ namespace Another_Mirai_Native
                     menu.Items.Add(new ToolStripMenuItem { Text = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
                     menu.Items.Add("-");
                     TaskBarMenuParent = new ToolStripMenuItem() { Text = "应用" };
-                    RebuildTaskBarMenu();
                     menu.Items.Add(TaskBarMenuParent);
                     menu.Items.Add("-");
                     ToolStripMenuItem reloadItem = new() { Text = "重载插件" };
@@ -212,8 +215,10 @@ namespace Another_Mirai_Native
 
                     NotifyIcon.Text = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})\n已启用 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件";
                     NotifyIcon.Visible = true;
-                    PluginManagerProxy.OnPluginEnableChanged -= (_) => RebuildTaskBarMenu();
-                    PluginManagerProxy.OnPluginEnableChanged += (_) => RebuildTaskBarMenu();
+                    NotifyIcon.DoubleClick += (_, _) => WinNative.SetForegroundWindow(ConsoleHandle);
+                    RebuildTaskBarMenu();
+                    PluginManagerProxy.OnPluginEnableChanged -= (_) => Invoke(RebuildTaskBarMenu);
+                    PluginManagerProxy.OnPluginEnableChanged += (_) => Invoke(RebuildTaskBarMenu);
                     Application.Run();
                 });
                 UIThread.SetApartmentState(ApartmentState.STA);
@@ -223,7 +228,8 @@ namespace Another_Mirai_Native
 
         private static void RebuildTaskBarMenu()
         {
-            Invoke(TaskBarMenuParent.DropDownItems.Clear);
+            NotifyIcon.Text = $"{AppConfig.Instance.CurrentNickName}({AppConfig.Instance.CurrentQQ})\n已启用 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件";
+            TaskBarMenuParent.DropDownItems.Clear();
             foreach (var item in PluginManagerProxy.Proxies.OrderBy(x => x.PluginName))
             {
                 ToolStripMenuItem menuItem = new() { Text = $"{item.PluginName}", Tag = item };
@@ -233,7 +239,7 @@ namespace Another_Mirai_Native
                 {
                     await Task.Run(() =>
                     {
-                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin || plugin.Enabled)
                         {
                             return;
                         }
@@ -260,7 +266,7 @@ namespace Another_Mirai_Native
                 {
                     await Task.Run(() =>
                     {
-                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin)
+                        if (sender is not ToolStripMenuItem selectItem || selectItem.Tag is not CQPluginProxy plugin || !plugin.Enabled)
                         {
                             return;
                         }
@@ -311,7 +317,8 @@ namespace Another_Mirai_Native
                     };
                     menuItem.DropDownItems.Add(subMenuItem);
                 }
-                Invoke(() => TaskBarMenuParent.DropDownItems.Add(menuItem));
+
+                TaskBarMenuParent.DropDownItems.Add(menuItem);
             }
         }
 
