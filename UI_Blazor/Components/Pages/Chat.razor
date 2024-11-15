@@ -34,19 +34,19 @@
                     <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
                 </div>
                 <ChatMessageDisplay @ref="ChatMessageDisplay"
-                ChatItems="Messages"
-                OnLoadAvaliable="LoadMessageHistoryNextPage"
-                OnAt="OnChatItemAt"
-                OnCopy="OnChatItemCopy"
-                OnRepeat="OnChatItemRepeat"
-                OnReply="OnChatItemReply"
-                OnResend="OnChatItemResend"
-                OnAtElementClicked="OnAtElementClicked"
-                OnReplyJumpReuquest="OnReplyJumpReuquest"
-                OnCopyNick="OnCopyNick"
-                OnCopyQQ="OnCopyQQ"
-                OnRevoke="OnRevoke"
-                OnImagePreview="OnImagePreview"></ChatMessageDisplay>
+                    ChatItems="Messages"
+                    OnLoadAvaliable="LoadMessageHistoryNextPage"
+                    OnAt="OnChatItemAt"
+                    OnCopy="OnChatItemCopy"
+                    OnRepeat="OnChatItemRepeat"
+                    OnReply="OnChatItemReply"
+                    OnResend="OnChatItemResend"
+                    OnAtElementClicked="OnAtElementClicked"
+                    OnReplyJumpReuquest="OnReplyJumpReuquest"
+                    OnCopyNick="OnCopyNick"
+                    OnCopyQQ="OnCopyQQ"
+                    OnRevoke="OnRevoke"
+                    OnImagePreview="OnImagePreview"></ChatMessageDisplay>
                 <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">

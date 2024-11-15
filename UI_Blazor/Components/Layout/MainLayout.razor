@@ -13,7 +13,7 @@
 <MudSnackbarProvider />
 <MudPopoverProvider />
 <MudLayout>
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="1" Dense="@(CurrentDrawerVariant == DrawerVariant.Temporary)">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">AMN2 WebUI</MudText>
         <MudSpacer />

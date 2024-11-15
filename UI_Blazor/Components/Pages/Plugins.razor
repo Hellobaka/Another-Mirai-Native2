@@ -126,6 +126,7 @@
         PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
         PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
         BlazorUI.Entry_Blazor.OnBlazorServiceStopped -= OnBlazorStopped;
+        Shared.CurrentBreakPointChanged -= CurrentBreakPointChanged;
     }
 
     private void SelectedItemChanged(CQPluginProxyWrapper selected)
