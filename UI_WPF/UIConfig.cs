@@ -32,8 +32,6 @@ namespace Another_Mirai_Native.UI
 
         public string WindowMaterial { get; set; } = "None";
 
-        public bool ChatEnabled { get; set; } = false;
-
         public bool HardwareRender { get; set; } = false;
 
         public int MessageContainerMaxCount { get; set; } = 15;
@@ -58,7 +56,6 @@ namespace Another_Mirai_Native.UI
             LogAutoScroll = GetConfig("LogAutoScroll", true);
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
-            ChatEnabled = GetConfig("ChatEnabled", false);
             HardwareRender = GetConfig("HardwareRender", false);
             AutoStartup = GetConfig("AutoStartup", false);
             AutoCloseWindow = GetConfig("AutoCloseWindow", false);

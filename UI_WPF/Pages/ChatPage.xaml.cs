@@ -1111,7 +1111,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (UIConfig.Instance.ChatEnabled is false)
+            if (AppConfig.Instance.EnableChat is false)
             {
                 DisableDisplay.Visibility = Visibility.Visible;
                 MainContent.Visibility = Visibility.Collapsed;

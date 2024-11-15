@@ -1,4 +1,5 @@
-﻿using ModernWpf;
+﻿using Another_Mirai_Native.Config;
+using ModernWpf;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -55,7 +56,7 @@ namespace Another_Mirai_Native.UI.Pages
             LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             HardwareRender.IsOn = UIConfig.Instance.HardwareRender;
-            ChatEnableSelector.IsOn = UIConfig.Instance.ChatEnabled;
+            ChatEnableSelector.IsOn = AppConfig.Instance.EnableChat;
             ShowBalloonTip.IsOn = UIConfig.Instance.ShowBalloonTip;
             ShowWhenError.IsOn = UIConfig.Instance.PopWindowWhenError;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
