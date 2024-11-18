@@ -113,7 +113,6 @@ namespace Another_Mirai_Native.RPC.Pipe
                     if (bytesRead > 0)
                     {
                         string messagePart = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        LogHelper.Debug("收到客户端消息", messagePart);
 
                         stringBuilder.Append(messagePart);
 
@@ -127,6 +126,7 @@ namespace Another_Mirai_Native.RPC.Pipe
                             // 移除已处理的消息部分
                             completeMessage = completeMessage.Substring(nullCharIndex + 1);
 
+                            LogHelper.Debug("收到客户端消息", message);
                             // 处理消息
                             new Thread(() => HandleClientMessage(message, pipe)).Start();
                         }

@@ -204,12 +204,15 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogHelper_LogStatusUpdated(int logId, string status)
         {
-            LogModelWrapper log = LogCollections.FirstOrDefault(x => x.id == logId);
-            if (log != null)
+            Dispatcher.BeginInvoke(() =>
             {
-                log.status = status;
-                log.InvokePropertyChanged("status");
-            }
+                LogModelWrapper log = LogCollections.FirstOrDefault(x => x.id == logId);
+                if (log != null)
+                {
+                    log.status = status;
+                    log.InvokePropertyChanged("status");
+                }
+            });
         }
 
         private void LogPage_Loaded(object sender, RoutedEventArgs e)

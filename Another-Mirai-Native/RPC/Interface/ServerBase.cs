@@ -194,12 +194,7 @@ namespace Another_Mirai_Native.RPC.Interface
                     break;
             }
 
-            if (WaitingMessage.ContainsKey(result.GUID))
-            {
-                WaitingMessage[result.GUID] = result;
-                WaitingMessage[result.GUID].Success = true;
-                RequestWaiter.TriggerByKey(result.GUID);
-            }
+            RequestWaiter.TriggerByKey(result.GUID, result);
         }
 
         public int? InvokeCQPAPI(CQPImplementation cqp, string functionName, params object[] args)
@@ -224,17 +219,15 @@ namespace Another_Mirai_Native.RPC.Interface
             }
             Stopwatch stopwatch = Stopwatch.StartNew();
             string guid = Guid.NewGuid().ToString();
-            WaitingMessage.Add(guid, new InvokeResult());
-            LogHelper.Debug($"InvokeEvent_{eventType}", $"GUID = {guid}");
+            LogHelper.Debug($"InvokeEvent_{eventType}", $"GUID = {guid} 插件 = {target.PluginName}");
 
             if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, () =>
                     {
                         SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
-                    }, out _)
-                    && WaitingMessage.TryGetValue(guid, out InvokeResult result))
+                    }, out object obj) && obj is InvokeResult result)
             {
-                WaitingMessage.Remove(guid);
-                if (result.Success && int.TryParse(result.Result.ToString(), out int r))
+                LogHelper.Debug($"InvokeEvent_{eventType}", $"结束 GUID = {guid} 插件 = {target.PluginName}");
+                if (int.TryParse(result.Result.ToString(), out int r))
                 {
                     if (AppConfig.Instance.DebugMode)
                     {
@@ -258,6 +251,7 @@ namespace Another_Mirai_Native.RPC.Interface
                 {
                     LogHelper.WriteLog(LogLevel.Debug, logOrigin: "AMN框架", "插件耗时", $"{target.PluginName} 处理 {eventType} 事件耗时 {stopwatch.ElapsedMilliseconds} ms");
                 }
+                LogHelper.Debug("等待失败", $"GUID={guid}");
                 return null;
             }
         }
