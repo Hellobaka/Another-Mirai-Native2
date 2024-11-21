@@ -31,17 +31,27 @@
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+        <TextBlock Padding="12,12,0,0" Text="{Binding LogCollections.Count, StringFormat={}{0} 条日志}" />
         <ListView
             x:Name="LogView"
+            Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Stretch"
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding LogCollections}"
             SelectionMode="Single"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
             Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityConverter}}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.View>
                 <GridView x:Name="LogGridView" ui:ScrollViewerHelper.AutoHideScrollBars="True">
                     <GridViewColumn Width="Auto" Header="时间">
@@ -71,19 +81,28 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Row="1" Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityConverter}}">
+        <Grid Grid.Row="2" Visibility="{Binding PageEnabled, Converter={StaticResource BoolVisibilityConverter}}">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button
                 x:Name="ClearBtn"
-                Grid.Column="1"
+                Grid.Column="2"
                 Margin="5"
                 HorizontalAlignment="Stretch"
                 Click="ClearBtn_Click"
                 Style="{StaticResource AccentButtonStyle}">
                 清空
+            </Button>
+            <Button
+                x:Name="ScrollToBottomButton"
+                Grid.Column="1"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                Click="ScrollToBottomButton_Click">
+                滚动至底
             </Button>
             <Button
                 x:Name="SaveBtn"

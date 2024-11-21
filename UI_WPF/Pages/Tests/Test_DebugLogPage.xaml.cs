@@ -109,5 +109,10 @@ namespace Another_Mirai_Native.UI.Pages
             File.WriteAllText(Path.Combine(dir, fileName), sb.ToString());
             DialogHelper.ShowSimpleDialog("保存调试日志", $"保存成功，路径: {Path.Combine(dir, fileName)}");
         }
+
+        private void ScrollToBottomButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectLastLog();
+        }
     }
 }
