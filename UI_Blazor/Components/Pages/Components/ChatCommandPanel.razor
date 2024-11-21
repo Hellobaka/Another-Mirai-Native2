@@ -3,30 +3,47 @@
 @inject IJSRuntime JS
 
 <InputFile OnChange="@OnNativeUpload" @ref="InputFile" id="nativeUpload" style="display: none" />
-<MudPaper style="padding: 10px; padding-bottom: 0; margin-top: 10px; position: relative; background-color: var(--mud-palette-background);" Elevation="3">
+<MudPaper Class="@(Dense ? "command-dense" : "")" style="padding: 10px; padding-bottom: 0; position: relative; background-color: var(--mud-palette-background);">
     <div style="display: flex;">
-        <MudTooltip Text="图片">
-            <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
-                <ActivatorContent>
-                    <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
-                </ActivatorContent>
-            </MudFileUpload>
-        </MudTooltip>
-        <MudTooltip Text="At Bot">
-            <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
-        </MudTooltip>
-        <MudTooltip Text="清空">
-            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="ClearSendText"></MudIconButton>
-        </MudTooltip>
+        <MudCollapse Expanded="@(!Dense || ShowCommandPanel)">
+            <MudTooltip Text="图片">
+                <MudFileUpload Style="margin-top: 0;" T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadFile" MaximumFileCount="1">
+                    <ActivatorContent>
+                        <MudIconButton Icon="@Icons.Material.Filled.Image" Color="Color.Secondary"></MudIconButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+            </MudTooltip>
+            <MudTooltip Text="At Bot">
+                <MudIconButton Icon="@Icons.Material.Filled.AlternateEmail" Color="Color.Secondary" OnClick="AtBotClicked"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="清空">
+                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="ClearSendText"></MudIconButton>
+            </MudTooltip>
+        </MudCollapse>
     </div>
     <div style="display: flex; align-items: center;">
-        <MudTextField Disabled="Sending" id="sendTextInput" Lines="1" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="Shift + Enter换行"></MudTextField>
-        <MudIconButton Disabled="Sending" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin: 6px 0 22px 6px;" Color="Color.Primary" OnClick="OnSendButtonClick"></MudIconButton>
+        <MudTextField Disabled="Sending" id="sendTextInput" Lines="1" AutoGrow MaxLines="5" Immediate KeyDownPreventDefault="PreventDefault" OnKeyDown="SendTextKeyDown" @ref="SendTextElement" T="string" AutoFocus @bind-Value="@SendText" Variant="Variant.Outlined" Label="发送文本" HelperText="@(Dense ? "": "Shift + Enter换行")"></MudTextField>
+        <MudIconButton Class="@(Dense ? "button-dense" : "")" Disabled="Sending" Size="Size.Medium" Icon="@Icons.Material.Filled.Send" Style="margin: 6px 0 22px 0;" Color="Color.Primary" OnClick="OnSendButtonClick"></MudIconButton>
+        @if (Dense)
+        {
+            <MudIconButton Class="@(Dense ? "button-dense" : "")" Size="Size.Medium" Icon="@Icons.Material.Filled.Add" Style="margin: 6px 0 22px 0;" Color="Color.Primary" OnClick="@(() => ShowCommandPanel = !ShowCommandPanel)"></MudIconButton>
+        }
     </div>
     <MudOverlay Visible="@Sending" DarkBackground="true" Absolute="true">
         <MudProgressCircular Color="Color.Primary" Value="@UploadProgress" />
     </MudOverlay>
 </MudPaper>
+<style>
+    .button-dense {
+        margin: 6px 0 0px 0 !important;
+    }
+
+    .command-dense {
+        width: 100vw;
+        position: sticky;
+        bottom: 10px;
+    }
+</style>
 <script>
     async function handleUpload(){
         try {
@@ -78,6 +95,10 @@
     private InputFile InputFile { get; set; } = new();
     private double UploadProgress { get; set; } = 0;
     public bool Sending { get; set; }
+    public bool ShowCommandPanel { get; set; }
+    
+    [Parameter]
+    public bool Dense { get; set; }
 
     [Parameter]
     public EventCallback<string> OnMessageSend { get; set; }

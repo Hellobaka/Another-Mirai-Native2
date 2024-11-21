@@ -1,6 +1,6 @@
 ﻿@inject IScrollManager ScrollManager
 @inject IJSRuntime JS
-<MudPaper id="chatContainer" style="@BaseStyle" Elevation="3">
+<MudPaper id="chatContainer" style="padding: 10px; overflow: scroll; flex-grow: 1; overflow-x: hidden; background-color: var(--mud-palette-background);">
     @if (Reloading)
     {
         <div style="display: flex; justify-content: center;">
@@ -124,7 +124,6 @@
     public bool EnableErrorIcon { get; set; }
 
     private bool Reloading { get; set; } = false;
-    private string BaseStyle { get; set; } = "padding: 10px; flex-grow: 7; overflow: scroll; overflow-x: hidden; background-color: var(--mud-palette-background);";
     private DotNetObjectReference<ChatMessageDisplay>? IntercallInstance{ get; set; }
 
     protected override void OnAfterRender(bool firstRender)

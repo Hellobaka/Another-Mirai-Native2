@@ -12,29 +12,47 @@
 @implements IDisposable
 
 <div style="display: flex; height: calc(100vh - var(--mud-appbar-height)); position: relative;">
-    <div id="ChatHistoryList">
-        <MudTextField T="string" Label="检索" Variant="Variant.Filled"></MudTextField>
-        <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValueChanged="SelectedHistoryItemChanged" @ref="ChatHistoryList" SelectionMode="SelectionMode.SingleSelection" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
-            @foreach (var item in HistoryItems)
-            {
-                <MudListItem @key="item" T="ChatHistoryItem" Value="item" Style="cursor: default">
-                    <HistoryItem Item="@item" />
-                </MudListItem>
-            }
-        </MudList>
-        <div id="Shinker" @onclick="ShinkerClicked">
-            &lt;
+    @if(ShowHistoryDrawer)
+    {
+        <MudDrawer Width="80%" Variant="DrawerVariant.Temporary" OverlayAutoClose @bind-Open="HistoryDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+            <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValue="SelectedHistoryItem" SelectedValueChanged="SelectedHistoryItemChanged" @ref="ChatHistoryList" SelectionMode="SelectionMode.SingleSelection" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
+                @foreach (var item in HistoryItems)
+                {
+                    <MudListItem @key="item" T="ChatHistoryItem" Value="item" Style="cursor: default">
+                        <HistoryItem Item="@item" />
+                    </MudListItem>
+                }
+            </MudList>
+        </MudDrawer>
+    }
+    else {
+        <div id="ChatHistoryList">
+            <MudList T="ChatHistoryItem" Color="Color.Primary" SelectedValue="SelectedHistoryItem" SelectedValueChanged="SelectedHistoryItemChanged" @ref="ChatHistoryList" SelectionMode="SelectionMode.SingleSelection" Style="max-height: calc(93vh - var(--mud-appbar-height)); overflow: auto;">
+                @foreach (var item in HistoryItems)
+                {
+                    <MudListItem @key="item" T="ChatHistoryItem" Value="item" Style="cursor: default">
+                        <HistoryItem Item="@item" />
+                    </MudListItem>
+                }
+            </MudList>
+            <div id="Shinker" @onclick="ShinkerClicked">
+                &lt;
+            </div>
         </div>
-    </div>
+    }
     <div id="ChatMainContent">
         @if (SelectedHistoryItem != null)
         {
-            <div style="height: calc(100vh - var(--mud-appbar-height)); display: flex; flex-direction: column;">
-                <div style="height: 62px; background-color: var(--mud-palette-background-gray);">
-                    <MudText Typo="Typo.h5" Style="line-height: 65px; margin-left: 16px;">@SelectedHistoryItem.Name</MudText>
+            <div class="@(ShowHistoryDrawer ? "container-dense" : "")" style="height: calc(100vh - var(--mud-appbar-height)); display: flex; flex-direction: column;">
+                <div class="@(ShowHistoryDrawer ? "dense" : "")" style="min-height: 70px; background-color: var(--mud-palette-background-gray); display: flex; align-items: center;">
+                    @if (ShowHistoryDrawer)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Menu" Style="margin-left: 10px;" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => HistoryDrawerOpen = !HistoryDrawerOpen)" />
+                    }
+                    <MudText Typo="Typo.h5" Style="margin-left: 10px;">@SelectedHistoryItem.Name</MudText>
                 </div>
                 <ChatMessageDisplay @ref="ChatMessageDisplay"
-                    ChatItems="Messages"
+                ChatItems="Messages"
                     OnLoadAvaliable="LoadMessageHistoryNextPage"
                     OnAt="OnChatItemAt"
                     OnCopy="OnChatItemCopy"
@@ -47,10 +65,15 @@
                     OnCopyQQ="OnCopyQQ"
                     OnRevoke="OnRevoke"
                     OnImagePreview="OnImagePreview"></ChatMessageDisplay>
-                <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel"></ChatCommandPanel>
+                <ChatCommandPanel OnMessageSend="OnMessageSend" @ref="MessageCommandPanel" Dense="ShowHistoryDrawer"></ChatCommandPanel>
             </div>
             <MudOverlay DarkBackground="true" Absolute AutoClose="false" @bind-Visible="MessageUnavailable">
                 <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate />
+            </MudOverlay>
+        }
+        else{
+            <MudOverlay DarkBackground="true" AutoClose="false" Visible Absolute>
+                <MudButton Variant="Variant.Text" OnClick="@(() => HistoryDrawerOpen = true)">从历史记录里选择一项</MudButton>
             </MudOverlay>
         }
     </div>
@@ -60,6 +83,17 @@
 </MudOverlay>
 
 <style>
+    .dense {
+        min-height: 48px !important;
+    }
+
+    .container-dense{
+        height: calc(100vh - 48px) !important;
+        height: calc(100dvh - 48px) !important;
+        position: fixed;
+        top: 48px;
+    }
+
     .short {
         width: 65px !important;
     }
@@ -102,16 +136,16 @@
 
 <script>
     function toggleContainerLength() {
-    const shinker = document.getElementById('Shinker')
-    const list = document.getElementById('ChatHistoryList')
-    const long = shinker.innerText === '<';
-    if (long) {
-    shinker.innerText = '>'
-    list.classList.add('short')
-    } else {
-    shinker.innerText = '<'
-    list.classList.remove('short')
-    }
+        const shinker = document.getElementById('Shinker')
+        const list = document.getElementById('ChatHistoryList')
+        const long = shinker.innerText === '<';
+        if (long) {
+            shinker.innerText = '>'
+            list.classList.add('short')
+        } else {
+            shinker.innerText = '<'
+            list.classList.remove('short')
+        }
     }
 </script>
 
@@ -128,6 +162,8 @@
     private int PageSize { get; set; } = 15;
     private MudList<ChatHistoryItem>? ChatHistoryList { get; set; } = null;
     private ChatCommandPanel MessageCommandPanel { get; set; }
+    private bool ShowHistoryDrawer { get; set; }
+    private bool HistoryDrawerOpen { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
     {
@@ -152,6 +188,9 @@
 
         CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
         CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+
+        CurrentBreakPointChanged(Shared.CurrentBreakPoint);
+        Shared.CurrentBreakPointChanged += CurrentBreakPointChanged;
     }
 
     public void Dispose()
@@ -167,6 +206,21 @@
 
         CQPImplementation.OnPrivateMessageSend -= CQPImplementation_OnPrivateMessageSend;
         CQPImplementation.OnGroupMessageSend -= CQPImplementation_OnGroupMessageSend;
+
+        Shared.CurrentBreakPointChanged -= CurrentBreakPointChanged;
+    }
+
+    private void CurrentBreakPointChanged(Breakpoint breakpoint)
+    {
+        ShowHistoryDrawer = breakpoint switch
+        {
+            Breakpoint.Lg => false,
+            Breakpoint.Xl => false,
+            Breakpoint.Md => false,
+            _ => true
+        };
+        HistoryDrawerOpen = false;
+        StateHasChanged();
     }
 
     private async Task LoadChatHistory()
@@ -219,6 +273,7 @@
                 }
             }
         });
+        HistoryDrawerOpen = false;
         StateHasChanged();
         if (ChatMessageDisplay != null)
         {
