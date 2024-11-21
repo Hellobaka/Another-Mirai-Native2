@@ -122,7 +122,7 @@ namespace Another_Mirai_Native
                         if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
                         {
                             LogHelper.Info("加载插件", $"{item.PluginName} 启动完成");
-                            UpdateConsoleTitle($"Another-Mirai-Native2 控制台版本-核心 加载了 {++count} 个插件");
+                            UpdateConsoleTitle($"Another-Mirai-Native2 加载了 {++count} 个插件");
                         }
                     }
                 }
@@ -158,7 +158,7 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                UpdateConsoleTitle($"[{ClientBase.PID}]Another-Mirai-Native2 控制台版本-插件 [{PluginManager.LoadedPlugin.PluginName}]");
+                UpdateConsoleTitle($"[{ClientBase.PID}] [{PluginManager.LoadedPlugin.PluginName}]");
             }
             ChatHistoryHelper.Initialize();
             ServerStarted?.Invoke();
