@@ -133,12 +133,13 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         public void Close()
         {
+            if (Client == null || Client.State != WebSocketState.Open)
+            {
+                return;
+            }
             try
             {
-                if (Client != null && Client.State == WebSocketState.Open)
-                {
-                    Client.Abort();
-                }
+                Client.CloseAsync(WebSocketCloseStatus.InvalidMessageType, "Websocket Error, reconnect requested.", new());
             }
             catch (Exception  ex)
             {

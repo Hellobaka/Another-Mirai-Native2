@@ -100,6 +100,7 @@ namespace Another_Mirai_Native.RPC.Pipe
             if (r)
             {
                 Reconnecting = false;
+                UpdateConnection();
             }
             else
             {

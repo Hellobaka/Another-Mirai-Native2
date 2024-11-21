@@ -109,6 +109,7 @@ namespace Another_Mirai_Native
             };
             CommonWaiter.TryAdd(key, waiterInfo);
             callBack?.Invoke();
+            LogHelper.Debug("Wait", $"Key={key} callback invoked.");
             bool timeoutFlag;
             if (timeout > 0)
             {

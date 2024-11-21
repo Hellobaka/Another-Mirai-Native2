@@ -81,6 +81,18 @@ namespace Another_Mirai_Native.RPC.WebSocket
             }
         }
 
+        public override void DropConnection(object connection)
+        {
+            if (connection is IWebSocketConnection client)
+            {
+                try
+                {
+                    client.Close();
+                }
+                catch { }
+            }
+        }
+
         private void Handler(IWebSocketConnection connection)
         {
             LogHelper.Debug("客户端连接", $"连接已建立, ID={connection.ConnectionInfo.Id}");

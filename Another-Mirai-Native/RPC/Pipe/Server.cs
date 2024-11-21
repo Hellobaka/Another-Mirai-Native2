@@ -203,5 +203,18 @@ namespace Another_Mirai_Native.RPC.Pipe
 #endif
             }
         }
+
+        public override void DropConnection(object connection)
+        {
+            if (connection is NamedPipe pipe)
+            {
+                try
+                {
+                    pipe.Disconnect();
+                    pipe.Dispose();
+                }
+                catch { }
+            }
+        }
     }
 }

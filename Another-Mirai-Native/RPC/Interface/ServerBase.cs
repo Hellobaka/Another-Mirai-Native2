@@ -190,6 +190,16 @@ namespace Another_Mirai_Native.RPC.Interface
                     ClientStartup(Convert.ToInt32(pid), result.Result.ToString());
                     break;
 
+                case "UpdateConnection":
+                    int _pid = Convert.ToInt32(pid);
+                    if (Connections.TryGetValue(_pid, out var oldConnection))
+                    {
+                        DropConnection(oldConnection);
+                        Connections[_pid] = connection;
+                        LogHelper.Debug("连接重置", $"PID={_pid} 连接已更新");
+                    }
+                    break;
+
                 default:
                     break;
             }
@@ -307,6 +317,10 @@ namespace Another_Mirai_Native.RPC.Interface
         public virtual bool Stop()
         {
             return false;
+        }
+
+        public virtual void DropConnection(object connection)
+        {
         }
 
         #endregion Virtual
