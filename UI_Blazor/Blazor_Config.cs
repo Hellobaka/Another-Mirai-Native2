@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.BlazorUI
             Password = GetConfig("Password", Guid.NewGuid().ToString());
             ListenIP = GetConfig("ListenIP", "127.0.0.1");
             ListenPort = GetConfig("ListenPort", 5000);
-            if (IPAddress.TryParse(ListenIP, out _) is false)
+            if (IPAddress.TryParse(ListenIP, out _) is false && ListenIP != "*")
             {
                 Console.Error.WriteLine($"ListenIP {ListenIP} is invalid ip, now changed to 127.0.0.1");
                 ListenIP = "127.0.0.1";

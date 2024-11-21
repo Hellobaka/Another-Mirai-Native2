@@ -65,12 +65,8 @@ namespace Another_Mirai_Native.BlazorUI
                 builder.Logging.ClearProviders();
                 builder.Logging.AddProvider(Logging.Instance);
             }
-
-            builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                serverOptions.Listen(IPAddress.Parse(Blazor_Config.Instance.ListenIP), Blazor_Config.Instance.ListenPort);
-            });
             WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
+            builder.WebHost.UseUrls(WebUIURL);
             var app = builder.Build();
             BlazorHost = app;
             var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
