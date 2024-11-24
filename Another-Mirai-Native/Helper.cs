@@ -10,6 +10,7 @@ using System.Text;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace Another_Mirai_Native
 {
@@ -183,6 +184,11 @@ namespace Another_Mirai_Native
             return "";
         }
 
+        public static string GetPicName(this CQCode cqimg)
+        {
+            return cqimg.Items.TryGetValue("file", out var file) ? file : "";
+        }
+
         /// <summary>
         /// 下载文件
         /// </summary>
@@ -341,5 +347,147 @@ namespace Another_Mirai_Native
             }
         }
 
+        public static string GetImageUrlOrPathFromCQCode(CQCode cqCode)
+        {
+            string ParseUrlFromCQImg(string filePath)
+            {
+                Regex regex = new("url=(.*)");
+                var a = regex.Match(File.ReadAllText(filePath));
+                if (a.Groups.Count > 1)
+                {
+                    string capture = a.Groups[1].Value;
+                    capture = capture.Split('\r').First();
+                    return capture;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
+            if (cqCode.IsImageCQCode is false)
+            {
+                return "";
+            }
+            string file = cqCode.Items["file"];
+            string basePath = @"data\image";
+
+            string filePath = Path.Combine(basePath, file);
+            if (File.Exists(filePath))
+            {
+                if (filePath.EndsWith(".cqimg"))
+                {
+                    return ParseUrlFromCQImg(filePath);
+                }
+                else
+                {
+                    return new FileInfo(filePath).FullName;
+                }
+            }
+            else
+            {
+                filePath += ".cqimg";
+                if (File.Exists(filePath))
+                {
+                    return ParseUrlFromCQImg(filePath);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 下载或读取缓存图片
+        /// </summary>
+        /// <param name="imageUrl">欲下载的图片URL</param>
+        /// <returns>本地图片路径</returns>
+        public static async Task<string?> DownloadImageAsync(string imageUrl, string fileName = "")
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(imageUrl))
+                {
+                    return null;
+                }
+                string cacheImagePath = Path.Combine("data", "image", "cached");
+
+                Directory.CreateDirectory(cacheImagePath);
+                if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
+                {
+                    return new FileInfo(imageUrl).FullName;
+                }
+                string name;
+                if (fileName == "")
+                {
+                    name = GetPicNameFromUrl(imageUrl);// 解析图片唯一ID
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
+                    }
+                }
+                else
+                {
+                    name = fileName;
+                }
+                // 尝试从本地读取缓存
+                string? path = GetFromCache(cacheImagePath, name);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+
+                return await DownloadFileFromWebAsync(cacheImagePath, name, imageUrl);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog((int)Model.Enums.LogLevel.Debug, "DownloadImageAsync", ex.Message + ex.StackTrace);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 下载图片
+        /// </summary>
+        /// <param name="cacheImagePath">缓存图片路径</param>
+        /// <param name="name">文件名</param>
+        /// <param name="imageUrl">目标下载Url</param>
+        /// <returns>下载后完全路径</returns>
+        private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetAsync(imageUrl);
+            response.EnsureSuccessStatusCode();
+            // 文件类型已知
+            if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
+            {
+                return null;
+            }
+            string path = Path.Combine(cacheImagePath, name + "." + (response.Content.Headers.ContentType?.MediaType.Split('/').Last() ?? "jpg"));
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            File.WriteAllBytes(path, imageBytes);
+
+            return new DirectoryInfo(path).FullName;
+        }
+
+        /// <summary>
+        /// 从缓存获取图片
+        /// </summary>
+        /// <param name="cacheImagePath">图片缓存文件夹</param>
+        /// <param name="name">文件名</param>
+        /// <param name="avatarTypes"></param>
+        /// <returns>文件的完全路径</returns>
+        private static string? GetFromCache(string cacheImagePath, string name)
+        {
+            // 检测文件是否已经存在
+            string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
+            if (!string.IsNullOrEmpty(path))
+            {
+                return new DirectoryInfo(path).FullName;
+            }
+
+            return null;
+        }
     }
 }

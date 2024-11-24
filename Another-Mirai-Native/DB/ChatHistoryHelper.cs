@@ -17,6 +17,8 @@ namespace Another_Mirai_Native.DB
 
         public static Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
+        private static bool Deleteing { get; set; }
+
         private static string GetDBPath(long id, ChatHistoryType type)
         {
             var path = Path.Combine("logs", "ChatHistory", type.ToString(), id.ToString() + ".db");
@@ -366,6 +368,7 @@ namespace Another_Mirai_Native.DB
             if (history.Type != ChatHistoryType.Notice)
             {
                 UpdateHistoryCategory(history);
+                CacheMessageImage(msg);
             }
         }
 
@@ -380,6 +383,7 @@ namespace Another_Mirai_Native.DB
             if (history.Type != ChatHistoryType.Notice)
             {
                 UpdateHistoryCategory(history);
+                CacheMessageImage(msg);
             }
         }
 
@@ -435,6 +439,77 @@ namespace Another_Mirai_Native.DB
                 InitKeyType = InitKeyType.Attribute,
             });
             return db;
+        }
+
+        private static async void CacheMessageImage(string msg)
+        {
+            Directory.CreateDirectory(Path.Combine("data", "image", "cached"));
+            var imgs = CQCode.Parse(msg).Where(x => x.IsImageCQCode);
+            if (!imgs.Any())
+            {
+                return;
+            }
+            foreach (var item in imgs)
+            {
+                string url = Helper.GetImageUrlOrPathFromCQCode(item);
+                await Helper.DownloadImageAsync(url, item.GetPicName());
+            }
+            await CheckAndFreeCache();
+        }
+
+        private static async Task CheckAndFreeCache()
+        {
+            if (Deleteing)
+            {
+                return;
+            }
+            try
+            {
+                Deleteing = true;
+                await Task.Run(() =>
+                {
+                    string dir = Path.Combine("data", "image", "cached");
+                    double length = 0;
+                    // 统计缓存文件夹总大小
+                    List<FileInfo> files = [];
+                    foreach (var item in Directory.GetFiles(dir))
+                    {
+                        var info = new FileInfo(item);
+                        length += info.Length;
+                        files.Add(info);
+                    }
+                    double maxSize = AppConfig.Instance.MaxChatImageCacheFolderSize * 1024 * 1024;
+                    if (length > maxSize)
+                    {
+                        // 按修改时间从旧到新排序
+                        files = files.OrderBy(x => x.LastWriteTime).ToList();
+                        // 循环删除第一个
+                        do
+                        {
+                            var file = files.FirstOrDefault();
+                            if (file != null)
+                            {
+                                length -= file.Length;
+
+                                file.Delete();
+                                files.Remove(file);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (length > maxSize);
+                    }
+                });                
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog($"缓存图片释放失败：{ex.Message}\n{ex.StackTrace}");
+            }
+            finally
+            {
+                Deleteing = false;
+            }
         }
     }
 }

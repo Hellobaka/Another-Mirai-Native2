@@ -42,11 +42,6 @@ namespace Another_Mirai_Native.UI.Controls
         private static ContextMenu DetailContextMenu { get; set; } = BuildDetailContextMenu();
 
         /// <summary>
-        /// 下载并发限制
-        /// </summary>
-        private static ConcurrentDictionary<string, Task<string?>> DownloadTasks { get; set; } = new();
-
-        /// <summary>
         /// 名称菜单
         /// </summary>
         private static ContextMenu GroupContextMenu { get; set; } = BuildGroupContextMenu();
@@ -359,21 +354,21 @@ namespace Another_Mirai_Native.UI.Controls
             fontIcon.SetResourceReference(FontIcon.FontFamilyProperty, "SymbolThemeFontFamily");
             grid.Children.Add(fontIcon);
             // 解析图片路径
-            string url = Extend.GetImageUrlOrPathFromCQCode(cqCode);
-            LoadImage(url);
+            string url = Helper.GetImageUrlOrPathFromCQCode(cqCode);
+            LoadImage(url, cqCode.GetPicName());
             fontIcon.MouseDown += (_, _) =>
             {
                 // 加载失败时可点击重试
                 progressRing.Visibility = Visibility.Visible;
                 progressRing.Visibility = Visibility.Collapsed;
-                LoadImage(url);
+                LoadImage(url, cqCode.GetPicName());
             };
 
-            void LoadImage(string url)
+            void LoadImage(string url, string fileName = "")
             {
                 Task.Run(async () =>
                 {
-                    var imagePath = await DownloadImageAsync(url, ChatAvatar.AvatarTypes.Fallback);
+                    var imagePath = await Helper.DownloadImageAsync(url, fileName);
                     await viewBox.Dispatcher.BeginInvoke(() =>
                     {
                         if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
@@ -518,60 +513,6 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         /// <summary>
-        /// 下载或读取缓存图片
-        /// </summary>
-        /// <param name="imageUrl">欲下载的图片URL</param>
-        /// <returns>本地图片路径</returns>
-        public static async Task<string?> DownloadImageAsync(string imageUrl, ChatAvatar.AvatarTypes avatarTypes)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(imageUrl))
-                {
-                    return null;
-                }
-                string cacheImagePath = Path.Combine("data", "image", "cached");
-                if (avatarTypes == ChatAvatar.AvatarTypes.QQPrivate)
-                {
-                    cacheImagePath = Path.Combine(cacheImagePath, "private");
-                }
-                else if (avatarTypes == ChatAvatar.AvatarTypes.QQGroup)
-                {
-                    cacheImagePath = Path.Combine(cacheImagePath, "group");
-                }
-                Directory.CreateDirectory(cacheImagePath);
-                if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
-                {
-                    return new FileInfo(imageUrl).FullName;
-                }
-                string name = Helper.GetPicNameFromUrl(imageUrl);// 解析图片唯一ID
-                if (string.IsNullOrEmpty(name))
-                {
-                    //LogHelper.Error("DownloadImageAsync", "无法从URL中解析出图片ID");
-                    //return null;
-                    name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
-                }
-                // 尝试从本地读取缓存
-                string? path = await GetFromCacheAsync(cacheImagePath, name);
-                if (!string.IsNullOrEmpty(path))
-                {
-                    return path;
-                }
-                // 如果没有缓存则进行下载, 从同步字典中获取或新建一个下载任务
-                var downloadTask = DownloadTasks.GetOrAdd(imageUrl, _ => DownloadFileFromWebAsync(cacheImagePath, name, imageUrl));
-
-                string? data = await downloadTask;
-                DownloadTasks.TryRemove(imageUrl, out var _);
-                return data;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog((int)Model.Enums.LogLevel.Debug, "DownloadImageAsync", ex.Message + ex.StackTrace);
-                return null;
-            }
-        }
-
-        /// <summary>
         /// 文本框删除点击时发光的外边框
         /// </summary>
         /// <param name="element"></param>
@@ -704,30 +645,6 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
-        /// <summary>
-        /// 下载图片
-        /// </summary>
-        /// <param name="cacheImagePath">缓存图片路径</param>
-        /// <param name="name">文件名</param>
-        /// <param name="imageUrl">目标下载Url</param>
-        /// <returns>下载后完全路径</returns>
-        private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
-        {
-            using var client = new HttpClient();
-            var response = await client.GetAsync(imageUrl);
-            response.EnsureSuccessStatusCode();
-            // 文件类型已知
-            if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
-            {
-                return null;
-            }
-            string path = Path.Combine(cacheImagePath, name + ".jpg");
-            path = Path.ChangeExtension(path, response.Content.Headers.ContentType.MediaType.Split('/').Last());
-            var imageBytes = await response.Content.ReadAsByteArrayAsync();
-            File.WriteAllBytes(path, imageBytes);
-
-            return new DirectoryInfo(path).FullName;
-        }
 
         /// <summary>
         /// 获取右键菜单触发元素
@@ -735,25 +652,6 @@ namespace Another_Mirai_Native.UI.Controls
         private static object GetContextMenuTarget(object sender)
         {
             return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
-        }
-
-        /// <summary>
-        /// 从缓存获取图片
-        /// </summary>
-        /// <param name="cacheImagePath">图片缓存文件夹</param>
-        /// <param name="name">文件名</param>
-        /// <param name="avatarTypes"></param>
-        /// <returns>文件的完全路径</returns>
-        private static Task<string?> GetFromCacheAsync(string cacheImagePath, string name)
-        {
-            // 检测文件是否已经存在
-            string? path = Directory.GetFiles(cacheImagePath).FirstOrDefault(x => Path.GetFileNameWithoutExtension(x) == name);
-            if (!string.IsNullOrEmpty(path))
-            {
-                return Task.FromResult<string?>(new DirectoryInfo(path).FullName);
-            }
-
-            return Task.FromResult<string?>(null);
         }
     }
 }
