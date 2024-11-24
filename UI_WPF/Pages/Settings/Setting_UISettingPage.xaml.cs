@@ -56,7 +56,6 @@ namespace Another_Mirai_Native.UI.Pages
             LogMaxCount.Text = UIConfig.Instance.LogItemsCount.ToString();
             LogAutoScroll.IsOn = UIConfig.Instance.LogAutoScroll;
             HardwareRender.IsOn = UIConfig.Instance.HardwareRender;
-            ChatEnableSelector.IsOn = AppConfig.Instance.EnableChat;
             ShowBalloonTip.IsOn = UIConfig.Instance.ShowBalloonTip;
             ShowWhenError.IsOn = UIConfig.Instance.PopWindowWhenError;
             ThemeSelector.SelectedIndex = UIConfig.Instance.Theme == "Dark" ? 0 : UIConfig.Instance.Theme == "Light" ? 1 : 2;
@@ -161,15 +160,6 @@ namespace Another_Mirai_Native.UI.Pages
             }
             UIConfig.Instance.HardwareRender = HardwareRender.IsOn;
             UIConfig.Instance.SetConfig("HardwareRender", HardwareRender.IsOn);
-        }
-
-        private void ChatEnableSelector_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!FormLoaded)
-            {
-                return;
-            }
-            UIConfig.Instance.SetConfig("ChatEnabled", ChatEnableSelector.IsOn);
         }
 
         private void AutoStartup_Toggled(object sender, RoutedEventArgs e)

@@ -48,6 +48,9 @@ namespace Another_Mirai_Native.UI.Pages
             UseDatabase.IsOn = AppConfig.Instance.UseDatabase;
             DebugMode.IsOn = AppConfig.Instance.DebugMode;
             MessageCacheSize.Text = AppConfig.Instance.MessageCacheSize.ToString();
+            ChatEnable.IsOn = AppConfig.Instance.EnableChat;
+            EnableChatImageCache.IsOn = AppConfig.Instance.EnableChatImageCache;
+            MaxChatImageCacheFolderSize.Text = AppConfig.Instance.MaxChatImageCacheFolderSize.ToString();
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
             {
                 var child = VisualTreeHelper.GetChild(Container, i);

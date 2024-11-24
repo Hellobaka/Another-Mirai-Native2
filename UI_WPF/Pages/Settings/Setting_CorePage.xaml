@@ -35,13 +35,13 @@
             Margin="0,10"
             OffContent="关闭"
             OnContent="开启" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">失去连接时 每次重新连接的间隔时间(ms)</TextBlock>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">失去连接时 每次重新连接的间隔时间 (ms)</TextBlock>
         <TextBox Name="ReconnectTime" Margin="0,10" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">核心与插件的心跳间隔(ms)</TextBlock>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">核心与插件的心跳间隔 (ms)</TextBlock>
         <TextBox Name="HeartBeatInterval" Margin="0,10" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">调用插件方法的超时时长(ms)</TextBlock>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">调用插件方法的超时时长 (ms)</TextBlock>
         <TextBox Name="PluginInvokeTimeout" Margin="0,10" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件载入超时时长(ms)</TextBlock>
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件载入超时时长 (ms)</TextBlock>
         <TextBox Name="LoadTimeout" Margin="0,10" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">消息缓存数量</TextBlock>
         <TextBox Name="MessageCacheSize" Margin="0,10" />
@@ -57,5 +57,21 @@
             Margin="0,10"
             OffContent="关闭"
             OnContent="开启" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">启用聊天窗口</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="ChatEnable"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="Toggler_Toggled" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">允许缓存聊天图片</TextBlock>
+        <ui:ToggleSwitch
+            x:Name="EnableChatImageCache"
+            Margin="0,10"
+            OffContent="关闭"
+            OnContent="开启"
+            Toggled="Toggler_Toggled" />
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}">缓存文件夹最大大小 (MB)</TextBlock>
+        <TextBox Name="MaxChatImageCacheFolderSize" Margin="0,10" />
     </StackPanel>
 </Page>
