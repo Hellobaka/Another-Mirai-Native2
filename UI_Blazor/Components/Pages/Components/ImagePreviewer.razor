@@ -5,7 +5,9 @@
         图片预览
     </TitleContent>
     <DialogContent>
-        <MudImage id="imagePreview" Src="@Item.ImageUrl" Fluid ObjectFit="ObjectFit.Cover"></MudImage>
+        <div style="display: flex; justify-content: center; min-height: 40vh;">
+            <MudImage id="imagePreview" Src="@Item.ImageUrl" Fluid ObjectFit="ObjectFit.Contain"></MudImage>
+        </div>
     </DialogContent>
     <DialogActions>
         <MudButton Disabled OnClick="Collect" StartIcon="@Icons.Material.Filled.Favorite" Color="Color.Error">收藏</MudButton>
@@ -19,18 +21,21 @@
     var originY = 0;
     var isDragging = false;
     var startX, startY;
+    var initialDistance = 0;
+    var initialScale = 1;
     var image = null;
-    var container = null
+    var container = null;
 
     function initPreview() {
         image = document.getElementById('imagePreview');
-        container = image.parentElement
+        container = image.parentElement;
 
         scale = 1;
         originX = 0;
         originY = 0;
         isDragging = false;
-        startX, startY;
+        startX = 0;
+        startY = 0;
 
         container.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -49,19 +54,27 @@
 
         window.addEventListener('mousemove', window_mouseMove);
         window.addEventListener('mouseup', window_mouseUp);
+
+        // Touch events for mobile
+        container.addEventListener('touchstart', touchStart);
+        container.addEventListener('touchmove', touchMove);
+        container.addEventListener('touchend', touchEnd);
     }
 
     function disposePreview() {
         window.removeEventListener('mousemove', window_mouseMove);
         window.removeEventListener('mouseup', window_mouseUp);
+        container.removeEventListener('touchstart', touchStart);
+        container.removeEventListener('touchmove', touchMove);
+        container.removeEventListener('touchend', touchEnd);
     }
 
-    function window_mouseUp(){
+    function window_mouseUp() {
         isDragging = false;
         container.style.cursor = 'default';
     }
 
-    function window_mouseMove(e){
+    function window_mouseMove(e) {
         if (!isDragging) return;
         e.preventDefault();
         const dx = (e.clientX - startX) / scale;
@@ -72,6 +85,49 @@
         startX = e.clientX;
         startY = e.clientY;
     }
+
+    function touchStart(e) {
+        if (e.touches.length === 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+            isDragging = false;
+            initialDistance = getDistance(e.touches[0], e.touches[1]);
+            initialScale = scale;
+        }
+    }
+
+    function touchMove(e) {
+        e.preventDefault();
+        if (e.touches.length === 1 && isDragging) {
+            const dx = (e.touches[0].clientX - startX) / scale;
+            const dy = (e.touches[0].clientY - startY) / scale;
+            originX += dx;
+            originY += dy;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            image.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+        } else if (e.touches.length === 2) {
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            const distanceRatio = currentDistance / initialDistance;
+            scale = Math.min(Math.max(0.5, initialScale * distanceRatio), 3);
+            image.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+        }
+    }
+
+    function touchEnd(e) {
+        if (e.touches.length === 0) {
+            isDragging = false;
+        }
+    }
+
+    function getDistance(touch1, touch2) {
+        const dx = touch2.clientX - touch1.clientX;
+        const dy = touch2.clientY - touch1.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
 </script>
 @code {
     [CascadingParameter]
