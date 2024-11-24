@@ -72,6 +72,10 @@ namespace Another_Mirai_Native.Config
 
         public bool EnableChat { get; set; }
 
+        public bool EnableChatImageCache { get; set; }
+
+        public int MaxChatImageCacheFolderSize { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -95,6 +99,8 @@ namespace Another_Mirai_Native.Config
             ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
             EnableChat = GetConfig("EnableChat", true);
+            EnableChatImageCache = GetConfig("EnableChatImageCache", true);
+            MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", 1024);
         }
     }
 }

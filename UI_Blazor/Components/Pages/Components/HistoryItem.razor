@@ -1,6 +1,6 @@
 ﻿<div style="display: flex">
     <MudAvatar Style="margin-top: 5px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.IsRound)">
-        <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
+        <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()" ObjectFit="ObjectFit.Cover"></MudImage>
         @if (ShowFallbackName)
         {
             <MudText @ref="AvatarText">@Item.Name[0..1]</MudText>

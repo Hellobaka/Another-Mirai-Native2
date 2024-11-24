@@ -286,7 +286,7 @@ else
         });
         Task.Run(async () =>
         {
-            RenderItems = ParseMessageToRenderItems(Item.Message);
+            RenderItems = await ParseMessageToRenderItems(Item.Message);
             SingleImageMode = RenderItems.Count == 1 && RenderItems.First().RenderType == RenderType.Image;
             await InvokeAsync(() => StateHasChanged());
         });
@@ -405,7 +405,7 @@ else
         await OnResend.InvokeAsync(Item);
     }
 
-    private List<RenderChatItem> ParseMessageToRenderItems(string plain)
+    private async Task<List<RenderChatItem>> ParseMessageToRenderItems(string plain)
     {
         List<RenderChatItem> result = [];
 
@@ -429,7 +429,7 @@ else
                         {
                             case Model.Enums.CQCodeType.Image:
                                 renderItem.RenderType = RenderType.Image;
-                                renderItem.ImageUrl = GetImageUrlFromCQCode(item);
+                                renderItem.ImageUrl = await GetImageUrlFromCQCode(item);
                                 renderItem.ImageFailed = string.IsNullOrWhiteSpace(renderItem.ImageUrl);
                                 break;
 
@@ -489,25 +489,26 @@ else
         return result;
     }
 
-    private string? GetImageUrlFromCQCode(CQCode cqCode)
+    private async Task<string?> GetImageUrlFromCQCode(CQCode cqCode)
     {
         if (cqCode.IsImageCQCode)
         {
-            string path = cqCode.Items["file"];
-            if (path.Contains('.'))
+            string? path = Helper.GetImageUrlOrPathFromCQCode(cqCode);
+            if (path.StartsWith("http"))
             {
-                if (File.Exists(Path.Combine("data", "image", path)))
-                {
-                    return $"/image/{path}";
-                }
-                else
+                path = await Helper.DownloadImageAsync(path, cqCode.GetPicName());
+                if (string.IsNullOrEmpty(path))
                 {
                     return null;
                 }
+                else
+                {
+                    return "/" + Path.GetRelativePath("data", path);
+                }
             }
-            else
+            else if (!string.IsNullOrEmpty(path))
             {
-                return Helper.GetPicUrlFromCQImg(path);
+                return "/" + Path.GetRelativePath("data", path);
             }
         }
         return null;
