@@ -490,7 +490,7 @@ namespace Another_Mirai_Native.UI.Pages
         private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
-            if (plugin != null)
+            if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
@@ -507,7 +507,7 @@ namespace Another_Mirai_Native.UI.Pages
             });
             itemAdded?.Invoke(item?.GUID);
 
-            return history.ID;
+            return history?.ID ?? 0;
         }
 
         /// <summary>
@@ -632,7 +632,7 @@ namespace Another_Mirai_Native.UI.Pages
         private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
         {
             string nick = await GetFriendNick(sender);
-            if (plugin != null)
+            if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
@@ -649,7 +649,7 @@ namespace Another_Mirai_Native.UI.Pages
                 }
             });
             itemAdded?.Invoke(item?.GUID);
-            return history.ID;
+            return history?.ID ?? 0;
         }
 
         private void AtBtn_Click(object sender, RoutedEventArgs e)
@@ -1227,8 +1227,8 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
             {
-                dict.Remove(qq);
                 await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
+                dict.Remove(qq);
             }
             else
             {
