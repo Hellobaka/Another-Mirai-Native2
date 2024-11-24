@@ -20,8 +20,12 @@
             </MudSelect>
             <MudSwitch id="autoScroll" @bind-Value="@AutoScroll" Color="Color.Primary" T="bool" Style="margin: 5px 0;" CheckedChanged="AutoScrollChecked" Label="自动滚动"></MudSwitch>
             <MudSpacer />
-            <MudIconButton Icon="@Icons.Material.Filled.VerticalAlignBottom" Color="Color.Secondary" OnClick="@(() => ScrollToBottom())"></MudIconButton>
-            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Primary" OnClick="@(() => ShowMoreFilter = !ShowMoreFilter)"></MudIconButton>
+            <MudTooltip Text="滚动至底">
+                <MudIconButton Icon="@Icons.Material.Filled.VerticalAlignBottom" Color="Color.Secondary" OnClick="@(() => ScrollToBottom())"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="筛选">
+                <MudIconButton Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Primary" OnClick="@(() => ShowMoreFilter = !ShowMoreFilter)"></MudIconButton>
+            </MudTooltip>
         </div>
         <MudCollapse Expanded="ShowMoreFilter">
             <MudTextField @bind-Value="LogSearchText" Margin="Margin.Dense" Immediate Label="搜点什么？" TextChanged="SearchTextChanged" Variant="Variant.Outlined"></MudTextField>
@@ -166,6 +170,10 @@
 
     private Func<LogDisplay, string> _cellClassFunc => (x) =>
     {
+        if (x == null)
+        {
+            return "";
+        }
         string itemClass = (LogLevel)x.Priority switch
         {
             LogLevel.Debug => "",
