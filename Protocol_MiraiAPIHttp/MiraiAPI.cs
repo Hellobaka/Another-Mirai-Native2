@@ -200,7 +200,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             var list = GetGroupMemberListInternal(groupId);
             return list == null && !list.Any(x => x.group.id == groupId && x.id == qqId)
                 ? new GroupMemberInfo()
-                : ParseGroupMemberInfoResponse2GroupMemberInfo(list.First(x => x.group.id == groupId && x.id == qqId));
+                : ParseGroupMemberInfoResponse2GroupMemberInfo(list.FirstOrDefault(x => x.group.id == groupId && x.id == qqId));
         }
 
         public List<GroupMemberInfo> GetRawGroupMemberList(long groupId)
