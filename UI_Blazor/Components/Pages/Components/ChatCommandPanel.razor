@@ -1,4 +1,5 @@
 ﻿@using Another_Mirai_Native.Config
+@using ImageMagick
 @inject ISnackbar Snackbar
 @inject IJSRuntime JS
 
@@ -81,7 +82,7 @@
             }
         } catch (error) {
             console.log(error.message);
-        }    
+        }
     }
 </script>
 @code {
@@ -96,7 +97,7 @@
     private double UploadProgress { get; set; } = 0;
     public bool Sending { get; set; }
     public bool ShowCommandPanel { get; set; }
-    
+
     [Parameter]
     public bool Dense { get; set; }
 
@@ -183,10 +184,14 @@
 
     private async Task UploadFile(IBrowserFile upload)
     {
-        int minFileSize = 4 * 1024, maxFileSize = 5 * 1024 * 1024;
-        if (upload.Size < minFileSize || upload.Size > maxFileSize)
+        if (Sending)
         {
-            Snackbar.Add("上传图片文件尺寸不得大于 5MB 且不得小于 4KB", Severity.Error);
+            return;
+        }
+        int maxFileSize = 5 * 1024 * 1024;
+        if (upload.Size > maxFileSize)
+        {
+            Snackbar.Add("上传图片文件尺寸不得大于 5MB", Severity.Error);
             return;
         }
         Sending = true;
@@ -206,9 +211,8 @@
                 imageDirectory = Path.Combine(imageDirectory, "cached");
                 Directory.CreateDirectory(imageDirectory);
             }
-
-            await using FileStream writeStream = new(Path.Combine(imageDirectory, fileName), FileMode.OpenOrCreate);
-
+            string filePath = Path.Combine(imageDirectory, fileName);
+            await using FileStream writeStream = new(filePath, FileMode.OpenOrCreate);
             using var readStream = upload.OpenReadStream(maxFileSize);
             var bytesRead = 0;
             var totalRead = 0;
@@ -220,6 +224,16 @@
                 await writeStream.WriteAsync(buffer, 0, bytesRead);
                 UploadProgress = (totalRead / upload.Size) * 100;
                 StateHasChanged();
+            }
+            writeStream.Close();
+            await writeStream.DisposeAsync();
+
+            using MagickImage image = new MagickImage(filePath);
+            if (image.Format == MagickFormat.Heic || image.Format == MagickFormat.Heif)
+            {
+                await image.WriteAsync(filePath, MagickFormat.Jpg);
+                fileName = Path.ChangeExtension(fileName, ".jpg");
+                cqCode = $"[CQ:image,file=cached\\{fileName}]";
             }
 
             await SendTextElement.SetText((SendText ?? "") + cqCode);
