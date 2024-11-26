@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-	  <RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
-	  <RootNamespace>Another_Mirai_Native.BlazorUI</RootNamespace>
-	  <Nullable>enable</Nullable>
+	<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
+	<RootNamespace>Another_Mirai_Native.BlazorUI</RootNamespace>
+	<Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x86</Platforms>
     <AssemblyName>Another-Mirai-Native-WebUI</AssemblyName>
+	<Version>2.7.0</Version>
   </PropertyGroup>
 
-  
+
   <ItemGroup>
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.2.0" />
     <PackageReference Include="MudBlazor" Version="7.15.0" />

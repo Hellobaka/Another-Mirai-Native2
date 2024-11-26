@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
@@ -7,6 +7,7 @@
     <LangVersion>11</LangVersion>
     <RootNamespace>Another_Mirai_Native.Protocol.OneBot</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
+	  <Version>2.7.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

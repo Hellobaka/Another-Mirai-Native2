@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
@@ -6,6 +6,7 @@
     <Platforms>AnyCPU;x86</Platforms>
     <AssemblyName>MiraiAPIHttp</AssemblyName>
     <LangVersion>11</LangVersion>
+    <Version>2.7.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
