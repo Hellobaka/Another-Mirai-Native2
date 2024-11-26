@@ -169,6 +169,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return;
             }
             ReconnectCount++;
+            SessionKey_Event = "";
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByConnection(EventConnection);
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
@@ -217,6 +218,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 return;
             }
             ReconnectCount++;
+            SessionKey_Message = "";
             LogHelper.Error("消息服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByConnection(MessageConnection);
             Thread.Sleep(AppConfig.Instance.ReconnectTime);

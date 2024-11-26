@@ -133,7 +133,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         public void Close()
         {
-            if (Client == null || Client.State != WebSocketState.Open)
+            if (Client == null)
             {
                 return;
             }
