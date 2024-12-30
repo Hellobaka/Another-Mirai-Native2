@@ -52,7 +52,7 @@
             // GroupValue
             // 
             GroupValue.Location = new System.Drawing.Point(70, 17);
-            GroupValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            GroupValue.Margin = new System.Windows.Forms.Padding(2);
             GroupValue.Name = "GroupValue";
             GroupValue.Size = new System.Drawing.Size(164, 23);
             GroupValue.TabIndex = 1;
@@ -60,7 +60,7 @@
             // QQValue
             // 
             QQValue.Location = new System.Drawing.Point(284, 17);
-            QQValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            QQValue.Margin = new System.Windows.Forms.Padding(2);
             QQValue.Name = "QQValue";
             QQValue.Size = new System.Drawing.Size(164, 23);
             QQValue.TabIndex = 3;
@@ -78,7 +78,7 @@
             // AtButton
             // 
             AtButton.Location = new System.Drawing.Point(18, 74);
-            AtButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            AtButton.Margin = new System.Windows.Forms.Padding(2);
             AtButton.Name = "AtButton";
             AtButton.Size = new System.Drawing.Size(28, 23);
             AtButton.TabIndex = 4;
@@ -90,7 +90,7 @@
             // 
             PicButton.Enabled = false;
             PicButton.Location = new System.Drawing.Point(50, 74);
-            PicButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            PicButton.Margin = new System.Windows.Forms.Padding(2);
             PicButton.Name = "PicButton";
             PicButton.Size = new System.Drawing.Size(28, 23);
             PicButton.TabIndex = 5;
@@ -102,7 +102,7 @@
             // 
             SendValue.AcceptsReturn = true;
             SendValue.Location = new System.Drawing.Point(83, 74);
-            SendValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            SendValue.Margin = new System.Windows.Forms.Padding(2);
             SendValue.Name = "SendValue";
             SendValue.Size = new System.Drawing.Size(287, 23);
             SendValue.TabIndex = 6;
@@ -111,7 +111,7 @@
             // SendButton
             // 
             SendButton.Location = new System.Drawing.Point(374, 72);
-            SendButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            SendButton.Margin = new System.Windows.Forms.Padding(2);
             SendButton.Name = "SendButton";
             SendButton.Size = new System.Drawing.Size(73, 23);
             SendButton.TabIndex = 7;
@@ -123,7 +123,7 @@
             // 
             PrivateSelector.AutoSize = true;
             PrivateSelector.Location = new System.Drawing.Point(22, 45);
-            PrivateSelector.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            PrivateSelector.Margin = new System.Windows.Forms.Padding(2);
             PrivateSelector.Name = "PrivateSelector";
             PrivateSelector.Size = new System.Drawing.Size(75, 21);
             PrivateSelector.TabIndex = 8;
@@ -146,11 +146,12 @@
             Controls.Add(GroupValue);
             Controls.Add(label1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            Margin = new System.Windows.Forms.Padding(2);
             MaximizeBox = false;
             Name = "Tester";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Tester";
+            FormClosing += Tester_FormClosing;
             Load += Tester_Load;
             ResumeLayout(false);
             PerformLayout();

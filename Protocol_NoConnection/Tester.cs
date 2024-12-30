@@ -145,7 +145,7 @@ namespace Protocol_NoConnection
                     path = Path.GetFileName(item);
                 }
                 string fileName = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
-                if(path.EndsWith(".cqimg"))
+                if (path.EndsWith(".cqimg"))
                 {
                     SendValue.Text += $"[CQ:image,file={Path.GetFileNameWithoutExtension(path)}] ";
                     continue;
@@ -194,6 +194,12 @@ namespace Protocol_NoConnection
             catch
             {
             }
+        }
+
+        private void Tester_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            WindowState = FormWindowState.Minimized;
         }
     }
 }
