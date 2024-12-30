@@ -104,4 +104,10 @@
     <Style x:Key="PathIconData" TargetType="ui:PathIcon">
         <Setter Property="Data" Value="" />
     </Style>
+    <Style
+        x:Key="ErrorButtonStyle"
+        BasedOn="{StaticResource DefaultButtonStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="#FF4D4F" />
+    </Style>
 </ResourceDictionary>

@@ -84,7 +84,8 @@
                 Margin="5,0,0,0"
                 HorizontalAlignment="Stretch"
                 Click="QuitButton_Click"
-                Content="退出" />
+                Content="退出"
+                Style="{StaticResource ErrorButtonStyle}" />
         </Grid>
     </Grid>
 </ui:ContentDialog>
