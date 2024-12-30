@@ -37,7 +37,13 @@ namespace Protocol_NoConnection
 
         private int MessageHistoryIndex { get; set; }
 
-        private bool AutoRecall { get; set; } = false;
+        private bool AutoRecall => UseAutoRecall.Checked;
+
+        private int AutoRecallInteval => int.TryParse(AutoRecallValue.Text, out int value) ? value : -1;
+
+        private bool UseCustomMessageID => UseMessageID.Checked;
+
+        private int CustomMessageID => int.TryParse(MessageIDValue.Text, out int value) ? value : -1;
 
         private void Tester_Load(object sender, EventArgs e)
         {
@@ -46,6 +52,7 @@ namespace Protocol_NoConnection
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
 
             PicButton.Enabled = PicServer.Instance?.Running ?? false;
+            SendValue.Focus();
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -74,7 +81,11 @@ namespace Protocol_NoConnection
                 sw.Start();
                 int logId;
                 CQPluginProxy handledPlugin = null;
-                int msgId = MsgId++;
+                int msgId = UseCustomMessageID ? CustomMessageID : MsgId++;
+                if (msgId < 0)
+                {
+                    msgId = MsgId++;
+                }
                 if (PrivateSelector.Checked)
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");
@@ -86,13 +97,13 @@ namespace Protocol_NoConnection
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, msgId, GroupId, QQId, "", msg, 0, DateTime.Now);
                 }
                 sw.Stop();
-                new Thread(() =>
+                Task.Run(() =>
                 {
-                    if (AutoRecall is false)
+                    if (AutoRecall is false || AutoRecallInteval < 0)
                     {
                         return;
                     }
-                    Thread.Sleep(3000);
+                    Thread.Sleep((int)TimeSpan.FromSeconds(AutoRecallInteval).TotalMilliseconds);
                     if (PrivateSelector.Checked)
                     {
                         PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(msgId, QQId, msg);
@@ -101,7 +112,7 @@ namespace Protocol_NoConnection
                     {
                         PluginManagerProxy.Instance.Event_OnGroupMsgRecall(msgId, GroupId, msg);
                     }
-                }).Start();
+                });
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
                 LogHelper.LocalDebug("", updateMsg);
                 if (handledPlugin != null)
@@ -200,6 +211,24 @@ namespace Protocol_NoConnection
         {
             e.Cancel = true;
             WindowState = FormWindowState.Minimized;
+        }
+
+        private void UseAutoRecall_CheckedChanged(object sender, EventArgs e)
+        {
+            AutoRecallValue.Enabled = UseAutoRecall.Checked;
+        }
+
+        private void UseMessageID_CheckedChanged(object sender, EventArgs e)
+        {
+            MessageIDValue.Enabled = UseMessageID.Checked;
+        }
+
+        private void Tester_Resize(object sender, EventArgs e)
+        {
+            if (WindowState != FormWindowState.Minimized)
+            {
+                SendValue.Focus();
+            }
         }
     }
 }
