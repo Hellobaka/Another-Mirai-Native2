@@ -247,6 +247,7 @@ namespace Another_Mirai_Native.UI
                 PageCache.Add("ChatPage", new ChatPage());
                 LoadPlugins();
             }
+            DialogHelper.HandleDialogQueue();
             if (UIConfig.Instance.AutoStartWebUI)
             {
                 await WebUIPage.Instance.StartWebUI();

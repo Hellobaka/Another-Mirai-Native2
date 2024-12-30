@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,12 +18,38 @@ using System.Windows.Shapes;
 
 namespace Another_Mirai_Native.UI
 {
+    /// <summary>
+    /// 帮助类，用于显示各种对话框
+    /// </summary>
     public class DialogHelper
     {
-        private static SimpleMessageBox CurrentDialog { get; set; }
+        /// <summary>
+        /// 当前显示的对话框
+        /// </summary>
+        private static SimpleMessageBox? CurrentDialog { get; set; }
 
+        /// <summary>
+        /// 错误对话框队列
+        /// </summary>
         private static Queue<DialogQueueObject> ErrorDialogQueue { get; set; } = new();
 
+        /// <summary>
+        /// 退出操作
+        /// </summary>
+        private static Action ExitAction { get; set; } = () => Environment.Exit(0);
+
+        /// <summary>
+        /// 构建通知图标的上下文菜单
+        /// </summary>
+        /// <param name="plugins">插件列表</param>
+        /// <param name="exitAction">退出操作</param>
+        /// <param name="webUIAction">WebUI操作</param>
+        /// <param name="reloadAction">重载操作</param>
+        /// <param name="pluginManageAction">插件管理操作</param>
+        /// <param name="logAction">日志操作</param>
+        /// <param name="menuAction">菜单操作</param>
+        /// <param name="updateAction">更新操作</param>
+        /// <returns>上下文菜单</returns>
         public static ContextMenu BuildNotifyIconContextMenu(List<CQPluginProxy> plugins, Action exitAction, Action webUIAction, Action reloadAction, Action pluginManageAction, Action logAction, Action<CQPluginProxy, string> menuAction, Action updateAction)
         {
             var menu = new ContextMenu();
@@ -32,7 +57,7 @@ namespace Another_Mirai_Native.UI
             menu.Items.Add(new Separator());
             menu.Items.Add(new MenuItem { Header = $"框架版本: {ServerManager.Server.GetCoreVersion()}" });
 #if NET5_0_OR_GREATER
-            StackPanel webUIStatus= new StackPanel();
+            StackPanel webUIStatus = new StackPanel();
             webUIStatus.Orientation = Orientation.Horizontal;
 
             webUIStatus.Children.Add(new Ellipse
@@ -104,6 +129,12 @@ namespace Another_Mirai_Native.UI
             return menu;
         }
 
+        /// <summary>
+        /// 显示确认对话框
+        /// </summary>
+        /// <param name="title">对话框标题</param>
+        /// <param name="message">对话框内容</param>
+        /// <returns>用户是否确认</returns>
         public static async Task<bool> ShowConfirmDialog(string title, string message)
         {
             ContentDialog dialog = new()
@@ -117,18 +148,40 @@ namespace Another_Mirai_Native.UI
             return await dialog.ShowAsync() == ContentDialogResult.Primary;
         }
 
+        /// <summary>
+        /// 显示错误对话框
+        /// </summary>
+        /// <param name="guid">错误标识</param>
+        /// <param name="authCode">授权码</param>
+        /// <param name="title">对话框标题</param>
+        /// <param name="content">对话框内容</param>
+        /// <param name="canIgnore">是否可以忽略</param>
         public static void ShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {
             var plugin = PluginManagerProxy.GetProxyByAuthCode(authCode);
             ShowErrorDialog(plugin, guid, title, content, canIgnore);
         }
 
+        /// <summary>
+        /// 显示错误对话框
+        /// </summary>
+        /// <param name="message">错误信息</param>
+        /// <param name="detail">错误详情</param>
+        /// <param name="canIgnore">是否可以忽略</param>
         public static void ShowErrorDialog(string message, string detail, bool canIgnore = true)
         {
             ShowErrorDialog(null, "", message, detail, canIgnore);
         }
 
-        public static void ShowErrorDialog(CQPluginProxy proxy, string guid, string message, string detail, bool canIgnore = true)
+        /// <summary>
+        /// 显示错误对话框
+        /// </summary>
+        /// <param name="proxy">插件代理</param>
+        /// <param name="guid">错误标识</param>
+        /// <param name="message">错误信息</param>
+        /// <param name="detail">错误详情</param>
+        /// <param name="canIgnore">是否可以忽略</param>
+        public static void ShowErrorDialog(CQPluginProxy? proxy, string guid, string message, string detail, bool canIgnore = true)
         {
             MainWindow.Instance.Dispatcher.BeginInvoke(() =>
             {
@@ -147,9 +200,13 @@ namespace Another_Mirai_Native.UI
                 {
                     dialog.ErrorHint += "，但是这个错误可以被忽略";
                 }
-                else
+                else if (proxy != null)
                 {
                     dialog.ErrorHint += "，插件需要重启";
+                }
+                else
+                {
+                    dialog.ErrorHint += "，请重启框架";
                 }
                 if (proxy != null)
                 {
@@ -165,6 +222,11 @@ namespace Another_Mirai_Native.UI
             });
         }
 
+        /// <summary>
+        /// 显示简单对话框
+        /// </summary>
+        /// <param name="title">对话框标题</param>
+        /// <param name="message">对话框内容</param>
         public static void ShowSimpleDialog(string title, string message)
         {
             MainWindow.Instance.Dispatcher.Invoke(() =>
@@ -186,55 +248,113 @@ namespace Another_Mirai_Native.UI
             HandleDialogQueue();
         }
 
-        private static async void HandleDialogQueue()
+        /// <summary>
+        /// 处理对话框队列
+        /// </summary>
+        public static async void HandleDialogQueue()
         {
+            // 如果队列为空或当前已有对话框在显示，则直接返回
             if (ErrorDialogQueue.Count == 0 || CurrentDialog != null)
             {
                 return;
             }
+
+            // 从队列中取出一个对话框对象
             var dialog = ErrorDialogQueue.Dequeue();
             CurrentDialog = dialog.Dialog;
+
+            // 如果队列中还有其他对话框，更新当前对话框的标题
             if (ErrorDialogQueue.Count > 0)
             {
                 CurrentDialog.Title = $"异常捕获 ({ErrorDialogQueue.Count + 1}条)";
             }
+
+            bool successShown = false;
+
+            // 在主线程上显示对话框
             await MainWindow.Instance.Dispatcher.Invoke(async () =>
             {
-                if (dialog.Dialog != null)
+                try
                 {
-                    dialog.DialogResult = await dialog.Dialog.ShowAsync();
+                    if (dialog.Dialog != null)
+                    {
+                        // 设置关闭按钮的点击事件
+                        dialog.Dialog.CloseButtonClick += (_, _) => ExitAction();
+                        dialog.Dialog.IsSecondaryButtonEnabled = dialog.Plugin != null;
+                        dialog.DialogResult = await dialog.Dialog.ShowAsync();
+                    }
+                    else if (dialog.ContentDialog != null)
+                    {
+                        // 设置关闭按钮的点击事件
+                        dialog.ContentDialog.CloseButtonClick += (_, _) => ExitAction();
+                        dialog.ContentDialog.IsSecondaryButtonEnabled = dialog.Plugin != null;
+                        dialog.DialogResult = await dialog.ContentDialog.ShowAsync();
+                    }
+                    successShown = true;
                 }
-                else if (dialog.ContentDialog != null)
+                catch (InvalidOperationException)
                 {
-                    dialog.DialogResult = await dialog.ContentDialog.ShowAsync();
+                    // 如果显示对话框时发生异常，将对话框重新加入队列
+                    ErrorDialogQueue.Enqueue(dialog);
+                    CurrentDialog = null;
+                    successShown = false;
                 }
             });
-            if (ServerManager.Server.WaitingMessage.TryGetValue(dialog.GUID, out InvokeResult value)
-                && value != null)
+
+            // 如果对话框未成功显示，直接返回
+            if (!successShown)
+            {
+                return;
+            }
+
+            // 处理对话框结果
+            if (ServerManager.Server.WaitingMessage.TryGetValue(dialog.GUID, out InvokeResult? value) && value != null)
             {
                 value.Result = true;
                 value.Success = true;
                 RequestWaiter.TriggerByKey(dialog.GUID);
             }
+
+            // 如果用户点击了重载按钮且插件不为空，重新加载插件
             if (dialog.DialogResult == ContentDialogResult.Secondary && dialog.Plugin != null)
             {
-                Task.Run(() => PluginManagerProxy.Instance.ReloadPlugin(dialog.Plugin));
+                _ = Task.Run(() => PluginManagerProxy.Instance.ReloadPlugin(dialog.Plugin));
             }
+
+            // 清空当前对话框并处理下一个队列中的对话框
             CurrentDialog = null;
             HandleDialogQueue();
         }
 
+        /// <summary>
+        /// 对话框队列对象
+        /// </summary>
         private class DialogQueueObject
         {
+            /// <summary>
+            /// 简单消息框
+            /// </summary>
             public SimpleMessageBox Dialog { get; set; }
 
+            /// <summary>
+            /// 内容对话框
+            /// </summary>
             public ContentDialog ContentDialog { get; set; }
 
+            /// <summary>
+            /// 对话框结果
+            /// </summary>
             public ContentDialogResult DialogResult { get; set; } = ContentDialogResult.None;
 
+            /// <summary>
+            /// 等待标识
+            /// </summary>
             public string GUID { get; set; } = "";
 
-            public CQPluginProxy Plugin { get; set; }
+            /// <summary>
+            /// 插件代理
+            /// </summary>
+            public CQPluginProxy? Plugin { get; set; }
         }
     }
 }
