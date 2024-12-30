@@ -15,6 +15,9 @@ namespace Protocol_NoConnection
             ListenIP = ip;
             Port = port;
             Instance = this;
+
+            Server = new();
+            Server.Prefixes.Add(ListenURL);
         }
 
         public static PicServer Instance { get; set; }
@@ -37,26 +40,27 @@ namespace Protocol_NoConnection
         {
             try
             {
-                if (ServerRunning != null && !ServerRunning.IsCancellationRequested)
+                if (Running && !Stop())
                 {
-                    if (!Stop())
-                    {
-                        throw new Exception("停止服务失败");
-                    }
+                    throw new Exception("停止服务失败");
                 }
 
-                Server = new();
-                Server.Prefixes.Add(ListenURL);
                 Server.Start();
                 ServerRunning = new();
                 LogHelper.Info("启动图片服务器", "启动成功");
-                Task.Run(() =>
+                Task.Run(async () =>
                 {
                     var token = ServerRunning.Token;
                     while (!token.IsCancellationRequested)
                     {
-                        var context = Server.GetContext();
-                        ProcessRequest(context);
+                        try
+                        {
+                            var context = await Server.GetContextAsync();
+                            ProcessRequest(context);
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 });
                 return true;
@@ -76,8 +80,6 @@ namespace Protocol_NoConnection
 
                 Server.Stop();
                 Server.Close();
-
-                Server = null;
                 return true;
             }
             catch (Exception e)
@@ -110,7 +112,7 @@ namespace Protocol_NoConnection
                 try
                 {
                     byte[] content = File.ReadAllBytes(filename);
-                    context.Response.ContentType = PicServer.GetContentType(filename);
+                    context.Response.ContentType = GetContentType(filename);
                     context.Response.ContentLength64 = content.Length;
                     context.Response.OutputStream.Write(content, 0, content.Length);
                 }

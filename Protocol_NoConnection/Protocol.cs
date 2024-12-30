@@ -136,15 +136,18 @@ namespace Protocol_NoConnection
             }
             if (ShowTestDialog)
             {
-                Thread uiThread = new(() =>
+                if (TesterForm == null)
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    TesterForm = new Tester();
-                    Application.Run(TesterForm);
-                });
-                uiThread.SetApartmentState(ApartmentState.STA);
-                uiThread.Start();
+                    Thread uiThread = new(() =>
+                    {
+                        Application.EnableVisualStyles();
+                        Application.SetCompatibleTextRenderingDefault(false);
+                        TesterForm = new Tester();
+                        Application.Run(TesterForm);
+                    });
+                    uiThread.SetApartmentState(ApartmentState.STA);
+                    uiThread.Start();
+                }
             }
             if (BuildTestPicServer)
             {
@@ -178,6 +181,7 @@ namespace Protocol_NoConnection
         public bool Disconnect()
         {
             IsConnected = false;
+            PicServer.Stop();
             return true;
         }
 
