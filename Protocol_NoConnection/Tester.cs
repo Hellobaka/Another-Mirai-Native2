@@ -1,10 +1,12 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -42,6 +44,8 @@ namespace Protocol_NoConnection
             GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)10001).ToString();
             QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)10001).ToString();
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
+
+            PicButton.Enabled = PicServer.Instance?.Running ?? false;
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -115,7 +119,40 @@ namespace Protocol_NoConnection
 
         private void PicButton_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog dialog = new()
+            {
+                InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image"),
+                Filter = "图片文件|*.png;*.jpg;*.jpeg;*.gif|CQ 图片文件|*.cqimg|任何文件|*.*",
+                Title = "选择图片",
+                Multiselect = true,
+                AddExtension = false
+            };
+            dialog.ShowDialog();
+            foreach (var item in dialog.FileNames)
+            {
+                var path1 = Path.GetFullPath(item).TrimEnd(Path.DirectorySeparatorChar);
+                var path2 = Path.GetFullPath(dialog.InitialDirectory).TrimEnd(Path.DirectorySeparatorChar);
+                string path;
+                if (path1.StartsWith(path2 + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    // 为同一目录
+                    path = Helper.GetRelativePath(item, dialog.InitialDirectory);
+                }
+                else
+                {
+                    // 移动文件至默认目录
+                    File.Copy(item, Path.Combine(dialog.InitialDirectory, Path.GetFileName(item)), true);
+                    path = Path.GetFileName(item);
+                }
+                string fileName = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+                if(path.EndsWith(".cqimg"))
+                {
+                    SendValue.Text += $"[CQ:image,file={Path.GetFileNameWithoutExtension(path)}] ";
+                    continue;
+                }
+                File.WriteAllText(Path.Combine(dialog.InitialDirectory, fileName + ".cqimg"), $"[url]\r\nmd5=0\r\nsize=0\r\nurl={PicServer.Instance.ListenURL}{path}");
+                SendValue.Text += $"[CQ:image,file={fileName}] ";
+            }
         }
 
         private void PrivateSelector_CheckedChanged(object sender, EventArgs e)

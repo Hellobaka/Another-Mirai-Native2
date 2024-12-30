@@ -42,40 +42,45 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(22, 24);
+            label1.Location = new System.Drawing.Point(18, 19);
+            label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(59, 20);
+            label1.Size = new System.Drawing.Size(48, 17);
             label1.TabIndex = 0;
             label1.Text = "Group:";
             // 
             // GroupValue
             // 
-            GroupValue.Location = new System.Drawing.Point(87, 21);
+            GroupValue.Location = new System.Drawing.Point(70, 17);
+            GroupValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             GroupValue.Name = "GroupValue";
-            GroupValue.Size = new System.Drawing.Size(204, 27);
+            GroupValue.Size = new System.Drawing.Size(164, 23);
             GroupValue.TabIndex = 1;
             // 
             // QQValue
             // 
-            QQValue.Location = new System.Drawing.Point(355, 21);
+            QQValue.Location = new System.Drawing.Point(284, 17);
+            QQValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             QQValue.Name = "QQValue";
-            QQValue.Size = new System.Drawing.Size(204, 27);
+            QQValue.Size = new System.Drawing.Size(164, 23);
             QQValue.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(312, 24);
+            label2.Location = new System.Drawing.Point(250, 19);
+            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(37, 20);
+            label2.Size = new System.Drawing.Size(31, 17);
             label2.TabIndex = 2;
             label2.Text = "QQ:";
             // 
             // AtButton
             // 
-            AtButton.Location = new System.Drawing.Point(22, 92);
+            AtButton.Location = new System.Drawing.Point(18, 74);
+            AtButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             AtButton.Name = "AtButton";
-            AtButton.Size = new System.Drawing.Size(35, 29);
+            AtButton.Size = new System.Drawing.Size(28, 23);
             AtButton.TabIndex = 4;
             AtButton.Text = "@";
             AtButton.UseVisualStyleBackColor = true;
@@ -84,9 +89,10 @@
             // PicButton
             // 
             PicButton.Enabled = false;
-            PicButton.Location = new System.Drawing.Point(63, 92);
+            PicButton.Location = new System.Drawing.Point(50, 74);
+            PicButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             PicButton.Name = "PicButton";
-            PicButton.Size = new System.Drawing.Size(35, 29);
+            PicButton.Size = new System.Drawing.Size(28, 23);
             PicButton.TabIndex = 5;
             PicButton.Text = "图";
             PicButton.UseVisualStyleBackColor = true;
@@ -95,17 +101,19 @@
             // SendValue
             // 
             SendValue.AcceptsReturn = true;
-            SendValue.Location = new System.Drawing.Point(104, 92);
+            SendValue.Location = new System.Drawing.Point(83, 74);
+            SendValue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             SendValue.Name = "SendValue";
-            SendValue.Size = new System.Drawing.Size(358, 27);
+            SendValue.Size = new System.Drawing.Size(287, 23);
             SendValue.TabIndex = 6;
             SendValue.KeyDown += SendValue_KeyDown;
             // 
             // SendButton
             // 
-            SendButton.Location = new System.Drawing.Point(468, 90);
+            SendButton.Location = new System.Drawing.Point(374, 72);
+            SendButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             SendButton.Name = "SendButton";
-            SendButton.Size = new System.Drawing.Size(91, 29);
+            SendButton.Size = new System.Drawing.Size(73, 23);
             SendButton.TabIndex = 7;
             SendButton.Text = "发送";
             SendButton.UseVisualStyleBackColor = true;
@@ -114,9 +122,10 @@
             // PrivateSelector
             // 
             PrivateSelector.AutoSize = true;
-            PrivateSelector.Location = new System.Drawing.Point(27, 56);
+            PrivateSelector.Location = new System.Drawing.Point(22, 45);
+            PrivateSelector.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             PrivateSelector.Name = "PrivateSelector";
-            PrivateSelector.Size = new System.Drawing.Size(91, 24);
+            PrivateSelector.Size = new System.Drawing.Size(75, 21);
             PrivateSelector.TabIndex = 8;
             PrivateSelector.Text = "使用私聊";
             PrivateSelector.UseVisualStyleBackColor = true;
@@ -124,9 +133,9 @@
             // 
             // Tester
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            ClientSize = new System.Drawing.Size(588, 141);
+            ClientSize = new System.Drawing.Size(470, 113);
             Controls.Add(PrivateSelector);
             Controls.Add(SendButton);
             Controls.Add(SendValue);
@@ -137,6 +146,7 @@
             Controls.Add(GroupValue);
             Controls.Add(label1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             MaximizeBox = false;
             Name = "Tester";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -28,11 +28,19 @@ namespace Protocol_NoConnection
 
         public string Name { get; set; } = "NoConnection";
 
-        public bool ShowTestDialog { get; private set; }
+        public bool ShowTestDialog { get; set; }
+
+        public bool BuildTestPicServer { get; set; }
+
+        public string PicServerListenIP { get; set; } = "127.0.0.1";
+
+        public ushort PicServerListenPort { get; set; } = 45000;
 
         public long TestLoginQQ { get; set; } = 100000;
 
         public string TestNickName { get; set; } = "";
+
+        public PicServer PicServer { get; set; }
 
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
@@ -137,6 +145,11 @@ namespace Protocol_NoConnection
                 });
                 uiThread.SetApartmentState(ApartmentState.STA);
                 uiThread.Start();
+            }
+            if (BuildTestPicServer)
+            {
+                PicServer = new PicServer(@"data\image", PicServerListenIP, PicServerListenPort);
+                PicServer.Start();
             }
         }
 
@@ -261,6 +274,9 @@ namespace Protocol_NoConnection
             TestNickName = GetConfig("NoConnection_Nick", "测试账号9");
             TestLoginQQ = GetConfig("NoConnection_QQ", (long)999999999);
             ShowTestDialog = GetConfig("ShowTestDialog", true);
+            BuildTestPicServer = GetConfig("BuildTestPicServer", false);
+            PicServerListenIP = GetConfig("PicServerListenIP", "127.0.0.1");
+            PicServerListenPort = GetConfig("PicServerListenPort", (ushort)45000);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
