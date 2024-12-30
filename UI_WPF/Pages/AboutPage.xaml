@@ -15,9 +15,24 @@
     <StackPanel Margin="20">
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">更新</TextBlock>
         <TextBlock x:Name="CurrentVersionDisplay" Margin="0,10,0,5">当前版本：</TextBlock>
-        <TextBlock x:Name="NewVersionDisplay" Margin="0,5" Visibility="Collapsed">新版本：</TextBlock>
-        <TextBlock x:Name="NewVersionUpdateTimeDisplay" Margin="0,5" Visibility="Collapsed">更新时间：</TextBlock>
-        <TextBlock x:Name="NewVersionDescriptionDisplay" Margin="0,5" Visibility="Collapsed">更新说明：</TextBlock>
+        <TextBlock
+            x:Name="NewVersionDisplay"
+            Margin="0,5"
+            Visibility="Collapsed">
+            新版本：
+        </TextBlock>
+        <TextBlock
+            x:Name="NewVersionUpdateTimeDisplay"
+            Margin="0,5"
+            Visibility="Collapsed">
+            更新时间：
+        </TextBlock>
+        <TextBlock
+            x:Name="NewVersionDescriptionDisplay"
+            Margin="0,5"
+            Visibility="Collapsed">
+            更新说明：
+        </TextBlock>
 
         <StackPanel
             Margin="0,10"

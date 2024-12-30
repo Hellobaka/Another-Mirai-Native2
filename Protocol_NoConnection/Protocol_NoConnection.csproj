@@ -5,7 +5,7 @@
     <LangVersion>11</LangVersion>
     <Platforms>AnyCPU;x86</Platforms>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.7.0</Version>
+	  <Version>2.8.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
