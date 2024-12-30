@@ -3,9 +3,9 @@ using Another_Mirai_Native.Model;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
-    public class Protocol : IProtocol
+    public partial class LagrangeCoreAPI : IProtocol
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = $"Langrange.Core";
        
         public bool IsConnected { get; set ; }
 

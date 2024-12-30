@@ -1,14 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <RootNamespace>Another_Mirai_Native.Protocol.LagrangeCore</RootNamespace>
+    <RootNamespace>Another_Mirai_Native.Protocol.LagrangeCore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Lagrange.Core\**" />
+    <EmbeddedResource Remove="Lagrange.Core\**" />
+    <None Remove="Lagrange.Core\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
+    <ProjectReference Include="Lagrange.Core\Lagrange.Core\Lagrange.Core.csproj" />
   </ItemGroup>
 
 </Project>
