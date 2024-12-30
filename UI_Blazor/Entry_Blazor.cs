@@ -1,5 +1,6 @@
 using Another_Mirai_Native.BlazorUI.Components;
 using Another_Mirai_Native.BlazorUI.Models;
+using Another_Mirai_Native.DB;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using MudBlazor.Services;
@@ -44,64 +45,72 @@ namespace Another_Mirai_Native.BlazorUI
 
         public static void StartBlazorService()
         {
-            Blazor_Config.Instance.LoadConfig();
-            var builder = WebApplication.CreateBuilder();
-
-            // Add services to the container.
-            builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
-
-            builder.Services.AddMudServices();
-
-            builder.Services.AddCascadingAuthenticationState();
-            builder.Services.AddScoped<AuthService>();
-            builder.Services.AddScoped<RouteService>();
-            builder.Services.AddScoped<Shared>();
-            builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
-            builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
-            if (!ConsoleMode)
+            try
             {
-                // 清除所有默认日志提供程序
-                builder.Logging.ClearProviders();
-                builder.Logging.AddProvider(Logging.Instance);
+                Blazor_Config.Instance.LoadConfig();
+                var builder = WebApplication.CreateBuilder();
+
+                // Add services to the container.
+                builder.Services.AddRazorComponents()
+                    .AddInteractiveServerComponents();
+
+                builder.Services.AddMudServices();
+
+                builder.Services.AddCascadingAuthenticationState();
+                builder.Services.AddScoped<AuthService>();
+                builder.Services.AddScoped<RouteService>();
+                builder.Services.AddScoped<Shared>();
+                builder.Services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<AuthService>());
+                builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
+                if (!ConsoleMode)
+                {
+                    // 清除所有默认日志提供程序
+                    builder.Logging.ClearProviders();
+                    builder.Logging.AddProvider(Logging.Instance);
+                }
+                WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
+                builder.WebHost.UseUrls(WebUIURL);
+                if (Blazor_Config.Instance.ListenIP == "0.0.0.0" || Blazor_Config.Instance.ListenIP == "*")
+                {
+                    WebUIURL = $"http://127.0.0.1:{Blazor_Config.Instance.ListenPort}";
+                }
+                else if (Blazor_Config.Instance.ListenIP == "[::]")
+                {
+                    WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
+                }
+                var app = builder.Build();
+                BlazorHost = app;
+                var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+
+                lifetime.ApplicationStarted.Register(() =>
+                {
+                    OnBlazorServiceStarted?.Invoke();
+                });
+
+                lifetime.ApplicationStopped.Register(() =>
+                {
+                    OnBlazorServiceStopped?.Invoke();
+                });
+
+                // Configure the HTTP request pipeline.
+                if (!app.Environment.IsDevelopment())
+                {
+                    app.UseExceptionHandler("/Error");
+                }
+
+                app.UseStaticFiles();
+                app.UseAntiforgery();
+
+                app.MapRazorComponents<App>()
+                    .AddInteractiveServerRenderMode();
+
+                app.Run();
             }
-            WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
-            builder.WebHost.UseUrls(WebUIURL);
-            if (Blazor_Config.Instance.ListenIP == "0.0.0.0" || Blazor_Config.Instance.ListenIP == "*")
+            catch (Exception ex)
             {
-                WebUIURL = $"http://127.0.0.1:{Blazor_Config.Instance.ListenPort}";
+                LogHelper.Error("WebUI异常", ex);
+                Helper.ShowErrorDialog(ex, true);
             }
-            else if (Blazor_Config.Instance.ListenIP == "[::]")
-            {
-                WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
-            }
-            var app = builder.Build();
-            BlazorHost = app;
-            var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
-
-            lifetime.ApplicationStarted.Register(() =>
-            {
-                OnBlazorServiceStarted?.Invoke();
-            });
-
-            lifetime.ApplicationStopped.Register(() =>
-            {
-                OnBlazorServiceStopped?.Invoke();
-            });
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-            }
-
-            app.UseStaticFiles();
-            app.UseAntiforgery();
-
-            app.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode();
-
-            app.Run();
         }
     }
 }
