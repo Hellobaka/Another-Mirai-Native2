@@ -1,4 +1,6 @@
 ﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
@@ -8,6 +10,10 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public string Name { get; set; } = $"Langrange.Core";
        
         public bool IsConnected { get; set ; }
+       
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        public event Action QRCodeFinishedAction;
 
         public int CanSendImage()
         {
@@ -21,7 +27,13 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool Connect()
         {
-            return true;
+            _ = new LagrangeConfig();
+            if (!InitBotContext())
+            {
+                LogHelper.Error("登录", "Bot 实例创建失败");
+                return false;
+            }
+            return Login();
         }
 
         public int DeleteMsg(long msgId)
@@ -31,7 +43,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool Disconnect()
         {
-            return true;
+            return DisposeBotContext();
         }
 
         public Dictionary<string, string> GetConnectionConfig()
