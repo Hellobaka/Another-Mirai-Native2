@@ -18,8 +18,6 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public static Protocols SignFallbackPlatform { get; set; }
 
-        public static long QQ { get; set; }
-
         public static BotConfig BotConfig { get; set; }
 
         public static BotDeviceInfo BotDeviceInfo { get; set; }
@@ -29,8 +27,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public void Load()
         {
             SignUrl = GetConfig("SignUrl", "https://sign.lagrangecore.org/api/sign/25765");
-            SignFallbackPlatform = GetConfig("SignFallbackPlatform", Protocols.Windows);
-            QQ = GetConfig("QQ", (long)100000);
+            SignFallbackPlatform = GetConfig("SignFallbackPlatform", Protocols.Linux);
             BotConfig = GetConfig("BotConfig", new BotConfig()
             {
                 AutoReconnect = true,
@@ -47,8 +44,14 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             SetConfig("SignUrl", SignUrl);
             SetConfig("SignFallbackPlatform", SignFallbackPlatform);
-            SetConfig("QQ", QQ);
-            SetConfig("BotConfig", BotConfig);
+            SetConfig("BotConfig", new BotConfig()
+            {
+                AutoReconnect = BotConfig.AutoReconnect,
+                AutoReLogin = BotConfig.AutoReLogin,
+                GetOptimumServer = BotConfig.GetOptimumServer,
+                Protocol = BotConfig.Protocol,
+                UseIPv6Network = BotConfig.UseIPv6Network,
+            });
             SetConfig("BotDeviceInfo", BotDeviceInfo);
             SetConfig("BotKeystore", BotKeystore);
         }
