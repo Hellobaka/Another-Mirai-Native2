@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -263,15 +264,15 @@ namespace Another_Mirai_Native.UI
 
         private void SetQrCodeAction(ProtocolManager protocolManager)
         {
-            Action<string, byte[]> displayAction = (string title, byte[] data) =>
+            Action<string, byte[]> displayAction = (string url, byte[] data) =>
             {
                 Dispatcher.BeginInvoke(() =>
                 {
                     string path = Path.Combine("data", "image", "LoginQRCode");
                     Directory.CreateDirectory(path);
-                    string fileName = Guid.NewGuid().ToString();
+                    string fileName = Guid.NewGuid().ToString() + ".png";
                     File.WriteAllBytes(Path.Combine(path, fileName), data);
-                    if (Uri.TryCreate(Path.Combine(path, fileName), UriKind.RelativeOrAbsolute, out var uri))
+                    if (Uri.TryCreate(Path.GetFullPath(Path.Combine(path, fileName)), UriKind.Absolute, out var uri))
                     {
                         QRCodeViewer ??= new PictureViewer
                         {

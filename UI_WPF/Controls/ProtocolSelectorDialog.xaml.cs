@@ -105,8 +105,6 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 ErrorDisplay.Text = "配置校验失败，请修改后重试";
             }
-            AppConfig.Instance.AutoProtocol = CurrentProtocol.Name;
-            AppConfig.Instance.SetConfig("AutoProtocol", CurrentProtocol.Name);
             Connecting = true;
             Task.Run(() =>
             {
@@ -116,8 +114,16 @@ namespace Another_Mirai_Native.UI.Controls
                     Connecting = false;
                     if (ret)
                     {
+                        AppConfig.Instance.AutoProtocol = CurrentProtocol.Name;
+                        AppConfig.Instance.SetConfig("AutoProtocol", CurrentProtocol.Name);
+
                         DialogResult = ContentDialogResult.Primary;
                         Hide();
+                    }
+                    else
+                    {
+                        ErrorDisplay.Text = "连接失败，请检查配置后重试";
+                        Connecting = false;
                     }
                 });
             });
