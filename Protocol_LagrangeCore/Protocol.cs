@@ -7,7 +7,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
     public partial class LagrangeCoreAPI : IProtocol
     {
-        public string Name { get; set; } = $"Langrange.Core";
+        public string Name { get; set; } = $"Lagrange.Core";
        
         public bool IsConnected { get; set ; }
        
