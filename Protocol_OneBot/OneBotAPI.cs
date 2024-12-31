@@ -776,5 +776,9 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             return msg;
         }
+
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        public event Action QRCodeFinishedAction;
     }
 }

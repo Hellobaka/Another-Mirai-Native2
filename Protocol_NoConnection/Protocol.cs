@@ -398,5 +398,9 @@ namespace Protocol_NoConnection
                 Sex = QQSex.Man
             };
         }
+
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        public event Action QRCodeFinishedAction;
     }
 }

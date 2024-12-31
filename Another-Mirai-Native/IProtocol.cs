@@ -309,5 +309,16 @@ namespace Another_Mirai_Native
         /// <param name="isDisband"><see cref="bool">True</see> 为开启; <see cref="bool">False</see> 为关闭</param>
         /// <returns>0为 <see cref="bool">操作成功</see>; 1为 <see cref="bool">操作失败</see></returns>
         public int SetGroupWholeBan(long groupId, bool isOpen);
+
+        /// <summary>
+        /// 二维码显示，禁止阻塞
+        /// Url, 二维码图片buffer
+        /// </summary>
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        /// <summary>
+        /// 二维码完成，关闭显示，禁止阻塞
+        /// </summary>
+        public event Action QRCodeFinishedAction;
     }
 }

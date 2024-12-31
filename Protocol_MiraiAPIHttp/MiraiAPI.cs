@@ -629,5 +629,9 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         {
             return sex == null ? QQSex.Unknown : sex == "MALE" ? QQSex.Man : sex == "FEMALE" ? QQSex.Woman : QQSex.Unknown;
         }
+
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        public event Action QRCodeFinishedAction;
     }
 }

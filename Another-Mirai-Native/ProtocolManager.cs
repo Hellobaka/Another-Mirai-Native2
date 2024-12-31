@@ -23,6 +23,15 @@ namespace Another_Mirai_Native
             Instance = this;
         }
 
+        public void SetQrCodeAction(Action<string, byte[]> displayAction, Action finishedAction)
+        {
+            foreach (var protocol in Protocols)
+            {
+                protocol.QRCodeDisplayAction += displayAction;
+                protocol.QRCodeFinishedAction += finishedAction;
+            }
+        }
+
         public bool Start(IProtocol protocol)
         {
             if (protocol == null)

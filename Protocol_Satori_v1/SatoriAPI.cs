@@ -494,5 +494,9 @@ namespace Another_Mirai_Native.Protocol.Satori
             }
             return 1;
         }
+
+        public event Action<string, byte[]> QRCodeDisplayAction;
+
+        public event Action QRCodeFinishedAction;
     }
 }
