@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.Pages;
+using Another_Mirai_Native.UI.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
 using ModernWpf;
 using ModernWpf.Controls;
@@ -79,6 +80,8 @@ namespace Another_Mirai_Native.UI
         private Dictionary<string, object> PageCache { get; set; } = new();
 
         private DispatcherTimer ResizeTimer { get; set; }
+
+        private PictureViewer QRCodeViewer { get; set; }
 
         public void BuildTaskbarIconMenu()
         {
@@ -229,7 +232,8 @@ namespace Another_Mirai_Native.UI
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
-            _ = new ProtocolManager();
+            ProtocolManager protocolManager = new();
+            SetQrCodeAction(protocolManager);
             ProtocolSelectorDialog dialog = new();
             await dialog.ShowAsync();
             if (dialog.DialogResult == ContentDialogResult.Secondary)
@@ -257,15 +261,51 @@ namespace Another_Mirai_Native.UI
             PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
         }
 
+        private void SetQrCodeAction(ProtocolManager protocolManager)
+        {
+            Action<string, byte[]> displayAction = (string title, byte[] data) =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    string path = Path.Combine("data", "image", "LoginQRCode");
+                    Directory.CreateDirectory(path);
+                    string fileName = Guid.NewGuid().ToString();
+                    File.WriteAllBytes(Path.Combine(path, fileName), data);
+                    if (Uri.TryCreate(Path.Combine(path, fileName), UriKind.RelativeOrAbsolute, out var uri))
+                    {
+                        QRCodeViewer ??= new PictureViewer
+                        {
+                            Title = "二维码登录 关闭后无法再次打开",
+                            Owner = this
+                        };
+                        QRCodeViewer.Image = uri;
+                        QRCodeViewer.Show();
+                    }
+                    else
+                    {
+                        DialogHelper.ShowSimpleDialog("二维码显示失败", "二维码显示失败，无法保存图片");
+                    }
+                });
+            };
+            Action finishedAction = () =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    QRCodeViewer?.Close();
+                });
+            };
+            protocolManager.SetQrCodeAction(displayAction, finishedAction);
+        }
+
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var selectedItem = (NavigationViewItem)args.SelectedItem;
             if (selectedItem != null)
             {
                 string selectedItemTag = (string)selectedItem.Tag;
-                if (PageCache.ContainsKey(selectedItemTag))
+                if (PageCache.TryGetValue(selectedItemTag, out object? page))
                 {
-                    MainFrame.Navigate(PageCache[selectedItemTag]);
+                    MainFrame.Navigate(page);
                 }
                 else
                 {
