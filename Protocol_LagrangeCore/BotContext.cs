@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model.Enums;
 using Lagrange.Core;
 using Lagrange.Core.Common;
 using Lagrange.Core.Common.Interface;
@@ -203,7 +204,17 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnBotLogEvent(BotContext context, Lagrange.Core.Event.EventArg.BotLogEvent e)
         {
-            
+            LogLevel level = e.Level switch
+            {
+                Lagrange.Core.Event.EventArg.LogLevel.Debug => LogLevel.Debug,
+                Lagrange.Core.Event.EventArg.LogLevel.Verbose => LogLevel.Info,
+                Lagrange.Core.Event.EventArg.LogLevel.Information => LogLevel.Info,
+                Lagrange.Core.Event.EventArg.LogLevel.Warning => LogLevel.Warning,
+                Lagrange.Core.Event.EventArg.LogLevel.Exception => LogLevel.Error,
+                Lagrange.Core.Event.EventArg.LogLevel.Fatal => LogLevel.Fatal,
+                _ => LogLevel.Info
+            };
+            LogHelper.WriteLog(level, e.Tag, e.EventMessage);
         }
 
         private bool DisposeBotContext()
@@ -309,14 +320,14 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             QRCodeDisplayAction?.Invoke(captcha.Value.url, captcha.Value.qrCode);
             LogHelper.Info("二维码登录", "开始等待扫码状态...");
             var loginResult = ((Task<bool>)BotContext.LoginByQrCode(LoginToken.Token)).Result;
-            LogHelper.Info("二维码登录", "扫码成功");
-            LagrangeConfig.BotKeystore = BotContext.UpdateKeystore();
+            if (loginResult)
+            {
+                LogHelper.Info("二维码登录", "扫码成功");
+                LagrangeConfig.BotKeystore = BotContext.UpdateKeystore();
+            }
             QRCodeFinishedAction?.Invoke();
 
-            return loginResult
-                && LagrangeConfig.BotKeystore.Session != null
-                && LagrangeConfig.BotKeystore.Session.TempPassword != null
-                && LagrangeConfig.BotKeystore.Session.TempPassword.Length > 0;
+            return loginResult;
         }
 
         private bool PasswordLogin(BotKeystore keystore)

@@ -16,9 +16,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public BotAppInfo BotAppInfo { get; set; }
 
-        private Protocols Platform { get; set; } = Protocols.Windows;
+        private Protocols Platform { get; set; } = Protocols.Linux;
 
-        public BotSign(string signUrl, Protocols platform = Protocols.Windows)
+        public BotSign(string signUrl, Protocols platform = Protocols.Linux)
         {
             SignUrl = string.IsNullOrEmpty(signUrl) ? FallbackUrl : signUrl;
             Platform = platform;
@@ -103,15 +103,17 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 var response = getTask.Result;
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    LogHelper.Error("获取签名服务器版本", $"请求失败，状态码 = {response.StatusCode}");
+                    LogHelper.Error("签名服务器", $"获取签名服务器版本失败，状态码 = {response.StatusCode}");
                     return null;
                 }
                 var content = response.Content.ReadAsStringAsync().Result;
-                return JsonConvert.DeserializeObject<BotAppInfo>(content);
+                var appInfo = JsonConvert.DeserializeObject<BotAppInfo>(content);
+                LogHelper.Info("签名服务器", $"协议版本：{appInfo.CurrentVersion}");
+                return appInfo;
             }
             catch (Exception e)
             {
-                LogHelper.Error("获取签名服务器版本", $"请求失败，{e.Message}\n{e.StackTrace}");
+                LogHelper.Error("签名服务器", $"获取签名服务器版本失败，{e.Message}\n{e.StackTrace}");
                 return null;
             }
         }
