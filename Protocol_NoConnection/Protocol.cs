@@ -182,6 +182,11 @@ namespace Protocol_NoConnection
         {
             IsConnected = false;
             PicServer.Stop();
+            TesterForm.Invoke(() =>
+            {
+                TesterForm.Close();
+                TesterForm.Dispose();
+            });
             return true;
         }
 
