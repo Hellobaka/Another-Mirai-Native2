@@ -8,8 +8,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
     public partial class LagrangeCoreAPI : IProtocol
     {
         public string Name { get; set; } = $"Lagrange.Core";
-       
-        public bool IsConnected { get; set ; }
+
+        public bool IsConnected { get; set; }
        
         public event Action<string, byte[]> QRCodeDisplayAction;
 
@@ -17,12 +17,12 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public int CanSendImage()
         {
-            return 0;
+            return 1;
         }
 
         public int CanSendRecord()
         {
-            return 0;
+            return 1;
         }
 
         public bool Connect()
@@ -88,12 +88,12 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public string GetLoginNick()
         {
-            return "";
+            return BotContext.BotName;
         }
 
         public long GetLoginQQ()
         {
-            return 0;
+            return BotContext.BotUin;
         }
 
         public List<FriendInfo> GetRawFriendList(bool reserved)
