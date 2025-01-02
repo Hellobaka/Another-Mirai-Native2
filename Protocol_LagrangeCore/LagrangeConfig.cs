@@ -27,7 +27,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public void Load()
         {
             SignUrl = GetConfig("SignUrl", "https://sign.lagrangecore.org/api/sign/25765");
-            SignFallbackPlatform = GetConfig("SignFallbackPlatform", Protocols.Linux);
+            SignFallbackPlatform = Enum.TryParse(GetConfig("SignFallbackPlatform", "Linux"), false, out Protocols p) ? p : Protocols.Linux;
             BotConfig = GetConfig("BotConfig", new BotConfig()
             {
                 AutoReconnect = true,
@@ -43,7 +43,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public void Save()
         {
             SetConfig("SignUrl", SignUrl);
-            SetConfig("SignFallbackPlatform", SignFallbackPlatform);
+            SetConfig("SignFallbackPlatform", SignFallbackPlatform.ToString());
+            // 重建对象 防止将 Sign 对象存入
             SetConfig("BotConfig", new BotConfig()
             {
                 AutoReconnect = BotConfig.AutoReconnect,
