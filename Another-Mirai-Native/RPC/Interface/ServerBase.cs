@@ -281,7 +281,7 @@ namespace Another_Mirai_Native.RPC.Interface
         {
             WaitingMessage.Add(guid, new InvokeResult());
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title, content, canIgnore);
-            RequestWaiter.Wait(guid, -1, out _);
+            RequestWaiter.Wait(guid, -1, null, out _);
             WaitingMessage.Remove(guid);
         }
 

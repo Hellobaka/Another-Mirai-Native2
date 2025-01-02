@@ -489,5 +489,7 @@ namespace Another_Mirai_Native
 
             return null;
         }
+
+        public static long ToLong(this uint? value) => value ?? 0;
     }
 }

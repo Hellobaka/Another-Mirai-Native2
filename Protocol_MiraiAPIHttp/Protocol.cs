@@ -127,7 +127,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             EventConnection = new(event_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.Instance.LoadTimeout, out _);
+                RequestWaiter.Wait("MAH_EventAuthKey", AppConfig.Instance.LoadTimeout, null, out _);
             });
             EventConnection.OnOpen += EventConnection_OnOpen;
             EventConnection.OnClose += EventConnection_OnClose;
@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             MessageConnection = new(message_ConnectUrl);
             var waitTask = Task.Run(() =>
             {
-                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.Instance.LoadTimeout, out _);
+                RequestWaiter.Wait("MAH_MessageAuthKey", AppConfig.Instance.LoadTimeout, null, out _);
             });
             MessageConnection.OnOpen += MessageConnection_OnOpen;
             MessageConnection.OnClose += MessageConnection_OnClose;

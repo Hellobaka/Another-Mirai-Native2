@@ -258,7 +258,7 @@ namespace Another_Mirai_Native.Native
             }
             else
             {
-                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.Instance.LoadTimeout, out _);
+                RequestWaiter.Wait($"PluginEnabled_{plugin.AppInfo.name}", AppConfig.Instance.LoadTimeout, null, out _);
             }
         }
 
