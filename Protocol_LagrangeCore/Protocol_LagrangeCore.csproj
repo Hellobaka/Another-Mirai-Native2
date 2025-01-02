@@ -17,6 +17,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
     <ProjectReference Include="Lagrange.Core\Lagrange.Core\Lagrange.Core.csproj" />
+	<PackageReference Include="SqlSugarCore">
+		<Version>5.1.4.170</Version>
+	</PackageReference>
   </ItemGroup>
 
 </Project>
