@@ -1,9 +1,15 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using Lagrange.Core;
 using Lagrange.Core.Common;
 using Lagrange.Core.Common.Interface;
 using Lagrange.Core.Common.Interface.Api;
+using Lagrange.Core.Message;
+using Lagrange.Core.Message.Entity;
+using System.Diagnostics;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
@@ -55,6 +61,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 BotContext.Invoker.OnGroupTodoEvent += Invoker_OnGroupTodoEvent;
                 BotContext.Invoker.OnTempMessageReceived += Invoker_OnTempMessageReceived;
 
+                MessageChainPaser.OnFileUploaded += MessageChainPaser_OnFileUploaded;
                 LogHelper.Info("创建Bot实例", $"成功");
 
                 return true;
@@ -64,6 +71,21 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 LogHelper.Error("创建Bot实例", ex);
                 return false;
             }
+        }
+
+        private void MessageChainPaser_OnFileUploaded(MessageChain chain, FileEntity file)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            MemoryStream stream = new();
+            BinaryWriter binaryWriter = new(stream);
+            BinaryWriterExpand.Write_Ex(binaryWriter, file.FileId);
+            BinaryWriterExpand.Write_Ex(binaryWriter, file.FileName);
+            BinaryWriterExpand.Write_Ex(binaryWriter, file.FileSize);
+            BinaryWriterExpand.Write_Ex(binaryWriter, 0);
+            PluginManagerProxy.Instance.Event_OnUpload(1, Helper.TimeStamp, chain.GroupUin.ToLong(), chain.FriendUin, Convert.ToBase64String(stream.ToArray()));
+            sw.Stop();
+            LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传", $"来源群:{chain.GroupUin}({chain.FriendInfo?.Group.GroupName}) 来源QQ:{chain.FriendUin}({chain.FriendInfo?.Nickname}) " +
+                $"文件名:{file.FileName} 大小:{file.FileSize / 1000}KB FileID:{file.FileId}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");
         }
 
         private void Invoker_OnTempMessageReceived(BotContext context, Lagrange.Core.Event.EventArg.TempMessageEvent e)
@@ -103,7 +125,26 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnGroupMessageReceived(BotContext context, Lagrange.Core.Event.EventArg.GroupMessageEvent e)
         {
+            if (e.Chain.FriendUin == AppConfig.Instance.CurrentQQ)
+            {
+                return;
+            }
+            Stopwatch sw = Stopwatch.StartNew();
+            var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
+            int messageId = MessageCacher.CalcMessageHash(e.Chain.MessageId, e.Chain.Sequence);
+            Task.Run(() => MessageCacher.RecordMessage(messageId, e.Chain));
+
+            int logId = 0;
+            logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{e.Chain.GroupUin}({e.Chain.FriendInfo?.Group.GroupName}) QQ:{e.Chain.FriendUin}({e.Chain.FriendInfo?.Nickname}) 消息: {message}", "处理中...");
+            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, messageId, e.Chain.GroupUin.ToLong(), e.Chain.FriendUin, "", message, 0, DateTime.Now);
             
+            sw.Stop();
+            string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
+            if (handledPlugin != null)
+            {
+                updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
+            }
+            LogHelper.UpdateLogStatus(logId, updateMsg);
         }
 
         private void Invoker_OnGroupMemberMuteEvent(BotContext context, Lagrange.Core.Event.EventArg.GroupMemberMuteEvent e)
@@ -188,13 +229,15 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnBotOfflineEvent(BotContext context, Lagrange.Core.Event.EventArg.BotOfflineEvent e)
         {
-            
+            LogHelper.Info("Bot离线", e.EventMessage);
+            IsConnected = false;
         }
 
         private void Invoker_OnBotOnlineEvent(BotContext context, Lagrange.Core.Event.EventArg.BotOnlineEvent e)
         {
-            LogHelper.Info("Bot在线状态变化", e.EventMessage);
+            LogHelper.Info("Bot在线", e.EventMessage);
             RequestWaiter.TriggerByKey("LagrangeCoreLogin", true);
+            IsConnected = true;
         }
 
         private void Invoker_OnBotCaptchaEvent(BotContext context, Lagrange.Core.Event.EventArg.BotCaptchaEvent e)
@@ -207,11 +250,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             LogLevel level = e.Level switch
             {
                 Lagrange.Core.Event.EventArg.LogLevel.Debug => LogLevel.Debug,
-                Lagrange.Core.Event.EventArg.LogLevel.Verbose => LogLevel.Info,
+                Lagrange.Core.Event.EventArg.LogLevel.Verbose => LogLevel.Debug,
                 Lagrange.Core.Event.EventArg.LogLevel.Information => LogLevel.Info,
                 Lagrange.Core.Event.EventArg.LogLevel.Warning => LogLevel.Warning,
                 Lagrange.Core.Event.EventArg.LogLevel.Exception => LogLevel.Error,
-                Lagrange.Core.Event.EventArg.LogLevel.Fatal => LogLevel.Fatal,
+                Lagrange.Core.Event.EventArg.LogLevel.Fatal => LogLevel.Error,
                 _ => LogLevel.Info
             };
             LogHelper.WriteLog(level, e.Tag, e.EventMessage);
@@ -249,7 +292,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 BotContext.Invoker.OnGroupRecallEvent -= Invoker_OnGroupRecallEvent;
                 BotContext.Invoker.OnGroupTodoEvent -= Invoker_OnGroupTodoEvent;
                 BotContext.Invoker.OnTempMessageReceived -= Invoker_OnTempMessageReceived;
-                
+                MessageChainPaser.OnFileUploaded -= MessageChainPaser_OnFileUploaded;
+
                 LoginToken?.Cancel();
                 BotContext?.Dispose();
 
@@ -273,7 +317,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 // 失败后再使用密码登录 (不实现)
                 // 若不存在密码，则使用二维码
                 var keystore = BotContext.UpdateKeystore();
-                bool wait = RequestWaiter.Wait("LagrangeCoreLogin", null, (int)TimeSpan.FromSeconds(60).TotalMilliseconds, () =>
+                bool wait = RequestWaiter.Wait("LagrangeCoreLogin", (int)TimeSpan.FromSeconds(60).TotalMilliseconds, () =>
                 {
                     bool success = SessionLogin(keystore)
                         || PasswordLogin(keystore)
@@ -286,11 +330,22 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         LagrangeConfig.Instance.Save();
                         LogHelper.Info("账号登录", "已更新登录状态缓存");
                     }
+                    else
+                    {
+                        RequestWaiter.TriggerByKey("LagrangeCoreLogin", false);
+                    }
                 }, out object r);
-
+                bool waitResult = r != null && (bool)r;
                 if (wait)
                 {
-                    LogHelper.Info("账号登录", $"登录成功，{BotContext.BotName}({BotContext.BotUin})");
+                    if (waitResult)
+                    {
+                        LogHelper.Info("账号登录", $"登录成功，{BotContext.BotName}({BotContext.BotUin})");
+                    }
+                    else
+                    {
+                        LogHelper.Error("账号登录", "登录失败");
+                    }
                 }
                 else
                 {
@@ -298,7 +353,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     LoginToken?.Cancel();
                     return false;
                 }
-                return r is bool waitResult && waitResult;
+                return waitResult;
             }
             catch (Exception ex)
             {
