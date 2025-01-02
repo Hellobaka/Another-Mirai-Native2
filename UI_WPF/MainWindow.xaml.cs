@@ -82,7 +82,7 @@ namespace Another_Mirai_Native.UI
 
         private DispatcherTimer ResizeTimer { get; set; }
 
-        private PictureViewer QRCodeViewer { get; set; }
+        private PictureViewer? QRCodeViewer { get; set; }
 
         public void BuildTaskbarIconMenu()
         {
@@ -293,6 +293,7 @@ namespace Another_Mirai_Native.UI
                 Dispatcher.BeginInvoke(() =>
                 {
                     QRCodeViewer?.Close();
+                    QRCodeViewer = null;
                 });
             };
             protocolManager.SetQrCodeAction(displayAction, finishedAction);
