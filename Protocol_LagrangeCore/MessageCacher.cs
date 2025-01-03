@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private static string GetDBPath()
         {
-            var path = Path.Combine("logs", "Lagrange", DateTime.Now.Year + ".db");
+            var path = Path.Combine("logs", "Lagrange", $"{DateTime.Now:yyyyMM}" + ".db");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             if (File.Exists(path) is false)
             {
