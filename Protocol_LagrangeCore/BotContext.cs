@@ -272,8 +272,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             var request = requests?.FirstOrDefault(x => x.GroupUin == e.GroupUin && e.TargetUin == x.TargetMemberUin);
             if (request != null)
             {
-                int id = Helper.MakeUniqueID();
-                RequestCache.GroupRequest.Add(id.ToString(), (request.TargetMemberUin, request.TargetMemberCard, e.GroupUin, ""));
+                string id = $"{e.GroupUin}_{e.TargetUin}";
                 int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "添加群请求", $"群:{e.GroupUin} 申请者:{e.TargetUin} 备注:{request.Comment}", "处理中...");
                 var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
 
@@ -294,8 +293,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             var request = requests?.FirstOrDefault(x => x.GroupUin == e.GroupUin && e.TargetUin == x.TargetMemberUin);
             if (request != null)
             {
-                int id = Helper.MakeUniqueID();
-                RequestCache.GroupRequest.Add(id.ToString(), (request.TargetMemberUin, request.TargetMemberCard, e.GroupUin, ""));
+                string id = $"{e.GroupUin}_{e.TargetUin}";
                 int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "添加群请求", $"群:{e.GroupUin} 申请者:{e.TargetUin} 邀请者:{request.InvitorMemberUin}({request.InvitorMemberCard}) 备注:{request.Comment}", "处理中...");
                 var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -335,8 +333,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            int id = Helper.MakeUniqueID();
-            RequestCache.FriendRequest.Add(id.ToString(), (e.SourceUin, e.Source));
+            string id = $"{e.SourceUin}";
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "添加好友请求", $"申请者:{e.SourceUin} 备注:{e.Message}", "处理中...");
             var handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, Helper.DateTime2TimeStamp(e.EventTime), e.SourceUin, e.EventMessage, id.ToString());
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
