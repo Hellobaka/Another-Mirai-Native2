@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is ForwardEntity forward)
                 {
-                    // ignore
+                    message.Append($"[CQ:reply,id={MessageCacher.CalcMessageHash(forward.MessageId, forward.Sequence)}]");
                 }
                 else if (item is GreyTipEntity greyTip)
                 {
