@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public void Load()
         {
-            SignUrl = GetConfig("SignUrl", "https://sign.lagrangecore.org/api/sign/25765");
+            SignUrl = GetConfig("SignUrl", "https://sign.lagrangecore.org/api/sign/30366");
             SignFallbackPlatform = Enum.TryParse(GetConfig("SignFallbackPlatform", "Linux"), false, out Protocols p) ? p : Protocols.Linux;
             BotConfig = GetConfig("BotConfig", new BotConfig()
             {
