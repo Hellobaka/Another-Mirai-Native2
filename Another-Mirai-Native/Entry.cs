@@ -32,6 +32,9 @@ namespace Another_Mirai_Native
         // -WS 核心WS路径
         public static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
+
             if (args.Length == 0)
             {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
@@ -88,9 +91,16 @@ namespace Another_Mirai_Native
                     LogHelper.Error("初始化", "构建服务器失败");
                     return;
                 }
+                ProtocolManager protocolManager = new();
+                SetQRCodeAction(protocolManager);
                 if (!AppConfig.Instance.AutoConnect)
                 {
                     Console.WriteLine();
+                    Console.WriteLine("[-]可用协议列表：");
+                    foreach(var item in ProtocolManager.Protocols)
+                    {
+                        Console.WriteLine(item.Name);
+                    }
                     Console.WriteLine("[-]当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
                     Console.WriteLine("[-]请输入 connect 以进行手动连接。");
                     while (true)
@@ -101,8 +111,6 @@ namespace Another_Mirai_Native
                         }
                     }
                 }
-                ProtocolManager protocolManager = new();
-                SetQRCodeAction(protocolManager);
                 // 若配置无需UI则自动连接之后加载插件
                 if (!protocolManager.Start(AppConfig.Instance.AutoProtocol))
                 {
