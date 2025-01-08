@@ -76,10 +76,13 @@ namespace Another_Mirai_Native.Config
 
         public int MaxChatImageCacheFolderSize { get; set; }
 
+        public bool QRCodeCompatibilityMode { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
             AutoConnect = GetConfig("AutoConnect", false);
+            QRCodeCompatibilityMode = GetConfig("QRCodeCompatibilityMode", false);
             AutoProtocol = GetConfig("AutoProtocol", "NoConnection");
             if (string.IsNullOrEmpty(AutoProtocol))
             {

@@ -99,9 +99,10 @@ namespace Another_Mirai_Native
                         }
                     }
                 }
-
+                ProtocolManager protocolManager = new();
+                SetQRCodeAction(protocolManager);
                 // 若配置无需UI则自动连接之后加载插件
-                if (!new ProtocolManager().Start(AppConfig.Instance.AutoProtocol))
+                if (!protocolManager.Start(AppConfig.Instance.AutoProtocol))
                 {
                     return;
                 }
@@ -428,6 +429,26 @@ namespace Another_Mirai_Native
                     AppConfig.Instance.CurrentQQ = long.Parse(args[i + 1]);
                 }
             }
+        }
+
+        private static void SetQRCodeAction(ProtocolManager protocolManager)
+        {
+            string guid = Guid.NewGuid().ToString().Replace("-", "");
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, guid + ".png");
+            Action<string, byte[]> displayAction = (string url, byte[] data) =>
+            {
+                File.WriteAllBytes(filePath, data);
+                LogHelper.Info("二维码", $"二维码已写出到运行目录：{filePath}");
+                QRCodeHelper.Output(url, AppConfig.Instance.QRCodeCompatibilityMode);
+            };
+            Action finishedAction = () =>
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            };
+            protocolManager.SetQrCodeAction(displayAction, finishedAction);
         }
     }
 }
