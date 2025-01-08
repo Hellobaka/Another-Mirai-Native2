@@ -61,7 +61,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public static MessageChain? GetMessageById(uint messageId)
         {
             using var db = GetInstance(GetDBPath());
-            return db.Queryable<MessageCacher>().First(x => x.MessageId == messageId)?.Record;
+            return db.Queryable<MessageCacher>().Where(x => x.MessageId == messageId).ToList().Last()?.Record;
         }
 
         public static int CalcMessageHash(ulong msgId, uint seq)
