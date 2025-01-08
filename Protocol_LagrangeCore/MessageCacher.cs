@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Config;
 using Lagrange.Core.Message;
+using System.Reflection;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
@@ -9,18 +10,22 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private static Dictionary<int, (ulong, uint)> MessageIDCache { get; set; } = [];
 
-        private static int InternalMessageId { get; set; } = 1;
-
         private static object MessageCacheLock { get; set; } = new();
+
+        public static int RecordMessage(MessageChain chain, ulong id, uint seq)
+        {
+            typeof(MessageChain).GetProperty("MessageId", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(chain, id);
+            typeof(MessageChain).GetProperty("Sequence", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(chain, seq);
+            return RecordMessage(chain);
+        }
 
         public static int RecordMessage(MessageChain chain)
         {
             lock (MessageCacheLock)
             {
-                int messageId = InternalMessageId;
+                int messageId = MakeUniqueID();
                 MessageIDCache[messageId] = (chain.MessageId, chain.Sequence);
                 MessageCache[(chain.MessageId, chain.Sequence)] = chain;
-                InternalMessageId++;
 
                 if (messageId >= AppConfig.Instance.MessageCacheSize)
                 {
@@ -46,20 +51,22 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             return null;
         }
 
-        public static MessageChain? GetMessageByRawId(ulong msgId, uint seq)
-        {
-            if (MessageCache.TryGetValue((msgId, seq), out var chain))
-            {
-                return chain;
-            }
-            return null;
-        }
-
         public static int GetMessageId(ulong msgId, uint seq)
         {
             return MessageIDCache.Any(x => x.Value == (msgId, seq))
                 ? MessageIDCache.First(x => x.Value == (msgId, seq)).Key
                 : 0;
+        }
+
+        private static int MakeUniqueID()
+        {
+            int id;
+            do
+            {
+                id = Math.Abs(Helper.Random.Next());
+            }while (MessageIDCache.ContainsKey(id));
+
+            return id;
         }
     }
 }
