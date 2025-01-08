@@ -88,8 +88,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             PluginManagerProxy.Instance.Event_OnUpload(1, Helper.TimeStamp, chain.GroupUin.ToLong(), chain.FriendUin, Convert.ToBase64String(stream.ToArray()));
             sw.Stop();
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传",
-                $"来源群:{chain.GroupUin}({ChatHistoryHelper.GetGroupName(chain.GroupUin.ToLong())}) " +
-                $"来源QQ:{chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(chain.GroupUin.ToLong(), chain.FriendUin)}) " +
+                $"来源群:{chain.GroupUin}({ChatHistoryHelper.GetGroupName(chain.GroupUin.ToLong()).Result}) " +
+                $"来源QQ:{chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(chain.GroupUin.ToLong(), chain.FriendUin).Result}) " +
                 $"文件名:{file.FileName} " +
                 $"大小:{file.FileSize / 1000}KB " +
                 $"FileID:{file.FileId}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");
@@ -100,12 +100,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
-            int messageId = MessageCacher.CalcMessageHash(e.Chain.MessageId, e.Chain.Sequence);
-            Task.Run(() => MessageCacher.RecordMessage(messageId, e.Chain));
+            int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息",
-                $"群:{e.Chain.GroupUin}({ChatHistoryHelper.GetGroupName(e.Chain.GroupUin.ToLong())}) " +
-                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(e.Chain.GroupUin.ToLong(), e.Chain.FriendUin)}) " +
+                $"群:{e.Chain.GroupUin}({ChatHistoryHelper.GetGroupName(e.Chain.GroupUin.ToLong()).Result}) " +
+                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(e.Chain.GroupUin.ToLong(), e.Chain.FriendUin).Result}) " +
                 $"消息:{message}", "处理中...");
             var handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(2, messageId, e.Chain.FriendUin, message, 0, DateTime.Now);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -119,21 +118,21 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         private void Invoker_OnGroupTodoEvent(BotContext context, Lagrange.Core.Event.EventArg.GroupTodoEvent e)
         {
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群待办",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin)})", "");
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin).Result})", "");
         }
 
         private void Invoker_OnGroupRecallEvent(BotContext context, Lagrange.Core.Event.EventArg.GroupRecallEvent e)
         {
             Stopwatch sw = Stopwatch.StartNew();
             int logId = 0;
-            var msgId = MessageCacher.CalcMessageHash(e.Random, e.Sequence);
-            var message = MessageCacher.GetMessageById((uint)msgId);
+            var msgId = MessageCacher.GetMessageId(e.Random, e.Sequence);
+            var message = MessageCacher.GetMessageById(msgId);
             if (message == null)
             {
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群撤回",
-                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                    $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin)}) " +
+                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                    $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin).Result}) " +
                     $"消息:消息拉取失败", "处理中...");
             }
             else
@@ -141,8 +140,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 string parsedMessage = MessageChainPaser.ParseMessageChainToCQCode(message);
                 PluginManagerProxy.Instance.Event_OnGroupMsgRecall(msgId, e.GroupUin, parsedMessage);
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群撤回",
-                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                    $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin)}) " +
+                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                    $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin).Result}) " +
                     $"消息:{parsedMessage}", "处理中...");
             }
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -153,7 +152,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群回应",
                 $"群:{e.TargetGroupUin} " +
-                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.TargetGroupUin, e.OperatorUin)}) " +
+                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.TargetGroupUin, e.OperatorUin).Result}) " +
                 $"表情ID:{e.Code} " +
                 $"数量:{e.Count}", "");
         }
@@ -161,8 +160,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         private void Invoker_OnGroupPokeEvent(BotContext context, Lagrange.Core.Event.EventArg.GroupPokeEvent e)
         {
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "戳一戳",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin)}) " +
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin).Result}) " +
                 $"动作:{e.Action}", "");
         }
 
@@ -171,7 +170,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群名变更",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                 $"新名称:{e.Name}", "处理中...");
             PluginManagerProxy.Instance.Event_OnGroupNameChanged(e.GroupUin, e.Name);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -183,8 +182,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", $"全体{(e.IsMuted ? "" : "解除")}禁言",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong())})", "处理中...");
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
             int subType = e.IsMuted ? 2 : 1;
             var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), 0, 0);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -203,12 +202,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             }
             Stopwatch sw = Stopwatch.StartNew();
             var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
-            int messageId = MessageCacher.CalcMessageHash(e.Chain.MessageId, e.Chain.Sequence);
-            Task.Run(() => MessageCacher.RecordMessage(messageId, e.Chain));
+            int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息",
-                $"群:{e.Chain.GroupUin}({ChatHistoryHelper.GetGroupName(e.Chain.GroupUin.ToLong())}) " +
-                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(e.Chain.GroupUin.ToLong(), e.Chain.FriendUin)}) " +
+                $"群:{e.Chain.GroupUin}({ChatHistoryHelper.GetGroupName(e.Chain.GroupUin.ToLong()).Result}) " +
+                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(e.Chain.GroupUin.ToLong(), e.Chain.FriendUin).Result}) " +
                 $"消息: {message}", "处理中...");
             CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, messageId, e.Chain.GroupUin.ToLong(), e.Chain.FriendUin, "", message, 0, DateTime.Now);
 
@@ -226,9 +224,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", $"群员被{(e.Duration == 0 ? "解除" : "")}禁言",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"被禁言:{e.TargetUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.TargetUin)}) " +
-                $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong())}) " +
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"被禁言:{e.TargetUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.TargetUin).Result}) " +
+                $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result}) " +
                 $"时长:{e.Duration}", "处理中...");
             int subType = e.Duration != 0 ? 2 : 1;
             var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), e.TargetUin, e.Duration);
@@ -245,9 +243,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群成员增加",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"新群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin)}) " +
-                $"邀请者:{e.InvitorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.InvitorUin.ToLong())})", "处理中...");
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"新群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
+                $"邀请者:{e.InvitorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.InvitorUin.ToLong()).Result})", "处理中...");
             var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(e.Type == Lagrange.Core.Event.EventArg.GroupMemberIncreaseEvent.EventType.Approve ? 1 : 2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.InvitorUin.ToLong());
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
@@ -272,8 +270,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             {
                 case Lagrange.Core.Event.EventArg.GroupMemberDecreaseEvent.EventType.KickMe:
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "Bot被踢出群聊",
-                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                        $"操作人:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong())})", "处理中...");
+                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                        $"操作人:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
@@ -284,17 +282,17 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
                 case Lagrange.Core.Event.EventArg.GroupMemberDecreaseEvent.EventType.Leave:
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群成员离开",
-                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                        $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin)}) " +
-                        $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong())})", "处理中...");
+                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                        $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
+                        $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
                 case Lagrange.Core.Event.EventArg.GroupMemberDecreaseEvent.EventType.Kick:
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群成员被踢出",
-                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                        $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin)}) " +
-                        $"邀请者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong())})", "处理中...");
+                        $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                        $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
+                        $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
@@ -319,7 +317,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             {
                 string id = $"{e.GroupUin}_{e.TargetUin}";
                 int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "添加群请求",
-                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
+                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                     $"申请者:{e.TargetUin} " +
                     $"备注:{request.Comment}", "处理中...");
                 var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
@@ -343,7 +341,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             {
                 string id = $"{e.GroupUin}_{e.TargetUin}";
                 int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "邀请入群请求",
-                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
+                    $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                     $"申请者:{e.TargetUin} " +
                     $"邀请者:{request.InvitorMemberUin}({request.InvitorMemberCard}) " +
                     $"备注:{request.Comment}", "处理中...");
@@ -359,8 +357,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnGroupInvitationReceived(BotContext context, Lagrange.Core.Event.EventArg.GroupInvitationEvent e)
         {
-            LogHelper.WriteLog(LogLevel.Info, "AMN框架", "收到入群邀请", $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"QQ:{e.InvitorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.InvitorUin)})", "");
+            LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "收到入群邀请", $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"QQ:{e.InvitorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.InvitorUin).Result})", "");
         }
 
         private void Invoker_OnGroupEssenceEvent(BotContext context, Lagrange.Core.Event.EventArg.GroupEssenceEvent e)
@@ -372,9 +370,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            int logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更",
-                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin)}) " +
-                $"QQ:{e.AdminUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.AdminUin)}) " +
+            int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群员权限变更",
+                $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
+                $"QQ:{e.AdminUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.AdminUin).Result}) " +
                 $"新权限为:{(e.IsPromote ? "管理层" : "群员")}", "处理中...");
             var handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(e.IsPromote ? 2 : 1, Helper.TimeStamp, e.GroupUin, e.AdminUin);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -406,12 +404,12 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
             int logId;
-            var msgId = MessageCacher.CalcMessageHash(e.Random, e.ClientSequence);
-            var message = MessageCacher.GetMessageById((uint)msgId);
+            var msgId = MessageCacher.GetMessageId(e.Random, e.ClientSequence);
+            var message = MessageCacher.GetMessageById(msgId);
             if (message == null)
             {
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "好友撤回",
-                    $"QQ:{e.FriendUin}({ChatHistoryHelper.GetFriendNick(e.FriendUin)}) " +
+                    $"QQ:{e.FriendUin}({ChatHistoryHelper.GetFriendNick(e.FriendUin).Result}) " +
                     $"消息:消息拉取失败", "处理中...");
             }
             else
@@ -419,7 +417,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 string parsedMessage = MessageChainPaser.ParseMessageChainToCQCode(message);
                 PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(msgId, e.FriendUin, parsedMessage);
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "好友撤回",
-                    $"QQ:{e.FriendUin}({ChatHistoryHelper.GetFriendNick(e.FriendUin)}) " +
+                    $"QQ:{e.FriendUin}({ChatHistoryHelper.GetFriendNick(e.FriendUin).Result}) " +
                     $"消息:{parsedMessage}", "处理中...");
             }
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -429,7 +427,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         private void Invoker_OnFriendPokeEvent(BotContext context, Lagrange.Core.Event.EventArg.FriendPokeEvent e)
         {
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "戳一戳",
-                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetFriendNick(e.OperatorUin)}) " +
+                $"QQ:{e.OperatorUin}({ChatHistoryHelper.GetFriendNick(e.OperatorUin).Result}) " +
                 $"动作:{e.Action}", "");
         }
 
@@ -438,11 +436,10 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             Stopwatch sw = Stopwatch.StartNew();
 
             var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
-            int messageId = MessageCacher.CalcMessageHash(e.Chain.MessageId, e.Chain.Sequence);
-            Task.Run(() => MessageCacher.RecordMessage(messageId, e.Chain));
+            int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息",
-                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetFriendNick(e.Chain.FriendUin)}) " +
+                $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetFriendNick(e.Chain.FriendUin).Result}) " +
                 $"消息: {message}", "处理中...");
             var handledPlugin = PluginManagerProxy.Instance.Event_OnPrivateMsg(1, messageId, e.Chain.FriendUin, message, 0, DateTime.Now);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
