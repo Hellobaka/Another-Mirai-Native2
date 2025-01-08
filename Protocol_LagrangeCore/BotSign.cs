@@ -108,7 +108,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 var content = response.Content.ReadAsStringAsync().Result;
                 var appInfo = JsonConvert.DeserializeObject<BotAppInfo>(content);
-                LogHelper.Info("签名服务器", $"协议版本：{appInfo.CurrentVersion}");
+                LogHelper.Info("签名服务器", $"协议版本：{appInfo?.CurrentVersion}");
                 return appInfo;
             }
             catch (Exception e)
@@ -148,9 +148,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 var content = response.Content.ReadAsStringAsync().Result;
                 var sign = JObject.Parse(content);
-                ver = Convert.FromHexString(sign["value"]["extra"].ToString());
-                token = Encoding.UTF8.GetString(Convert.FromHexString(sign["value"]["token"].ToString()));
-                return Convert.FromHexString(sign["value"]["sign"].ToString());
+                ver = Convert.FromHexString(sign["value"]!["extra"]!.ToString());
+                token = Encoding.UTF8.GetString(Convert.FromHexString(sign["value"]!["token"]!.ToString()));
+                return Convert.FromHexString(sign["value"]!["sign"]!.ToString());
             }
             catch (Exception e)
             {
