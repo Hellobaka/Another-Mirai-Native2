@@ -26,7 +26,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is ForwardEntity forward)
                 {
-                    message.Append($"[CQ:reply,id={MessageCacher.CalcMessageHash(forward.MessageId, forward.Sequence)}]");
+                    int id = MessageCacher.GetMessageId(forward.MessageId, forward.Sequence);
+                    if (id != 0)
+                    {
+                        message.Append($"[CQ:reply,id={id}]");
+                    }
                 }
                 else if (item is GreyTipEntity greyTip)
                 {
@@ -209,7 +213,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         break;
 
                     case Model.Enums.CQCodeType.Reply:
-                        if (uint.TryParse(cqcode.Items["id"], out uint msgId))
+                        if (int.TryParse(cqcode.Items["id"], out int msgId))
                         {
                             var msg = MessageCacher.GetMessageById(msgId);
                             if (msg != null)
