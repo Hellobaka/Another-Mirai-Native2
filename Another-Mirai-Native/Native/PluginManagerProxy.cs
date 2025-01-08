@@ -596,7 +596,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="sendTime">发生时间</param>
         /// <param name="fromGroup">来源群ID</param>
         /// <param name="fromQQ">来源QQ</param>
-        /// <param name="beingOperateQQ">操作者QQ</param>
+        /// <param name="beingOperateQQ">被禁言者QQ 若全体禁言则写0</param>
         /// <param name="duration">禁言时长(s) 仅在禁言时生效</param>
         /// <returns>1为阻塞 0为放行</returns>
         public CQPluginProxy Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
