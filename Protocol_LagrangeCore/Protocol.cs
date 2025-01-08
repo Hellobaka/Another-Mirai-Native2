@@ -106,7 +106,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public string GetLoginNick()
         {
-            return BotContext.BotName;
+            return BotContext.BotName ?? "";
         }
 
         public long GetLoginQQ()
@@ -169,7 +169,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             var info = list.FirstOrDefault(x => x.Uin == qqId);
             if (info == null)
             {
-                return null;
+                return new();
             }
             return new()
             {

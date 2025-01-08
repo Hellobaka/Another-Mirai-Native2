@@ -24,6 +24,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public static BotKeystore BotKeystore { get; set; }
 
+        public static bool DebugMode { get; set; }
+
         public void Load()
         {
             SignUrl = GetConfig("SignUrl", "https://sign.lagrangecore.org/api/sign/30366");
@@ -38,6 +40,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             });
             BotDeviceInfo = GetConfig("BotDeviceInfo", BotDeviceInfo.GenerateInfo());
             BotKeystore = GetConfig("BotKeystore", new BotKeystore());
+            DebugMode = GetConfig("DebugMode", false);
         }
 
         public void Save()
