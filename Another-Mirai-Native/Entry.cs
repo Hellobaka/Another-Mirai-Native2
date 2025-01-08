@@ -5,6 +5,7 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.RPC.Interface;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Another_Mirai_Native
@@ -56,6 +57,7 @@ namespace Another_Mirai_Native
             // 重定向异常
             InitExceptionCapture();
             PrintSystemInfo();
+            ListenConsoleExit();
             // 加载配置
             AppConfig.Instance.IsCore = args.Length == 0;
             if (AppConfig.Instance.DebugMode && !AppConfig.Instance.IsCore)
@@ -164,6 +166,20 @@ namespace Another_Mirai_Native
             ChatHistoryHelper.Initialize();
             ServerStarted?.Invoke();
             _quitEvent.WaitOne();
+        }
+
+        private static void ListenConsoleExit()
+        {
+            var listen = new WinNative.ConsoleEventDelegate((e) =>
+            {
+                if (e == WinNative.CTRL_CLOSE_EVENT)
+                {
+                    Console.WriteLine("Exiting...");
+                    _quitEvent.Set();
+                }
+                return true;
+            });
+            WinNative.SetConsoleCtrlHandler(listen, true);
         }
 
         private static void BuildTaskBar()
