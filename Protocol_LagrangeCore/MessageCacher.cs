@@ -58,6 +58,13 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 : 0;
         }
 
+        public static int GetMessageIdBySeq(uint seq)
+        {
+            return MessageIDCache.Any(x => x.Value.Item2 == seq)
+                ? MessageIDCache.First(x => x.Value.Item2 == seq).Key
+                : 0;
+        }
+
         private static int MakeUniqueID()
         {
             int id;

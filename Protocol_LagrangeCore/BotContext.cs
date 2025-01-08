@@ -126,7 +126,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
             int logId = 0;
-            var msgId = MessageCacher.GetMessageId(e.Random, e.Sequence);
+            var msgId = MessageCacher.GetMessageIdBySeq(e.Sequence);
             var message = MessageCacher.GetMessageById(msgId);
             if (message == null)
             {
@@ -404,7 +404,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
             int logId;
-            var msgId = MessageCacher.GetMessageId(e.Random, e.ClientSequence);
+            var msgId = MessageCacher.GetMessageIdBySeq(e.ClientSequence);
             var message = MessageCacher.GetMessageById(msgId);
             if (message == null)
             {
