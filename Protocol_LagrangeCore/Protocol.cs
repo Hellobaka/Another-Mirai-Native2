@@ -42,19 +42,19 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public int DeleteMsg(long msgId)
         {
-            var message = MessageCacher.GetMessageById((uint)msgId);
-            if (message == null)
+            MessageChain? chain = MessageCacher.GetMessageById((int)msgId);
+            if (chain == null)
             {
                 return 0;
             }
             bool result;
-            if (message.GroupUin.HasValue)
+            if (chain.GroupUin.HasValue)
             {
-                result = BotContext.RecallGroupMessage(message).Result;
+                result = BotContext.RecallGroupMessage(chain).Result;
             }
             else
             {
-                result = BotContext.RecallFriendMessage(message).Result;
+                result = BotContext.RecallFriendMessage(chain).Result;
             }
             return result ? 1 : 0;
         }
@@ -269,7 +269,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             {
                 return 0;
             }
-            return MessageCacher.CalcMessageHash(result.MessageId, (uint)result.Sequence);
+            return MessageCacher.RecordMessage(chain, result.MessageId, result.Sequence.Value);
         }
 
         public int SendLike(long qqId, int count)
@@ -288,7 +288,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             {
                 return 0;
             }
-            return MessageCacher.CalcMessageHash(result.MessageId, (uint)result.Sequence);
+            return MessageCacher.RecordMessage(chain, result.MessageId, result.Sequence.Value);
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
