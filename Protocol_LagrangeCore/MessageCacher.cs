@@ -1,76 +1,65 @@
-﻿using Lagrange.Core.Message;
-using SqlSugar;
+﻿using Another_Mirai_Native.Config;
+using Lagrange.Core.Message;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
-    [SugarTable]
-    public class MessageCacher
+    public static class MessageCacher
     {
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-        public int ID { get; set; }
+        private static Dictionary<(ulong, uint), MessageChain> MessageCache { get; set; } = [];
 
-        public int MessageId { get; set; }
+        private static Dictionary<int, (ulong, uint)> MessageIDCache { get; set; } = [];
 
-        [SugarColumn(IsJson = true)]
-        public MessageChain Record { get; set; }
+        private static int InternalMessageId { get; set; } = 1;
 
-        private static SqlSugarClient GetInstance(string path)
+        private static object MessageCacheLock { get; set; } = new();
+
+        public static int RecordMessage(MessageChain chain)
         {
-            SqlSugarClient db = new(new ConnectionConfig()
+            lock (MessageCacheLock)
             {
-                ConnectionString = $"data source={path}",
-                DbType = DbType.Sqlite,
-                IsAutoCloseConnection = false,
-                InitKeyType = InitKeyType.Attribute,
-            });
-            return db;
-        }
+                int messageId = InternalMessageId;
+                MessageIDCache[messageId] = (chain.MessageId, chain.Sequence);
+                MessageCache[(chain.MessageId, chain.Sequence)] = chain;
+                InternalMessageId++;
 
-        public static void CreateDB(string path)
-        {
-            if (File.Exists(path))
-            {
-                return;
+                if (messageId >= AppConfig.Instance.MessageCacheSize)
+                {
+                    int keyToRemove = messageId - AppConfig.Instance.MessageCacheSize + 1;
+                    if (MessageIDCache.TryGetValue(keyToRemove, out var rawKey))
+                    {
+                        MessageIDCache.Remove(keyToRemove);
+                        MessageCache.Remove(rawKey);
+                    }
+                }
+
+                return messageId;
             }
-            using var db = GetInstance(path);
-            db.DbMaintenance.CreateDatabase();
-            db.CodeFirst.InitTables(typeof(MessageCacher));
         }
 
-        private static string GetDBPath()
+        public static MessageChain? GetMessageById(int messageId)
         {
-            var path = Path.Combine("logs", "Lagrange", $"{DateTime.Now:yyyyMM}" + ".db");
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            if (File.Exists(path) is false)
+            if (MessageIDCache.TryGetValue(messageId, out var rawKey)
+                && MessageCache.TryGetValue(rawKey, out var chain))
             {
-                CreateDB(path);
+                return chain;
             }
-            return path;
+            return null;
         }
 
-        public static void RecordMessage(int messageId, MessageChain message)
+        public static MessageChain? GetMessageByRawId(ulong msgId, uint seq)
         {
-            using var db = GetInstance(GetDBPath());
-            db.Insertable(new MessageCacher()
+            if (MessageCache.TryGetValue((msgId, seq), out var chain))
             {
-                MessageId = messageId,
-                Record = message,
-            }).ExecuteCommand();
+                return chain;
+            }
+            return null;
         }
 
-        public static MessageChain? GetMessageById(uint messageId)
+        public static int GetMessageId(ulong msgId, uint seq)
         {
-            using var db = GetInstance(GetDBPath());
-            return db.Queryable<MessageCacher>().Where(x => x.MessageId == messageId).ToList().Last()?.Record;
-        }
-
-        public static int CalcMessageHash(ulong msgId, uint seq)
-        {
-            var messageId = BitConverter.GetBytes(msgId);
-            var sequence = BitConverter.GetBytes(seq);
-
-            byte[] id = [messageId[0], messageId[1], sequence[0], sequence[1]];
-            return BitConverter.ToInt32(id.AsSpan());
+            return MessageIDCache.Any(x => x.Value == (msgId, seq))
+                ? MessageIDCache.First(x => x.Value == (msgId, seq)).Key
+                : 0;
         }
     }
 }
