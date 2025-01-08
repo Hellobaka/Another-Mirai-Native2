@@ -30,6 +30,14 @@ for %%f in (".\build\Console\net48\*.dll") do (
     )
 )
 
+echo Generate Console(net8)
+echo Copy Loaders
+xcopy ".\build\loaders" ".\build\Console\net8\loaders" /E /I /H /Y
+echo Copy Protocols
+xcopy ".\UI_WPF\bin\x86\Debug\net8.0-windows\protocols" ".\build\Console\net8\protocols" /E /I /H /Y
+echo Clean Unnecessary Files
+del /Q ".\build\Console\net8\*.pdb"
+
 echo Generate WebUI(.net8)
 echo Copy Loaders
 xcopy ".\build\loaders" ".\build\Web\loaders" /E /I /H /Y
@@ -79,6 +87,7 @@ if %errorlevel% neq 0 (
     exit /b
 )
 7z.exe a -tzip ".\build\Minimal_Console.zip" ".\build\Console\net48\*"
+7z.exe a -tzip ".\build\Console_net8.zip" ".\build\Console\net8\*"
 7z.exe a -tzip ".\build\WebUI.zip" ".\build\Web\*"
 7z.exe a -tzip ".\build\WPF_net8.zip" ".\build\WPF\net8\*"
 7z.exe a -tzip ".\build\WPF_net48.zip" ".\build\WPF\net48\*"
