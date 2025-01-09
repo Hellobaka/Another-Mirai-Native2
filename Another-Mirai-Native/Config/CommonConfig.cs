@@ -2,7 +2,7 @@
 {
     public static class CommonConfig
     {
-        public static T GetConfig<T>(string key, string path, T defaultValue = default)
+        public static T GetConfig<T>(string key, string path, T defaultValue)
         {
             return new ConfigBase(path).GetConfig(key, defaultValue);
         }

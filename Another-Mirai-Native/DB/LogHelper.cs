@@ -303,7 +303,7 @@ namespace Another_Mirai_Native.DB
 
         public static int WriteLog(int level, string logOrigin, string type, string messages, string status = "")
         {
-            LogLevel logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), Enum.GetName(typeof(LogLevel), level));
+            LogLevel logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), Enum.GetName(typeof(LogLevel), level) ?? "");
             return WriteLog(logLevel, logOrigin, type, messages, status);
         }
 

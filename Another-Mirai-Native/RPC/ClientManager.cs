@@ -37,7 +37,7 @@ namespace Another_Mirai_Native.RPC
             }
         }
 
-        private void HeartBeatTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void HeartBeatTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             if(Client == null)
             {

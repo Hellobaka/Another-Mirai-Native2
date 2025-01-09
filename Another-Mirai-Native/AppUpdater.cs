@@ -38,7 +38,7 @@ namespace Another_Mirai_Native
                 {
                     return null;
                 }
-                UpdateModel updateModel = JsonConvert.DeserializeObject<UpdateModel>(json);
+                UpdateModel? updateModel = JsonConvert.DeserializeObject<UpdateModel>(json);
                 if (updateModel == null)
                 {
                     return null;

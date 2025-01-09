@@ -25,11 +25,11 @@ namespace Another_Mirai_Native.Config
         /// <param name="sectionName">需要读取的配置键名</param>
         /// <typeparam name="T">类型</typeparam>
         /// <returns>目标类型的配置</returns>
-        public T GetConfig<T>(string sectionName, T defaultValue = default)
+        public T GetConfig<T>(string sectionName, T defaultValue)
         {
             if (Directory.Exists(Path.GetDirectoryName(ConfigPath)) is false)
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath) ?? "conf");
             }
 
             if (File.Exists(ConfigPath) is false)
@@ -40,7 +40,7 @@ namespace Another_Mirai_Native.Config
             var o = JObject.Parse(File.ReadAllText(ConfigPath));
             if (o.ContainsKey(sectionName))
             {
-                return o[sectionName]!.ToObject<T>();
+                return o[sectionName]!.ToObject<T>() ?? defaultValue;
             }
 
             if (defaultValue != null)
@@ -48,31 +48,16 @@ namespace Another_Mirai_Native.Config
                 SetConfig<T>(sectionName, defaultValue);
                 return defaultValue;
             }
-            if (typeof(T) == typeof(string))
-            {
-                return (T)(object)"";
-            }
 
-            if (typeof(T) == typeof(int))
-            {
-                return (T)(object)0;
-            }
-
-            if (typeof(T) == typeof(long))
-            {
-                return default;
-            }
-
-            if (typeof(T) == typeof(bool))
-            {
-                return (T)(object)false;
-            }
-
-            return typeof(T) == typeof(object) ? (T)(object)new { } : throw new Exception("无法默认返回");
+            return defaultValue;
         }
 
-        public void SetConfig<T>(string sectionName, T value)
+        public void SetConfig<T>(string sectionName, T? value)
         {
+            if (value == null)
+            {
+                return;
+            }
             if (File.Exists(ConfigPath) is false)
             {
                 File.WriteAllText(ConfigPath, "{}");

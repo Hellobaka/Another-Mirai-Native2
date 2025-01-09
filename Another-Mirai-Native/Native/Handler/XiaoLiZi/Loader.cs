@@ -160,7 +160,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             if (!File.Exists(path))
             {
                 // V3
-                AppInfo_XiaoLiZi = JsonConvert.DeserializeObject<AppInfo_XiaoLiZi>(nativeInfo);
+                AppInfo_XiaoLiZi = JsonConvert.DeserializeObject<AppInfo_XiaoLiZi>(nativeInfo!);
             }
             else
             {
@@ -171,7 +171,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 {
                     try
                     {
-                        AppInfo_XiaoLiZi.appname = JObject.Parse(nativeInfo)["appname"].ToString();
+                        AppInfo_XiaoLiZi.appname = JObject.Parse(nativeInfo!)["appname"]?.ToString() ?? "";
                     }
                     catch
                     {
@@ -181,7 +181,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 }
             }
 
-            if (AppInfo_XiaoLiZi == null)
+            if (AppInfo_XiaoLiZi == null || string.IsNullOrEmpty(AppInfo_XiaoLiZi.appname))
             {
                 LogHelper.Error("读取插件信息", $"无法从插件返回解析出插件信息，{Path.GetFileName(PluginPath)}可能并非 小栗子 插件");
                 return false;

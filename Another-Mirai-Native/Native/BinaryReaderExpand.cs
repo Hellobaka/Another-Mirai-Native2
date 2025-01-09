@@ -113,14 +113,11 @@ namespace Another_Mirai_Native.Native
 		/// <exception cref="ArgumentException">已解码要读取的字符数超过了边界。</exception>
 		/// <exception cref="ObjectDisposedException">流已关闭。</exception>
 		/// <exception cref="IOException">出现 I/O 错误。</exception>
-		public static string ReadString_Ex (this BinaryReader binary, Encoding encoding = null)
+		public static string ReadString_Ex (this BinaryReader binary)
 		{
-			if (encoding == null)
-			{
-				encoding = Helper.GB18030;
-			}
+			var encoding = Helper.GB18030;
 
-			return encoding.GetString (ReadToken_Ex (binary));
+            return encoding.GetString (ReadToken_Ex (binary));
 		}
 		#endregion
 

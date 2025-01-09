@@ -21,7 +21,9 @@ namespace Another_Mirai_Native.Native
 
         public static PluginHandlerBase LoadedPlugin { get; private set; }
 
+#if NET48
         [HandleProcessCorruptedStateExceptions]
+#endif
         public int CallEvent(PluginEventType eventName, object[] args)
         {
             int result = -1;
@@ -53,7 +55,7 @@ namespace Another_Mirai_Native.Native
                             break;
 
                         case "String":
-                            transformedArgs[i] = args[i].ToString();
+                            transformedArgs[i] = args[i]?.ToString() ?? "";
                             break;
 
                         case "Boolean":
@@ -62,7 +64,7 @@ namespace Another_Mirai_Native.Native
                     }
                 }
 
-                return (int)methodInfo.Invoke(this, transformedArgs);
+                return (int)(methodInfo.Invoke(this, transformedArgs) ?? -1);
             }
             catch (Exception ex)
             {

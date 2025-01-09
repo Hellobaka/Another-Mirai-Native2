@@ -62,7 +62,7 @@ namespace Another_Mirai_Native.Model
                 this.Items.Add(item.Key, item.Value);
             }
 
-            this._originalString = null;
+            this._originalString = string.Empty;
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         /// <param name="obj">要与当前对象进行比较的对象</param>
         /// <returns>如果指定的对象等于当前对象，则为 <code>true</code>，否则为 <code>false</code></returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is CQCode code ? string.Equals(this._originalString, code._originalString) : base.Equals(obj);
         }
@@ -183,7 +183,7 @@ namespace Another_Mirai_Native.Model
         /// <returns></returns>
         public override string ToString()
         {
-            if (this._originalString == null)
+            if (string.IsNullOrEmpty(this._originalString))
             {
                 if (this.Items.Count == 0)
                 {
@@ -280,7 +280,7 @@ namespace Another_Mirai_Native.Model
         /// <param name="imageUrl">封面图片链接, 留空为默认</param>
         /// <exception cref="ArgumentException">参数: url 或 musicUrl 是空字符串或为 null</exception>
         /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_DIYMusic(string url, string musicUrl, string title = null, string content = null, string imageUrl = null)
+        public static CQCode CQCode_DIYMusic(string url, string musicUrl, string? title = null, string? content = null, string? imageUrl = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -299,17 +299,17 @@ namespace Another_Mirai_Native.Model
                 new KeyValuePair<string, string>("audio", musicUrl));
             if (!string.IsNullOrEmpty(title))
             {
-                code.Items.Add("title", title);
+                code.Items.Add("title", title!);
             }
 
             if (!string.IsNullOrEmpty(content))
             {
-                code.Items.Add("content", content);
+                code.Items.Add("content", content!);
             }
 
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                code.Items.Add("imageUrl", imageUrl);
+                code.Items.Add("imageUrl", imageUrl!);
             }
             return code;
         }
@@ -460,7 +460,7 @@ namespace Another_Mirai_Native.Model
         /// <param name="imageUrl">分享的图片链接, 留空则为默认图片</param>
         /// <exception cref="ArgumentException">参数: url 是空字符串或为 null</exception>
         /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_ShareLink(string url, string title, string content, string imageUrl = null)
+        public static CQCode CQCode_ShareLink(string url, string title, string content, string? imageUrl = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -481,7 +481,7 @@ namespace Another_Mirai_Native.Model
             }
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                code.Items.Add("image", imageUrl);
+                code.Items.Add("image", imageUrl!);
             }
 
             return code;

@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.RPC.Interface
                     {
                         return;
                     }
-                    object result = null;
+                    object? result = null;
                     if (caller.Function.StartsWith("InvokeEvent"))
                     {
                         PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), caller.Function.Replace("InvokeEvent_", ""));
@@ -48,6 +48,7 @@ namespace Another_Mirai_Native.RPC.Interface
                     else if (caller.Function == "HeartBeat")
                     {
                         HeartBeatLostCount = 0;
+                        OnReceiveHeartBeat?.Invoke(true);
                     }
                     else if (caller.Function == "CurrentQQChanged")
                     {
@@ -56,7 +57,7 @@ namespace Another_Mirai_Native.RPC.Interface
                             && string.IsNullOrEmpty(caller.Args[1]?.ToString()))
                         {
                             AppConfig.Instance.CurrentQQ = v;
-                            AppConfig.Instance.CurrentNickName = caller.Args[1].ToString();
+                            AppConfig.Instance.CurrentNickName = caller.Args[1].ToString() ?? "";
                         }
                     }
                 }
@@ -100,7 +101,7 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public virtual void ClientStartUp()
         {
-            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo.AppId }.ToJson());
+            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo?.AppId }.ToJson());
         }
 
         public virtual void UpdateConnection()
@@ -117,7 +118,7 @@ namespace Another_Mirai_Native.RPC.Interface
             return false;
         }
 
-        public virtual object InvokeCQPFuntcion(string function, bool waiting, params object[] args)
+        public virtual object? InvokeCQPFuntcion(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
             if (function.StartsWith("CQ_"))

@@ -25,7 +25,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         private Uri ServerUri { get; set; }
 
-        private ClientWebSocket Client { get; set; }
+        private ClientWebSocket? Client { get; set; }
 
         public void Connect()
         {
@@ -51,6 +51,11 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         private async Task ReceiveMessagesAsync()
         {
+            if (Client == null)
+            {
+                return;
+            }
+
             var buffer = new byte[1024 * 4];
             var stringBuilder = new StringBuilder();
 
@@ -147,9 +152,8 @@ namespace Another_Mirai_Native.RPC.WebSocket
             }
             finally
             {
-                cts?.Cancel();
-                cts?.Dispose();
-                cts = null;
+                cts.Cancel();
+                cts.Dispose();
 
                 Client?.Dispose();
                 Client = null;

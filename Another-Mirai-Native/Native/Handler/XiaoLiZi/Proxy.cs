@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         private long CacheResponse(string responseFlag)
         {
-            if (RequestCache.CachedStrings.TryGetValue(responseFlag, out string value))
+            if (RequestCache.CachedStrings.TryGetValue(responseFlag, out string? value))
             {
                 return long.Parse(value);
             }

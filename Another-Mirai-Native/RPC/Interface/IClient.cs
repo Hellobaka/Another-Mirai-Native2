@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.RPC.Interface
         /// <param name="waiting">是否等待到结果返回</param>
         /// <param name="args">参数</param>
         /// <returns>结果返回</returns>
-        public object InvokeCQPFuntcion(string function, bool waiting, params object[] args);
+        public object? InvokeCQPFuntcion(string function, bool waiting, params object[] args);
 
         public int InvokeEvent(PluginEventType eventType, object[] args);
 

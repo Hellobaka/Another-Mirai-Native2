@@ -178,7 +178,9 @@ namespace Another_Mirai_Native.Native.Handler.CoolQ
             return false;
         }
 
+#if NET48
         [HandleProcessCorruptedStateExceptions]
+#endif
         private KeyValuePair<int, string> GetAppId()
         {
             if (AppInfoFunction == null)

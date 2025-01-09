@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.DB
         private static string GetDBPath(long id, ChatHistoryType type)
         {
             var path = Path.Combine("logs", "ChatHistory", type.ToString(), id.ToString() + ".db");
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             if (File.Exists(path) is false)
             {
                 CreateDB(path);
@@ -298,7 +298,7 @@ namespace Another_Mirai_Native.DB
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
         }
 
-        private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy plugin = null)
+        private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy? plugin = null)
         {
             var history = new ChatHistory
             {

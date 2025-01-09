@@ -38,7 +38,7 @@ namespace Another_Mirai_Native.Native
 
         public string PluginBasePath { get; set; } = "";
 
-        public Process PluginProcess { get; set; }
+        public Process? PluginProcess { get; set; }
 
         public bool ExitFlag { get; set; }
 
@@ -101,7 +101,7 @@ namespace Another_Mirai_Native.Native
                 LogHelper.Error("加载插件", $"{PluginPath} 进程已启动，请先禁用插件");
                 return false;
             }
-            if (!StartPluginProcess() || PluginProcess.HasExited)
+            if (!StartPluginProcess())
             {
                 LogHelper.Error("加载插件", $"{PluginPath} 进程拉起失败");
                 return false;
@@ -141,7 +141,6 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadAppInfo()
         {
-            AppInfo = null;
             string appInfoPath = PluginPath.Replace(".dll", ".json");
             if (File.Exists(appInfoPath) is false)
             {
@@ -151,8 +150,8 @@ namespace Another_Mirai_Native.Native
             string jsonContent = File.ReadAllText(appInfoPath);
             try
             {
-                AppInfo = JsonConvert.DeserializeObject<AppInfo>(jsonContent);
-                if (AppInfo == null || string.IsNullOrWhiteSpace(AppInfo.name))
+                AppInfo = JsonConvert.DeserializeObject<AppInfo>(jsonContent) ?? new();
+                if (string.IsNullOrWhiteSpace(AppInfo.name))
                 {
                     LogHelper.Error("加载插件", $"{PluginPath} 的 json 文件格式错误，无法加载插件");
                     return false;
@@ -193,7 +192,7 @@ namespace Another_Mirai_Native.Native
         private bool StartPluginProcess()
         {
             string arguments = $"-PID {PID} -AuthCode {AppInfo.AuthCode} -AutoExit {AppConfig.Instance.PluginExitWhenCoreExit} -Path \"{new FileInfo(PluginPath).FullName}\" -WS {AppConfig.Instance.WebSocketURL} -QQ {AppConfig.Instance.CurrentQQ}";
-            Process? pluginProcess = null;
+            PluginProcess = null;
             var startConfig = new ProcessStartInfo
             {
                 Arguments = arguments,
@@ -206,16 +205,23 @@ namespace Another_Mirai_Native.Native
                 startConfig.CreateNoWindow = true;
                 startConfig.RedirectStandardOutput = false;
             }
-            pluginProcess = Process.Start(startConfig);
-            pluginProcess.EnableRaisingEvents = true;
-            pluginProcess.Exited += PluginProcess_Exited;
+            PluginProcess = Process.Start(startConfig);
+            if (PluginProcess != null)
+            {
+                PluginProcess.EnableRaisingEvents = true;
+                PluginProcess.Exited += PluginProcess_Exited;
+            }
 
-            PluginProcess = pluginProcess;
-            return PluginProcess != null;
+            return PluginProcess != null && !PluginProcess.HasExited;
         }
 
         private bool WaitClientResponse()
         {
+            if (PluginProcess == null)
+            {
+                LogHelper.Error("加载插件", $"由于进程不存在，无法进行等待操作");
+                return false;
+            }
             return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.Instance.LoadTimeout, out _);
         }
     }

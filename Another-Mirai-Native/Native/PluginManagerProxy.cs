@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.Native
 
         public bool PluginLoaded { get; set; }
 
-        public static CQPluginProxy GetProxyByAuthCode(int authCode)
+        public static CQPluginProxy? GetProxyByAuthCode(int authCode)
         {
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
         }
@@ -131,7 +131,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="eventType">事件类型</param>
         /// <param name="args">参数</param>
         /// <returns>阻塞的插件</returns>
-        public CQPluginProxy InvokeEvent(PluginEventType eventType, params object[] args)
+        public CQPluginProxy? InvokeEvent(PluginEventType eventType, params object[] args)
         {
             if (PluginLoaded is false)
             {
@@ -174,6 +174,7 @@ namespace Another_Mirai_Native.Native
                     if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
                     {
                         Proxies.Add(plugin);
+                        OnPluginProxyAdded?.Invoke(plugin);
                         plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
                     }
                 }
@@ -318,7 +319,7 @@ namespace Another_Mirai_Native.Native
 
         private void Plugin_OnPluginProcessExited(CQPluginProxy plugin)
         {
-            if (plugin == null)
+            if (plugin == null || plugin.PluginProcess == null)
             {
                 return;
             }
@@ -367,7 +368,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="fromGroup">来源群ID</param>
         /// <param name="beingOperateQQ">操作者QQ</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnAdminChange(int subType, long sendTime, long fromGroup, long beingOperateQQ)
+        public CQPluginProxy? Event_OnAdminChange(int subType, long sendTime, long fromGroup, long beingOperateQQ)
         {
             new Thread(() =>
             {
@@ -398,7 +399,7 @@ namespace Another_Mirai_Native.Native
         /// Type: 1004
         /// 应用禁用
         /// </summary>
-        public CQPluginProxy Event_OnDisable()
+        public CQPluginProxy? Event_OnDisable()
         {
             return InvokeEvent(PluginEventType.Disable);
         }
@@ -430,7 +431,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="msg">消息来源文本</param>
         /// <param name="font">字体ID</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
+        public CQPluginProxy? Event_OnDiscussMsg(int subType, int msgId, long fromNative, long fromQQ, string msg, int font)
         {
             return InvokeEvent(PluginEventType.DiscussMsg, subType, msgId, fromNative, fromQQ, msg, font);
         }
@@ -449,7 +450,7 @@ namespace Another_Mirai_Native.Native
         /// Type: 1003
         /// 应用启用
         /// </summary>
-        public CQPluginProxy Event_OnEnable()
+        public CQPluginProxy? Event_OnEnable()
         {
             return InvokeEvent(PluginEventType.Enable);
         }
@@ -468,7 +469,7 @@ namespace Another_Mirai_Native.Native
         /// Type: 1002
         /// 框架退出
         /// </summary>
-        public CQPluginProxy Event_OnExit()
+        public CQPluginProxy? Event_OnExit()
         {
             return InvokeEvent(PluginEventType.Exit);
         }
@@ -494,7 +495,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="sendTime">发生时间</param>
         /// <param name="fromQQ">来源QQ</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnFriendAdded(int subType, long sendTime, long fromQQ)
+        public CQPluginProxy? Event_OnFriendAdded(int subType, long sendTime, long fromQQ)
         {
             new Thread(() =>
             {
@@ -535,7 +536,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="msg">附加消息</param>
         /// <param name="responseFlag">响应标识</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnFriendAddRequest(int subType, long sendTime, long fromQQ, string msg, string responseFlag)
+        public CQPluginProxy? Event_OnFriendAddRequest(int subType, long sendTime, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.FriendRequest, subType, sendTime, fromQQ, msg, responseFlag);
         }
@@ -567,7 +568,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="msg">附加消息</param>
         /// <param name="responseFlag">响应标识</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnGroupAddRequest(int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
+        public CQPluginProxy? Event_OnGroupAddRequest(int subType, long sendTime, long fromGroup, long fromQQ, string msg, string responseFlag)
         {
             return InvokeEvent(PluginEventType.GroupAddRequest, subType, sendTime, fromGroup, fromQQ, msg, responseFlag);
         }
@@ -599,7 +600,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="beingOperateQQ">被禁言者QQ 若全体禁言则写0</param>
         /// <param name="duration">禁言时长(s) 仅在禁言时生效</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
+        public CQPluginProxy? Event_OnGroupBan(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration)
         {
             new Thread(() =>
             {
@@ -640,7 +641,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="fromQQ">来源QQ</param>
         /// <param name="beingOperateQQ">操作者QQ</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnGroupMemberDecrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public CQPluginProxy? Event_OnGroupMemberDecrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             new Thread(() =>
             {
@@ -681,7 +682,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="fromQQ">来源QQ</param>
         /// <param name="beingOperateQQ">操作者QQ</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnGroupMemberIncrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+        public CQPluginProxy? Event_OnGroupMemberIncrease(int subType, long sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
         {
             new Thread(() =>
             {
@@ -726,7 +727,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="msg">消息内容</param>
         /// <param name="font">字体ID</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font, DateTime time)
+        public CQPluginProxy? Event_OnGroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font, DateTime time)
         {
             new Thread(() =>
             {
@@ -767,7 +768,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="msg">消息内容</param>
         /// <param name="font">字体ID</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font, DateTime time)
+        public CQPluginProxy? Event_OnPrivateMsg(int subType, int msgId, long fromQQ, string msg, int font, DateTime time)
         {
             new Thread(() =>
             {
@@ -798,7 +799,7 @@ namespace Another_Mirai_Native.Native
         /// 框架启动事件
         /// </summary>
         /// <returns>无定义</returns>
-        public CQPluginProxy Event_OnStartUp()
+        public CQPluginProxy? Event_OnStartUp()
         {
             return InvokeEvent(PluginEventType.StartUp);
         }
@@ -828,7 +829,7 @@ namespace Another_Mirai_Native.Native
         /// <param name="fromQQ">文件来源QQ</param>
         /// <param name="file">文件名</param>
         /// <returns>1为阻塞 0为放行</returns>
-        public CQPluginProxy Event_OnUpload(int subType, long sendTime, long fromGroup, long fromQQ, string file)
+        public CQPluginProxy? Event_OnUpload(int subType, long sendTime, long fromGroup, long fromQQ, string file)
         {
             return InvokeEvent(PluginEventType.Upload, subType, sendTime, fromGroup, fromQQ, file);
         }

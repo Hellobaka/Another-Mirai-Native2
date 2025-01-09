@@ -9,7 +9,7 @@ namespace Another_Mirai_Native.Native
 {
     public class CQPImplementation
     {
-        public CQPluginProxy CurrentPlugin { get; set; } = null;
+        public CQPluginProxy CurrentPlugin { get; set; }
 
         public Stopwatch Stopwatch { get; set; } = new();
 
@@ -27,10 +27,14 @@ namespace Another_Mirai_Native.Native
 
         public CQPImplementation(CQPluginProxy plugin)
         {
+            if (plugin == null)
+            {
+                throw new ArgumentNullException(nameof(plugin));
+            }
             CurrentPlugin = plugin;
         }
 
-        public object Invoke(string functionName, params object[] args)
+        public object? Invoke(string functionName, params object[] args)
         {
             Stopwatch.Restart();
             int logId = -1;
@@ -53,7 +57,7 @@ namespace Another_Mirai_Native.Native
                     LogHelper.Error("调用前置检查", $"{CurrentPlugin.PluginName} => 调用 {functionName} 参数表数量不对应");
                     return null;
                 }
-                object[] transformedArgs = new object[argumentList.Length];
+                object?[] transformedArgs = new object[argumentList.Length];
                 for (int i = 0; i < args.Length; i++)
                 {
                     switch (argumentList[i].ParameterType.Name)
@@ -76,7 +80,7 @@ namespace Another_Mirai_Native.Native
                     }
                 }
                 LogHelper.Debug("调用前置检查", $"{CurrentPlugin.PluginName} => 调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
-                object result = methodInfo.Invoke(this, transformedArgs);
+                object? result = methodInfo.Invoke(this, transformedArgs);
                 return result;
             }
             catch (Exception ex)
@@ -490,7 +494,7 @@ namespace Another_Mirai_Native.Native
             long fromId = 0; string nick = "";
             if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
             {
-                if (!RequestCache.CachedStrings.TryGetValue(identifying, out identifying))
+                if (!RequestCache.CachedStrings.TryGetValue(identifying, out identifying!))
                 {
                     LogHelper.Error("处理好友添加请求", $"Seq={identifying} 没有被缓存，框架可能未正确处理事件");
                     return 1;
@@ -525,7 +529,7 @@ namespace Another_Mirai_Native.Native
             string nick = "", groupName = "";
             if (CurrentPlugin.PluginType == PluginType.XiaoLiZi)
             {
-                if (RequestCache.CachedStrings.TryGetValue(identifying, out string seq))
+                if (RequestCache.CachedStrings.TryGetValue(identifying, out string? seq))
                 {
                     identifying = seq;
                 }

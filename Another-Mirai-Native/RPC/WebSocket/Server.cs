@@ -11,7 +11,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
 {
     public class Server : ServerBase
     {
-        public WebSocketServer WebSocketServer { get; set; }
+        public WebSocketServer? WebSocketServer { get; set; }
 
         private Dictionary<int, IWebSocketConnection> WebSocketConnections { get; set; } = new();
 
@@ -41,7 +41,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
         {
             try
             {
-                WebSocketServer.Dispose();
+                WebSocketServer?.Dispose();
                 WebSocketServer = null;
                 return true;
             }

@@ -38,9 +38,9 @@ namespace Another_Mirai_Native
                 return string.Empty;
             }
 
-            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            DescriptionAttribute attribute = fieldInfo.GetCustomAttribute<DescriptionAttribute>(false);
-            return attribute.Description;
+            FieldInfo? fieldInfo = value.GetType().GetField(value.ToString());
+            DescriptionAttribute? attribute = fieldInfo?.GetCustomAttribute<DescriptionAttribute>(false);
+            return attribute?.Description ?? "";
         }
 
         [DllImport("kernel32.dll", EntryPoint = "lstrlenA", CharSet = CharSet.Ansi)]
@@ -247,7 +247,7 @@ namespace Another_Mirai_Native
             }
             else
             {
-                ClientManager.Client.ShowErrorDialog(guid, ex.Message, ex.StackTrace, canIgnore);
+                ClientManager.Client.ShowErrorDialog(guid, ex.Message, ex.StackTrace ?? "", canIgnore);
             }
             if (ServerManager.Server.ShowErrorDialogEventHasSubscribed)
             {

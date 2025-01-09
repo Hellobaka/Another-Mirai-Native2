@@ -27,17 +27,17 @@ namespace Another_Mirai_Native.RPC.Interface
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title, content, canIgnore);
         }
 
-        public int? AddLog(LogModel log)
+        public int AddLog(LogModel? log)
         {
-            return log == null ? null : LogHelper.WriteLog(log);
+            return log == null ? -1 : LogHelper.WriteLog(log);
         }
 
-        public void ClientStartup(int pid, string appId)
+        public void ClientStartup(int pid, string? appId)
         {
             var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess != null && x.PluginProcess.Id == pid);
             if (proxy != null && !string.IsNullOrEmpty(appId))
             {
-                proxy.AppInfo.AppId = appId;
+                proxy.AppInfo.AppId = appId!;
             }
             else
             {
@@ -72,13 +72,17 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public List<CQPluginProxy> GetAllPlugins() => PluginManagerProxy.Proxies;
 
-        public object GetAppConfig(string key)
+        public object? GetAppConfig(string? key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
             var property = typeof(AppConfig).GetProperty(key);
-            return property == null ? null : property.GetValue(null);
+            return property ?? property?.GetValue(null);
         }
 
-        public string GetCoreVersion() => GetType().Assembly.GetName().Version.ToString();
+        public string GetCoreVersion() => GetType().Assembly.GetName().Version?.ToString() ?? "未知版本";
 
         public object? HandleCoreAPI(InvokeBody? caller)
         {
@@ -96,7 +100,7 @@ namespace Another_Mirai_Native.RPC.Interface
                         return GetAllPlugins();
 
                     case "AddLog":
-                        return AddLog(JObject.FromObject(caller.Args[0]).ToObject<LogModel>());
+                        return AddLog(JObject.FromObject(caller.Args[0]).ToObject<LogModel>() ?? null);
 
                     case "GetCoreVersion":
                         return GetCoreVersion();
@@ -187,7 +191,7 @@ namespace Another_Mirai_Native.RPC.Interface
             {
                 case "ClientStartUp":
                     Connections.Add(Convert.ToInt32(pid), connection);
-                    ClientStartup(Convert.ToInt32(pid), result.Result.ToString());
+                    ClientStartup(Convert.ToInt32(pid), result.Result?.ToString());
                     break;
 
                 case "UpdateConnection":
@@ -211,10 +215,11 @@ namespace Another_Mirai_Native.RPC.Interface
         {
             try
             {
-                return (int)cqp.Invoke(functionName, args);
+                return (int?)cqp.Invoke(functionName, args);
             }
             catch (Exception e)
             {
+                LogHelper.Error("调用CQP函数", $"{functionName}。{e.Message}\n{e.StackTrace}");
                 return null;
             }
         }
@@ -222,8 +227,9 @@ namespace Another_Mirai_Native.RPC.Interface
         public int? InvokeEvents(CQPluginProxy target, PluginEventType eventType, params object[] args)
         {
             if (target == null
-                            || target.HasConnection is false
-                            || Connections.TryGetValue(target.PluginProcess.Id, out var connection) is false)
+                || target.PluginProcess == null
+                || target.HasConnection is false
+                || Connections.TryGetValue(target.PluginProcess.Id, out var connection) is false)
             {
                 return null;
             }
@@ -234,10 +240,10 @@ namespace Another_Mirai_Native.RPC.Interface
             if (RequestWaiter.Wait(guid, target, AppConfig.Instance.PluginInvokeTimeout, () =>
                     {
                         SendMessage(connection, new InvokeBody { GUID = guid, Function = $"InvokeEvent_{eventType}", Args = args }.ToJson());
-                    }, out object obj) && obj is InvokeResult result)
+                    }, out object? obj) && obj is InvokeResult result)
             {
                 LogHelper.Debug($"InvokeEvent_{eventType}", $"结束 GUID = {guid} 插件 = {target.PluginName}");
-                if (int.TryParse(result.Result.ToString(), out int r))
+                if (int.TryParse(result.Result?.ToString(), out int r))
                 {
                     if (AppConfig.Instance.DebugMode)
                     {
@@ -277,10 +283,10 @@ namespace Another_Mirai_Native.RPC.Interface
             return true;
         }
 
-        public void ShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
+        public void ShowErrorDialog(string guid, int authCode, string? title, string? content, bool canIgnore)
         {
             WaitingMessage.Add(guid, new InvokeResult());
-            OnShowErrorDialogCalled?.Invoke(guid, authCode, title, content, canIgnore);
+            OnShowErrorDialogCalled?.Invoke(guid, authCode, title ?? "", content ?? "", canIgnore);
             RequestWaiter.Wait(guid, -1, null, out _);
             WaitingMessage.Remove(guid);
         }

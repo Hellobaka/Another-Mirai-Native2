@@ -17,7 +17,7 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         public override void ClientStartUp()
         {
-            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo.AppId }.ToJson());
+            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo?.AppId }.ToJson());
         }
 
         public override void Close()

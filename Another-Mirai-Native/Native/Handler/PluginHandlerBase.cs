@@ -110,7 +110,7 @@ namespace Another_Mirai_Native.Native.Handler
             return api == IntPtr.Zero ? null : (T?)Marshal.GetDelegateForFunctionPointer(api, typeof(T));
         }
 
-        public Delegate CreateDelegateFromUnmanaged<T>(int address, string apiName) where T : Delegate
+        public Delegate? CreateDelegateFromUnmanaged<T>(int address, string apiName) where T : Delegate
         {
             if (address > 0)
             {
@@ -155,8 +155,10 @@ namespace Another_Mirai_Native.Native.Handler
         {
             throw new NotImplementedException();
         }
-
+        
+#if NET48
         [HandleProcessCorruptedStateExceptions]
+#endif
         [SecurityCritical]
         public virtual bool LoadPlugin()
         {
