@@ -27,7 +27,7 @@
             {
                 <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
             }
-            @(SelectedPlugin.Enabled ? "禁用" : "启用")
+            @((SelectedPlugin?.Enabled ?? false) ? "禁用" : "启用")
         </MudButton>
         <MudButton Color="Color.Secondary" @onclick="TestClick">测试</MudButton>
         <MudButton Color="Color.Info" @onclick="ReloadClick">
@@ -46,7 +46,7 @@ else
 
 @code {
     [Parameter]
-    public CQPluginProxyWrapper CurrentPlugin { get; set; }
+    public CQPluginProxyWrapper? CurrentPlugin { get; set; }
 
     private Dictionary<int, string> AuthChineseName { get; set; } = new() {
         {20, "[敏感]取Cookies"},
@@ -75,12 +75,16 @@ else
         {162, "取好友列表"},
         {180, "撤回消息"},
         };
-    private CQPluginProxy SelectedPlugin => CurrentPlugin?.TargetPlugin;
+    private CQPluginProxy? SelectedPlugin => CurrentPlugin?.TargetPlugin;
     private bool ToggleEnableRunningStatus { get; set; }
     private bool ReloadRunningStatus { get; set; }
 
     private async void ReloadClick()
     {
+        if (SelectedPlugin == null)
+        {
+            return;
+        }
         bool? result = await DialogService.ShowMessageBox("重载插件", $"确定要重载 {SelectedPlugin.PluginName} 吗？", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true });
         if (result == null || !result.Value)
         {
@@ -102,6 +106,11 @@ else
 
     private async void TestClick()
     {
+        if (SelectedPlugin == null)
+        {
+            return;
+        }
+
         if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode && !(await DialogService.ShowMessageBox("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件", "嗯", cancelText: "不是", options: new DialogOptions { FullWidth = true }) ?? false))
         {
             return;
@@ -121,7 +130,7 @@ else
 
     private async void ToggleEnableClick()
     {
-        if (CurrentPlugin == null)
+        if (CurrentPlugin == null || SelectedPlugin == null)
         {
             return;
         }

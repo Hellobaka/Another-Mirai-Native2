@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.BlazorUI.Models
             _navigationManager.LocationChanged += OnLocationChanged;
         }
 
-        private async void OnLocationChanged(object sender, LocationChangedEventArgs e)
+        private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
         {
             string newTitle = GetTitleForRoute(e.Location);
             await _jsRuntime.InvokeVoidAsync("setTitle", newTitle);

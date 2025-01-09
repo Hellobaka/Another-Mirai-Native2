@@ -69,12 +69,12 @@
 
 @code {
     private ObservableCollection<CQPluginProxyWrapper> CQPlugins { get; set; } = new();
-    private CQPluginProxyWrapper SelectedItem { get; set; }
+    private CQPluginProxyWrapper? SelectedItem { get; set; }
     private bool Loading { get; set; }
     private bool ReloadAllRunningStatus { get; set; }
     private bool ShowActionDrawer { get; set; }
     private bool ActionDrawerOpen { get; set; }
-    private CQPluginProxy SelectedPlugin => SelectedItem?.TargetPlugin;
+    private CQPluginProxy? SelectedPlugin => SelectedItem?.TargetPlugin;
 
     protected override void OnInitialized()
     {

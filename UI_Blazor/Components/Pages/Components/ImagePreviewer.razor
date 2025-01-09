@@ -6,7 +6,7 @@
     </TitleContent>
     <DialogContent>
         <div style="display: flex; justify-content: center; min-height: 40vh;">
-            <MudImage id="imagePreview" Src="@Item.ImageUrl" Fluid ObjectFit="ObjectFit.Contain"></MudImage>
+            <MudImage id="imagePreview" Src="@Item?.ImageUrl" Fluid ObjectFit="ObjectFit.Contain"></MudImage>
         </div>
     </DialogContent>
     <DialogActions>
@@ -131,12 +131,12 @@
 </script>
 @code {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; } = new();
 
     [Parameter]
-    public RenderChatItem Item { get; set; }
+    public RenderChatItem Item { get; set; } = new();
 
-    private void Close() => MudDialog.Close(DialogResult.Ok(true));
+    private void Close() => MudDialog?.Close(DialogResult.Ok(true));
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -151,7 +151,7 @@
         await JS.InvokeVoidAsync("disposePreview");
     }
 
-    private async Task Collect()
+    private void Collect()
     {
 
     }

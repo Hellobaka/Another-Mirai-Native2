@@ -92,16 +92,20 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
+#if NET5_0_OR_GREATER
         private async void WebUIStopButton_Click(object sender, RoutedEventArgs e)
         {
-#if NET5_0_OR_GREATER
             if (await DialogHelper.ShowConfirmDialog("终止 WebUI", "确定要终止 WebUI 吗？") is false)
             {
                 return;
             }
             await StopWebUI();
-#endif
+        }        
+#else
+        private void WebUIStopButton_Click(object sender, RoutedEventArgs e)
+        {
         }
+#endif
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -121,7 +125,7 @@ namespace Another_Mirai_Native.UI.Pages
 #endif
         }
 
-        private async void Logger_LogEvent(bool error, string msg, Exception exception)
+        private async void Logger_LogEvent(bool error, string msg, Exception? exception)
         {
             await Dispatcher.InvokeAsync(() =>
             {

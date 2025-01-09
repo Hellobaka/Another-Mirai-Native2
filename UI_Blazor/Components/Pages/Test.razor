@@ -116,12 +116,16 @@
     {
         try
         {
+            if (TestingPlugin == null)
+            {
+                return;
+            }
             switch (functionName)
             {
                 case "CQ_sendPrivateMsg":
                 case "CQ_sendGroupMsg":
                 case "CQ_sendGroupQuoteMsg":
-                    string msg = obj["msg"].ToString();
+                    string? msg = obj["msg"]?.ToString();
                     if (string.IsNullOrEmpty(msg))
                     {
                         return;
@@ -133,7 +137,7 @@
                     break;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
     }
@@ -164,7 +168,7 @@
 
     private async Task SendTestMessage(string msg)
     {
-        if (string.IsNullOrEmpty(msg))
+        if (string.IsNullOrEmpty(msg) || TestingPlugin == null)
         {
             return;
         }
@@ -181,7 +185,7 @@
         CommonConfig.SetConfig("MessageHistories", SendHistories, @"conf\Test.json");
         Stopwatch sw = Stopwatch.StartNew();
         bool flag = Group ? SendGroupMessage(msg) : SendPrivateMessage(msg);
-        await AddChatBlock($"插件{(flag ? "结束" : "放弃")}了处理({sw.ElapsedMilliseconds}ms)", TestingPlugin?.PluginName, AppConfig.Instance.CurrentQQ, DetailItemType.Receive);
+        await AddChatBlock($"插件{(flag ? "结束" : "放弃")}了处理({sw.ElapsedMilliseconds}ms)", TestingPlugin.PluginName, AppConfig.Instance.CurrentQQ, DetailItemType.Receive);
         MessageCommandPanel.Sending = false;
     }
 

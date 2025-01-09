@@ -18,7 +18,7 @@
                 <MudSelectItem T="int" Value="@(30)">Error 错误</MudSelectItem>
                 <MudSelectItem T="int" Value="@(40)">Fatal 致命</MudSelectItem>
             </MudSelect>
-            <MudSwitch id="autoScroll" @bind-Value="@AutoScroll" Color="Color.Primary" T="bool" Style="margin: 5px 0;" CheckedChanged="AutoScrollChecked" Label="自动滚动"></MudSwitch>
+            <MudSwitch id="autoScroll" Color="Color.Primary" T="bool" Style="margin: 5px 0;" ValueChanged="AutoScrollChecked" Label="自动滚动"></MudSwitch>
             <MudSpacer />
             <MudTooltip Text="滚动至底">
                 <MudIconButton Icon="@Icons.Material.Filled.VerticalAlignBottom" Color="Color.Secondary" OnClick="@(() => ScrollToBottom())"></MudIconButton>
@@ -226,7 +226,7 @@
         {
             return;
         }
-        SearchDebounder.Debounce(() => ReloadLogs(), 500);
+        SearchDebounder.Debounce(async () => await ReloadLogs(), 500);
     }
 
     private async Task ReloadLogs()

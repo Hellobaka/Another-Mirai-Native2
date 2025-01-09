@@ -238,7 +238,7 @@
         ProcessList.Clear();
         foreach (var item in PluginManagerProxy.Proxies.Where(x => x.PluginProcess != null && !x.PluginProcess.HasExited))
         {
-            item.PluginProcess.Refresh();
+            item.PluginProcess!.Refresh();
 
             double cpu = UpdateOrAddCpuUsagetoDict(item.PluginProcess);
 

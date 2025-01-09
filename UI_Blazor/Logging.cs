@@ -28,13 +28,16 @@ namespace Another_Mirai_Native.BlazorUI
         /// <summary>
         /// Error msg Exception
         /// </summary>
-        public event Action<bool, string, Exception> LogEvent;
+        public event Action<bool, string, Exception?> LogEvent;
 
-        public IDisposable BeginScope<TState>(TState state) => null;
+        IDisposable? ILogger.BeginScope<TState>(TState state)
+        {
+            return null;
+        }
 
         public bool IsEnabled(LogLevel logLevel) => true;
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
             var message = formatter(state, exception);
             message = $"[{logLevel}] {message}{Environment.NewLine}";

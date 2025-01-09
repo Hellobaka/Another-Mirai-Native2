@@ -24,19 +24,11 @@
     private bool isShow;
     private InputType PasswordInput = InputType.Password;
     private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-    private MudTextField<string> PasswordTextField = null;
+    private MudTextField<string> PasswordTextField;
 
     protected override void OnInitialized()
     {
         LogHandler.StopSaveLogs();
-    }
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // await JS.InvokeVoidAsync("setTitle", "连接 - AMN2 WebUI");
-        }
     }
 
     private async Task OnPasswordKeyDown(KeyboardEventArgs e)
