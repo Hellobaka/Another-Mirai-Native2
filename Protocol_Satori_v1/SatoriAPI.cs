@@ -37,7 +37,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             }
         }
 
-        private JObject SendRequest(string api, string payload)
+        private JObject? SendRequest(string api, string payload)
         {
             using var http = new HttpClient();
             int failCode = 400;
@@ -116,7 +116,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             if (msg != null)
             {
                 var info = SendRequest("message.delete", new { channel_id = msg.ParentId, message_id = msg.RawMessageId }.ToJson());
-                if (info.ContainsKey("ret"))
+                if (info != null && info.ContainsKey("ret"))
                 {
                     return 1;
                 }
@@ -225,7 +225,7 @@ namespace Another_Mirai_Native.Protocol.Satori
 
         public GroupInfo GetRawGroupInfo(long groupId, bool notCache)
         {
-            Guild guild = SendRequest("guild.get", new { guild_id = groupId.ToString() }.ToJson())?.ToObject<Guild>();
+            Guild? guild = SendRequest("guild.get", new { guild_id = groupId.ToString() }.ToJson())?.ToObject<Guild>();
             if (guild == null)
             {
                 return new GroupInfo();
@@ -309,7 +309,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             {
                 return 0;
             }
-            string quoteId = "";
+            string? quoteId = "";
             if (msgId != 0)
             {
                 quoteId = MessageDict.GetMessageByDictId(msgId)?.RawMessageId;
@@ -319,14 +319,14 @@ namespace Another_Mirai_Native.Protocol.Satori
                 // parsedMessage = $"<quote id={quoteId}>" + parsedMessage;
             }
             var info = SendRequest("message.create", new { channel_id = groupId.ToString(), content = parsedMessage }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret") || !info.ContainsKey("id"))
             {
                 return 0;
             }
             return MessageDict.InsertMessage(new MessageDict
             {
                 ParentId = groupId.ToString(),
-                RawMessageId = info["id"].ToString()
+                RawMessageId = info["id"]!.ToString()
             });
         }
 
@@ -343,40 +343,43 @@ namespace Another_Mirai_Native.Protocol.Satori
                 return 0;
             }
 
-            var channel = SendRequest("user.channel.create", new { user_id = qqId.ToString() }.ToJson()).ToObject<Channel>();
+            Channel? channel = SendRequest("user.channel.create", new { user_id = qqId.ToString() }.ToJson())?.ToObject<Channel>();
             if (channel == null || channel.type == 0)
             {
                 return 0;
             }
 
             var info = SendRequest("message.create", new { channel_id = channel.id.ToString(), content = parsedMessage }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret") || !info.ContainsKey("id"))
             {
                 return 0;
             }
             return MessageDict.InsertMessage(new MessageDict
             {
                 ParentId = channel.id.ToString(),
-                RawMessageId = info["id"].ToString()
+                RawMessageId = info["id"]!.ToString()
             });
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
         {
-            bool success = config != null && config.ContainsKey("WebSocketURL") && config.ContainsKey("Token");
-            success = success && !string.IsNullOrEmpty(config["WebSocketURL"]);
-            if (success)
+            if (config == null
+                || !config.ContainsKey("WebSocketURL")
+                || !config.ContainsKey("Token")
+                || string.IsNullOrEmpty(config["WebSocketURL"]))
             {
-                WsURL = config["WebSocketURL"];
-                if (WsURL.EndsWith("/"))
-                {
-                    WsURL = WsURL.Substring(0, WsURL.Length - 1);
-                }
-                Token = config["Token"];
-                SetConfig("WebSocketURL", WsURL);
-                SetConfig("Token", Token);
+                return false;
             }
-            return success;
+
+            WsURL = config["WebSocketURL"];
+            if (WsURL.EndsWith("/"))
+            {
+                WsURL = WsURL.Substring(0, WsURL.Length - 1);
+            }
+            Token = config["Token"];
+            SetConfig("WebSocketURL", WsURL);
+            SetConfig("Token", Token);
+            return true;
         }
 
         public int SetDiscussLeave(long discussId)
@@ -389,7 +392,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             RequestCache.FriendRequest.Remove(identifying);
 
             var info = SendRequest("friend.approve", new { message_id = identifying, approve = responseType == 1, comment = appendMsg }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret"))
             {
                 return 1;
             }
@@ -401,7 +404,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             RequestCache.FriendRequest.Remove(identifying);
 
             var info = SendRequest("guild.member.approve", new { message_id = identifying, approve = responseType == 1, comment = appendMsg }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret"))
             {
                 return 1;
             }
@@ -440,7 +443,7 @@ namespace Another_Mirai_Native.Protocol.Satori
         public int SetGroupBan(long groupId, long qqId, long banTime)
         {
             var info = SendRequest("guild.member.mute", new { channel_id = groupId.ToString(), user_id = qqId.ToString(), duration = banTime }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret"))
             {
                 return 1;
             }
@@ -455,7 +458,7 @@ namespace Another_Mirai_Native.Protocol.Satori
         public int SetGroupKick(long groupId, long qqId, bool refuses)
         {
             var info = SendRequest("guild.member.kick", new { guild_id = groupId.ToString(), user_id = qqId.ToString(), permanent = refuses }.ToJson());
-            if (info.ContainsKey("ret"))
+            if (info == null || info.ContainsKey("ret"))
             {
                 return 1;
             }
@@ -467,7 +470,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             if (CurrentPlatform == "chronocat")
             {
                 var info = SendRequest("unsafe.guild.remove", new { guild_id = groupId.ToString() }.ToJson());
-                if (info.ContainsKey("ret"))
+                if (info == null || info.ContainsKey("ret"))
                 {
                     return 1;
                 }
@@ -486,7 +489,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             if (CurrentPlatform == "chronocat")
             {
                 var info = SendRequest("unsafe.channel.mute", new { channel_id = groupId.ToString(), enable = !isOpen }.ToJson());
-                if (info.ContainsKey("ret"))
+                if (info == null || info.ContainsKey("ret"))
                 {
                     return 1;
                 }

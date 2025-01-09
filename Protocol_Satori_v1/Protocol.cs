@@ -42,8 +42,8 @@ namespace Another_Mirai_Native.Protocol.Satori
             MessageDict.CreateDB();
 
             bool waitFlag = RequestWaiter.Wait("Satori_Identity", EventClient, 5000,
-                () => { },out object success);
-            return (bool)success && EventClient.ReadyState == WebSocketState.Open;
+                () => { }, out object? success);
+            return ((bool?)success ?? false) && EventClient.ReadyState == WebSocketState.Open;
         }
 
         private void EventClient_OnMessage(string message)
@@ -56,8 +56,11 @@ namespace Another_Mirai_Native.Protocol.Satori
         {
             try
             {
-                ServerMessage e = JsonConvert.DeserializeObject<ServerMessage>(data);
-
+                ServerMessage? e = JsonConvert.DeserializeObject<ServerMessage>(data);
+                if (e == null)
+                {
+                    return;
+                }
                 switch (e.op)
                 {
                     case EventOp.EVENT:
@@ -79,7 +82,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             }
         }
 
-        private void HandleReady(JToken body)
+        private void HandleReady(JToken? body)
         {
             if (body is JArray array)
             {
@@ -125,9 +128,13 @@ namespace Another_Mirai_Native.Protocol.Satori
             }).Start();
         }
 
-        private void HandleEvent(JToken body)
+        private void HandleEvent(JToken? body)
         {
-            Events e = body.ToObject<Events>();
+            if (body == null)
+            {
+                return;
+            }
+            Events? e = body.ToObject<Events>();
             if (e == null)
             {
                 LogHelper.Error("处理事件", "无法解析事件对象");
@@ -137,19 +144,22 @@ namespace Another_Mirai_Native.Protocol.Satori
             sw.Start();
 
             int logId = 0;
-            CQPluginProxy handledPlugin = null;
+            CQPluginProxy? handledPlugin = null;
             switch (e.type)
             {
                 case "friend-request":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加好友请求", $"QQ:{e.user.id}({e.user.nick})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, e.timestamp, long.Parse(e.user.id), "", e.id.ToString());
                     break;
+
                 case "guild-added":
                     break;
+
                 case "guild-member-added":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员增加", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick}) 操作人: {e.opeator.id}({e.opeator.nick})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(1, e.timestamp, long.Parse(e.guild.id), long.Parse(e.opeator.id), long.Parse(e.user.id));
                     break;
+
                 case "guild-member-removed":
                     if (e.opeator == null)
                     {
@@ -162,40 +172,52 @@ namespace Another_Mirai_Native.Protocol.Satori
                         handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.TimeStamp, long.Parse(e.guild.id), long.Parse(e.opeator.id), long.Parse(e.user.id));
                     }
                     break;
+
                 case "guild-member-request":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, e.timestamp, long.Parse(e.guild.id), long.Parse(e.user.id), "", "");
                     break;
+
                 case "guild-member-updated":
                     break;
+
                 case "guild-removed":
                     break;
+
                 case "guild-request":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick})", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, e.timestamp, long.Parse(e.guild.id), long.Parse(e.user.id), "", e.id.ToString());
                     break;
+
                 case "guild-role-updated":
                 case "guild-role-created":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick}) 被设置为管理员", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(2, e.timestamp, long.Parse(e.guild.id), long.Parse(e.user.id));
                     break;
+
                 case "guild-role-deleted":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick}) 被取消管理员", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(1, e.timestamp, long.Parse(e.guild.id), long.Parse(e.user.id));
                     break;
+
                 case "guild-updated":
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员名片改变", $"群:{e.guild.id}({e.guild.name}) QQ:{e.user.id}({e.user.nick}) 名片:{e.user.nick}", "处理中...");
                     PluginManagerProxy.Instance.Event_OnGroupMemberCardChanged(long.Parse(e.guild.id), long.Parse(e.user.id), e.user.nick);
                     break;
+
                 case "login-added":
                     break;
+
                 case "login-removed":
                     break;
+
                 case "login-updated":
                     break;
+
                 case "message-created":
                     HandleMessage(e.channel, e.guild, e.user, e.member, e.message);
                     break;
+
                 case "message-deleted":
                     string msg = "内容未捕获";
                     int messageId = Protocol.GetMessageIdFromDB(e.message.id, out _);
@@ -215,18 +237,25 @@ namespace Another_Mirai_Native.Protocol.Satori
                         logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友消息撤回", $"QQ:{e.user.id}({e.user.nick}) 内容:{msg}", "处理中...");
                     }
                     break;
+
                 case "message-updated":
                     break;
+
                 case "reaction-added":
                     break;
+
                 case "reaction-removed":
                     break;
+
                 case "internal":
                     break;
+
                 case "interaction/button":
                     break;
+
                 case "interaction/command":
                     break;
+
                 default:
                     break;
             }
@@ -263,9 +292,10 @@ namespace Another_Mirai_Native.Protocol.Satori
             });
         }
 
-        private void HandleMessage(Channel? channel, Guild? guild, User? user, GuildMember? member, Message? rawMessage)
+        private void HandleMessage(Channel channel, Guild? guild, User user, GuildMember? member, Message? rawMessage)
         {
-            if (rawMessage == null || user?.id == AppConfig.Instance.CurrentQQ.ToString())
+            if (rawMessage == null || channel == null || user == null
+                || user.id == AppConfig.Instance.CurrentQQ.ToString())
             {
                 return;
             }
@@ -275,8 +305,8 @@ namespace Another_Mirai_Native.Protocol.Satori
             sw.Start();
 
             int logId = 0;
-            CQPluginProxy handledPlugin = null;
-            string nick = member != null ? member.nick : !string.IsNullOrEmpty(user?.name) ? user.name : "";
+            CQPluginProxy? handledPlugin = null;
+            string nick = member != null ? member.nick : !string.IsNullOrEmpty(user.name) ? user.name : "";
             long groupId = long.TryParse(guild?.id, out long value) ? value : 0;
             long qqId = long.TryParse(user?.id, out value) ? value : 0;
             if (!string.IsNullOrEmpty(message) && guild == null && user != null && qqId > 0)

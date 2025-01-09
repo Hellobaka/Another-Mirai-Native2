@@ -14,18 +14,18 @@ namespace Another_Mirai_Native.Protocol.Satori.Models
         public string self_id { get; set; } = "";
         public long timestamp { get; set; }
 
-        public Argv? argv { get; set; }
-        public Button? button { get; set; }
-        public Channel? channel { get; set; }
-        public Guild? guild { get; set; }
-        public Login? login { get; set; }
-        public GuildMember? member { get; set; }
-        public Message? message { get; set; }
-        public User? opeator { get; set; }
-        public GuildRole? role { get; set; }
+        public Argv argv { get; set; }
+        public Button button { get; set; }
+        public Channel channel { get; set; }
+        public Guild guild { get; set; }
+        public Login login { get; set; }
+        public GuildMember member { get; set; }
+        public Message message { get; set; }
+        public User opeator { get; set; }
+        public GuildRole role { get; set; }
         /// <summary>
         /// 目标用户
         /// </summary>
-        public User? user { get; set; }
+        public User user { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <RootNamespace>Another_Mirai_Native.Protocol.OneBot</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
 	  <Version>2.8.0</Version>

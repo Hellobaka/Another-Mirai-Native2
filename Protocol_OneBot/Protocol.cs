@@ -41,7 +41,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         /// </summary>
         private bool Handing { get; set; } = true;
 
-        public JToken CallOneBotAPI(APIType type, Dictionary<string, object> param)
+        public JToken? CallOneBotAPI(APIType type, Dictionary<string, object> param)
         {
             int syncId;
             do
@@ -57,16 +57,17 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return CallOneBotAPI(syncId, body);
         }
 
-        public JToken CallOneBotAPI(int syncId, object obj)
+        public JToken? CallOneBotAPI(int syncId, object obj)
         {
             var msg = new WaitingMessage();
             WaitingMessages.Add(syncId, msg);
-            
-            JObject result = null;
+
+            JObject? result = null;
             if (RequestWaiter.Wait(syncId, APIClient, AppConfig.Instance.PluginInvokeTimeout,
-                () => {
+                () =>
+                {
                     APIClient.Send(obj.ToJson());
-                },out _))
+                }, out _))
             {
                 WaitingMessages.Remove(syncId);
                 result = msg.Result;
@@ -78,7 +79,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             else
             {
-                if (result.ContainsKey("retcode") && result["retcode"].ToString() != "0")
+                if (result.ContainsKey("retcode") && result["retcode"]!.ToString() != "0")
                 {
                     LogHelper.Debug("OneBotAPI", $"retcode: {result["retcode"]}");
                     return null;
@@ -156,7 +157,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchGroupMessage(JObject message)
         {
-            GroupMessage groupMessage = message.ToObject<GroupMessage>();
+            GroupMessage? groupMessage = message.ToObject<GroupMessage>();
             if (groupMessage == null)
             {
                 return;
@@ -184,7 +185,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             Stopwatch sw = new();
             sw.Start();
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息", $"群:{groupMessage.group_id}{GetGroupName(groupMessage.group_id, true)} QQ:{groupMessage.user_id}({GetGroupMemberNick(groupMessage.group_id, groupMessage.user_id)}) {groupMessage.ParsedMessage}", "处理中...");
-            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(groupMessage.time));
+            CQPluginProxy? handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, groupMessage.message_id, groupMessage.group_id, groupMessage.user_id, "", groupMessage.ParsedMessage, 0, Helper.TimeStamp2DateTime(groupMessage.time));
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -203,14 +204,24 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return regex.Replace(parsedMessage, "[CQ:record,file=$1]");
         }
 
-        private string UnescapeRawMessage(string msg)
+        private string UnescapeRawMessage(string? msg)
         {
-            return msg.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&#44;", ",").Replace("&amp;", "&");
+            if (string.IsNullOrEmpty(msg))
+            {
+                return "";
+            }
+
+            return msg!.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&#44;", ",").Replace("&amp;", "&");
         }
 
-        private string EscapeRawMessage(string msg)
+        private string EscapeRawMessage(string? msg)
         {
-            return msg.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
+            if (string.IsNullOrEmpty(msg))
+            {
+                return "";
+            }
+
+            return msg!.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
         }
 
         private void DispatchMessage(JObject message)
@@ -219,7 +230,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            string messageType = message["message_type"].ToString();
+            string messageType = message["message_type"]!.ToString();
             if (messageType.ToString() == "group")
             {
                 DispatchGroupMessage(message);
@@ -236,24 +247,29 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            NoticeType noticeType = (NoticeType)Enum.Parse(typeof(NoticeType), notice["notice_type"].ToString());
+            NoticeType noticeType = (NoticeType)Enum.Parse(typeof(NoticeType), notice["notice_type"]!.ToString());
             NoticeType subType = NoticeType.notify;
             if (notice.ContainsKey("sub_type"))
             {
-                subType = Enum.TryParse<NoticeType>(notice["sub_type"].ToString(), out NoticeType value) ? value : NoticeType.notify;
+                subType = Enum.TryParse(notice["sub_type"]!.ToString(), out NoticeType value) ? value : NoticeType.notify;
             }
             Stopwatch sw = new();
             sw.Start();
 
             int logId = 0;
-            CQPluginProxy handledPlugin = null;
+            CQPluginProxy? handledPlugin = null;
             switch (noticeType)
             {
                 case NoticeType.notify:
                     switch (subType)
                     {
                         case NoticeType.poke:
-                            Poke poke = notice.ToObject<Poke>();
+                            Poke? poke = notice.ToObject<Poke>();
+                            if (poke == null)
+                            {
+                                LogHelper.Error("类型转换", $"Poke类型转换失败");
+                                break;
+                            }
                             logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "戳一戳", $"群:{poke.group_id}{GetGroupName(poke.group_id, true)} {poke.user_id} 戳了戳 {poke.target_id}", "处理中...");
                             break;
 
@@ -263,7 +279,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.group_upload:
-                    FileUpload fileUpload = notice.ToObject<FileUpload>();
+                    FileUpload? fileUpload = notice.ToObject<FileUpload>();
+                    if (fileUpload == null)
+                    {
+                        LogHelper.Error("类型转换", $"FileUpload类型转换失败");
+                        break;
+                    }
                     MemoryStream stream = new();
                     BinaryWriter binaryWriter = new(stream);
                     BinaryWriterExpand.Write_Ex(binaryWriter, fileUpload.file.id);
@@ -274,17 +295,27 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     sw.Stop();
                     LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传", $"群:{fileUpload.group_id}{GetGroupName(fileUpload.group_id, true)} QQ:{fileUpload.user_id}{GetGroupMemberNick(fileUpload.group_id, fileUpload.user_id, true)} " +
                         $"文件名:{fileUpload.file.name} 大小:{fileUpload.file.size / 1000}KB FileID:{fileUpload.file.id}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");
-                    return;
+                    break;
 
                 case NoticeType.group_admin:
-                    AdminChange adminChange = notice.ToObject<AdminChange>();
+                    AdminChange? adminChange = notice.ToObject<AdminChange>();
+                    if (adminChange == null)
+                    {
+                        LogHelper.Error("类型转换", $"AdminChange类型转换失败");
+                        break;
+                    }
                     int adminSet = adminChange.sub_type == "set" ? 2 : 1;
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{adminChange.group_id}{GetGroupName(adminChange.group_id, true)} QQ:{adminChange.user_id}{GetGroupMemberNick(adminChange.group_id, adminChange.user_id, true)} 被{(adminSet == 2 ? "设置为" : "取消")}管理员", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(adminSet, adminChange.time, adminChange.group_id, adminChange.user_id);
                     break;
 
                 case NoticeType.group_decrease:
-                    GroupMemberLeave leave = notice.ToObject<GroupMemberLeave>();
+                    GroupMemberLeave? leave = notice.ToObject<GroupMemberLeave>();
+                    if (leave == null)
+                    {
+                        LogHelper.Error("类型转换", $"GroupMemberLeave类型转换失败");
+                        break;
+                    }
                     switch (leave.sub_type)
                     {
                         case "leave":
@@ -309,14 +340,24 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.group_increase:
-                    GroupMemberJoin join = notice.ToObject<GroupMemberJoin>();
+                    GroupMemberJoin? join = notice.ToObject<GroupMemberJoin>();
+                    if (join == null)
+                    {
+                        LogHelper.Error("类型转换", $"GroupMemberJoin类型转换失败");
+                        break;
+                    }
                     int groupInviteType = join.sub_type == "approve" ? 1 : 2;
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员增加", $"群:{join.group_id}{GetGroupName(join.group_id, true)} QQ:{join.user_id}{GetGroupMemberNick(join.group_id, join.user_id, true)} 操作人: {join.operator_id}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(groupInviteType, join.time, join.group_id, join.operator_id, join.user_id);
                     break;
 
                 case NoticeType.group_ban:
-                    GroupBan ban = notice.ToObject<GroupBan>();
+                    GroupBan? ban = notice.ToObject<GroupBan>();
+                    if (ban == null)
+                    {
+                        LogHelper.Error("类型转换", $"GroupBan类型转换失败");
+                        break;
+                    }
                     int banId = ban.sub_type == "ban" ? 2 : 1;
                     switch (ban.sub_type)
                     {
@@ -332,15 +373,25 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.friend_add:
-                    FriendAdd friendAdd = notice.ToObject<FriendAdd>();
+                    FriendAdd? friendAdd = notice.ToObject<FriendAdd>();
+                    if (friendAdd == null)
+                    {
+                        LogHelper.Error("类型转换", $"FriendAdd类型转换失败");
+                        break;
+                    }
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "好友添加", $"QQ:{friendAdd.user_id}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAdded(1, friendAdd.time, friendAdd.user_id);
                     break;
 
                 case NoticeType.group_recall:
-                    GroupMessageRecall groupMessageRecall = notice.ToObject<GroupMessageRecall>();
+                    GroupMessageRecall? groupMessageRecall = notice.ToObject<GroupMessageRecall>();
+                    if (groupMessageRecall == null)
+                    {
+                        LogHelper.Error("类型转换", $"GroupMessageRecall类型转换失败");
+                        break;
+                    }
                     string msg = "内容未捕获";
-                    if (RequestCache.Message.Any(x=> x.Item1 == groupMessageRecall.message_id))
+                    if (RequestCache.Message.Any(x => x.Item1 == groupMessageRecall.message_id))
                     {
                         var msgCache = RequestCache.Message.Last(x => x.Item1 == groupMessageRecall.message_id);
                         if (!string.IsNullOrEmpty(msgCache.Item2))
@@ -354,7 +405,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.friend_recall:
-                    FriendMessageRecall friendMessageRecall = notice.ToObject<FriendMessageRecall>();
+                    FriendMessageRecall? friendMessageRecall = notice.ToObject<FriendMessageRecall>();
+                    if (friendMessageRecall == null)
+                    {
+                        LogHelper.Error("类型转换", $"FriendMessageRecall类型转换失败");
+                        break;
+                    }
                     string friendRecallMsg = "内容未捕获";
                     if (RequestCache.Message.Any(x => x.Item1 == friendMessageRecall.message_id))
                     {
@@ -370,14 +426,15 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     break;
 
                 case NoticeType.group_card:
-                    GroupMemberCardChanged groupMemberCardChanged = notice.ToObject<GroupMemberCardChanged>();
-                    if (groupMemberCardChanged != null)
+                    GroupMemberCardChanged? groupMemberCardChanged = notice.ToObject<GroupMemberCardChanged>();
+                    if (groupMemberCardChanged == null)
                     {
-                        logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员名片改变", $"群:{groupMemberCardChanged.group_id}({GetGroupName(groupMemberCardChanged.group_id)}) QQ:{groupMemberCardChanged.user_id} 名片:{groupMemberCardChanged.card_new}", "处理中...");
-                        PluginManagerProxy.Instance.Event_OnGroupMemberCardChanged(groupMemberCardChanged.group_id, groupMemberCardChanged.user_id, groupMemberCardChanged.card_new);
+                        LogHelper.Error("类型转换", $"GroupMemberCardChanged类型转换失败");
+                        break;
                     }
+                    logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员名片改变", $"群:{groupMemberCardChanged.group_id}({GetGroupName(groupMemberCardChanged.group_id)}) QQ:{groupMemberCardChanged.user_id} 名片:{groupMemberCardChanged.card_new}", "处理中...");
+                    PluginManagerProxy.Instance.Event_OnGroupMemberCardChanged(groupMemberCardChanged.group_id, groupMemberCardChanged.user_id, groupMemberCardChanged.card_new);
                     break;
-
             }
             sw.Stop();
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -390,9 +447,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchPrivateMessage(JObject message)
         {
-            PrivateMessage privateMessage = message.ToObject<PrivateMessage>();
+            PrivateMessage? privateMessage = message.ToObject<PrivateMessage>();
             if (privateMessage == null)
             {
+                LogHelper.Error("类型转换", $"PrivateMessage类型转换失败");
                 return;
             }
             if (privateMessage.message_format == "array")
@@ -418,7 +476,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             Stopwatch sw = new();
             sw.Start();
             int logId = 0;
-            CQPluginProxy handledPlugin = null;
+            CQPluginProxy? handledPlugin = null;
             switch (privateMessage.sub_type)
             {
                 case "friend":
@@ -461,20 +519,20 @@ namespace Another_Mirai_Native.Protocol.OneBot
             string result = "";
             foreach (JObject json in arr)
             {
-                if (json["type"].ToString() == "text")
+                if (json["type"]?.ToString() == "text")
                 {
-                    result += json["data"]["text"].ToString();
+                    result += json["data"]?["text"]?.ToString() ?? "";
                 }
                 else
                 {
                     string cqCode = $"[CQ:{json["type"]},";
-                    foreach (JProperty key in json["data"].Values<JProperty>())
+                    foreach (JProperty? key in json["data"]?.Values<JProperty>() ?? [])
                     {
-                        if (json["type"].ToString() == "at" && key.Name != "qq")
+                        if (json["type"]?.ToString() == "at" && key?.Name != "qq")
                         {
                             continue;
                         }
-                        cqCode += $"{key.Name}={EscapeRawMessage(key.Value.ToString())},";
+                        cqCode += $"{key?.Name}={EscapeRawMessage(key?.Value.ToString())},";
                     }
                     cqCode = cqCode.Substring(0, cqCode.Length - 1) + "]";
                     result += cqCode;
@@ -485,7 +543,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private void DispatchRequest(JObject request)
         {
-            if (request == null || !Handing)
+            if (request == null || !Handing || !request.ContainsKey("request_type"))
             {
                 return;
             }
@@ -493,18 +551,28 @@ namespace Another_Mirai_Native.Protocol.OneBot
             sw.Start();
 
             int logId = 0;
-            CQPluginProxy handledPlugin = null;
-            switch (request["request_type"].ToString())
+            CQPluginProxy? handledPlugin = null;
+            switch (request["request_type"]!.ToString())
             {
                 case "group":
-                    GroupRequest groupRequest = request.ToObject<GroupRequest>();
+                    GroupRequest? groupRequest = request.ToObject<GroupRequest>();
+                    if (groupRequest == null)
+                    {
+                        LogHelper.Error("类型转换", $"GroupRequest类型转换失败");
+                        break;
+                    }
                     RequestCache.GroupRequest.Add(groupRequest.flag, (groupRequest.user_id, "", groupRequest.group_id, ""));
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{groupRequest.group_id}{GetGroupName(groupRequest.group_id, true)} QQ:{groupRequest.user_id}{GetGroupMemberNick(groupRequest.group_id, groupRequest.user_id, true)} 备注:{groupRequest.comment}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, groupRequest.time, groupRequest.group_id, groupRequest.user_id, groupRequest.comment, groupRequest.flag);
                     break;
 
                 case "friend":
-                    FriendRequest friendRequest = request.ToObject<FriendRequest>();
+                    FriendRequest? friendRequest = request.ToObject<FriendRequest>();
+                    if (friendRequest == null)
+                    {
+                        LogHelper.Error("类型转换", $"FriendRequest类型转换失败");
+                        break;
+                    }
                     RequestCache.FriendRequest.Add(friendRequest.flag, (friendRequest.user_id, ""));
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加好友请求", $"QQ:{friendRequest.user_id} 备注:{friendRequest.comment} 来源群:{friendRequest.group_id}{GetGroupName(friendRequest.group_id, true)}", "处理中...");
                     handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, friendRequest.time, friendRequest.user_id, friendRequest.comment, friendRequest.flag);
@@ -555,7 +623,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 JObject json = JObject.Parse(data);
                 if (json.ContainsKey("echo"))
                 {
-                    int echo = int.TryParse(json["echo"].ToString(), out int value) ? value : 0;
+                    int echo = int.TryParse(json["echo"]?.ToString(), out int value) ? value : 0;
                     if (WaitingMessages.TryGetValue(echo, out WaitingMessage? message))
                     {
                         message.Result = json;
@@ -584,7 +652,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     return;
                 }
-                EventType eventTypes = (EventType)Enum.Parse(typeof(EventType), e["post_type"].ToString());
+                EventType eventTypes = (EventType)Enum.Parse(typeof(EventType), e["post_type"]?.ToString() ?? "");
                 switch (eventTypes)
                 {
                     case EventType.message:

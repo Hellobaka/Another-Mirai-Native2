@@ -208,7 +208,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 $"群:{e.Chain.GroupUin}({ChatHistoryHelper.GetGroupName(e.Chain.GroupUin.ToLong()).Result}) " +
                 $"QQ:{e.Chain.FriendUin}({ChatHistoryHelper.GetGroupMemberNick(e.Chain.GroupUin.ToLong(), e.Chain.FriendUin).Result}) " +
                 $"消息: {message}", "处理中...");
-            CQPluginProxy handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, messageId, e.Chain.GroupUin.ToLong(), e.Chain.FriendUin, "", message, 0, DateTime.Now);
+            CQPluginProxy? handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMsg(1, messageId, e.Chain.GroupUin.ToLong(), e.Chain.FriendUin, "", message, 0, DateTime.Now);
 
             sw.Stop();
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
@@ -576,7 +576,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     {
                         RequestWaiter.TriggerByKey("LagrangeCoreLogin", false);
                     }
-                }, out object r);
+                }, out object? r);
                 bool waitResult = r != null && (bool)r;
                 if (wait)
                 {

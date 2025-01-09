@@ -48,7 +48,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.can_send_image, new Dictionary<string, object>
             {
             });
-            return r != null ? (r["yes"].ToObject<bool>() ? 1 : 0) : 0;
+            var token = r?["yes"];
+            if (token == null)
+            {
+                return 0;
+            }
+            return token.ToObject<bool>() ? 1 : 0;
         }
 
         public int CanSendRecord()
@@ -56,7 +61,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.can_send_record, new Dictionary<string, object>
             {
             });
-            return r != null ? (r["yes"].ToObject<bool>() ? 1 : 0) : 0;
+            var token = r?["yes"];
+            if (token == null)
+            {
+                return 0;
+            }
+            return token.ToObject<bool>() ? 1 : 0;
         }
 
         public bool Connect()
@@ -98,7 +108,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 {"domain", domain},
             });
-            return r != null ? r["cookies"].ToString() : "";
+            return r != null ? r["cookies"]?.ToString() ?? "" : "";
         }
 
         public string GetCsrfToken()
@@ -106,7 +116,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_csrf_token, new Dictionary<string, object>
             {
             });
-            return r != null ? r["token"].ToString() : "";
+            var token = r?["token"];
+            if (token == null)
+            {
+                return "";
+            }
+            return token.ToString();
         }
 
         public string GetFriendList(bool reserved)
@@ -139,7 +154,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_login_info, new Dictionary<string, object>
             {
             });
-            return r != null ? r["nickname"].ToString() : "";
+            var token = r?["nickname"];
+            if (token == null)
+            {
+                return "";
+            }
+            return token.ToString();
         }
 
         public long GetLoginQQ()
@@ -147,7 +167,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_login_info, new Dictionary<string, object>
             {
             });
-            return r != null ? (long)r["user_id"] : 0;
+            var token = r?["user_id"];
+            if (token == null)
+            {
+                return 0;
+            }
+            return token.ToObject<long>();
         }
 
         public List<FriendInfo> GetRawFriendList(bool reserved)
@@ -155,17 +180,17 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_friend_list, new Dictionary<string, object>
             {
             });
-            if (r != null)
+            if (r is JArray array)
             {
-                var arr = reserved ? (r as JArray).Reverse() : r as JArray;
+                var arr = reserved ? array.Reverse() : array;
                 List<FriendInfo> friendInfos = new();
                 foreach (var item in arr)
                 {
                     friendInfos.Add(new FriendInfo
                     {
-                        Nick = item["nickname"].ToString(),
-                        Postscript = item["remark"].ToString(),
-                        QQ = (long)item["user_id"]
+                        Nick = item["nickname"]?.ToString() ?? "",
+                        Postscript = item["remark"]?.ToString() ?? "",
+                        QQ = (long?)item["user_id"] ?? 0
                     });
                 }
                 return friendInfos;
@@ -184,10 +209,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return new GroupInfo
                 {
-                    Group = (long)r["group_id"],
-                    Name = r["group_name"].ToString(),
-                    CurrentMemberCount = (int)r["member_count"],
-                    MaxMemberCount = (int)r["max_member_count"],
+                    Group = (long?)r["group_id"] ?? 0,
+                    Name = r["group_name"]?.ToString() ?? "",
+                    CurrentMemberCount = (int?)r["member_count"] ?? 0,
+                    MaxMemberCount = (int?)r["max_member_count"] ?? 0,
                 };
             }
             return new GroupInfo();
@@ -198,18 +223,17 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var r = CallOneBotAPI(APIType.get_group_list, new Dictionary<string, object>
             {
             });
-            if (r != null)
+            if (r is JArray arr)
             {
-                var arr = r as JArray;
                 List<GroupInfo> groupInfos = new();
                 foreach (var item in arr)
                 {
                     groupInfos.Add(new GroupInfo
                     {
-                        Group = (long)item["group_id"],
-                        Name = item["group_name"].ToString(),
-                        CurrentMemberCount = (int)item["member_count"],
-                        MaxMemberCount = (int)item["max_member_count"],
+                        Group = (long?)item["group_id"] ?? 0,
+                        Name = item["group_name"]?.ToString() ?? "",
+                        CurrentMemberCount = (int?)item["member_count"] ?? 0,
+                        MaxMemberCount = (int?)item["max_member_count"] ?? 0,
                     });
                 }
                 return groupInfos;
@@ -234,9 +258,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 {"group_id", groupId},
             });
-            if (r != null)
+            if (r is JArray arr)
             {
-                var arr = r as JArray;
                 List<GroupMemberInfo> groupInfos = new();
                 foreach (var item in arr)
                 {
@@ -257,10 +280,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return r != null
                 ? new StrangerInfo
                 {
-                    Age = (int)r["age"],
-                    Nick = r["nickname"].ToString(),
-                    QQ = (long)r["user_id"],
-                    Sex = ParseString2QQSex(r["sex"].ToString())
+                    Age = (int?)r["age"] ?? 0,
+                    Nick = r["nickname"]?.ToString() ?? "",
+                    QQ = (long?)r["user_id"] ?? 0,
+                    Sex = ParseString2QQSex(r["sex"]?.ToString())
                 }.ToNativeBase64()
                 : new StrangerInfo().ToNativeBase64();
         }
@@ -298,7 +321,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {"message", arrMessage },
                     {"auto_escape", false },
                 });
-                return r != null ? (int)r["message_id"] : 0;
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
             }
             else
             {
@@ -308,7 +331,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {"message", msg },
                     {"auto_escape", false },
                 });
-                return r != null ? (int)r["message_id"] : 0;
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
             }
         }
 
@@ -330,14 +353,15 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {
                         continue;
                     }
+                    JObject json_data = new();
                     JObject json = new()
                     {
                         new JProperty("type", cqcode.Function.GetDescription()),
-                        new JProperty("data", new JObject())
+                        new JProperty("data", json_data)
                     };
                     foreach (var data in cqcode.Items)
                     {
-                        (json["data"] as JObject).Add(new JProperty(data.Key, data.Value));
+                        json_data.Add(new JProperty(data.Key, data.Value));
                     }
                     result.Add(json);
                 }
@@ -381,7 +405,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {"message", arrMessage },
                     {"auto_escape", false },
                 });
-                return r != null ? (int)r["message_id"] : 0;
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
             }
             else
             {
@@ -391,26 +415,29 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {"message", msg },
                     {"auto_escape", false },
                 });
-                return r != null ? (int)r["message_id"] : 0;
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
             }
         }
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
         {
-            bool success = config != null && config.ContainsKey("Ws") && config.ContainsKey("AuthKey");
-            success = success && !string.IsNullOrEmpty(config["Ws"]);
-            if (success)
+            if (config == null
+                || !config.ContainsKey("Ws")
+                || !config.ContainsKey("AuthKey")
+                || string.IsNullOrEmpty(config["Ws"]))
             {
-                WsURL = config["Ws"];
-                if (WsURL.EndsWith("/"))
-                {
-                    WsURL = WsURL.Substring(0, WsURL.Length - 1);
-                }
-                AuthKey = config["AuthKey"];
-                SetConfig("WebSocketURL", WsURL);
-                SetConfig("AuthKey", AuthKey);
+                return false;
             }
-            return success;
+
+            WsURL = config["Ws"];
+            if (WsURL.EndsWith("/"))
+            {
+                WsURL = WsURL.Substring(0, WsURL.Length - 1);
+            }
+            AuthKey = config["AuthKey"];
+            SetConfig("WebSocketURL", WsURL);
+            SetConfig("AuthKey", AuthKey);
+            return true;
         }
 
         public int SetDiscussLeave(long discussId)
@@ -651,25 +678,29 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
         }
 
-        private GroupMemberInfo ParseResult2GroupMemberInfo(JObject r)
+        private GroupMemberInfo ParseResult2GroupMemberInfo(JObject? r)
         {
+            if (r == null)
+            {
+                return new();
+            }
             return new GroupMemberInfo
             {
-                Age = (int)r["age"],
-                Area = r["area"].ToString(),
-                Card = r["card"].ToString(),
-                ExclusiveTitle = r["title"].ToString(),
-                ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime((int)r["title_expire_time"]),
-                Group = (long)r["group_id"],
-                IsAllowEditorCard = (bool)r["card_changeable"],
-                IsBadRecord = (bool)r["unfriendly"],
-                JoinGroupDateTime = Helper.TimeStamp2DateTime((int)r["join_time"]),
-                LastSpeakDateTime = Helper.TimeStamp2DateTime((int)r["last_sent_time"]),
-                Level = r["level"].ToString(),
-                Nick = r["nickname"].ToString(),
-                QQ = (long)r["user_id"],
-                Sex = ParseString2QQSex(r["sex"].ToString()),
-                MemberType = ParseString2MemberType(r["role"].ToString())
+                Age = (int?)r["age"] ?? 0,
+                Area = r["area"]?.ToString() ?? "",
+                Card = r["card"]?.ToString() ?? "",
+                ExclusiveTitle = r["title"]?.ToString() ?? "",
+                ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime((int?)r["title_expire_time"] ?? 0),
+                Group = (long?)r["group_id"] ?? 0,
+                IsAllowEditorCard = (bool?)r["card_changeable"] ?? false,
+                IsBadRecord = (bool?)r["unfriendly"] ?? false,
+                JoinGroupDateTime = Helper.TimeStamp2DateTime((int?)r["join_time"] ?? 0),
+                LastSpeakDateTime = Helper.TimeStamp2DateTime((int?)r["last_sent_time"] ?? 0),
+                Level = r["level"]?.ToString() ?? "",
+                Nick = r["nickname"]?.ToString() ?? "",
+                QQ = (long?)r["user_id"] ?? 0,
+                Sex = ParseString2QQSex(r["sex"]?.ToString()),
+                MemberType = ParseString2MemberType(r["role"]?.ToString() ?? "")
             };
         }
 
@@ -679,8 +710,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 ? QQGroupMemberType.Manage : QQGroupMemberType.Member;
         }
 
-        private QQSex ParseString2QQSex(string sex)
+        private QQSex ParseString2QQSex(string? sex)
         {
+            if (string.IsNullOrEmpty(sex))
+            {
+                return QQSex.Unknown;
+            }
             return sex == "male" ? QQSex.Man : sex == "female"
                 ? QQSex.Woman : QQSex.Unknown;
         }
