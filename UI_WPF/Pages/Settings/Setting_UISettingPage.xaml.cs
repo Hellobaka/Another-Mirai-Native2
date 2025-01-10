@@ -2,6 +2,7 @@
 using ModernWpf;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -182,7 +183,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             string keyPath = @"HKCU\Software\Microsoft\Windows\CurrentVersion\Run";
             string valueName = "Another-Mirai-Native2";
-            string programPath = Assembly.GetExecutingAssembly().Location;
+            string programPath = Path.Combine(AppContext.BaseDirectory, "Another-Mirai-Native-UI.exe");
 
             string command = enable
                 ? $"reg add \"{keyPath}\" /v \"{valueName}\" /d \"{programPath}\" /f"
