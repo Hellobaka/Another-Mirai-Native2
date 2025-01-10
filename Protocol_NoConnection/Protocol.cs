@@ -181,8 +181,8 @@ namespace Protocol_NoConnection
         public bool Disconnect()
         {
             IsConnected = false;
-            PicServer.Stop();
-            TesterForm.Invoke(() =>
+            PicServer?.Stop();
+            TesterForm?.Invoke(() =>
             {
                 TesterForm.Close();
                 TesterForm.Dispose();
