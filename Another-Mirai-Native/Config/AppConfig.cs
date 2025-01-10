@@ -83,7 +83,11 @@ namespace Another_Mirai_Native.Config
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
             AutoConnect = GetConfig("AutoConnect", false);
             QRCodeCompatibilityMode = GetConfig("QRCodeCompatibilityMode", false);
+#if NET5_0_OR_GREATER
+            AutoProtocol = GetConfig("AutoProtocol", "Lagrange.Core");
+#else
             AutoProtocol = GetConfig("AutoProtocol", "NoConnection");
+#endif
             if (string.IsNullOrEmpty(AutoProtocol))
             {
                 AutoProtocol = "NoConnection";
