@@ -43,7 +43,7 @@ namespace Another_Mirai_Native.UI.Pages
                         return;
                     }
                     var obj = Activator.CreateInstance(pageType);
-                    if(obj == null)
+                    if (obj == null)
                     {
                         return;
                     }
@@ -71,11 +71,11 @@ namespace Another_Mirai_Native.UI.Pages
         public class Remark
         {
             public string Name { get; set; } = "";
-            
+
             public string DisplayName { get; set; } = "";
 
             public Dictionary<string, string> ArgumentList { get; set; } = [];
-            
+
             public string ReturnDescription { get; set; } = "";
 
             public string SummaryDescription { get; set; } = "";

@@ -1,7 +1,6 @@
 ﻿using ModernWpf;
 using ModernWpf.Controls;
 using System;
-using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,11 +92,11 @@ namespace Another_Mirai_Native.UI
             var paneRoot = GetPaneRoot(navigationView, navigationView.PaneDisplayMode);
             if (paneRoot != null)
             {
-                if(paneRoot is StackPanel stackPanel)
+                if (paneRoot is StackPanel stackPanel)
                 {
                     stackPanel.Background = Brushes.Transparent;
                 }
-                else if(paneRoot is Grid grid)
+                else if (paneRoot is Grid grid)
                 {
                     grid.Background = Brushes.Transparent;
                 }

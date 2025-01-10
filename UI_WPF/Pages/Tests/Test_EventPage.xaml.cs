@@ -1,12 +1,10 @@
 ﻿using Another_Mirai_Native.Native;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,7 +59,7 @@ namespace Another_Mirai_Native.UI.Pages
                 TextBox inputTextbox = new TextBox() { Tag = item, Text = item.Value, Margin = new Thickness(0, 3, 0, 0) };
                 inputTextbox.TextChanged += (sender, _) =>
                 {
-                    if(sender is TextBox textBox && textBox.Tag is InvokeArugment arugment)
+                    if (sender is TextBox textBox && textBox.Tag is InvokeArugment arugment)
                     {
                         arugment.Value = textBox.Text;
                     }
@@ -486,7 +484,7 @@ namespace Another_Mirai_Native.UI.Pages
             public string EventName { get; set; }
 
             public string EventNameDisplay { get; set; }
-       
+
             public string EventNameIcon => EventName.Substring(0, 1);
         }
     }

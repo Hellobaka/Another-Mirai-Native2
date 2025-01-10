@@ -1,6 +1,4 @@
 ﻿using Another_Mirai_Native.Config;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;

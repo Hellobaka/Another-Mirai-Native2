@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.UI.Pages
                         return;
                     }
                     var obj = Activator.CreateInstance(pageType);
-                    if(obj == null)
+                    if (obj == null)
                     {
                         return;
                     }

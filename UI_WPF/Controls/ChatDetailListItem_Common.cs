@@ -22,6 +22,7 @@ using XamlAnimatedGif;
 namespace Another_Mirai_Native.UI.Controls
 {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
+
     public static class ChatDetailListItem_Common
     {
         /// <summary>
@@ -670,7 +671,6 @@ namespace Another_Mirai_Native.UI.Controls
             }
         }
 
-
         /// <summary>
         /// 获取右键菜单触发元素
         /// </summary>
@@ -679,5 +679,6 @@ namespace Another_Mirai_Native.UI.Controls
             return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
         }
     }
+
 #pragma warning restore CS8602 // 解引用可能出现空引用。
 }

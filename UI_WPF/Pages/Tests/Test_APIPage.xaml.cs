@@ -56,7 +56,7 @@ namespace Another_Mirai_Native.UI.Pages
                 TextBox inputTextbox = new TextBox() { Tag = item, Text = item.Value, Margin = new Thickness(0, 3, 0, 0) };
                 inputTextbox.TextChanged += (sender, _) =>
                 {
-                    if(sender is TextBox textBox && textBox.Tag is InvokeArugment arugment)
+                    if (sender is TextBox textBox && textBox.Tag is InvokeArugment arugment)
                     {
                         arugment.Value = textBox.Text;
                     }
