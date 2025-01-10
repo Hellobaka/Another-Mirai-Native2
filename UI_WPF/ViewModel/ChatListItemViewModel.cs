@@ -6,7 +6,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 {
     public class ChatListItemViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
 
@@ -25,13 +25,18 @@ namespace Another_Mirai_Native.UI.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is ChatListItemViewModel viewModel)
             {
                 return viewModel.Id == Id;
             }
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

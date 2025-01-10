@@ -84,7 +84,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// <summary>
         /// 最后一个段落
         /// </summary>
-        private Paragraph CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
+        private Paragraph? CurrentParagraph => DetailContainer.Document.Blocks.LastBlock as Paragraph;
 
         private Border ReplyElement { get; set; }
 
@@ -93,6 +93,11 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         public async void ParseAndBuildDetail()
         {
+            if (CurrentParagraph == null)
+            {
+                return;
+            }
+
             // 拆分CQ码
             Regex regex = new("(\\[CQ:.*?,.*?\\])");
             var cqCodeCaptures = regex.Matches(Message).Cast<Match>().Select(m => m.Value).ToList();
@@ -143,7 +148,7 @@ namespace Another_Mirai_Native.UI.Controls
                         minWidth = Math.Max(minWidth, 150);
                     }
                     else if (cqcode.Function == Model.Enums.CQCodeType.At
-                        && cqcode.Items.TryGetValue("qq", out string qq) && long.TryParse(qq, out long id))
+                        && cqcode.Items.TryGetValue("qq", out string? qq) && long.TryParse(qq, out long id))
                     {
                         // At元素
                         string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
@@ -295,7 +300,7 @@ namespace Another_Mirai_Native.UI.Controls
                         }
                         else if (inline is Hyperlink link)
                         {
-                            text = link.Tag.ToString();
+                            text = link.Tag?.ToString() ?? "";
                         }
                         var formattedText = new FormattedText(
                             text,

@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private string SearchText { get; set; } = "";
 
-        private LogModelWrapper SelectedLog => LogView.SelectedItem as LogModelWrapper;
+        private LogModelWrapper? SelectedLog => LogView.SelectedItem as LogModelWrapper;
 
         public void RefilterLogCollection()
         {
@@ -206,7 +206,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                LogModelWrapper log = LogCollections.FirstOrDefault(x => x.id == logId);
+                LogModelWrapper? log = LogCollections.FirstOrDefault(x => x.id == logId);
                 if (log != null)
                 {
                     log.status = status;
@@ -215,7 +215,7 @@ namespace Another_Mirai_Native.UI.Pages
             });
         }
 
-        private void LogPage_Loaded(object sender, RoutedEventArgs e)
+        private void LogPage_Loaded(object? sender, RoutedEventArgs? e)
         {
             if (FormLoaded)
             {

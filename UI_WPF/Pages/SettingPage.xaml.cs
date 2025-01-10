@@ -42,6 +42,10 @@ namespace Another_Mirai_Native.UI.Pages
                         return;
                     }
                     var obj = Activator.CreateInstance(pageType);
+                    if(obj == null)
+                    {
+                        return;
+                    }
                     PageCache.Add(selectedItemTag, obj);
                     MainFrame.Navigate(obj);
                 }

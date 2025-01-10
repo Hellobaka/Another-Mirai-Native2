@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.UI.WinNative
 
         public static void AssignProcessToKillOnCloseJob(Process process)
         {
-            var job = CreateJobObject(IntPtr.Zero, null);
+            var job = CreateJobObject(IntPtr.Zero, "");
 
             var info = new JOBOBJECT_BASIC_LIMIT_INFORMATION { LimitFlags = 0x2000 };
 

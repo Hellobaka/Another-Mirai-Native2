@@ -29,30 +29,41 @@ namespace Another_Mirai_Native.UI.Pages
             Page_Loaded(null, null);
         }
 
+#if NET5_0_OR_GREATER
+
         public async Task<bool> StartWebUI()
         {
             if (ProcessStartStatus.Fill == Brushes.Green)
             {
                 return false;
             }
-#if NET5_0_OR_GREATER
-            Task.Run(() => BlazorUI.Entry_Blazor.StartBlazorService());
+            await Task.Run(BlazorUI.Entry_Blazor.StartBlazorService);
             LogHelper.Info("启动 WebUI", $"WebUI 已尝试启动");
             return true;
-#else
-            LogHelper.Error("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
-            return false;
-#endif
         }
 
         public async Task<bool> StopWebUI()
         {
-#if NET5_0_OR_GREATER
-            await BlazorUI.Entry_Blazor.BlazorHost?.StopAsync(); 
-            LogHelper.Info("停止 WebUI", $"WebUI 已停止");
-#endif
-            return true;
+            if (BlazorUI.Entry_Blazor.BlazorHost != null)
+            {
+                await BlazorUI.Entry_Blazor.BlazorHost.StopAsync();
+                LogHelper.Info("停止 WebUI", $"WebUI 已停止");
+                return true;
+            }
+            return false;
         }
+#else
+        public bool StartWebUI()
+        {
+            LogHelper.Error("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
+            return false;
+        }
+
+        public bool StopWebUI()
+        {
+            return false;
+        }
+#endif
 
         private async void WebUIStartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -65,7 +76,11 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            StartWebUI();
+#if NET5_0_OR_GREATER
+            await StartWebUI();
+#else
+            LogHelper.Error("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
+#endif
         }
 
         private void Program_OnBlazorServiceStoped()
@@ -107,7 +122,7 @@ namespace Another_Mirai_Native.UI.Pages
         }
 #endif
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object? sender, RoutedEventArgs? e)
         {
             if (PageLoaded)
             {

@@ -21,7 +21,7 @@ namespace Another_Mirai_Native.UI.Controls
             OriginList = list;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public event EventHandler ItemSelected;
 
@@ -49,7 +49,7 @@ namespace Another_Mirai_Native.UI.Controls
             SearchBox.Focus();
         }
 
-        private void DeboundTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void DeboundTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             DeboundTimer.Stop();
             Dispatcher.BeginInvoke(() =>

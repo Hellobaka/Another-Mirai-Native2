@@ -10,9 +10,9 @@ namespace Another_Mirai_Native.UI.Controls
 {
     public class BindableBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        protected void Set<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(storage, value))
             {
@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.UI.Controls
             RaisePropertyChanged(propertyName);
         }
 
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

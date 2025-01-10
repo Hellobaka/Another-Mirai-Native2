@@ -103,8 +103,12 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private void UpdateAppConfig(string key, object value)
+        private void UpdateAppConfig(string key, object? value)
         {
+            if (value == null)
+            {
+                return;
+            }
             var propertiesInfos = typeof(AppConfig).GetProperties();
             var property = propertiesInfos.FirstOrDefault(x => x.Name == key);
             property?.SetValue(AppConfig.Instance, value);

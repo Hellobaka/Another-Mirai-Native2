@@ -61,7 +61,7 @@ namespace Another_Mirai_Native.UI
 
         public static void SetNavigationViewTransparent(NavigationView navigationView)
         {
-            UIElement GetPaneRoot(DependencyObject element, NavigationViewPaneDisplayMode findMode)
+            UIElement? GetPaneRoot(DependencyObject element, NavigationViewPaneDisplayMode findMode)
             {
                 for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
                 {

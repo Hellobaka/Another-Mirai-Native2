@@ -23,11 +23,11 @@ namespace Another_Mirai_Native.UI.Pages
 
         public static AboutPage Instance { get; private set; }
 
-        private Version CurrentVersion => GetType().Assembly.GetName().Version;
+        private Version CurrentVersion => GetType().Assembly.GetName().Version ?? new();
 
-        private UpdateModel.UpdateItem NewUpdateModel { get; set; }
+        private UpdateModel.UpdateItem? NewUpdateModel { get; set; }
 
-        public async void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
+        public async void CheckUpdateButton_Click(object? sender, RoutedEventArgs? e)
         {
             UpdateUpdateStatus("检查更新中...", true);
             DownloadButton.IsEnabled = false;
@@ -36,7 +36,7 @@ namespace Another_Mirai_Native.UI.Pages
             NewVersionUpdateTimeDisplay.Visibility = Visibility.Collapsed;
             NewVersionDescriptionDisplay.Visibility = Visibility.Collapsed;
             NewUpdateModel = await AppUpdater.GetLatestVersion();
-            if (NewUpdateModel == null || (Version.TryParse(NewUpdateModel.Version, out Version v) && v <= CurrentVersion))
+            if (NewUpdateModel == null || (Version.TryParse(NewUpdateModel.Version, out Version? v) && v <= CurrentVersion))
             {
                 UpdateUpdateStatus($"未发现新版本 ({DateTime.Now:G})", false);
                 return;

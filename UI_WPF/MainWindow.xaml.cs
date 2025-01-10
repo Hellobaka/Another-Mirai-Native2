@@ -149,7 +149,7 @@ namespace Another_Mirai_Native.UI
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception.StackTrace);
+            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception?.StackTrace ?? "");
         }
 
         private async void DisconnectProtocol_Click(object sender, RoutedEventArgs e)
@@ -253,10 +253,12 @@ namespace Another_Mirai_Native.UI
                 LoadPlugins();
             }
             DialogHelper.HandleDialogQueue();
+#if NET5_0_OR_GREATER
             if (UIConfig.Instance.AutoStartWebUI)
             {
                 await WebUIPage.Instance.StartWebUI();
             }
+#endif
 
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
@@ -311,8 +313,16 @@ namespace Another_Mirai_Native.UI
                 }
                 else
                 {
-                    Type pageType = typeof(MainWindow).Assembly.GetType("Another_Mirai_Native.UI.Pages." + selectedItemTag);
+                    Type? pageType = typeof(MainWindow).Assembly.GetType("Another_Mirai_Native.UI.Pages." + selectedItemTag);
+                    if (pageType == null)
+                    {
+                        return;
+                    }
                     var obj = Activator.CreateInstance(pageType);
+                    if (obj == null)
+                    {
+                        return;
+                    }
                     PageCache.Add(selectedItemTag, obj);
                     MainFrame.Navigate(obj);
                 }

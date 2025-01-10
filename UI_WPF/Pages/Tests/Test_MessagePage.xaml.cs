@@ -82,7 +82,7 @@ namespace Another_Mirai_Native.UI.Pages
             contextMenu.Items.Add(new TextBlock() { Text = "+1", TextAlignment = TextAlignment.Center });
             contextMenu.Items.Add(new Separator());
             contextMenu.Items.Add(new TextBlock() { Text = "读取图片", TextAlignment = TextAlignment.Center });
-
+#pragma warning disable CS8602 // 解引用可能出现空引用。
             (contextMenu.Items[0] as UIElement).MouseDown += (sender, _) =>
             {
                 System.Windows.Clipboard.SetText(text);
@@ -112,6 +112,7 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 }
             };
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             chatBlock.ContextMenu = contextMenu;
             return border;
         }
@@ -175,15 +176,18 @@ namespace Another_Mirai_Native.UI.Pages
                     case "CQ_sendPrivateMsg":
                     case "CQ_sendGroupMsg":
                     case "CQ_sendGroupQuoteMsg":
-                        string msg = obj["msg"].ToString();
-                        AddChatBlock(msg, false);
+                        string? msg = obj["msg"]?.ToString();
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            AddChatBlock(msg!, false);
+                        }
                         break;
 
                     default:
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -206,7 +210,7 @@ namespace Another_Mirai_Native.UI.Pages
             MessageHistories.Add(msg);
             CommonConfig.SetConfig("MessageHistories", MessageHistories, @"conf\Test.json");
             MessageHistoryIndex = 0;
-            bool useGroup = GroupMessageSelector.IsChecked.Value;
+            bool useGroup = GroupMessageSelector.IsChecked ?? false;
             Thread thread = new(() =>
             {
                 Stopwatch sw = new();
@@ -223,6 +227,10 @@ namespace Another_Mirai_Native.UI.Pages
         {
             try
             {
+                if (TestPage.CurrentPlugin == null)
+                {
+                    return false;
+                }
                 long groupId = 0, qqId = 0;
                 Dispatcher.Invoke(() =>
                 {
@@ -265,7 +273,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             else if (e.Key == System.Windows.Input.Key.Enter)
             {
-                SendBtn_Click(sender, null);
+                SendBtn_Click(sender, e);
             }
         }
 
@@ -273,6 +281,11 @@ namespace Another_Mirai_Native.UI.Pages
         {
             try
             {
+                if (TestPage.CurrentPlugin == null)
+                {
+                    return false;
+                }
+
                 long qqId = 0;
                 Dispatcher.Invoke(() =>
                 {

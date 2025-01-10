@@ -62,7 +62,7 @@ namespace Another_Mirai_Native.UI.Controls
 
             foreach (var item in Directory.GetFiles(CollectedImagePath))
             {
-                if (Uri.TryCreate(Path.GetFullPath(item), UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(Path.GetFullPath(item), UriKind.Absolute, out Uri? uri))
                 {
                     Image image = new()
                     {
@@ -143,6 +143,10 @@ namespace Another_Mirai_Native.UI.Controls
             var assembly = Assembly.GetExecutingAssembly();
             string resourceName = assembly.GetName().Name + ".g.resources";
             using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null)
+            {
+                return [];
+            }
             using var reader = new System.Resources.ResourceReader(stream);
 
             foreach (DictionaryEntry entry in reader)

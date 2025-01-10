@@ -1,14 +1,11 @@
-﻿using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.Windows;
 using Microsoft.Win32;
 using ModernWpf.Controls;
 using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +21,7 @@ using XamlAnimatedGif;
 
 namespace Another_Mirai_Native.UI.Controls
 {
+#pragma warning disable CS8602 // 解引用可能出现空引用。
     public static class ChatDetailListItem_Common
     {
         /// <summary>
@@ -103,14 +101,19 @@ namespace Another_Mirai_Native.UI.Controls
             AvatarContextMenu.Items.Add(new MenuItem { Header = "@" });
             AvatarContextMenu.Opened += (sender, _) =>
             {
-                var targetElement = AvatarContextMenu.PlacementTarget as FrameworkElement;
-                // 当为发送者时禁用at按钮
-                (AvatarContextMenu.Items[3] as MenuItem).IsEnabled = targetElement.DataContext is not ChatDetailListItem_Right right;
+                if (AvatarContextMenu.PlacementTarget is FrameworkElement targetElement)
+                {
+                    // 当为发送者时禁用at按钮
+                    (AvatarContextMenu.Items[3] as MenuItem).IsEnabled = targetElement.DataContext is not ChatDetailListItem_Right right;
+                }
             };
 
             (AvatarContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_CopyNick(sender, e);
@@ -122,7 +125,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (AvatarContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_CopyId(sender, e);
@@ -134,7 +140,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (AvatarContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_At(sender, e);
@@ -172,7 +181,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_CopyMessage(sender, e);
@@ -184,7 +196,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_Repeat(sender, e);
@@ -196,7 +211,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[2] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_At(sender, e);
@@ -208,7 +226,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_Reply(sender, e);
@@ -220,7 +241,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (DetailContextMenu.Items[5] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_Recall(sender, e);
@@ -244,7 +268,7 @@ namespace Another_Mirai_Native.UI.Controls
         {
             // TODO: 实现Lottie
             string packUri = $"pack://application:,,,/Resources/qq-face/{id}.{(isAnimation ? "png" : "png")}";
-            if (!CheckResourceExists(packUri, out StreamResourceInfo resource))
+            if (!CheckResourceExists(packUri, out StreamResourceInfo? resource) || resource == null)
             {
                 return null;
             }
@@ -278,16 +302,14 @@ namespace Another_Mirai_Native.UI.Controls
 
             (GroupContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
-                object target = GetContextMenuTarget(sender);
-                if (target is ChatListItem item)
+                if (GetContextMenuTarget(sender) is ChatListItem item)
                 {
                     item.ContextMenu_CopyNick(sender, e);
                 }
             };
             (GroupContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
             {
-                object target = GetContextMenuTarget(sender);
-                if (target is ChatListItem item)
+                if (GetContextMenuTarget(sender) is ChatListItem item)
                 {
                     item.ContextMenu_CopyId(sender, e);
                 }
@@ -518,7 +540,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// <param name="element"></param>
         public static void SetElementNoSelectEffect(UIElement element)
         {
-            UIElement GetBorderElement(DependencyObject element)
+            UIElement? GetBorderElement(DependencyObject element)
             {
                 for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
                 {
@@ -573,7 +595,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
                 {
-                    string path = image.Tag?.ToString();
+                    string path = image.Tag?.ToString() ?? "";
                     string collectImagePath = Path.Combine("data", "image", "collected");
                     Directory.CreateDirectory(collectImagePath);
                     if (File.Exists(path))
@@ -586,7 +608,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 if (GetContextMenuTarget(sender) is Image image && !string.IsNullOrEmpty(image.Tag?.ToString()))
                 {
-                    string path = image.Tag?.ToString();
+                    string path = image.Tag?.ToString() ?? "";
                     if (File.Exists(path) is false)
                     {
                         return;
@@ -607,7 +629,10 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                FrameworkElement target = GetContextMenuTarget(sender) as FrameworkElement;
+                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                {
+                    return;
+                }
                 if (target.DataContext is ChatDetailListItem_Right right)
                 {
                     right.ContextMenu_Repeat(sender, e);
@@ -626,7 +651,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         /// <param name="resourcePath">资源的路径</param>
         /// <returns>如果资源存在返回 true，否则返回 false。</returns>
-        private static bool CheckResourceExists(string uri, out StreamResourceInfo streamInfo)
+        private static bool CheckResourceExists(string uri, out StreamResourceInfo? streamInfo)
         {
             streamInfo = null;
             try
@@ -649,9 +674,10 @@ namespace Another_Mirai_Native.UI.Controls
         /// <summary>
         /// 获取右键菜单触发元素
         /// </summary>
-        private static object GetContextMenuTarget(object sender)
+        private static object? GetContextMenuTarget(object sender)
         {
             return sender is MenuItem menuItem && menuItem.Parent is ContextMenu contextMenu ? contextMenu.PlacementTarget : (object?)null;
         }
     }
+#pragma warning restore CS8602 // 解引用可能出现空引用。
 }

@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void InitDisplay()
         {
-            string configName = (SettingPage.Instance.SettingContainer.SelectedItem as ModernWpf.Controls.NavigationViewItem)?.Tag.ToString();
+            string? configName = (SettingPage.Instance.SettingContainer.SelectedItem as ModernWpf.Controls.NavigationViewItem)?.Tag.ToString();
             if (string.IsNullOrEmpty(configName))
             {
                 return;
@@ -36,7 +36,7 @@ namespace Another_Mirai_Native.UI.Pages
             if (CurrentConfigPath != configName)
             {
                 Container.Children.Clear();
-                CurrentConfigPath = configName;
+                CurrentConfigPath = configName!;
             }
             try
             {
@@ -85,7 +85,7 @@ namespace Another_Mirai_Native.UI.Pages
                             textBox.TextChanged += (_, _) =>
                             {
                                 bool success = false;
-                                object saveValue = null;
+                                object? saveValue = null;
                                 switch (item.Value.Type)
                                 {
                                     case JTokenType.Integer:

@@ -5,7 +5,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 {
     public class CQPluginProxyWrapper : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public CQPluginProxy TargetPlugin { get; set; }
 

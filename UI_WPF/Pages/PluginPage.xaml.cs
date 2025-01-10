@@ -66,7 +66,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private bool ReloadRunningStatus { set => Dispatcher.Invoke(() => ReloadStatus.IsActive = value); }
 
-        private CQPluginProxy SelectedPlugin { get; set; }
+        private CQPluginProxy? SelectedPlugin { get; set; }
 
         private bool ToggleEnableRunningStatus { set => Dispatcher.Invoke(() => EnableStatus.IsActive = value); }
 
@@ -114,6 +114,10 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void OpenMenuBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (SelectedPlugin == null)
+            {
+                return;
+            }
             var menu = new ContextMenu();
             foreach (var item in SelectedPlugin.AppInfo.menu)
             {

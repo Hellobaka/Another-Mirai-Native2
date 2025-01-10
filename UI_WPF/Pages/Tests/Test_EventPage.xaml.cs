@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.UI.Pages
             DataContext = this;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public List<PluginEvent> DisplayPluginEvents { get; set; } = [];
 
@@ -61,8 +61,10 @@ namespace Another_Mirai_Native.UI.Pages
                 TextBox inputTextbox = new TextBox() { Tag = item, Text = item.Value, Margin = new Thickness(0, 3, 0, 0) };
                 inputTextbox.TextChanged += (sender, _) =>
                 {
-                    InvokeArugment arugment = (sender as TextBox).Tag as InvokeArugment;
-                    arugment.Value = (sender as TextBox).Text;
+                    if(sender is TextBox textBox && textBox.Tag is InvokeArugment arugment)
+                    {
+                        arugment.Value = textBox.Text;
+                    }
                 };
                 ArgumentList.Children.Add(inputTextbox);
             }
@@ -227,7 +229,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     continue;
                 }
-                string desc = remark != null ? (remark.ArgumentList.TryGetValue(item.Name, out string v) ? $" ({v})" : "") : "";
+                string desc = remark != null ? (remark.ArgumentList.TryGetValue(item.Name, out string? v) ? $" ({v})" : "") : "";
                 InvokeArugments.Add(new InvokeArugment
                 {
                     Name = item.Name + desc + $" ({item.ParameterType.Name})",

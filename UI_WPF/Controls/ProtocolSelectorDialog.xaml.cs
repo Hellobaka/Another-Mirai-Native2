@@ -37,7 +37,7 @@ namespace Another_Mirai_Native.UI.Controls
 
         public ContentDialogResult DialogResult { get; set; }
 
-        private IProtocol CurrentProtocol { get; set; }
+        private IProtocol? CurrentProtocol { get; set; }
 
         private void ProtocolSelector_Loaded(object sender, RoutedEventArgs e)
         {
@@ -63,10 +63,10 @@ namespace Another_Mirai_Native.UI.Controls
             }
             ErrorDisplay.Text = "";
             ProtocolConfigContainer.Children.Clear();
-            var protocol = ProtocolManager.Protocols.FirstOrDefault(x => x.Name == ProtocolList.SelectedItem.ToString());
-            if (protocol != null)
+            CurrentProtocol = ProtocolManager.Protocols.FirstOrDefault(x => x.Name == ProtocolList.SelectedItem.ToString());
+            if (CurrentProtocol != null)
             {
-                foreach (var item in protocol.GetConnectionConfig())
+                foreach (var item in CurrentProtocol.GetConnectionConfig())
                 {
                     ProtocolConfigContainer.Children.Add(new TextBlock()
                     {
@@ -81,7 +81,6 @@ namespace Another_Mirai_Native.UI.Controls
                     });
                 }
             }
-            CurrentProtocol = protocol;
             HasProtocolContent = ProtocolConfigContainer.Children.Count > 0;
         }
 
@@ -98,7 +97,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 if (ProtocolConfigContainer.Children[i + 1] is TextBox child)
                 {
-                    configs.Add(child.Tag.ToString(), child.Text);
+                    configs.Add(child.Tag?.ToString() ?? "", child.Text);
                 }
             }
             if (!CurrentProtocol.SetConnectionConfig(configs))

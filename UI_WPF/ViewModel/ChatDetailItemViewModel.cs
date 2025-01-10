@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
     public class ChatDetailItemViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ChatAvatar.AvatarTypes AvatarType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
 

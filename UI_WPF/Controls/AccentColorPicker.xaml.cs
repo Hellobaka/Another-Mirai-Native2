@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UIConfig.Instance.AccentColor = ThemeManager.Current.AccentColor?.ToString();
+            UIConfig.Instance.AccentColor = ThemeManager.Current.AccentColor?.ToString() ?? "";
             UIConfig.Instance.SetConfig("AccentColor", ThemeManager.Current.AccentColor.ToString());
         }
     }

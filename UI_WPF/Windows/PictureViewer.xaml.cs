@@ -121,8 +121,9 @@ namespace Another_Mirai_Native.UI.Windows
             AnimationBehavior.SetSourceUri(ImageDisplayer, Image);
             AnimationBehavior.SetRepeatBehavior(ImageDisplayer, RepeatBehavior.Forever);
             ImageDisplayer.ContextMenu = new ContextMenu();
-            ImageDisplayer.ContextMenu.Items.Add(new MenuItem() { Header = "另存为" });
-            (ImageDisplayer.ContextMenu.Items[0] as MenuItem).Click += (_, _) =>
+            var menuItem = new MenuItem() { Header = "另存为" };
+            ImageDisplayer.ContextMenu.Items.Add(menuItem);
+            menuItem.Click += (_, _) =>
             {
                 SaveFileDialog saveFileDialog = new()
                 {

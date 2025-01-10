@@ -51,7 +51,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public static event Action<SizeChangedEventArgs> WindowSizeChanged;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static ChatPage Instance { get; private set; }
 
@@ -487,14 +487,14 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         /// <returns>消息持久化的ID</returns>
-        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
-            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick, ChatAvatar.AvatarTypes.QQGroup, itemType);
+            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, qq, msg, nick!, ChatAvatar.AvatarTypes.QQGroup, itemType);
             var history = ChatHistoryHelper.GetHistoriesByMsgId(group, msgId, ChatHistoryType.Group);
             AddOrUpdateGroupChatList(group, qq, msg);
             await Dispatcher.BeginInvoke(() =>
@@ -505,7 +505,7 @@ namespace Another_Mirai_Native.UI.Pages
                     ScrollToBottom(MessageScrollViewer, qq == AppConfig.Instance.CurrentQQ);
                 }
             });
-            itemAdded?.Invoke(item?.GUID);
+            itemAdded?.Invoke(item.GUID);
 
             return history?.ID ?? 0;
         }
@@ -629,14 +629,14 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">持久化后的回调</param>
         /// <param name="plugin">消息来源的插件</param>
         /// <returns>持久化后的ID</returns>
-        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string> itemAdded = null, CQPluginProxy plugin = null)
+        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
             string nick = await GetFriendNick(sender);
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
             }
-            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, sender, msg, nick, ChatAvatar.AvatarTypes.QQPrivate, itemType);
+            ChatDetailItemViewModel item = BuildChatDetailItem(msgId, sender, msg, nick!, ChatAvatar.AvatarTypes.QQPrivate, itemType);
             var history = ChatHistoryHelper.GetHistoriesByMsgId(qq, msgId, ChatHistoryType.Private);
             ChatHistoryHelper.UpdateHistoryCategory(history);
             AddOrUpdatePrivateChatList(qq, sender, msg);
@@ -648,7 +648,7 @@ namespace Another_Mirai_Native.UI.Pages
                     ScrollToBottom(MessageScrollViewer, sender == AppConfig.Instance.CurrentQQ);
                 }
             });
-            itemAdded?.Invoke(item?.GUID);
+            itemAdded?.Invoke(item.GUID);
             return history?.ID ?? 0;
         }
 
@@ -709,7 +709,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AtTargetSelector_ItemSelected(object sender, EventArgs e)
+        private void AtTargetSelector_ItemSelected(object? sender, EventArgs e)
         {
             AddTextToSendBox(AtTargetSelector.SelectedCQCode);
             AtFlyout.Hide();
@@ -1012,7 +1012,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             list.Reverse();
             double distanceToBottom = MessageScrollViewer.ScrollableHeight - MessageScrollViewer.VerticalOffset;
-            FrameworkElement scrollItem = null;
+            FrameworkElement? scrollItem = null;
             foreach (var item in list)
             {
                 UIElement lastElement;
@@ -1109,7 +1109,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object? sender, RoutedEventArgs? e)
         {
             if (AppConfig.Instance.EnableChat is false)
             {
@@ -1345,7 +1345,10 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     SendText.Document.Blocks.Add(new Paragraph());
                 }
-                (SendText.Document.Blocks.LastBlock as Paragraph).Inlines.Add(new InlineUIContainer(img));
+                if (SendText.Document.Blocks.LastBlock is Paragraph lastParagraph)
+                {
+                    lastParagraph.Inlines.Add(new InlineUIContainer(img));
+                }
                 e.Handled = true;
                 e.CancelCommand();
             }
