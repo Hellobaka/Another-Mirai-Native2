@@ -1,7 +1,9 @@
 ﻿@page "/setting"
+@using Another_Mirai_Native.BlazorUI.Components.Pages.Components
 @using Another_Mirai_Native.Config
 @inject IDialogService DialogService
 @inject ISnackbar SnackBar
+@implements IDisposable
 
 <MudTabs Position="Position.Top" Rounded="true" Border="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="协议设置">
@@ -36,6 +38,9 @@
     private Dictionary<string, string> ProtocolConnectionConfig { get; set; } = [];
     private bool CurrentProtocolCanToggle { get; set; } = false;
     private IProtocol? SelectedProtocolInstance { get; set; }
+    private Action<string, byte[]> QRCodeDisplayAction { get; set; }
+    private Action QRCodeFinishedAction { get; set; }
+    private IDialogReference QRCodeDialog { get; set; }
 
     protected override void OnInitialized()
     {
@@ -46,12 +51,49 @@
         Loading = false;
         SelectedProtocol = ProtocolManager.Instance.CurrentProtocol.Name;
         SelectedProtocolInstance = ProtocolManager.Instance.CurrentProtocol;
+        SetQRCodeAction(true);
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
+        }
+    }
+
+    public void Dispose()
+    {
+        SetQRCodeAction(false);
+    }
+
+    private void SetQRCodeAction(bool action)
+    {
+        QRCodeDisplayAction ??= new Action<string, byte[]>((url, data) =>
+        {
+            Task.Run(async () =>
+            {
+                QRCodeDialog = await DialogService.ShowAsync<ImagePreviewer>("图片预览", new DialogParameters<ImagePreviewer> { { x => x.ImageBuffer, data } }, new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Medium });
+            });
+        });
+        QRCodeFinishedAction ??= new Action(() =>
+        {
+            if (QRCodeDialog != null)
+            {
+                QRCodeDialog.Close();
+            }
+        });
+        foreach(var item in ProtocolManager.Protocols)
+        {
+            if (action)
+            {
+                item.QRCodeDisplayAction += QRCodeDisplayAction;
+                item.QRCodeFinishedAction += QRCodeFinishedAction;
+            }
+            else
+            {
+                item.QRCodeDisplayAction -= QRCodeDisplayAction;
+                item.QRCodeFinishedAction -= QRCodeFinishedAction;
+            }
         }
     }
 

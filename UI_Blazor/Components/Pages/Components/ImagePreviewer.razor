@@ -6,7 +6,7 @@
     </TitleContent>
     <DialogContent>
         <div style="display: flex; justify-content: center; min-height: 40vh;">
-            <MudImage id="imagePreview" Src="@Item?.ImageUrl" Fluid ObjectFit="ObjectFit.Contain"></MudImage>
+            <MudImage id="imagePreview" Src="@ImageSrc" Fluid ObjectFit="ObjectFit.Contain"></MudImage>
         </div>
     </DialogContent>
     <DialogActions>
@@ -136,13 +136,29 @@
     [Parameter]
     public RenderChatItem Item { get; set; } = new();
 
+    [Parameter]
+    public byte[] ImageBuffer { get; set; }
+
     private void Close() => MudDialog?.Close(DialogResult.Ok(true));
+    private string? ImageSrc { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JS.InvokeVoidAsync("initPreview");
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Item != null)
+        {
+            ImageSrc = Item.ImageUrl;
+        }
+        if (ImageBuffer.Length > 0)
+        {
+            ImageSrc = $"data:image/png;base64,{Convert.ToBase64String(ImageBuffer)}";
         }
     }
 

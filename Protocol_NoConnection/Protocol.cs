@@ -187,6 +187,7 @@ namespace Protocol_NoConnection
                 TesterForm.Close();
                 TesterForm.Dispose();
             });
+            TesterForm = null;
             return true;
         }
 
