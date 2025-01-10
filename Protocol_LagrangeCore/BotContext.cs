@@ -196,6 +196,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnGroupMessageReceived(BotContext context, Lagrange.Core.Event.EventArg.GroupMessageEvent e)
         {
+            MessageCacher.UpdateChainByRawMessageId(e.Chain);
             if (e.Chain.FriendUin == AppConfig.Instance.CurrentQQ)
             {
                 return;

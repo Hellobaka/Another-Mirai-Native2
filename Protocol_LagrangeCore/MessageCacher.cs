@@ -14,8 +14,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public static int RecordMessage(MessageChain chain, ulong id, uint seq)
         {
-            typeof(MessageChain).GetProperty("MessageId", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(chain, id);
-            typeof(MessageChain).GetProperty("Sequence", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(chain, seq);
+            typeof(MessageChain).GetField("<MessageId>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(chain, id);
+            typeof(MessageChain).GetField("<Sequence>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(chain, seq);
             return RecordMessage(chain);
         }
 
@@ -49,6 +49,18 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 return chain;
             }
             return null;
+        }
+
+        public static void UpdateChainByRawMessageId(MessageChain chain)
+        {
+            if (!MessageIDCache.Any(x => x.Value.Item1 == chain.MessageId))
+            {
+                return;
+            }
+            var id = MessageIDCache.FirstOrDefault(x => x.Value.Item1 == chain.MessageId);
+            MessageIDCache[id.Key] = (chain.MessageId, chain.Sequence);
+            var c = MessageCache.FirstOrDefault(x => x.Key.Item1 == chain.MessageId);
+            MessageCache[c.Key] = chain;
         }
 
         public static int GetMessageId(ulong msgId, uint seq)
