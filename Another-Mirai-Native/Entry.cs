@@ -49,11 +49,6 @@ namespace Another_Mirai_Native
 #if NET5_0_OR_GREATER
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-            Console.CancelKeyPress += (sender, eArgs) =>
-            {
-                _quitEvent.Set();
-                eArgs.Cancel = true;
-            };
 
             // 创建初始文件夹
             CreateInitFolders();
@@ -180,10 +175,14 @@ namespace Another_Mirai_Native
         {
             var listen = new WinNative.ConsoleEventDelegate((e) =>
             {
-                if (e == WinNative.CTRL_CLOSE_EVENT)
+                if (e == WinNative.CTRL_CLOSE_EVENT || e == WinNative.CTRL_C_EVENT)
                 {
                     Console.WriteLine("Exiting...");
                     _quitEvent.Set();
+                    if (AppConfig.Instance.ShowTaskBar)
+                    {
+                        Invoke(() => Environment.Exit(0));
+                    }
                 }
                 return true;
             });
