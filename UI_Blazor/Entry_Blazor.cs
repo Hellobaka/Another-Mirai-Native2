@@ -28,14 +28,22 @@ namespace Another_Mirai_Native.BlazorUI
         public static void Main(string[] args)
         {
             ConsoleMode = true;
-            ConsoleStartedSignal = new(false);
-            Entry.ServerStarted += Entry_ServerStarted;
 
-            Task.Run(() => Entry.Main(args));
+            if (args.Length > 0)
+            {
+                Entry.Main(args);
+            }
+            else
+            {
+                ConsoleStartedSignal = new(false);
+                Entry.ServerStarted += Entry_ServerStarted;
 
-            ConsoleStartedSignal.WaitOne();
-            Console.WriteLine("[+]Console Service Started. Starting Blazor Service...");
-            StartBlazorService();
+                Task.Run(() => Entry.Main(args));
+
+                ConsoleStartedSignal.WaitOne();
+                Console.WriteLine("[+]Console Service Started. Starting Blazor Service...");
+                StartBlazorService();
+            }
         }
 
         private static void Entry_ServerStarted()
