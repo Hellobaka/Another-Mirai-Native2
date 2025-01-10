@@ -31,7 +31,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public bool PageEnabled { get; set; }
 
-        private List<string> MessageHistories { get; set; } = new();
+        private List<string> MessageHistories { get; set; } = [];
 
         private int MessageHistoryIndex { get; set; }
 
@@ -203,10 +203,7 @@ namespace Another_Mirai_Native.UI.Pages
             CommonConfig.SetConfig("TesterGroup", Convert.ToInt64(GroupDisplay.Text), @"conf\Test.json");
             CommonConfig.SetConfig("TesterQQ", Convert.ToInt64(QQDisplay.Text), @"conf\Test.json");
             SendMessage.Text = "";
-            if (MessageHistories.Contains(msg))
-            {
-                MessageHistories.Remove(msg);
-            }
+            MessageHistories.Remove(msg);
             MessageHistories.Add(msg);
             CommonConfig.SetConfig("MessageHistories", MessageHistories, @"conf\Test.json");
             MessageHistoryIndex = 0;

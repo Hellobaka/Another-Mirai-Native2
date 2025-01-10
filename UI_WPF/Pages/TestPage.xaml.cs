@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public static CQPluginProxy? CurrentPlugin { get; private set; }
 
-        private Dictionary<string, object> PageCache { get; set; } = new();
+        private Dictionary<string, object> PageCache { get; set; } = [];
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
         {
@@ -30,9 +30,9 @@ namespace Another_Mirai_Native.UI.Pages
             if (selectedItem != null)
             {
                 string selectedItemTag = (string)selectedItem.Tag;
-                if (PageCache.ContainsKey(selectedItemTag))
+                if (PageCache.TryGetValue(selectedItemTag, out var page))
                 {
-                    MainFrame.Navigate(PageCache[selectedItemTag]);
+                    MainFrame.Navigate(page);
                 }
                 else
                 {

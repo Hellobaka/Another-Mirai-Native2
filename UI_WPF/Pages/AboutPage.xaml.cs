@@ -36,7 +36,7 @@ namespace Another_Mirai_Native.UI.Pages
             NewVersionUpdateTimeDisplay.Visibility = Visibility.Collapsed;
             NewVersionDescriptionDisplay.Visibility = Visibility.Collapsed;
             NewUpdateModel = await AppUpdater.GetLatestVersion();
-            if (NewUpdateModel == null || (Version.TryParse(NewUpdateModel.Version, out Version? v) && v <= CurrentVersion))
+            if (NewUpdateModel == null || (Version.TryParse(NewUpdateModel.Version, out Version? v) && v != null && v <= CurrentVersion))
             {
                 UpdateUpdateStatus($"未发现新版本 ({DateTime.Now:G})", false);
                 return;
