@@ -7,6 +7,7 @@
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [x] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
 - [x] 实现[Satori](https://satori.js.org/zh-CN/introduction.html)协议
+- [x] 实现[Lagrange.Core](https://github.com/LagrangeDev/Lagrange.Core)协议
 - [ ] 实现官方协议
 - [ ] 实现OPQBot协议
 
@@ -21,39 +22,47 @@
 | MiraiApiHttp | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ❓ |⭕  | ❌ | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
 | OneBot v11 | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |⭕  | ⭕ | ⭕ |⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
 | Satori v1 | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ❓ | ❓ | ⭕ | ⭕ | ❌ |⭕  | ❌ | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ❌ | ❌ | ❌ | ⭕ | ❌ | ⭕ | ⭕ |  ❌| ⭕ |
+| Lagrange.Core | ⭕ | ⭕ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |⭕  | ⭕ | ⭕ |❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
 
 ## 协议CQ码可发送情况
-||MiraiAPIHttp|OneBot v11|Satori v1|
-|--|--|--|--|
-|face|⭕|⭕|⭕|
-|image|⭕|⭕|⭕|
-|record|⭕|⭕|⭕|
-|at|⭕|⭕|⭕|
-|dice|⭕|⭕|❌|
-|music|⭕|⭕|❌|
-|rich|⭕|⭕|❌|
-|reply|⭕|⭕|❌|
+||MiraiAPIHttp|OneBot v11|Satori v1|Lagrange.Core|
+|--|--|--|--|--|
+|face|⭕|⭕|⭕|⭕|
+|image|⭕|⭕|⭕|⭕|
+|record|⭕|⭕|⭕|⭕|
+|at|⭕|⭕|⭕|⭕|
+|dice|⭕|⭕|❌|❌|
+|music|⭕|⭕|❌|❌|
+|rich|⭕|⭕|❌|❌|
+|reply|⭕|⭕|❌|❌|
 
 ## 协议CQ码可解析情况
-||MiraiAPIHttp|OneBot v11|Satori v1|
-|--|--|--|--|
-|face|⭕|⭕|⭕|
-|bigface|⭕|⭕|❌|
-|image|⭕|⭕|⭕|
-|flashimage|⭕|⭕|❌|
-|record|⭕|⭕|⭕|
-|at|⭕|⭕|⭕|
-|atall|⭕|⭕|❌|
-|dice|⭕|⭕|❌|
-|music|⭕|⭕|❌|
-|xml|⭕|⭕|❌|
-|json|⭕|⭕|❌|
-|app|⭕|⭕|❌|
-|rich|⭕|⭕|❌|
-|reply|⭕|⭕|❌|
-|poke|⭕|⭕|❌|
+||MiraiAPIHttp|OneBot v11|Satori v1|Lagrange.Core|
+|--|--|--|--|--|
+|face|⭕|⭕|⭕|⭕|
+|bigface|⭕|⭕|❌|⭕|
+|image|⭕|⭕|⭕|⭕|
+|flashimage|⭕|⭕|❌|⭕|
+|record|⭕|⭕|⭕|⭕|
+|at|⭕|⭕|⭕|⭕|
+|atall|⭕|⭕|❌|⭕|
+|dice|⭕|⭕|❌|❌|
+|music|⭕|⭕|❌|❌|
+|xml|⭕|⭕|❌|⭕|
+|json|⭕|⭕|❌|⭕|
+|app|⭕|⭕|❌|⭕|
+|rich|⭕|⭕|❌|⭕|
+|reply|⭕|⭕|❌|⭕|
+|poke|⭕|⭕|❌|⭕|
 
 </details>
+
+## 关于 Lagrange.Core
+- 登录逻辑借鉴于Lagrange.Onebot项目
+- 仅.net8.0版本可用
+- 若控制台输出的二维码无法扫码，可修改`conf\Config.json`配置中的`QRCodeCompatibilityMode`为true
+- 协议端会可能有很多的异常输出，正常现象
+- 若需要更新Lagrange.Core版本，查看[Wiki](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E6%9B%B4%E6%96%B0Lagrange.Core%E7%89%88%E6%9C%AC)
 
 ## 可加载插件
 - [x] 酷Q
