@@ -149,6 +149,8 @@ namespace Another_Mirai_Native.DB
                         var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
                         foreach (var item in ls)
                         {
+                            item.Nick = item.Nick.Replace("\r", "").Replace("\n", "");
+                            item.Postscript = item.Postscript.Replace("\r", "").Replace("\n", "");
                             if (FriendInfoCache.ContainsKey(item.QQ))
                             {
                                 FriendInfoCache[item.QQ] = item;
@@ -211,6 +213,8 @@ namespace Another_Mirai_Native.DB
                         await Task.Run(() =>
                         {
                             var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
+                            memberInfo.Card = memberInfo.Card.Replace("\r", "").Replace("\n", "");
+                            memberInfo.Nick = memberInfo.Nick.Replace("\r", "").Replace("\n", "");
                             GroupMemberCache[group].Add(qq, memberInfo);
                         });
                     }
@@ -255,7 +259,9 @@ namespace Another_Mirai_Native.DB
                     string r = groupId.ToString();
                     await Task.Run(() =>
                     {
-                        GroupInfoCache.Add(groupId, ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false));
+                        var info = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
+                        info.Name = info.Name.Replace("\n", "").Replace("\r", "");
+                        GroupInfoCache.Add(groupId, info);
                         if (GroupInfoCache[groupId] == null)
                         {
                             r = groupId.ToString();
