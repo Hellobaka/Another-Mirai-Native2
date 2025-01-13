@@ -34,7 +34,7 @@
 |dice|⭕|⭕|❌|❌|
 |music|⭕|⭕|❌|❌|
 |rich|⭕|⭕|❌|❌|
-|reply|⭕|⭕|❌|❌|
+|reply|⭕|⭕|❌|⭕|
 
 ## 协议CQ码可解析情况
 ||MiraiAPIHttp|OneBot v11|Satori v1|Lagrange.Core|
@@ -53,7 +53,7 @@
 |app|⭕|⭕|❌|⭕|
 |rich|⭕|⭕|❌|⭕|
 |reply|⭕|⭕|❌|⭕|
-|poke|⭕|⭕|❌|⭕|
+|poke|⭕|⭕|❌|❌|
 
 </details>
 
