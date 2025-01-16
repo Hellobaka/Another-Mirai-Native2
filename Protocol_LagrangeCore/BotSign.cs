@@ -10,7 +10,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
     public class BotSign : SignProvider
     {
-        private const string FallbackUrl = "https://sign.lagrangecore.org/api/sign/25765";
+        private const string FallbackUrl = "https://sign.lagrangecore.org/api/sign/30366";
 
         private string SignUrl { get; set; }
 
@@ -74,16 +74,16 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     Os = "Linux",
                     Kernel = "Linux",
                     VendorOs = "linux",
-                    CurrentVersion = "3.2.10-25765",
+                    CurrentVersion = "3.2.15-30366",
                     MiscBitmap = 32764,
                     PtVersion = "2.0.0",
                     SsoVersion = 19,
                     PackageName = "com.tencent.qq",
                     WtLoginSdk = "nt.wtlogin.0.0.1",
                     AppId = 1600001615,
-                    SubAppId = 537234773,
+                    SubAppId = 537258424,
                     AppIdQrCode = 13697054,
-                    AppClientVersion = 25765,
+                    AppClientVersion = 30366,
 
                     MainSigMap = 169742560,
                     SubSigMap = 0,
