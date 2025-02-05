@@ -477,6 +477,9 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             LogHelper.Info("Bot在线", e.EventMessage);
             RequestWaiter.TriggerByKey("LagrangeCoreLogin", true);
             IsConnected = true;
+            LagrangeConfig.BotKeystore = BotContext.UpdateKeystore();
+            LagrangeConfig.Instance.Save();
+            LogHelper.Info("账号登录", "已更新登录状态缓存");
         }
 
         private void Invoker_OnBotCaptchaEvent(BotContext context, Lagrange.Core.Event.EventArg.BotCaptchaEvent e)
@@ -575,12 +578,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     }
                     LogHelper.Info("账号登录", $"登录结果:{success}；等待在线信号...");
 
-                    if (success)
-                    {
-                        LagrangeConfig.Instance.Save();
-                        LogHelper.Info("账号登录", "已更新登录状态缓存");
-                    }
-                    else
+                    if (!success)
                     {
                         RequestWaiter.TriggerByKey("LagrangeCoreLogin", false);
                     }
@@ -628,7 +626,6 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             if (loginResult)
             {
                 LogHelper.Info("二维码登录", "扫码成功");
-                LagrangeConfig.BotKeystore = BotContext.UpdateKeystore();
             }
             QRCodeFinishedAction?.Invoke();
 
