@@ -16,7 +16,7 @@
         <MudText Class="mt-5">该协议当前的连接参数:</MudText>
         @foreach (var item in ProtocolConnectionConfig)
         {
-            <MudTextField T="string" Label="@item.Key" Value="@item.Value"></MudTextField>
+            <MudTextField T="string" Label="@item.Key.Replace("bool_", "")" @bind-Value="ProtocolConnectionConfig[item.Key]"></MudTextField>
         }
         <MudButton Class="mt-6" Disabled="!CurrentProtocolCanToggle" Color="Color.Primary" Variant="Variant.Filled" OnClick="ChangeProtocolClicked">切换</MudButton>
         <MudOverlay @bind-Visible="ProtocolLoading" DarkBackground="true" AutoClose="false">
@@ -133,6 +133,18 @@
                     {
                         SnackBar.Add("协议断开失败", Severity.Error);
                         return;
+                    }
+                    foreach (var item in ProtocolConnectionConfig)
+                    {
+                        if (item.Key.StartsWith("bool_"))
+                        {
+                            if (bool.TryParse(item.Value, out var result) is false)
+                            {
+                                SnackBar.Add("协议参数错误", Severity.Error);
+                                return;
+                            }
+                            ProtocolConnectionConfig[item.Key] = item.Value.ToLower();
+                        }
                     }
                     if (SelectedProtocolInstance.SetConnectionConfig(ProtocolConnectionConfig) is false)
                     {

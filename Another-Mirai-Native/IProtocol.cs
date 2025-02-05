@@ -34,6 +34,7 @@ namespace Another_Mirai_Native
         /// <summary>
         /// 获取连接参数, <see cref="KeyValuePair{TKey, TValue}">Item</see> 表示每个连接参数, Key为参数名称, Value为参数的值.
         /// 参数的值可以将保存的值填入
+        /// 支持 Bool 参数，将 Key 设置为 "bool_" 开头即可，Value 推荐使用小写的 "true" 或 "false"
         /// </summary>
         /// <returns>连接参数</returns>
         public Dictionary<string, string> GetConnectionConfig();

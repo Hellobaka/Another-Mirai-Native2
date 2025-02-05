@@ -68,17 +68,32 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 foreach (var item in CurrentProtocol.GetConnectionConfig())
                 {
+                    bool isBoolOption = item.Key.StartsWith("bool_");
                     ProtocolConfigContainer.Children.Add(new TextBlock()
                     {
                         HorizontalAlignment = HorizontalAlignment.Stretch,
-                        Text = item.Key
+                        Text = item.Key.Replace("bool_", ""),
                     });
-                    ProtocolConfigContainer.Children.Add(new TextBox()
+                    if (isBoolOption)
                     {
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        Text = item.Value,
-                        Tag = item.Key
-                    });
+                        ProtocolConfigContainer.Children.Add(new ToggleSwitch()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            IsOn = item.Value == "true",
+                            Tag = item.Key,
+                            OnContent = "启用",
+                            OffContent = "不启用"
+                        });
+                    }
+                    else
+                    {
+                        ProtocolConfigContainer.Children.Add(new TextBox()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            Text = item.Value,
+                            Tag = item.Key
+                        });
+                    }
                 }
             }
             HasProtocolContent = ProtocolConfigContainer.Children.Count > 0;
@@ -98,6 +113,10 @@ namespace Another_Mirai_Native.UI.Controls
                 if (ProtocolConfigContainer.Children[i + 1] is TextBox child)
                 {
                     configs.Add(child.Tag?.ToString() ?? "", child.Text);
+                }
+                else if(ProtocolConfigContainer.Children[i + 1] is ToggleSwitch toggle)
+                {
+                    configs.Add(toggle.Tag?.ToString() ?? "", toggle.IsOn.ToString().ToLower());
                 }
             }
             if (!CurrentProtocol.SetConnectionConfig(configs))
