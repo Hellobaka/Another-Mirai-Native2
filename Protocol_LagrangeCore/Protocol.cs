@@ -15,6 +15,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool IsConnected { get; set; }
 
+        public bool ForceQRLogin { get; set; } = false;
+
         public event Action<string, byte[]> QRCodeDisplayAction;
 
         public event Action QRCodeFinishedAction;
@@ -66,7 +68,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public Dictionary<string, string> GetConnectionConfig()
         {
-            return [];
+            ForceQRLogin = false;
+            return new Dictionary<string, string> 
+            {
+                { "bool_强制扫码登录", "false" }
+            };
         }
 
         public string GetCookies(string domain)
@@ -293,6 +299,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
         {
+            ForceQRLogin = config[config.Keys.First()] == "true";
             return true;
         }
 

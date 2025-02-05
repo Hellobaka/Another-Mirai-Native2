@@ -562,10 +562,17 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 var keystore = BotContext.UpdateKeystore();
                 bool wait = RequestWaiter.Wait("LagrangeCoreLogin", (int)TimeSpan.FromSeconds(60).TotalMilliseconds, () =>
                 {
-                    bool success = SessionLogin(keystore)
-                        || PasswordLogin(keystore)
-                        || QrCodeLogin();
-
+                    bool success;
+                    if (ForceQRLogin)
+                    {
+                        success = QrCodeLogin();
+                    }
+                    else
+                    {
+                        success = SessionLogin(keystore)
+                            || PasswordLogin(keystore)
+                            || QrCodeLogin();
+                    }
                     LogHelper.Info("账号登录", $"登录结果:{success}；等待在线信号...");
 
                     if (success)
