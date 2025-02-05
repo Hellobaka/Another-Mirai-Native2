@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using System.Globalization;
 
 namespace Another_Mirai_Native
 {
@@ -491,5 +492,22 @@ namespace Another_Mirai_Native
         }
 
         public static long ToLong(this uint? value) => value ?? 0;
+
+        public static string Clean(this string input)
+        {
+            StringBuilder sb = new();
+            foreach (char c in input)
+            {
+                UnicodeCategory category = char.GetUnicodeCategory(c);
+
+                // 过滤异常字符
+                if (category != UnicodeCategory.NonSpacingMark &&
+                    category != UnicodeCategory.OtherNotAssigned)
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

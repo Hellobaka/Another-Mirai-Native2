@@ -25,6 +25,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public LogModelWrapper(LogModel log)
         {
+            log.detail = log.detail.Clean();
             id = log.id;
             time = log.time;
             priority = log.priority;
