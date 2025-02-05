@@ -6,7 +6,7 @@
     <Platforms>AnyCPU;x86</Platforms>
     <AssemblyName>MiraiAPIHttp</AssemblyName>
     <LangVersion>11</LangVersion>
-    <Version>2.8.0</Version>
+    <Version>2.8.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
