@@ -41,12 +41,6 @@ jobs:
     - name: Restore DllExport    
       run: .\DllExport -action Restore
       
-    - name: Run MSBuild
-      run: msbuild Another-Mirai-Native2.sln -p:Configuration=Debug -p:Platform=x86
-      
-    - name: Run MSBuild
-      run: msbuild Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
-      
     - name: Build Publish Result
       run: .\Release.bat 
 
