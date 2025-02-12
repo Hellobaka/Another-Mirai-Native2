@@ -243,7 +243,10 @@ namespace Another_Mirai_Native.Native
             string imgDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image");
             var downloadTask = Helper.DownloadFile(url, imgFileName, imgDir);
             downloadTask.Wait();
-
+            if (downloadTask.Result is false)
+            {
+                LogHelper.Error("图片下载", $"{file} 下载任务失败");
+            }
             return Path.Combine(imgDir, imgFileName);
         }
 
