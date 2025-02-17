@@ -91,7 +91,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Plain:
                         var plain = (MiraiMessageTypeDetail.Plain)item;
-                        Result.Append(plain.text);
+                        Result.Append(EscapeRawMessage(plain.text));
                         break;
 
                     case MiraiMessageType.Image:

@@ -103,7 +103,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is TextEntity text)
                 {
-                    message.Append(text.Text);
+                    message.Append(EscapeRawMessage(text.Text));
                 }
                 else if (item is VideoEntity video)
                 {

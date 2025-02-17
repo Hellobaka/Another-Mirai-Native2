@@ -528,7 +528,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 if (json["type"]?.ToString() == "text")
                 {
-                    result += json["data"]?["text"]?.ToString() ?? "";
+                    result += EscapeRawMessage(json["data"]?["text"]?.ToString() ?? "");
                 }
                 else
                 {
