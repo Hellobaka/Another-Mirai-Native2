@@ -201,7 +201,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
             regex = new("\\[CQ:record,file=(.*)\\..*url\\=.*\\]");
             parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
             regex = new("\\[CQ:record,file=(.*)\\..*path\\=.*\\]");
-            return regex.Replace(parsedMessage, "[CQ:record,file=$1]");
+            parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
+            // TODO: 实现更多格式
+            regex = new("\\[CQ:(.*?),file=(http.*)]");
+            string url = regex.Match(parsedMessage).Groups[2].Value;
+            string hash = url.MD5();
+            parsedMessage = regex.Replace(parsedMessage, $"[CQ:$1,file={hash}]");
+
+            return parsedMessage;
         }
 
         private string UnescapeRawMessage(string? msg)
@@ -703,7 +710,18 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     string imgId = item.Items["file"].Split('.').First();
                     Directory.CreateDirectory("data\\image");
-                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
+                    // TODO: 实现更多格式
+                    // https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#%E5%9B%BE%E7%89%87
+                    if (imgId.StartsWith("http"))
+                    {
+                        string hash = imgId.MD5();
+                        item.Items["file"] = hash;
+                        File.WriteAllText($"data\\image\\{hash}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={imgId}");
+                    }
+                    else
+                    {
+                        File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
+                    }
                 }
                 else if (item.IsRecordCQCode)
                 {
