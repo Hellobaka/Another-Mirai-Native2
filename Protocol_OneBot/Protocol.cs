@@ -714,9 +714,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     // https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#%E5%9B%BE%E7%89%87
                     if (imgId.StartsWith("http"))
                     {
-                        string hash = imgId.MD5();
+                        string url = item.Items["file"];
+                        string hash = url.MD5();
                         item.Items["file"] = hash;
-                        File.WriteAllText($"data\\image\\{hash}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={imgId}");
+                        File.WriteAllText($"data\\image\\{hash}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={url}");
                     }
                     else
                     {
