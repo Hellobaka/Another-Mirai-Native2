@@ -204,7 +204,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
             // TODO: 实现更多格式
             regex = new("\\[CQ:(.*?),file=(http.*)]");
-            string url = regex.Match(parsedMessage).Groups[2].Value;
+            string url = UnescapeRawMessage(regex.Match(parsedMessage).Groups[2].Value);
             string hash = url.MD5();
             parsedMessage = regex.Replace(parsedMessage, $"[CQ:$1,file={hash}]");
 
