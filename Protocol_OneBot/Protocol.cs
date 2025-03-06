@@ -41,6 +41,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
         /// </summary>
         private bool Handing { get; set; } = true;
 
+        private Regex ImageCleanPattern { get; set; } = new(@"\[CQ:image,file=(.*?),\]");
+
+        private Regex RecordCleanPattern { get; set; } = new(@"\[CQ:record,file=(.*?),\]");
+
+        private Regex HttpCleanPattern { get; set; } = new(@"\[CQ:(.*?),file=(http.*?)\]");
+
+        private Regex AtCleanPattern { get; set; } = new(@"\[CQ:at,qq=(\d*).*?\]");
+
         public JToken? CallOneBotAPI(APIType type, Dictionary<string, object> param)
         {
             int syncId;
@@ -196,17 +204,18 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         private string RebuildImageAndRecordCQCode(string parsedMessage)
         {
-            Regex regex = new("\\[CQ:image,file=(.*)\\..*url\\=.*\\]");
-            parsedMessage = regex.Replace(parsedMessage, "[CQ:image,file=$1]");
-            regex = new("\\[CQ:record,file=(.*)\\..*url\\=.*\\]");
-            parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
-            regex = new("\\[CQ:record,file=(.*)\\..*path\\=.*\\]");
-            parsedMessage = regex.Replace(parsedMessage, "[CQ:record,file=$1]");
+            parsedMessage = ImageCleanPattern.Replace(parsedMessage, "[CQ:image,file=$1]");
+            parsedMessage = RecordCleanPattern.Replace(parsedMessage, "[CQ:record,file=$1]");
+            parsedMessage = AtCleanPattern.Replace(parsedMessage, "[CQ:at,qq=$1]");
+
             // TODO: 实现更多格式
-            regex = new("\\[CQ:(.*?),file=(http.*)]");
-            string url = UnescapeRawMessage(regex.Match(parsedMessage).Groups[2].Value);
-            string hash = url.MD5();
-            parsedMessage = regex.Replace(parsedMessage, $"[CQ:$1,file={hash}]");
+            var matches = HttpCleanPattern.Matches(parsedMessage);
+            foreach (Match match in matches) 
+            {
+                string url = UnescapeRawMessage(match.Groups[2].Value);
+                string hash = url.MD5();
+                parsedMessage = parsedMessage.Replace(match.Groups[0].Value, $"[CQ:{match.Groups[1].Value},file={hash}]");
+            }
 
             return parsedMessage;
         }
