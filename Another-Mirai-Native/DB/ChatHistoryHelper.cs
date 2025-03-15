@@ -449,6 +449,10 @@ namespace Another_Mirai_Native.DB
 
         private static async void CacheMessageImage(string msg)
         {
+            if (AppConfig.Instance.EnableChatImageCache is false)
+            {
+                return;
+            }
             Directory.CreateDirectory(Path.Combine("data", "image", "cached"));
             var imgs = CQCode.Parse(msg).Where(x => x.IsImageCQCode);
             if (!imgs.Any())
@@ -478,7 +482,7 @@ namespace Another_Mirai_Native.DB
                     double length = 0;
                     // 统计缓存文件夹总大小
                     List<FileInfo> files = [];
-                    foreach (var item in Directory.GetFiles(dir))
+                    foreach (var item in Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly))
                     {
                         var info = new FileInfo(item);
                         length += info.Length;
@@ -497,7 +501,12 @@ namespace Another_Mirai_Native.DB
                             {
                                 length -= file.Length;
 
-                                file.Delete();
+                                try
+                                {
+                                    file.Delete();
+                                }
+                                catch
+                                { }
                                 files.Remove(file);
                             }
                             else
