@@ -105,8 +105,8 @@ namespace Another_Mirai_Native.Config
             MessageCacheSize = GetConfig("MessageCacheSize", 4096);
             ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
-            EnableChat = GetConfig("EnableChat", true);
-            EnableChatImageCache = GetConfig("EnableChatImageCache", true);
+            EnableChat = GetConfig("EnableChat", false);
+            EnableChatImageCache = GetConfig("EnableChatImageCache", false);
             MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", 1024);
         }
     }
