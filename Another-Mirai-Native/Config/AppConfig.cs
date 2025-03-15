@@ -74,7 +74,7 @@ namespace Another_Mirai_Native.Config
 
         public bool EnableChatImageCache { get; set; }
 
-        public int MaxChatImageCacheFolderSize { get; set; }
+        public long MaxChatImageCacheFolderSize { get; set; }
 
         public bool QRCodeCompatibilityMode { get; set; }
 
@@ -107,7 +107,7 @@ namespace Another_Mirai_Native.Config
             ShowTaskBar = GetConfig("ShowTaskBar", true);
             EnableChat = GetConfig("EnableChat", false);
             EnableChatImageCache = GetConfig("EnableChatImageCache", false);
-            MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", 1024);
+            MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", (long)1024);
         }
     }
 }
