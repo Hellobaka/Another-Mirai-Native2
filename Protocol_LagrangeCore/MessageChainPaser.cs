@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         }
                         else if (File.Exists(recordPath + ".cqrecord"))
                         {
-                            recordPath += ".amr";
+                            recordPath = Path.ChangeExtension(recordPath, ".amr");
                             string picUrl = File.ReadAllText(recordPath).Split('\n').Last().Replace("url=", "");
                             string cachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", "cache");
                             bool download = Helper.DownloadFile(picUrl, Path.GetFileName(recordPath), cachePath, true).Result;
