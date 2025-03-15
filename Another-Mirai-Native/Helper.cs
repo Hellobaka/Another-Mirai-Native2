@@ -195,6 +195,7 @@ namespace Another_Mirai_Native
         /// </summary>
         /// <param name="url">网址</param>
         /// <param name="path">目标文件夹</param>
+        /// <param name="fileName">无法获取文件名时的回滚值</param>
         /// <param name="overwrite">重复时是否覆写</param>
         /// <returns></returns>
         public static async Task<bool> DownloadFile(string url, string fileName, string path, bool overwrite = false)
@@ -205,6 +206,14 @@ namespace Another_Mirai_Native
                 if (string.IsNullOrWhiteSpace(url)) return false;
                 if (!overwrite && File.Exists(Path.Combine(path, fileName))) return true;
                 var r = await http.GetAsync(url);
+                r.EnsureSuccessStatusCode();
+
+                var contentDisposition = r.Content.Headers.ContentDisposition;
+                if (contentDisposition != null && !string.IsNullOrEmpty(contentDisposition.FileName))
+                {
+                    fileName = contentDisposition.FileName.Trim('"');
+                }
+
                 byte[] buffer = await r.Content.ReadAsByteArrayAsync();
                 Directory.CreateDirectory(path);
                 File.WriteAllBytes(Path.Combine(path, fileName), buffer);
@@ -374,7 +383,7 @@ namespace Another_Mirai_Native
             string basePath = @"data\image";
 
             string filePath = Path.Combine(basePath, file);
-            if (File.Exists(filePath))
+            if (File.Exists(filePath) || File.Exists(Path.ChangeExtension(filePath, ".cqimg")))
             {
                 if (filePath.EndsWith(".cqimg"))
                 {

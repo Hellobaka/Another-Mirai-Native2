@@ -239,7 +239,7 @@ namespace Another_Mirai_Native.Native
         private string CQ_getImage(int authCode, string file)
         {
             string url = Helper.GetPicUrlFromCQImg(file);
-            string imgFileName = file + ".jpg";
+            string imgFileName = file.Contains('.') ? file : Path.ChangeExtension(file, ".jpg");
             string imgDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image");
             var downloadTask = Helper.DownloadFile(url, imgFileName, imgDir);
             downloadTask.Wait();
