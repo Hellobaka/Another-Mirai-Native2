@@ -172,16 +172,16 @@ namespace Another_Mirai_Native
         public static string GetPicUrlFromCQImg(string cqimg)
         {
             string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", cqimg);
-            if (!cqimg.Contains('.'))
-            {
-                picPath += ".cqimg";
-            }
+            picPath = Path.ChangeExtension(picPath, ".cqimg");
+
             if (File.Exists(picPath))
             {
                 string picUrl = File.ReadAllText(picPath);
                 picUrl = picUrl.Split('\n').Last().Replace("url=", "");
                 return picUrl;
             }
+            LogHelper.Error("图片下载", $"{cqimg} 获取下载链接失败");
+
             return "";
         }
 
