@@ -518,5 +518,18 @@ namespace Another_Mirai_Native
             }
             return sb.ToString();
         }
+
+        public static int IndexOf(this List<byte> buffer, byte[] delimiter)
+        {
+            for (int i = 0; i <= buffer.Count - delimiter.Length; i++)
+            {
+                if (buffer.Skip(i).Take(delimiter.Length).SequenceEqual(delimiter))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
     }
 }

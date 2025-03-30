@@ -111,7 +111,9 @@ namespace Another_Mirai_Native.RPC.Pipe
         private async Task ListenForMessages()
         {
             var buffer = new byte[1024];
-            var stringBuilder = new StringBuilder();
+            var messageBuffer = new List<byte>();
+            byte[] delimiter = [0x62, 0x35, 0x32];
+
             while (PipeClient.IsConnected)
             {
                 try
@@ -124,26 +126,21 @@ namespace Another_Mirai_Native.RPC.Pipe
                     LogHelper.LocalDebug("Pipe_Receive", "");
                     if (bytesRead > 0)
                     {
-                        string messagePart = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        stringBuilder.Append(messagePart);
+                        messageBuffer.AddRange(buffer.Take(bytesRead));
 
-                        // 查找完整消息的定界符
-                        string completeMessage = stringBuilder.ToString();
-                        int nullCharIndex;
-                        while ((nullCharIndex = completeMessage.IndexOf('\0')) != -1)
+                        int delimiterIndex;
+                        while ((delimiterIndex = messageBuffer.IndexOf(delimiter)) != -1)
                         {
                             // 提取完整消息
-                            string message = completeMessage.Substring(0, nullCharIndex);
+                            var messageBytes = messageBuffer.Take(delimiterIndex).ToArray();
+                            string message = Encoding.UTF8.GetString(messageBytes);
+
                             // 移除已处理的消息部分
-                            completeMessage = completeMessage.Substring(nullCharIndex + 1);
+                            messageBuffer.RemoveRange(0, delimiterIndex + delimiter.Length);
 
                             // 处理消息
                             new Thread(() => HandleMessage(message)).Start();
                         }
-
-                        // 将剩余的部分放回 StringBuilder
-                        stringBuilder.Clear();
-                        stringBuilder.Append(completeMessage);
                     }
                     else
                     {
