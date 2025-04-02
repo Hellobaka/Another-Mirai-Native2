@@ -197,8 +197,8 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(plugin));
                 CQPlugins = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToObservableCollection();
+                MainWindow.Instance.BuildTaskbarIconMenu();
             });
-            MainWindow.Instance.BuildTaskbarIconMenu();
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
