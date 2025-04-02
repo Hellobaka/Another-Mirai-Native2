@@ -101,7 +101,6 @@ namespace Another_Mirai_Native.RPC.Pipe
             var buffer = new byte[1024];
             var messageBuffer = new List<byte>();
             var client = pipe.ServerInstance;
-            byte[] delimiter = [0x62, 0x35, 0x32];
 
             while (IsRunning && client.IsConnected)
             {
@@ -110,21 +109,21 @@ namespace Another_Mirai_Native.RPC.Pipe
 #if NET5_0_OR_GREATER
                     int bytesRead = await client.ReadAsync(new Memory<byte>(buffer));
 #else
-            int bytesRead = await client.ReadAsync(buffer, 0, buffer.Length);
+                    int bytesRead = await client.ReadAsync(buffer, 0, buffer.Length);
 #endif
                     if (bytesRead > 0)
                     {
                         messageBuffer.AddRange(buffer.Take(bytesRead));
 
                         int delimiterIndex;
-                        while ((delimiterIndex = messageBuffer.IndexOf(delimiter)) != -1)
+                        while ((delimiterIndex = messageBuffer.IndexOf(Delimiter)) != -1)
                         {
                             // 提取完整消息
                             var messageBytes = messageBuffer.Take(delimiterIndex).ToArray();
                             string message = Encoding.UTF8.GetString(messageBytes);
 
                             // 移除已处理的消息部分
-                            messageBuffer.RemoveRange(0, delimiterIndex + delimiter.Length);
+                            messageBuffer.RemoveRange(0, delimiterIndex + Delimiter.Length);
 
                             LogHelper.Debug("收到客户端消息", message);
 
@@ -192,7 +191,7 @@ namespace Another_Mirai_Native.RPC.Pipe
         {
             if (client.IsConnected)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(message + "\0");
+                byte[] buffer = Encoding.UTF8.GetBytes(message).Concat(Delimiter).ToArray();
 #if NET5_0_OR_GREATER
                 client.Write(new ReadOnlySpan<byte>(buffer));
 #else

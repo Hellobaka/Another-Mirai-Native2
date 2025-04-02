@@ -20,6 +20,8 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
+        public byte[] Delimiter { get; set; } = [0x62, 0x35, 0x32];
+
         public void HandleMessage(string message)
         {
             try
