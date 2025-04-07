@@ -92,6 +92,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string path { get; set; }
 
             public string base64 { get; set; }
+
+            public bool isEmoji { get; set; }
         }
 
         public class FlashImage : IMiraiMessageBase

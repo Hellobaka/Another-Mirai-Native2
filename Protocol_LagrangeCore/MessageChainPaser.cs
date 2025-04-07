@@ -45,7 +45,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     string imgId = BitConverter.ToString(image.ImageMd5).ToUpper().Replace("-", "");
                     Directory.CreateDirectory("data\\image");
                     File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5={imgId}\nsize={image.ImageSize}\nurl={image.ImageUrl}");
-                    message.Append($"[CQ:image,file={imgId}]");
+                    message.Append($"[CQ:image,file={imgId},sub_type={image.SubType}]");
                 }
                 else if (item is JsonEntity json)
                 {

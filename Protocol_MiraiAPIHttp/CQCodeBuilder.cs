@@ -107,7 +107,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         }
                         Directory.CreateDirectory("data\\image");
                         File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={image.url}");
-                        Result.Append($"[CQ:image,file={imgId}]");
+                        Result.Append($"[CQ:image,file={imgId},sub_type={(image.isEmoji ? 1 : 0)}]");
                         break;
 
                     case MiraiMessageType.FlashImage:
