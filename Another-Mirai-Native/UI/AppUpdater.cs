@@ -20,9 +20,10 @@ namespace Another_Mirai_Native
             {
                 return null;
             }
-            if (await Helper.DownloadFile(version.DownloadUrl, Path.GetFileName(version.DownloadUrl), path, true))
+            var (success, fullPath) = await Helper.DownloadFile(version.DownloadUrl, Path.GetFileName(version.DownloadUrl), path, true);
+            if (success)
             {
-                return Path.Combine(path, Path.GetFileName(version.DownloadUrl));
+                return fullPath;
             }
             return null;
         }

@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections.Concurrent;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Another_Mirai_Native
 {
@@ -198,13 +199,13 @@ namespace Another_Mirai_Native
         /// <param name="fileName">无法获取文件名时的回滚值</param>
         /// <param name="overwrite">重复时是否覆写</param>
         /// <returns></returns>
-        public static async Task<bool> DownloadFile(string url, string fileName, string path, bool overwrite = false)
+        public static async Task<(bool success, string fullPath)> DownloadFile(string url, string fileName, string path, bool overwrite = false)
         {
             using var http = new HttpClient();
             try
             {
-                if (string.IsNullOrWhiteSpace(url)) return false;
-                if (!overwrite && File.Exists(Path.Combine(path, fileName))) return true;
+                if (string.IsNullOrWhiteSpace(url)) return (false, "");
+                if (!overwrite && File.Exists(Path.Combine(path, fileName))) return (true, Path.Combine(path, fileName));
                 var r = await http.GetAsync(url);
                 r.EnsureSuccessStatusCode();
 
@@ -213,16 +214,27 @@ namespace Another_Mirai_Native
                 {
                     fileName = contentDisposition.FileName.Trim('"');
                 }
+                // 从请求中获取扩展名
+                string? extension = "";
+                if (!string.IsNullOrEmpty(r.Content.Headers.ContentType?.MediaType))
+                {
+                    extension = r.Content.Headers.ContentType?.MediaType.Split('/').Last();
+                }
+                if (!string.IsNullOrEmpty(extension))
+                {
+                    fileName = Path.ChangeExtension(fileName, extension);
+                }
 
                 byte[] buffer = await r.Content.ReadAsByteArrayAsync();
                 Directory.CreateDirectory(path);
                 File.WriteAllBytes(Path.Combine(path, fileName), buffer);
-                return true;
+
+                return (true, Path.Combine(path, fileName));
             }
             catch (Exception e)
             {
                 LogHelper.Error("下载文件", e);
-                return false;
+                return (false, "");
             }
         }
         

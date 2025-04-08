@@ -235,19 +235,42 @@ namespace Another_Mirai_Native.Native
         /// </summary>
         /// <param name="authCode"></param>
         /// <param name="file">收到消息中的图片文件名(file)</param>
-        /// <returns></returns>
+        /// <returns>下载成功时，返回绝对路径；下载失败时，返回空字符串</returns>
         private string CQ_getImage(int authCode, string file)
         {
-            string url = Helper.GetPicUrlFromCQImg(file);
-            string imgFileName = file.Contains('.') ? file : Path.ChangeExtension(file, ".jpg");
+            // 检查图片是否是已缓存状态
             string imgDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image");
-            var downloadTask = Helper.DownloadFile(url, imgFileName, imgDir);
-            downloadTask.Wait();
-            if (downloadTask.Result is false)
+            // 检索图片文件夹下文件名为{file}的所有文件
+            var arr = Directory.GetFiles(imgDir, $"{Path.GetFileNameWithoutExtension(file)}.*");
+            if (arr.Length > 0)
             {
-                LogHelper.Error("图片下载", $"{file} 下载任务失败");
+                // 缓存文件存在
+                var downloaded = arr.FirstOrDefault(x => Path.GetExtension(x) != ".cqimg");
+                if (string.IsNullOrEmpty(downloaded))
+                {
+                    // 未下载，只有cqimg文件，从中取url并下载
+                    string url = Helper.GetPicUrlFromCQImg(file);
+                    string imgFileName = file.Contains('.') ? file : Path.ChangeExtension(file, ".jpg");
+                    var downloadTask = Helper.DownloadFile(url, imgFileName, imgDir);
+                    downloadTask.Wait();
+                    if (downloadTask.Result.success is false)
+                    {
+                        LogHelper.Error("图片下载", $"{file} 下载任务失败");
+                        return string.Empty;
+                    }
+                    return downloadTask.Result.fullPath;
+                }
+                else
+                {
+                    // 缓存文件存在，直接返回
+                    return downloaded;
+                }
             }
-            return Path.Combine(imgDir, imgFileName);
+            else
+            {
+                LogHelper.Error("图片下载", $"{file} 缓存文件不存在");
+                return string.Empty;
+            }
         }
 
         /// <summary>

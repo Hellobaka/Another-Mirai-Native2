@@ -197,13 +197,13 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                             recordPath = Path.ChangeExtension(recordPath, ".amr");
                             string picUrl = File.ReadAllText(recordPath).Split('\n').Last().Replace("url=", "");
                             string cachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", "cache");
-                            bool download = Helper.DownloadFile(picUrl, Path.GetFileName(recordPath), cachePath, true).Result;
-                            if (!download)
+                            (bool success, string path) = Helper.DownloadFile(picUrl, Path.GetFileName(recordPath), cachePath, true).Result;
+                            if (!success)
                             {
                                 LogHelper.Error("构建消息", $"从缓存下载音频失败：{recordPath}");
                                 break;
                             }
-                            builder.Record(Path.Combine(cachePath, Path.GetFileName(recordPath)));
+                            builder.Record(path);
                         }
                         break;
 
