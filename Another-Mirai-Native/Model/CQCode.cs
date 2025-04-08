@@ -218,11 +218,11 @@ namespace Another_Mirai_Native.Model
         private static Regex[] InitializeRegex()
         {
             // 此处延时加载, 以提升运行速度
-            return new Regex[]
-            {
+            return
+            [
                 new(@"\[CQ:([A-Za-z]*)(?:(,[^\[\]]+))?\]", RegexOptions.Compiled),    // 匹配CQ码
-                new(@",([A-Za-z]+)=([^,\[\]]+)", RegexOptions.Compiled)               // 匹配键值对
-            };
+                new(@",([A-Za-z_]+)=([^,\[\]]+)", RegexOptions.Compiled)               // 匹配键值对
+            ];
         }
 
         #endregion --私有方法--

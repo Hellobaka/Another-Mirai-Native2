@@ -31,8 +31,6 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public JToken message { get; set; }
 
-        public List<CQCode> CQCodes { get; set; } = new();
-
         public string ParsedMessage { get; set; } = "";
 
         public class Sender

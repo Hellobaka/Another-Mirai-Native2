@@ -33,8 +33,6 @@ namespace Another_Mirai_Native.Protocol.OneBot.Messages
 
         public string message_format { get; set; }
 
-        public List<CQCode> CQCodes { get; set; } = new();
-
         public string ParsedMessage { get; set; } = "";
 
         public class Anonymous

@@ -186,9 +186,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     groupMessage.ParsedMessage = groupMessage.raw_message;
                 }
             }
-            groupMessage.CQCodes = CQCode.Parse(groupMessage.ParsedMessage);
-            SaveCQCodeCache(groupMessage.CQCodes);
-            groupMessage.ParsedMessage = RebuildImageAndRecordCQCode(groupMessage.ParsedMessage);
+            groupMessage.ParsedMessage = RebuildMessage(groupMessage.ParsedMessage);
             RequestCache.AddMessageCache(groupMessage.message_id, groupMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
@@ -200,44 +198,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 updateMsg += $"(由 {handledPlugin.AppInfo.name} 结束消息处理)";
             }
             LogHelper.UpdateLogStatus(logId, updateMsg);
-        }
-
-        private string RebuildImageAndRecordCQCode(string parsedMessage)
-        {
-            parsedMessage = ImageCleanPattern.Replace(parsedMessage, "[CQ:image,file=$1]");
-            parsedMessage = RecordCleanPattern.Replace(parsedMessage, "[CQ:record,file=$1]");
-            parsedMessage = AtCleanPattern.Replace(parsedMessage, "[CQ:at,qq=$1]");
-
-            // TODO: 实现更多格式
-            var matches = HttpCleanPattern.Matches(parsedMessage);
-            foreach (Match match in matches) 
-            {
-                string url = UnescapeRawMessage(match.Groups[2].Value);
-                string hash = url.MD5();
-                parsedMessage = parsedMessage.Replace(match.Groups[0].Value, $"[CQ:{match.Groups[1].Value},file={hash}]");
-            }
-
-            return parsedMessage;
-        }
-
-        private string UnescapeRawMessage(string? msg)
-        {
-            if (string.IsNullOrEmpty(msg))
-            {
-                return "";
-            }
-
-            return msg!.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&#44;", ",").Replace("&amp;", "&");
-        }
-
-        private string EscapeRawMessage(string? msg)
-        {
-            if (string.IsNullOrEmpty(msg))
-            {
-                return "";
-            }
-
-            return msg!.Replace("&", "&amp;").Replace("[", "&#91;").Replace("]", "&#93;").Replace(",", "&#44;");
         }
 
         private void DispatchMessage(JObject message)
@@ -485,9 +445,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     privateMessage.ParsedMessage = privateMessage.raw_message;
                 }
             }
-            privateMessage.CQCodes = CQCode.Parse(privateMessage.ParsedMessage);
-            SaveCQCodeCache(privateMessage.CQCodes);
-            privateMessage.ParsedMessage = RebuildImageAndRecordCQCode(privateMessage.ParsedMessage);
+            privateMessage.ParsedMessage = RebuildMessage(privateMessage.ParsedMessage);
             RequestCache.AddMessageCache(privateMessage.message_id, privateMessage.ParsedMessage);
             Stopwatch sw = new();
             sw.Start();
@@ -708,43 +666,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
             catch (Exception ex)
             {
                 LogHelper.Error("处理消息", ex);
-            }
-        }
-
-        private void SaveCQCodeCache(List<CQCode> cqCodes)
-        {
-            foreach (var item in cqCodes)
-            {
-                if (item.IsImageCQCode)
-                {
-                    string imgId = item.Items["file"].Split('.').First();
-                    Directory.CreateDirectory("data\\image");
-                    // TODO: 实现更多格式
-                    // https://github.com/botuniverse/onebot-11/blob/master/message/segment.md#%E5%9B%BE%E7%89%87
-                    if (imgId.StartsWith("http"))
-                    {
-                        string url = item.Items["file"];
-                        string hash = url.MD5();
-                        item.Items["file"] = hash;
-                        File.WriteAllText($"data\\image\\{hash}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={url}");
-                    }
-                    else
-                    {
-                        File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={(item.Items.TryGetValue("url", out string? value) ? value : "")}");
-                    }
-                }
-                else if (item.IsRecordCQCode)
-                {
-                    string voiceId = item.Items["file"].Replace(".amr", "");
-                    Directory.CreateDirectory("data\\record");
-
-                    if (item.Items.TryGetValue("url", out string? url) is false
-                        && item.Items.TryGetValue("path", out string? value))
-                    {
-                        url = $"file://{value}";
-                    }
-                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={url ?? ""}");
-                }
             }
         }
     }
