@@ -101,6 +101,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         break;
 
                     default:
+                        stringBuilder.Append(s);
                         break;
                 }
             }
