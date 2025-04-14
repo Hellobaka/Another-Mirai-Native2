@@ -26,6 +26,8 @@
 
         honor,
 
-        group_card
+        group_card,
+        
+        reaction
     }
 }

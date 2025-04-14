@@ -223,11 +223,11 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
-            NoticeType noticeType = (NoticeType)Enum.Parse(typeof(NoticeType), notice["notice_type"]!.ToString());
+            NoticeType noticeType = Enum.TryParse(notice["notice_type"]!.ToString(), out NoticeType value) ? value : NoticeType.notify;
             NoticeType subType = NoticeType.notify;
             if (notice.ContainsKey("sub_type"))
             {
-                subType = Enum.TryParse(notice["sub_type"]!.ToString(), out NoticeType value) ? value : NoticeType.notify;
+                subType = Enum.TryParse(notice["sub_type"]!.ToString(), out value) ? value : NoticeType.notify;
             }
             Stopwatch sw = new();
             sw.Start();
