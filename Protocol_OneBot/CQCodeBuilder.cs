@@ -46,7 +46,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         }
 
                         // 检查图片是否下载成功
-                        string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", cqcode.Items["file"]);
+                        string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", imageFile);
                         if (!File.Exists(picPath) && File.Exists(picPath + ".cqimg"))
                         {
                             LogHelper.Error("构建消息", $"从缓存下载图片失败：{picPath}");
