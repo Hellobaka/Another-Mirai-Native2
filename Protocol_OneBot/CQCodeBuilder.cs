@@ -47,7 +47,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
                         // 检查图片是否下载成功
                         string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", imageFile);
-                        if (!File.Exists(picPath) && File.Exists(picPath + ".cqimg"))
+                        if (!File.Exists(picPath) && !File.Exists(picPath + ".cqimg"))
                         {
                             LogHelper.Error("构建消息", $"从缓存下载图片失败：{picPath}");
                             break;
@@ -137,6 +137,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             // file字段为hash值，应当直接返回
             string file = cqcode.Items["file"];
             string subType = cqcode.Items.TryGetValue("sub_type", out string? s) ? s : string.Empty;
+            if (string.IsNullOrEmpty(subType))
+            {
+                subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
+            }
 
             return (Path.GetFileNameWithoutExtension(file), subType);
         }
@@ -146,6 +150,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             // file字段为本地文件路径，应当复制文件到图片目录
             string file = cqcode.Items["file"].Replace("file://", "");
             string subType = cqcode.Items.TryGetValue("sub_type", out string? s) ? s : string.Empty;
+            if (string.IsNullOrEmpty(subType))
+            {
+                subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
+            }
             string fileName = Path.GetFileName(file);
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, fileName);
             if (File.Exists(filePath))
@@ -173,6 +181,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             // file字段为base64编码的图片，应当解码并保存到图片目录
             string base64 = cqcode.Items["file"].Replace("base64://", "");
             string subType = cqcode.Items.TryGetValue("sub_type", out string? s) ? s : string.Empty;
+            if (string.IsNullOrEmpty(subType))
+            {
+                subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
+            }
             byte[] imageBytes = Convert.FromBase64String(base64);
             string fileName = $"{base64.MD5()}.jpg";
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, fileName);
@@ -188,6 +200,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             string url = string.IsNullOrEmpty(u) ? file : u;
 
             string subType = cqcode.Items.TryGetValue("sub_type", out string? s) ? s : string.Empty;
+            if (string.IsNullOrEmpty(subType))
+            {
+                subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
+            }
             string hash = url.MD5();
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, Path.ChangeExtension(hash, ".cqimg"));
             if (File.Exists(filePath))
