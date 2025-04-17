@@ -22,8 +22,6 @@ namespace Another_Mirai_Native.RPC.Interface
         /// </summary>
         private Dictionary<int, object> Connections { get; set; } = new();
 
-        public byte[] Delimiter { get; set; } = [0x01, 0xBF, 0x52];
-
         public void ActiveShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title, content, canIgnore);

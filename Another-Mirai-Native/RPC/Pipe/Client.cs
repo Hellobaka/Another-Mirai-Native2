@@ -63,7 +63,8 @@ namespace Another_Mirai_Native.RPC.Pipe
                 {
                     LogHelper.LocalDebug("Pipe_Send", message);
 
-                    byte[] buffer = Encoding.UTF8.GetBytes(message).Concat(Delimiter).ToArray();
+                    byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    buffer = [.. BitConverter.GetBytes(buffer.Length), .. buffer];
 #if NET5_0_OR_GREATER
                     PipeClient.Write(new ReadOnlySpan<byte>(buffer));
 #else
@@ -111,10 +112,12 @@ namespace Another_Mirai_Native.RPC.Pipe
         private async Task ListenForMessages()
         {
             var buffer = new byte[1024];
-            var messageBuffer = new List<byte>();
+            using MemoryStream messageBuffer = new();
+            int targetLength = -1, readLength = 0;
 
             while (PipeClient.IsConnected)
             {
+                bool lengthRead = false;
                 try
                 {
 #if NET5_0_OR_GREATER
@@ -122,24 +125,48 @@ namespace Another_Mirai_Native.RPC.Pipe
 #else
                     int bytesRead = await PipeClient.ReadAsync(buffer, 0, buffer.Length);
 #endif
-                    LogHelper.LocalDebug("Pipe_Receive", "");
+                    LogHelper.LocalDebug("Pipe_Receive", bytesRead.ToString());
                     if (bytesRead > 0)
                     {
-                        messageBuffer.AddRange(buffer.Take(bytesRead));
-
-                        int delimiterIndex;
-                        while ((delimiterIndex = messageBuffer.IndexOf(Delimiter)) != -1)
+                        if (targetLength < 0 && bytesRead > 4)
                         {
-                            // 提取完整消息
-                            var messageBytes = messageBuffer.Take(delimiterIndex).ToArray();
-                            string message = Encoding.UTF8.GetString(messageBytes);
-
-                            // 移除已处理的消息部分
-                            messageBuffer.RemoveRange(0, delimiterIndex + Delimiter.Length);
-
-                            // 处理消息
-                            new Thread(() => HandleMessage(message)).Start();
+                            targetLength = BitConverter.ToInt32(buffer, 0);
+                            lengthRead = true;
                         }
+                        if (targetLength <= 0)
+                        {
+                            throw new InvalidDataException("Pipe 获得的数据长度无效");
+                        }
+
+                        if (readLength < targetLength)
+                        {
+                            if (lengthRead)
+                            {
+                                messageBuffer.Write(buffer, 4, bytesRead - 4);
+                                readLength += bytesRead - 4;
+                            }
+                            else
+                            {
+                                messageBuffer.Write(buffer, 0, bytesRead);
+                                readLength += bytesRead;
+                            }
+
+                            if (readLength < targetLength)
+                            {
+                                continue;
+                            }
+                        }
+#if NET5_0_OR_GREATER
+                        string message = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(messageBuffer.ToArray(), 0, targetLength));
+#else
+                        string message = Encoding.UTF8.GetString(messageBuffer.ToArray(), 0, targetLength);
+#endif
+                        LogHelper.Debug("收到客户端消息", message);
+                        targetLength = -1;
+                        readLength = 0;
+                        messageBuffer.Position = 0;
+                        // 处理消息
+                        new Thread(() => HandleMessage(message)).Start();
                     }
                     else
                     {
