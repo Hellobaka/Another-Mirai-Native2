@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         // 检查是否下载成功
                         string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordFile);
 
-                        if (!File.Exists(recordPath) && File.Exists(recordPath + ".cqimg"))
+                        if (!File.Exists(recordPath) && !File.Exists(recordPath + ".cqimg"))
                         {
                             LogHelper.Error("构建消息", $"下载音频失败：{recordPath}");
                             break;
