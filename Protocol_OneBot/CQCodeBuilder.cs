@@ -204,7 +204,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
-            string hash = url.MD5();
+            string hash = file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file);
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, Path.ChangeExtension(hash, ".cqimg"));
             if (File.Exists(filePath))
             {
