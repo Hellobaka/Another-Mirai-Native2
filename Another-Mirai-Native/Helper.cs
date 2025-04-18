@@ -13,14 +13,13 @@ using System.Diagnostics;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace Another_Mirai_Native
 {
     public static class Helper
     {
         public static Encoding GB18030 { get; set; } = Encoding.GetEncoding("GB18030");
-
-        public static Random Random { get; set; } = new Random();
 
         private static int Number { get; set; } = 10000;
 
@@ -543,5 +542,49 @@ namespace Another_Mirai_Native
             return -1;
         }
 
+        #region Random
+#if NET5_0_OR_GREATER
+        public static int RandomNext(int min, int max) => Random.Shared.Next(min, max);
+      
+        public static int RandomNext() => Random.Shared.Next();
+
+        public static double RandomNextDouble() => Random.Shared.NextDouble();
+#else
+        private static RNGCryptoServiceProvider Rng { get; set; } = new();
+
+        public static int RandomNext()
+        {
+            return RandomNext(0, int.MaxValue);
+        }
+
+        public static int RandomNext(int minValue, int maxValue)
+        {
+            if (minValue >= maxValue)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            long diff = (long)maxValue - minValue;
+            byte[] uint32Buffer = new byte[4];
+            uint rand;
+            do
+            {
+                Rng.GetBytes(uint32Buffer);
+                rand = BitConverter.ToUInt32(uint32Buffer, 0);
+            }
+            while (rand >= (uint.MaxValue - (((uint.MaxValue % diff) + 1) % diff)));
+
+            return (int)(minValue + (rand % diff));
+        }
+
+        public static double RandomNextDouble()
+        {
+            byte[] bytes = new byte[8];
+            Rng.GetBytes(bytes);
+            ulong ul = BitConverter.ToUInt64(bytes, 0) >> 11; // 53位精度
+            return ul / (double)(1UL << 53);
+        }
+#endif
+        #endregion
     }
 }

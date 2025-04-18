@@ -1,5 +1,5 @@
 ﻿<div style="display: flex">
-    <MudAvatar Style="margin-top: 5px;" Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.IsRound)">
+    <MudAvatar Style="margin-top: 5px;" Color="@((Color)Random.Shared.Next(11))" Rounded="@(!Item.IsRound)">
         <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()" ObjectFit="ObjectFit.Cover"></MudImage>
         @if (ShowFallbackName)
         {

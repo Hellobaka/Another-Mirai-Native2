@@ -14,7 +14,7 @@ else
 
         <MudMenu ActivationEvent="@MouseEvent.RightClick" PositionAtCursor="true" Style="cursor: default; margin: 1.25rem 10px 0 10px; align-self: unset;">
             <ActivatorContent>
-                <MudAvatar Color="@((Color)new Random(Item.Id.GetHashCode()).Next(11))" Rounded="@(!Item.Avatar.IsRound)">
+                <MudAvatar Color="@((Color)Random.Shared.Next(11))" Rounded="@(!Item.Avatar.IsRound)">
                     <MudImage @onerror="OnAvatarLoadFail" @ref="AvatarImage" Src="@GetAvatarSource()"></MudImage>
                     @if (ShowFallbackName)
                     {

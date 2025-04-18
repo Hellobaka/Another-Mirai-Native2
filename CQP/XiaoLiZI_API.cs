@@ -118,8 +118,8 @@ namespace Another_Mirai_Native.Export
             long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, arg2).ToLong();
             if (msgId > 0)
             {
-                arg3 = Static.Random.Next();
-                arg4 = Static.Random.Next();
+                arg3 = Helper.RandomNext();
+                arg4 = Helper.RandomNext();
 
                 MessageCache.Add((arg3, arg4), msgId);
             }
@@ -293,8 +293,8 @@ namespace Another_Mirai_Native.Export
             long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, $"[CQ:json,content={arg2}]").ToLong();
             if (msgId > 0)
             {
-                arg3 = Static.Random.Next();
-                arg4 = Static.Random.Next();
+                arg3 = Helper.RandomNext();
+                arg4 = Helper.RandomNext();
 
                 MessageCache.Add((arg3, arg4), msgId);
             }
@@ -2920,8 +2920,8 @@ namespace Another_Mirai_Native.Export
             long msgId = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, authCode, arg1, $"[CQ:xml,content={arg2}]").ToLong();
             if (msgId > 0)
             {
-                arg3 = Static.Random.Next();
-                arg4 = Static.Random.Next();
+                arg3 = Helper.RandomNext();
+                arg4 = Helper.RandomNext();
 
                 MessageCache.Add((arg3, arg4), msgId);
             }

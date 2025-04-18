@@ -48,8 +48,6 @@ namespace Protocol_NoConnection
 
         private List<GroupMemberInfo> GroupMemberInfos { get; set; } = new();
 
-        private Random Random { get; set; } = new();
-
         private Tester TesterForm { get; set; }
 
         private int MsgId { get; set; } = 10;
@@ -65,13 +63,13 @@ namespace Protocol_NoConnection
                 Postscript = "Baka",
                 QQ = 1145141919
             });
-            for (int i = 0; i < Random.Next(2, 30); i++)
+            for (int i = 0; i < Helper.RandomNext(2, 30); i++)
             {
                 FriendInfos.Add(new FriendInfo
                 {
                     Nick = $"Nick{i + 1}",
                     Postscript = $"Remark{i + 1}",
-                    QQ = Random.Next(20000, int.MaxValue)
+                    QQ = Helper.RandomNext(20000, int.MaxValue)
                 });
             }
             GroupInfos.Add(new GroupInfo
@@ -92,7 +90,7 @@ namespace Protocol_NoConnection
                 IsAllowEditorCard = true,
                 IsBadRecord = false,
                 JoinGroupDateTime = new DateTime(2018, 9, 9),
-                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
+                LastSpeakDateTime = DateTime.Now - new TimeSpan(Helper.RandomNext(0, 24), Helper.RandomNext(0, 60), Helper.RandomNext(0, 60)),
                 Level = "九十九",
                 MemberType = QQGroupMemberType.Manage,
                 Nick = "琪露诺",
@@ -100,12 +98,12 @@ namespace Protocol_NoConnection
                 Sex = QQSex.Woman
             });
             GroupMemberInfos.Add(BuildSelfMockData(1919810));
-            for (int i = 0; i < Random.Next(2, 25); i++)
+            for (int i = 0; i < Helper.RandomNext(2, 25); i++)
             {
                 GroupInfos.Add(new GroupInfo
                 {
-                    CurrentMemberCount = Random.Next(5, 100),
-                    Group = Random.Next(20000, int.MaxValue),
+                    CurrentMemberCount = Helper.RandomNext(5, 100),
+                    Group = Helper.RandomNext(20000, int.MaxValue),
                     Name = $"Group{i + 1}"
                 });
                 GroupInfos.Last().MaxMemberCount = GroupInfos.Last().CurrentMemberCount * 2;
@@ -113,21 +111,21 @@ namespace Protocol_NoConnection
                 {
                     GroupMemberInfos.Add(new GroupMemberInfo
                     {
-                        Age = Random.Next(0, 99),
-                        Area = $"Area{Random.Next()}",
-                        Card = $"Card{Random.Next()}",
-                        ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
+                        Age = Helper.RandomNext(0, 99),
+                        Area = $"Area{Helper.RandomNext()}",
+                        Card = $"Card{Helper.RandomNext()}",
+                        ExclusiveTitle = $"ExclusiveTitle{Helper.RandomNext()}",
                         ExclusiveTitleExpirationTime = null,
                         Group = GroupInfos.Last().Group,
                         IsAllowEditorCard = true,
-                        IsBadRecord = Random.NextDouble() > 0.5,
-                        JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
-                        LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
-                        Level = $"Level{Random.Next()}",
+                        IsBadRecord = Helper.RandomNextDouble() > 0.5,
+                        JoinGroupDateTime = new DateTime(Helper.RandomNext(2000, 2023), Helper.RandomNext(1, 12), Helper.RandomNext(1, 25)),
+                        LastSpeakDateTime = DateTime.Now - new TimeSpan(Helper.RandomNext(0, 24), Helper.RandomNext(0, 60), Helper.RandomNext(0, 60)),
+                        Level = $"Level{Helper.RandomNext()}",
                         MemberType = QQGroupMemberType.Member,
-                        Nick = $"Nick{Random.Next()}",
-                        QQ = Random.Next(20000, int.MaxValue),
-                        Sex = Random.NextDouble() > 0.3 ? QQSex.Man : Random.NextDouble() > 0.1 ? QQSex.Woman : QQSex.Unknown
+                        Nick = $"Nick{Helper.RandomNext()}",
+                        QQ = Helper.RandomNext(20000, int.MaxValue),
+                        Sex = Helper.RandomNextDouble() > 0.3 ? QQSex.Man : Helper.RandomNextDouble() > 0.1 ? QQSex.Woman : QQSex.Unknown
                     });
                 }
                 GroupMemberInfos.Add(BuildSelfMockData(GroupInfos.Last().Group));
@@ -272,10 +270,10 @@ namespace Protocol_NoConnection
         {
             return new StrangerInfo
             {
-                Age = Random.Next(0, 99),
-                Nick = $"Stranger{Random.Next()}",
+                Age = Helper.RandomNext(0, 99),
+                Nick = $"Stranger{Helper.RandomNext()}",
                 QQ = qqId,
-                Sex = Random.NextDouble() > 0.5 ? QQSex.Man : QQSex.Woman
+                Sex = Helper.RandomNextDouble() > 0.5 ? QQSex.Man : QQSex.Woman
             }.ToNativeBase64();
         }
 
@@ -387,19 +385,19 @@ namespace Protocol_NoConnection
         {
             return new GroupMemberInfo
             {
-                Age = Random.Next(0, 99),
-                Area = $"Area{Random.Next()}",
-                Card = $"Card{Random.Next()}",
-                ExclusiveTitle = $"ExclusiveTitle{Random.Next()}",
+                Age = Helper.RandomNext(0, 99),
+                Area = $"Area{Helper.RandomNext()}",
+                Card = $"Card{Helper.RandomNext()}",
+                ExclusiveTitle = $"ExclusiveTitle{Helper.RandomNext()}",
                 ExclusiveTitleExpirationTime = null,
                 Group = groupId,
                 IsAllowEditorCard = true,
-                IsBadRecord = Random.NextDouble() > 0.5,
-                JoinGroupDateTime = new DateTime(Random.Next(2000, 2023), Random.Next(1, 12), Random.Next(1, 25)),
-                LastSpeakDateTime = DateTime.Now - new TimeSpan(Random.Next(0, 24), Random.Next(0, 60), Random.Next(0, 60)),
-                Level = $"Level{Random.Next()}",
+                IsBadRecord = Helper.RandomNextDouble() > 0.5,
+                JoinGroupDateTime = new DateTime(Helper.RandomNext(2000, 2023), Helper.RandomNext(1, 12), Helper.RandomNext(1, 25)),
+                LastSpeakDateTime = DateTime.Now - new TimeSpan(Helper.RandomNext(0, 24), Helper.RandomNext(0, 60), Helper.RandomNext(0, 60)),
+                Level = $"Level{Helper.RandomNext()}",
                 MemberType = QQGroupMemberType.Member,
-                Nick = $"Nick{Random.Next()}",
+                Nick = $"Nick{Helper.RandomNext()}",
                 QQ = GetLoginQQ(),
                 Sex = QQSex.Man
             };
