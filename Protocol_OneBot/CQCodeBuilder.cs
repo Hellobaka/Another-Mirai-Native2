@@ -206,15 +206,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             string hash = file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file);
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, Path.ChangeExtension(hash, ".cqimg"));
-            if (File.Exists(filePath))
-            {
-                return (hash, subType);
-            }
-            else
-            {
-                File.WriteAllText(filePath, $"[{folderName}]\nmd5=0\nsize=0\nurl={url}");
-                return (hash, subType);
-            }
+            File.WriteAllText(filePath, $"[{folderName}]\nmd5=0\nsize=0\nurl={url}");
+            return (hash, subType);
         }
 
         private string UnescapeRawMessage(string? msg)
