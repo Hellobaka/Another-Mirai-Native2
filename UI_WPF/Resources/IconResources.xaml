@@ -108,6 +108,10 @@
         x:Key="ErrorButtonStyle"
         BasedOn="{StaticResource DefaultButtonStyle}"
         TargetType="Button">
-        <Setter Property="Background" Value="#FF4D4F" />
+        <Style.Resources>
+            <SolidColorBrush x:Key="ButtonBackground" Color="#E81123" />
+            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFB3B3" />
+            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F1707B" />
+        </Style.Resources>
     </Style>
 </ResourceDictionary>
