@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -44,6 +45,10 @@ namespace Protocol_NoConnection
         private bool UseCustomMessageID => UseMessageID.Checked;
 
         private int CustomMessageID => int.TryParse(MessageIDValue.Text, out int value) ? value : -1;
+
+        public Protocol Protocol { get; set; }
+
+        private byte[] AlterQRCodePicture { get; set; } = [];
 
         private void Tester_Load(object sender, EventArgs e)
         {
@@ -229,6 +234,64 @@ namespace Protocol_NoConnection
             {
                 SendValue.Focus();
             }
+        }
+
+        private byte[] ReadEmbeddedImageBytes(string resourceName)
+        {
+            // 获取当前程序集
+            var assembly = Assembly.GetExecutingAssembly();
+
+            // 资源名称通常为 "命名空间.文件名"
+            // 你可以通过 assembly.GetManifestResourceNames() 查看所有资源名
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null)
+                return [];
+
+            using MemoryStream ms = new();
+            stream.CopyTo(ms);
+            return ms.ToArray();
+        }
+
+        private void ShowQRCodeButton_Click(object sender, EventArgs e)
+        {
+            if(AlterQRCodePicture?.Length > 0)
+            {
+                Protocol.ShowQRCode("HelloWorld",AlterQRCodePicture);
+            }
+            else
+            {
+                Protocol.ShowQRCode("HelloWorld", ReadEmbeddedImageBytes("Protocol_NoConnection.QRCode.png"));
+            }
+        }
+
+        private void HideQRCodeButton_Click(object sender, EventArgs e)
+        {
+            Protocol.HideQRCode();
+        }
+
+        private void ChangeQRCodeButton_Click(object sender, EventArgs e)
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Filter = "图片文件|*.png;*.jpg;*.jpeg|全部文件|*.*",
+                Multiselect = false,
+                CheckFileExists = true
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                AlterQRCodePicture = File.ReadAllBytes(dialog.FileName);
+                MessageBox.Show("提示", "图片已替换", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void BotOnlineButton_Click(object sender, EventArgs e)
+        {
+            Protocol.SetProtocolOnline();
+        }
+
+        private void BotOfflineButton_Click(object sender, EventArgs e)
+        {
+            Protocol.SetProtocolOffline();
         }
     }
 }

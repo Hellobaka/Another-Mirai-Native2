@@ -2,11 +2,19 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0-windows;net48</TargetFrameworks>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <Platforms>AnyCPU;x86</Platforms>
 	  <UseWindowsForms>True</UseWindowsForms>
 	  <Version>2.8.3</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="QRCode.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="QRCode.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />

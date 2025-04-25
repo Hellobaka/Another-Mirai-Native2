@@ -48,11 +48,22 @@
             groupBox1 = new System.Windows.Forms.GroupBox();
             tabPage2 = new System.Windows.Forms.TabPage();
             label4 = new System.Windows.Forms.Label();
+            tabPage3 = new System.Windows.Forms.TabPage();
+            HideQRCodeButton = new System.Windows.Forms.Button();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            BotOnlineButton = new System.Windows.Forms.Button();
+            BotOfflineButton = new System.Windows.Forms.Button();
+            ShowQRCodeButton = new System.Windows.Forms.Button();
+            ChangeQRCodeButton = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -151,6 +162,7 @@
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
             tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             tabControl1.Location = new System.Drawing.Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -277,6 +289,91 @@
             label4.Text = "哈喵？";
             label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tabPage3
+            // 
+            tabPage3.BackColor = System.Drawing.SystemColors.Control;
+            tabPage3.Controls.Add(groupBox4);
+            tabPage3.Controls.Add(groupBox3);
+            tabPage3.Location = new System.Drawing.Point(4, 26);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            tabPage3.Size = new System.Drawing.Size(462, 195);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "框架事件";
+            // 
+            // HideQRCodeButton
+            // 
+            HideQRCodeButton.Location = new System.Drawing.Point(91, 22);
+            HideQRCodeButton.Name = "HideQRCodeButton";
+            HideQRCodeButton.Size = new System.Drawing.Size(79, 25);
+            HideQRCodeButton.TabIndex = 1;
+            HideQRCodeButton.Text = "隐藏二维码";
+            HideQRCodeButton.UseVisualStyleBackColor = true;
+            HideQRCodeButton.Click += HideQRCodeButton_Click;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(ChangeQRCodeButton);
+            groupBox3.Controls.Add(ShowQRCodeButton);
+            groupBox3.Controls.Add(HideQRCodeButton);
+            groupBox3.Location = new System.Drawing.Point(8, 6);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(446, 61);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "二维码事件";
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(BotOnlineButton);
+            groupBox4.Controls.Add(BotOfflineButton);
+            groupBox4.Location = new System.Drawing.Point(8, 73);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(446, 61);
+            groupBox4.TabIndex = 3;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "在线变化事件";
+            // 
+            // BotOnlineButton
+            // 
+            BotOnlineButton.Location = new System.Drawing.Point(6, 22);
+            BotOnlineButton.Name = "BotOnlineButton";
+            BotOnlineButton.Size = new System.Drawing.Size(79, 25);
+            BotOnlineButton.TabIndex = 0;
+            BotOnlineButton.Text = "在线";
+            BotOnlineButton.UseVisualStyleBackColor = true;
+            BotOnlineButton.Click += BotOnlineButton_Click;
+            // 
+            // BotOfflineButton
+            // 
+            BotOfflineButton.Location = new System.Drawing.Point(91, 22);
+            BotOfflineButton.Name = "BotOfflineButton";
+            BotOfflineButton.Size = new System.Drawing.Size(79, 25);
+            BotOfflineButton.TabIndex = 1;
+            BotOfflineButton.Text = "离线";
+            BotOfflineButton.UseVisualStyleBackColor = true;
+            BotOfflineButton.Click += BotOfflineButton_Click;
+            // 
+            // ShowQRCodeButton
+            // 
+            ShowQRCodeButton.Location = new System.Drawing.Point(6, 22);
+            ShowQRCodeButton.Name = "ShowQRCodeButton";
+            ShowQRCodeButton.Size = new System.Drawing.Size(79, 25);
+            ShowQRCodeButton.TabIndex = 0;
+            ShowQRCodeButton.Text = "显示二维码";
+            ShowQRCodeButton.UseVisualStyleBackColor = true;
+            ShowQRCodeButton.Click += ShowQRCodeButton_Click;
+            // 
+            // ChangeQRCodeButton
+            // 
+            ChangeQRCodeButton.Location = new System.Drawing.Point(176, 22);
+            ChangeQRCodeButton.Name = "ChangeQRCodeButton";
+            ChangeQRCodeButton.Size = new System.Drawing.Size(120, 25);
+            ChangeQRCodeButton.TabIndex = 2;
+            ChangeQRCodeButton.Text = "修改二维码图片";
+            ChangeQRCodeButton.UseVisualStyleBackColor = true;
+            ChangeQRCodeButton.Click += ChangeQRCodeButton_Click;
+            // 
             // Tester
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -299,6 +396,9 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tabPage2.ResumeLayout(false);
+            tabPage3.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -324,5 +424,23 @@
         private System.Windows.Forms.TextBox AutoRecallValue;
         private System.Windows.Forms.CheckBox UseAutoRecall;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button BotOnlineButton;
+        private System.Windows.Forms.Button BotOfflineButton;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button1;
+
+/* 项目“Protocol_NoConnection (net48)”的未合并的更改
+在此之前:
+        private System.Windows.Forms.Button button2;
+    }
+在此之后:
+        private System.Windows.Forms.Button HideQRCodeButton;
+    }
+*/
+        private System.Windows.Forms.Button HideQRCodeButton;
+        private System.Windows.Forms.Button ChangeQRCodeButton;
+        private System.Windows.Forms.Button ShowQRCodeButton;
     }
 }

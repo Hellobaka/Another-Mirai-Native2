@@ -141,6 +141,7 @@ namespace Protocol_NoConnection
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         TesterForm = new Tester();
+                        TesterForm.Protocol = this;
                         Application.Run(TesterForm);
                     });
                     uiThread.SetApartmentState(ApartmentState.STA);
@@ -406,5 +407,27 @@ namespace Protocol_NoConnection
         public event Action<string, byte[]> QRCodeDisplayAction;
 
         public event Action QRCodeFinishedAction;
+
+        public event Action OnProtocolOnline;
+
+        public event Action OnProtocolOffline;
+
+        public void ShowQRCode(string path, byte[] buffer)
+        {
+            QRCodeDisplayAction?.Invoke(path, buffer);
+        }
+
+        public void HideQRCode()
+        {
+            QRCodeFinishedAction?.Invoke();
+        }
+        public void SetProtocolOnline()
+        {
+            OnProtocolOnline?.Invoke();
+        }
+        public void SetProtocolOffline()
+        {
+            OnProtocolOffline?.Invoke();
+        }
     }
 }
