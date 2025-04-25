@@ -139,7 +139,7 @@ namespace Another_Mirai_Native.Native
                 return null;
             }
             foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.type == (int)eventType))
-                .OrderByDescending(x => x.AppInfo._event.First().priority))
+                .OrderByDescending(x => x.AppInfo._event.First(o => o.type == (int)eventType).priority))
             {
                 if (item.AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
                 {
