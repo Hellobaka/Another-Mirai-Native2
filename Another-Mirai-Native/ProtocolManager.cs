@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.RPC;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -13,6 +14,8 @@ namespace Another_Mirai_Native
         public static List<IProtocol> Protocols { get; set; } = new();
 
         public IProtocol CurrentProtocol { get; set; }
+
+        public CancellationTokenSource OfflineActionCancel { get; set; }
 
         public ProtocolManager()
         {
@@ -38,6 +41,14 @@ namespace Another_Mirai_Native
             {
                 return false;
             }
+            if (CurrentProtocol != null)
+            {
+                CurrentProtocol.OnProtocolOnline -= Protocol_OnProtocolOnline;
+                CurrentProtocol.OnProtocolOffline -= Protocol_OnProtocolOffline;
+            }
+            protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
+            protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
+
             bool flag = protocol.Connect();
             RefreshBotInfo(protocol);
             flag = flag && !string.IsNullOrEmpty(AppConfig.Instance.CurrentNickName);
@@ -48,6 +59,17 @@ namespace Another_Mirai_Native
             }
             LogHelper.Info("加载协议", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             return flag;
+        }
+
+        private void Protocol_OnProtocolOffline()
+        {
+            OfflineActionCancel = new();
+            new Debouncer(OfflineActionCancel).Debounce(OfflineAction, TimeSpan.FromSeconds(AppConfig.Instance.ActionAfterOfflineSeconds));
+        }
+
+        private void Protocol_OnProtocolOnline()
+        {
+            OfflineActionCancel?.Cancel();
         }
 
         public bool Start(string protocolName)
@@ -95,6 +117,46 @@ namespace Another_Mirai_Native
                 AppConfig.Instance.CurrentNickName = protocol.GetLoginNick();
                 AppConfig.Instance.CurrentQQ = protocol.GetLoginQQ();
             }
+        }
+
+        public void OfflineAction()
+        {
+            if (AppConfig.Instance.OfflineActionSendEmail)
+            {
+                OfflineAction_Email();
+            }
+            if (AppConfig.Instance.OfflineActionRunCommand)
+            {
+                OfflineAction_RunCommand();
+            }
+        }
+
+        public static bool OfflineAction_Email()
+        {
+            return new EmailSender().SendEmail("离线通知", $"{AppConfig.Instance.CurrentNickName}[{AppConfig.Instance.CurrentQQ}] 已离线", true);
+        }
+
+        public static bool OfflineAction_RunCommand()
+        {
+            if (AppConfig.Instance.OfflineActionCommands != null && AppConfig.Instance.OfflineActionCommands.Count > 0)
+            {
+                foreach (var command in AppConfig.Instance.OfflineActionCommands)
+                {
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo("cmd.exe", "/c " + command)
+                        {
+                            UseShellExecute = true,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error("离线后命令执行", $"执行命令失败: {ex}");
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

@@ -321,5 +321,9 @@ namespace Another_Mirai_Native
         /// 二维码完成，关闭显示，禁止阻塞
         /// </summary>
         public event Action QRCodeFinishedAction;
+
+        public event Action OnProtocolOnline;
+
+        public event Action OnProtocolOffline;
     }
 }

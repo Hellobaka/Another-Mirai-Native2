@@ -78,6 +78,26 @@ namespace Another_Mirai_Native.Config
 
         public bool QRCodeCompatibilityMode { get; set; }
 
+        public int ActionAfterOfflineSeconds { get; set; }
+
+        public bool OfflineActionSendEmail { get; set; }
+
+        public string OfflineActionEmail_SMTPServer { get; set; }
+
+        public ushort OfflineActionEmail_SMTPPort { get; set; }
+
+        public string OfflineActionEmail_SMTPSenderEmail { get; set; }
+
+        public string OfflineActionEmail_SMTPReceiveEmail { get; set; }
+
+        public string OfflineActionEmail_SMTPUsername { get; set; }
+
+        public string OfflineActionEmail_SMTPPassport { get; set; }
+
+        public bool OfflineActionRunCommand { get; set; }
+
+        public List<string> OfflineActionCommands { get; set; } = [];
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -108,6 +128,18 @@ namespace Another_Mirai_Native.Config
             EnableChat = GetConfig("EnableChat", false);
             EnableChatImageCache = GetConfig("EnableChatImageCache", false);
             MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", (long)1024);
+            ActionAfterOfflineSeconds = GetConfig("ActionAfterOfflineSeconds", 120);
+
+            OfflineActionSendEmail = GetConfig("OfflineActionSendEmail", false);
+            OfflineActionEmail_SMTPServer = GetConfig("OfflineActionEmail_SMTPServer", "smtp.qq.com");
+            OfflineActionEmail_SMTPPort = GetConfig("OfflineActionEmail_SMTPPort", (ushort)465);
+            OfflineActionEmail_SMTPSenderEmail = GetConfig("OfflineActionEmail_SMTPSenderEmail", "");
+            OfflineActionEmail_SMTPReceiveEmail = GetConfig("OfflineActionEmail_SMTPReceiveEmail", "");
+            OfflineActionEmail_SMTPUsername = GetConfig("OfflineActionEmail_SMTPUsername", "");
+            OfflineActionEmail_SMTPPassport = GetConfig("OfflineActionEmail_SMTPPassport", "");
+
+            OfflineActionRunCommand = GetConfig("OfflineActionRunCommand", false);
+            OfflineActionCommands = GetConfig("OfflineActionCommands", new List<string>());
         }
     }
 }
