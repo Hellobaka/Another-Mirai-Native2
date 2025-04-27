@@ -2,9 +2,6 @@
 setlocal
 
 echo Release...
-dotnet msbuild Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
-dotnet msbuild Another-Mirai-Native2.sln -p:Configuration=Debug -p:Platform=x86
-
 dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
 dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net48.pubxml -f net48
 dotnet publish UI_Blazor\UI_Blazor.csproj /p:PublishProfile=net8.pubxml -f net8.0-windows
