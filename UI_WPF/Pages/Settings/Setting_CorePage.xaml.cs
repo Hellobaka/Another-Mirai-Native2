@@ -1,8 +1,11 @@
 ﻿using Another_Mirai_Native.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Another_Mirai_Native.UI.Pages
@@ -19,6 +22,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         public bool FormLoaded { get; set; }
 
+        private PropertyInfo[] AppConfigProperties { get; set; } = [];
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (FormLoaded)
@@ -27,6 +32,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             InitDisplay();
             FormLoaded = true;
+            AppConfigProperties = typeof(AppConfig).GetProperties();
         }
 
         private void InitDisplay()
@@ -57,7 +63,7 @@ namespace Another_Mirai_Native.UI.Pages
             OfflineActionEmail_SMTPUsername.Text = AppConfig.Instance.OfflineActionEmail_SMTPUsername;
             OfflineActionEmail_SMTPPassport.Text = AppConfig.Instance.OfflineActionEmail_SMTPPassport;
             OfflineActionEmail_SMTPReceiveEmail.Text = AppConfig.Instance.OfflineActionEmail_SMTPReceiveEmail;
-            OfflineActionSendEmail.IsOn = AppConfig.Instance.OfflineActionRunCommand;
+            OfflineActionSendEmail.IsOn = AppConfig.Instance.OfflineActionSendEmail;
             OfflineActionRunCommand.IsOn = AppConfig.Instance.OfflineActionRunCommand;
             OfflineActionCommandAdd.Text = string.Empty;
             OfflineActionCommands.Items.Clear();
@@ -115,11 +121,76 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox textBox && int.TryParse(textBox.Text, out int value))
+            if (sender is TextBox textBox)
             {
-                AppConfig.Instance.SetConfig(textBox.Name, value);
-                UpdateAppConfig(textBox.Name, value);
+                var property = AppConfigProperties.FirstOrDefault(x => x.Name == textBox.Name);
+                if (property != null && TryParse(textBox.Text, property.PropertyType, out object value))
+                {
+                    property.SetValue(AppConfig.Instance, value);
+                    AppConfig.Instance.SetConfig(textBox.Name, value);
+                }
             }
+        }
+
+        private static bool TryParse(string input, Type type, out object value)
+        {
+            value = input;
+            if (type.Name == "Int32")
+            {
+                if (int.TryParse(input, out int v))
+                {
+                    value = v;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (type.Name == "UInt16")
+            {
+                if (ushort.TryParse(input, out ushort v))
+                {
+                    value = v;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (type.Name == "Int64")
+            {
+                if (long.TryParse(input, out long v))
+                {
+                    value = v;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (type.Name == "Single")
+            {
+                if (float.TryParse(input, out float v))
+                {
+                    value = v;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (type.Name == "Double")
+            {
+                if (double.TryParse(input, out double v))
+                {
+                    value = v;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void UpdateAppConfig(string key, object? value)
@@ -128,8 +199,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var propertiesInfos = typeof(AppConfig).GetProperties();
-            var property = propertiesInfos.FirstOrDefault(x => x.Name == key);
+            var property = AppConfigProperties.FirstOrDefault(x => x.Name == key);
             property?.SetValue(AppConfig.Instance, value);
         }
 
