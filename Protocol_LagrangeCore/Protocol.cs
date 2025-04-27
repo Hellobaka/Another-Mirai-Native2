@@ -21,6 +21,10 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public event Action QRCodeFinishedAction;
 
+        public event Action OnProtocolOnline;
+
+        public event Action OnProtocolOffline;
+
         public int CanSendImage()
         {
             return 1;

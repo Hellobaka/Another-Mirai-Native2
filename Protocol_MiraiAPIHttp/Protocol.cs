@@ -334,22 +334,27 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 case MiraiEvents.BotOnlineEvent:
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot登录成功", $"登录成功", "处理中...");
+                    OnProtocolOnline?.Invoke();
                     break;
 
                 case MiraiEvents.BotOfflineEventActive:
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot主动离线", $"主动离线", "处理中...");
+                    OnProtocolOffline?.Invoke();
                     break;
 
                 case MiraiEvents.BotOfflineEventForce:
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot被挤下线", $"被动离线", "处理中...");
+                    OnProtocolOffline?.Invoke();
                     break;
 
                 case MiraiEvents.BotOfflineEventDropped:
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot掉线", $"被服务器断开或因网络问题而掉线", "处理中...");
+                    OnProtocolOffline?.Invoke();
                     break;
 
                 case MiraiEvents.BotReloginEvent:
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot主动重新登录", $"主动重新登录", "处理中...");
+                    OnProtocolOnline?.Invoke();
                     break;
 
                 case MiraiEvents.FriendInputStatusChangedEvent:

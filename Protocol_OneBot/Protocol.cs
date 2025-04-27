@@ -656,6 +656,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             {
                                 Handing = online;
                             }
+                            if (online)
+                            {
+                                OnProtocolOnline?.Invoke();
+                            }
+                            else
+                            {
+                                OnProtocolOffline?.Invoke();
+                            }
                         }
                         break;
 

@@ -470,6 +470,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             LogHelper.Info("Bot离线", e.EventMessage);
             IsConnected = false;
+            OnProtocolOffline?.Invoke();
         }
 
         private void Invoker_OnBotOnlineEvent(BotContext context, Lagrange.Core.Event.EventArg.BotOnlineEvent e)
@@ -480,6 +481,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             LagrangeConfig.BotKeystore = BotContext.UpdateKeystore();
             LagrangeConfig.Instance.Save();
             LogHelper.Info("账号登录", "已更新登录状态缓存");
+            OnProtocolOnline?.Invoke();
         }
 
         private void Invoker_OnBotCaptchaEvent(BotContext context, Lagrange.Core.Event.EventArg.BotCaptchaEvent e)

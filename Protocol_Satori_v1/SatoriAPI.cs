@@ -501,5 +501,9 @@ namespace Another_Mirai_Native.Protocol.Satori
         public event Action<string, byte[]> QRCodeDisplayAction;
 
         public event Action QRCodeFinishedAction;
+
+        public event Action OnProtocolOnline;
+
+        public event Action OnProtocolOffline;
     }
 }
