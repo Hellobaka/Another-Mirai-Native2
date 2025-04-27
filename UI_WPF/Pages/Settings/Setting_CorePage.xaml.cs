@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,6 +50,26 @@ namespace Another_Mirai_Native.UI.Pages
             ChatEnable.IsOn = AppConfig.Instance.EnableChat;
             EnableChatImageCache.IsOn = AppConfig.Instance.EnableChatImageCache;
             MaxChatImageCacheFolderSize.Text = AppConfig.Instance.MaxChatImageCacheFolderSize.ToString();
+            ActionAfterOfflineSeconds.Text = AppConfig.Instance.ActionAfterOfflineSeconds.ToString();
+            OfflineActionEmail_SMTPServer.Text = AppConfig.Instance.OfflineActionEmail_SMTPServer;
+            OfflineActionEmail_SMTPPort.Text = AppConfig.Instance.OfflineActionEmail_SMTPPort.ToString();
+            OfflineActionEmail_SMTPSenderEmail.Text = AppConfig.Instance.OfflineActionEmail_SMTPSenderEmail;
+            OfflineActionEmail_SMTPUsername.Text = AppConfig.Instance.OfflineActionEmail_SMTPUsername;
+            OfflineActionEmail_SMTPPassport.Text = AppConfig.Instance.OfflineActionEmail_SMTPPassport;
+            OfflineActionEmail_SMTPReceiveEmail.Text = AppConfig.Instance.OfflineActionEmail_SMTPReceiveEmail;
+            OfflineActionSendEmail.IsOn = AppConfig.Instance.OfflineActionRunCommand;
+            OfflineActionRunCommand.IsOn = AppConfig.Instance.OfflineActionRunCommand;
+            OfflineActionCommandAdd.Text = string.Empty;
+            OfflineActionCommands.Items.Clear();
+            foreach (var item in AppConfig.Instance.OfflineActionCommands)
+            {
+                if (string.IsNullOrEmpty(item))
+                {
+                    continue;
+                }
+                OfflineActionCommands.Items.Add(item);
+            }
+
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
             {
                 var child = VisualTreeHelper.GetChild(Container, i);
@@ -110,6 +131,59 @@ namespace Another_Mirai_Native.UI.Pages
             var propertiesInfos = typeof(AppConfig).GetProperties();
             var property = propertiesInfos.FirstOrDefault(x => x.Name == key);
             property?.SetValue(AppConfig.Instance, value);
+        }
+
+        private void OfflineActionCommandAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(OfflineActionCommandAdd.Text))
+            {
+                bool duplicate = false;
+                foreach (var item in OfflineActionCommands.Items)
+                {
+                    if (item.ToString() == OfflineActionCommandAdd.Text)
+                    {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (duplicate)
+                {
+                    DialogHelper.ShowSimpleDialog("嗯？", "已存在相同项");
+                    return;
+                }
+                OfflineActionCommands.Items.Add(OfflineActionCommandAdd.Text);
+                UpdateOfflineCommands();
+            }
+            else
+            {
+                DialogHelper.ShowSimpleDialog("嗯？", "输入内容格式错误");
+            }
+        }
+
+        private void OfflineActionCommandRemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (OfflineActionCommands.SelectedIndex < 0)
+            {
+                DialogHelper.ShowSimpleDialog("嗯？", "请选择一项");
+                return;
+            }
+            OfflineActionCommands.Items.RemoveAt(OfflineActionCommands.SelectedIndex);
+            UpdateOfflineCommands();
+        }
+
+        private void UpdateOfflineCommands()
+        {
+            List<string> commands = [];
+            foreach (var item in OfflineActionCommands.Items)
+            {
+                if(item == null)
+                {
+                    continue;
+                }
+                commands.Add(item.ToString());
+            }
+            AppConfig.Instance.SetConfig("OfflineActionCommands", commands);
+            UpdateAppConfig("OfflineActionCommands", commands);
         }
     }
 }

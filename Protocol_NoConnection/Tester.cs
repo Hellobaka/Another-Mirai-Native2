@@ -280,7 +280,7 @@ namespace Protocol_NoConnection
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 AlterQRCodePicture = File.ReadAllBytes(dialog.FileName);
-                MessageBox.Show("提示", "图片已替换", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("图片已替换", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -292,6 +292,7 @@ namespace Protocol_NoConnection
         private void BotOfflineButton_Click(object sender, EventArgs e)
         {
             Protocol.SetProtocolOffline();
+            LogHelper.Info("模拟离线", $"已触发离线事件，{AppConfig.Instance.ActionAfterOfflineSeconds}秒后执行离线操作");
         }
     }
 }
