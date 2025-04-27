@@ -132,7 +132,7 @@ namespace Another_Mirai_Native.Config
 
             OfflineActionSendEmail = GetConfig("OfflineActionSendEmail", false);
             OfflineActionEmail_SMTPServer = GetConfig("OfflineActionEmail_SMTPServer", "smtp.qq.com");
-            OfflineActionEmail_SMTPPort = GetConfig("OfflineActionEmail_SMTPPort", (ushort)465);
+            OfflineActionEmail_SMTPPort = GetConfig("OfflineActionEmail_SMTPPort", (ushort)587);
             OfflineActionEmail_SMTPSenderEmail = GetConfig("OfflineActionEmail_SMTPSenderEmail", "");
             OfflineActionEmail_SMTPReceiveEmail = GetConfig("OfflineActionEmail_SMTPReceiveEmail", "");
             OfflineActionEmail_SMTPUsername = GetConfig("OfflineActionEmail_SMTPUsername", "");
