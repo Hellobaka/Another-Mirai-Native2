@@ -17,6 +17,10 @@ namespace Another_Mirai_Native
 
         public CancellationTokenSource OfflineActionCancel { get; set; }
 
+        private DateTime LastOnlineTime { get; set; }
+
+        private bool OfflineHandled { get; set; }
+
         public ProtocolManager()
         {
             if (Protocols.Count == 0)
@@ -46,8 +50,6 @@ namespace Another_Mirai_Native
                 CurrentProtocol.OnProtocolOnline -= Protocol_OnProtocolOnline;
                 CurrentProtocol.OnProtocolOffline -= Protocol_OnProtocolOffline;
             }
-            protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
-            protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
 
             bool flag = protocol.Connect();
             RefreshBotInfo(protocol);
@@ -55,6 +57,10 @@ namespace Another_Mirai_Native
             if (flag)
             {
                 CurrentProtocol = protocol;
+                LastOnlineTime = DateTime.Now;
+                OfflineHandled = false;
+                protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
+                protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
                 ServerManager.Server.NotifyCurrentQQChanged(AppConfig.Instance.CurrentQQ, AppConfig.Instance.CurrentNickName);
             }
             LogHelper.Info("加载协议", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
@@ -63,13 +69,20 @@ namespace Another_Mirai_Native
 
         private void Protocol_OnProtocolOffline()
         {
+            if (OfflineHandled)
+            {
+                return;
+            }
+            OfflineHandled = true;
             OfflineActionCancel = new();
             new Debouncer(OfflineActionCancel).Debounce(OfflineAction, TimeSpan.FromSeconds(AppConfig.Instance.ActionAfterOfflineSeconds));
         }
 
         private void Protocol_OnProtocolOnline()
         {
+            LastOnlineTime = DateTime.Now;
             OfflineActionCancel?.Cancel();
+            OfflineHandled = false;
         }
 
         public bool Start(string protocolName)
@@ -123,7 +136,14 @@ namespace Another_Mirai_Native
         {
             if (AppConfig.Instance.OfflineActionSendEmail)
             {
-                OfflineAction_Email();
+                if (OfflineAction_Email())
+                {
+                    LogHelper.Info("离线邮件发送", $"邮件发送成功，已投递至: {AppConfig.Instance.OfflineActionEmail_SMTPReceiveEmail}");
+                }
+                else
+                {
+                    LogHelper.Error("离线邮件发送", "邮件发送失败，可能需要修改配置，尝试以下操作：1. 更换为另一个端口 2.密码使用授权码而不是登录密码。");
+                }
             }
             if (AppConfig.Instance.OfflineActionRunCommand)
             {
@@ -131,32 +151,47 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static bool OfflineAction_Email()
+        public bool OfflineAction_Email()
         {
-            return new EmailSender().SendEmail("离线通知", $"{AppConfig.Instance.CurrentNickName}[{AppConfig.Instance.CurrentQQ}] 已离线", true);
+            var onlineTimeSpan = DateTime.Now - LastOnlineTime;
+            return new EmailSender().SendEmail("离线通知", true, $"{AppConfig.Instance.CurrentNickName}[{AppConfig.Instance.CurrentQQ}] 已离线", $"在线时间：{onlineTimeSpan.Days}天{onlineTimeSpan.Hours}小时{onlineTimeSpan.Minutes}分{onlineTimeSpan.Seconds}秒。");
         }
 
-        public static bool OfflineAction_RunCommand()
+        public void OfflineAction_RunCommand()
         {
             if (AppConfig.Instance.OfflineActionCommands != null && AppConfig.Instance.OfflineActionCommands.Count > 0)
             {
-                foreach (var command in AppConfig.Instance.OfflineActionCommands)
+                Task.Run(() =>
                 {
-                    try
+                    int successCount = 0, failCount = 0;
+
+                    foreach (var command in AppConfig.Instance.OfflineActionCommands)
                     {
-                        Process.Start(new ProcessStartInfo("cmd.exe", "/c " + command)
+                        try
                         {
-                            UseShellExecute = true,
-                        });
+                            var p = Process.Start(new ProcessStartInfo("cmd.exe", "/c " + command)
+                            {
+                                UseShellExecute = true,
+                            });
+                            p?.WaitForExit();
+                            if (p?.ExitCode == 0)
+                            {
+                                successCount++;
+                            }
+                            else
+                            {
+                                failCount++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("离线后命令执行", $"执行 {command} 命令失败: {ex}");
+                            failCount++;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        LogHelper.Error("离线后命令执行", $"执行命令失败: {ex}");
-                        return false;
-                    }
-                }
+                    LogHelper.Info("离线后命令执行", $"执行了 {successCount + failCount} 条命令，成功 {successCount} 条，失败 {failCount} 条");
+                });
             }
-            return true;
         }
     }
 }

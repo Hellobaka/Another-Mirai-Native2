@@ -254,9 +254,9 @@ namespace Protocol_NoConnection
 
         private void ShowQRCodeButton_Click(object sender, EventArgs e)
         {
-            if(AlterQRCodePicture?.Length > 0)
+            if (AlterQRCodePicture?.Length > 0)
             {
-                Protocol.ShowQRCode("HelloWorld",AlterQRCodePicture);
+                Protocol.ShowQRCode("HelloWorld", AlterQRCodePicture);
             }
             else
             {

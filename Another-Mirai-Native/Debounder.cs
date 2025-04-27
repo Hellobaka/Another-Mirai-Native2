@@ -4,6 +4,8 @@
     {
         private CancellationTokenSource cancellationTokenSource = new();
 
+        private bool canCancel = true;
+
         public Debouncer()
         {
             
@@ -12,6 +14,7 @@
         public Debouncer(CancellationTokenSource cancel)
         {
             cancellationTokenSource = cancel;
+            canCancel = false;
         }
 
         /// <summary>
@@ -31,9 +34,12 @@
         /// <param name="waitTime">等待时间（毫秒）</param>
         public void Debounce(Action callback, TimeSpan waitTime)
         {
-            // 取消之前的延时调用
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource = new CancellationTokenSource();
+            if (canCancel)
+            {
+                // 取消之前的延时调用
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource = new CancellationTokenSource();
+            }
 
             Task.Delay(waitTime, cancellationTokenSource.Token)
                 .ContinueWith(task =>

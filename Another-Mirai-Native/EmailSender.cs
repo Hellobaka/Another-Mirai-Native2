@@ -8,15 +8,15 @@ namespace Another_Mirai_Native
     public class EmailSender
     {
         private string SmtpHost { get; set; } = "smtp.qq.com";
-     
+
         private ushort SmtpPort { get; set; } = 587;
-     
+
         private string FromEmail { get; set; }
-     
+
         private string ToEmail { get; set; }
-     
+
         private string Username { get; set; }
-     
+
         private string Password { get; set; }
 
         public EmailSender()
@@ -30,7 +30,7 @@ namespace Another_Mirai_Native
 
             if (string.IsNullOrEmpty(SmtpHost)
                 || string.IsNullOrEmpty(FromEmail)
-                || string.IsNullOrEmpty(Username) 
+                || string.IsNullOrEmpty(Username)
                 || string.IsNullOrEmpty(Password))
             {
                 LogHelper.Error("邮件发送", $"SMTP 参数缺失");
@@ -42,15 +42,30 @@ namespace Another_Mirai_Native
             }
         }
 
-        public bool SendEmail(string subject, string body, bool htmlContent)
+        public bool SendEmail(string subject, bool htmlContent, params string[] body)
         {
             try
             {
                 using var client = new SmtpClient(SmtpHost, SmtpPort);
                 client.Credentials = new NetworkCredential(Username, Password);
                 client.EnableSsl = true;
-                var mailMessage = new MailMessage(FromEmail, ToEmail, subject, htmlContent ? HtmlBody.Replace(HtmlContentTemplate, body) : body);
-               
+                string content = "";
+                if (htmlContent)
+                {
+                    content = HtmlBody;
+                    for (int i = 0; i < body.Length; i++)
+                    {
+                        content = content.Replace($"{{{i}}}", body[i]);
+                    }
+                }
+                else
+                {
+                    content = string.Join(",", body);
+                }
+                var mailMessage = new MailMessage(FromEmail, ToEmail, subject, content)
+                {
+                    IsBodyHtml = htmlContent
+                };
                 client.Send(mailMessage);
                 return true;
             }
@@ -60,8 +75,6 @@ namespace Another_Mirai_Native
                 return false;
             }
         }
-
-        private const string HtmlContentTemplate = "{{template}}";
 
         private const string HtmlBody = @"<!DOCTYPE html>
 <html>
@@ -104,8 +117,8 @@ namespace Another_Mirai_Native
 <body>
     <div class=""container"">
         <div class=""status-icon"">🤖</div>
-        <div class=""title"">{{template}}</div>
-        <p class=""desc"">您的机器人已经离线一段时间。建议登录服务器进行维护。</p>
+        <div class=""title"">{0}</div>
+        <p class=""desc"">您的机器人已经离线一段时间。{1}建议登录服务器进行维护。</p>
     </div>
 </body>
 </html>
