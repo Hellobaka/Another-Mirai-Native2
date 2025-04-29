@@ -575,6 +575,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();
+            OnProtocolOffline?.Invoke();
         }
 
         private void EventClient_OnMessage(string message)
@@ -587,6 +588,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器");
+            OnProtocolOnline?.Invoke();
         }
 
         private void HandleAPI(string data)

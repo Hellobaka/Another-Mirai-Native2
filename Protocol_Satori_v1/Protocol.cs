@@ -355,6 +355,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();
+            OnProtocolOffline?.Invoke();
         }
 
         private void EventClient_OnOpen()
@@ -362,6 +363,7 @@ namespace Another_Mirai_Native.Protocol.Satori
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器，开始鉴权");
             SendIdentity();
+            OnProtocolOnline?.Invoke();
         }
 
         private void SendIdentity()

@@ -174,12 +174,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             RequestWaiter.ResetSignalByConnection(EventConnection);
             Thread.Sleep(AppConfig.Instance.ReconnectTime);
             ConnectEventServer();
+            OnProtocolOffline?.Invoke();
         }
 
         private void EventConnection_OnOpen()
         {
             ReconnectCount = 0;
             LogHelper.Info("事件服务器", "成功连接到事件服务器");
+            OnProtocolOnline?.Invoke();
         }
 
         private bool ConnectMessageServer()

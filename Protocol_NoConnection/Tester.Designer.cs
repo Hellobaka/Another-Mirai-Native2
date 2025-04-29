@@ -429,16 +429,6 @@
         private System.Windows.Forms.Button BotOnlineButton;
         private System.Windows.Forms.Button BotOfflineButton;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button1;
-
-/* 项目“Protocol_NoConnection (net48)”的未合并的更改
-在此之前:
-        private System.Windows.Forms.Button button2;
-    }
-在此之后:
-        private System.Windows.Forms.Button HideQRCodeButton;
-    }
-*/
         private System.Windows.Forms.Button HideQRCodeButton;
         private System.Windows.Forms.Button ChangeQRCodeButton;
         private System.Windows.Forms.Button ShowQRCodeButton;
