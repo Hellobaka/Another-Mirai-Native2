@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
 	<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
 	<RootNamespace>Another_Mirai_Native.BlazorUI</RootNamespace>
 	<Nullable>enable</Nullable>

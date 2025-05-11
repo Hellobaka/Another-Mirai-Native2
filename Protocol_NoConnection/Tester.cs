@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -46,6 +47,7 @@ namespace Protocol_NoConnection
 
         private int CustomMessageID => int.TryParse(MessageIDValue.Text, out int value) ? value : -1;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Protocol Protocol { get; set; }
 
         private byte[] AlterQRCodePicture { get; set; } = [];

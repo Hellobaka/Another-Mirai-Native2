@@ -2,7 +2,7 @@
   "profiles": {
     "http": {
       "commandName": "Project",
-      "workingDirectory": ".\\bin\\x86\\Debug\\net8.0-windows",
+      "workingDirectory": ".\\bin\\x86\\Debug\\net9.0-windows",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

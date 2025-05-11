@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
