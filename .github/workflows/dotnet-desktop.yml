@@ -56,11 +56,11 @@ jobs:
              name: Minimal_Console
              path: build\Console\net48\
 
-    - name: Upload a Build Artifact(Console_net8)
+    - name: Upload a Build Artifact(Console_net9)
       uses: actions/upload-artifact@v4
       with:
-             name: Console_net8
-             path: build\Console\net8\
+             name: Console_net9
+             path: build\Console\net9\
 
     - name: Upload a Build Artifact(Blazor)
       uses: actions/upload-artifact@v4
@@ -71,8 +71,8 @@ jobs:
     - name: Upload a Build Artifact(WPF_net8)
       uses: actions/upload-artifact@v4
       with:
-             name: WPF_net8
-             path: build\WPF\net8\
+             name: WPF_net9
+             path: build\WPF\net9\
 
     - name: Upload a Build Artifact(WPF_net48)
       uses: actions/upload-artifact@v4
