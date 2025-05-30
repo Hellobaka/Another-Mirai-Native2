@@ -67,7 +67,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 BotContext.Invoker.OnGroupTodoEvent += Invoker_OnGroupTodoEvent;
                 BotContext.Invoker.OnTempMessageReceived += Invoker_OnTempMessageReceived;
 
-                MessageChainPaser.OnFileUploaded += MessageChainPaser_OnFileUploaded;
+                MessageChainParser.OnFileUploaded += MessageChainParser_OnFileUploaded;
                 LogHelper.Info("创建Bot实例", $"成功");
 
                 return true;
@@ -79,7 +79,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             }
         }
 
-        private void MessageChainPaser_OnFileUploaded(MessageChain chain, FileEntity file)
+        private void MessageChainParser_OnFileUploaded(MessageChain chain, FileEntity file)
         {
             if (string.IsNullOrEmpty(file.FileId))
             {
@@ -106,7 +106,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
+            var message = MessageChainParser.ParseMessageChainToCQCode(e.Chain);
             int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到群临时消息",
@@ -144,7 +144,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             }
             else
             {
-                string parsedMessage = MessageChainPaser.ParseMessageChainToCQCode(message);
+                string parsedMessage = MessageChainParser.ParseMessageChainToCQCode(message);
                 PluginManagerProxy.Instance.Event_OnGroupMsgRecall(msgId, e.GroupUin, parsedMessage);
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "群撤回",
                     $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
@@ -209,7 +209,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 return;
             }
             Stopwatch sw = Stopwatch.StartNew();
-            var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
+            var message = MessageChainParser.ParseMessageChainToCQCode(e.Chain);
             int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到消息",
@@ -422,7 +422,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             }
             else
             {
-                string parsedMessage = MessageChainPaser.ParseMessageChainToCQCode(message);
+                string parsedMessage = MessageChainParser.ParseMessageChainToCQCode(message);
                 PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(msgId, e.FriendUin, parsedMessage);
                 logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "好友撤回",
                     $"QQ:{e.FriendUin}({ChatHistoryHelper.GetFriendNick(e.FriendUin).Result}) " +
@@ -443,7 +443,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            var message = MessageChainPaser.ParseMessageChainToCQCode(e.Chain);
+            var message = MessageChainParser.ParseMessageChainToCQCode(e.Chain);
             int messageId = MessageCacher.RecordMessage(e.Chain);
 
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息",
@@ -547,7 +547,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 BotContext.Invoker.OnGroupRecallEvent -= Invoker_OnGroupRecallEvent;
                 BotContext.Invoker.OnGroupTodoEvent -= Invoker_OnGroupTodoEvent;
                 BotContext.Invoker.OnTempMessageReceived -= Invoker_OnTempMessageReceived;
-                MessageChainPaser.OnFileUploaded -= MessageChainPaser_OnFileUploaded;
+                MessageChainParser.OnFileUploaded -= MessageChainParser_OnFileUploaded;
 
                 LoginToken?.Cancel();
                 BotContext?.Dispose();

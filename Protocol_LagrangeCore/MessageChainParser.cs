@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
 {
-    public static class MessageChainPaser
+    public static class MessageChainParser
     {
         public static event Action<MessageChain, FileEntity> OnFileUploaded;
 

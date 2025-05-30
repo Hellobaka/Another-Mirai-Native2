@@ -275,7 +275,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 msg = $"[CQ:reply,id={msgId}]" + msg;
             }
             MessageBuilder builder = MessageBuilder.Group((uint)groupId);
-            MessageChainPaser.ParseCQCodeToMessageChain(builder, msg);
+            MessageChainParser.ParseCQCodeToMessageChain(builder, msg);
             var chain = builder.Build();
             var result = BotContext.SendMessage(chain).Result;
             if (result.Result != 0 || result.Sequence == null || result.Sequence == 0)
@@ -294,7 +294,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         public int SendPrivateMessage(long qqId, string msg)
         {
             MessageBuilder builder = MessageBuilder.Friend((uint)qqId);
-            MessageChainPaser.ParseCQCodeToMessageChain(builder, msg);
+            MessageChainParser.ParseCQCodeToMessageChain(builder, msg);
             var chain = builder.Build();
             var result = BotContext.SendMessage(chain).Result;
             if (result.Result != 0 || result.Sequence == null || result.Sequence == 0)
