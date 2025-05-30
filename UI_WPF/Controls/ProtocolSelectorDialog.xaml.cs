@@ -31,6 +31,7 @@ namespace Another_Mirai_Native.UI.Controls
             set
             {
                 ConnectButton.IsEnabled = !value;
+                ProtocolList.IsEnabled = !value;
                 ConnectingStatus.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
@@ -150,6 +151,7 @@ namespace Another_Mirai_Native.UI.Controls
         private void QuitButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = ContentDialogResult.Secondary;
+            AppConfig.Instance.SetConfig("AutoConnect", false);
             Hide();
         }
 
