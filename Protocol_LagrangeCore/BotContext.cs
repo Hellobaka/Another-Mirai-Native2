@@ -24,6 +24,13 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             try
             {
+                if (ClearDeviceInfo)
+                {
+                    LagrangeConfig.BotDeviceInfo = BotDeviceInfo.GenerateInfo();
+                    LagrangeConfig.BotKeystore = new();
+                    LagrangeConfig.Instance.Save();
+                }
+
                 BotSign ??= new BotSign(LagrangeConfig.SignUrl, LagrangeConfig.SignFallbackPlatform);
                 LagrangeConfig.BotConfig.CustomSignProvider = BotSign;
                 BotContext = BotFactory.Create(LagrangeConfig.BotConfig,

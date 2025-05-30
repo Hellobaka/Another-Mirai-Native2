@@ -17,6 +17,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool ForceQRLogin { get; set; } = false;
 
+        public bool ClearDeviceInfo { get; set; } = false;
+
         public event Action<string, byte[]> QRCodeDisplayAction;
 
         public event Action QRCodeFinishedAction;
@@ -75,7 +77,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             ForceQRLogin = false;
             return new Dictionary<string, string> 
             {
-                { "bool_强制扫码登录", "false" }
+                { "bool_强制扫码登录", "false" },
+                { "bool_重建设备信息", "false" },
             };
         }
 
@@ -303,7 +306,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool SetConnectionConfig(Dictionary<string, string> config)
         {
-            ForceQRLogin = config[config.Keys.First()] == "true";
+            ForceQRLogin = config["bool_强制扫码登录"] == "true";
+            ClearDeviceInfo = config["bool_重建设备信息"] == "true";
             return true;
         }
 
