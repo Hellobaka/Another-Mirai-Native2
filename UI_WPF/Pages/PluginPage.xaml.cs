@@ -278,7 +278,8 @@ namespace Another_Mirai_Native.UI.Pages
             ToggleEnableRunningStatus = true;
             Task.Run(() =>
             {
-                bool success = PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
+                bool success = SelectedPlugin.Enabled ? true : (SelectedPlugin.MovePluginToTmpDir() && SelectedPlugin.LoadAppInfo());
+                success = success && PluginManagerProxy.Instance.SetPluginEnabled(SelectedPlugin, !SelectedPlugin.Enabled);
                 ToggleEnableRunningStatus = false;
                 if (!success)
                 {

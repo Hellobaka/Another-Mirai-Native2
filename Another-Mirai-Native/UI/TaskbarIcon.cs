@@ -95,7 +95,9 @@ namespace Another_Mirai_Native
                             return;
                         }
 
-                        if (PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
+                        if (plugin.MovePluginToTmpDir()
+                            && plugin.LoadAppInfo()
+                            && PluginManagerProxy.Instance.SetPluginEnabled(plugin, true))
                         {
                             Invoke(() =>
                             {
