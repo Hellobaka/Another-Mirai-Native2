@@ -493,7 +493,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         private void Invoker_OnBotCaptchaEvent(BotContext context, Lagrange.Core.Event.EventArg.BotCaptchaEvent e)
         {
-            LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "验证码请求", e.Url, "");
+            LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "验证码请求", "验证码发生，请勾选清空设备信息后重新扫码登录", "");
+            LoginToken?.Cancel();
         }
 
         private void Invoker_OnBotLogEvent(BotContext context, Lagrange.Core.Event.EventArg.BotLogEvent e)
