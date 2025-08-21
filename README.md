@@ -59,7 +59,7 @@
 
 ## 关于 Lagrange.Core
 - 登录逻辑借鉴于Lagrange.Onebot项目
-- 仅.net8.0版本可用
+- 仅.net9.0版本可用
 - 若控制台输出的二维码无法扫码，可修改`conf\Config.json`配置中的`QRCodeCompatibilityMode`为true
 - 协议端会可能有很多的异常输出，正常现象
 - 若需要更新Lagrange.Core版本，查看[Wiki](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E6%9B%B4%E6%96%B0Lagrange.Core%E7%89%88%E6%9C%AC)
