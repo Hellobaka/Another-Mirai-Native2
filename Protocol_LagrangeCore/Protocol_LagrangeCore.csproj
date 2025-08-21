@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Another_Mirai_Native.Protocol.LagrangeCore</RootNamespace>
-    <Version>2.8.5</Version>
+    <Version>2.9.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
