@@ -653,18 +653,18 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             if (online != Handing)
                             {
                                 LogHelper.Info("框架在线状态变化", $"框架 Online 变化为：{type}");
+                                if (online)
+                                {
+                                    OnProtocolOnline?.Invoke();
+                                }
+                                else
+                                {
+                                    OnProtocolOffline?.Invoke();
+                                }
                             }
                             if (DiscardOfflineMessage)
                             {
                                 Handing = online;
-                            }
-                            if (online)
-                            {
-                                OnProtocolOnline?.Invoke();
-                            }
-                            else
-                            {
-                                OnProtocolOffline?.Invoke();
                             }
                         }
                         break;

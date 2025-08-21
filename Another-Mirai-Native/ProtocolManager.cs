@@ -69,7 +69,6 @@ namespace Another_Mirai_Native
 
         private void Protocol_OnProtocolOffline()
         {
-            LogHelper.Info("加载协议", $"协议发送离线事件");
             if (OfflineHandled)
             {
                 return;
@@ -81,7 +80,6 @@ namespace Another_Mirai_Native
 
         private void Protocol_OnProtocolOnline()
         {
-            LogHelper.Info("加载协议", $"协议发送在线事件");
             LastOnlineTime = DateTime.Now;
             OfflineActionCancel?.Cancel();
             OfflineHandled = false;
