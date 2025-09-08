@@ -89,6 +89,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
             ExitFlag = true;
             APIClient.Close();
             EventClient.Close();
+            StopAPIReconnectLoop();
+            StopEventReconnectLoop();
             return IsConnected == false;
         }
 

@@ -51,17 +51,29 @@ namespace Another_Mirai_Native
                 CurrentProtocol.OnProtocolOffline -= Protocol_OnProtocolOffline;
             }
 
-            bool flag = protocol.Connect();
-            RefreshBotInfo(protocol);
-            flag = flag && !string.IsNullOrEmpty(AppConfig.Instance.CurrentNickName);
-            if (flag)
+            bool flag = false;
+            if (protocol.Connect())
             {
-                CurrentProtocol = protocol;
-                LastOnlineTime = DateTime.Now;
-                OfflineHandled = false;
-                protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
-                protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
-                ServerManager.Server.NotifyCurrentQQChanged(AppConfig.Instance.CurrentQQ, AppConfig.Instance.CurrentNickName);
+                RefreshBotInfo(protocol);
+                if (!string.IsNullOrEmpty(AppConfig.Instance.CurrentNickName))
+                {
+                    CurrentProtocol = protocol;
+                    LastOnlineTime = DateTime.Now;
+                    OfflineHandled = false;
+                    protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
+                    protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
+                    ServerManager.Server.NotifyCurrentQQChanged(AppConfig.Instance.CurrentQQ, AppConfig.Instance.CurrentNickName);
+                    flag = true;
+                }
+                else
+                {
+                    LogHelper.Info("加载协议", $"获取 Bot ID 与昵称失败");
+                }
+            }
+            else
+            {
+                protocol.Disconnect();
+                LogHelper.Info("加载协议", $"连接失败");
             }
             LogHelper.Info("加载协议", $"加载 {protocol.Name} 协议{(flag ? "成功" : "失败")}");
             return flag;

@@ -18,13 +18,25 @@ namespace Another_Mirai_Native.Protocol.OneBot
     public partial class OneBotAPI
     {
         public WebSocketClient APIClient { get; set; } = new("ws://127.0.0.1");
+      
+        private CancellationTokenSource APIReconnectTokenSource { get; set; }
+      
+        private Task APIReconnectTask { get; set; }
+      
+        private object APIReconnectLock { get; set; } = new object();
+
+        public WebSocketClient EventClient { get; set; } = new("ws://127.0.0.1");
+       
+        private CancellationTokenSource EventReconnectTokenSource { get; set; }
+       
+        private Task EventReconnectTask { get; set; }
+       
+        private object EventReconnectLock { get; set; } = new object();
 
         public static string AuthKey { get; set; } = "";
 
         public string MessageType { get; set; } = "Array";
-
-        public WebSocketClient EventClient { get; set; } = new("ws://127.0.0.1");
-
+       
         public bool ExitFlag { get; private set; }
 
         public int ReconnectCount { get; private set; }
@@ -138,6 +150,90 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return EventClient.ReadyState == WebSocketState.Open;
         }
 
+        private void StartAPIReconnectLoop()
+        {
+            lock (APIReconnectLock)
+            {
+                if (APIReconnectTask != null && !APIReconnectTask.IsCompleted)
+                    return;
+
+                APIReconnectTokenSource = new CancellationTokenSource();
+                APIReconnectTask = Task.Run(async () =>
+                {
+                    LogHelper.Error("API服务器连接断开", $"尝试重新连接...");
+
+                    while (!ExitFlag && !APIReconnectTokenSource.Token.IsCancellationRequested)
+                    {
+                        bool connected = false;
+                        try
+                        {
+                            connected = ConnectAPIServer();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("API服务器重连异常", ex.Message);
+                        }
+
+                        if (connected)
+                        {
+                            break; // 连接成功，退出循环
+                        }
+                        else
+                        {
+                            await Task.Delay(AppConfig.Instance.ReconnectTime, APIReconnectTokenSource.Token);
+                        }
+                    }
+                }, APIReconnectTokenSource.Token);
+            }
+        }
+
+        private void StartEventReconnectLoop()
+        {
+            lock (EventReconnectLock)
+            {
+                if (EventReconnectTask != null && !EventReconnectTask.IsCompleted)
+                    return;
+
+                EventReconnectTokenSource = new CancellationTokenSource();
+                EventReconnectTask = Task.Run(async () =>
+                {
+                    LogHelper.Error("事件服务器连接断开", $"尝试重新连接...");
+
+                    while (!ExitFlag && !EventReconnectTokenSource.Token.IsCancellationRequested)
+                    {
+                        bool connected = false;
+                        try
+                        {
+                            connected = ConnectEventServer();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("事件服务器重连异常", ex.Message);
+                        }
+
+                        if (connected)
+                        {
+                            break; // 连接成功，退出循环
+                        }
+                        else
+                        {
+                            await Task.Delay(AppConfig.Instance.ReconnectTime, EventReconnectTokenSource.Token);
+                        }
+                    }
+                }, EventReconnectTokenSource.Token);
+            }
+        }
+
+        public void StopAPIReconnectLoop()
+        {
+            APIReconnectTokenSource?.Cancel();
+        }
+
+        public void StopEventReconnectLoop()
+        {
+            EventReconnectTokenSource?.Cancel();
+        }
+
         private void APIClient_OnClose()
         {
             if (ExitFlag)
@@ -146,9 +242,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
             ReconnectCount++;
             RequestWaiter.ResetSignalByConnection(APIClient);
-            LogHelper.Error("API服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
-            Thread.Sleep(AppConfig.Instance.ReconnectTime);
-            ConnectAPIServer();
+            StartAPIReconnectLoop();
         }
 
         private void APIClient_OnMessage(string message)
@@ -570,12 +664,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 return;
             }
+            OnProtocolOffline?.Invoke();
             ReconnectCount++;
             RequestWaiter.ResetSignalByConnection(EventClient);
-            LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
-            Thread.Sleep(AppConfig.Instance.ReconnectTime);
-            ConnectEventServer();
-            OnProtocolOffline?.Invoke();
+            StartEventReconnectLoop();
         }
 
         private void EventClient_OnMessage(string message)

@@ -32,7 +32,19 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
         public WebSocketClient EventConnection { get; set; } = new("ws://127.0.0.1");
 
+        private CancellationTokenSource EventReconnectTokenSource { get; set; }
+
+        private Task EventReconnectTask { get; set; }
+
+        private object EventReconnectLock { get; set; } = new object();
+
         public WebSocketClient MessageConnection { get; set; } = new("ws://127.0.0.1");
+
+        private CancellationTokenSource MessageReconnectTokenSource { get; set; }
+
+        private Task MessageReconnectTask { get; set; }
+
+        private object MessageReconnectLock { get; set; } = new object();
 
         private Task HeartBeatTask { get; set; }
 
@@ -168,13 +180,11 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             {
                 return;
             }
+            OnProtocolOffline?.Invoke();
             ReconnectCount++;
             SessionKey_Event = "";
-            LogHelper.Error("事件服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByConnection(EventConnection);
-            Thread.Sleep(AppConfig.Instance.ReconnectTime);
-            ConnectEventServer();
-            OnProtocolOffline?.Invoke();
+            StartEventReconnectLoop();
         }
 
         private void EventConnection_OnOpen()
@@ -207,6 +217,90 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             return MessageConnection.ReadyState == WebSocketState.Open;
         }
 
+        private void StartMessageReconnectLoop()
+        {
+            lock (MessageReconnectLock)
+            {
+                if (MessageReconnectTask != null && !MessageReconnectTask.IsCompleted)
+                    return;
+
+                MessageReconnectTokenSource = new CancellationTokenSource();
+                MessageReconnectTask = Task.Run(async () =>
+                {
+                    LogHelper.Error("消息服务器连接断开", $"尝试重新连接...");
+
+                    while (!ExitFlag && !MessageReconnectTokenSource.Token.IsCancellationRequested)
+                    {
+                        bool connected = false;
+                        try
+                        {
+                            connected = ConnectMessageServer();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("消息服务器重连异常", ex.Message);
+                        }
+
+                        if (connected)
+                        {
+                            break; // 连接成功，退出循环
+                        }
+                        else
+                        {
+                            await Task.Delay(AppConfig.Instance.ReconnectTime, MessageReconnectTokenSource.Token);
+                        }
+                    }
+                }, MessageReconnectTokenSource.Token);
+            }
+        }
+
+        private void StartEventReconnectLoop()
+        {
+            lock (EventReconnectLock)
+            {
+                if (EventReconnectTask != null && !EventReconnectTask.IsCompleted)
+                    return;
+
+                EventReconnectTokenSource = new CancellationTokenSource();
+                EventReconnectTask = Task.Run(async () =>
+                {
+                    LogHelper.Error("事件服务器连接断开", $"尝试重新连接...");
+
+                    while (!ExitFlag && !EventReconnectTokenSource.Token.IsCancellationRequested)
+                    {
+                        bool connected = false;
+                        try
+                        {
+                            connected = ConnectEventServer();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("事件服务器重连异常", ex.Message);
+                        }
+
+                        if (connected)
+                        {
+                            break; // 连接成功，退出循环
+                        }
+                        else
+                        {
+                            await Task.Delay(AppConfig.Instance.ReconnectTime, EventReconnectTokenSource.Token);
+                        }
+                    }
+                }, EventReconnectTokenSource.Token);
+            }
+        }
+
+        public void StopMessageReconnectLoop()
+        {
+            MessageReconnectTokenSource?.Cancel();
+        }
+
+        public void StopEventReconnectLoop()
+        {
+            EventReconnectTokenSource?.Cancel();
+        }
+
         private void MessageConnection_OnMessage(string message)
         {
             LogHelper.Debug("Message", message);
@@ -221,10 +315,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             ReconnectCount++;
             SessionKey_Message = "";
-            LogHelper.Error("消息服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
             RequestWaiter.ResetSignalByConnection(MessageConnection);
-            Thread.Sleep(AppConfig.Instance.ReconnectTime);
-            ConnectMessageServer();
+            StartMessageReconnectLoop();
         }
 
         private void MessageConnection_OnOpen()
