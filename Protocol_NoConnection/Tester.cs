@@ -54,8 +54,8 @@ namespace Protocol_NoConnection
 
         private void Tester_Load(object sender, EventArgs e)
         {
-            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)10001).ToString();
-            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)10001).ToString();
+            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)1919810).ToString();
+            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)1145141919).ToString();
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
 
             PicButton.Enabled = PicServer.Instance?.Running ?? false;
