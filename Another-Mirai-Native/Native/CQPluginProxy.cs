@@ -57,6 +57,8 @@ namespace Another_Mirai_Native.Native
             "getAppDirectory",
             "getLoginQQ",
             "getLoginNick",
+            "canSendImage",
+            "canSendRecord",
         };
 
         private static int PID => Process.GetCurrentProcess().Id;
