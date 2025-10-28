@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using System.Diagnostics;
 using System.IO;
@@ -693,6 +694,16 @@ namespace Another_Mirai_Native.Native
         private int CQ_canSendRecord(int authCode)
         {
             return ProtocolManager.Instance.CurrentProtocol.CanSendRecord();
+        }
+
+        private string CQ_getChatHistory(int authCode, long groupId, long qq, int count)
+        {
+            return ChatHistory.CollectionToList(ChatHistoryHelper.GetHistoriesByCount(groupId, qq, count));
+        }
+
+        private string CQ_getChatHistoryById(int authCode, long parentId, bool isGroup, int messageId)
+        {
+            return ChatHistoryHelper.GetHistoriesByMsgId(parentId, messageId, isGroup ? ChatHistoryType.Group : ChatHistoryType.Private)?.ToNativeBase64() ?? new ChatHistory().ToNativeBase64();
         }
     }
 }

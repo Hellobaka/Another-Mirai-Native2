@@ -59,6 +59,8 @@ namespace Another_Mirai_Native.Native
             "getLoginNick",
             "canSendImage",
             "canSendRecord",
+            "getChatHistory",
+            "getChatHistoryById",
         };
 
         private static int PID => Process.GetCurrentProcess().Id;

@@ -87,7 +87,19 @@ namespace Another_Mirai_Native.DB
             return ls;
         }
 
-        public static ChatHistory GetHistoriesByMsgId(long id, int msgId, ChatHistoryType historyType)
+        public static List<ChatHistory> GetHistoriesByCount(long groupId, long qq, int count)
+        {
+            long id = groupId > 0 ? groupId : qq;
+            ChatHistoryType historyType = groupId > 0 ? ChatHistoryType.Group : ChatHistoryType.Private;
+            using var db = GetInstance(GetDBPath(id, historyType));
+            List<ChatHistory> list = db.Queryable<ChatHistory>()
+                .WhereIF(qq > 0, x => x.SenderID == groupId)
+                .OrderByDescending(x => x.Time).Take(count)
+                .ToList();
+            return list;
+        }
+
+        public static ChatHistory? GetHistoriesByMsgId(long id, int msgId, ChatHistoryType historyType)
         {
             using var db = GetInstance(GetDBPath(id, historyType));
             var item = db.Queryable<ChatHistory>().First(x => x.MsgId == msgId);

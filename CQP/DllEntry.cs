@@ -498,6 +498,20 @@ namespace Another_Mirai_Native.Export
             return true;
         }
 
+        [DllExport(ExportName = "CQ_getChatHistory", CallingConvention = CallingConvention.StdCall)]
+        public static IntPtr CQ_getChatHistory(int authCode, long groupId, long qq, int count)
+        {
+            var r = CallCore(authCode, groupId, qq, count);
+            return r != null ? r.ToString().ToNative() : ChatHistory.CollectionToList(new()).ToNative();
+        }
+
+        [DllExport(ExportName = "CQ_getChatHistoryById", CallingConvention = CallingConvention.StdCall)]
+        public static IntPtr CQ_getChatHistoryById(int authCode, long parentId, bool isGroup, int messageId)
+        {
+            var r = CallCore(authCode, parentId, isGroup, messageId);
+            return r != null ? r.ToString().ToNative() : new ChatHistory().ToNativeBase64().ToNative();
+        }
+
         /// <summary>
         /// 
         /// </summary>
