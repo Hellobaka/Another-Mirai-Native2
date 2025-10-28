@@ -59,7 +59,7 @@
             OnContent="开启" />
         <TextBlock Style="{StaticResource TitleTextBlockStyle}">启用聊天窗口</TextBlock>
         <ui:ToggleSwitch
-            x:Name="ChatEnable"
+            x:Name="EnableChat"
             Margin="0,10"
             OffContent="关闭"
             OnContent="开启"

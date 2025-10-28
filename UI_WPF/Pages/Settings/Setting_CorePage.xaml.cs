@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.UI.Pages
             UseDatabase.IsOn = AppConfig.Instance.UseDatabase;
             DebugMode.IsOn = AppConfig.Instance.DebugMode;
             MessageCacheSize.Text = AppConfig.Instance.MessageCacheSize.ToString();
-            ChatEnable.IsOn = AppConfig.Instance.EnableChat;
+            EnableChat.IsOn = AppConfig.Instance.EnableChat;
             EnableChatImageCache.IsOn = AppConfig.Instance.EnableChatImageCache;
             MaxChatImageCacheFolderSize.Text = AppConfig.Instance.MaxChatImageCacheFolderSize.ToString();
             ActionAfterOfflineSeconds.Text = AppConfig.Instance.ActionAfterOfflineSeconds.ToString();
