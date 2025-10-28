@@ -38,6 +38,8 @@ namespace Another_Mirai_Native.UI
         /// </summary>
         private static Action ExitAction { get; set; } = () => Environment.Exit(0);
 
+        private static Action<CQPluginProxy> DisableAction { get; set; } = (plugin) => PluginManagerProxy.Instance.SetPluginEnabled(plugin, false);
+
         /// <summary>
         /// 构建通知图标的上下文菜单
         /// </summary>
@@ -193,6 +195,7 @@ namespace Another_Mirai_Native.UI
                 {
                     ErrorDetail = detail,
                     ErrorMessage = message,
+                    CanIgnore = canIgnore & proxy != null,
                     IsPrimaryButtonEnabled = canIgnore,
                     DefaultButton = canIgnore ? ContentDialogButton.Primary : ContentDialogButton.Secondary,
                 };
@@ -279,7 +282,17 @@ namespace Another_Mirai_Native.UI
                     if (dialog.Dialog != null)
                     {
                         // 设置关闭按钮的点击事件
-                        dialog.Dialog.CloseButtonClick += (_, _) => ExitAction();
+                        dialog.Dialog.CloseButtonClick += (_, _) =>
+                        {
+                            if (dialog.Dialog.CanIgnore)
+                            {
+                                DisableAction(dialog.Plugin!);
+                            }
+                            else
+                            {
+                                ExitAction();
+                            }
+                        };
                         dialog.Dialog.IsSecondaryButtonEnabled = dialog.Plugin != null;
                         dialog.DialogResult = await dialog.Dialog.ShowAsync();
                     }

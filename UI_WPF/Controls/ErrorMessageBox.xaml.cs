@@ -34,10 +34,13 @@ namespace Another_Mirai_Native.UI.Controls
 
         public string CopyMessage { get; set; } = "";
 
+        public bool CanIgnore { get; set; }
+
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e)
         {
             DetailExpander.Visibility = !string.IsNullOrEmpty(ErrorDetail) ? Visibility.Visible : Visibility.Collapsed;
             DataContext = this;
+            CloseButtonText = CanIgnore ? "禁用插件" : "退出框架";
         }
 
         private void CopyDetail_Click(object sender, RoutedEventArgs e)
