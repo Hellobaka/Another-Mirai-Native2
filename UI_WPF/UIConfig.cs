@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.UI.Models;
 using System;
 using System.Collections.Generic;
 
@@ -14,7 +15,7 @@ namespace Another_Mirai_Native.UI
 
         public static UIConfig Instance { get; set; } = new UIConfig();
 
-        public string Theme { get; set; } = "System";
+        public SystemTheme Theme { get; set; } = SystemTheme.System;
 
         public string AccentColor { get; set; } = "";
 
@@ -30,7 +31,7 @@ namespace Another_Mirai_Native.UI
 
         public bool PopWindowWhenError { get; set; } = true;
 
-        public string WindowMaterial { get; set; } = "None";
+        public WindowMaterial WindowMaterial { get; set; } = WindowMaterial.None;
 
         public bool HardwareRender { get; set; } = false;
 
@@ -38,16 +39,14 @@ namespace Another_Mirai_Native.UI
 
         public List<int> UsedFaceId { get; set; } = new();
 
-        public bool AutoStartup { get; set; }
-
         public bool AutoCloseWindow { get; set; }
 
         public bool AutoStartWebUI { get; set; }
 
         public void LoadConfig()
         {
-            Theme = GetConfig("Theme", "System");
-            WindowMaterial = GetConfig("WindowMaterial", "None");
+            Theme = (SystemTheme)GetConfig("Theme", 0);
+            WindowMaterial = (WindowMaterial)GetConfig("WindowMaterial", 0);
             AccentColor = GetConfig("AccentColor", "");
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);
@@ -57,7 +56,6 @@ namespace Another_Mirai_Native.UI
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);
             PopWindowWhenError = GetConfig("PopWindowWhenError", true);
             HardwareRender = GetConfig("HardwareRender", false);
-            AutoStartup = GetConfig("AutoStartup", false);
             AutoCloseWindow = GetConfig("AutoCloseWindow", false);
             AutoStartWebUI = GetConfig("AutoStartWebUI", false);
             UsedFaceId = GetConfig("UsedFaceId", new List<int>());

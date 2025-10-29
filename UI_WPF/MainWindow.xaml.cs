@@ -3,6 +3,7 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.UI.Models;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -37,11 +38,11 @@ namespace Another_Mirai_Native.UI
             }
             switch (UIConfig.Instance.Theme)
             {
-                case "Light":
+                case SystemTheme.Light:
                     ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
                     break;
 
-                case "Dark":
+                case SystemTheme.Dark:
                     ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
                     break;
 
@@ -198,10 +199,10 @@ namespace Another_Mirai_Native.UI
             ThemeManager.Current.ActualApplicationThemeChanged += (_, _) => RefreshDarkMode();
             Material material = UIConfig.Instance.WindowMaterial switch
             {
-                "Mica" => Material.Mica,
-                "Acrylic" => Material.Acrylic,
-                "Tabbed" => Material.Tabbed,
-                "None" => Material.None,
+                WindowMaterial.Mica => Material.Mica,
+                WindowMaterial.Acrylic => Material.Acrylic,
+                WindowMaterial.Tabbed => Material.Tabbed,
+                WindowMaterial.None => Material.None,
                 _ => Material.None
             };
             TestMenuItem.IsEnabled = AppConfig.Instance.DebugMode;
@@ -353,7 +354,7 @@ namespace Another_Mirai_Native.UI
                          ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark
                          ? ApplicationTheme.Light
                          : ApplicationTheme.Dark;
-            UIConfig.Instance.Theme = ThemeManager.Current.ActualApplicationTheme.ToString();
+            UIConfig.Instance.Theme = (SystemTheme)(int)ThemeManager.Current.ActualApplicationTheme;
             UIConfig.Instance.SetConfig("Theme", UIConfig.Instance.Theme);
         }
 

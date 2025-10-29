@@ -3,94 +3,158 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
+    xmlns:converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="Setting_UISettingPage"
+    d:DataContext="{d:DesignInstance Type=local:Setting_UISettingPage}"
     d:DesignWidth="800"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
+    <Page.Resources>
+        <converters:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </Page.Resources>
+    <ui:SimpleStackPanel Margin="10,0,20,0" Spacing="10">
+        <StackPanel>
+            <!--  启动设置  -->
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        🚀 启动设置
+                    </TextBlock>
+                    <controls:SettingItem_ToggleButton
+                        x:Name="AutoStartup"
+                        Title="开机自动启动"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="系统启动时自动运行程序" />
 
-    <StackPanel Margin="20">
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">开机自动启动</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="AutoStartup"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="AutoStartup_Toggled" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="AutoCloseWindow"
+                        Title="连接成功后自动关闭窗口"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="协议连接成功后最小化主窗口" />
 
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">连接成功后自动关闭窗口</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="AutoCloseWindow"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="AutoCloseWindow_Toggled" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="WebUIAutoStart"
+                        Title="自动启动 WebUI"
+                        OnToggled="SettingItem_Toggled" />
+                </ui:SimpleStackPanel>
+            </Border>
 
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">日志最大数量</TextBlock>
-        <TextBox
-            x:Name="LogMaxCount"
-            Margin="0,10"
-            TextChanged="LogMaxCount_TextChanged" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">日志自动滚动</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="LogAutoScroll"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="LogAutoScroll_Toggled" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">错误等级日志弹出通知</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="ShowBalloonTip"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="ShowBalloonTip_Toggled" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">插件崩溃时主窗口自动弹出</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="ShowWhenError"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="ShowWhenError_Toggled" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">渲染硬件加速</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="HardwareRender"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="SoftWareRender_Toggled" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">自动启动WebUI</TextBlock>
-        <ui:ToggleSwitch
-            x:Name="WebUIAutoStartSelector"
-            Margin="0,10"
-            OffContent="关闭"
-            OnContent="开启"
-            Toggled="WebUIAutoStartSelector_Toggled" />
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题</TextBlock>
-        <ComboBox
-            x:Name="ThemeSelector"
-            Margin="0,10"
-            HorizontalAlignment="Stretch"
-            SelectionChanged="ThemeSelector_SelectionChanged">
-            <ComboBoxItem>深色</ComboBoxItem>
-            <ComboBoxItem>浅色</ComboBoxItem>
-            <ComboBoxItem>跟随系统</ComboBoxItem>
-        </ComboBox>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">窗口材质（Windows11以上可用）</TextBlock>
-        <ComboBox
-            x:Name="MaterialSelector"
-            Margin="0,10"
-            HorizontalAlignment="Stretch"
-            SelectionChanged="MaterialSelector_SelectionChanged">
-            <ComboBoxItem Tag="0">默认</ComboBoxItem>
-            <ComboBoxItem Tag="2">云母/Mica</ComboBoxItem>
-            <ComboBoxItem Tag="3">亚克力/Acrylic</ComboBoxItem>
-            <ComboBoxItem Tag="4">Tabbed</ComboBoxItem>
-        </ComboBox>
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}">主题颜色</TextBlock>
-        <controls:AccentColorPicker />
-    </StackPanel>
+            <!--  日志设置  -->
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock
+                        Margin="0,0,0,15"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        📝 日志设置
+                    </TextBlock>
+                    <controls:SettingItem_TextBox
+                        x:Name="LogItemsCount"
+                        Title="日志最大数量"
+                        Data="1"
+                        DataChanged="SettingItem_TextBox_DataChanged"
+                        Subtitle="内存中保存的日志条目数量限制"
+                        Unit="条" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="LogAutoScroll"
+                        Title="日志自动滚动"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="新日志自动滚动到最新位置" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="ShowBalloonTip"
+                        Title="错误等级日志弹出通知"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="错误级别的日志显示系统通知" />
+                </ui:SimpleStackPanel>
+            </Border>
+
+            <!--  插件设置  -->
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        🔌 插件设置
+                    </TextBlock>
+                    <controls:SettingItem_ToggleButton
+                        x:Name="ShowWhenError"
+                        Title="插件崩溃时主窗口自动弹出"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="插件发生错误时自动显示主窗口" />
+                </ui:SimpleStackPanel>
+            </Border>
+
+            <!--  外观设置  -->
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        🎨 外观设置
+                    </TextBlock>
+
+                    <controls:SettingItem_ComboBox
+                        x:Name="Theme"
+                        Title="主题"
+                        ItemSources="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}"
+                        SelectedItemChanged="ThemeSelector_SelectedItemChanged"
+                        Subtitle="选择应用程序的主题模式" />
+
+                    <controls:SettingItem_ToggleButton
+                        x:Name="HardwareRender"
+                        Title="启动硬件渲染加速"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="关闭时可以降低内存占用" />
+
+                    <controls:SettingItem_ComboBox
+                        x:Name="WindowMaterial"
+                        Title="窗口材质（Windows11以上可用）"
+                        ItemSources="{Binding MaterialValues, Converter={StaticResource EnumToItemsSourceConverter}}"
+                        SelectedItemChanged="ThemeSelector_SelectedItemChanged"
+                        Subtitle="选择窗口的背景材质效果" />
+
+                    <TextBlock FontWeight="Medium" Style="{StaticResource BaseTextBlockStyle}">主题颜色</TextBlock>
+                    <controls:AccentColorPicker Grid.Column="1" />
+                </ui:SimpleStackPanel>
+            </Border>
+        </StackPanel>
+    </ui:SimpleStackPanel>
 </Page>

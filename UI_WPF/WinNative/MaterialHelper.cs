@@ -47,8 +47,8 @@ namespace Another_Mirai_Native.UI
             var osVersion = GetOSVersion();
             if (!(osVersion.dwMajorVersion >= 10 && osVersion.dwBuildNumber >= 22000))
             {
-                UIConfig.Instance.WindowMaterial = "None";
-                UIConfig.Instance.SetConfig("WindowMaterial", "None");
+                UIConfig.Instance.WindowMaterial = Models.WindowMaterial.None;
+                UIConfig.Instance.SetConfig("WindowMaterial", UIConfig.Instance.WindowMaterial);
                 throw new NotSupportedException("更换材质只支持Windows11 21H2版本以上。");
             }
             Background = Brushes.Transparent;
