@@ -19,13 +19,13 @@ namespace Another_Mirai_Native.Model
 
         public long SenderID { get; set; }
 
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         public int MsgId { get; set; }
 
         public bool Recalled { get; set; }
 
-        public string PluginName { get; set; } = "";
+        public string PluginName { get; set; } = string.Empty;
 
         public byte[] ToNative()
         {
