@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Fleck" Version="1.2.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
 		<PackageReference Include="System.Data.SQLite" Version="1.0.119" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />

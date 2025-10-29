@@ -351,7 +351,7 @@
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="XamlAnimatedGif" Version="2.3.0" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.3.1" />
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
@@ -1353,6 +1353,9 @@
     <Compile Update="Controls\ChatDetailListItem_Right.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\SettingItem_TextBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1381,6 +1384,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Themes\" />
   </ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
