@@ -21,10 +21,15 @@
             SelectionChanged="SettingContainer_SelectionChanged">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
-                    Content="UI设置"
+                    Content="UI 设置"
                     IsSelected="True"
                     Tag="Setting_UISettingPage" />
                 <ui:NavigationViewItem Content="核心设置" Tag="Setting_CorePage" />
+                <ui:NavigationViewItem
+                    x:Name="WebUIPage"
+                    Content="WebUI 设置"
+                    Tag="Setting_WebUISettingPage"
+                    Visibility="Collapsed" />
             </ui:NavigationView.MenuItems>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <ui:Frame x:Name="MainFrame" Style="{DynamicResource CascadeDataContextFrame}" />

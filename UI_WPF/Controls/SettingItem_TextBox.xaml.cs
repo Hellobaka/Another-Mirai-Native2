@@ -40,9 +40,20 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(object), typeof(SettingItem_TextBox), new PropertyMetadata(null));
+            DependencyProperty.Register("Data", typeof(object), typeof(SettingItem_TextBox), new PropertyMetadata(null, OnDataSet));
 
+        private static void OnDataSet(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not SettingItem_TextBox textBox
+                || textBox.InitPropertyType != null)
+            {
+                return;
+            }
+            
+            textBox.InitPropertyType = e.NewValue.GetType();
+        }
 
+        public Type InitPropertyType { get; set; }
 
         public string Unit
         {
@@ -54,40 +65,29 @@ namespace Another_Mirai_Native.UI.Controls
         public static readonly DependencyProperty UnitProperty =
             DependencyProperty.Register("Unit", typeof(string), typeof(SettingItem_TextBox), new PropertyMetadata(""));
 
-
-
         public event Action<object, object> DataChanged;
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (TryParse(Input.Text, out object data))
-            {
-                Data = data;
-                DataChanged?.Invoke(this, Data);
-            }
-        }
 
         private bool TryParse(string text, out object data)
         {
             data = null;
-            if (Data is int
+            if (InitPropertyType.Equals(typeof(int))
                 && int.TryParse(text, out int int_value))
             {
                 data = int_value;
                 return true;
             }
-            else if (Data is string s)
+            else if (InitPropertyType.Equals(typeof(string)))
             {
-                data = s;
+                data = Data?.ToString() ?? string.Empty;
                 return true;
             }
-            else if (Data is float
+            else if (InitPropertyType.Equals(typeof(float))
                 && float.TryParse(text, out float float_value))
             {
                 data = float_value;
                 return true;
             }
-            else if (Data is double
+            else if (InitPropertyType.Equals(typeof(double))
                 && double.TryParse(text, out double double_value))
             {
                 data = double_value;
@@ -95,6 +95,15 @@ namespace Another_Mirai_Native.UI.Controls
             }
 
             return false;
+        }
+
+        private void Input_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TryParse(Input.Text, out object data))
+            {
+                Data = data;
+                DataChanged?.Invoke(this, Data);
+            }
         }
     }
 }

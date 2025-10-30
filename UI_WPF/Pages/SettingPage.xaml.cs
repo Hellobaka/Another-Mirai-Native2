@@ -57,7 +57,7 @@ namespace Another_Mirai_Native.UI.Pages
             MainWindow.SetNavigationViewTransparent(SettingContainer);
             foreach (var item in Directory.GetFiles("conf", "*.json"))
             {
-                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json")
+                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json" || item == @"conf\Blazor_Config.json")
                 {
                     continue;
                 }
@@ -73,6 +73,9 @@ namespace Another_Mirai_Native.UI.Pages
                 });
                 MenuList.Add(name);
             }
+#if NET5_0_OR_GREATER
+            WebUIPage.Visibility = System.Windows.Visibility.Visible;
+#endif
         }
     }
 }

@@ -46,8 +46,8 @@
                 x:Name="Input"
                 Grid.Column="0"
                 VerticalContentAlignment="Center"
-                Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=LostFocus, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                TextChanged="TextBox_TextChanged" />
+                LostFocus="Input_LostFocus"
+                Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             <TextBlock
                 Grid.Column="1"
                 Margin="5,0,0,0"

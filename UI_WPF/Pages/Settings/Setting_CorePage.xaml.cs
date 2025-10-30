@@ -215,8 +215,12 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     continue;
                 }
-                property.SetValue(AppConfig.Instance, value);
-                AppConfig.Instance.SetConfig(property.Name, value);
+                var currentValue = property.GetValue(AppConfig.Instance);
+                if (currentValue?.ToString() != value.ToString())
+                {
+                    property.SetValue(AppConfig.Instance, value);
+                    AppConfig.Instance.SetConfig(property.Name, value);
+                }
             }
             AfterConfigSet(textBox.Name, value);
         }
