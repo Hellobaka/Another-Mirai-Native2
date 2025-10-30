@@ -35,6 +35,8 @@ namespace Another_Mirai_Native.UI.Pages
 
         public Array MaterialValues { get; set; } = Enum.GetValues(typeof(WindowMaterial));
 
+        private PropertyInfo[] AppConfigProperties { get; set; } = [];
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (FormLoaded)
@@ -42,6 +44,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             FormLoaded = true;
+            AppConfigProperties = typeof(AppConfig).GetProperties();
             SetConfigToControl();
             AutoStartup.Toggled = CheckHasStartupRegistry();
 #if NET48
@@ -141,8 +144,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var properties = UIConfig.Instance.GetType().GetProperties();
-            foreach (var property in properties)
+            foreach (var property in AppConfigProperties)
             {
                 if (property.Name != toggleButton.Name)
                 {
@@ -160,8 +162,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var properties = UIConfig.Instance.GetType().GetProperties();
-            foreach (var property in properties)
+            foreach (var property in AppConfigProperties)
             {
                 if (property.Name != textBox.Name)
                 {
@@ -184,8 +185,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
-            var properties = UIConfig.Instance.GetType().GetProperties();
-            foreach (var property in properties)
+            foreach (var property in AppConfigProperties)
             {
                 if (property.Name != comboBox.Name)
                 {

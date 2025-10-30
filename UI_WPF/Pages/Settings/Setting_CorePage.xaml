@@ -2,357 +2,349 @@
     x:Class="Another_Mirai_Native.UI.Pages.Setting_CorePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
+    xmlns:converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="Setting_CorePage"
+    d:DataContext="{d:DesignInstance Type=local:Setting_CorePage}"
+    d:DesignWidth="800"
     Loaded="Page_Loaded"
     mc:Ignorable="d">
 
-    <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
-        <StackPanel x:Name="Container">
-            <!--  连接设置  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="连接设置"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">协议自动连接</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="AutoConnect"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启" />
-                    </Grid>
+    <Page.Resources>
+        <converters:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </Page.Resources>
+    <ui:SimpleStackPanel Margin="10,0,20,0" Spacing="10">
+        <!--  连接设置  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    🚀 连接设置
+                </TextBlock>
+                <controls:SettingItem_ToggleButton
+                    x:Name="AutoStartup"
+                    Title="开机自动启动"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="系统启动时自动运行程序" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="200" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">自动连接协议</TextBlock>
-                        <ComboBox x:Name="AutoProtocol" Grid.Column="1" />
-                    </Grid>
+                <controls:SettingItem_ToggleButton
+                    x:Name="AutoConnect"
+                    Title="协议自动连接"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="启动时自动连接协议" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">失去连接时 每次重新连接的间隔时间 (ms)</TextBlock>
-                        <TextBox Name="ReconnectTime" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </Expander>
+                <controls:SettingItem_ComboBox
+                    x:Name="AutoProtocol"
+                    Title="自动连接协议"
+                    ItemSources="{Binding Protocols}"
+                    SelectedItemChanged="SettingItem_ComboBox_SelectedItemChanged"
+                    Subtitle="选择启动时自动连接的协议" />
 
-            <!--  插件管理  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="插件管理"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">框架退出时 插件自动退出</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="PluginExitWhenCoreExit"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启" />
-                    </Grid>
+                <controls:SettingItem_TextBox
+                    x:Name="ReconnectTime"
+                    Title="重新连接间隔时间"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="失去连接时每次重新连接的间隔时间"
+                    Unit="ms" />
+            </ui:SimpleStackPanel>
+        </Border>
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">插件崩溃时自动重启</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="RestartPluginIfDead"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启" />
-                    </Grid>
+        <!--  插件管理  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    🔌 插件管理
+                </TextBlock>
+                <controls:SettingItem_ToggleButton
+                    x:Name="PluginExitWhenCoreExit"
+                    Title="框架退出时插件自动退出"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="主程序退出时自动关闭所有插件" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">核心与插件的心跳间隔 (ms)</TextBlock>
-                        <TextBox Name="HeartBeatInterval" Grid.Column="1" />
-                    </Grid>
+                <controls:SettingItem_ToggleButton
+                    x:Name="RestartPluginIfDead"
+                    Title="插件崩溃时自动重启"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="插件发生异常时自动重新启动" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">调用插件方法的超时时长 (ms)</TextBlock>
-                        <TextBox Name="PluginInvokeTimeout" Grid.Column="1" />
-                    </Grid>
+                <controls:SettingItem_TextBox
+                    x:Name="HeartBeatInterval"
+                    Title="心跳间隔时间"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="核心与插件之间的心跳检测间隔"
+                    Unit="ms" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">插件载入超时时长 (ms)</TextBlock>
-                        <TextBox Name="LoadTimeout" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </Expander>
+                <controls:SettingItem_TextBox
+                    x:Name="PluginInvokeTimeout"
+                    Title="插件方法调用超时"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="调用插件方法的超时时长"
+                    Unit="ms" />
 
-            <!--  数据管理  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="数据管理"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">日志使用数据库</TextBlock>
-                        <ui:ToggleSwitch
-                            Name="UseDatabase"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启" />
-                    </Grid>
+                <controls:SettingItem_TextBox
+                    x:Name="LoadTimeout"
+                    Title="插件载入超时"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="插件载入的超时时长"
+                    Unit="ms" />
+            </ui:SimpleStackPanel>
+        </Border>
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">消息缓存数量</TextBlock>
-                        <TextBox Name="MessageCacheSize" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </Expander>
+        <!--  数据管理  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    💾 数据管理
+                </TextBlock>
+                <controls:SettingItem_ToggleButton
+                    x:Name="UseDatabase"
+                    Title="日志使用数据库"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="将日志存储到数据库而不是文件" />
 
-            <!--  聊天功能  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="聊天功能"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">启用聊天窗口</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="EnableChat"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启"
-                            Toggled="Toggler_Toggled" />
-                    </Grid>
+                <controls:SettingItem_TextBox
+                    x:Name="MessageCacheSize"
+                    Title="消息缓存数量"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="内存中缓存的消息数量限制"
+                    Unit="条" />
+            </ui:SimpleStackPanel>
+        </Border>
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">允许缓存聊天图片</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="EnableChatImageCache"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启"
-                            Toggled="Toggler_Toggled" />
-                    </Grid>
+        <!--  聊天功能  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    💬 聊天功能
+                </TextBlock>
+                <controls:SettingItem_ToggleButton
+                    x:Name="EnableChat"
+                    Title="启用聊天窗口"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="启用内置的聊天窗口功能" />
 
-                    <Grid Margin="0,15,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">缓存文件夹最大大小 (MB)</TextBlock>
-                        <TextBox Name="MaxChatImageCacheFolderSize" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </Expander>
+                <controls:SettingItem_ToggleButton
+                    x:Name="EnableChatImageCache"
+                    Title="允许缓存聊天图片"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="缓存聊天窗口中显示的图片" />
 
-            <!--  调试设置  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="调试设置"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">调试模式</TextBlock>
-                        <ui:ToggleSwitch
-                            x:Name="DebugMode"
-                            Grid.Column="1"
-                            OffContent="关闭"
-                            OnContent="开启" />
-                    </Grid>
-                </StackPanel>
-            </Expander>
+                <controls:SettingItem_TextBox
+                    x:Name="MaxChatImageCacheFolderSize"
+                    Title="缓存文件夹最大大小"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="聊天图片缓存文件夹的最大大小限制"
+                    Unit="MB" />
+            </ui:SimpleStackPanel>
+        </Border>
 
-            <!--  离线操作  -->
-            <Expander
-                Margin="0,0,0,15"
-                Header="离线操作"
-                IsExpanded="true">
-                <StackPanel Margin="15,10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">离线操作等待时间 (秒)</TextBlock>
-                        <TextBox Name="ActionAfterOfflineSeconds" Grid.Column="1" />
-                    </Grid>
+        <!--  调试设置  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    🔧 调试设置
+                </TextBlock>
+                <controls:SettingItem_ToggleButton
+                    x:Name="DebugMode"
+                    Title="调试模式"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="启用调试模式输出详细信息" />
+            </ui:SimpleStackPanel>
+        </Border>
 
-                    <!--  邮件通知  -->
-                    <Expander
-                        Margin="0,15,0,0"
-                        Header="邮件通知"
-                        IsExpanded="false">
-                        <StackPanel Margin="15,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">启用离线后邮件发送</TextBlock>
-                                <ui:ToggleSwitch
-                                    x:Name="OfflineActionSendEmail"
-                                    Grid.Column="1"
-                                    OffContent="关闭"
-                                    OnContent="开启"
-                                    Toggled="Toggler_Toggled" />
-                            </Grid>
+        <!--  离线操作  -->
+        <Border
+            Margin="0,0,0,15"
+            Padding="10"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <ui:SimpleStackPanel Spacing="10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource TitleTextBlockStyle}">
+                    📴 离线操作
+                </TextBlock>
+                <controls:SettingItem_TextBox
+                    x:Name="ActionAfterOfflineSeconds"
+                    Title="离线操作等待时间"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Subtitle="离线后执行操作的等待时间"
+                    Unit="秒" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">SMTP服务器</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPServer" Grid.Column="1" />
-                            </Grid>
+                <!--  邮件通知  -->
+                <Border
+                    Margin="0,15,0,0"
+                    Padding="10"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <ui:SimpleStackPanel Spacing="10">
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource TitleTextBlockStyle}">
+                            📧 邮件通知
+                        </TextBlock>
+                        <controls:SettingItem_ToggleButton
+                            x:Name="OfflineActionSendEmail"
+                            Title="启用离线后邮件发送"
+                            OnToggled="SettingItem_Toggled"
+                            Subtitle="离线后自动发送邮件通知" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="120" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">SMTP服务器端口</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPPort" Grid.Column="1" />
-                            </Grid>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPServer"
+                            Title="SMTP服务器"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="邮件发送的SMTP服务器地址" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">SMTP用户名</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPUsername" Grid.Column="1" />
-                            </Grid>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPPort"
+                            Title="SMTP服务器端口"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="SMTP服务器的端口号"
+                            Unit="" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">SMTP授权码</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPPassport" Grid.Column="1" />
-                            </Grid>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPUsername"
+                            Title="SMTP用户名"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="SMTP服务器的用户名" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">邮件发送方 (邮箱)</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPSenderEmail" Grid.Column="1" />
-                            </Grid>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPPassport"
+                            Title="SMTP授权码"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="SMTP服务器的授权码或密码" />
 
-                            <Grid Margin="0,15,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">邮件接收方 (邮箱)</TextBlock>
-                                <TextBox Name="OfflineActionEmail_SMTPReceiveEmail" Grid.Column="1" />
-                            </Grid>
-                        </StackPanel>
-                    </Expander>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPSenderEmail"
+                            Title="邮件发送方"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="邮件发送方的邮箱地址" />
 
-                    <!--  终端指令  -->
-                    <Expander
-                        Margin="0,15,0,0"
-                        Header="终端指令"
-                        IsExpanded="false">
-                        <StackPanel Margin="15,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">启用离线后执行终端指令</TextBlock>
-                                <ui:ToggleSwitch
-                                    x:Name="OfflineActionRunCommand"
-                                    Grid.Column="1"
-                                    OffContent="关闭"
-                                    OnContent="开启"
-                                    Toggled="Toggler_Toggled" />
-                            </Grid>
+                        <controls:SettingItem_TextBox
+                            x:Name="OfflineActionEmail_SMTPReceiveEmail"
+                            Title="邮件接收方"
+                            DataChanged="SettingItem_TextBox_DataChanged"
+                            Subtitle="邮件接收方的邮箱地址" />
+                    </ui:SimpleStackPanel>
+                </Border>
 
-                            <TextBlock Margin="0,15,0,5" Style="{StaticResource SubtitleTextBlockStyle}">指令列表</TextBlock>
-                            <ListBox
-                                x:Name="OfflineActionCommands"
-                                MinHeight="20"
-                                MaxHeight="150"
-                                Margin="0,0,0,10" />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Button
-                                    x:Name="OfflineActionCommandRemoveButton"
-                                    Grid.Column="0"
-                                    Width="60"
-                                    Margin="0,0,10,0"
-                                    Click="OfflineActionCommandRemoveButton_Click">
-                                    删除
-                                </Button>
-                                <TextBox x:Name="OfflineActionCommandAdd" Grid.Column="1" />
-                                <Button
-                                    x:Name="OfflineActionCommandAddButton"
-                                    Grid.Column="2"
-                                    Width="60"
-                                    Margin="10,0,0,0"
-                                    Click="OfflineActionCommandAddButton_Click">
-                                    添加
-                                </Button>
-                            </Grid>
-                        </StackPanel>
-                    </Expander>
-                </StackPanel>
-            </Expander>
-        </StackPanel>
-    </ScrollViewer>
+                <!--  终端指令  -->
+                <Border
+                    Margin="0,15,0,0"
+                    Padding="10"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <ui:SimpleStackPanel Spacing="10">
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource TitleTextBlockStyle}">
+                            💻 终端指令
+                        </TextBlock>
+                        <controls:SettingItem_ToggleButton
+                            x:Name="OfflineActionRunCommand"
+                            Title="启用离线后执行终端指令"
+                            OnToggled="SettingItem_Toggled"
+                            Subtitle="离线后自动执行预设的终端指令" />
+
+                        <ListBox
+                            x:Name="OfflineActionCommands"
+                            MinHeight="20"
+                            MaxHeight="150"
+                            Margin="0,0,0,10"
+                            IsEnabled="{Binding Toggled, ElementName=OfflineActionRunCommand}" />
+                        <Grid IsEnabled="{Binding Toggled, ElementName=OfflineActionRunCommand}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                x:Name="OfflineActionCommandRemoveButton"
+                                Grid.Column="0"
+                                Width="60"
+                                Margin="0,0,10,0"
+                                Click="OfflineActionCommandRemoveButton_Click">
+                                删除
+                            </Button>
+                            <TextBox x:Name="OfflineActionCommandAdd" Grid.Column="1" />
+                            <Button
+                                x:Name="OfflineActionCommandAddButton"
+                                Grid.Column="2"
+                                Width="60"
+                                Margin="10,0,0,0"
+                                Click="OfflineActionCommandAddButton_Click">
+                                添加
+                            </Button>
+                        </Grid>
+                    </ui:SimpleStackPanel>
+                </Border>
+            </ui:SimpleStackPanel>
+        </Border>
+    </ui:SimpleStackPanel>
 </Page>

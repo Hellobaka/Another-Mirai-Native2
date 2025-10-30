@@ -40,9 +40,11 @@
         <ui:ToggleSwitch
             x:Name="Selector"
             Grid.Column="1"
-            Width="80"
+            Width="40"
             HorizontalAlignment="Right"
             IsOn="{Binding Toggled, RelativeSource={RelativeSource AncestorType=ContentControl}, Mode=TwoWay}"
+            OffContent=""
+            OnContent=""
             Toggled="ToggleSwitch_Toggled" />
     </Grid>
 </ContentControl>

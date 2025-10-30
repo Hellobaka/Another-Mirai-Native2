@@ -1,6 +1,9 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.UI.Controls;
+using ModernWpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -13,14 +16,17 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// Setting_CorePage.xaml 的交互逻辑
     /// </summary>
-    public partial class Setting_CorePage : Page
+    public partial class Setting_CorePage : Page, INotifyPropertyChanged
     {
         public Setting_CorePage()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
-        public bool FormLoaded { get; set; }
+        public string[] Protocols { get; set; }
+
+        private bool FormLoaded { get; set; }
 
         private PropertyInfo[] AppConfigProperties { get; set; } = [];
 
@@ -30,41 +36,72 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return;
             }
+            AppConfigProperties = typeof(AppConfig).GetProperties();
+            Protocols = ProtocolManager.Protocols.Select(x => x.Name).ToArray();
+            SetConfigToControl();
             InitDisplay();
             FormLoaded = true;
-            AppConfigProperties = typeof(AppConfig).GetProperties();
+
+            OnPropertyChanged(nameof(Protocols));
+        }
+
+        private void SetConfigToControl()
+        {
+            var properties = AppConfig.Instance.GetType().GetProperties();
+            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                var control = field.GetValue(this);
+                if (!(control?.GetType().Name ?? "").StartsWith("SettingItem_"))
+                {
+                    continue;
+                }
+                SettingItem_ComboBox? comboBox = null;
+                SettingItem_TextBox? textBox = null;
+                SettingItem_ToggleButton? toggleButton = null;
+                if (control is SettingItem_ComboBox c)
+                {
+                    comboBox = c;
+                }
+                else if (control is SettingItem_TextBox t)
+                {
+                    textBox = t;
+                }
+                else if (control is SettingItem_ToggleButton b)
+                {
+                    toggleButton = b;
+                }
+                else
+                {
+                    continue;
+                }
+                foreach (var property in properties)
+                {
+                    if (property.Name == field.Name)
+                    {
+                        object? value = property.GetValue(AppConfig.Instance);
+                        if (value == null)
+                        {
+                            break;
+                        }
+                        if (comboBox != null)
+                        {
+                            comboBox.SelectedItem = value;
+                        }
+                        else if (textBox != null)
+                        {
+                            textBox.Data = value;
+                        }
+                        else if (toggleButton != null && value is bool b)
+                        {
+                            toggleButton.Toggled = b;
+                        }
+                    }
+                }
+            }
         }
 
         private void InitDisplay()
         {
-            AutoProtocol.Items.Clear();
-            foreach (var item in ProtocolManager.Protocols)
-            {
-                AutoProtocol.Items.Add(item.Name);
-            }
-            AutoConnect.IsOn = AppConfig.Instance.AutoConnect;
-            AutoProtocol.Text = AppConfig.Instance.AutoProtocol;
-            PluginExitWhenCoreExit.IsOn = AppConfig.Instance.PluginExitWhenCoreExit;
-            RestartPluginIfDead.IsOn = AppConfig.Instance.RestartPluginIfDead;
-            ReconnectTime.Text = AppConfig.Instance.ReconnectTime.ToString();
-            HeartBeatInterval.Text = AppConfig.Instance.HeartBeatInterval.ToString();
-            PluginInvokeTimeout.Text = AppConfig.Instance.PluginInvokeTimeout.ToString();
-            LoadTimeout.Text = AppConfig.Instance.LoadTimeout.ToString();
-            UseDatabase.IsOn = AppConfig.Instance.UseDatabase;
-            DebugMode.IsOn = AppConfig.Instance.DebugMode;
-            MessageCacheSize.Text = AppConfig.Instance.MessageCacheSize.ToString();
-            EnableChat.IsOn = AppConfig.Instance.EnableChat;
-            EnableChatImageCache.IsOn = AppConfig.Instance.EnableChatImageCache;
-            MaxChatImageCacheFolderSize.Text = AppConfig.Instance.MaxChatImageCacheFolderSize.ToString();
-            ActionAfterOfflineSeconds.Text = AppConfig.Instance.ActionAfterOfflineSeconds.ToString();
-            OfflineActionEmail_SMTPServer.Text = AppConfig.Instance.OfflineActionEmail_SMTPServer;
-            OfflineActionEmail_SMTPPort.Text = AppConfig.Instance.OfflineActionEmail_SMTPPort.ToString();
-            OfflineActionEmail_SMTPSenderEmail.Text = AppConfig.Instance.OfflineActionEmail_SMTPSenderEmail;
-            OfflineActionEmail_SMTPUsername.Text = AppConfig.Instance.OfflineActionEmail_SMTPUsername;
-            OfflineActionEmail_SMTPPassport.Text = AppConfig.Instance.OfflineActionEmail_SMTPPassport;
-            OfflineActionEmail_SMTPReceiveEmail.Text = AppConfig.Instance.OfflineActionEmail_SMTPReceiveEmail;
-            OfflineActionSendEmail.IsOn = AppConfig.Instance.OfflineActionSendEmail;
-            OfflineActionRunCommand.IsOn = AppConfig.Instance.OfflineActionRunCommand;
             OfflineActionCommandAdd.Text = string.Empty;
             OfflineActionCommands.Items.Clear();
             foreach (var item in AppConfig.Instance.OfflineActionCommands)
@@ -75,132 +112,6 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 OfflineActionCommands.Items.Add(item);
             }
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(Container); i++)
-            {
-                var child = VisualTreeHelper.GetChild(Container, i);
-                if (child == null)
-                {
-                    continue;
-                }
-                if (child is TextBox textBox)
-                {
-                    textBox.TextChanged -= TextBox_TextChanged;
-                    textBox.TextChanged += TextBox_TextChanged;
-                }
-                else if (child is ModernWpf.Controls.ToggleSwitch toggler)
-                {
-                    toggler.Toggled -= Toggler_Toggled;
-                    toggler.Toggled += Toggler_Toggled;
-                }
-                else if (child is ComboBox comboBox)
-                {
-                    comboBox.SelectionChanged -= ComboBox_SelectionChanged;
-                    comboBox.SelectionChanged += ComboBox_SelectionChanged;
-                }
-            }
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox)
-            {
-                AppConfig.Instance.SetConfig(comboBox.Name, e.AddedItems[0]?.ToString());
-                UpdateAppConfig(comboBox.Name, e.AddedItems[0]?.ToString());
-            }
-        }
-
-        private void Toggler_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (sender is ModernWpf.Controls.ToggleSwitch toggleSwitch)
-            {
-                AppConfig.Instance.SetConfig(toggleSwitch.Name, toggleSwitch.IsOn);
-                UpdateAppConfig(toggleSwitch.Name, toggleSwitch.IsOn);
-            }
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox textBox)
-            {
-                var property = AppConfigProperties.FirstOrDefault(x => x.Name == textBox.Name);
-                if (property != null && TryParse(textBox.Text, property.PropertyType, out object value))
-                {
-                    property.SetValue(AppConfig.Instance, value);
-                    AppConfig.Instance.SetConfig(textBox.Name, value);
-                }
-            }
-        }
-
-        private static bool TryParse(string input, Type type, out object value)
-        {
-            value = input;
-            if (type.Name == "Int32")
-            {
-                if (int.TryParse(input, out int v))
-                {
-                    value = v;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (type.Name == "UInt16")
-            {
-                if (ushort.TryParse(input, out ushort v))
-                {
-                    value = v;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (type.Name == "Int64")
-            {
-                if (long.TryParse(input, out long v))
-                {
-                    value = v;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (type.Name == "Single")
-            {
-                if (float.TryParse(input, out float v))
-                {
-                    value = v;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (type.Name == "Double")
-            {
-                if (double.TryParse(input, out double v))
-                {
-                    value = v;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private void UpdateAppConfig(string key, object? value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-            var property = AppConfigProperties.FirstOrDefault(x => x.Name == key);
-            property?.SetValue(AppConfig.Instance, value);
         }
 
         private void OfflineActionCommandAddButton_Click(object sender, RoutedEventArgs e)
@@ -252,8 +163,77 @@ namespace Another_Mirai_Native.UI.Pages
                 }
                 commands.Add(item.ToString());
             }
+            AppConfig.Instance.OfflineActionCommands = commands;
             AppConfig.Instance.SetConfig("OfflineActionCommands", commands);
-            UpdateAppConfig("OfflineActionCommands", commands);
         }
+
+        private void SettingItem_Toggled(object sender, bool value)
+        {
+            if (!FormLoaded || sender is not SettingItem_ToggleButton toggleButton)
+            {
+                return;
+            }
+            foreach (var property in AppConfigProperties)
+            {
+                if (property.Name != toggleButton.Name)
+                {
+                    continue;
+                }
+                property.SetValue(AppConfig.Instance, value);
+                AppConfig.Instance.SetConfig(property.Name, value);
+            }
+            AfterConfigSet(toggleButton.Name, value);
+        }
+
+        private void SettingItem_ComboBox_SelectedItemChanged(object sender, object value)
+        {
+            if (!FormLoaded || sender is not SettingItem_ComboBox comboBox)
+            {
+                return;
+            }
+            foreach (var property in AppConfigProperties)
+            {
+                if (property.Name != comboBox.Name)
+                {
+                    continue;
+                }
+                property.SetValue(AppConfig.Instance, value);
+                AppConfig.Instance.SetConfig(property.Name, value);
+            }
+            AfterConfigSet(comboBox.Name, value);
+        }
+
+        private void SettingItem_TextBox_DataChanged(object sender, object value)
+        {
+            if (!FormLoaded || sender is not SettingItem_TextBox textBox)
+            {
+                return;
+            }
+            foreach (var property in AppConfigProperties)
+            {
+                if (property.Name != textBox.Name)
+                {
+                    continue;
+                }
+                property.SetValue(AppConfig.Instance, value);
+                AppConfig.Instance.SetConfig(property.Name, value);
+            }
+            AfterConfigSet(textBox.Name, value);
+        }
+
+        private void AfterConfigSet(string name, object value)
+        {
+            switch (name)
+            {
+
+                default:
+                    break;
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName) =>
+                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

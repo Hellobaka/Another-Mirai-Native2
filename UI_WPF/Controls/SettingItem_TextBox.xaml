@@ -14,7 +14,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid x:Name="TextPanel">
             <Grid.RowDefinitions>
@@ -37,7 +37,7 @@
                 Text="{Binding Subtitle, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                 Visibility="{Binding Subtitle, RelativeSource={RelativeSource AncestorType=ContentControl}, Converter={StaticResource StringToVisibilityConverter}}" />
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" MinWidth="160">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="auto" />
