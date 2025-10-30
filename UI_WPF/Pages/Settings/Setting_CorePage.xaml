@@ -53,7 +53,7 @@
                     x:Name="ReconnectTime"
                     Title="重新连接间隔时间"
                     DataChanged="SettingItem_TextBox_DataChanged"
-                    Subtitle="失去连接时每次重新连接的间隔时间"
+                    Subtitle="协议失去连接时每次重新连接的间隔时间"
                     Unit="ms" />
             </ui:SimpleStackPanel>
         </Border>
@@ -97,14 +97,12 @@
                     x:Name="PluginInvokeTimeout"
                     Title="插件方法调用超时"
                     DataChanged="SettingItem_TextBox_DataChanged"
-                    Subtitle="调用插件方法的超时时长"
                     Unit="ms" />
 
                 <controls:SettingItem_TextBox
                     x:Name="LoadTimeout"
                     Title="插件载入超时"
                     DataChanged="SettingItem_TextBox_DataChanged"
-                    Subtitle="插件载入的超时时长"
                     Unit="ms" />
             </ui:SimpleStackPanel>
         </Border>
@@ -129,7 +127,7 @@
                     x:Name="UseDatabase"
                     Title="日志使用数据库"
                     OnToggled="SettingItem_Toggled"
-                    Subtitle="将日志存储到数据库而不是文件" />
+                    Subtitle="是否将日志存储到数据库" />
 
                 <controls:SettingItem_TextBox
                     x:Name="MessageCacheSize"
@@ -159,8 +157,7 @@
                 <controls:SettingItem_ToggleButton
                     x:Name="EnableChat"
                     Title="启用聊天窗口"
-                    OnToggled="SettingItem_Toggled"
-                    Subtitle="启用内置的聊天窗口功能" />
+                    OnToggled="SettingItem_Toggled" />
 
                 <controls:SettingItem_ToggleButton
                     x:Name="EnableChatImageCache"
@@ -243,45 +240,38 @@
                         <controls:SettingItem_ToggleButton
                             x:Name="OfflineActionSendEmail"
                             Title="启用离线后邮件发送"
-                            OnToggled="SettingItem_Toggled"
-                            Subtitle="离线后自动发送邮件通知" />
+                            OnToggled="SettingItem_Toggled" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPServer"
                             Title="SMTP服务器"
-                            DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="邮件发送的SMTP服务器地址" />
+                            DataChanged="SettingItem_TextBox_DataChanged" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPPort"
                             Title="SMTP服务器端口"
                             DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="SMTP服务器的端口号"
                             Unit="" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPUsername"
                             Title="SMTP用户名"
-                            DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="SMTP服务器的用户名" />
+                            DataChanged="SettingItem_TextBox_DataChanged" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPPassport"
                             Title="SMTP授权码"
-                            DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="SMTP服务器的授权码或密码" />
+                            DataChanged="SettingItem_TextBox_DataChanged" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPSenderEmail"
-                            Title="邮件发送方"
-                            DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="邮件发送方的邮箱地址" />
+                            Title="邮件发送方邮箱"
+                            DataChanged="SettingItem_TextBox_DataChanged" />
 
                         <controls:SettingItem_TextBox
                             x:Name="OfflineActionEmail_SMTPReceiveEmail"
-                            Title="邮件接收方"
-                            DataChanged="SettingItem_TextBox_DataChanged"
-                            Subtitle="邮件接收方的邮箱地址" />
+                            Title="邮件接收方邮箱"
+                            DataChanged="SettingItem_TextBox_DataChanged" />
                     </ui:SimpleStackPanel>
                 </Border>
 
@@ -304,8 +294,7 @@
                         <controls:SettingItem_ToggleButton
                             x:Name="OfflineActionRunCommand"
                             Title="启用离线后执行终端指令"
-                            OnToggled="SettingItem_Toggled"
-                            Subtitle="离线后自动执行预设的终端指令" />
+                            OnToggled="SettingItem_Toggled" />
 
                         <ListBox
                             x:Name="OfflineActionCommands"

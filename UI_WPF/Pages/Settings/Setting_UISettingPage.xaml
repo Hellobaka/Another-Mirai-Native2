@@ -75,18 +75,18 @@
                         Title="日志最大数量"
                         Data="1"
                         DataChanged="SettingItem_TextBox_DataChanged"
-                        Subtitle="内存中保存的日志条目数量限制"
+                        Subtitle="日志窗口显示的日志条目数量限制"
                         Unit="条" />
                     <controls:SettingItem_ToggleButton
                         x:Name="LogAutoScroll"
                         Title="日志自动滚动"
                         OnToggled="SettingItem_Toggled"
-                        Subtitle="新日志自动滚动到最新位置" />
+                        Subtitle="新日志添加自动滚动到置底" />
                     <controls:SettingItem_ToggleButton
                         x:Name="ShowBalloonTip"
                         Title="错误等级日志弹出通知"
                         OnToggled="SettingItem_Toggled"
-                        Subtitle="错误级别的日志显示系统通知" />
+                        Subtitle="Error、Warning 级别的日志显示系统通知" />
                 </ui:SimpleStackPanel>
             </Border>
 
@@ -109,8 +109,7 @@
                     <controls:SettingItem_ToggleButton
                         x:Name="ShowWhenError"
                         Title="插件崩溃时主窗口自动弹出"
-                        OnToggled="SettingItem_Toggled"
-                        Subtitle="插件发生错误时自动显示主窗口" />
+                        OnToggled="SettingItem_Toggled" />
                 </ui:SimpleStackPanel>
             </Border>
 
