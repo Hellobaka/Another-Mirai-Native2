@@ -46,7 +46,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private static void EditStartupProgram(bool add)
         {
-            string name = "";
+            string name = "Another-Mirai-Native2";
 #if NET48
             string? path = Assembly.GetEntryAssembly().Location;
 #else
