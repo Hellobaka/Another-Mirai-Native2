@@ -76,6 +76,12 @@ namespace Another_Mirai_Native.UI.Controls
                 data = int_value;
                 return true;
             }
+            else if (InitPropertyType.Equals(typeof(long))
+                && long.TryParse(text, out long long_value))
+            {
+                data = long_value;
+                return true;
+            }
             else if (InitPropertyType.Equals(typeof(string)))
             {
                 data = Data?.ToString() ?? string.Empty;

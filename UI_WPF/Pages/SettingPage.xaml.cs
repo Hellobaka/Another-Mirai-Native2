@@ -55,24 +55,6 @@ namespace Another_Mirai_Native.UI.Pages
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             MainWindow.SetNavigationViewTransparent(SettingContainer);
-            foreach (var item in Directory.GetFiles("conf", "*.json"))
-            {
-                if (string.IsNullOrEmpty(item) || item == @"conf\Config.json" || item == @"conf\UIConfig.json" || item == @"conf\Blazor_Config.json")
-                {
-                    continue;
-                }
-                string name = item.Replace(@"conf\", "").Replace(".json", "");
-                if (MenuList.Any(x => x == name))
-                {
-                    continue;
-                }
-                SettingContainer.MenuItems.Add(new ModernWpf.Controls.NavigationViewItem
-                {
-                    Content = name,
-                    Tag = item
-                });
-                MenuList.Add(name);
-            }
 #if NET5_0_OR_GREATER
             WebUIPage.Visibility = System.Windows.Visibility.Visible;
 #endif

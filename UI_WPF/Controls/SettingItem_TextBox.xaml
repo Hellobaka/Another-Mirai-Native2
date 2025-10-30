@@ -46,6 +46,7 @@
                 x:Name="Input"
                 Grid.Column="0"
                 VerticalContentAlignment="Center"
+                ui:TextBoxHelper.IsDeleteButtonVisible="False"
                 LostFocus="Input_LostFocus"
                 Text="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             <TextBlock

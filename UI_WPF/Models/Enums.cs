@@ -27,4 +27,11 @@ namespace Another_Mirai_Native.UI.Models
         Acrylic,
         Tabbed
     }
+
+    public enum LagrangeCorePlatform
+    {
+        Windows = 0,
+        MacOs = 1,
+        Linux = 2
+    }
 }

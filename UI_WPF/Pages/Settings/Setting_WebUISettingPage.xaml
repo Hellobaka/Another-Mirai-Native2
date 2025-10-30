@@ -22,7 +22,7 @@
             <Border
                 Margin="0,0,0,10"
                 Padding="10"
-                Background="{DynamicResource SystemControlBackgroundAltMediumBrush}"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                 BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                 BorderThickness="1"
                 CornerRadius="8">
