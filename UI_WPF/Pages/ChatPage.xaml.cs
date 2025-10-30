@@ -427,18 +427,11 @@ namespace Another_Mirai_Native.UI.Pages
                 // 遍历查询消息ID相同的, 并跳转
                 foreach (var control in MessageContainer.Children)
                 {
-                    if (control is ChatDetailListItem_Left left
-                        && left.MsgId == msgId)
+                    if (control is ChatDetailListItem detail
+                        && detail.MsgId == msgId)
                     {
                         await Dispatcher.Yield();
-                        left.BringIntoView();
-                        break;
-                    }
-                    else if (control is ChatDetailListItem_Right right
-                        && right.MsgId == msgId)
-                    {
-                        await Dispatcher.Yield();
-                        right.BringIntoView();
+                        detail.BringIntoView();
                         break;
                     }
                 }
@@ -514,21 +507,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="isRemove">是否需要清理消息至最少</param>
         private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
         {
-            switch (item.DetailItemType)
-            {
-                case DetailItemType.Notice:
-                    MessageContainer.Children.Add(BuildMiddleBlock(item));
-                    break;
-
-                case DetailItemType.Receive:
-                    MessageContainer.Children.Add(BuildLeftBlock(item));
-                    break;
-
-                default:
-                case DetailItemType.Send:
-                    MessageContainer.Children.Add(BuildRightBlock(item));
-                    break;
-            }
+            MessageContainer.Children.Add(BuildChatDetailItem(item));
             DetailList.Add(item);
 
             if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
@@ -769,13 +748,20 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// 构建左侧消息块
+        /// 构建统一的消息块（支持 Send/Receive/Notice 三种类型）
         /// </summary>
         /// <param name="item">消息模型</param>
         /// <returns>消息块元素</returns>
-        private UIElement BuildLeftBlock(ChatDetailItemViewModel item)
+        private UIElement BuildChatDetailItem(ChatDetailItemViewModel item)
         {
-            return new ChatDetailListItem_Left()
+            HorizontalAlignment alignment = item.DetailItemType switch
+            {
+                DetailItemType.Send => HorizontalAlignment.Right,
+                DetailItemType.Notice => HorizontalAlignment.Center,
+                _ => HorizontalAlignment.Left  // Receive
+            };
+
+            return new ChatDetailListItem()
             {
                 Message = item.Content,
                 DetailItemType = item.DetailItemType,
@@ -787,50 +773,7 @@ namespace Another_Mirai_Native.UI.Pages
                 MsgId = item.MsgId,
                 GUID = item.GUID,
                 MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(0, 10, 0, 10),
-                Recalled = item.Recalled,
-            };
-        }
-
-        /// <summary>
-        /// 构建中间消息块
-        /// </summary>
-        /// <param name="item">消息模型</param>
-        /// <returns>消息块元素</returns>
-        private UIElement BuildMiddleBlock(ChatDetailItemViewModel item)
-        {
-            return new ChatDetailListItem_Center()
-            {
-                Message = item.Content,
-                DetailItemType = item.DetailItemType,
-                GUID = item.GUID,
-                MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
-            };
-        }
-
-        /// <summary>
-        /// 构建右侧消息块
-        /// </summary>
-        /// <param name="item">消息模型</param>
-        /// <returns>消息块元素</returns>
-        private UIElement BuildRightBlock(ChatDetailItemViewModel item)
-        {
-            return new ChatDetailListItem_Right()
-            {
-                Message = item.Content,
-                DetailItemType = item.DetailItemType,
-                ParentType = item.AvatarType,
-                DisplayName = item.Nick,
-                Time = item.Time,
-                Id = item.Id,
-                ParentId = SelectedItem.Id,
-                MsgId = item.MsgId,
-                GUID = item.GUID,
-                MaxWidth = ActualWidth * 0.6,
-                HorizontalAlignment = HorizontalAlignment.Right,
+                HorizontalAlignment = alignment,
                 Margin = new Thickness(0, 10, 0, 10),
                 Recalled = item.Recalled,
             };
@@ -928,15 +871,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             foreach (UIElement item in MessageContainer.Children)
             {
-                if (item is ChatDetailListItem_Center center && center.GUID == guid)
-                {
-                    return true;
-                }
-                else if (item is ChatDetailListItem_Right right && right.GUID == guid)
-                {
-                    return true;
-                }
-                else if (item is ChatDetailListItem_Left left && left.GUID == guid)
+                if (item is ChatDetailListItem detail && detail.GUID == guid)
                 {
                     return true;
                 }
@@ -1012,21 +947,11 @@ namespace Another_Mirai_Native.UI.Pages
             FrameworkElement? scrollItem = null;
             foreach (var item in list)
             {
-                UIElement lastElement;
-                if (item.SenderID == AppConfig.Instance.CurrentQQ)
-                {
-                    lastElement = BuildRightBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                }
-                else if (item.Type == ChatHistoryType.Notice)
-                {
-                    lastElement = BuildMiddleBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                }
-                else
-                {
-                    lastElement = BuildLeftBlock(await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
-                }
+                var viewModel = await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item);
+                UIElement lastElement = BuildChatDetailItem(viewModel);
+
                 MessageContainer.Children.Insert(0, lastElement);
-                DetailList.Insert(0, await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item));
+                DetailList.Insert(0, viewModel);
                 if (item.MsgId == msgId)
                 {
                     scrollItem = (FrameworkElement)lastElement;
@@ -1437,9 +1362,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 foreach (UIElement item in MessageContainer.Children)
                 {
-                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    if (item is ChatDetailListItem detail && detail.GUID == guid)
                     {
-                        right.SendFail();
+                        detail.SendFail();
                         return;
                     }
                 }
@@ -1461,9 +1386,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 foreach (UIElement item in MessageContainer.Children)
                 {
-                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    if (item is ChatDetailListItem detail && detail.GUID == guid)
                     {
-                        right.UpdateSendStatus(enable);
+                        detail.UpdateSendStatus(enable);
                         return;
                     }
                 }
@@ -1471,10 +1396,10 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// 更新消息发送状态
+        /// 更新消息ID
         /// </summary>
         /// <param name="guid">消息GUID</param>
-        /// <param name="enable">正在发送</param>
+        /// <param name="msgId">消息ID</param>
         private void UpdateMessageId(string? guid, int msgId)
         {
             if (string.IsNullOrEmpty(guid))
@@ -1485,9 +1410,9 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 foreach (UIElement item in MessageContainer.Children)
                 {
-                    if (item is ChatDetailListItem_Right right && right.GUID == guid)
+                    if (item is ChatDetailListItem detail && detail.GUID == guid)
                     {
-                        right.UpdateMessageId(msgId);
+                        detail.UpdateMessageId(msgId);
                         return;
                     }
                 }

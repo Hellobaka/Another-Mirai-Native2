@@ -1,4 +1,6 @@
 ﻿using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.UI.ViewModel;
 using Another_Mirai_Native.UI.Windows;
 using Microsoft.Win32;
 using ModernWpf.Controls;
@@ -105,54 +107,33 @@ namespace Another_Mirai_Native.UI.Controls
                 if (AvatarContextMenu.PlacementTarget is FrameworkElement targetElement)
                 {
                     // 当为发送者时禁用at按钮
-                    (AvatarContextMenu.Items[3] as MenuItem).IsEnabled = targetElement.DataContext is not ChatDetailListItem_Right right;
+                    (AvatarContextMenu.Items[3] as MenuItem).IsEnabled = targetElement.DataContext is ChatDetailListItem detail && detail.DetailItemType != DetailItemType.Send;
                 }
             };
 
             (AvatarContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_CopyNick(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_CopyNick(sender, e);
-                }
+                detail.ContextMenu_CopyNick(sender, e);
             };
             (AvatarContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_CopyId(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_CopyId(sender, e);
-                }
+                detail.ContextMenu_CopyId(sender, e);
             };
             (AvatarContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_At(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_At(sender, e);
-                }
+                detail.ContextMenu_At(sender, e);
             };
 
             return AvatarContextMenu;
@@ -178,82 +159,52 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 var targetElement = DetailContextMenu.PlacementTarget as FrameworkElement;
                 // 当为发送者时禁用at按钮
-                (DetailContextMenu.Items[2] as MenuItem).IsEnabled = targetElement.DataContext is not ChatDetailListItem_Right right;
+                bool isEnabled = true;
+                if (targetElement?.DataContext is ChatDetailListItem detail)
+                {
+                    isEnabled = detail.DetailItemType != DetailItemType.Send;
+                }
+                (DetailContextMenu.Items[2] as MenuItem).IsEnabled = isEnabled;
             };
             (DetailContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_CopyMessage(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_CopyMessage(sender, e);
-                }
+                detail.ContextMenu_CopyMessage(sender, e);
             };
             (DetailContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_Repeat(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_Repeat(sender, e);
-                }
+                detail.ContextMenu_Repeat(sender, e);
             };
             (DetailContextMenu.Items[2] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_At(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_At(sender, e);
-                }
+                detail.ContextMenu_At(sender, e);
             };
             (DetailContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_Reply(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_Reply(sender, e);
-                }
+                detail.ContextMenu_Reply(sender, e);
             };
             (DetailContextMenu.Items[5] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_Recall(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_Recall(sender, e);
-                }
+                detail.ContextMenu_Recall(sender, e);
             };
 
             return DetailContextMenu;
@@ -630,18 +581,11 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
                 {
                     return;
                 }
-                if (target.DataContext is ChatDetailListItem_Right right)
-                {
-                    right.ContextMenu_Repeat(sender, e);
-                }
-                else if (target.DataContext is ChatDetailListItem_Left left)
-                {
-                    left.ContextMenu_Repeat(sender, e);
-                }
+                detail.ContextMenu_Repeat(sender, e);
             };
 
             return ImageContextMenu;

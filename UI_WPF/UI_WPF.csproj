@@ -1347,12 +1347,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\ChatDetailListItem_Center.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\ChatDetailListItem_Right.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Controls\SettingItem_TextBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
