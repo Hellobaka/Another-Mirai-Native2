@@ -18,7 +18,7 @@
         <converters:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
     </Page.Resources>
-    <ui:SimpleStackPanel Margin="10,0,20,0" Spacing="10">
+    <ui:SimpleStackPanel Margin="10,10,20,0" Spacing="10">
         <!--  连接设置  -->
         <Border
             Margin="0,0,0,15"
@@ -35,11 +35,6 @@
                     Style="{StaticResource TitleTextBlockStyle}">
                     🚀 连接设置
                 </TextBlock>
-                <controls:SettingItem_ToggleButton
-                    x:Name="AutoStartup"
-                    Title="开机自动启动"
-                    OnToggled="SettingItem_Toggled"
-                    Subtitle="系统启动时自动运行程序" />
 
                 <controls:SettingItem_ToggleButton
                     x:Name="AutoConnect"

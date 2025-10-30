@@ -19,6 +19,6 @@
     </Page.Resources>
     <ui:SimpleStackPanel
         x:Name="ProtocolConfigContainer"
-        Margin="10,0,20,0"
+        Margin="10,10,20,0"
         Spacing="10" />
 </Page>
