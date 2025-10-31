@@ -7,7 +7,7 @@
     <LangVersion>12</LangVersion>
     <RootNamespace>Another_Mirai_Native.Protocol.OneBot</RootNamespace>
     <Platforms>AnyCPU;x86</Platforms>
-	  <Version>2.9.1</Version>
+	  <Version>2.9.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
