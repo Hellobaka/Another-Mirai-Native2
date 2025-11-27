@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// ChatPage.xaml 的交互逻辑
     /// </summary>
-    public partial class ChatPage : Page
+    public partial class ChatPage : Page, IDisposable
     {
         // 服务实例
         private readonly ICacheService _cacheService;
@@ -42,6 +42,9 @@ namespace Another_Mirai_Native.UI.Pages
 
         // ViewModel
         private ChatPageViewModel? _viewModel;
+        
+        // 标记是否已释放资源
+        private bool _disposed;
 
         public ChatPage()
         {
@@ -62,6 +65,9 @@ namespace Another_Mirai_Native.UI.Pages
             _viewModel.ClearMessageRequested += ViewModel_ClearMessageRequested;
             _viewModel.ClearSendBoxRequested += ViewModel_ClearSendBoxRequested;
             _viewModel.ScrollToBottomRequested += ViewModel_ScrollToBottomRequested;
+            
+            // 订阅Unloaded事件以清理资源
+            Unloaded += ChatPage_Unloaded;
             
             Instance = this;
             Page_Loaded(null, null);
@@ -1084,6 +1090,63 @@ namespace Another_Mirai_Native.UI.Pages
         private void UpdateMessageId(string? guid, int msgId)
         {
             _messageContainerManager?.UpdateMessageId(guid, msgId);
+        }
+
+        /// <summary>
+        /// 页面卸载事件处理，取消所有事件订阅以防止内存泄漏
+        /// </summary>
+        private void ChatPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Dispose();
+        }
+
+        /// <summary>
+        /// 释放资源，取消所有事件订阅
+        /// </summary>
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            // 取消ViewModel事件订阅
+            if (_viewModel != null)
+            {
+                _viewModel.SelectedChatItemChanged -= ViewModel_SelectedChatItemChanged;
+                _viewModel.SendMessageRequested -= ViewModel_SendMessageRequested;
+                _viewModel.ClearMessageRequested -= ViewModel_ClearMessageRequested;
+                _viewModel.ClearSendBoxRequested -= ViewModel_ClearSendBoxRequested;
+                _viewModel.ScrollToBottomRequested -= ViewModel_ScrollToBottomRequested;
+            }
+
+            // 取消PluginManagerProxy事件订阅
+            PluginManagerProxy.OnGroupBan -= PluginManagerProxy_OnGroupBan;
+            PluginManagerProxy.OnGroupAdded -= PluginManagerProxy_OnGroupAdded;
+            PluginManagerProxy.OnGroupMsg -= PluginManagerProxy_OnGroupMsg;
+            PluginManagerProxy.OnGroupLeft -= PluginManagerProxy_OnGroupLeft;
+            PluginManagerProxy.OnPrivateMsg -= PluginManagerProxy_OnPrivateMsg;
+            PluginManagerProxy.OnGroupMsgRecall -= PluginManagerProxy_OnGroupMsgRecall;
+            PluginManagerProxy.OnPrivateMsgRecall -= PluginManagerProxy_OnPrivateMsgRecall;
+
+            // 取消CQPImplementation事件订阅
+            CQPImplementation.OnPrivateMessageSend -= CQPImplementation_OnPrivateMessageSend;
+            CQPImplementation.OnGroupMessageSend -= CQPImplementation_OnGroupMessageSend;
+
+            // 取消粘贴事件订阅
+            if (SendText != null)
+            {
+                DataObject.RemovePastingHandler(SendText, RichTextboxPasteOverrideAction);
+            }
+
+            // 释放辅助管理器
+            _lazyLoadManager?.Dispose();
+            _messageContainerManager?.Dispose();
+
+            // 取消Unloaded事件订阅
+            Unloaded -= ChatPage_Unloaded;
+
+            _disposed = true;
         }
     }
 }

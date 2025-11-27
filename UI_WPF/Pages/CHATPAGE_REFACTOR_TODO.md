@@ -651,3 +651,5 @@ Id = qq,
 - 2025-11-27 06:44：✅ **第二次迭代编译通过** - ChatPage.xaml.cs减少至~900行（-37%）
 - 2025-11-27 06:46：✅ 完成任务1.3.1、1.3.2 - 创建ChatPageViewModel和ToolbarViewModel（MVVM模式）
 - 2025-11-27 06:52：🔄 ChatPage.xaml.cs重构 - 集成ViewModel，移除INotifyPropertyChanged，改用数据绑定
+- 2025-11-27 06:53：🐛 修复编译错误 - 添加缺失的using引用
+- 2025-11-27 06:55：✅ 完成任务4.1.3 - 修复内存泄漏风险，实现IDisposable和事件取消订阅
