@@ -4,6 +4,8 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.UI.Pages.Helpers;
+using Another_Mirai_Native.UI.Services;
 using Another_Mirai_Native.UI.ViewModel;
 using Microsoft.Win32;
 using System;
@@ -29,8 +31,18 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class ChatPage : Page, INotifyPropertyChanged
     {
+        // 服务实例
+        private readonly ICacheService _cacheService;
+        private readonly IMessageService _messageService;
+        private readonly IChatListService _chatListService;
+
         public ChatPage()
         {
+            // 初始化服务
+            _cacheService = new CacheService();
+            _messageService = new MessageService(_cacheService);
+            _chatListService = new ChatListService(_cacheService);
+
             InitializeComponent();
             DataContext = this;
             Instance = this;
@@ -68,11 +80,6 @@ namespace Another_Mirai_Native.UI.Pages
         public string GroupName { get; set; } = "";
 
         /// <summary>
-        /// 协议API调用锁
-        /// </summary>
-        private SemaphoreSlim APILock { get; set; } = new(1, 1);
-
-        /// <summary>
         /// At选择器Flyout元素
         /// </summary>
         private ModernWpf.Controls.Flyout AtFlyout { get; set; }
@@ -91,21 +98,6 @@ namespace Another_Mirai_Native.UI.Pages
         /// 窗体加载完成事件
         /// </summary>
         private bool FormLoaded { get; set; }
-
-        /// <summary>
-        /// 好友信息列表缓存
-        /// </summary>
-        private Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
-
-        /// <summary>
-        /// 群信息列表缓存
-        /// </summary>
-        private Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
-
-        /// <summary>
-        /// 群成员信息列表缓存
-        /// </summary>
-        private Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
         /// <summary>
         /// 懒加载防抖时钟
@@ -135,11 +127,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                TextPointer startPosition = SendText.Document.ContentStart;
-                int start = startPosition.GetOffsetToPosition(SendText.CaretPosition);
-                SendText.CaretPosition.InsertTextInRun(text);
-                SendText.CaretPosition = startPosition.GetPositionAtOffset(start + text.Length + 2);
-                SendText.Focus();
+                RichTextBoxHelper.InsertText(SendText, text);
             });
         }
 
@@ -151,12 +139,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>返回的消息ID, 不为0时为成功</returns>
         public int CallGroupMsgSend(long groupId, string message)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
+            return _messageService.SendMessage(groupId, ChatType.Group, message);
         }
 
         /// <summary>
@@ -167,12 +150,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>返回的消息ID, 不为0时为成功</returns>
         public int CallPrivateMsgSend(long qq, string message)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
-            int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
-            sw.Stop();
-            LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            return msgId;
+            return _messageService.SendMessage(qq, ChatType.Private, message);
         }
 
         /// <summary>
@@ -251,65 +229,18 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
+        /// 从缓存中获取好友昵称
         /// 若缓存中不存在则调用协议API
         /// </summary>
         /// <param name="qq">好友ID</param>
         /// <returns>昵称, 失败时返回QQ号</returns>
         public async Task<string> GetFriendNick(long qq)
         {
-            try
-            {
-                await APILock.WaitAsync();
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (FriendInfoCache.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return info.Nick;
-                }
-                else
-                {
-                    string r = qq.ToString();
-                    await Task.Run(() =>
-                    {
-                        var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
-                        foreach (var item in ls)
-                        {
-                            if (FriendInfoCache.ContainsKey(item.QQ))
-                            {
-                                FriendInfoCache[item.QQ] = item;
-                            }
-                            else
-                            {
-                                FriendInfoCache.Add(item.QQ, item);
-                            }
-                            if (item.QQ == qq)
-                            {
-                                r = item.Nick;
-                            }
-                        }
-                    });
-                    return r;
-                }
-            }
-            catch
-            {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
+            return await _cacheService.GetFriendNickAsync(qq);
         }
 
         /// <summary>
-        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
+        /// 从缓存中获取群员名片
         /// 若缓存中不存在则调用协议API
         /// </summary>
         /// <param name="group">群来源</param>
@@ -317,96 +248,18 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
         public async Task<string> GetGroupMemberNick(long group, long qq)
         {
-            try
-            {
-                await APILock.WaitAsync();
-
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(info.Card) ? info.Nick : info.Card;
-                }
-                else
-                {
-                    if (GroupMemberCache.ContainsKey(group) is false)
-                    {
-                        GroupMemberCache.Add(group, new Dictionary<long, GroupMemberInfo>());
-                    }
-                    if (GroupMemberCache[group].ContainsKey(qq) is false)
-                    {
-                        await Task.Run(() =>
-                        {
-                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                            GroupMemberCache[group].Add(qq, memberInfo);
-                        });
-                    }
-                    if (GroupMemberCache[group][qq] == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(GroupMemberCache[group][qq].Card) ? GroupMemberCache[group][qq].Nick : GroupMemberCache[group][qq].Card;
-                }
-            }
-            catch
-            {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
+            return await _cacheService.GetGroupMemberNickAsync(group, qq);
         }
 
         /// <summary>
-        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
+        /// 从缓存中获取群名称
         /// 若缓存中不存在则调用协议API
         /// </summary>
         /// <param name="groupId">群号</param>
         /// <returns>群名称, 若不存在则返回群号</returns>
         public async Task<string> GetGroupName(long groupId)
         {
-            try
-            {
-                await APILock.WaitAsync();
-
-                if (GroupInfoCache.TryGetValue(groupId, out var info))
-                {
-                    if (info == null)
-                    {
-                        return groupId.ToString();
-                    }
-                    return info.Name;
-                }
-                else
-                {
-                    string r = groupId.ToString();
-                    await Task.Run(() =>
-                    {
-                        GroupInfoCache.Add(groupId, ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false));
-                        if (GroupInfoCache[groupId] == null)
-                        {
-                            r = groupId.ToString();
-                        }
-                        r = GroupInfoCache[groupId]?.Name ?? groupId.ToString();
-                    });
-                    return r;
-                }
-            }
-            catch
-            {
-                return groupId.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
+            return await _cacheService.GetGroupNameAsync(groupId);
         }
 
         /// <summary>
@@ -585,7 +438,7 @@ namespace Another_Mirai_Native.UI.Pages
                          AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
                          Detail = msg,
                          GroupName = await GetFriendNick(qq),
-                         Id = sender,
+                         Id = qq,  // 修复: 应该是qq而不是sender
                          Time = DateTime.Now,
                          UnreadCount = 1
                      });
@@ -651,21 +504,7 @@ namespace Another_Mirai_Native.UI.Pages
                         GroupName = string.IsNullOrEmpty(item.Card) ? item.Nick : item.Card,
                         AvatarType = ChatAvatar.AvatarTypes.QQPrivate
                     });
-                    if (GroupMemberCache.ContainsKey(SelectedItem.Id) is false)
-                    {
-                        GroupMemberCache.Add(SelectedItem.Id, new Dictionary<long, GroupMemberInfo>());
-                    }
-                    if (GroupMemberCache.TryGetValue(SelectedItem.Id, out var cache))
-                    {
-                        if (cache.ContainsKey(item.QQ))
-                        {
-                            cache[item.QQ] = item;
-                        }
-                        else
-                        {
-                            cache.Add(item.QQ, item);
-                        }
-                    }
+                    // 缓存由CacheService管理，不需要手动更新
                 }
             }
             // 显示Flyout
@@ -785,32 +624,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>处理后的CQ码消息</returns>
         private string BuildTextFromRichTextBox()
         {
-            StringBuilder stringBuilder = new();
-            foreach (Block item in SendText.Document.Blocks)
-            {
-                // 粘贴的图片
-                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
-                {
-                    stringBuilder.Append(blockImg.Tag?.ToString());
-                    continue;
-                }
-                if (item is not Paragraph paragraph)
-                {
-                    continue;
-                }
-                foreach (Inline inline in paragraph.Inlines)
-                {
-                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
-                    {
-                        stringBuilder.Append(inlineImage.Tag?.ToString());
-                    }
-                    else
-                    {
-                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
-                    }
-                }
-            }
-            return stringBuilder.ToString();
+            return RichTextBoxHelper.ConvertToCQCode(SendText);
         }
 
         /// <summary>
@@ -886,7 +700,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
         {
-            SendText.Document.Blocks.Clear();
+            RichTextBoxHelper.Clear(SendText);
         }
 
         /// <summary>
@@ -1079,19 +893,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>消息模型</returns>
         private async Task<ChatDetailItemViewModel> ParseChatHistoryToViewModel(ChatAvatar.AvatarTypes avatarType, ChatHistory history)
         {
-            return new ChatDetailItemViewModel
-            {
-                AvatarType = avatarType,
-                Content = history.Message,
-                DetailItemType = history.Type == ChatHistoryType.Notice ? DetailItemType.Notice : (history.SenderID == AppConfig.Instance.CurrentQQ ? DetailItemType.Send : DetailItemType.Receive),
-                Id = history.SenderID,
-                MsgId = history.MsgId,
-                Nick = (avatarType == ChatAvatar.AvatarTypes.QQPrivate ? await GetFriendNick(history.SenderID) : await GetGroupMemberNick(history.ParentID, history.SenderID))
-                     + (string.IsNullOrEmpty(history.PluginName) ? "" : $" [{history.PluginName}]"),
-                Recalled = history.Recalled,
-                Time = history.Time,
-                SqlId = history.ID
-            };
+            return await _messageService.ParseHistoryAsync(history, avatarType);
         }
 
         private void PictureBtn_Click(object sender, RoutedEventArgs e)
@@ -1131,31 +933,17 @@ namespace Another_Mirai_Native.UI.Pages
 
         private async void PluginManagerProxy_OnGroupAdded(long group, long qq)
         {
-            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
-            {
-                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
-            }
+            await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
         }
 
         private async void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
         {
-            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
-            {
-                await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
-            }
+            await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
         }
 
         private async void PluginManagerProxy_OnGroupLeft(long group, long qq)
         {
-            if (GroupMemberCache.TryGetValue(group, out var dict) && dict.ContainsKey(qq))
-            {
-                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
-                dict.Remove(qq);
-            }
-            else
-            {
-                await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{qq} 离开了群", DetailItemType.Notice, DateTime.Now);
-            }
+            await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
         }
 
         private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
@@ -1244,45 +1032,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
-            {
-                // 粘贴内容为图片 将图片保存进缓存文件夹
-                string cacheImagePath = Path.Combine("data", "image", "cached");
-                using MemoryStream memoryStream = new();
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(image));
-                encoder.Save(memoryStream);
-                var buffer = memoryStream.ToArray();
-                string md5 = buffer.MD5();
-
-                File.WriteAllBytes(Path.Combine(cacheImagePath, md5 + ".png"), buffer);
-                Image img = new()
-                {
-                    Source = image,
-                    Width = image.Width,
-                    Height = image.Height,
-                    Tag = $"[CQ:image,file=cached\\{md5}.png]"
-                };
-                if (SendText.Document.Blocks.Count == 0)
-                {
-                    SendText.Document.Blocks.Add(new Paragraph());
-                }
-                if (SendText.Document.Blocks.LastBlock is Paragraph lastParagraph)
-                {
-                    lastParagraph.Inlines.Add(new InlineUIContainer(img));
-                }
-                e.Handled = true;
-                e.CancelCommand();
-            }
-            else if (e.DataObject.GetDataPresent(DataFormats.UnicodeText)
-                && e.DataObject.GetData(DataFormats.UnicodeText) is string text
-                && string.IsNullOrEmpty(text) is false)
-            {
-                // 粘贴内容为文本
-                AddTextToSendBox(text);
-                e.Handled = true;
-                e.CancelCommand();
-            }
+            RichTextBoxHelper.HandlePaste(e, SendText);
         }
 
         /// <summary>
@@ -1330,7 +1080,7 @@ namespace Another_Mirai_Native.UI.Pages
                 ExecuteSendMessage(id, avatar, sendText);
             });
             // 清空发送框
-            SendText.Document.Blocks.Clear();
+            RichTextBoxHelper.Clear(SendText);
         }
 
         private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

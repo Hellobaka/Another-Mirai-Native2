@@ -1381,6 +1381,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Helpers\" />
     <Folder Include="Themes\" />
   </ItemGroup>
 	
