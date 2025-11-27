@@ -28,6 +28,9 @@ namespace Another_Mirai_Native.UI.ViewModel
             ClearMessageCommand = new RelayCommand(ExecuteClearMessage, CanClearMessage);
             ClearSendBoxCommand = new RelayCommand(ExecuteClearSendBox, CanClearSendBox);
             ScrollToBottomCommand = new RelayCommand(ExecuteScrollToBottom);
+            ShowAtSelectorCommand = new RelayCommand(ExecuteShowAtSelector, CanShowAtSelector);
+            SelectPictureCommand = new RelayCommand(ExecuteSelectPicture, CanSelectPicture);
+            SelectAudioCommand = new RelayCommand(ExecuteSelectAudio, CanSelectAudio);
             
             // 检查聊天功能是否启用
             IsChatEnabled = AppConfig.Instance.EnableChat;
@@ -115,6 +118,21 @@ namespace Another_Mirai_Native.UI.ViewModel
         public ICommand ScrollToBottomCommand { get; }
 
         /// <summary>
+        /// 显示At选择器命令
+        /// </summary>
+        public ICommand ShowAtSelectorCommand { get; }
+
+        /// <summary>
+        /// 选择图片命令
+        /// </summary>
+        public ICommand SelectPictureCommand { get; }
+
+        /// <summary>
+        /// 选择音频命令
+        /// </summary>
+        public ICommand SelectAudioCommand { get; }
+
+        /// <summary>
         /// 选中项改变时的事件
         /// </summary>
         public event EventHandler<ChatListItemViewModel?>? SelectedChatItemChanged;
@@ -138,6 +156,21 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// 请求滚动到底部的事件
         /// </summary>
         public event EventHandler? ScrollToBottomRequested;
+
+        /// <summary>
+        /// 请求显示At选择器的事件
+        /// </summary>
+        public event EventHandler? ShowAtSelectorRequested;
+
+        /// <summary>
+        /// 请求选择图片的事件
+        /// </summary>
+        public event EventHandler? SelectPictureRequested;
+
+        /// <summary>
+        /// 请求选择音频的事件
+        /// </summary>
+        public event EventHandler? SelectAudioRequested;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -200,6 +233,36 @@ namespace Another_Mirai_Native.UI.ViewModel
         private void ExecuteScrollToBottom(object? parameter)
         {
             ScrollToBottomRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ExecuteShowAtSelector(object? parameter)
+        {
+            ShowAtSelectorRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool CanShowAtSelector(object? parameter)
+        {
+            return SelectedChatItem?.AvatarType == ChatAvatar.AvatarTypes.QQGroup && IsChatEnabled;
+        }
+
+        private void ExecuteSelectPicture(object? parameter)
+        {
+            SelectPictureRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool CanSelectPicture(object? parameter)
+        {
+            return SelectedChatItem != null && IsChatEnabled;
+        }
+
+        private void ExecuteSelectAudio(object? parameter)
+        {
+            SelectAudioRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool CanSelectAudio(object? parameter)
+        {
+            return SelectedChatItem != null && IsChatEnabled;
         }
     }
 

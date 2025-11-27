@@ -69,6 +69,9 @@ namespace Another_Mirai_Native.UI.Pages
             _viewModel.ClearMessageRequested += ViewModel_ClearMessageRequested;
             _viewModel.ClearSendBoxRequested += ViewModel_ClearSendBoxRequested;
             _viewModel.ScrollToBottomRequested += ViewModel_ScrollToBottomRequested;
+            _viewModel.ShowAtSelectorRequested += ViewModel_ShowAtSelectorRequested;
+            _viewModel.SelectPictureRequested += ViewModel_SelectPictureRequested;
+            _viewModel.SelectAudioRequested += ViewModel_SelectAudioRequested;
             
             // 订阅Unloaded事件以清理资源
             Unloaded += ChatPage_Unloaded;
@@ -220,6 +223,116 @@ namespace Another_Mirai_Native.UI.Pages
             _messageContainerManager?.ScrollToBottom(true);
             _messageContainerManager?.RemoveOldMessages(UIConfig.Instance.MessageContainerMaxCount);
             _lazyLoadManager?.Reset();
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：显示At选择器
+        /// </summary>
+        private void ViewModel_ShowAtSelectorRequested(object? sender, EventArgs e)
+        {
+            if (SelectedItem == null)
+            {
+                return;
+            }
+            List<ChatListItemViewModel> list = new();
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(SelectedItem.Id);
+            // 构建群成员列表
+            if (rawList != null)
+            {
+                foreach (var item in rawList)
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+                    list.Add(new ChatListItemViewModel
+                    {
+                        Id = item.QQ,
+                        GroupName = string.IsNullOrEmpty(item.Card) ? item.Nick : item.Card,
+                        AvatarType = ChatAvatar.AvatarTypes.QQPrivate
+                    });
+                }
+            }
+            // 显示Flyout
+            AtTargetSelector = new(list);
+            AtTargetSelector.ItemSelected -= AtTargetSelector_ItemSelected;
+            AtTargetSelector.ItemSelected += AtTargetSelector_ItemSelected;
+            AtFlyout = new ModernWpf.Controls.Flyout
+            {
+                Content = AtTargetSelector,
+                Placement = ModernWpf.Controls.Primitives.FlyoutPlacementMode.TopEdgeAlignedLeft
+            };
+            AtFlyout.ShowAt(AtBtn);
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：选择图片
+        /// </summary>
+        private void ViewModel_SelectPictureRequested(object? sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "图片文件|*.jpg;*.jpeg;*.png;*.bmp;*.webp|所有文件|*.*",
+                Title = "请选择要发送的图片"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            foreach (var file in openFileDialog.FileNames)
+            {
+                string filePath = file;
+                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
+                Directory.CreateDirectory(picPath);
+                if (filePath.StartsWith(picPath))
+                {
+                    filePath = filePath.Replace(picPath, "");
+                }
+                else
+                {
+                    string newFile = Path.Combine(picPath, Path.GetFileName(filePath));
+                    File.Copy(filePath, newFile, true);
+                    filePath = Path.GetFileName(filePath);
+                }
+                AddTextToSendBox($"[CQ:image,file={filePath}]");
+            }
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：选择音频
+        /// </summary>
+        private void ViewModel_SelectAudioRequested(object? sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Multiselect = false,
+                Filter = "音频文件|*.wav;*.mp3;*.flac;*.amr;*.m4a|所有文件|*.*",
+                Title = "请选择要发送的音频"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            string filePath = openFileDialog.FileName;
+            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
+            Directory.CreateDirectory(audioPath);
+            if (filePath.StartsWith(audioPath))
+            {
+                filePath = filePath.Replace(audioPath, "");
+            }
+            else
+            {
+                string newFile = Path.Combine(audioPath, Path.GetFileName(filePath));
+                File.Copy(filePath, newFile, true);
+                filePath = Path.GetFileName(filePath);
+            }
+            AddTextToSendBox($"[CQ:record,file={filePath}]");
         }
 
         /// <summary>
@@ -522,44 +635,6 @@ namespace Another_Mirai_Native.UI.Pages
             return history?.ID ?? 0;
         }
 
-        private void AtBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedItem == null)
-            {
-                return;
-            }
-            List<ChatListItemViewModel> list = new();
-            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(SelectedItem.Id);
-            // 构建群成员列表
-            if (rawList != null)
-            {
-                foreach (var item in rawList)
-                {
-                    if (item == null)
-                    {
-                        continue;
-                    }
-                    list.Add(new ChatListItemViewModel
-                    {
-                        Id = item.QQ,
-                        GroupName = string.IsNullOrEmpty(item.Card) ? item.Nick : item.Card,
-                        AvatarType = ChatAvatar.AvatarTypes.QQPrivate
-                    });
-                    // 缓存由CacheService管理，不需要手动更新
-                }
-            }
-            // 显示Flyout
-            AtTargetSelector = new(list);
-            AtTargetSelector.ItemSelected -= AtTargetSelector_ItemSelected;
-            AtTargetSelector.ItemSelected += AtTargetSelector_ItemSelected;
-            AtFlyout = new ModernWpf.Controls.Flyout
-            {
-                Content = AtTargetSelector,
-                Placement = ModernWpf.Controls.Primitives.FlyoutPlacementMode.TopEdgeAlignedLeft
-            };
-            AtFlyout.ShowAt(AtBtn);
-        }
-
         /// <summary>
         /// At选择器的项目被选中
         /// </summary>
@@ -569,39 +644,6 @@ namespace Another_Mirai_Native.UI.Pages
         {
             AddTextToSendBox(AtTargetSelector.SelectedCQCode);
             AtFlyout.Hide();
-        }
-
-        private void AudioBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new()
-            {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Multiselect = false,
-                Filter = "音频文件|*.wav;*.mp3;*.flac;*.amr;*.m4a|所有文件|*.*",
-                Title = "请选择要发送的音频"
-            };
-            if (openFileDialog.ShowDialog() is false)
-            {
-                return;
-            }
-            string filePath = openFileDialog.FileName;
-            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
-            Directory.CreateDirectory(audioPath);
-            // 选择的文件在缓存文件夹中
-            if (filePath.StartsWith(audioPath))
-            {
-                filePath = filePath.Replace(audioPath, "");
-            }
-            else
-            {
-                string fileName = Path.GetFileName(filePath);
-                // 复制文件到缓存文件夹中
-                File.Copy(filePath, Path.Combine(audioPath, fileName), true);
-                filePath = @$"cached\\{fileName}";
-            }
-            AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
         }
 
         /// <summary>
@@ -689,16 +731,6 @@ namespace Another_Mirai_Native.UI.Pages
         private bool CheckMessageContainerHasItem(string guid)
         {
             return _messageContainerManager?.HasMessage(guid) ?? false;
-        }
-
-        private void CleanMessageBtn_Click(object sender, RoutedEventArgs e)
-        {
-            _messageContainerManager?.ClearMessages();
-        }
-
-        private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
-        {
-            RichTextBoxHelper.Clear(SendText);
         }
 
         /// <summary>
@@ -838,78 +870,6 @@ namespace Another_Mirai_Native.UI.Pages
             return await _messageService.ParseHistoryAsync(history, avatarType);
         }
 
-        private void PictureBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new()
-            {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "图片文件|*.jpg;*.jpeg;*.png;*.bmp;*.webp|所有文件|*.*",
-                Title = "请选择要发送的图片"
-            };
-            if (openFileDialog.ShowDialog() is false)
-            {
-                return;
-            }
-            foreach (var file in openFileDialog.FileNames)
-            {
-                string filePath = file;
-                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
-                Directory.CreateDirectory(picPath);
-                if (filePath.StartsWith(picPath))
-                {
-                    // 选中图片已经存在于缓存文件夹
-                    filePath = filePath.Replace(picPath, "");
-                }
-                else
-                {
-                    // 复制至缓存文件夹
-                    string fileName = Path.GetFileName(filePath);
-                    File.Copy(filePath, Path.Combine(picPath, fileName), true);
-                    filePath = @$"cached\\{fileName}";
-                }
-                AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
-            }
-        }
-
-        private async void PluginManagerProxy_OnGroupAdded(long group, long qq)
-        {
-            await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
-        }
-
-        private async void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
-        {
-            await AddGroupChatItem(group, qq, $"{await GetGroupMemberNick(group, qq)} 禁言了 {await GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
-        }
-
-        private async void PluginManagerProxy_OnGroupLeft(long group, long qq)
-        {
-            await AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
-        }
-
-        private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
-        {
-            await AddGroupChatItem(group, qq, msg, DetailItemType.Receive, time, msgId);
-            AddOrUpdateGroupChatList(group, qq, msg);
-        }
-
-        private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
-        {
-            MsgRecalled?.Invoke(msgId);
-        }
-
-        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
-        {
-            await AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, time, msgId);
-            AddOrUpdatePrivateChatList(qq, qq, msg);
-        }
-
-        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
-        {
-            MsgRecalled?.Invoke(msgId);
-        }
-
         /// <summary>
         /// 更新顶部显示的群名称
         /// </summary>
@@ -1012,13 +972,15 @@ namespace Another_Mirai_Native.UI.Pages
             if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
             {
                 e.Handled = true;
-                SendBtn_Click(sender, e);
+                // 使用ViewModel Command发送消息
+                _viewModel?.SendMessageCommand?.Execute(null);
             }
             else if (e.Key == Key.D2 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
                 // 触发@
                 e.Handled = true;
-                AtBtn_Click(sender, e);
+                // 使用ViewModel Command显示At选择器
+                _viewModel?.ShowAtSelectorCommand?.Execute(null);
             }
         }
 
@@ -1059,6 +1021,67 @@ namespace Another_Mirai_Native.UI.Pages
             Dispose();
         }
 
+        #region Plugin Event Handlers
+
+        private void PluginManagerProxy_OnGroupBan(long groupId, long operatorQQ, long targetQQ, long duration)
+        {
+            // 群禁言事件处理
+            string msg = $"[{operatorQQ}] 在群 [{groupId}] 中{(duration > 0 ? "禁言" : "解除禁言")}了 [{targetQQ}]";
+            _ = AddGroupChatItem(groupId, 0, msg, DetailItemType.Notice, DateTime.Now, 0, null, null);
+        }
+
+        private void PluginManagerProxy_OnGroupAdded(long groupId, long qq)
+        {
+            // 群成员增加事件处理
+            string msg = $"[{qq}] 加入了群聊";
+            _ = AddGroupChatItem(groupId, 0, msg, DetailItemType.Notice, DateTime.Now, 0, null, null);
+        }
+
+        private async void PluginManagerProxy_OnGroupMsg(int msgId, long groupId, long qq, string message, DateTime time)
+        {
+            // 群消息事件处理
+            await AddGroupChatItem(groupId, qq, message, DetailItemType.Receive, time, msgId, null, null);
+        }
+
+        private void PluginManagerProxy_OnGroupLeft(long groupId, long qq)
+        {
+            // 群成员减少事件处理
+            string msg = $"[{qq}] 退出了群聊";
+            _ = AddGroupChatItem(groupId, 0, msg, DetailItemType.Notice, DateTime.Now, 0, null, null);
+        }
+
+        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string message, DateTime time)
+        {
+            // 私聊消息事件处理
+            await AddPrivateChatItem(qq, qq, message, DetailItemType.Receive, time, msgId, null, null);
+        }
+
+        private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string message)
+        {
+            // 群消息撤回事件处理
+            MsgRecalled?.Invoke(msgId);
+        }
+
+        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string message)
+        {
+            // 私聊消息撤回事件处理
+            MsgRecalled?.Invoke(msgId);
+        }
+
+        private void CQPImplementation_OnGroupMessageSend(long groupId, long msgId, string msg)
+        {
+            // 群消息发送完成事件处理
+            _ = AddGroupChatItem(groupId, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, (int)msgId);
+        }
+
+        private void CQPImplementation_OnPrivateMessageSend(long qq, long msgId, string msg)
+        {
+            // 私聊消息发送完成事件处理
+            _ = AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, (int)msgId);
+        }
+
+        #endregion
+
         /// <summary>
         /// 释放资源，取消所有事件订阅
         /// </summary>
@@ -1077,6 +1100,9 @@ namespace Another_Mirai_Native.UI.Pages
                 _viewModel.ClearMessageRequested -= ViewModel_ClearMessageRequested;
                 _viewModel.ClearSendBoxRequested -= ViewModel_ClearSendBoxRequested;
                 _viewModel.ScrollToBottomRequested -= ViewModel_ScrollToBottomRequested;
+                _viewModel.ShowAtSelectorRequested -= ViewModel_ShowAtSelectorRequested;
+                _viewModel.SelectPictureRequested -= ViewModel_SelectPictureRequested;
+                _viewModel.SelectAudioRequested -= ViewModel_SelectAudioRequested;
             }
 
             // 取消PluginManagerProxy事件订阅
