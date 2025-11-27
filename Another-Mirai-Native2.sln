@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_WPF", "UI_WPF\UI_WPF.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_OneBotv11", "Protocol_OneBot\Protocol_OneBotv11.csproj", "{40258B40-0DBD-4E63-9D04-E09A4BF3E5B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_Satori_v1", "Protocol_Satori_v1\Protocol_Satori_v1.csproj", "{DE147760-0C55-4B95-BA3C-CE0DDE01AFE7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_Blazor", "UI_Blazor\UI_Blazor.csproj", "{D2B1680B-0D64-4C40-A589-0BC6D5583517}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol_LagrangeCore", "Protocol_LagrangeCore\Protocol_LagrangeCore.csproj", "{729FD802-1CD5-4FB7-9AE4-02BA2F1E0092}"

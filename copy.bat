@@ -15,7 +15,6 @@ mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols"
 copy "%ROOT%\Protocol_OneBot\bin\x86\Debug\net48\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
 copy "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net48\MiraiAPIHttp.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
 copy "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net48\Protocol_NoConnection.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
-copy "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net48\Protocol_Satori_v1.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\protocols" /Y
 
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders"
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net48\loaders\NetFramework48"
@@ -38,7 +37,6 @@ mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols"
 copy "%ROOT%\Protocol_OneBot\bin\x86\Debug\net9.0-windows\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocol_MiraiAPIHttp\bin\x86\Debug\net9.0-windows\MiraiAPIHttp.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocol_NoConnection\bin\x86\Debug\net9.0-windows\Protocol_NoConnection.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
-copy "%ROOT%\Protocol_Satori_v1\bin\x86\Debug\net9.0-windows\Protocol_Satori_v1.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocol_LagrangeCore\bin\x86\Debug\net9.0-windows\Protocol_LagrangeCore.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocol_LagrangeCore\bin\x86\Debug\net9.0-windows\Lagrange.Core.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocol_LagrangeCore\Lagrange.Core\Lagrange.OneBot\bin\Debug\net9.0\protobuf-net.Core.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y

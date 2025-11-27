@@ -6,7 +6,7 @@
 ## 协议实现进度
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [x] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
-- [x] 实现[Satori](https://satori.js.org/zh-CN/introduction.html)协议
+- [-] 实现[Satori](https://satori.js.org/zh-CN/introduction.html)协议
 - [x] 实现[Lagrange.Core](https://github.com/LagrangeDev/Lagrange.Core)协议
 - [ ] 实现官方协议
 - [ ] 实现OPQBot协议

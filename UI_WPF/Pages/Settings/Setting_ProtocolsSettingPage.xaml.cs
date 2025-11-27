@@ -48,12 +48,6 @@ namespace Another_Mirai_Native.UI.Pages
             new(){ Key = "FullMemberInfo", ValueType = typeof(bool), DescriptionTitle = "详细群成员信息", DescriptionSubtitle = "调用更详细的群成员信息接口 但是可能大幅度加长调用时长", DisplayControl = typeof(SettingItem_ToggleButton) },
         ];
 
-        private ProtocolConfigItem[] SatoriConfigs { get; set; } = 
-        [
-            new(){ Key = "WebSocketURL", ValueType = typeof(string), DescriptionTitle = "正向 WebSocket 服务器 Url", DescriptionSubtitle = "", DisplayControl = typeof(SettingItem_TextBox) },
-            new(){ Key = "Token", ValueType = typeof(string), DescriptionTitle = "鉴权 Token", DescriptionSubtitle = "", DisplayControl = typeof(SettingItem_TextBox) },
-        ];
-
         private ProtocolConfigItem[] NoConnectionConfigs { get; set; } = 
         [
             new(){ Key = "PicServerListenIP", ValueType = typeof(string), DescriptionTitle = "图片服务器监听 IP", DescriptionSubtitle = "", DisplayControl = typeof(SettingItem_TextBox) },
@@ -78,7 +72,6 @@ namespace Another_Mirai_Native.UI.Pages
                     || (fileName != "LagrangeCore"
                         && fileName != "MiraiAPIHttp"
                         && fileName != "NoConnection_ProtocolConfig"
-                        && fileName != "Satori_v1"
                         && fileName != "OneBot_v11"))
                 {
                     continue;
@@ -90,7 +83,6 @@ namespace Another_Mirai_Native.UI.Pages
                     "MiraiAPIHttp" => ("🛠️ Mirai API Http", MiraiAPIHttpConfigs),
                     "NoConnection_ProtocolConfig" => ("🛠️ 仿真协议", NoConnectionConfigs),
                     "OneBot_v11" => ("🛠️ OneBot v11", OneBotConfigs),
-                    "Satori_v1" => ("🛠️ Satori", SatoriConfigs),
                     _ => (string.Empty, [])
                 };
                 if (string.IsNullOrEmpty(panelName))
