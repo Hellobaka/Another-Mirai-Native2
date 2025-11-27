@@ -4,6 +4,7 @@ using Another_Mirai_Native.DB;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 using System.Security.Cryptography.X509Certificates;
 
@@ -109,6 +110,19 @@ namespace Another_Mirai_Native.BlazorUI
                 }
 
                 app.UseStaticFiles();
+
+                // 添加 data\image 目录的静态文件支持
+                string imageDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image");
+                if (!Directory.Exists(imageDirectory))
+                {
+                    Directory.CreateDirectory(imageDirectory);
+                }
+                app.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(imageDirectory),
+                    RequestPath = "/data/image"
+                });
+                
                 app.UseAntiforgery();
 
                 app.MapRazorComponents<App>()

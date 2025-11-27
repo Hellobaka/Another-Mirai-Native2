@@ -29,10 +29,6 @@ namespace Another_Mirai_Native
             {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             }
-            if (Directory.Exists("wwwroot"))
-            {
-                Helper.CreateDirectoryLink(@"wwwroot\image", @"data\image");
-            }
 
             AppConfig.Instance.StartTime = DateTime.Now;
 
