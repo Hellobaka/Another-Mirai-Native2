@@ -41,6 +41,7 @@
                             Margin="0,10"
                             HorizontalContentAlignment="Stretch"
                             ItemsSource="{Binding ChatList}"
+                            SelectedItem="{Binding SelectedChatItem, Mode=TwoWay}"
                             SelectionChanged="ChatListDisplay_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -78,7 +79,7 @@
                         <Button
                             x:Name="FaceBtn"
                             Margin="0,0,5,8"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsFaceEnabled}">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -95,7 +96,7 @@
                             x:Name="AtBtn"
                             Margin="0,0,5,8"
                             Click="AtBtn_Click"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsAtEnabled}">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -107,7 +108,7 @@
                             x:Name="PictureBtn"
                             Margin="0,0,5,8"
                             Click="PictureBtn_Click"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsPictureEnabled}">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -119,7 +120,7 @@
                             x:Name="AudioBtn"
                             Margin="0,0,5,8"
                             Click="AudioBtn_Click"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsAudioEnabled}">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -131,7 +132,7 @@
                             x:Name="CleanMessageBtn"
                             Margin="0,0,5,8"
                             Click="CleanMessageBtn_Click"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsClearMessageEnabled}">
                             <ui:FontIcon
                                 Width="16"
                                 Height="16"
@@ -145,7 +146,7 @@
                         Grid.Row="1"
                         AcceptsReturn="True"
                         HorizontalScrollBarVisibility="Auto"
-                        IsEnabled="False"
+                        IsEnabled="{Binding ToolbarViewModel.IsSendEnabled}"
                         PreviewKeyDown="SendText_PreviewKeyDown"
                         VerticalScrollBarVisibility="Auto" />
                     <Grid Grid.Row="2" Grid.ColumnSpan="2">
@@ -160,7 +161,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Click="CleanSendBtn_Click"
-                            IsEnabled="False">
+                            IsEnabled="{Binding ToolbarViewModel.IsClearSendEnabled}">
                             清空
                         </Button>
                         <Button
@@ -171,7 +172,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Click="SendBtn_Click"
-                            IsEnabled="False"
+                            IsEnabled="{Binding ToolbarViewModel.IsSendEnabled}"
                             Style="{StaticResource AccentButtonStyle}">
                             发送
                         </Button>

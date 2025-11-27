@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// ChatPage.xaml 的交互逻辑
     /// </summary>
-    public partial class ChatPage : Page, INotifyPropertyChanged
+    public partial class ChatPage : Page
     {
         // 服务实例
         private readonly ICacheService _cacheService;
@@ -40,6 +40,9 @@ namespace Another_Mirai_Native.UI.Pages
         private LazyLoadManager? _lazyLoadManager;
         private MessageContainerManager? _messageContainerManager;
 
+        // ViewModel
+        private ChatPageViewModel? _viewModel;
+
         public ChatPage()
         {
             // 初始化服务
@@ -48,7 +51,18 @@ namespace Another_Mirai_Native.UI.Pages
             _chatListService = new ChatListService(_cacheService);
 
             InitializeComponent();
-            DataContext = this;
+            
+            // 初始化ViewModel
+            _viewModel = new ChatPageViewModel();
+            DataContext = _viewModel;
+            
+            // 订阅ViewModel事件
+            _viewModel.SelectedChatItemChanged += ViewModel_SelectedChatItemChanged;
+            _viewModel.SendMessageRequested += ViewModel_SendMessageRequested;
+            _viewModel.ClearMessageRequested += ViewModel_ClearMessageRequested;
+            _viewModel.ClearSendBoxRequested += ViewModel_ClearSendBoxRequested;
+            _viewModel.ScrollToBottomRequested += ViewModel_ScrollToBottomRequested;
+            
             Instance = this;
             Page_Loaded(null, null);
         }
@@ -64,14 +78,12 @@ namespace Another_Mirai_Native.UI.Pages
 
         public static event Action<SizeChangedEventArgs> WindowSizeChanged;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public static ChatPage Instance { get; private set; }
 
         /// <summary>
-        /// 侧边栏列表
+        /// 侧边栏列表（通过ViewModel访问）
         /// </summary>
-        public List<ChatListItemViewModel> ChatList { get; set; } = new();
+        public List<ChatListItemViewModel> ChatList => _viewModel?.ChatList.ToList() ?? new List<ChatListItemViewModel>();
 
         /// <summary>
         /// 消息容器列表
@@ -79,9 +91,19 @@ namespace Another_Mirai_Native.UI.Pages
         public List<ChatDetailItemViewModel> DetailList { get; set; } = new();
 
         /// <summary>
-        /// 当前选择项的组名称
+        /// 当前选择项的组名称（通过ViewModel访问）
         /// </summary>
-        public string GroupName { get; set; } = "";
+        public string GroupName
+        {
+            get => _viewModel?.GroupName ?? "";
+            set
+            {
+                if (_viewModel != null)
+                {
+                    _viewModel.GroupName = value;
+                }
+            }
+        }
 
         /// <summary>
         /// At选择器Flyout元素
@@ -106,7 +128,89 @@ namespace Another_Mirai_Native.UI.Pages
         /// <summary>
         /// 左侧聊天列表选中的元素
         /// </summary>
-        private ChatListItemViewModel SelectedItem => (ChatListItemViewModel)ChatListDisplay.SelectedItem;
+        private ChatListItemViewModel? SelectedItem => _viewModel?.SelectedChatItem;
+
+        /// <summary>
+        /// ViewModel事件处理：选中项改变
+        /// </summary>
+        private async void ViewModel_SelectedChatItemChanged(object? sender, ChatListItemViewModel? item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            // 重新加载消息内容
+            List<ChatHistory> history = new();
+            if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
+            {
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, LoadCount, 1);
+            }
+            else
+            {
+                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, LoadCount, 1);
+            }
+            DetailList.Clear();
+            foreach (var x in history)
+            {
+                DetailList.Add(await ParseChatHistoryToViewModel(item.AvatarType, x));
+            }
+            if (_lazyLoadManager != null)
+            {
+                _lazyLoadManager.CurrentPageIndex = 1;
+            }
+            
+            // 更新显示名称
+            GroupNameDisplay.Text = $"{item.GroupName} [{item.Id}]";
+            GroupName = item.GroupName;
+            
+            // 重置懒加载管理器
+            _lazyLoadManager?.Reset();
+            
+            await RefreshMessageContainer(true);
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：发送消息请求
+        /// </summary>
+        private void ViewModel_SendMessageRequested(object? sender, SendMessageEventArgs e)
+        {
+            string sendText = BuildTextFromRichTextBox();
+            Task.Run(() =>
+            {
+                ExecuteSendMessage(e.TargetId, 
+                    e.ChatType == ChatType.Group ? ChatAvatar.AvatarTypes.QQGroup : ChatAvatar.AvatarTypes.QQPrivate, 
+                    sendText);
+            });
+            // 清空发送框
+            RichTextBoxHelper.Clear(SendText);
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：清空消息容器
+        /// </summary>
+        private void ViewModel_ClearMessageRequested(object? sender, EventArgs e)
+        {
+            _messageContainerManager?.ClearMessages();
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：清空发送框
+        /// </summary>
+        private void ViewModel_ClearSendBoxRequested(object? sender, EventArgs e)
+        {
+            RichTextBoxHelper.Clear(SendText);
+        }
+
+        /// <summary>
+        /// ViewModel事件处理：滚动到底部
+        /// </summary>
+        private void ViewModel_ScrollToBottomRequested(object? sender, EventArgs e)
+        {
+            _messageContainerManager?.ScrollToBottom(true);
+            _messageContainerManager?.RemoveOldMessages(UIConfig.Instance.MessageContainerMaxCount);
+            _lazyLoadManager?.Reset();
+        }
 
         /// <summary>
         /// 向发送框中添加文本
@@ -286,7 +390,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="model"></param>
         public async void UpdateUnreadCount(ChatListItemViewModel model)
         {
-            var item = ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
+            var item = _viewModel?.ChatList.FirstOrDefault(x => x.Id == model.Id && x.AvatarType == model.AvatarType);
             if (item != null)
             {
                 item.UnreadCount = model.UnreadCount;
@@ -295,11 +399,11 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// MVVM
+        /// MVVM属性变化通知（保留用于向后兼容）
         /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            // 由ViewModel处理，这里保留空实现用于向后兼容
         }
 
         /// <summary>
@@ -354,8 +458,10 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="msg">消息</param>
         private async void AddOrUpdateGroupChatList(long id, long qq, string msg)
         {
+            if (_viewModel == null) return;
+            
             msg = msg.Replace("\r", "").Replace("\n", "");
-            var item = ChatList.FirstOrDefault(x => x.Id == id && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
+            var item = _viewModel.ChatList.FirstOrDefault(x => x.Id == id && x.AvatarType == ChatAvatar.AvatarTypes.QQGroup);
             if (item != null) // 消息已存在, 更新
             {
                 item.GroupName = await GetGroupName(id);
@@ -368,7 +474,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 await Dispatcher.BeginInvoke(async () =>
                 {
-                    ChatList.Add(new ChatListItemViewModel
+                    _viewModel.ChatList.Add(new ChatListItemViewModel
                     {
                         AvatarType = ChatAvatar.AvatarTypes.QQGroup,
                         Detail = $"{await GetGroupMemberNick(id, qq)}: {msg}",
@@ -390,8 +496,10 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="msg">消息</param>
         private async void AddOrUpdatePrivateChatList(long qq, long sender, string msg)
         {
+            if (_viewModel == null) return;
+            
             msg = msg.Replace("\r", "").Replace("\n", "");
-            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
+            var item = _viewModel.ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatAvatar.AvatarTypes.QQPrivate);
             if (item != null)
             {
                 item.GroupName = await GetFriendNick(qq);
@@ -404,7 +512,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 await Dispatcher.BeginInvoke(async () =>
                  {
-                     ChatList.Add(new ChatListItemViewModel
+                     _viewModel.ChatList.Add(new ChatListItemViewModel
                      {
                          AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
                          Detail = msg,
@@ -599,61 +707,18 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// 左侧列表选中变化
+        /// 左侧列表选中变化（绑定到ViewModel的SelectedChatItem）
         /// </summary>
-        private async void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var item = SelectedItem;
-            if (item == null)
-            {
-                return;
-            }
-            FaceBtn.IsEnabled = true;
-            PictureBtn.IsEnabled = true;
-            AudioBtn.IsEnabled = true;
-            CleanMessageBtn.IsEnabled = true;
-            SendText.IsEnabled = true;
-            CleanSendBtn.IsEnabled = true;
-            SendBtn.IsEnabled = true;
-
-            if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQGroup)
-            {
-                AtBtn.IsEnabled = true;
-            }
-            else if (SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
-            {
-                // 私聊时禁用At按钮
-                AtBtn.IsEnabled = false;
-            }
-
-            // 重新加载消息内容
-            List<ChatHistory> history = new();
-            if (item.AvatarType == ChatAvatar.AvatarTypes.QQPrivate)
-            {
-                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Private, LoadCount, 1);
-            }
-            else
-            {
-                history = ChatHistoryHelper.GetHistoriesByPage(item.Id, ChatHistoryType.Group, LoadCount, 1);
-            }
-            DetailList.Clear();
-            foreach (var x in history)
-            {
-                DetailList.Add(await ParseChatHistoryToViewModel(item.AvatarType, x));
-            }
-            if (_lazyLoadManager != null)
-            {
-                _lazyLoadManager.CurrentPageIndex = 1;
-            }
-            OnPropertyChanged(nameof(DetailList));
-            item.UnreadCount = 0;
-            GroupNameDisplay.Text = $"{SelectedItem.GroupName} [{SelectedItem.Id}]";
-            UpdateUnreadCount(item);
+            if (_viewModel == null) return;
             
-            // 重置懒加载管理器
-            _lazyLoadManager?.Reset();
-            
-            await RefreshMessageContainer(true);
+            var item = ChatListDisplay.SelectedItem as ChatListItemViewModel;
+            if (item != null)
+            {
+                // 更新ViewModel的选中项，这会触发ViewModel_SelectedChatItemChanged事件
+                _viewModel.SelectedChatItem = item;
+            }
         }
 
         /// <summary>
@@ -734,11 +799,13 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns></returns>
         private async Task LoadChatHistory()
         {
+            if (_viewModel == null) return;
+            
             var list = ChatHistoryHelper.GetHistoryCategroies();
-            ChatList.Clear();
+            _viewModel.ChatList.Clear();
             foreach (var item in list)
             {
-                ChatList.Add(new ChatListItemViewModel
+                _viewModel.ChatList.Add(new ChatListItemViewModel
                 {
                     AvatarType = item.Type == ChatHistoryType.Private ? ChatAvatar.AvatarTypes.QQPrivate : ChatAvatar.AvatarTypes.QQGroup,
                     Detail = item.Message,
@@ -748,7 +815,7 @@ namespace Another_Mirai_Native.UI.Pages
                     UnreadCount = 0
                 });
             }
-            EmptyHint.Visibility = ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
+            EmptyHint.Visibility = _viewModel.ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private async void Page_Loaded(object? sender, RoutedEventArgs? e)
@@ -764,11 +831,11 @@ namespace Another_Mirai_Native.UI.Pages
 
             if (FormLoaded)
             {
-                if (SelectedItem == null && ChatList.Count > 0)
+                if (SelectedItem == null && _viewModel != null && _viewModel.ChatList.Count > 0)
                 {
                     // 当没有内容被选中时 选中第一项
                     await Dispatcher.Yield();
-                    ChatListDisplay.SelectedItem = ChatList.First();
+                    ChatListDisplay.SelectedItem = _viewModel.ChatList.First();
                 }
                 return;
             }
@@ -924,15 +991,21 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private async Task ReorderChatList()
         {
+            if (_viewModel == null) return;
+            
             await Dispatcher.BeginInvoke(() =>
             {
                 if (SelectedItem != null)
                 {
                     SelectedItem.UnreadCount = 0;
                 }
-                ChatList = ChatList.GroupBy(x => x.Id).Select(x => x.First()).OrderByDescending(x => x.Time).ToList();
-                OnPropertyChanged(nameof(ChatList));
-                EmptyHint.Visibility = ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+                var sortedList = _viewModel.ChatList.GroupBy(x => x.Id).Select(x => x.First()).OrderByDescending(x => x.Time).ToList();
+                _viewModel.ChatList.Clear();
+                foreach (var item in sortedList)
+                {
+                    _viewModel.ChatList.Add(item);
+                }
+                EmptyHint.Visibility = _viewModel.ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             });
         }
 
