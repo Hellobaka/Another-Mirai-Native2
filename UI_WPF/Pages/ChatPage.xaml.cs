@@ -36,6 +36,10 @@ namespace Another_Mirai_Native.UI.Pages
         private readonly IMessageService _messageService;
         private readonly IChatListService _chatListService;
 
+        // 辅助管理器
+        private LazyLoadManager? _lazyLoadManager;
+        private MessageContainerManager? _messageContainerManager;
+
         public ChatPage()
         {
             // 初始化服务
@@ -90,24 +94,9 @@ namespace Another_Mirai_Native.UI.Pages
         private AtTargetSelector AtTargetSelector { get; set; }
 
         /// <summary>
-        /// 懒加载当前页数
-        /// </summary>
-        private int CurrentPageIndex { get; set; }
-
-        /// <summary>
         /// 窗体加载完成事件
         /// </summary>
         private bool FormLoaded { get; set; }
-
-        /// <summary>
-        /// 懒加载防抖时钟
-        /// </summary>
-        private DispatcherTimer LazyLoadDebounceTimer { get; set; }
-
-        /// <summary>
-        /// 是否在懒加载中
-        /// </summary>
-        private bool LazyLoading { get; set; }
 
         /// <summary>
         /// 初始化加载时的消息数量
@@ -277,23 +266,17 @@ namespace Another_Mirai_Native.UI.Pages
             var item = DetailList.FirstOrDefault(x => x.MsgId == msgId);
             if (item != null)
             {
-                // 遍历查询消息ID相同的, 并跳转
-                foreach (var control in MessageContainer.Children)
-                {
-                    if (control is ChatDetailListItem detail
-                        && detail.MsgId == msgId)
-                    {
-                        await Dispatcher.Yield();
-                        detail.BringIntoView();
-                        break;
-                    }
-                }
+                // 滚动到该消息
+                _messageContainerManager?.ScrollToMessage(msgId);
             }
             else
             {
                 // 计算相差数量, 进行懒加载并跳转
                 int lastId = DetailList.First().SqlId;
-                await LazyLoad(lastId - history.ID, msgId);
+                if (_lazyLoadManager != null)
+                {
+                    await _lazyLoadManager.LoadMoreMessagesAsync(lastId - history.ID, msgId);
+                }
             }
         }
 
@@ -345,7 +328,7 @@ namespace Another_Mirai_Native.UI.Pages
                 if (SelectedItem?.Id == group)
                 {
                     AddItemToMessageContainer(item, true);
-                    ScrollToBottom(MessageScrollViewer, qq == AppConfig.Instance.CurrentQQ);
+                    _messageContainerManager?.ScrollToBottom(qq == AppConfig.Instance.CurrentQQ);
                 }
             });
             itemAdded?.Invoke(item.GUID);
@@ -360,19 +343,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="isRemove">是否需要清理消息至最少</param>
         private void AddItemToMessageContainer(ChatDetailItemViewModel item, bool isRemove)
         {
-            MessageContainer.Children.Add(BuildChatDetailItem(item));
-            DetailList.Add(item);
-
-            if (isRemove && MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
-                && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
-            {
-                do
-                {
-                    MessageContainer.Children.RemoveAt(0);
-                    DetailList.RemoveAt(0);
-                    CurrentPageIndex = 1;
-                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
-            }
+            _messageContainerManager?.AddMessage(item, isRemove);
         }
 
         /// <summary>
@@ -474,7 +445,7 @@ namespace Another_Mirai_Native.UI.Pages
                 if (SelectedItem?.Id == qq)
                 {
                     AddItemToMessageContainer(item, true);
-                    ScrollToBottom(MessageScrollViewer, sender == AppConfig.Instance.CurrentQQ);
+                    _messageContainerManager?.ScrollToBottom(sender == AppConfig.Instance.CurrentQQ);
                 }
             });
             itemAdded?.Invoke(item.GUID);
@@ -670,11 +641,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 DetailList.Add(await ParseChatHistoryToViewModel(item.AvatarType, x));
             }
-            CurrentPageIndex = 1;
+            if (_lazyLoadManager != null)
+            {
+                _lazyLoadManager.CurrentPageIndex = 1;
+            }
             OnPropertyChanged(nameof(DetailList));
             item.UnreadCount = 0;
             GroupNameDisplay.Text = $"{SelectedItem.GroupName} [{SelectedItem.Id}]";
             UpdateUnreadCount(item);
+            
+            // 重置懒加载管理器
+            _lazyLoadManager?.Reset();
+            
             await RefreshMessageContainer(true);
         }
 
@@ -683,19 +661,12 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private bool CheckMessageContainerHasItem(string guid)
         {
-            foreach (UIElement item in MessageContainer.Children)
-            {
-                if (item is ChatDetailListItem detail && detail.GUID == guid)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _messageContainerManager?.HasMessage(guid) ?? false;
         }
 
         private void CleanMessageBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageContainer.Children.Clear();
+            _messageContainerManager?.ClearMessages();
         }
 
         private void CleanSendBtn_Click(object sender, RoutedEventArgs e)
@@ -725,63 +696,36 @@ namespace Another_Mirai_Native.UI.Pages
         }
 
         /// <summary>
-        /// 消息列表懒加载
+        /// 初始化辅助管理器
         /// </summary>
-        /// <param name="count">欲加载的消息数量</param>
-        /// <param name="msgId">最终跳转的消息ID, 若为-1则保持当前滚动条</param>
-        private async Task LazyLoad(int count, int msgId = -1)
+        private void InitializeManagers()
         {
-            if (SelectedItem == null)
-            {
-                return;
-            }
-            // 加载的页面数量
-            int diff = (int)Math.Ceiling(count / (float)UIConfig.Instance.MessageContainerMaxCount);
-            // 从数据库取的消息历史
-            List<ChatHistory> list = new List<ChatHistory>();
-            for (int i = CurrentPageIndex + 1; i <= CurrentPageIndex + diff; i++)
-            {
-                var ls = ChatHistoryHelper.GetHistoriesByPage(SelectedItem.Id,
-                    SelectedItem.AvatarType == ChatAvatar.AvatarTypes.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group,
-                    count,
-                    i);
-                list = list.Concat(ls).ToList();
-            }
-            if (list.Count > 0)
-            {
-                // 更新页数
-                CurrentPageIndex += diff;
-            }
-            else
-            {
-                return;
-            }
-            list.Reverse();
-            double distanceToBottom = MessageScrollViewer.ScrollableHeight - MessageScrollViewer.VerticalOffset;
-            FrameworkElement? scrollItem = null;
-            foreach (var item in list)
-            {
-                var viewModel = await ParseChatHistoryToViewModel(SelectedItem.AvatarType, item);
-                UIElement lastElement = BuildChatDetailItem(viewModel);
+            // 初始化消息容器管理器
+            _messageContainerManager = new MessageContainerManager(
+                MessageContainer,
+                MessageScrollViewer,
+                ScrollBottomContainer,
+                DetailList,
+                BuildChatDetailItem,
+                Dispatcher,
+                UIConfig.Instance.MessageContainerMaxCount
+            );
 
-                MessageContainer.Children.Insert(0, lastElement);
-                DetailList.Insert(0, viewModel);
-                if (item.MsgId == msgId)
+            // 初始化懒加载管理器
+            _lazyLoadManager = new LazyLoadManager(
+                MessageScrollViewer,
+                () => SelectedItem,
+                async (avatarType, history) => await ParseChatHistoryToViewModel(avatarType, history),
+                (items, insertAtBeginning) =>
                 {
-                    scrollItem = (FrameworkElement)lastElement;
-                }
-            }
-            MessageContainer.UpdateLayout();
-            await Dispatcher.Yield();
-            if (msgId == -1 || scrollItem == null)
-            {
-                // 保持滚动条位置
-                MessageScrollViewer.ScrollToVerticalOffset(MessageScrollViewer.ScrollableHeight - distanceToBottom);
-            }
-            else
-            {
-                scrollItem?.BringIntoView();
-            }
+                    if (_messageContainerManager != null)
+                    {
+                        _messageContainerManager.AddMessages(items, insertAtBeginning);
+                    }
+                },
+                Dispatcher,
+                LoadCount
+            );
         }
 
         /// <summary>
@@ -807,44 +751,6 @@ namespace Another_Mirai_Native.UI.Pages
             EmptyHint.Visibility = ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void MessageScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (sender is not ScrollViewer scrollViewer || e.VerticalChange == 0)
-            {
-                return;
-            }
-            double distanceToBottom = scrollViewer.ScrollableHeight - scrollViewer.VerticalOffset;
-            double distanceToTop = scrollViewer.VerticalOffset;
-
-            ScrollBottomContainer.Visibility = distanceToBottom > 100 ? Visibility.Visible : Visibility.Collapsed;
-            if (distanceToTop < 50 && distanceToBottom > 100 && !LazyLoading)
-            {
-                // 滚动条距顶部50像素以内 且 距离底部100像素以上
-                // 懒加载防抖
-                if (LazyLoadDebounceTimer == null)
-                {
-                    LazyLoadDebounceTimer = new DispatcherTimer
-                    {
-                        Interval = TimeSpan.FromMilliseconds(300),
-                    };
-                    LazyLoadDebounceTimer.Tick += (_, _) =>
-                    {
-                        LazyLoadDebounceTimer.Stop();
-                        Dispatcher.BeginInvoke(async () => await LazyLoad(UIConfig.Instance.MessageContainerMaxCount));
-                        Dispatcher.BeginInvoke(() => LazyLoading = false);
-                    };
-                    LazyLoading = true;
-                    LazyLoadDebounceTimer.Start();
-                }
-                else
-                {
-                    LazyLoadDebounceTimer.Stop();
-                }
-                LazyLoading = true;
-                LazyLoadDebounceTimer.Start();
-            }
-        }
-
         private async void Page_Loaded(object? sender, RoutedEventArgs? e)
         {
             if (AppConfig.Instance.EnableChat is false)
@@ -867,6 +773,10 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             FormLoaded = true;
+            
+            // 初始化辅助管理器
+            InitializeManagers();
+            
             SizeChanged += (_, e) => WindowSizeChanged?.Invoke(e);
 
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
@@ -988,15 +898,14 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="refreshAll">是否清空后加载</param>
         private async Task RefreshMessageContainer(bool refreshAll)
         {
-            if (SelectedItem == null)
+            if (SelectedItem == null || _messageContainerManager == null)
             {
                 return;
             }
             if (refreshAll)
             {
                 await RefreshGroupName();
-                MessageContainer.Children.Clear();
-                GC.Collect();
+                _messageContainerManager.ClearMessages();
             }
 
             var ls = DetailList.Skip(Math.Max(0, DetailList.Count - LoadCount)).ToList();
@@ -1007,7 +916,7 @@ namespace Another_Mirai_Native.UI.Pages
                     AddItemToMessageContainer(item, isRemove: true);
                 }
             }
-            ScrollToBottom(MessageScrollViewer);
+            _messageContainerManager.ScrollToBottom();
         }
 
         /// <summary>
@@ -1035,35 +944,12 @@ namespace Another_Mirai_Native.UI.Pages
             RichTextBoxHelper.HandlePaste(e, SendText);
         }
 
-        /// <summary>
-        /// 将滚动容器滚动至底部
-        /// 当滚动至底按钮不可见时不滚动
-        /// </summary>
-        /// <param name="scrollViewer">滚动容器</param>
-        /// <param name="forced">true时忽略滚动至底按钮是否可见</param>
-        private void ScrollToBottom(ScrollViewer scrollViewer, bool forced = false)
-        {
-            if (!forced && ScrollBottomContainer.Visibility == Visibility.Visible)
-            {
-                return;
-            }
-            scrollViewer.ScrollToBottom();
-        }
-
         private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
         {
-            ScrollToBottom(MessageScrollViewer, true);
+            _messageContainerManager?.ScrollToBottom(true);
             // 清理消息内容至数量以下
-            if (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount
-                 && MessageScrollViewer.VerticalOffset > 100)// 数量超过30，且滚动条不在懒加载区
-            {
-                do
-                {
-                    MessageContainer.Children.RemoveAt(0);
-                    DetailList.RemoveAt(0);
-                    CurrentPageIndex = 1;
-                } while (MessageContainer.Children.Count > UIConfig.Instance.MessageContainerMaxCount);
-            }
+            _messageContainerManager?.RemoveOldMessages(UIConfig.Instance.MessageContainerMaxCount);
+            _lazyLoadManager?.Reset();
         }
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
@@ -1104,21 +990,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="guid">目标GUID</param>
         private void UpdateSendFail(string? guid)
         {
-            if (string.IsNullOrEmpty(guid))
-            {
-                return;
-            }
-            Dispatcher.BeginInvoke(() =>
-            {
-                foreach (UIElement item in MessageContainer.Children)
-                {
-                    if (item is ChatDetailListItem detail && detail.GUID == guid)
-                    {
-                        detail.SendFail();
-                        return;
-                    }
-                }
-            });
+            _messageContainerManager?.MarkSendFailed(guid);
         }
 
         /// <summary>
@@ -1128,21 +1000,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="enable">正在发送</param>
         private void UpdateSendStatus(string? guid, bool enable)
         {
-            if (string.IsNullOrEmpty(guid))
-            {
-                return;
-            }
-            Dispatcher.BeginInvoke(() =>
-            {
-                foreach (UIElement item in MessageContainer.Children)
-                {
-                    if (item is ChatDetailListItem detail && detail.GUID == guid)
-                    {
-                        detail.UpdateSendStatus(enable);
-                        return;
-                    }
-                }
-            });
+            _messageContainerManager?.UpdateSendStatus(guid, enable);
         }
 
         /// <summary>
@@ -1152,21 +1010,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="msgId">消息ID</param>
         private void UpdateMessageId(string? guid, int msgId)
         {
-            if (string.IsNullOrEmpty(guid))
-            {
-                return;
-            }
-            Dispatcher.BeginInvoke(() =>
-            {
-                foreach (UIElement item in MessageContainer.Children)
-                {
-                    if (item is ChatDetailListItem detail && detail.GUID == guid)
-                    {
-                        detail.UpdateMessageId(msgId);
-                        return;
-                    }
-                }
-            });
+            _messageContainerManager?.UpdateMessageId(guid, msgId);
         }
     }
 }

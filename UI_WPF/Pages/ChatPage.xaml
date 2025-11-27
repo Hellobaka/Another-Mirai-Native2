@@ -191,8 +191,7 @@
                         <ScrollViewer
                             x:Name="MessageScrollViewer"
                             Grid.RowSpan="2"
-                            Padding="10"
-                            ScrollChanged="MessageScrollViewer_ScrollChanged">
+                            Padding="10">
                             <StackPanel x:Name="MessageContainer" />
                         </ScrollViewer>
                         <Grid
