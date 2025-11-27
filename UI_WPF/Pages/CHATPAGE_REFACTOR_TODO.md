@@ -4,9 +4,9 @@
 重构 `UI_WPF\Pages\ChatPage.xaml` 和 `ChatPage.xaml.cs`，减少重复代码，修复逻辑错误，拆分组件，提高可维护性。
 
 **当前状态**：
-- 代码行数：XAML 232行，C# ~946行（从1422行减少至946行，-33%）
-- 已完成任务：11/38（29%）
-- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成
+- 代码行数：XAML 232行，C# ~1137行（从1422行减少，目标是~970行）
+- 已完成任务：12/38（32%）
+- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成 ✅ Command绑定基本完成
 
 **累计成果**：
 - ✅ 阶段1.1：服务层抽象（3/3）- CacheService、MessageService、ChatListService
@@ -404,26 +404,33 @@
 
 ### 3.1 使用Command替代事件 ⭐ 优先级：中
 
-#### [ ] 任务3.1.1：将Click事件改为Command
+#### [x] 任务3.1.1：将Click事件改为Command
 **文件**：`UI_WPF\Pages\ChatPage.xaml`, `ChatPageViewModel.cs`
 **描述**：使用ICommand替代直接的Click事件处理
+**状态**：✅ 基本完成（部分遗留事件保留用于特殊场景）
 **当前问题**：
 - 所有按钮使用Click事件
 - 代码后台耦合度高
 
-**改造按钮列表**：
-- SendBtn_Click → SendMessageCommand
-- CleanSendBtn_Click → ClearSendCommand
-- AtBtn_Click → ShowAtSelectorCommand
-- PictureBtn_Click → SelectPictureCommand
-- AudioBtn_Click → SelectAudioCommand
-- CleanMessageBtn_Click → ClearMessageCommand
-- ScrollToBottomBtn_Click → ScrollToBottomCommand
+**已改造按钮列表**：
+- ✅ SendBtn_Click → SendMessageCommand
+- ✅ CleanSendBtn_Click → ClearSendCommand  
+- ✅ AtBtn_Click → ShowAtSelectorCommand
+- ✅ PictureBtn_Click → SelectPictureCommand
+- ✅ AudioBtn_Click → SelectAudioCommand
+- ✅ CleanMessageBtn_Click → ClearMessageCommand
+- ✅ ScrollToBottomBtn_Click → ScrollToBottomCommand
+
+**保留的事件处理**（由于特殊场景）：
+- ChatListDisplay_SelectionChanged - 需要处理UI状态变化
+- Page_Loaded - 页面初始化逻辑
+- FaceImageSelector_ImageSelected - Flyout内部事件
+- SendText_PreviewKeyDown - 键盘事件处理
 
 **预期改进**：
-- 符合MVVM最佳实践
-- 便于单元测试
-- 支持CommandParameter
+- ✅ 符合MVVM最佳实践
+- ✅ 便于单元测试
+- ✅ 支持CommandParameter
 
 ---
 
@@ -698,7 +705,7 @@ public class MessageSendingCoordinator
 
 ## 任务进度总结
 
-### 已完成任务（11/38 = 29%）✅
+### 已完成任务（12/38 = 32%）✅
 
 **阶段1.1 服务层抽象（3/3）✅**
 - [x] 1.1.1 ICacheService + CacheService
@@ -714,7 +721,8 @@ public class MessageSendingCoordinator
 - [x] 1.3.1 ChatPageViewModel
 - [x] 1.3.2 ToolbarViewModel
 
-**阶段3.1 数据绑定优化（1/2）**
+**阶段3.1 数据绑定优化（2/2）✅**
+- [x] 3.1.1 将Click事件改为Command（基本完成）
 - [x] 3.1.2 使用Binding替代硬编码（IsEnabled绑定）
 
 **阶段4.1 代码质量改进（4/5）**
@@ -723,10 +731,9 @@ public class MessageSendingCoordinator
 - [x] 4.1.3 修复内存泄漏风险
 - [x] 4.1.4 重构ExecuteSendMessage方法 🔥
 
-### 待完成任务（27/38 = 71%）
+### 待完成任务（26/38 = 68%）
 
 **高优先级：**
-- [ ] 3.1.1 将Click事件改为Command
 - [ ] 2.1.1-2.1.4 创建可复用用户控件（4个）
 
 **中优先级：**
@@ -741,17 +748,17 @@ public class MessageSendingCoordinator
 ## 进度追踪
 
 **总任务数**：38
-**已完成**：11 ✅
-**未开始**：27
+**已完成**：12 ✅
+**未开始**：26
 
-**完成进度**：11/38 (29%)
+**完成进度**：12/38 (32%)
 
 **阶段进度**：
 - [x] 阶段1.1：服务层抽象（3/3）✅
 - [x] 阶段1.2：辅助类提取（3/3）✅
 - [x] 阶段1.3：ViewModel优化（2/2）✅
 - [ ] 阶段2：XAML重构（0/6）
-- [x] 阶段3：数据绑定优化（1/2）
+- [x] 阶段3：数据绑定优化（2/2）✅
 - [ ] 阶段4：代码质量改进（4/5）
 - [ ] 阶段5：测试和文档（0/4）
 
