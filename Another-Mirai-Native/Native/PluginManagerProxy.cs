@@ -159,12 +159,6 @@ namespace Another_Mirai_Native.Native
         public bool LoadPlugins()
         {
             PluginLoaded = false;
-            string pluginTmpPath = Path.Combine("data", "plugins", "tmp");
-            if (Directory.Exists(pluginTmpPath))
-            {
-                Directory.Delete(pluginTmpPath, true);
-            }
-            Directory.CreateDirectory(pluginTmpPath);
             Stopwatch sw = Stopwatch.StartNew();
             foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {

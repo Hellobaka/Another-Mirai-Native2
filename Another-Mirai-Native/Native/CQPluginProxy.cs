@@ -9,6 +9,20 @@ namespace Another_Mirai_Native.Native
 {
     public class CQPluginProxy
     {
+        private static readonly string SessionTempDirectory;
+        private static readonly string TempRootDirectory;
+
+        static CQPluginProxy()
+        {
+            // 使用系统临时目录
+            TempRootDirectory = Path.Combine(Path.GetTempPath(), "Another-Mirai-Native2", "plugins");
+            // 为当前会话创建唯一的临时目录
+            SessionTempDirectory = Path.Combine(TempRootDirectory, $"session_{DateTime.Now:yyyyMMdd_HHmmss}_{Process.GetCurrentProcess().Id}");
+            
+            // 清理旧的临时目录
+            CleanupOldTempDirectories();
+        }
+
         public CQPluginProxy()
         {
         }
@@ -123,9 +137,14 @@ namespace Another_Mirai_Native.Native
         {
             try
             {
-                string pluginTmpPath = Path.Combine("data", "plugins", "tmp");
-                Directory.CreateDirectory(pluginTmpPath);
-                string newPath = Path.Combine(pluginTmpPath, Path.GetFileName(PluginBasePath));
+                // 创建会话临时目录
+                Directory.CreateDirectory(SessionTempDirectory);
+                
+                // 为每个插件创建唯一的子目录
+                string pluginTempDir = Path.Combine(SessionTempDirectory, Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(pluginTempDir);
+                
+                string newPath = Path.Combine(pluginTempDir, Path.GetFileName(PluginBasePath));
                 File.Copy(PluginBasePath, newPath, true);
                 File.Copy(Path.ChangeExtension(PluginBasePath, ".json"), Path.ChangeExtension(newPath, ".json"), true);
                 PluginPath = newPath;
@@ -141,6 +160,43 @@ namespace Another_Mirai_Native.Native
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 清理旧的临时目录，保留最近3个会话的目录
+        /// </summary>
+        private static void CleanupOldTempDirectories()
+        {
+            try
+            {
+                if (!Directory.Exists(TempRootDirectory))
+                {
+                    return;
+                }
+
+                var sessionDirs = Directory.GetDirectories(TempRootDirectory, "session_*")
+                    .Select(dir => new DirectoryInfo(dir))
+                    .OrderByDescending(dir => dir.CreationTime)
+                    .ToList();
+
+                // 保留最近3个会话的目录，删除其余的
+                foreach (var dir in sessionDirs.Skip(3))
+                {
+                    try
+                    {
+                        dir.Delete(true);
+                        LogHelper.Info("清理临时目录", $"已删除旧的临时目录: {dir.Name}");
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Debug("清理临时目录", $"删除目录失败: {dir.Name}, {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error("清理临时目录", e);
+            }
         }
 
         public bool LoadAppInfo()
