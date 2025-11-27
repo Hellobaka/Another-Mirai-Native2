@@ -35,6 +35,7 @@ namespace Another_Mirai_Native.UI.Pages
         private readonly ICacheService _cacheService;
         private readonly IMessageService _messageService;
         private readonly IChatListService _chatListService;
+        private MessageSendingCoordinator _messageSendingCoordinator;
 
         // 辅助管理器
         private LazyLoadManager? _lazyLoadManager;
@@ -58,6 +59,9 @@ namespace Another_Mirai_Native.UI.Pages
             // 初始化ViewModel
             _viewModel = new ChatPageViewModel();
             DataContext = _viewModel;
+            
+            // 初始化消息发送协调器（在MessageContainerManager初始化后会重新设置）
+            _messageSendingCoordinator = new MessageSendingCoordinator(_messageService);
             
             // 订阅ViewModel事件
             _viewModel.SelectedChatItemChanged += ViewModel_SelectedChatItemChanged;
@@ -260,70 +264,22 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="message">发送的消息</param>
         public async void ExecuteSendMessage(long id, ChatAvatar.AvatarTypes avatar, string message)
         {
-            if (id == 0 || string.IsNullOrEmpty(message))
+            var request = new SendMessageRequest
             {
-                return;
-            }
-            int sendMsgId = 0, sqlId = 0;
-            ManualResetEvent sendSignal = new(false);
-            var history = new ChatHistory
-            {
+                TargetId = id,
+                ChatType = avatar == ChatAvatar.AvatarTypes.QQGroup ? ChatType.Group : ChatType.Private,
+                AvatarType = avatar,
                 Message = message,
-                ParentID = id,
-                SenderID = AppConfig.Instance.CurrentQQ,
-                Type = avatar == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private,
-                MsgId = 0,
-                PluginName = "",
-                Time = DateTime.Now,
+                SenderId = AppConfig.Instance.CurrentQQ,
+                SendTime = DateTime.Now
             };
-            sqlId = ChatHistoryHelper.InsertHistory(history);
 
-            if (avatar == ChatAvatar.AvatarTypes.QQGroup)
+            var result = await _messageSendingCoordinator.SendMessageAsync(request);
+            
+            if (!result.Success && result.Exception != null)
             {
-                await AddGroupChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
-                    itemAdded: (guid) =>
-                    {
-                        UpdateSendStatus(guid, true);
-                        int msgId = CallGroupMsgSend(id, message);
-                        if (msgId != 0)
-                        {
-                            sendMsgId = msgId;
-                            UpdateSendStatus(guid, false);
-                            UpdateMessageId(guid, sendMsgId);
-                        }
-                        else
-                        {
-                            UpdateSendFail(guid);
-                        }
-                        sendSignal.Set();
-                    }
-                );
-            }
-            else
-            {
-                await AddPrivateChatItem(id, AppConfig.Instance.CurrentQQ, message, DetailItemType.Send, DateTime.Now,
-                     itemAdded: (guid) =>
-                     {
-                         UpdateSendStatus(guid, true);
-                         int msgId = CallPrivateMsgSend(id, message);
-                         if (msgId != 0)
-                         {
-                             sendMsgId = msgId;
-                             UpdateSendStatus(guid, false);
-                             UpdateMessageId(guid, sendMsgId);
-                         }
-                         else
-                         {
-                             UpdateSendFail(guid);
-                         }
-                         sendSignal.Set();
-                     });
-            }
-            sendSignal.WaitOne();
-            if (sendMsgId != 0)
-            {
-                ChatHistoryHelper.UpdateHistoryMessageId(id, avatar == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
-                    , sqlId, sendMsgId);
+                // 可以在这里添加日志记录或用户提示
+                System.Diagnostics.Debug.WriteLine($"消息发送失败: {result.ErrorMessage}");
             }
         }
 
@@ -423,7 +379,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         /// <returns>消息持久化的ID</returns>
-        private async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
+        internal async Task<int> AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
             string nick = await GetGroupMemberNick(group, qq);
             if (nick != null && plugin != null)
@@ -543,7 +499,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <param name="itemAdded">持久化后的回调</param>
         /// <param name="plugin">消息来源的插件</param>
         /// <returns>持久化后的ID</returns>
-        private async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
+        internal async Task<int> AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
             string nick = await GetFriendNick(sender);
             if (nick != null && plugin != null)
@@ -797,6 +753,9 @@ namespace Another_Mirai_Native.UI.Pages
                 Dispatcher,
                 LoadCount
             );
+            
+            // 重新初始化MessageSendingCoordinator，传入MessageContainerManager
+            _messageSendingCoordinator = new MessageSendingCoordinator(_messageService, _messageContainerManager);
         }
 
         /// <summary>
