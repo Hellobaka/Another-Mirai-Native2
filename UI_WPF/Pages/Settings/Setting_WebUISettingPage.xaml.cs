@@ -120,6 +120,26 @@ namespace Another_Mirai_Native.UI.Pages
 #endif
         }
 
+        private void SettingItem_Toggled(object sender, bool value)
+        {
+#if NET5_0_OR_GREATER
+            if (!FormLoaded || sender is not SettingItem_ToggleButton toggleButton)
+            {
+                return;
+            }
+            foreach (var property in AppConfigProperties)
+            {
+                if (property.Name != toggleButton.Name)
+                {
+                    continue;
+                }
+                property.SetValue(Blazor_Config.Instance, value);
+                Blazor_Config.Instance.SetConfig(property.Name, value);
+            }
+            AfterConfigSet(toggleButton.Name, value);
+#endif
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName) =>

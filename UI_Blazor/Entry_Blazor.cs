@@ -3,8 +3,9 @@ using Another_Mirai_Native.BlazorUI.Models;
 using Another_Mirai_Native.DB;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using MudBlazor.Services;
-using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Another_Mirai_Native.BlazorUI
 {
@@ -14,7 +15,7 @@ namespace Another_Mirai_Native.BlazorUI
         public static event Action OnBlazorServiceStopped;
 
         public static IHost BlazorHost { get; private set; }
-        
+
         public static string WebUIURL { get; private set; } = "";
 
         private static ManualResetEvent ConsoleStartedSignal { get; set; }
@@ -72,7 +73,7 @@ namespace Another_Mirai_Native.BlazorUI
                 builder.Services.AddSingleton<CircuitHandler, AuthCircuitHandler>();
                 if (!ConsoleMode)
                 {
-                    // �������Ĭ����־�ṩ����
+                    // 清除所有默认日志提供程序
                     builder.Logging.ClearProviders();
                     builder.Logging.AddProvider(Logging.Instance);
                 }
@@ -86,6 +87,7 @@ namespace Another_Mirai_Native.BlazorUI
                 {
                     WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
                 }
+                LoadHTTPsCertificate(builder.WebHost);
                 var app = builder.Build();
                 BlazorHost = app;
                 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
@@ -116,8 +118,78 @@ namespace Another_Mirai_Native.BlazorUI
             }
             catch (Exception ex)
             {
-                LogHelper.Error("WebUI�쳣", ex);
+                LogHelper.Error("WebUI异常", ex);
                 Helper.ShowErrorDialog(ex, true);
+            }
+        }
+
+        public static void LoadHTTPsCertificate(ConfigureWebHostBuilder webHost)
+        {
+            if (Blazor_Config.Instance.EnableHTTPS)
+            {
+                if (File.Exists(Blazor_Config.Instance.CertificatePath) && File.Exists(Blazor_Config.Instance.CertificateKeyPath))
+                {
+                    bool httpsLoaded = false;
+                    webHost.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.ConfigureHttpsDefaults(httpsOptions =>
+                        {
+                            if (TryLoadPEM(httpsOptions))
+                            {
+                                LogHelper.Info("加载 HTTPS", "成功加载了 PEM 证书");
+                                httpsLoaded = true;
+                            }
+                            else if (TryLoadPFX(httpsOptions))
+                            {
+                                LogHelper.Info("加载 HTTPS", "成功加载了 PFX 证书");
+                                httpsLoaded = true;
+                            }
+                            else
+                            {
+                                LogHelper.Error("加载 HTTPS", "启用HTTPS失败，证书文件加载失败");
+                            }
+                        });
+                    });
+                    if (httpsLoaded)
+                    {
+                        WebUIURL = WebUIURL.Replace("http://", "https://");
+                    }
+                }
+                else
+                {
+                    LogHelper.Error("加载 HTTPS", "启用HTTPS失败，证书文件不存在");
+                }
+            }
+        }
+
+        private static bool TryLoadPFX(HttpsConnectionAdapterOptions httpsOptions)
+        {
+            try
+            {
+                httpsOptions.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile(
+                    Blazor_Config.Instance.CertificatePath, Blazor_Config.Instance.CertificateKeyPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("加载 PFX 证书失败", ex);
+                return false;
+            }
+        }
+
+        private static bool TryLoadPEM(HttpsConnectionAdapterOptions httpsOptions)
+        {
+            try
+            {
+                var pemCert = X509Certificate2.CreateFromPemFile(Blazor_Config.Instance.CertificatePath, Blazor_Config.Instance.CertificateKeyPath);
+                byte[] pfxBytes = pemCert.Export(X509ContentType.Pfx);
+                httpsOptions.ServerCertificate = X509CertificateLoader.LoadPkcs12(pfxBytes, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("加载 PEM 证书失败", ex);
+                return false;
             }
         }
     }

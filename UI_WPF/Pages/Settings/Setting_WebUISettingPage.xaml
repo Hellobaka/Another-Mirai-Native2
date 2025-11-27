@@ -49,6 +49,39 @@
                         DataChanged="SettingItem_TextBox_DataChanged" />
                 </ui:SimpleStackPanel>
             </Border>
+
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        🔒 HTTPS 设置
+                    </TextBlock>
+                    <controls:SettingItem_ToggleButton
+                        x:Name="EnableHTTPS"
+                        Title="启用 HTTPS"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="启用 HTTPS 加密连接" />
+                    <controls:SettingItem_TextBox
+                        x:Name="CertificatePath"
+                        Title="证书路径"
+                        DataChanged="SettingItem_TextBox_DataChanged"
+                        Subtitle="SSL/TLS 证书文件路径（.crt 或 .pem）" />
+                    <controls:SettingItem_TextBox
+                        x:Name="CertificateKeyPath"
+                        Title="证书密钥路径"
+                        DataChanged="SettingItem_TextBox_DataChanged"
+                        Subtitle="SSL/TLS 证书私钥文件路径（.key 或 .pem）" />
+                </ui:SimpleStackPanel>
+            </Border>
         </StackPanel>
     </ui:SimpleStackPanel>
 </Page>

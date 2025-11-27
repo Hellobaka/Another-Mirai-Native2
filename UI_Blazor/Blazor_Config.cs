@@ -17,7 +17,13 @@ namespace Another_Mirai_Native.BlazorUI
 
         public int ListenPort { get; set; } = 5000;
 
+        public bool EnableHTTPS { get; set; }
+
         public string Password { get; set; }
+
+        public string CertificatePath { get; set; }
+
+        public string CertificateKeyPath { get; set; }
 
         public void LoadConfig()
         {
@@ -34,6 +40,9 @@ namespace Another_Mirai_Native.BlazorUI
                 Console.Error.WriteLine($"ListenPort {ListenPort} is invalid port, now changed to 5000");
                 ListenPort = 5000;
             }
+            CertificatePath = GetConfig("CertificatePath", "");
+            CertificateKeyPath = GetConfig("CertificateKeyPath", "");
+            EnableHTTPS = GetConfig("EnableHTTPS", false);
         }
     }
 }
