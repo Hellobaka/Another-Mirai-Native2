@@ -174,7 +174,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             
             // 更新显示名称
-            GroupNameDisplay.Text = $"{item.GroupName} [{item.Id}]";
+            GroupNameText.Text = $"{item.GroupName} [{item.Id}]";
             GroupName = item.GroupName;
             
             // 重置懒加载管理器
@@ -196,7 +196,7 @@ namespace Another_Mirai_Native.UI.Pages
                     sendText);
             });
             // 清空发送框
-            RichTextBoxHelper.Clear(SendText);
+            RichTextBoxHelper.Clear(SendTextBox);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private void ViewModel_ClearSendBoxRequested(object? sender, EventArgs e)
         {
-            RichTextBoxHelper.Clear(SendText);
+            RichTextBoxHelper.Clear(SendTextBox);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Another_Mirai_Native.UI.Pages
                 Content = AtTargetSelector,
                 Placement = ModernWpf.Controls.Primitives.FlyoutPlacementMode.TopEdgeAlignedLeft
             };
-            AtFlyout.ShowAt(AtBtn);
+            AtFlyout.ShowAt(AtButton);
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                RichTextBoxHelper.InsertText(SendText, text);
+                RichTextBoxHelper.InsertText(SendTextBox, text);
             });
         }
 
@@ -707,7 +707,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <returns>处理后的CQ码消息</returns>
         private string BuildTextFromRichTextBox()
         {
-            return RichTextBoxHelper.ConvertToCQCode(SendText);
+            return RichTextBoxHelper.ConvertToCQCode(SendTextBox);
         }
 
         /// <summary>
@@ -717,7 +717,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (_viewModel == null) return;
             
-            var item = ChatListDisplay.SelectedItem as ChatListItemViewModel;
+            var item = ChatListView.SelectedItem as ChatListItemViewModel;
             if (item != null)
             {
                 // 更新ViewModel的选中项，这会触发ViewModel_SelectedChatItemChanged事件
@@ -763,7 +763,7 @@ namespace Another_Mirai_Native.UI.Pages
             _messageContainerManager = new MessageContainerManager(
                 MessageContainer,
                 MessageScrollViewer,
-                ScrollBottomContainer,
+                ScrollToBottomButton,
                 DetailList,
                 BuildChatDetailItem,
                 Dispatcher,
@@ -812,18 +812,18 @@ namespace Another_Mirai_Native.UI.Pages
                     UnreadCount = 0
                 });
             }
-            EmptyHint.Visibility = _viewModel.ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
+            EmptyHintText.Visibility = _viewModel.ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private async void Page_Loaded(object? sender, RoutedEventArgs? e)
         {
             if (AppConfig.Instance.EnableChat is false)
             {
-                DisableDisplay.Visibility = Visibility.Visible;
+                DisabledHintText.Visibility = Visibility.Visible;
                 MainContent.Visibility = Visibility.Collapsed;
                 return;
             }
-            DisableDisplay.Visibility = Visibility.Collapsed;
+            DisabledHintText.Visibility = Visibility.Collapsed;
             MainContent.Visibility = Visibility.Visible;
 
             if (FormLoaded)
@@ -832,7 +832,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     // 当没有内容被选中时 选中第一项
                     await Dispatcher.Yield();
-                    ChatListDisplay.SelectedItem = _viewModel.ChatList.First();
+                    ChatListView.SelectedItem = _viewModel.ChatList.First();
                 }
                 return;
             }
@@ -854,7 +854,7 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
 
-            DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
+            DataObject.AddPastingHandler(SendTextBox, RichTextboxPasteOverrideAction);
             await LoadChatHistory();
             await ReorderChatList();
         }
@@ -930,7 +930,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     _viewModel.ChatList.Add(item);
                 }
-                EmptyHint.Visibility = _viewModel.ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+                EmptyHintText.Visibility = _viewModel.ChatList.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             });
         }
 
@@ -939,7 +939,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// </summary>
         private void RichTextboxPasteOverrideAction(object sender, DataObjectPastingEventArgs e)
         {
-            RichTextBoxHelper.HandlePaste(e, SendText);
+            RichTextBoxHelper.HandlePaste(e, SendTextBox);
         }
 
         private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
@@ -964,7 +964,7 @@ namespace Another_Mirai_Native.UI.Pages
                 ExecuteSendMessage(id, avatar, sendText);
             });
             // 清空发送框
-            RichTextBoxHelper.Clear(SendText);
+            RichTextBoxHelper.Clear(SendTextBox);
         }
 
         private void SendText_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -1119,9 +1119,9 @@ namespace Another_Mirai_Native.UI.Pages
             CQPImplementation.OnGroupMessageSend -= CQPImplementation_OnGroupMessageSend;
 
             // 取消粘贴事件订阅
-            if (SendText != null)
+            if (SendTextBox != null)
             {
-                DataObject.RemovePastingHandler(SendText, RichTextboxPasteOverrideAction);
+                DataObject.RemovePastingHandler(SendTextBox, RichTextboxPasteOverrideAction);
             }
 
             // 释放辅助管理器

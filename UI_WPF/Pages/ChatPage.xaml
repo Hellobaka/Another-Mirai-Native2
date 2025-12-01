@@ -21,63 +21,77 @@
         <converter:DetailAlignRightConverter x:Key="DetailAlignRightConverter" />
         <converter:DetailAlignCenterConverter x:Key="DetailAlignCenterConverter" />
     </Page.Resources>
-    <Grid>
+    <!-- 任务2.2.1: 减少Grid嵌套 - 合并外层Grid -->
+    <Grid x:Name="MainContentGrid">
+        <!-- 禁用状态提示 -->
+        <TextBlock
+            x:Name="DisabledHintText"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="Collapsed">
+            聊天窗口未启用，请前往设置打开配置后重启程序
+        </TextBlock>
+        
+        <!-- 主内容区域 -->
         <Grid x:Name="MainContent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2.5*" />
             </Grid.ColumnDefinitions>
+            
+            <!-- 左侧：聊天列表面板 -->
             <ui:ScrollViewerEx Grid.Column="0">
-                <Border>
-                    <StackPanel>
-                        <TextBlock
-                            x:Name="EmptyHint"
-                            Margin="10"
-                            TextAlignment="Center">
-                            空空如也喵~
-                        </TextBlock>
-                        <ListView
-                            x:Name="ChatListDisplay"
-                            Margin="0,10"
-                            HorizontalContentAlignment="Stretch"
-                            ItemsSource="{Binding ChatList}"
-                            SelectedItem="{Binding SelectedChatItem, Mode=TwoWay}"
-                            SelectionChanged="ChatListDisplay_SelectionChanged">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <controls:ChatListItem
-                                        MaxWidth="{Binding ActualWidth, ElementName=ChatListDisplay, Converter={StaticResource WidthConverter}, ConverterParameter={x:Static SystemParameters.VerticalScrollBarWidth}}"
-                                        Margin="0,10"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Center"
-                                        Item="{Binding}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                </Border>
+                <StackPanel>
+                    <TextBlock
+                        x:Name="EmptyHintText"
+                        Margin="10"
+                        TextAlignment="Center">
+                        空空如也喵~
+                    </TextBlock>
+                    <ListView
+                        x:Name="ChatListView"
+                        Margin="0,10"
+                        HorizontalContentAlignment="Stretch"
+                        ItemsSource="{Binding ChatList}"
+                        SelectedItem="{Binding SelectedChatItem, Mode=TwoWay}"
+                        SelectionChanged="ChatListDisplay_SelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <controls:ChatListItem
+                                    MaxWidth="{Binding ActualWidth, ElementName=ChatListView, Converter={StaticResource WidthConverter}, ConverterParameter={x:Static SystemParameters.VerticalScrollBarWidth}}"
+                                    Margin="0,10"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Item="{Binding}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
             </ui:ScrollViewerEx>
-            <Grid
-                x:Name="DetailContainer"
+            
+            <!-- 右侧：详情面板 - 任务2.2.1: 使用DockPanel简化布局 -->
+            <DockPanel
+                x:Name="DetailPanel"
                 Grid.Column="1"
-                Margin="10,10,10,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="6*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
-                <Border>
-                    <TextBlock x:Name="GroupNameDisplay" FontSize="18" />
-                </Border>
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal">
+                Margin="10,10,10,0"
+                LastChildFill="True">
+                
+                <!-- 顶部：群名称显示 -->
+                <TextBlock
+                    x:Name="GroupNameText"
+                    DockPanel.Dock="Top"
+                    FontSize="18" />
+                
+                <!-- 底部：输入面板 - 任务2.2.1: 使用DockPanel简化输入区域 -->
+                <DockPanel
+                    x:Name="InputPanel"
+                    DockPanel.Dock="Bottom"
+                    MinHeight="120">
+                    
+                    <!-- 工具栏 -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                         <Button
-                            x:Name="FaceBtn"
+                            x:Name="FaceButton"
                             Margin="0,0,5,8"
                             IsEnabled="{Binding ToolbarViewModel.IsFaceEnabled}">
                             <ui:FontIcon
@@ -93,7 +107,7 @@
                             </ui:FlyoutService.Flyout>
                         </Button>
                         <Button
-                            x:Name="AtBtn"
+                            x:Name="AtButton"
                             Margin="0,0,5,8"
                             Command="{Binding ShowAtSelectorCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsAtEnabled}">
@@ -105,7 +119,7 @@
                                 Glyph="&#xE716;" />
                         </Button>
                         <Button
-                            x:Name="PictureBtn"
+                            x:Name="PictureButton"
                             Margin="0,0,5,8"
                             Command="{Binding SelectPictureCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsPictureEnabled}">
@@ -117,7 +131,7 @@
                                 Glyph="&#xEB9F;" />
                         </Button>
                         <Button
-                            x:Name="AudioBtn"
+                            x:Name="AudioButton"
                             Margin="0,0,5,8"
                             Command="{Binding SelectAudioCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsAudioEnabled}">
@@ -129,7 +143,7 @@
                                 Glyph="&#xE720;" />
                         </Button>
                         <Button
-                            x:Name="CleanMessageBtn"
+                            x:Name="ClearMessageButton"
                             Margin="0,0,5,8"
                             Command="{Binding ClearMessageCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsClearMessageEnabled}">
@@ -141,92 +155,74 @@
                                 Glyph="&#xE75C;" />
                         </Button>
                     </StackPanel>
-                    <RichTextBox
-                        x:Name="SendText"
-                        Grid.Row="1"
-                        AcceptsReturn="True"
-                        HorizontalScrollBarVisibility="Auto"
-                        IsEnabled="{Binding ToolbarViewModel.IsSendEnabled}"
-                        PreviewKeyDown="SendText_PreviewKeyDown"
-                        VerticalScrollBarVisibility="Auto" />
-                    <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    
+                    <!-- 操作按钮行 -->
+                    <StackPanel
+                        DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,5,0,10">
                         <Button
-                            x:Name="CleanSendBtn"
+                            x:Name="ClearSendButton"
                             Width="150"
-                            Margin="0,5,10,10"
-                            HorizontalAlignment="Right"
+                            Margin="0,0,10,0"
                             VerticalAlignment="Center"
                             Command="{Binding ClearSendBoxCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsClearSendEnabled}">
                             清空
                         </Button>
                         <Button
-                            x:Name="SendBtn"
-                            Grid.Column="1"
+                            x:Name="SendButton"
                             Width="150"
-                            Margin="0,5,0,10"
-                            HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Command="{Binding SendMessageCommand}"
                             IsEnabled="{Binding ToolbarViewModel.IsSendEnabled}"
                             Style="{StaticResource AccentButtonStyle}">
                             发送
                         </Button>
-                    </Grid>
-                </Grid>
+                    </StackPanel>
+                    
+                    <!-- 输入框 -->
+                    <RichTextBox
+                        x:Name="SendTextBox"
+                        AcceptsReturn="True"
+                        HorizontalScrollBarVisibility="Auto"
+                        IsEnabled="{Binding ToolbarViewModel.IsSendEnabled}"
+                        PreviewKeyDown="SendText_PreviewKeyDown"
+                        VerticalScrollBarVisibility="Auto" />
+                </DockPanel>
+                
+                <!-- 中间：消息显示区域 -->
                 <Border
-                    Grid.Row="1"
                     Margin="0,10"
                     BorderBrush="{DynamicResource SystemControlBackgroundAccentBrush}"
                     BorderThickness="1"
                     CornerRadius="5">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
+                    <Grid x:Name="MessageDisplayGrid">
                         <ScrollViewer
                             x:Name="MessageScrollViewer"
-                            Grid.RowSpan="2"
                             Padding="10">
                             <StackPanel x:Name="MessageContainer" />
                         </ScrollViewer>
-                        <Grid
-                            x:Name="ScrollBottomContainer"
-                            Grid.Row="1"
+                        <!-- 滚动到底部按钮 -->
+                        <Button
+                            x:Name="ScrollToBottomButton"
+                            Width="40"
+                            Margin="20,10"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding ScrollToBottomCommand}"
+                            Style="{StaticResource AccentButtonStyle}"
                             Visibility="Collapsed">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <Button
-                                x:Name="ScrollToBottomBtn"
-                                Grid.Column="1"
-                                Width="40"
-                                Margin="20,10"
-                                Command="{Binding ScrollToBottomCommand}"
-                                Style="{StaticResource AccentButtonStyle}">
-                                <ui:FontIcon
-                                    Width="14"
-                                    Height="14"
-                                    FontSize="14"
-                                    Glyph="&#xE74B;" />
-                            </Button>
-                        </Grid>
+                            <ui:FontIcon
+                                Width="14"
+                                Height="14"
+                                FontSize="14"
+                                Glyph="&#xE74B;" />
+                        </Button>
                     </Grid>
                 </Border>
-            </Grid>
+            </DockPanel>
         </Grid>
-        <TextBlock
-            x:Name="DisableDisplay"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Visibility="Collapsed">
-            聊天窗口未启用，请前往设置打开配置后重启程序
-        </TextBlock>
     </Grid>
 </Page>
