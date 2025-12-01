@@ -132,13 +132,13 @@ UI_WPF/Pages/Helpers/
 
 统一的消息发送流程协调器：
 
-```csharp
-// 发送流程
-1. SaveToDatabase()      // 保存到数据库
-2. AddToUI()            // 添加到UI并获取GUID
-3. UpdateSendingStatus() // 显示发送中状态
-4. SendMessage()        // 调用API发送
-5. UpdateSuccess/Failed() // 更新结果状态
+```text
+发送流程步骤:
+1. SaveToDatabase()      - 保存到数据库
+2. AddToUI()             - 添加到UI并获取GUID
+3. UpdateSendingStatus() - 显示发送中状态
+4. SendMessage()         - 调用API发送
+5. UpdateSuccess/Failed() - 更新结果状态
 ```
 
 ### LazyLoadManager
@@ -239,8 +239,8 @@ ChatPage.xaml
 
 控件命名采用 `{组件用途}{控件类型}` 格式：
 
-| 名称 | 类型 | 说明 |
-|------|------|------|
+| Name | Type | Description |
+|------|------|-------------|
 | EmptyHintText | TextBlock | 空状态提示 |
 | ChatListView | ListView | 聊天列表 |
 | DetailPanel | DockPanel | 详情面板 |
