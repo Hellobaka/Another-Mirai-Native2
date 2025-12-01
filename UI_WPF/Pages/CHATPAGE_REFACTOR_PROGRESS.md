@@ -10,12 +10,13 @@
 2025-12-01 03:06 - ✅ **第七次迭代：缓存批量查询和预热优化完成**
 2025-12-01 03:40 - ✅ **第八次迭代：架构文档创建完成**
 2025-12-01 04:30 - ✅ **第九次迭代：单元测试完成**
+2025-12-01 04:48 - ✅ **第十次迭代：使用ChatListService优化代码**
 
 ## 最新状态
 ✅ **编译通过** - 所有修改已通过编译测试（0错误）
 📊 **进度**: 23/38 任务完成 (61%)
-📉 **代码行数**: ChatPage.xaml ~228行（-2%），ChatPage.xaml.cs ~1137行（-20%）
-✅ **已完成**: MVVM模式✅ ExecuteSendMessage重构✅ 内存泄漏修复✅ Command绑定✅ 可复用UI控件✅ XAML布局优化✅ 命名规范统一✅ 缓存批量查询✅ 架构文档✅ 单元测试✅
+📉 **代码行数**: ChatPage.xaml ~228行（-2%），ChatPage.xaml.cs ~1128行（-21%）
+✅ **已完成**: MVVM模式✅ ExecuteSendMessage重构✅ 内存泄漏修复✅ Command绑定✅ 可复用UI控件✅ XAML布局优化✅ 命名规范统一✅ 缓存批量查询✅ 架构文档✅ 单元测试✅ ChatListService优化✅
 🎯 **下一步**: 无（主要任务已完成，仅剩虚拟化优化暂缓）
 
 ## 已完成的任务
@@ -494,6 +495,30 @@ Task PreloadGroupMemberCacheAsync(long groupId);
 - Moq 4.20.70
 - Microsoft.NET.Test.Sdk 17.8.0
 - coverlet.collector 6.0.0
+
+---
+
+## 第十次迭代（2025-12-01）
+
+### ChatListService 优化 ✅
+
+**修改的文件：**
+- `UI_WPF\Pages\ChatPage.xaml.cs` - 使用 ChatListService 方法替换重复代码
+
+**改进内容：**
+
+1. **LoadChatHistory 方法优化**
+   - 原实现：直接调用 `ChatHistoryHelper.GetHistoryCategroies()` 并手动构建 `ChatListItemViewModel`
+   - 新实现：调用 `_chatListService.LoadChatHistoryAsync()` 获取已构建好的列表
+   - 减少约 10 行代码
+
+2. **ReorderChatList 方法优化**
+   - 原实现：直接使用 LINQ 进行分组、去重和排序
+   - 新实现：调用 `_chatListService.ReorderChatList()` 方法
+   - 代码更简洁，逻辑集中
+
+**代码行数变化：**
+- ChatPage.xaml.cs: 1136行 → 1128行（减少8行）
 
 ---
 
