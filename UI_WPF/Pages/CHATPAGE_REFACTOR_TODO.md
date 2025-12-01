@@ -5,16 +5,18 @@
 
 **当前状态**：
 - 代码行数：XAML 232行，C# ~1137行（从1422行减少，目标是~970行）
-- 已完成任务：12/38（32%）
-- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成 ✅ Command绑定基本完成
+- 已完成任务：16/38（42%）
+- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成 ✅ Command绑定基本完成 ✅ 可复用UI控件创建
 
 **累计成果**：
 - ✅ 阶段1.1：服务层抽象（3/3）- CacheService、MessageService、ChatListService
 - ✅ 阶段1.2：辅助类提取（3/3）- LazyLoadManager、MessageContainerManager、RichTextBoxHelper
 - ✅ 阶段1.3：ViewModel优化（2/2）- ChatPageViewModel、ToolbarViewModel
+- ✅ 阶段2.1：可复用控件（4/4）- ChatToolbar、MessageInputPanel、ChatListPanel、MessageDisplayPanel
 - ✅ 阶段4.1：质量改进（4/5）- 修复私聊ID错误、缓存竞态、内存泄漏、重构ExecuteSendMessage
 - 📊 代码减少：约476行（-33%）
 - 📈 新增模块化代码：约2089行（10个服务/辅助类/ViewModel）
+- 📈 新增UI组件代码：约750行（4个可复用用户控件）
 
 ---
 
@@ -247,9 +249,10 @@
 
 ### 2.1 创建可复用控件 ⭐ 优先级：中
 
-#### [ ] 任务2.1.1：创建 ChatToolbar 用户控件
+#### [x] 任务2.1.1：创建 ChatToolbar 用户控件
 **文件**：`UI_WPF\Controls\ChatToolbar.xaml`, `ChatToolbar.xaml.cs`
 **描述**：将工具栏按钮提取为独立控件
+**状态**：✅ 已完成（先前已创建）
 **当前问题**：
 - 工具栏按钮代码重复（约60行）
 - 按钮样式不统一
@@ -276,9 +279,10 @@
 
 ---
 
-#### [ ] 任务2.1.2：创建 MessageInputPanel 用户控件
+#### [x] 任务2.1.2：创建 MessageInputPanel 用户控件
 **文件**：`UI_WPF\Controls\MessageInputPanel.xaml`, `MessageInputPanel.xaml.cs`
 **描述**：将消息输入区域提取为独立控件
+**状态**：✅ 已完成
 **当前问题**：
 - 输入框、工具栏、发送按钮混在一起
 - Grid嵌套过深（3-4层）
@@ -303,9 +307,10 @@
 
 ---
 
-#### [ ] 任务2.1.3：创建 ChatListPanel 用户控件
+#### [x] 任务2.1.3：创建 ChatListPanel 用户控件
 **文件**：`UI_WPF\Controls\ChatListPanel.xaml`, `ChatListPanel.xaml.cs`
 **描述**：将左侧聊天列表提取为独立控件
+**状态**：✅ 已完成
 **当前问题**：
 - 列表和空状态提示混在一起
 - ScrollViewer包装不必要
@@ -331,9 +336,10 @@
 
 ---
 
-#### [ ] 任务2.1.4：创建 MessageDisplayPanel 用户控件
+#### [x] 任务2.1.4：创建 MessageDisplayPanel 用户控件
 **文件**：`UI_WPF\Controls\MessageDisplayPanel.xaml`, `MessageDisplayPanel.xaml.cs`
 **描述**：将消息显示区域提取为独立控件
+**状态**：✅ 已完成
 **当前问题**：
 - 消息容器、滚动按钮、标题混在一起
 - Border和Grid嵌套复杂
@@ -705,7 +711,7 @@ public class MessageSendingCoordinator
 
 ## 任务进度总结
 
-### 已完成任务（12/38 = 32%）✅
+### 已完成任务（16/38 = 42%）✅
 
 **阶段1.1 服务层抽象（3/3）✅**
 - [x] 1.1.1 ICacheService + CacheService
@@ -721,6 +727,12 @@ public class MessageSendingCoordinator
 - [x] 1.3.1 ChatPageViewModel
 - [x] 1.3.2 ToolbarViewModel
 
+**阶段2.1 可复用UI控件（4/4）✅**
+- [x] 2.1.1 ChatToolbar 用户控件
+- [x] 2.1.2 MessageInputPanel 用户控件
+- [x] 2.1.3 ChatListPanel 用户控件
+- [x] 2.1.4 MessageDisplayPanel 用户控件
+
 **阶段3.1 数据绑定优化（2/2）✅**
 - [x] 3.1.1 将Click事件改为Command（基本完成）
 - [x] 3.1.2 使用Binding替代硬编码（IsEnabled绑定）
@@ -731,10 +743,7 @@ public class MessageSendingCoordinator
 - [x] 4.1.3 修复内存泄漏风险
 - [x] 4.1.4 重构ExecuteSendMessage方法 🔥
 
-### 待完成任务（26/38 = 68%）
-
-**高优先级：**
-- [ ] 2.1.1-2.1.4 创建可复用用户控件（4个）
+### 待完成任务（22/38 = 58%）
 
 **中优先级：**
 - [ ] 2.2.1-2.2.2 XAML优化（2个）
@@ -748,16 +757,17 @@ public class MessageSendingCoordinator
 ## 进度追踪
 
 **总任务数**：38
-**已完成**：12 ✅
-**未开始**：26
+**已完成**：16 ✅
+**未开始**：22
 
-**完成进度**：12/38 (32%)
+**完成进度**：16/38 (42%)
 
 **阶段进度**：
 - [x] 阶段1.1：服务层抽象（3/3）✅
 - [x] 阶段1.2：辅助类提取（3/3）✅
 - [x] 阶段1.3：ViewModel优化（2/2）✅
-- [ ] 阶段2：XAML重构（0/6）
+- [x] 阶段2.1：可复用控件（4/4）✅
+- [ ] 阶段2.2：XAML布局优化（0/2）
 - [x] 阶段3：数据绑定优化（2/2）✅
 - [ ] 阶段4：代码质量改进（4/5）
 - [ ] 阶段5：测试和文档（0/4）
@@ -829,3 +839,5 @@ public class MessageSendingCoordinator
 - 2025-11-27 06:52：🔄 ChatPage.xaml.cs重构 - 集成ViewModel，移除INotifyPropertyChanged，改用数据绑定
 - 2025-11-27 06:53：🐛 修复编译错误 - 添加缺失的using引用
 - 2025-11-27 06:55：✅ 完成任务4.1.3 - 修复内存泄漏风险，实现IDisposable和事件取消订阅
+- 2025-12-01 01:55：✅ 完成任务2.1.1-2.1.4 - 创建可复用UI控件（ChatToolbar, MessageInputPanel, ChatListPanel, MessageDisplayPanel）
+- 2025-12-01 01:55：✅ **编译通过验证** - 所有新增控件已通过编译测试

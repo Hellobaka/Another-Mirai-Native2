@@ -5,13 +5,14 @@
 2025-11-27 06:32 - 06:44 ✅ **第二次迭代完成**
 2025-11-27 06:46 - 06:55 ✅ **第三次迭代完成（MVVM + 内存泄漏修复）**
 2025-11-27 07:47 - 进行中 🔄 **第四次迭代：优化遗留代码，推进UI组件拆分**
+2025-12-01 01:55 - ✅ **第五次迭代：创建可复用UI控件完成**
 
 ## 最新状态
 ✅ **编译通过** - 所有修改已通过编译测试
-📊 **进度**: 12/38 任务完成 (32%)
+📊 **进度**: 16/38 任务完成 (42%)
 📉 **代码行数**: ChatPage.xaml.cs ~1137行（从1422行减至~970行的目标还差167行）
-✅ **已完成**: MVVM模式✅ ExecuteSendMessage重构✅ 内存泄漏修复✅ Command绑定✅
-🎯 **下一步**: 继续优化ChatPage遗留代码，准备UI组件拆分
+✅ **已完成**: MVVM模式✅ ExecuteSendMessage重构✅ 内存泄漏修复✅ Command绑定✅ 可复用UI控件✅
+🎯 **下一步**: XAML布局优化（2.2.1-2.2.2），将控件集成到ChatPage
 
 ## 已完成的任务
 
@@ -297,24 +298,58 @@
 
 ---
 
+### ✅ 阶段2：可复用UI控件创建（2025-12-01 完成）
+
+#### 8. MessageInputPanel 用户控件 (任务2.1.2) - **NEW** ✅
+
+**创建的文件：**
+- `UI_WPF\Controls\MessageInputPanel.xaml` - 消息输入面板XAML
+- `UI_WPF\Controls\MessageInputPanel.xaml.cs` - 消息输入面板代码
+
+**功能说明：**
+- 包含工具栏按钮（表情、@、图片、音频、清空消息）
+- RichTextBox输入框，支持粘贴图片
+- 清空和发送按钮
+- 提供依赖属性控制按钮启用状态
+- 触发SendMessageRequested事件进行消息发送
+- 约280行代码
+
+#### 9. ChatListPanel 用户控件 (任务2.1.3) - **NEW** ✅
+
+**创建的文件：**
+- `UI_WPF\Controls\ChatListPanel.xaml` - 聊天列表面板XAML
+- `UI_WPF\Controls\ChatListPanel.xaml.cs` - 聊天列表面板代码
+
+**功能说明：**
+- 包含空状态提示和ListView
+- 自动管理空状态提示的可见性
+- 提供ItemsSource和SelectedItem依赖属性
+- 触发SelectionChanged事件
+- 约130行代码
+
+#### 10. MessageDisplayPanel 用户控件 (任务2.1.4) - **NEW** ✅
+
+**创建的文件：**
+- `UI_WPF\Controls\MessageDisplayPanel.xaml` - 消息显示面板XAML
+- `UI_WPF\Controls\MessageDisplayPanel.xaml.cs` - 消息显示面板代码
+
+**功能说明：**
+- 包含消息容器和滚动视图
+- 滚动到底部按钮，智能显示/隐藏
+- 提供AddMessage、ClearMessages、ScrollToBottom等方法
+- 支持懒加载触发事件
+- 约270行代码
+
+---
+
 ## 待完成任务
 
-### 高优先级（推荐接下来完成）
-- [ ] 任务1.3.1: ChatPageViewModel - MVVM模式改造
-- [ ] 任务1.3.2: ToolbarViewModel - 工具栏状态管理
-- [ ] 任务4.1.3: 修复内存泄漏风险（事件订阅）
-
 ### 中优先级
-- [ ] 任务2.1.1: ChatToolbar 用户控件
-- [ ] 任务2.1.2: MessageInputPanel 用户控件
-- [ ] 任务2.1.3: ChatListPanel 用户控件
-- [ ] 任务2.1.4: MessageDisplayPanel 用户控件
-- [ ] 任务3.1.1: 使用Command替代Click事件
-- [ ] 任务3.1.2: 使用Binding替代硬编码
-
-### 低优先级
 - [ ] 任务2.2.1: 减少Grid嵌套层级
 - [ ] 任务2.2.2: 统一命名规范
+- [ ] 将新控件集成到ChatPage.xaml中
+
+### 低优先级
 - [ ] 任务4.2.1: 优化消息容器渲染（虚拟化）
 - [ ] 任务4.2.2: 优化缓存查询（批量、预热）
 - [ ] 任务5.1.1: 服务层单元测试
@@ -327,45 +362,42 @@
 ## 下一步建议
 
 ### 立即执行（继续当前会话） - **推荐** 🎯
-由于已经完成了服务层和辅助类的重构，接下来最合适的是：
+已创建可复用的UI控件，接下来最合适的是：
 
-1. **创建 ChatPageViewModel** (任务1.3.1)
-   - 完整实现 MVVM 模式
-   - 将 ChatList、SelectedItem 等属性移至ViewModel
-   - 创建 SendMessageCommand、ClearMessageCommand 等命令
-   - 进一步减少 ChatPage.xaml.cs 的职责
+1. **将控件集成到ChatPage.xaml中**
+   - 用ChatListPanel替换左侧列表区域
+   - 用MessageDisplayPanel替换消息显示区域
+   - 用MessageInputPanel替换输入区域
+   - 简化ChatPage.xaml结构
 
-2. **创建 ToolbarViewModel** (任务1.3.2)
-   - 管理工具栏按钮状态
-   - 统一控制 IsEnabled 属性
-   - 支持数据绑定
+2. **XAML布局优化** (任务2.2.1)
+   - 减少Grid嵌套层级
+   - 使用DockPanel简化布局
 
-3. **修复内存泄漏风险** (任务4.1.3)
-   - 实现 IDisposable
-   - 在 Unloaded 事件中取消静态事件订阅
-   - 使用 WeakEventManager
+3. **统一命名规范** (任务2.2.2)
+   - 统一控件命名风格
 
 ### 后续执行（新会话）
-1. **UI组件拆分**：创建可复用的用户控件（ChatToolbar、MessageInputPanel等）
-2. **XAML优化**：使用Command替代Click事件，减少代码后台
-3. **单元测试**：为服务层和ViewModel添加测试覆盖
+1. **XAML优化**：减少Grid嵌套，统一命名规范
+2. **单元测试**：为服务层和ViewModel添加测试覆盖
 
 ---
 
 ## 进度追踪
 
 **总任务数**：38
-**已完成**：14 ✅
+**已完成**：16 ✅
 **进行中**：0
-**未开始**：24
+**未开始**：22
 
-**完成进度**：14/38 (37%)
+**完成进度**：16/38 (42%)
 
 **阶段进度**：
 - [x] 阶段1.1：服务层抽象（3/3）✅ 
 - [x] 阶段1.2：辅助类提取（3/3）✅
 - [x] 阶段1.3：ViewModel优化（2/2）✅
-- [ ] 阶段2：XAML重构（0/6）
+- [x] 阶段2.1：可复用控件（4/4）✅
+- [ ] 阶段2.2：XAML布局优化（0/2）
 - [x] 阶段3：数据绑定优化（2/2）✅
 - [x] 阶段4：代码质量改进（4/4）✅
 - [ ] 阶段5：测试和文档（0/4）
@@ -379,12 +411,16 @@
 6. ✅ 任务1.2.3: RichTextBoxHelper
 7. ✅ 任务1.3.1: ChatPageViewModel
 8. ✅ 任务1.3.2: ToolbarViewModel
-9. ✅ 任务3.1.1: 将Click事件改为Command
-10. ✅ 任务3.1.2: 使用Binding替代硬编码
-11. ✅ 任务4.1.1: 修复AddOrUpdatePrivateChatList的Id错误
-12. ✅ 任务4.1.2: 修复缓存竞态条件
-13. ✅ 任务4.1.3: 修复内存泄漏风险
-14. ✅ 任务4.1.4: 重构ExecuteSendMessage方法
+9. ✅ 任务2.1.1: ChatToolbar 用户控件
+10. ✅ 任务2.1.2: MessageInputPanel 用户控件
+11. ✅ 任务2.1.3: ChatListPanel 用户控件
+12. ✅ 任务2.1.4: MessageDisplayPanel 用户控件
+13. ✅ 任务3.1.1: 将Click事件改为Command
+14. ✅ 任务3.1.2: 使用Binding替代硬编码
+15. ✅ 任务4.1.1: 修复AddOrUpdatePrivateChatList的Id错误
+16. ✅ 任务4.1.2: 修复缓存竞态条件
+17. ✅ 任务4.1.3: 修复内存泄漏风险
+18. ✅ 任务4.1.4: 重构ExecuteSendMessage方法
 
 ---
 
@@ -394,11 +430,13 @@
 1. **缓存行为**：确保 ConcurrentDictionary 的行为与原 Dictionary + Lock 一致
 2. **消息发送流程**：确保 MessageService 正确处理所有场景
 3. **群成员离开事件**：移除了缓存清理逻辑，需验证是否影响功能
+4. **新控件集成**：需要将新创建的控件集成到ChatPage.xaml中
 
 ### ✅ 已解决的问题
 1. 私聊列表ID错误（已修复）
 2. 线程安全问题（使用ConcurrentDictionary）
 3. 代码重复（通过服务层抽象解决）
+4. UI组件复用性（创建可复用用户控件）
 
 ---
 

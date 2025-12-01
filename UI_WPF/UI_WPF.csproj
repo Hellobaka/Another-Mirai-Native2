@@ -1385,7 +1385,7 @@
     <Folder Include="Themes\" />
   </ItemGroup>
 	
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
 		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
 	</Target>
 
