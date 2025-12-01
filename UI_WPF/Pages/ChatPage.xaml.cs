@@ -713,7 +713,7 @@ namespace Another_Mirai_Native.UI.Pages
         /// <summary>
         /// 左侧列表选中变化（绑定到ViewModel的SelectedChatItem）
         /// </summary>
-        private void ChatListDisplay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ChatListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_viewModel == null) return;
             

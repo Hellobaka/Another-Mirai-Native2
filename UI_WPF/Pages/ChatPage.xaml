@@ -54,7 +54,7 @@
                         HorizontalContentAlignment="Stretch"
                         ItemsSource="{Binding ChatList}"
                         SelectedItem="{Binding SelectedChatItem, Mode=TwoWay}"
-                        SelectionChanged="ChatListDisplay_SelectionChanged">
+                        SelectionChanged="ChatListView_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <controls:ChatListItem
