@@ -202,6 +202,7 @@
                         <ScrollViewer
                             x:Name="MessageScrollViewer"
                             Padding="10">
+                            <!-- 消息容器 -->
                             <StackPanel x:Name="MessageContainer" />
                         </ScrollViewer>
                         <!-- 滚动到底部按钮 -->
