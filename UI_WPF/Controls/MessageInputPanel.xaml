@@ -1,0 +1,117 @@
+<UserControl x:Class="Another_Mirai_Native.UI.Controls.MessageInputPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
+             xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar row -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button x:Name="FaceBtn"
+                    Margin="0,0,5,8"
+                    IsEnabled="{Binding IsFaceEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE76E;" />
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout x:Name="FaceImageFlyout" Placement="TopEdgeAlignedLeft">
+                        <controls:FaceImageSelector x:Name="FaceImageSelector" ImageSelected="FaceImageSelector_ImageSelected" />
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+            <Button x:Name="AtBtn"
+                    Margin="0,0,5,8"
+                    IsEnabled="{Binding IsAtEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="AtBtn_Click">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE716;" />
+            </Button>
+            <Button x:Name="PictureBtn"
+                    Margin="0,0,5,8"
+                    IsEnabled="{Binding IsPictureEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="PictureBtn_Click">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xEB9F;" />
+            </Button>
+            <Button x:Name="AudioBtn"
+                    Margin="0,0,5,8"
+                    IsEnabled="{Binding IsAudioEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="AudioBtn_Click">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE720;" />
+            </Button>
+            <Button x:Name="CleanMessageBtn"
+                    Margin="0,0,5,8"
+                    IsEnabled="{Binding IsClearMessageEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="CleanMessageBtn_Click">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE75C;" />
+            </Button>
+        </StackPanel>
+        
+        <!-- Input textbox row -->
+        <RichTextBox x:Name="SendText"
+                     Grid.Row="1"
+                     AcceptsReturn="True"
+                     HorizontalScrollBarVisibility="Auto"
+                     IsEnabled="{Binding IsSendEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                     VerticalScrollBarVisibility="Auto" />
+        
+        <!-- Action buttons row -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CleanSendBtn"
+                    Width="150"
+                    Margin="0,5,10,10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    IsEnabled="{Binding IsClearSendEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="CleanSendBtn_Click">
+                清空
+            </Button>
+            <Button x:Name="SendBtn"
+                    Grid.Column="1"
+                    Width="150"
+                    Margin="0,5,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsEnabled="{Binding IsSendEnabled, RelativeSource={RelativeSource AncestorType=local:MessageInputPanel}}"
+                    Click="SendBtn_Click"
+                    Style="{StaticResource AccentButtonStyle}">
+                发送
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>
