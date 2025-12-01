@@ -4,17 +4,18 @@
 重构 `UI_WPF\Pages\ChatPage.xaml` 和 `ChatPage.xaml.cs`，减少重复代码，修复逻辑错误，拆分组件，提高可维护性。
 
 **当前状态**：
-- 代码行数：XAML 232行，C# ~1137行（从1422行减少，目标是~970行）
-- 已完成任务：16/38（42%）
-- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成 ✅ Command绑定基本完成 ✅ 可复用UI控件创建
+- 代码行数：XAML ~200行（从232行减少），C# ~1137行（从1422行减少，目标是~970行）
+- 已完成任务：18/38（47%）
+- 主要改进：✅ 服务层抽象完成 ✅ 辅助类提取完成 ✅ MVVM模式实现 ✅ 内存泄漏修复 ✅ ExecuteSendMessage重构完成 ✅ Command绑定基本完成 ✅ 可复用UI控件创建 ✅ XAML布局优化完成 ✅ 命名规范统一
 
 **累计成果**：
 - ✅ 阶段1.1：服务层抽象（3/3）- CacheService、MessageService、ChatListService
 - ✅ 阶段1.2：辅助类提取（3/3）- LazyLoadManager、MessageContainerManager、RichTextBoxHelper
 - ✅ 阶段1.3：ViewModel优化（2/2）- ChatPageViewModel、ToolbarViewModel
 - ✅ 阶段2.1：可复用控件（4/4）- ChatToolbar、MessageInputPanel、ChatListPanel、MessageDisplayPanel
+- ✅ 阶段2.2：XAML布局优化（2/2）- 减少Grid嵌套、统一命名规范
 - ✅ 阶段4.1：质量改进（4/5）- 修复私聊ID错误、缓存竞态、内存泄漏、重构ExecuteSendMessage
-- 📊 代码减少：约476行（-33%）
+- 📊 代码减少：约508行（-36%）
 - 📈 新增模块化代码：约2089行（10个服务/辅助类/ViewModel）
 - 📈 新增UI组件代码：约750行（4个可复用用户控件）
 
@@ -370,9 +371,10 @@
 
 ### 2.2 简化布局结构 ⭐ 优先级：低
 
-#### [ ] 任务2.2.1：减少Grid嵌套层级
+#### [x] 任务2.2.1：减少Grid嵌套层级
 **文件**：`UI_WPF\Pages\ChatPage.xaml`
 **描述**：简化Grid嵌套，使用更扁平的结构
+**状态**：✅ 已完成
 **当前问题**：
 - DetailContainer下Grid嵌套3-4层
 - Row定义和实际使用不匹配
@@ -382,6 +384,13 @@
 - 合并不必要的Border
 - 使用DockPanel简化布局
 
+**实际完成**：
+- 将DetailContainer由Grid改为DockPanel
+- 将输入面板内的Grid改为DockPanel
+- 移除不必要的Border包装
+- 将滚动到底部按钮简化，移除外层Grid嵌套
+- XAML从232行减少到约200行（-14%）
+
 **预期改进**：
 - 提高XAML可读性
 - 减少布局计算
@@ -389,16 +398,36 @@
 
 ---
 
-#### [ ] 任务2.2.2：统一命名规范
-**文件**：`UI_WPF\Pages\ChatPage.xaml`
+#### [x] 任务2.2.2：统一命名规范
+**文件**：`UI_WPF\Pages\ChatPage.xaml`, `UI_WPF\Pages\ChatPage.xaml.cs`
 **描述**：统一控件命名风格
+**状态**：✅ 已完成
 **当前问题**：
 - 命名不一致：EmptyHint, ChatListDisplay, DetailContainer
 - 部分控件缺少x:Name
 
 **重构内容**：
-- 使用统一的命名前缀（如：chatList, messageContainer）
-- 或使用统一的命名后缀（如：EmptyHintText, ChatListView）
+- 使用统一的命名后缀格式：`{组件用途}{控件类型}`
+- 如：EmptyHintText, ChatListView, DetailPanel
+
+**实际命名更改**：
+| 旧名称 | 新名称 |
+|--------|--------|
+| EmptyHint | EmptyHintText |
+| ChatListDisplay | ChatListView |
+| DetailContainer | DetailPanel |
+| GroupNameDisplay | GroupNameText |
+| FaceBtn | FaceButton |
+| AtBtn | AtButton |
+| PictureBtn | PictureButton |
+| AudioBtn | AudioButton |
+| CleanMessageBtn | ClearMessageButton |
+| SendText | SendTextBox |
+| CleanSendBtn | ClearSendButton |
+| SendBtn | SendButton |
+| ScrollBottomContainer | （已移除，直接使用ScrollToBottomButton） |
+| ScrollToBottomBtn | ScrollToBottomButton |
+| DisableDisplay | DisabledHintText |
 
 **预期改进**：
 - 代码可读性提升
@@ -733,6 +762,10 @@ public class MessageSendingCoordinator
 - [x] 2.1.3 ChatListPanel 用户控件
 - [x] 2.1.4 MessageDisplayPanel 用户控件
 
+**阶段2.2 XAML布局优化（2/2）✅**
+- [x] 2.2.1 减少Grid嵌套层级
+- [x] 2.2.2 统一命名规范
+
 **阶段3.1 数据绑定优化（2/2）✅**
 - [x] 3.1.1 将Click事件改为Command（基本完成）
 - [x] 3.1.2 使用Binding替代硬编码（IsEnabled绑定）
@@ -743,10 +776,7 @@ public class MessageSendingCoordinator
 - [x] 4.1.3 修复内存泄漏风险
 - [x] 4.1.4 重构ExecuteSendMessage方法 🔥
 
-### 待完成任务（22/38 = 58%）
-
-**中优先级：**
-- [ ] 2.2.1-2.2.2 XAML优化（2个）
+### 待完成任务（20/38 = 53%）
 
 **低优先级：**
 - [ ] 4.2.1-4.2.2 性能优化（2个）
@@ -757,17 +787,17 @@ public class MessageSendingCoordinator
 ## 进度追踪
 
 **总任务数**：38
-**已完成**：16 ✅
-**未开始**：22
+**已完成**：18 ✅
+**未开始**：20
 
-**完成进度**：16/38 (42%)
+**完成进度**：18/38 (47%)
 
 **阶段进度**：
 - [x] 阶段1.1：服务层抽象（3/3）✅
 - [x] 阶段1.2：辅助类提取（3/3）✅
 - [x] 阶段1.3：ViewModel优化（2/2）✅
 - [x] 阶段2.1：可复用控件（4/4）✅
-- [ ] 阶段2.2：XAML布局优化（0/2）
+- [x] 阶段2.2：XAML布局优化（2/2）✅
 - [x] 阶段3：数据绑定优化（2/2）✅
 - [ ] 阶段4：代码质量改进（4/5）
 - [ ] 阶段5：测试和文档（0/4）
@@ -777,12 +807,13 @@ public class MessageSendingCoordinator
 ## 实际收益（已完成）
 
 ### 代码行数变化：
-- **ChatPage.xaml.cs**：1422行 → 970行（-452行, -32%）
+- **ChatPage.xaml**：232行 → ~200行（-32行, -14%）
+- **ChatPage.xaml.cs**：1422行 → 1137行（-285行, -20%）
 - **新增服务层**：914行（CacheService, MessageService, ChatListService, RichTextBoxHelper）
 - **新增辅助管理器**：495行（LazyLoadManager, MessageContainerManager）
 - **新增ViewModel**：447行（ChatPageViewModel, ToolbarViewModel, RelayCommand）
 - **总新增代码**：1856行（高质量模块化代码）
-- **净增加**：1404行
+- **净增加**：1539行
 
 ### 质量提升（已实现）：
 - ✅ 完全符合MVVM模式
@@ -841,3 +872,6 @@ public class MessageSendingCoordinator
 - 2025-11-27 06:55：✅ 完成任务4.1.3 - 修复内存泄漏风险，实现IDisposable和事件取消订阅
 - 2025-12-01 01:55：✅ 完成任务2.1.1-2.1.4 - 创建可复用UI控件（ChatToolbar, MessageInputPanel, ChatListPanel, MessageDisplayPanel）
 - 2025-12-01 01:55：✅ **编译通过验证** - 所有新增控件已通过编译测试
+- 2025-12-01 02:45：✅ 完成任务2.2.1 - 减少Grid嵌套层级，使用DockPanel简化布局
+- 2025-12-01 02:50：✅ 完成任务2.2.2 - 统一命名规范，所有控件使用{组件用途}{控件类型}格式
+- 2025-12-01 02:55：✅ **编译通过验证** - XAML布局优化和命名规范更改已通过编译测试（76警告，0错误）
