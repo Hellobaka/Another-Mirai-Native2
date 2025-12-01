@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.UI.ViewModel;
+﻿using Another_Mirai_Native.UI.Models;
+using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
     /// ChatAvatar.xaml 的交互逻辑
@@ -27,15 +28,6 @@ namespace Another_Mirai_Native.UI.Controls
         {
             //DataContext = this;
             InitializeComponent();
-        }
-
-        public enum AvatarTypes
-        {
-            QQGroup,
-
-            QQPrivate,
-
-            Fallback
         }
 
         public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;

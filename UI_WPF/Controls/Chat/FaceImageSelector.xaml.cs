@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using XamlAnimatedGif;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
     /// SendImageSelector.xaml 的交互逻辑
@@ -50,7 +50,7 @@ namespace Another_Mirai_Native.UI.Controls
             FaceContainer_Common.Children.Clear();
             foreach (var item in UIConfig.Instance.UsedFaceId)
             {
-                var element = ChatDetailListItem_Common.BuildFaceElement(item, false);
+                var element = MessageItem_Common.BuildFaceElement(item, false);
                 if (element != null)
                 {
                     FaceContainer_Common.Children.Add(BuildFaceElement(element, item));
@@ -96,7 +96,7 @@ namespace Another_Mirai_Native.UI.Controls
                 var allFaces = GetAllResourceImages();
                 foreach (var face in allFaces.OrderBy(x => x.Key))
                 {
-                    var element = ChatDetailListItem_Common.BuildFaceElement(face.Key, false);
+                    var element = MessageItem_Common.BuildFaceElement(face.Key, false);
                     if (element != null)
                     {
                         FaceContainer_All.Children.Add(BuildFaceElement(element, face.Key));

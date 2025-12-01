@@ -1,0 +1,108 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019">
+    <ContextMenu x:Key="ChatListContextMenu">
+        <MenuItem
+            Command="{Binding Command_ChatList_CopyNick}"
+            CommandParameter="{Binding}"
+            Header="复制名称" />
+        <MenuItem
+            Command="{Binding Command_ChatList_CopyId}"
+            CommandParameter="{Binding}"
+            Header="复制ID" />
+    </ContextMenu>
+    <ContextMenu x:Key="AvatarContextMenu">
+        <MenuItem
+            Command="{Binding Command_Avatar_CopyNick}"
+            CommandParameter="{Binding}"
+            Header="复制昵称" />
+        <MenuItem
+            Command="{Binding Command_Avatar_CopyId}"
+            CommandParameter="{Binding}"
+            Header="复制QQ" />
+        <Separator />
+        <MenuItem
+            Command="{Binding Command_Avatar_At}"
+            CommandParameter="{Binding}"
+            Header="@"
+            IsEnabled="{Binding Avatar_IsAtEnabled}" />
+    </ContextMenu>
+    <ContextMenu x:Key="MessageContextMenu">
+        <!--  复制  -->
+        <MenuItem
+            Command="{Binding Command_Message_Copy}"
+            CommandParameter="{Binding}"
+            Header="复制">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE16F;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <!--  +1  -->
+        <MenuItem
+            Command="{Binding Command_Message_Repeat}"
+            CommandParameter="{Binding}"
+            Header="+1">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE8ED;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <!--  @  -->
+        <MenuItem
+            Command="{Binding Command_Message_At}"
+            CommandParameter="{Binding}"
+            Header="@"
+            IsEnabled="{Binding Message_IsAtEnabled}">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE9B2;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <!--  回复  -->
+        <MenuItem
+            Command="{Binding Command_Message_Reply}"
+            CommandParameter="{Binding}"
+            Header="回复">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE97A;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <!--  撤回  -->
+        <MenuItem
+            Command="{Binding Command_Message_Recall}"
+            CommandParameter="{Binding}"
+            Header="撤回">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE107;" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+    <ContextMenu x:Key="PictureContextMenu">
+        <MenuItem
+            Command="{Binding Command_Picture_Collect}"
+            CommandParameter="{Binding}"
+            Header="收藏">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xEB51;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem
+            Command="{Binding Command_Picture_Save}"
+            CommandParameter="{Binding}"
+            Header="另存为">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE792;" />
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem
+            Command="{Binding Command_Picture_Repeat}"
+            CommandParameter="{Binding}"
+            Header="+1">
+            <MenuItem.Icon>
+                <ui:FontIcon Glyph="&#xE8ED;" />
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+</ResourceDictionary>

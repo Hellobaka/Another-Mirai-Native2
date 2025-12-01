@@ -34,4 +34,22 @@ namespace Another_Mirai_Native.UI.Models
         MacOs = 1,
         Linux = 2
     }
+
+    public enum AvatarTypes
+    {
+        QQGroup,
+
+        QQPrivate,
+
+        Fallback
+    }
+
+    public enum DetailItemType
+    {
+        Notice,
+
+        Receive,
+
+        Send
+    }
 }

@@ -1,6 +1,7 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.UI.Models;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
@@ -13,76 +14,24 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
-    /// ChatDetailListItem.xaml 的交互逻辑
+    /// MessageItem.xaml 的交互逻辑
     /// 统一处理 Left(Receive)、Right(Send)、Center(Notice) 三种消息类型
     /// </summary>
-    public partial class ChatDetailListItem : UserControl
+    public partial class MessageItem : UserControl
     {
-        public ChatDetailListItem()
+        public MessageItem()
         {
             InitializeComponent();
-            DataContext = this;
         }
 
         #region 属性定义
 
-        /// <summary>
-        /// 控件加载完成标志
-        /// </summary>
         public bool ControlLoaded { get; set; }
 
-        /// <summary>
-        /// 消息类型（Send/Receive/Notice）
-        /// </summary>
-        public DetailItemType DetailItemType { get; set; }
-
-        /// <summary>
-        /// 消息来源类型（QQGroup/QQPrivate）
-        /// </summary>
-        public ChatAvatar.AvatarTypes ParentType { get; set; } = ChatAvatar.AvatarTypes.Fallback;
-
-        /// <summary>
-        /// 显示的名称
-        /// </summary>
-        public string DisplayName { get; set; }
-
-        /// <summary>
-        /// 消息块的GUID（唯一标识）
-        /// </summary>
-        public string GUID { get; set; }
-
-        /// <summary>
-        /// 消息所属的QQ（发送者QQ）
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
-        /// 未转换的原始消息内容
-        /// </summary>
-        public string Message { get; set; } = "";
-
-        /// <summary>
-        /// 消息ID
-        /// </summary>
-        public int MsgId { get; set; }
-
-        /// <summary>
-        /// 消息所属的组ID（群号或私聊QQ）
-        /// </summary>
-        public long ParentId { get; set; }
-
-        /// <summary>
-        /// 显示的时间
-        /// </summary>
-        public DateTime Time { get; set; }
-
-        /// <summary>
-        /// 是否已撤回
-        /// </summary>
-        public bool Recalled { get; set; }
+        public MessageViewModel ViewModel => (MessageViewModel)DataContext;
 
         /// <summary>
         /// 最后一个段落（用于添加内容）
@@ -109,22 +58,22 @@ namespace Another_Mirai_Native.UI.Controls
             }
 
             // 系统消息（Notice）不解析 CQ 码，直接显示
-            if (DetailItemType == DetailItemType.Notice)
+            if (ViewModel.DetailItemType == DetailItemType.Notice)
             {
-                ChatDetailListItem_Common.AddTextToRichTextBox(CurrentParagraph, Message);
-                ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
-                TimeDisplay.ToolTip = Time.ToString("G");
+                MessageItem_Common.AddTextToRichTextBox(CurrentParagraph, ViewModel.Content);
+                MessageItem_Common.SetElementNoSelectEffect(DetailContainer);
+                TimeDisplay.ToolTip = ViewModel.Time.ToString("G");
                 return;
             }
 
             // 拆分 CQ 码
             Regex regex = new("(\\[CQ:.*?,.*?\\])");
-            var cqCodeCaptures = regex.Matches(Message).Cast<Match>().Select(m => m.Value).ToList();
+            var cqCodeCaptures = regex.Matches(ViewModel.Content).Cast<Match>().Select(m => m.Value).ToList();
 
-            var ls = CQCode.Parse(Message);
+            var ls = CQCode.Parse(ViewModel.Content);
             int imageCount = ls.Count(x => x.IsImageCQCode);
 
-            var s = regex.Split(Message).ToList();
+            var s = regex.Split(ViewModel.Content).ToList();
             s.RemoveAll(string.IsNullOrEmpty);
             double minWidth = 0;
 
@@ -138,20 +87,19 @@ namespace Another_Mirai_Native.UI.Controls
                 else
                 {
                     // 纯文本消息
-                    ChatDetailListItem_Common.AddTextToRichTextBox(CurrentParagraph, item);
+                    MessageItem_Common.AddTextToRichTextBox(CurrentParagraph, item);
                 }
             }
 
             // 删除点击效果
-            ChatDetailListItem_Common.SetElementNoSelectEffect(DetailContainer);
-            DetailContainer.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
+            MessageItem_Common.SetElementNoSelectEffect(DetailContainer);
 
             // 计算容器宽度
             ChangeContainerWidth(minWidth);
 
             // 设置工具提示
-            TimeDisplay.ToolTip = Time.ToString("G");
-            NameDisplay.ToolTip = $"{DisplayName} [{Id}]";
+            TimeDisplay.ToolTip = ViewModel.Time.ToString("G");
+            NameDisplay.ToolTip = $"{ViewModel.Nick} [{ViewModel.Id}]";
 
             // 移除末尾空段落
             var lastParagraph = DetailContainer.Document.Blocks.Count > 0 && DetailContainer.Document.Blocks.LastBlock is Paragraph p
@@ -192,7 +140,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         public void UpdateMessageId(int msgId)
         {
-            MsgId = msgId;
+            ViewModel.MsgId = msgId;
         }
 
         /// <summary>
@@ -215,48 +163,6 @@ namespace Another_Mirai_Native.UI.Controls
 
         #endregion
 
-        #region 右键菜单方法
-
-        public void ContextMenu_Repeat(object sender, EventArgs e)
-        {
-            Task.Run(() => ChatPage.Instance.ExecuteSendMessage(ParentId, ParentType, Message));
-        }
-
-        public void ContextMenu_Recall(object sender, EventArgs e)
-        {
-            if (MsgId > 0)
-            {
-                ProtocolManager.Instance.CurrentProtocol.DeleteMsg(MsgId);
-            }
-        }
-
-        public void ContextMenu_At(object sender, EventArgs e)
-        {
-            ChatPage.Instance.AddTextToSendBox($"[CQ:at,qq={Id}]");
-        }
-
-        public void ContextMenu_Reply(object sender, EventArgs e)
-        {
-            ChatPage.Instance.AddTextToSendBox($"[CQ:reply,id={MsgId}]");
-        }
-
-        public void ContextMenu_CopyMessage(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Message);
-        }
-
-        public void ContextMenu_CopyId(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Id.ToString());
-        }
-
-        public void ContextMenu_CopyNick(object sender, EventArgs e)
-        {
-            Clipboard.SetText(DisplayName);
-        }
-
-        #endregion
-
         #region 私有方法
 
         /// <summary>
@@ -270,28 +176,14 @@ namespace Another_Mirai_Native.UI.Controls
                 return AddExpanderForCQCode(item, minWidth);
             }
 
-            switch (cqcode.Function)
+            minWidth = cqcode.Function switch
             {
-                case CQCodeType.Image:
-                    minWidth = ProcessImageCQCode(cqcode, imageCount, splitCount, minWidth);
-                    break;
-
-                case CQCodeType.At:
-                    minWidth = await ProcessAtCQCode(cqcode, minWidth);
-                    break;
-
-                case CQCodeType.Face:
-                    minWidth = ProcessFaceCQCode(cqcode, item, minWidth);
-                    break;
-
-                case CQCodeType.Reply:
-                    minWidth = await ProcessReplyCQCode(cqcode, item, minWidth);
-                    break;
-
-                default:
-                    minWidth = AddExpanderForCQCode(cqcode.ToSendString(), minWidth);
-                    break;
-            }
+                CQCodeType.Image => ProcessImageCQCode(cqcode, imageCount, splitCount, minWidth),
+                CQCodeType.At => await ProcessAtCQCode(cqcode, minWidth),
+                CQCodeType.Face => ProcessFaceCQCode(cqcode, item, minWidth),
+                CQCodeType.Reply => await ProcessReplyCQCode(cqcode, item, minWidth),
+                _ => AddExpanderForCQCode(cqcode.ToSendString(), minWidth),
+            };
             return minWidth;
         }
 
@@ -305,13 +197,13 @@ namespace Another_Mirai_Native.UI.Controls
                 // 仅图片消息
                 ImageBorder.Visibility = Visibility.Visible;
                 DetailBorder.Visibility = Visibility.Collapsed;
-                ImageDisplay.Children.Add(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5));
+                ImageDisplay.Children.Add(MessageItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5));
             }
             else
             {
                 // 混合消息
                 DetailContainer.Document.Blocks.Add(new Paragraph());
-                CurrentParagraph.Inlines.Add(new InlineUIContainer(ChatDetailListItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5)));
+                CurrentParagraph.Inlines.Add(new InlineUIContainer(MessageItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5)));
                 DetailContainer.Document.Blocks.Add(new Paragraph());
             }
             return Math.Max(minWidth, 150);
@@ -327,8 +219,8 @@ namespace Another_Mirai_Native.UI.Controls
                 return AddExpanderForCQCode(cqcode.ToSendString(), minWidth);
             }
 
-            string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup
-                    ? await ChatPage.Instance.GetGroupMemberNick(ParentId, id)
+            string nick = ViewModel.AvatarType == AvatarTypes.QQGroup
+                    ? await ChatPage.Instance.GetGroupMemberNick(ViewModel.ParentId, id)
                     : await ChatPage.Instance.GetFriendNick(id);
 
             var hyperlink = BuildAtHyperlink(nick, cqcode);
@@ -341,7 +233,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         private Hyperlink BuildAtHyperlink(string nick, CQCode cqcode)
         {
-            string text = DetailItemType == DetailItemType.Send ? $" @{nick} " : $"@{nick} ";
+            string text = ViewModel.DetailItemType == DetailItemType.Send ? $" @{nick} " : $"@{nick} ";
             var hyperlink = new Hyperlink(new Run(text))
             {
                 NavigateUri = new Uri("https://www.google.com"),
@@ -349,7 +241,7 @@ namespace Another_Mirai_Native.UI.Controls
             };
 
             // 根据消息类型选择样式
-            if (DetailItemType == DetailItemType.Send)
+            if (ViewModel.DetailItemType == DetailItemType.Send)
             {
                 // Right 样式：海洋绿
                 hyperlink.Background = Brushes.SeaGreen;
@@ -367,7 +259,7 @@ namespace Another_Mirai_Native.UI.Controls
             hyperlink.RequestNavigate += (_, e) =>
             {
                 e.Handled = true;
-                ChatPage.Instance.AddTextToSendBox(cqcode.ToSendString());
+                ChatViewModel.Instance.AddTextToSendBox(cqcode.ToSendString());
             };
 
             return hyperlink;
@@ -383,7 +275,7 @@ namespace Another_Mirai_Native.UI.Controls
                 return AddExpanderForCQCode(item, minWidth);
             }
 
-            Image? faceElement = ChatDetailListItem_Common.BuildFaceElement(faceId, true);
+            Image? faceElement = MessageItem_Common.BuildFaceElement(faceId, true);
             if (faceElement != null)
             {
                 CurrentParagraph.Inlines.Add(faceElement);
@@ -405,19 +297,19 @@ namespace Another_Mirai_Native.UI.Controls
                 return AddExpanderForCQCode(item, minWidth);
             }
 
-            var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(ParentId, replyId,
-                ParentType == ChatAvatar.AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+            var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(ViewModel.ParentId, replyId,
+                ViewModel.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
 
             if (messageItem == null)
             {
                 return AddExpanderForCQCode(item, minWidth);
             }
 
-            string nick = ParentType == ChatAvatar.AvatarTypes.QQGroup ?
-                await ChatPage.Instance.GetGroupMemberNick(ParentId, messageItem.SenderID) :
+            string nick = ViewModel.AvatarType == AvatarTypes.QQGroup ?
+                await ChatPage.Instance.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID) :
                 await ChatPage.Instance.GetFriendNick(messageItem.SenderID);
 
-            var reply = ChatDetailListItem_Common.BuildReplyElement(nick, messageItem.Message, () =>
+            var reply = MessageItem_Common.BuildReplyElement(nick, ViewModel.Content, () =>
             {
                 ChatPage.Instance.JumpToReplyItem(messageItem.MsgId);
             });
@@ -439,7 +331,7 @@ namespace Another_Mirai_Native.UI.Controls
             {
                 Header = "CQ 码",
                 Margin = new Thickness(10),
-                Content = ChatDetailListItem_Common.BuildTextElement(cqCodeString)
+                Content = MessageItem_Common.BuildTextElement(cqCodeString)
             };
             CurrentParagraph.Inlines.Add(new InlineUIContainer(expander));
             return Math.Max(minWidth, expander.Width);
@@ -505,7 +397,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         private void ChatPage_MsgRecalled(int msgId)
         {
-            if (msgId == MsgId)
+            if (msgId == ViewModel.MsgId)
             {
                 Recall();
             }
@@ -534,24 +426,22 @@ namespace Another_Mirai_Native.UI.Controls
             ControlLoaded = true;
 
             // 根据消息类型显示对应的头像
-            if (DetailItemType == DetailItemType.Send)
+            if (ViewModel.DetailItemType == DetailItemType.Send)
             {
                 AvatarRight.Visibility = Visibility.Visible;
                 AvatarRight.Item = new ChatListItemViewModel
                 {
-                    AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
-                    GroupName = DisplayName,
-                    Id = Id
+                    AvatarType = AvatarTypes.QQPrivate,
+                    GroupName = ViewModel.Nick,
                 };
             }
-            else if (DetailItemType == DetailItemType.Receive)
+            else if (ViewModel.DetailItemType == DetailItemType.Receive)
             {
                 AvatarLeft.Visibility = Visibility.Visible;
                 AvatarLeft.Item = new ChatListItemViewModel
                 {
-                    AvatarType = ChatAvatar.AvatarTypes.QQPrivate,
-                    GroupName = DisplayName,
-                    Id = Id
+                    AvatarType = AvatarTypes.QQPrivate,
+                    GroupName = ViewModel.Nick,
                 };
             }
 
@@ -562,7 +452,7 @@ namespace Another_Mirai_Native.UI.Controls
             ImageDisplay.MaxWidth = MaxWidth * 0.6;
             DetailContainer.MaxWidth = MaxWidth * 0.8;
 
-            if (Recalled)
+            if (ViewModel.Recalled)
             {
                 Recall();
             }
@@ -570,19 +460,6 @@ namespace Another_Mirai_Native.UI.Controls
             // 订阅事件
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
             ChatPage.MsgRecalled += ChatPage_MsgRecalled;
-
-            // 设置右键菜单
-            DetailBorder.ContextMenu = ChatDetailListItem_Common.BuildDetailContextMenu();
-            ImageBorder.ContextMenu = DetailBorder.ContextMenu;
-
-            if (DetailItemType == DetailItemType.Send)
-            {
-                AvatarRight.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu();
-            }
-            else if (DetailItemType == DetailItemType.Receive)
-            {
-                AvatarLeft.ContextMenu = ChatDetailListItem_Common.BuildAvatarContextMenu();
-            }
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
@@ -596,10 +473,10 @@ namespace Another_Mirai_Native.UI.Controls
         private void ResendClick_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             UpdateSendStatus(true);
-            switch (ParentType)
+            switch (ViewModel.AvatarType)
             {
-                case ChatAvatar.AvatarTypes.QQGroup:
-                    if (ChatPage.Instance.CallGroupMsgSend(ParentId, Message) > 0)
+                case AvatarTypes.QQGroup:
+                    if (ChatPage.Instance.CallGroupMsgSend(ViewModel.ParentId, ViewModel.Content) > 0)
                     {
                         UpdateSendStatus(false);
                     }
@@ -609,8 +486,8 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                     break;
 
-                case ChatAvatar.AvatarTypes.QQPrivate:
-                    if (ChatPage.Instance.CallPrivateMsgSend(ParentId, Message) > 0)
+                case AvatarTypes.QQPrivate:
+                    if (ChatPage.Instance.CallPrivateMsgSend(ViewModel.ParentId, ViewModel.Content) > 0)
                     {
                         UpdateSendStatus(false);
                     }
@@ -620,7 +497,7 @@ namespace Another_Mirai_Native.UI.Controls
                     }
                     break;
 
-                case ChatAvatar.AvatarTypes.Fallback:
+                case AvatarTypes.Fallback:
                 default:
                     UpdateSendStatus(false);
                     break;

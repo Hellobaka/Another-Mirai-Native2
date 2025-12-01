@@ -21,31 +21,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 using XamlAnimatedGif;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
 
-    public static class ChatDetailListItem_Common
+    public static class MessageItem_Common
     {
         /// <summary>
         /// 图片容器的最大高度
         /// </summary>
         public static double ImageMaxHeight { get; set; } = 450;
-
-        /// <summary>
-        /// 个人头像菜单
-        /// </summary>
-        private static ContextMenu AvatarContextMenu { get; set; } = BuildAvatarContextMenu();
-
-        /// <summary>
-        /// 消息菜单
-        /// </summary>
-        private static ContextMenu DetailContextMenu { get; set; } = BuildDetailContextMenu();
-
-        /// <summary>
-        /// 名称菜单
-        /// </summary>
-        private static ContextMenu GroupContextMenu { get; set; } = BuildGroupContextMenu();
 
         private static ContextMenu ImageContextMenu { get; set; } = BuildImageContextMenu();
 
@@ -89,128 +74,6 @@ namespace Another_Mirai_Native.UI.Controls
         }
 
         /// <summary>
-        /// 构建消息容器头像右键菜单
-        /// </summary>
-        public static ContextMenu BuildAvatarContextMenu()
-        {
-            if (AvatarContextMenu != null)
-            {
-                return AvatarContextMenu;
-            }
-            AvatarContextMenu = new ContextMenu();
-            AvatarContextMenu.Items.Add(new MenuItem { Header = "复制昵称" });
-            AvatarContextMenu.Items.Add(new MenuItem { Header = "复制QQ" });
-            AvatarContextMenu.Items.Add(new Separator());
-            AvatarContextMenu.Items.Add(new MenuItem { Header = "@" });
-            AvatarContextMenu.Opened += (sender, _) =>
-            {
-                if (AvatarContextMenu.PlacementTarget is FrameworkElement targetElement)
-                {
-                    // 当为发送者时禁用at按钮
-                    (AvatarContextMenu.Items[3] as MenuItem).IsEnabled = targetElement.DataContext is ChatDetailListItem detail && detail.DetailItemType != DetailItemType.Send;
-                }
-            };
-
-            (AvatarContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_CopyNick(sender, e);
-            };
-            (AvatarContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_CopyId(sender, e);
-            };
-            (AvatarContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_At(sender, e);
-            };
-
-            return AvatarContextMenu;
-        }
-
-        /// <summary>
-        /// 构建消息右键菜单
-        /// </summary>
-        public static ContextMenu BuildDetailContextMenu()
-        {
-            if (DetailContextMenu != null)
-            {
-                return DetailContextMenu;
-            }
-            DetailContextMenu = new ContextMenu();
-            DetailContextMenu.Items.Add(new MenuItem { Header = "复制", Icon = new FontIcon { Glyph = "\uE16F" } });
-            DetailContextMenu.Items.Add(new MenuItem { Header = "+1", Icon = new FontIcon { Glyph = "\uE8ED" } });
-            DetailContextMenu.Items.Add(new MenuItem { Header = "@", Icon = new FontIcon { Glyph = "\uE9B2" } });
-            DetailContextMenu.Items.Add(new MenuItem { Header = "回复", Icon = new FontIcon { Glyph = "\uE97A" } });
-            DetailContextMenu.Items.Add(new Separator());
-            DetailContextMenu.Items.Add(new MenuItem { Header = "撤回", Icon = new FontIcon { Glyph = "\uE107" } });
-            DetailContextMenu.Opened += (sender, _) =>
-            {
-                var targetElement = DetailContextMenu.PlacementTarget as FrameworkElement;
-                // 当为发送者时禁用at按钮
-                bool isEnabled = true;
-                if (targetElement?.DataContext is ChatDetailListItem detail)
-                {
-                    isEnabled = detail.DetailItemType != DetailItemType.Send;
-                }
-                (DetailContextMenu.Items[2] as MenuItem).IsEnabled = isEnabled;
-            };
-            (DetailContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_CopyMessage(sender, e);
-            };
-            (DetailContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_Repeat(sender, e);
-            };
-            (DetailContextMenu.Items[2] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_At(sender, e);
-            };
-            (DetailContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_Reply(sender, e);
-            };
-            (DetailContextMenu.Items[5] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
-                {
-                    return;
-                }
-                detail.ContextMenu_Recall(sender, e);
-            };
-
-            return DetailContextMenu;
-        }
-
-        /// <summary>
         /// 构建QQ表情元素
         /// </summary>
         /// <param name="id">表情Id</param>
@@ -237,37 +100,6 @@ namespace Another_Mirai_Native.UI.Controls
                 RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
                 return image;
             }
-        }
-
-        /// <summary>
-        /// 构建左侧列表项目的右键菜单
-        /// </summary>
-        public static ContextMenu BuildGroupContextMenu()
-        {
-            if (GroupContextMenu != null)
-            {
-                return GroupContextMenu;
-            }
-            GroupContextMenu = new ContextMenu();
-            GroupContextMenu.Items.Add(new MenuItem { Header = "复制名称" });
-            GroupContextMenu.Items.Add(new MenuItem { Header = "复制ID" });
-
-            (GroupContextMenu.Items[0] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is ChatListItem item)
-                {
-                    item.ContextMenu_CopyNick(sender, e);
-                }
-            };
-            (GroupContextMenu.Items[1] as MenuItem).Click += (sender, e) =>
-            {
-                if (GetContextMenuTarget(sender) is ChatListItem item)
-                {
-                    item.ContextMenu_CopyId(sender, e);
-                }
-            };
-
-            return GroupContextMenu;
         }
 
         /// <summary>
@@ -533,6 +365,7 @@ namespace Another_Mirai_Native.UI.Controls
         /// </summary>
         private static ContextMenu BuildImageContextMenu()
         {
+            // TODO: 重构掉
             if (ImageContextMenu != null)
             {
                 return ImageContextMenu;
@@ -581,11 +414,11 @@ namespace Another_Mirai_Native.UI.Controls
             };
             (ImageContextMenu.Items[3] as MenuItem).Click += (sender, e) =>
             {
-                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not ChatDetailListItem detail)
+                if (GetContextMenuTarget(sender) is not FrameworkElement target || target.DataContext is not MessageItem detail)
                 {
                     return;
                 }
-                detail.ContextMenu_Repeat(sender, e);
+                detail.ViewModel.Message_Repeat(e);
             };
 
             return ImageContextMenu;

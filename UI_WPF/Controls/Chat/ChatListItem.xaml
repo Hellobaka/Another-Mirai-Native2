@@ -1,12 +1,13 @@
 ﻿<UserControl
-    x:Class="Another_Mirai_Native.UI.Controls.ChatListItem"
+    x:Class="Another_Mirai_Native.UI.Controls.Chat.ChatListItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls"
+    xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls.Chat"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignInstance Type={x:Type local:ChatListItem}}"
+    xmlns:viewmodel="clr-namespace:Another_Mirai_Native.UI.ViewModel"
+    d:DataContext="{d:DesignInstance Type=viewmodel:ChatListItemViewModel}"
     d:DesignHeight="50"
     d:DesignWidth="230"
     Loaded="UserControl_Loaded"
@@ -14,6 +15,9 @@
     <UserControl.Resources>
         <Converters:DisplayTimeConverter x:Key="DisplayTimeConverter" />
     </UserControl.Resources>
+    <UserControl.ContextMenu>
+        <StaticResource ResourceKey="ChatListContextMenu" />
+    </UserControl.ContextMenu>
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />

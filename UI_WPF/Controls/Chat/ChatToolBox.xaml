@@ -1,0 +1,117 @@
+﻿<UserControl
+    x:Class="Another_Mirai_Native.UI.Controls.Chat.ChatToolBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
+    xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls.Chat"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewmodel="clr-namespace:Another_Mirai_Native.UI.ViewModel"
+    d:DataContext="{d:DesignInstance Type=viewmodel:ChatViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Loaded="UserControl_Loaded"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:BoolVisibilityConverter x:Name="BoolVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid Grid.Row="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button
+                x:Name="FaceBtn"
+                Margin="0,0,5,8"
+                IsEnabled="False">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE76E;" />
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout x:Name="FaceImageFlyout" Placement="TopEdgeAlignedLeft">
+                        <controls:FaceImageSelector x:Name="FaceImageSelector" ImageSelected="FaceImageSelector_ImageSelected" />
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+            <Button
+                x:Name="AtBtn"
+                Margin="0,0,5,8"
+                Click="AtButton_Click"
+                IsEnabled="{Binding IsGroupChat, Converter={StaticResource BoolVisibilityConverter}}">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE716;" />
+                <!--  由于需要使用当前处于的群，所以不在XAML中定义Flyout  -->
+            </Button>
+            <Button
+                Margin="0,0,5,8"
+                Command="{Binding Command_ToolPicture}"
+                IsEnabled="False">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xEB9F;" />
+            </Button>
+            <Button
+                Margin="0,0,5,8"
+                Command="{Binding Command_ToolAudio}"
+                IsEnabled="False">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE720;" />
+            </Button>
+            <Button
+                Margin="0,0,5,8"
+                Command="{Binding Command_ToolClear}"
+                IsEnabled="False">
+                <ui:FontIcon
+                    Width="16"
+                    Height="16"
+                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                    FontSize="16"
+                    Glyph="&#xE75C;" />
+            </Button>
+        </StackPanel>
+        <RichTextBox
+            x:Name="SendText"
+            Grid.Row="1"
+            AcceptsReturn="True"
+            Document="{Binding SendText, Mode=TwoWay}"
+            HorizontalScrollBarVisibility="Auto"
+            IsEnabled="False"
+            PreviewKeyDown="SendText_PreviewKeyDown"
+            VerticalScrollBarVisibility="Auto" />
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="1"
+                Width="150"
+                Margin="0,5,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding Command_ToolSendText}"
+                IsEnabled="False"
+                Style="{StaticResource AccentButtonStyle}">
+                发送
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

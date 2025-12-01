@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
     /// ChatListItem.xaml 的交互逻辑
@@ -14,7 +14,6 @@ namespace Another_Mirai_Native.UI.Controls
     {
         public ChatListItem()
         {
-            //DataContext = this;
             InitializeComponent();
         }
 
@@ -68,23 +67,13 @@ namespace Another_Mirai_Native.UI.Controls
 
         public ChatListItemViewModel ViewModel { get; set; }
 
-        public void ContextMenu_CopyId(object sender, EventArgs e)
-        {
-            Clipboard.SetText(Id.ToString());
-        }
-
-        public void ContextMenu_CopyNick(object sender, EventArgs e)
-        {
-            Clipboard.SetText(GroupName);
-        }
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ContextMenu = ChatDetailListItem_Common.BuildGroupContextMenu();
         }
 
         private void UnreadTip_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            // TODO: 无法清除未读
             UnreadCount = 0;
             UpdateControl();
             ChatPage.Instance.UpdateUnreadCount(ViewModel);
