@@ -798,19 +798,11 @@ namespace Another_Mirai_Native.UI.Pages
         {
             if (_viewModel == null) return;
             
-            var list = ChatHistoryHelper.GetHistoryCategroies();
+            var list = await _chatListService.LoadChatHistoryAsync();
             _viewModel.ChatList.Clear();
             foreach (var item in list)
             {
-                _viewModel.ChatList.Add(new ChatListItemViewModel
-                {
-                    AvatarType = item.Type == ChatHistoryType.Private ? ChatAvatar.AvatarTypes.QQPrivate : ChatAvatar.AvatarTypes.QQGroup,
-                    Detail = item.Message,
-                    GroupName = item.Type == ChatHistoryType.Private ? await GetFriendNick(item.ParentID) : await GetGroupName(item.ParentID),
-                    Id = item.ParentID,
-                    Time = item.Time,
-                    UnreadCount = 0
-                });
+                _viewModel.ChatList.Add(item);
             }
             EmptyHintText.Visibility = _viewModel.ChatList.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
         }
@@ -924,7 +916,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     SelectedItem.UnreadCount = 0;
                 }
-                var sortedList = _viewModel.ChatList.GroupBy(x => x.Id).Select(x => x.First()).OrderByDescending(x => x.Time).ToList();
+                var sortedList = _chatListService.ReorderChatList(_viewModel.ChatList.ToList());
                 _viewModel.ChatList.Clear();
                 foreach (var item in sortedList)
                 {

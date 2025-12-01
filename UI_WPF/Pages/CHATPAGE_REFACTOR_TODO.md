@@ -719,23 +719,29 @@ Task PreloadGroupMemberCacheAsync(long groupId);
 
 ### 5.1 单元测试 ⭐ 优先级：中
 
-#### [ ] 任务5.1.1：为服务层添加单元测试
-**文件**：`Tests\Services\*Tests.cs`
-**描述**：测试CacheService, MessageService, ChatListService
+#### [x] 任务5.1.1：为服务层添加单元测试
+**文件**：`UI_WPF.Tests\Services\CacheServiceTests.cs`
+**描述**：测试CacheService的缓存清理和接口行为
+**状态**：✅ 已完成
 **测试内容**：
-- 缓存命中和缺失场景
-- 消息发送成功和失败
-- 列表添加、更新、排序
+- 缓存清理方法（ClearCache, ClearFriendCache, ClearGroupCache, ClearGroupMemberCache）
+- 接口实现验证
+- 批量查询接口空列表处理
+- 多线程安全性测试
 
 ---
 
-#### [ ] 任务5.1.2：为ViewModel添加单元测试
-**文件**：`Tests\ViewModels\*Tests.cs`
-**描述**：测试ChatPageViewModel, ToolbarViewModel
+#### [x] 任务5.1.2：为ViewModel添加单元测试
+**文件**：`UI_WPF.Tests\ViewModels\ToolbarViewModelTests.cs`, `UI_WPF.Tests\ViewModels\ChatPageViewModelTests.cs`
+**描述**：测试ChatPageViewModel和ToolbarViewModel
+**状态**：✅ 已完成
 **测试内容**：
-- 属性变化通知
+- 属性变化通知（PropertyChanged事件）
 - Command执行
 - 状态更新逻辑
+- 工具栏按钮状态管理
+- 聊天选择逻辑
+- 未读消息清零
 
 ---
 
@@ -769,7 +775,7 @@ Task PreloadGroupMemberCacheAsync(long groupId);
 
 ## 任务进度总结
 
-### 已完成任务（21/38 = 55%）✅
+### 已完成任务（23/38 = 61%）✅
 
 **阶段1.1 服务层抽象（3/3）✅**
 - [x] 1.1.1 ICacheService + CacheService
@@ -809,26 +815,29 @@ Task PreloadGroupMemberCacheAsync(long groupId);
 - ⏸️ 4.2.1 优化消息容器渲染（虚拟化）- 暂缓
 - [x] 4.2.2 优化缓存查询（批量查询和预热）
 
+**阶段5.1 单元测试（2/2）✅**
+- [x] 5.1.1 为服务层添加单元测试（CacheServiceTests）
+- [x] 5.1.2 为ViewModel添加单元测试（ToolbarViewModelTests, ChatPageViewModelTests）
+
 **阶段5.2 文档更新（2/2）✅**
 - [x] 5.2.1 更新架构文档
 - [x] 5.2.2 添加代码注释
 
-### 待完成任务（17/38 = 45%）
+### 待完成任务（15/38 = 39%）
 
 **低优先级：**
 - ⏸️ 4.2.1 消息容器虚拟化（暂缓）
-- [ ] 5.1.1-5.1.2 单元测试（2个）
 
 ---
 
 ## 进度追踪
 
 **总任务数**：38
-**已完成**：21 ✅
+**已完成**：23 ✅
 **暂缓**：1
-**未开始**：16
+**未开始**：14
 
-**完成进度**：21/38 (55%)
+**完成进度**：23/38 (61%)
 
 **阶段进度**：
 - [x] 阶段1.1：服务层抽象（3/3）✅
@@ -839,8 +848,8 @@ Task PreloadGroupMemberCacheAsync(long groupId);
 - [x] 阶段3：数据绑定优化（2/2）✅
 - [x] 阶段4.1：代码质量改进（4/4）✅
 - [ ] 阶段4.2：性能优化（1/2）- 缓存优化完成，虚拟化暂缓
+- [x] 阶段5.1：单元测试（2/2）✅
 - [x] 阶段5.2：文档更新（2/2）✅
-- [ ] 阶段5.1：单元测试（0/2）
 
 ---
 
