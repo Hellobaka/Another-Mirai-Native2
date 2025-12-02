@@ -62,10 +62,10 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="NameDisplay"
-                    HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
+                    HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                     VerticalAlignment="Center"
                     FontSize="12"
-                    Text="{Binding DisplayName}"
+                    Text="{Binding Nick}"
                     TextTrimming="CharacterEllipsis" />
             </Grid>
 
@@ -74,8 +74,8 @@
                 x:Name="DetailBorder"
                 Grid.Row="1"
                 MinHeight="38"
-                Margin="0,5,10,0"
-                HorizontalAlignment="Left"
+                Margin="0,5,0,0"
+                HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                 Background="{DynamicResource SystemControlTransientBorderBrush}"
                 CornerRadius="10">
                 <Border.ContextMenu>
@@ -102,7 +102,7 @@
                 x:Name="ImageBorder"
                 Grid.Row="1"
                 Margin="0,5,10,0"
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                 ClipToBounds="True"
                 CornerRadius="10"
                 Visibility="Collapsed">
@@ -115,18 +115,18 @@
             <!--  时间和状态显示  -->
             <StackPanel
                 Grid.Row="2"
-                HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
+                HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                 Orientation="Horizontal">
                 <TextBlock
                     Margin="0,5,5,0"
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                     FontSize="10"
                     Visibility="{Binding Recalled, Converter={StaticResource BoolVisibilityConverter}}">
                     已撤回
                 </TextBlock>
                 <TextBlock
                     Margin="0,5,0,0"
-                    VerticalAlignment="Center"
+                    HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                     FontSize="10"
                     Text="{Binding Time, Converter={StaticResource DisplayTimeConverter}}" />
             </StackPanel>

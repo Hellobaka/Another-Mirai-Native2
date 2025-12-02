@@ -177,7 +177,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                     var imagePath = await Helper.DownloadImageAsync(url, fileName);
                     await viewBox.Dispatcher.BeginInvoke(() =>
                     {
-                        if (imagePath != null && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
+                        if (imagePath != null && File.Exists(imagePath) && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
                         {
                             // 显示图片元素
                             Image image = new()

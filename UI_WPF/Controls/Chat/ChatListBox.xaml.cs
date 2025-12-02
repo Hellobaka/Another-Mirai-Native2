@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Another_Mirai_Native.UI.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

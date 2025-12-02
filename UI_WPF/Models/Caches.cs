@@ -69,7 +69,8 @@ namespace Another_Mirai_Native.UI.Models
         /// <returns>昵称, 失败时返回QQ号</returns>
         public static async Task<string> GetFriendNick(long qq, bool retry = false)
         {
-            if (FriendInfoCache.TryGetValue(qq, out var info))
+            if (FriendInfoCache.TryGetValue(qq, out var info)
+                && info != null)
             {
                 if (string.IsNullOrEmpty(info.Postscript))
                 {
@@ -97,7 +98,8 @@ namespace Another_Mirai_Native.UI.Models
         /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
         public static async Task<string> GetGroupMemberNick(long groupId, long qq, bool retry = false)
         {
-            if (GroupMemberCache.TryGetValue(groupId, out var member))
+            if (GroupMemberCache.TryGetValue(groupId, out var member)
+                && member != null)
             {
                 if (member.TryGetValue(qq, out var info))
                 {
@@ -131,7 +133,8 @@ namespace Another_Mirai_Native.UI.Models
         /// <returns>群名称, 若不存在则返回群号</returns>
         public static async Task<string> GetGroupName(long groupId, bool retry = false)
         {
-            if (GroupInfoCache.TryGetValue(groupId, out var info))
+            if (GroupInfoCache.TryGetValue(groupId, out var info)
+                && info != null)
             {
                 return string.IsNullOrEmpty(info.Name) ? groupId.ToString() : info.Name;
             }

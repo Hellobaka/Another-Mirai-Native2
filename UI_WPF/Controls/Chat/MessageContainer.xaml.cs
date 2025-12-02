@@ -20,8 +20,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         public MessageContainer()
         {
             InitializeComponent();
-            ViewModel.OnMessageJumpRequested += ViewModel_OnMessageJumpRequested;
-            ViewModel.OnScrollToBottomRequested += ViewModel_OnScrollToBottomRequested;
         }
 
         public ChatViewModel ViewModel => (ChatViewModel)DataContext;
@@ -112,20 +110,17 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
             // 从数据库取的消息历史
             List<ChatHistory> list = [];
-            await Task.Run(() =>
+            for (int i = ViewModel.CurrentPageIndex + 1; i <= ViewModel.CurrentPageIndex + pagesToLoad; i++)
             {
-                for (int i = ViewModel.CurrentPageIndex + 1; i <= ViewModel.CurrentPageIndex + pagesToLoad; i++)
+                var ls = await ChatHistoryHelper.GetHistoriesByPageAsync(ViewModel.SelectedChat.Id,
+                    ViewModel.SelectedChat.AvatarType == ChatType.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group,
+                    count,
+                    i);
+                if (ls != null && ls.Count > 0)
                 {
-                    var ls = ChatHistoryHelper.GetHistoriesByPage(ViewModel.SelectedChat.Id,
-                        ViewModel.SelectedChat.AvatarType == ChatType.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group,
-                        count,
-                        i);
-                    if (ls != null && ls.Count > 0)
-                    {
-                        list.AddRange(ls);
-                    }
+                    list.AddRange(ls);
                 }
-            });
+            }
 
             if (list.Count == 0)
             {
@@ -205,6 +200,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 int lastId = ViewModel.Messages.First().SqlId;
                 await LazyLoad(lastId - history.ID, msgId);
             }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.OnMessageJumpRequested += ViewModel_OnMessageJumpRequested;
+            ViewModel.OnScrollToBottomRequested += ViewModel_OnScrollToBottomRequested;
         }
     }
 }

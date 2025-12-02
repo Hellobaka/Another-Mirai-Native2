@@ -18,7 +18,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         public ChatToolBox()
         {
             InitializeComponent();
-            ViewModel.OnTextAddRequested += ViewModel_OnTextAddRequested;
         }
 
         public ChatViewModel ViewModel => (ChatViewModel)DataContext;
@@ -80,6 +79,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            ViewModel.OnTextAddRequested += ViewModel_OnTextAddRequested;
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
         }
 
@@ -127,6 +127,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 e.Handled = true;
                 e.CancelCommand();
             }
+        }
+
+        private void FaceImageSelector_ImageSelected(object sender, EventArgs e)
+        {
+            ViewModel.AddTextToSendBox(FaceImageSelector.SelectedImageCQCode);
+            FaceImageFlyout.Hide();
         }
     }
 }

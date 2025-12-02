@@ -3,12 +3,9 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
-using Another_Mirai_Native.UI.Controls.Chat;
 using Another_Mirai_Native.UI.Models;
-using Another_Mirai_Native.UI.Pages;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -16,9 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
@@ -63,11 +58,13 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public bool IsGroupChat => SelectedChat != null && SelectedChat.AvatarType == ChatType.QQGroup;
 
-        public bool EmptyHintVisible => ChatList.Count == 0 || SelectedChat == null;
+        public bool EmptyHintVisible => ChatList.Count == 0;
 
         public bool Avatar_IsAtEnabled { get; set; }
 
         public bool Message_IsAtEnabled { get; set; }
+
+        public bool ToolBoxEnabled => SelectedChat != null;
 
         public bool LazyLoading { get; set; }
 
@@ -531,7 +528,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             await Dispatcher.Yield();// TODO: 可能也没必要
         }
 
-        public async Task OnSelectedChatChanged()
+        public async void OnSelectedChatChanged()
         {
             Messages = [];
             if (SelectedChat == null)

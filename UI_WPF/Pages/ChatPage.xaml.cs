@@ -25,10 +25,10 @@ namespace Another_Mirai_Native.UI.Pages
     {
         public ChatPage()
         {
-            InitializeComponent();
             ViewModel = new ChatViewModel();
             DataContext = ViewModel;
             Instance = this;
+            InitializeComponent();
             Page_Loaded(null, null);
         }
 

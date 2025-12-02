@@ -27,7 +27,7 @@
             <Button
                 x:Name="FaceBtn"
                 Margin="0,0,5,8"
-                IsEnabled="False">
+                IsEnabled="{Binding ToolBoxEnabled}">
                 <ui:FontIcon
                     Width="16"
                     Height="16"
@@ -56,7 +56,7 @@
             <Button
                 Margin="0,0,5,8"
                 Command="{Binding Command_ToolPicture}"
-                IsEnabled="False">
+                IsEnabled="{Binding ToolBoxEnabled}">
                 <ui:FontIcon
                     Width="16"
                     Height="16"
@@ -67,7 +67,7 @@
             <Button
                 Margin="0,0,5,8"
                 Command="{Binding Command_ToolAudio}"
-                IsEnabled="False">
+                IsEnabled="{Binding ToolBoxEnabled}">
                 <ui:FontIcon
                     Width="16"
                     Height="16"
@@ -78,7 +78,7 @@
             <Button
                 Margin="0,0,5,8"
                 Command="{Binding Command_ToolClear}"
-                IsEnabled="False">
+                IsEnabled="{Binding ToolBoxEnabled}">
                 <ui:FontIcon
                     Width="16"
                     Height="16"
@@ -91,9 +91,8 @@
             x:Name="SendText"
             Grid.Row="1"
             AcceptsReturn="True"
-            Document="{Binding SendText, Mode=TwoWay}"
             HorizontalScrollBarVisibility="Auto"
-            IsEnabled="False"
+            IsEnabled="{Binding ToolBoxEnabled}"
             PreviewKeyDown="SendText_PreviewKeyDown"
             VerticalScrollBarVisibility="Auto" />
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
@@ -108,7 +107,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Command="{Binding Command_ToolSendText}"
-                IsEnabled="False"
+                IsEnabled="{Binding ToolBoxEnabled}"
                 Style="{StaticResource AccentButtonStyle}">
                 发送
             </Button>

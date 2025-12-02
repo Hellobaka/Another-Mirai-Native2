@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.UI.ViewModel;
 using Hardcodet.Wpf.TaskbarNotification;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// LogPage.xaml 的交互逻辑
     /// </summary>
+    [DoNotNotify]
     public partial class LogPage : Page, INotifyPropertyChanged
     {
         private ObservableCollection<LogModelWrapper> logCollections;

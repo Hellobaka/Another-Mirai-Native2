@@ -4,6 +4,7 @@ using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.Controls.Chat;
 using Another_Mirai_Native.UI.ViewModel;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +21,7 @@ namespace Another_Mirai_Native.UI.Pages
     /// <summary>
     /// PluginPage.xaml 的交互逻辑
     /// </summary>
+    [DoNotNotify]
     public partial class PluginPage : Page, INotifyPropertyChanged
     {
         public PluginPage()

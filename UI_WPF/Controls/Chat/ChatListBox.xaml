@@ -30,9 +30,11 @@
                 HorizontalContentAlignment="Stretch"
                 ItemsSource="{Binding ChatList}"
                 SelectedItem="{Binding SelectedChat, Mode=TwoWay}">
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="ContextMenu" Value="{StaticResource ChatListContextMenu}" />
-                </Style>
+                <ListView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                        <Setter Property="ContextMenu" Value="{StaticResource ChatListContextMenu}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:ChatListItem

@@ -149,7 +149,7 @@ namespace Another_Mirai_Native.UI
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception?.StackTrace ?? "");
+            DialogHelper.ShowErrorDialog($"UI异常: {e.Exception.Message}", e.Exception?.ToString() ?? "");
         }
 
         private async void DisconnectProtocol_Click(object sender, RoutedEventArgs e)

@@ -54,7 +54,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public int SqlId { get; set; }
 
-        public MessageStatus MessageStatus { get; set; } = MessageStatus.Sending;
+        public MessageStatus MessageStatus { get; set; } = MessageStatus.Sent;
 
         #region Commands
         public RelayCommand Command_Message_Copy { get; set; }
