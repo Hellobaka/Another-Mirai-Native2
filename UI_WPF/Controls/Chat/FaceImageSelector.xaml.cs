@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using XamlAnimatedGif;
+using System.Windows.Input;
 
 namespace Another_Mirai_Native.UI.Controls.Chat
 {
@@ -17,15 +15,27 @@ namespace Another_Mirai_Native.UI.Controls.Chat
     /// </summary>
     public partial class FaceImageSelector : UserControl
     {
+        private const int FaceRowSize = 8;
+        private const int ImageRowSize = 4;
+
+        private Dictionary<int, string> _faceResourceCache = [];
+
         public FaceImageSelector()
         {
             InitializeComponent();
+            DataContext = this;
             BuildCacheImages();
         }
 
-        public event EventHandler ImageSelected;
+        public event EventHandler? ImageSelected;
 
-        public string SelectedImageCQCode { get; set; }
+        public string SelectedImageCQCode { get; set; } = string.Empty;
+
+        public ObservableCollection<IReadOnlyList<FaceResourceItem>> CommonFaceRows { get; } = new();
+
+        public ObservableCollection<IReadOnlyList<FaceResourceItem>> AllFaceRows { get; } = new();
+
+        public ObservableCollection<IReadOnlyList<CollectedImageItem>> CollectedImageRows { get; } = new();
 
         private string CollectedImagePath { get; } = Path.Combine("data", "image", "collected");
 
@@ -33,92 +43,131 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         {
             if (FaceItem.IsSelected)
             {
-                FaceContainer.Visibility = Visibility.Visible;
-                ImageConatainer.Visibility = Visibility.Collapsed;
+                FaceScroll.Visibility = Visibility.Visible;
+                ImageList.Visibility = Visibility.Collapsed;
             }
             else
             {
-                FaceContainer.Visibility = Visibility.Collapsed;
-                ImageConatainer.Visibility = Visibility.Visible;
+                FaceScroll.Visibility = Visibility.Collapsed;
+                ImageList.Visibility = Visibility.Visible;
             }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            MainScroll.ScrollToTop();
+            FaceScroll.ScrollToTop();
+            RefreshCommonFaceRows();
+            LoadCollectedImages();
+        }
 
-            FaceContainer_Common.Children.Clear();
-            foreach (var item in UIConfig.Instance.UsedFaceId)
+        private void FaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is not FaceResourceItem face)
             {
-                var element = MessageItem_Common.BuildFaceElement(item, false);
-                if (element != null)
-                {
-                    FaceContainer_Common.Children.Add(BuildFaceElement(element, item));
-                }
+                return;
             }
 
-            ImageConatainer.Children.Clear();
-            Directory.CreateDirectory(CollectedImagePath);
+            SelectedImageCQCode = $"[CQ:face,id={face.Id}]";
+            ImageSelected?.Invoke(sender, EventArgs.Empty);
+            UpdateUsedFaceList(face.Id);
+            RefreshCommonFaceRows();
+            e.Handled = true;
+        }
 
-            foreach (var item in Directory.GetFiles(CollectedImagePath))
+        private void ImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is not CollectedImageItem image)
             {
-                if (Uri.TryCreate(Path.GetFullPath(item), UriKind.Absolute, out Uri? uri))
-                {
-                    Image image = new()
-                    {
-                        Width = 80,
-                        Height = 80,
-                        Stretch = Stretch.UniformToFill,
-                        Margin = new Thickness(5),
-                        Tag = Path.GetFileName(item)
-                    };
-                    AnimationBehavior.SetSourceUri(image, uri);
-                    AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
-                    Button button = new()
-                    {
-                        Content = image,
-                        Background = Brushes.Transparent
-                    };
-                    button.Click += (_, _) =>
-                    {
-                        SelectedImageCQCode = $"[CQ:image,file=collected\\{image.Tag}]";
-                        ImageSelected?.Invoke(button, new EventArgs());
-                    };
-                    ImageConatainer.Children.Add(button);
-                }
+                return;
             }
+
+            SelectedImageCQCode = $"[CQ:image,file=collected\\{image.FileName}]";
+            ImageSelected?.Invoke(sender, EventArgs.Empty);
+            e.Handled = true;
+        }
+
+        private void FaceScroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (FaceScroll.Visibility != Visibility.Visible)
+            {
+                return;
+            }
+
+            FaceScroll.ScrollToVerticalOffset(FaceScroll.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
 
         private void BuildCacheImages()
         {
             MainWindow.Instance.Dispatcher.BeginInvoke(() =>
             {
-                var allFaces = GetAllResourceImages();
-                foreach (var face in allFaces.OrderBy(x => x.Key))
-                {
-                    var element = MessageItem_Common.BuildFaceElement(face.Key, false);
-                    if (element != null)
-                    {
-                        FaceContainer_All.Children.Add(BuildFaceElement(element, face.Key));
-                    }
-                }
+                _faceResourceCache = GetAllResourceImages();
+                PopulateAllFaceRows();
+                RefreshCommonFaceRows();
             });
         }
 
-        private Button BuildFaceElement(Image img, int id)
+        private void PopulateAllFaceRows()
         {
-            Button button = new()
+            AllFaceRows.Clear();
+            if (_faceResourceCache.Count == 0)
             {
-                Content = img,
-                Background = Brushes.Transparent
-            };
-            button.Click += (_, _) =>
+                return;
+            }
+
+            var faces = _faceResourceCache
+                .OrderBy(x => x.Key)
+                .Select(x => new FaceResourceItem(x.Key, new Uri(x.Value, UriKind.Absolute)))
+                .ToList();
+
+            foreach (var chunk in Chunk(faces, FaceRowSize))
             {
-                SelectedImageCQCode = $"[CQ:face,id={id}]";
-                ImageSelected?.Invoke(button, new EventArgs());
-                UpdateUsedFaceList(id);
-            };
-            return button;
+                AllFaceRows.Add(chunk);
+            }
+        }
+
+        private void RefreshCommonFaceRows()
+        {
+            CommonFaceRows.Clear();
+            if (_faceResourceCache.Count == 0)
+            {
+                return;
+            }
+
+            var faces = new List<FaceResourceItem>();
+            foreach (var id in UIConfig.Instance.UsedFaceId)
+            {
+                if (_faceResourceCache.TryGetValue(id, out var path))
+                {
+                    faces.Add(new FaceResourceItem(id, new Uri(path, UriKind.Absolute)));
+                }
+            }
+
+            foreach (var chunk in Chunk(faces, FaceRowSize))
+            {
+                CommonFaceRows.Add(chunk);
+            }
+        }
+
+        private void LoadCollectedImages()
+        {
+            CollectedImageRows.Clear();
+            Directory.CreateDirectory(CollectedImagePath);
+            var items = new List<CollectedImageItem>();
+
+            foreach (var file in Directory.GetFiles(CollectedImagePath))
+            {
+                var fullPath = Path.GetFullPath(file);
+                if (Uri.TryCreate(fullPath, UriKind.Absolute, out var uri))
+                {
+                    items.Add(new CollectedImageItem(Path.GetFileName(file), uri));
+                }
+            }
+
+            foreach (var chunk in Chunk(items, ImageRowSize))
+            {
+                CollectedImageRows.Add(chunk);
+            }
         }
 
         private void UpdateUsedFaceList(int id)
@@ -149,16 +198,66 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
             using var reader = new System.Resources.ResourceReader(stream);
 
-            foreach (DictionaryEntry entry in reader)
+            foreach (System.Collections.DictionaryEntry entry in reader)
             {
                 var resourceKey = (string)entry.Key;
                 if (resourceKey.StartsWith("resources/qq-face") && resourceKey.EndsWith(".png")
-                    && int.TryParse(System.IO.Path.GetFileNameWithoutExtension(resourceKey), out int faceId))
+                    && int.TryParse(Path.GetFileNameWithoutExtension(resourceKey), out int faceId))
                 {
-                    images.Add(faceId, $"pack://application:,,,/Resources/qq-face/{faceId}.png");
+                    images[faceId] = $"pack://application:,,,/Resources/qq-face/{faceId}.png";
                 }
             }
             return images;
+        }
+
+        private static IEnumerable<IReadOnlyList<T>> Chunk<T>(IEnumerable<T> items, int size)
+        {
+            if (size <= 0)
+            {
+                yield break;
+            }
+
+            var buffer = new List<T>(size);
+            foreach (var item in items)
+            {
+                buffer.Add(item);
+                if (buffer.Count == size)
+                {
+                    yield return buffer.ToArray();
+                    buffer.Clear();
+                }
+            }
+
+            if (buffer.Count > 0)
+            {
+                yield return buffer.ToArray();
+            }
+        }
+
+        public sealed class FaceResourceItem
+        {
+            public FaceResourceItem(int id, Uri source)
+            {
+                Id = id;
+                Source = source;
+            }
+
+            public int Id { get; }
+
+            public Uri Source { get; }
+        }
+
+        public sealed class CollectedImageItem
+        {
+            public CollectedImageItem(string fileName, Uri source)
+            {
+                FileName = fileName;
+                Source = source;
+            }
+
+            public string FileName { get; }
+
+            public Uri Source { get; }
         }
     }
 }

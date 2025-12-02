@@ -10,31 +10,131 @@
     Height="352"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style
+            x:Key="InlineButtonStyle"
+            BasedOn="{StaticResource DefaultButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+
+        <Style x:Key="RowListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+
+        <DataTemplate x:Key="FaceButtonTemplate">
+            <Button Click="FaceButton_Click" Style="{StaticResource InlineButtonStyle}">
+                <Image Source="{Binding Source}" Stretch="Uniform" />
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FaceRowTemplate">
+            <ItemsControl ItemTemplate="{StaticResource FaceButtonTemplate}" ItemsSource="{Binding}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            HorizontalAlignment="Left"
+                            ItemHeight="38"
+                            ItemWidth="38"
+                            ScrollViewer.CanContentScroll="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ImageButtonTemplate">
+            <Button
+                Margin="5"
+                Click="ImageButton_Click"
+                Style="{StaticResource InlineButtonStyle}">
+                <Border
+                    Width="80"
+                    Height="80"
+                    Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                    CornerRadius="4">
+                    <Image Source="{Binding Source}" Stretch="UniformToFill" />
+                </Border>
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ImageRowTemplate">
+            <ItemsControl ItemTemplate="{StaticResource ImageButtonTemplate}" ItemsSource="{Binding}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            HorizontalAlignment="Left"
+                            ItemHeight="90"
+                            ItemWidth="90"
+                            ScrollViewer.CanContentScroll="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer x:Name="MainScroll">
-            <Grid>
-                <StackPanel x:Name="FaceContainer">
-                    <TextBlock Margin="10,10,10,0">常用表情</TextBlock>
-                    <WrapPanel
-                        Name="FaceContainer_Common"
+        <Grid>
+            <ScrollViewer
+                x:Name="FaceScroll"
+                Padding="0"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Margin="10,10,10,0" Text="常用表情" />
+                    <ItemsControl
+                        Margin="10,0,10,10"
+                        ItemTemplate="{StaticResource FaceRowTemplate}"
+                        ItemsSource="{Binding CommonFaceRows}" />
+                    <TextBlock Margin="10,10,10,0" Text="全部表情" />
+                    <ListBox
+                        x:Name="AllFaceList"
                         Margin="10"
-                        Orientation="Horizontal" />
-                    <TextBlock Margin="10,10,10,0">全部表情</TextBlock>
-                    <WrapPanel
-                        Name="FaceContainer_All"
-                        Margin="10"
-                        Orientation="Horizontal" />
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemContainerStyle="{StaticResource RowListBoxItemStyle}"
+                        ItemTemplate="{StaticResource FaceRowTemplate}"
+                        ItemsSource="{Binding AllFaceRows}"
+                        ScrollViewer.CanContentScroll="True"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Recycling"
+                        PreviewMouseWheel="FaceScroll_PreviewMouseWheel">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </StackPanel>
-                <WrapPanel
-                    x:Name="ImageConatainer"
-                    Orientation="Horizontal"
-                    Visibility="Collapsed" />
-            </Grid>
-        </ScrollViewer>
+            </ScrollViewer>
+            <ListBox
+                x:Name="ImageList"
+                Margin="10"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemContainerStyle="{StaticResource RowListBoxItemStyle}"
+                ItemTemplate="{StaticResource ImageRowTemplate}"
+                ItemsSource="{Binding CollectedImageRows}"
+                ScrollViewer.CanContentScroll="True"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.VirtualizationMode="Recycling"
+                Visibility="Collapsed">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
         <ui:NavigationView
             x:Name="MainContainer"
             Grid.Row="1"
