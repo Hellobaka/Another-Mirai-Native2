@@ -108,136 +108,14 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         /// <param name="cqCode">图片CQ码</param>
         /// <param name="maxWidth">最大宽度</param>
         /// <returns>图片元素</returns>
-        public static Grid BuildImageElement(CQCode cqCode, double maxWidth)
+        public static FrameworkElement BuildImageElement(CQCode cqCode, double maxWidth)
         {
-            Grid grid = new()
+            return new ChatImageDisplay
             {
-                MinHeight = 100,
-                MinWidth = 100,
-                MaxWidth = maxWidth,
-                Clip = new RectangleGeometry
-                {
-                    RadiusX = 10,
-                    RadiusY = 10,
-                    Rect = new Rect(0, 0, 100, 100)
-                }
+                CQCode = cqCode,
+                MaxImageWidth = maxWidth,
+                MaxImageHeight = ImageMaxHeight
             };
-            // 背景色绑定
-            grid.SetResourceReference(Border.BackgroundProperty, "SystemControlPageBackgroundChromeMediumLowBrush");
-            var viewBox = new Viewbox()
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                MinHeight = 100,
-                MinWidth = 100,
-                MaxHeight = ImageMaxHeight,
-                Visibility = Visibility.Collapsed
-            };
-            grid.Children.Add(viewBox);
-            // 图片渲染质量
-            RenderOptions.SetBitmapScalingMode(viewBox, BitmapScalingMode.Fant);
-            // 进度环
-            var progressRing = new ProgressRing
-            {
-                IsActive = true,
-                Width = 30,
-                Height = 30,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-            grid.Children.Add(progressRing);
-            FontIcon fontIcon = new()
-            {
-                Width = 16,
-                Height = 16,
-                FontSize = 16,
-                Glyph = "\uF384",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Cursor = Cursors.Hand,
-                Visibility = Visibility.Collapsed
-            };
-            fontIcon.SetResourceReference(FontIcon.FontFamilyProperty, "SymbolThemeFontFamily");
-            grid.Children.Add(fontIcon);
-            // 解析图片路径
-            string url = Helper.GetImageUrlOrPathFromCQCode(cqCode);
-            LoadImage(url, cqCode.GetPicName());
-            fontIcon.MouseDown += (_, _) =>
-            {
-                // 加载失败时可点击重试
-                progressRing.Visibility = Visibility.Visible;
-                progressRing.Visibility = Visibility.Collapsed;
-                LoadImage(url, cqCode.GetPicName());
-            };
-
-            void LoadImage(string url, string fileName = "")
-            {
-                Task.Run(async () =>
-                {
-                    var imagePath = await Helper.DownloadImageAsync(url, fileName);
-                    await viewBox.Dispatcher.BeginInvoke(() =>
-                    {
-                        if (imagePath != null && File.Exists(imagePath) && Uri.TryCreate(imagePath, UriKind.RelativeOrAbsolute, out var uri))
-                        {
-                            // 显示图片元素
-                            Image image = new()
-                            {
-                                Stretch = Stretch.Uniform,
-                                Tag = imagePath,
-                                ContextMenu = BuildImageContextMenu()
-                            };
-                            // 图片双击事件
-                            viewBox.MouseLeftButtonDown += (_, e) =>
-                            {
-                                if (e.ClickCount == 2)
-                                {
-                                    PictureViewer pictureViewer = new()
-                                    {
-                                        Image = uri,
-                                        Owner = MainWindow.Instance
-                                    };
-                                    pictureViewer.Show();
-                                }
-                            };
-                            AnimationBehavior.SetSourceUri(image, uri);
-                            AnimationBehavior.SetRepeatBehavior(image, RepeatBehavior.Forever);
-                            var img = new BitmapImage(uri);
-                            // 拉伸容器高度
-                            viewBox.Height = Math.Min(img.Height, viewBox.MaxHeight);
-                            // 计算变化比率用于圆角尺寸统一
-                            double rate = img.Height / viewBox.Height;
-                            RectangleGeometry clipGeometry = new()
-                            {
-                                RadiusX = 10 * rate,
-                                RadiusY = 10 * rate,
-                                Rect = new Rect(0, 0, img.Width, img.Height)
-                            };
-                            image.Clip = clipGeometry;
-                            // 设置背景容器背景色透明
-                            // 将Grid的Height与ViewBox绑定
-                            var binding = new Binding
-                            {
-                                Source = viewBox,
-                                Path = new PropertyPath("ActualHeight"),
-                                Mode = BindingMode.OneWay
-                            };
-                            grid.SetBinding(Grid.HeightProperty, binding);
-                            grid.Background = Brushes.Transparent;
-                            grid.Clip = null;
-                            viewBox.Child = image;
-                            // 显示图片元素
-                            viewBox.Visibility = Visibility.Visible;
-                            progressRing.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            progressRing.Visibility = Visibility.Collapsed;
-                            fontIcon.Visibility = Visibility.Visible;
-                        }
-                    });
-                });
-            }
-            return grid;
         }
 
         /// <summary>
@@ -358,6 +236,11 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                     border.BorderBrush = Brushes.Transparent;
                 }
             }
+        }
+
+        internal static ContextMenu GetImageContextMenu()
+        {
+            return BuildImageContextMenu();
         }
 
         /// <summary>
