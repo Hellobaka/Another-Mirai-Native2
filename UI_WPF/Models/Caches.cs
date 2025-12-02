@@ -142,5 +142,13 @@ namespace Another_Mirai_Native.UI.Models
             }
             return groupId.ToString();
         }
+
+        public static void RemoveGroupMember(long group, long qq)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var member))
+            {
+                member.Remove(qq);
+            }
+        }
     }
 }

@@ -19,9 +19,6 @@
     <Page.Resources>
         <converter:WidthConverter x:Key="WidthConverter" />
         <converter:ColorOpacityConverter x:Key="ColorOpacityConverter" />
-        <converter:DetailAlignLeftConverter x:Key="DetailAlignLeftConverter" />
-        <converter:DetailAlignRightConverter x:Key="DetailAlignRightConverter" />
-        <converter:DetailAlignCenterConverter x:Key="DetailAlignCenterConverter" />
     </Page.Resources>
     <Grid>
         <Grid x:Name="MainContent">
@@ -42,7 +39,10 @@
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Border>
-                    <TextBlock x:Name="GroupNameDisplay" FontSize="18" />
+                    <TextBlock
+                        x:Name="GroupNameDisplay"
+                        FontSize="18"
+                        Text="{Binding ChatNameDisplay}" />
                 </Border>
                 <chatControls:ChatToolBox Grid.Row="2" />
                 <chatControls:MessageContainer Grid.Row="1" Margin="0,10" />

@@ -100,12 +100,57 @@ namespace Another_Mirai_Native.UI.Converters
         }
     }
 
-    public class DetailAlignLeftConverter : IValueConverter
+    public class DetailHorizontalAlignmentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DetailItemType a = (DetailItemType)value;
-            return a == DetailItemType.Receive ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+            return a == DetailItemType.Receive 
+                ? HorizontalAlignment.Left 
+                    : (a == DetailItemType.Notice 
+                        ? HorizontalAlignment.Center : HorizontalAlignment.Right);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MessageStatusToSendingVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            MessageStatus a = (MessageStatus)value;
+            return a == MessageStatus.Sending ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MessageStatusToSentVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            MessageStatus a = (MessageStatus)value;
+            return a == MessageStatus.Sent ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MessageStatusToSendFailedVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            MessageStatus a = (MessageStatus)value;
+            return a == MessageStatus.SendFailed ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

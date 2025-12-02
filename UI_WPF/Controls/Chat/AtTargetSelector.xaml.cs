@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
     /// </summary>
     public partial class AtTargetSelector : UserControl, INotifyPropertyChanged
     {
-        public AtTargetSelector(AvatarTypes avatarType, long id)
+        public AtTargetSelector(ChatType avatarType, long id)
         {
             InitializeComponent();
             DataContext = this;
@@ -43,7 +43,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private Timer DebounceTimer { get; set; }
 
-        public AvatarTypes AvatarType { get; }
+        public ChatType AvatarType { get; }
 
         public long Id { get; }
 

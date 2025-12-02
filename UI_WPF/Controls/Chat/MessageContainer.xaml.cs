@@ -24,11 +24,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             ViewModel.OnScrollToBottomRequested += ViewModel_OnScrollToBottomRequested;
         }
 
-        /// <summary>
-        /// 懒加载当前页数
-        /// </summary>
-        private int CurrentPageIndex { get; set; }
-
         public ChatViewModel ViewModel => (ChatViewModel)DataContext;
 
         private DispatcherTimer LazyLoadDebounceTimer { get; set; }
@@ -89,7 +84,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                     }
 
                     // 重置当前页索引为1，保证后续懒加载行为正确
-                    CurrentPageIndex = 1;
+                    ViewModel.CurrentPageIndex = 1;
 
                     // 更新布局并确保仍在底部
                     MessageScrollViewer.UpdateLayout();
@@ -119,10 +114,10 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             List<ChatHistory> list = [];
             await Task.Run(() =>
             {
-                for (int i = CurrentPageIndex + 1; i <= CurrentPageIndex + pagesToLoad; i++)
+                for (int i = ViewModel.CurrentPageIndex + 1; i <= ViewModel.CurrentPageIndex + pagesToLoad; i++)
                 {
                     var ls = ChatHistoryHelper.GetHistoriesByPage(ViewModel.SelectedChat.Id,
-                        ViewModel.SelectedChat.AvatarType == AvatarTypes.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group,
+                        ViewModel.SelectedChat.AvatarType == ChatType.QQPrivate ? ChatHistoryType.Private : ChatHistoryType.Group,
                         count,
                         i);
                     if (ls != null && ls.Count > 0)
@@ -138,7 +133,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             // 更新页数
-            CurrentPageIndex += pagesToLoad;
+            ViewModel.CurrentPageIndex += pagesToLoad;
 
             list.Reverse();
 
@@ -192,7 +187,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 return;
             }
             var history = ChatHistoryHelper.GetHistoriesByMsgId(ViewModel.SelectedChat.Id, msgId,
-                                                                ViewModel.SelectedChat.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+                                                                ViewModel.SelectedChat.AvatarType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
             if (history == null)
             {
                 return;

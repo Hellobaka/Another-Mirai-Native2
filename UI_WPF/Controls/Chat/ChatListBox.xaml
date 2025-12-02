@@ -35,7 +35,7 @@
                 </Style>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <controls:ChatListItem
+                        <local:ChatListItem
                             MaxWidth="{Binding ActualWidth, ElementName=ChatListDisplay, Converter={StaticResource WidthConverter}, ConverterParameter={x:Static SystemParameters.VerticalScrollBarWidth}}"
                             Margin="0,10"
                             HorizontalAlignment="Stretch"

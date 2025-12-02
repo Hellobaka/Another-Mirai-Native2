@@ -26,10 +26,10 @@ namespace Another_Mirai_Native.UI.ViewModel
             CreateRelayCommands();
         }
 
-        public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;
+        public ChatType AvatarType { get; set; } = ChatType.Fallback;
 
         // TODO: 留意如何赋值
-        public AvatarTypes ParentAvatarType { get; set; } = AvatarTypes.Fallback;
+        public ChatType ParentAvatarType { get; set; } = ChatType.Fallback;
 
         public string Content { get; set; } = "";
 
@@ -53,6 +53,8 @@ namespace Another_Mirai_Native.UI.ViewModel
         public int MsgId { get; set; }
 
         public int SqlId { get; set; }
+
+        public MessageStatus MessageStatus { get; set; } = MessageStatus.Sending;
 
         #region Commands
         public RelayCommand Command_Message_Copy { get; set; }

@@ -15,7 +15,7 @@
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converter:BoolVisibilityConverter x:Name="BoolVisibilityConverter" />
+        <converter:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
     </UserControl.Resources>
     <Grid Grid.Row="2">
         <Grid.RowDefinitions>
@@ -36,7 +36,7 @@
                     Glyph="&#xE76E;" />
                 <ui:FlyoutService.Flyout>
                     <ui:Flyout x:Name="FaceImageFlyout" Placement="TopEdgeAlignedLeft">
-                        <controls:FaceImageSelector x:Name="FaceImageSelector" ImageSelected="FaceImageSelector_ImageSelected" />
+                        <local:FaceImageSelector x:Name="FaceImageSelector" ImageSelected="FaceImageSelector_ImageSelected" />
                     </ui:Flyout>
                 </ui:FlyoutService.Flyout>
             </Button>

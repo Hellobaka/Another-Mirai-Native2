@@ -1,22 +1,27 @@
 ﻿using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Controls.Chat;
 using Another_Mirai_Native.UI.Models;
+using Another_Mirai_Native.UI.Pages;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Interop;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.ViewModel
 {
@@ -36,6 +41,8 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             CreateRelayCommands();
             Instance = this;
+            PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
+            PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
         }
 
         public static ChatViewModel Instance { get; set; }
@@ -54,7 +61,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public FlowDocument SendText { get; set; } = new();
 
-        public bool IsGroupChat => SelectedChat != null && SelectedChat.AvatarType == AvatarTypes.QQGroup;
+        public bool IsGroupChat => SelectedChat != null && SelectedChat.AvatarType == ChatType.QQGroup;
 
         public bool EmptyHintVisible => ChatList.Count == 0 || SelectedChat == null;
 
@@ -63,6 +70,19 @@ namespace Another_Mirai_Native.UI.ViewModel
         public bool Message_IsAtEnabled { get; set; }
 
         public bool LazyLoading { get; set; }
+
+        public string ChatNameDisplay => SelectedChat == null 
+            ? "" : $"{SelectedChat.GroupName} [{SelectedChat.Id}]";
+
+        /// <summary>
+        /// 初始化加载时的消息数量
+        /// </summary>
+        private int LoadCount { get; set; } = 15;
+
+        /// <summary>
+        /// 懒加载当前页数
+        /// </summary>
+        public int CurrentPageIndex { get; set; }
 
         #region Commands
 
@@ -157,16 +177,66 @@ namespace Another_Mirai_Native.UI.ViewModel
                 return;
             }
             string sendText = BuildTextFromRichTextBox();
-            AvatarTypes avatar = SelectedChat.AvatarType;
+            ChatType avatar = SelectedChat.AvatarType;
             long id = SelectedChat.Id;
             await ExecuteSendMessageAsync(id, avatar, sendText);
             // 清空发送框
             SendText.Blocks.Clear();
         }
 
-        public async Task ExecuteSendMessageAsync(long id, AvatarTypes avatar, string sendText)
+        public async Task ExecuteSendMessageAsync(long id, ChatType chatType, string message)
         {
-            throw new NotImplementedException();
+            if (id == 0 || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            // 插入历史数据库
+            var history = new ChatHistory
+            {
+                Message = message,
+                ParentID = id,
+                SenderID = AppConfig.Instance.CurrentQQ,
+                Type = chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private,
+                MsgId = 0,
+                PluginName = "",
+                Time = DateTime.Now,
+            };
+            int sqlId = ChatHistoryHelper.InsertHistory(history);
+
+            // 创建UI模型
+            Task<int> sendTask;
+            string nick;
+            if (chatType == ChatType.QQGroup)
+            {
+                sendTask = CallGroupMsgSendAsync(id, message);
+                nick = await Caches.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
+                await AddOrUpdateGroupChatList(id, AppConfig.Instance.CurrentQQ, message);
+            }
+            else
+            {
+                sendTask = CallPrivateMsgSendAsync(id, message);
+                nick = await Caches.GetFriendNick(AppConfig.Instance.CurrentQQ);
+                await AddOrUpdatePrivateChatList(id, AppConfig.Instance.CurrentQQ, message);
+            }
+            var messageViewModel = new MessageViewModel
+            {
+                AvatarType = chatType,
+                Content = message,
+                DetailItemType = DetailItemType.Send,
+                Id = AppConfig.Instance.CurrentQQ,
+                Nick = nick,
+                MsgId = 0,
+                Time = DateTime.Now,
+            };
+            Messages.Add(messageViewModel);
+
+            // 等待消息发送函数结果，更新消息发送状态与消息ID
+            messageViewModel.MsgId = await sendTask;
+            messageViewModel.MessageStatus = messageViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
+            
+            // 更新数据库中的消息ID
+            ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
+                , sqlId, messageViewModel.MsgId);
         }
 
         /// <summary>
@@ -175,7 +245,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="avatarType">消息来源</param>
         /// <param name="history">聊天历史</param>
         /// <returns>消息模型</returns>
-        public async static Task<MessageViewModel> ParseChatHistoryToViewModel(AvatarTypes avatarType, ChatHistory history)
+        public async static Task<MessageViewModel> ParseChatHistoryToViewModel(ChatType avatarType, ChatHistory history)
         {
             return new MessageViewModel
             {
@@ -185,7 +255,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 Id = history.SenderID,
                 ParentId = history.ParentID,
                 MsgId = history.MsgId,
-                Nick = (avatarType == AvatarTypes.QQPrivate ? await Caches.GetFriendNick(history.SenderID) : await Caches.GetGroupMemberNick(history.ParentID, history.SenderID))
+                Nick = (avatarType == ChatType.QQPrivate ? await Caches.GetFriendNick(history.SenderID) : await Caches.GetGroupMemberNick(history.ParentID, history.SenderID))
                      + (string.IsNullOrEmpty(history.PluginName) ? "" : $" [{history.PluginName}]"),
                 Recalled = history.Recalled,
                 Time = history.Time,
@@ -268,6 +338,263 @@ namespace Another_Mirai_Native.UI.ViewModel
                 }
             }
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 调用发送群消息
+        /// </summary>
+        /// <param name="groupId">发送的群</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
+        public async Task<int> CallGroupMsgSendAsync(long groupId, string message)
+        {
+            int msgId = 0;
+            await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
+                msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
+                sw.Stop();
+                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            });
+            return msgId;
+        }
+
+        /// <summary>
+        /// 调用发送好友消息
+        /// </summary>
+        /// <param name="qq">发送的好友</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
+        public async Task<int> CallPrivateMsgSendAsync(long qq, string message)
+        {
+            int msgId = 0;
+            await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
+                int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
+                sw.Stop();
+                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            });
+            return msgId;
+        }
+
+        /// <summary>
+        /// 消息持久化 若消息刚好为当前群则向容器构建消息并滚动至底
+        /// </summary>
+        /// <param name="group">群号</param>
+        /// <param name="qq">发送者ID</param>
+        /// <param name="msg">消息</param>
+        /// <param name="itemType">消息位置</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="itemAdded">消息添加后的回调</param>
+        /// <param name="plugin">发送来源插件</param>
+        public async Task AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
+        {
+            string nick = await Caches.GetGroupMemberNick(group, qq) ?? qq.ToString();
+            if (nick != null && plugin != null)
+            {
+                nick = $"{nick} [{plugin.PluginName}]";
+            }
+            MessageViewModel item = new()
+            {
+                AvatarType = ChatType.QQGroup,
+                Content = msg,
+                DetailItemType = itemType,
+                Id = qq,
+                Nick = nick!,
+                MsgId = msgId,
+                Time = DateTime.Now,
+            };
+
+            var history = ChatHistoryHelper.GetHistoriesByMsgId(group, msgId, ChatHistoryType.Group);
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            await AddOrUpdateGroupChatList(group, qq, msg);
+            if (SelectedChat?.Id == group)
+            {
+                // TODO: 考虑是否需要限制数量
+                Messages.Add(item);
+                // TODO: 可能没那么必要
+                ScrollToBottom();
+            }
+        }
+
+        /// <summary>
+        /// 消息持久化 若消息刚好为当前好友则向容器构建消息并滚动至底
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <param name="sender">发送者ID</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="itemType">消息位置</param>
+        /// <param name="msgId">消息ID</param>
+        /// <param name="itemAdded">持久化后的回调</param>
+        /// <param name="plugin">消息来源的插件</param>
+        public async Task AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
+        {
+            string nick = await Caches.GetFriendNick(sender);
+            if (nick != null && plugin != null)
+            {
+                nick = $"{nick} [{plugin.PluginName}]";
+            }
+            MessageViewModel item = new()
+            {
+                AvatarType = ChatType.QQPrivate,
+                Content = msg,
+                DetailItemType = itemType,
+                Id = qq,
+                Nick = nick!,
+                MsgId = msgId,
+                Time = DateTime.Now,
+            };
+            var history = ChatHistoryHelper.GetHistoriesByMsgId(qq, msgId, ChatHistoryType.Private);
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            await AddOrUpdatePrivateChatList(qq, sender, msg);
+            if (SelectedChat?.Id == qq)
+            {
+                // TODO: 考虑是否需要限制数量
+                Messages.Add(item);
+                // TODO: 可能没那么必要
+                ScrollToBottom();
+            }
+        }
+
+        /// <summary>
+        /// 添加或更新左侧聊天列表好友内容
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <param name="sender">发送者ID</param>
+        /// <param name="msg">消息</param>
+        private async Task AddOrUpdatePrivateChatList(long qq, long sender, string msg)
+        {
+            msg = msg.Replace("\r", "").Replace("\n", "");
+            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatType.QQPrivate);
+            if (item != null) // 消息已存在, 更新
+            {
+                item.GroupName = await Caches.GetFriendNick(qq);
+                item.Detail = msg;
+                item.Time = DateTime.Now;
+                item.UnreadCount++;
+            }
+            else
+            {
+                item = new ChatListItemViewModel
+                {
+                    AvatarType = ChatType.QQPrivate,
+                    Detail = msg,
+                    GroupName = await Caches.GetFriendNick(qq),
+                    Id = sender,
+                    Time = DateTime.Now,
+                    UnreadCount = 1
+                };
+                ChatList.Add(item);
+            }
+            await ReorderChatList();
+        }
+
+        /// <summary>
+        /// 添加或更新左侧聊天列表群内容
+        /// </summary>
+        /// <param name="id">群ID</param>
+        /// <param name="qq">发送者ID</param>
+        /// <param name="msg">消息</param>
+        private async Task AddOrUpdateGroupChatList(long group, long qq, string msg)
+        {
+            msg = msg.Replace("\r", "").Replace("\n", "");
+            var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatType.QQGroup);
+            if (item != null) // 消息已存在, 更新
+            {
+                item.GroupName = await Caches.GetGroupName(group);
+                item.Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}";
+                item.Time = DateTime.Now;
+                item.UnreadCount++;
+            }
+            else
+            {
+                item = new ChatListItemViewModel
+                {
+                    AvatarType = ChatType.QQGroup,
+                    Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}",
+                    GroupName = await Caches.GetGroupName(group),
+                    Id = group,
+                    Time = DateTime.Now,
+                    UnreadCount = 1
+                };
+                ChatList.Add(item);
+            }
+            await ReorderChatList();
+        }
+
+        private async Task ReorderChatList()
+        {
+            ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
+            await Dispatcher.Yield();// TODO: 可能也没必要
+        }
+
+        public async Task OnSelectedChatChanged()
+        {
+            Messages = [];
+            if (SelectedChat == null)
+            {
+                return;
+            }
+            var histories = SelectedChat.AvatarType == ChatType.QQGroup 
+                ? await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Group, LoadCount, 1)
+                : await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Private, LoadCount, 1);
+
+            foreach(var item in histories)
+            {
+                Messages.Add(await ParseChatHistoryToViewModel(SelectedChat.AvatarType, item));
+            }
+            CurrentPageIndex = 1;
+            SelectedChat.UnreadCount = 0;
+        }
+
+        public async Task LoadChatList()
+        {
+            var list = ChatHistoryHelper.GetHistoryCategories();
+            ChatList.Clear();
+            foreach (var item in list)
+            {
+                ChatList.Add(new ChatListItemViewModel
+                {
+                    AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
+                    Detail = item.Message,
+                    GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
+                    Id = item.ParentID,
+                    Time = item.Time,
+                    UnreadCount = 0
+                });
+            }
+            await ReorderChatList();
+        }
+
+        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        {
+            if (SelectedChat != null 
+                && SelectedChat.AvatarType == ChatType.QQPrivate 
+                && SelectedChat.Id == qq)
+            {
+                var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
+                if (item != null)
+                {
+                    item.Recalled = true;
+                }
+            }
+        }
+
+        private void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
+        {
+            if (SelectedChat != null
+                && SelectedChat.AvatarType == ChatType.QQGroup
+                && SelectedChat.Id == groupId)
+            {
+                var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
+                if (item != null)
+                {
+                    item.Recalled = true;
+                }
+            }
         }
     }
 }

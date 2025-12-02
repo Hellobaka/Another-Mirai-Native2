@@ -62,7 +62,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 MessageItem_Common.AddTextToRichTextBox(CurrentParagraph, ViewModel.Content);
                 MessageItem_Common.SetElementNoSelectEffect(DetailContainer);
-                TimeDisplay.ToolTip = ViewModel.Time.ToString("G");
                 return;
             }
 
@@ -98,7 +97,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             ChangeContainerWidth(minWidth);
 
             // 设置工具提示
-            TimeDisplay.ToolTip = ViewModel.Time.ToString("G");
             NameDisplay.ToolTip = $"{ViewModel.Nick} [{ViewModel.Id}]";
 
             // 移除末尾空段落
@@ -116,49 +114,11 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         }
 
         /// <summary>
-        /// 显示消息已撤回
-        /// </summary>
-        public void Recall()
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                RecallDisplay.Visibility = Visibility.Visible;
-            });
-        }
-
-        /// <summary>
-        /// 显示发送失败（仅 Send 类型）
-        /// </summary>
-        public void SendFail()
-        {
-            SendStatus.Visibility = Visibility.Collapsed;
-            ResendClick.Visibility = Visibility.Visible;
-        }
-
-        /// <summary>
-        /// 更新消息ID（仅 Send 类型）
-        /// </summary>
-        public void UpdateMessageId(int msgId)
-        {
-            ViewModel.MsgId = msgId;
-        }
-
-        /// <summary>
-        /// 更新发送状态（仅 Send 类型）
-        /// </summary>
-        public void UpdateSendStatus(bool sending)
-        {
-            SendStatus.Visibility = sending ? Visibility.Visible : Visibility.Collapsed;
-            ResendClick.Visibility = Visibility.Collapsed;
-        }
-
-        /// <summary>
         /// 清理资源
         /// </summary>
         public void Dispose()
         {
             ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
-            ChatPage.MsgRecalled -= ChatPage_MsgRecalled;
         }
 
         #endregion
@@ -219,9 +179,9 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 return AddExpanderForCQCode(cqcode.ToSendString(), minWidth);
             }
 
-            string nick = ViewModel.AvatarType == AvatarTypes.QQGroup
-                    ? await ChatPage.Instance.GetGroupMemberNick(ViewModel.ParentId, id)
-                    : await ChatPage.Instance.GetFriendNick(id);
+            string nick = ViewModel.AvatarType == ChatType.QQGroup
+                    ? await Caches.GetGroupMemberNick(ViewModel.ParentId, id)
+                    : await Caches.GetFriendNick(id);
 
             var hyperlink = BuildAtHyperlink(nick, cqcode);
             CurrentParagraph.Inlines.Add(hyperlink);
@@ -298,20 +258,20 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             var messageItem = ChatHistoryHelper.GetHistoriesByMsgId(ViewModel.ParentId, replyId,
-                ViewModel.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
+                ViewModel.AvatarType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private);
 
             if (messageItem == null)
             {
                 return AddExpanderForCQCode(item, minWidth);
             }
 
-            string nick = ViewModel.AvatarType == AvatarTypes.QQGroup ?
-                await ChatPage.Instance.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID) :
-                await ChatPage.Instance.GetFriendNick(messageItem.SenderID);
+            string nick = ViewModel.AvatarType == ChatType.QQGroup ?
+                await Caches.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID) :
+                await Caches.GetFriendNick(messageItem.SenderID);
 
             var reply = MessageItem_Common.BuildReplyElement(nick, ViewModel.Content, () =>
             {
-                ChatPage.Instance.JumpToReplyItem(messageItem.MsgId);
+                ChatViewModel.Instance.JumpToMessage(messageItem.MsgId);
             });
 
             CurrentParagraph.Inlines.Add(reply);
@@ -393,17 +353,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         }
 
         /// <summary>
-        /// 处理消息撤回事件
-        /// </summary>
-        private void ChatPage_MsgRecalled(int msgId)
-        {
-            if (msgId == ViewModel.MsgId)
-            {
-                Recall();
-            }
-        }
-
-        /// <summary>
         /// 处理窗体尺寸变化
         /// </summary>
         private void ChatPage_WindowSizeChanged(SizeChangedEventArgs e)
@@ -431,7 +380,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 AvatarRight.Visibility = Visibility.Visible;
                 AvatarRight.Item = new ChatListItemViewModel
                 {
-                    AvatarType = AvatarTypes.QQPrivate,
+                    AvatarType = ChatType.QQPrivate,
                     GroupName = ViewModel.Nick,
                 };
             }
@@ -440,7 +389,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 AvatarLeft.Visibility = Visibility.Visible;
                 AvatarLeft.Item = new ChatListItemViewModel
                 {
-                    AvatarType = AvatarTypes.QQPrivate,
+                    AvatarType = ChatType.QQPrivate,
                     GroupName = ViewModel.Nick,
                 };
             }
@@ -452,14 +401,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             ImageDisplay.MaxWidth = MaxWidth * 0.6;
             DetailContainer.MaxWidth = MaxWidth * 0.8;
 
-            if (ViewModel.Recalled)
-            {
-                Recall();
-            }
-
             // 订阅事件
             ChatPage.WindowSizeChanged += ChatPage_WindowSizeChanged;
-            ChatPage.MsgRecalled += ChatPage_MsgRecalled;
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
@@ -470,37 +413,36 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         /// <summary>
         /// 重新发送按钮点击事件（仅 Send 类型）
         /// </summary>
-        private void ResendClick_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void ResendClick_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            UpdateSendStatus(true);
+            ViewModel.MessageStatus = MessageStatus.Sending;
+            Task<int>? sendTask = null;
+            ChatHistoryType chatHistoryType = ChatHistoryType.Other;
             switch (ViewModel.AvatarType)
             {
-                case AvatarTypes.QQGroup:
-                    if (ChatPage.Instance.CallGroupMsgSend(ViewModel.ParentId, ViewModel.Content) > 0)
-                    {
-                        UpdateSendStatus(false);
-                    }
-                    else
-                    {
-                        SendFail();
-                    }
+                case ChatType.QQGroup:
+                    sendTask = ChatViewModel.Instance.CallGroupMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
+                    chatHistoryType = ChatHistoryType.Group;
                     break;
 
-                case AvatarTypes.QQPrivate:
-                    if (ChatPage.Instance.CallPrivateMsgSend(ViewModel.ParentId, ViewModel.Content) > 0)
-                    {
-                        UpdateSendStatus(false);
-                    }
-                    else
-                    {
-                        SendFail();
-                    }
+                case ChatType.QQPrivate:
+                    sendTask = ChatViewModel.Instance.CallPrivateMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
+                    chatHistoryType = ChatHistoryType.Private;
                     break;
 
-                case AvatarTypes.Fallback:
+                case ChatType.Fallback:
                 default:
-                    UpdateSendStatus(false);
                     break;
+            }
+            if (sendTask != null)
+            {
+                ViewModel.MsgId = await sendTask;
+                ViewModel.MessageStatus = ViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
+                ChatHistoryHelper.UpdateHistoryMessageId(ViewModel.ParentId, chatHistoryType, ViewModel.SqlId, ViewModel.MsgId);
+            }
+            else
+            {
+                ViewModel.MessageStatus = MessageStatus.SendFailed;
             }
         }
 

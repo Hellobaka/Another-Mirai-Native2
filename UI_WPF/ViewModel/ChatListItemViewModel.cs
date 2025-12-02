@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;
+        public ChatType AvatarType { get; set; } = ChatType.Fallback;
 
         public string Detail { get; set; } = "";
 
@@ -34,7 +34,6 @@ namespace Another_Mirai_Native.UI.ViewModel
         public DateTime Time { get; set; }
 
         public int UnreadCount { get; set; }
-
 
         #region Commands
 

@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.UI.Pages;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Windows;
@@ -76,7 +78,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             // TODO: 无法清除未读
             UnreadCount = 0;
             UpdateControl();
-            ChatPage.Instance.UpdateUnreadCount(ViewModel);
+            // TODO: 更新数据库
         }
     }
 }

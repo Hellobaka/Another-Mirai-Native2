@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             InitializeComponent();
         }
 
-        public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;
+        public ChatType AvatarType { get; set; } = ChatType.Fallback;
 
         public Brush FallbackBrush { get; set; }
 
@@ -102,15 +102,15 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             string url = "";
             switch (AvatarType)
             {
-                case AvatarTypes.QQPrivate:
+                case ChatType.QQPrivate:
                     url = $"https://q.qlogo.cn/g?b=qq&nk={id}&s=160";
                     break;
 
-                case AvatarTypes.QQGroup:
+                case ChatType.QQGroup:
                     url = $"http://p.qlogo.cn/gh/{id}/{id}/0";
                     break;
 
-                case AvatarTypes.Fallback:
+                case ChatType.Fallback:
                     return;
             }
             Task.Run(async () =>

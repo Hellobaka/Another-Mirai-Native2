@@ -33,7 +33,7 @@
                     <ItemsControl x:Name="MessageItemsControl" ItemsSource="{Binding Messages}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <local:MessageItem MaxWidth="{Binding ActualWidth, ElementName=MessageItemsControl, Converter={StaticResource WidthConverter}, ConverterParameter=100}" Item="{Binding}" />
+                                <local:MessageItem MaxWidth="{Binding ActualWidth, ElementName=MessageItemsControl, Converter={StaticResource WidthConverter}, ConverterParameter=100}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

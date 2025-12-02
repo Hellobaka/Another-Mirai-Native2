@@ -16,8 +16,12 @@
     Unloaded="UserControl_Unloaded"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <Converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
         <Converters:DisplayTimeConverter x:Key="DisplayTimeConverter" />
-        <Converters:DetailAlignLeftConverter x:Key="DetailAlignLeftConverter" />
+        <Converters:DetailHorizontalAlignmentConverter x:Key="DetailHorizontalAlignmentConverter" />
+        <Converters:MessageStatusToSendingVisibilityConverter x:Key="MessageStatusToSendingVisibilityConverter" />
+        <Converters:MessageStatusToSentVisibilityConverter x:Key="MessageStatusToSentVisibilityConverter" />
+        <Converters:MessageStatusToSendFailedVisibilityConverter x:Key="MessageStatusToSendFailedVisibilityConverter" />
     </UserControl.Resources>
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -49,7 +53,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-
+            <!--  检查如何承载Notice类型的消息  -->
             <!--  名称显示  -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -58,7 +62,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="NameDisplay"
-                    HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailAlignLeftConverter}}"
+                    HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                     VerticalAlignment="Center"
                     FontSize="12"
                     Text="{Binding DisplayName}"
@@ -111,18 +115,16 @@
             <!--  时间和状态显示  -->
             <StackPanel
                 Grid.Row="2"
-                HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailAlignLeftConverter}}"
+                HorizontalAlignment="{Binding AvatarType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                 Orientation="Horizontal">
                 <TextBlock
-                    x:Name="RecallDisplay"
                     Margin="0,5,5,0"
                     VerticalAlignment="Center"
                     FontSize="10"
-                    Visibility="Collapsed">
+                    Visibility="{Binding Recalled, Converter={StaticResource BoolVisibilityConverter}}">
                     已撤回
                 </TextBlock>
                 <TextBlock
-                    x:Name="TimeDisplay"
                     Margin="0,5,0,0"
                     VerticalAlignment="Center"
                     FontSize="10"
@@ -148,15 +150,13 @@
 
         <!--  发送状态指示（仅 Send 消息显示）  -->
         <ui:ProgressRing
-            x:Name="SendStatus"
             Grid.Column="0"
             Cursor=""
             IsActive="True"
-            Visibility="Collapsed" />
+            Visibility="{Binding MessageStatus, Converter={StaticResource MessageStatusToSendingVisibilityConverter}}" />
 
         <!--  重新发送按钮（仅 Send 消息显示）  -->
         <ui:FontIcon
-            x:Name="ResendClick"
             Grid.Column="0"
             Width="16"
             Height="16"
@@ -166,6 +166,6 @@
             Foreground="Red"
             Glyph="&#xE72C;"
             MouseDown="ResendClick_MouseDown"
-            Visibility="Collapsed" />
+            Visibility="{Binding MessageStatus, Converter={StaticResource MessageStatusToSendFailedVisibilityConverter}}" />
     </Grid>
 </UserControl>

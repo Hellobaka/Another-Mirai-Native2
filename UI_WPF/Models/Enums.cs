@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.UI.Models
         Linux = 2
     }
 
-    public enum AvatarTypes
+    public enum ChatType
     {
         QQGroup,
 
@@ -51,5 +51,12 @@ namespace Another_Mirai_Native.UI.Models
         Receive,
 
         Send
+    }
+
+    public enum MessageStatus
+    {
+        Sending,
+        Sent,
+        SendFailed
     }
 }
