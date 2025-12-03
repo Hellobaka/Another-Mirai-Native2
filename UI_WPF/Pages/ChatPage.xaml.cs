@@ -93,43 +93,64 @@ namespace Another_Mirai_Native.UI.Pages
             await ViewModel.LoadChatList();
         }
 
-        private async void PluginManagerProxy_OnGroupAdded(long group, long qq)
+        private void PluginManagerProxy_OnGroupAdded(long group, long qq)
         {
-            await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
+            });
         }
 
-        private async void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
+        private void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
         {
-            await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 禁言了 {await Caches.GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 禁言了 {await Caches.GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
+            });
         }
 
-        private async void PluginManagerProxy_OnGroupLeft(long group, long qq)
+        private void PluginManagerProxy_OnGroupLeft(long group, long qq)
         {
-            await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await Caches.GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
-            Caches.RemoveGroupMember(group, qq);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await Caches.GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
+                Caches.RemoveGroupMember(group, qq);
+            });
         }
 
-        private async void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
+        private void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
         {
-            await ViewModel.AddGroupChatItem(group, qq, msg, DetailItemType.Receive, time, msgId);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddGroupChatItem(group, qq, msg, DetailItemType.Receive, time, msgId);
+            });
         }
 
-        private async void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
+        private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
         {
-            await ViewModel.AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, time, msgId);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddPrivateChatItem(qq, qq, msg, DetailItemType.Receive, time, msgId);
+            });
         }
 
         /// <summary>
         /// CQP事件_群消息发送
         /// </summary>
-        private async void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
+        private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
-            await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
+            });
         }
 
-        private async void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
+        private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
-            await ViewModel.AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
+            Dispatcher.BeginInvoke(async () =>
+            {
+                await ViewModel.AddPrivateChatItem(qq, AppConfig.Instance.CurrentQQ, msg, DetailItemType.Send, DateTime.Now, msgId, plugin: plugin);
+            });
         }
     }
 }

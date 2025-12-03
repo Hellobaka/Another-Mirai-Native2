@@ -525,7 +525,6 @@ namespace Another_Mirai_Native.UI.ViewModel
         private async Task ReorderChatList()
         {
             ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
-            await Dispatcher.Yield();// TODO: 可能也没必要
         }
 
         public async void OnSelectedChatChanged()
