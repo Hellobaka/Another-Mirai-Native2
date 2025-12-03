@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Another_Mirai_Native.UI.Converters"
+    xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls.Chat"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -81,20 +82,12 @@
                 <Border.ContextMenu>
                     <StaticResource ResourceKey="MessageContextMenu" />
                 </Border.ContextMenu>
-                <RichTextBox
-                    x:Name="DetailContainer"
+                <controls:SelectableTextBlock
+                    x:Name="MessageContent"
                     Padding="10"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    BorderThickness="0"
-                    HorizontalScrollBarVisibility="Disabled"
-                    IsDocumentEnabled="True"
-                    IsReadOnly="True"
-                    VerticalScrollBarVisibility="Disabled" />
+                    TextWrapping="Wrap" />
             </Border>
 
             <!--  图片显示边框  -->

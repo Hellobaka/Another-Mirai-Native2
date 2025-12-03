@@ -5,31 +5,35 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    MinWidth="100"
+    MinHeight="100"
     d:DesignHeight="100"
     d:DesignWidth="150"
-    MinHeight="100"
-    MinWidth="100"
     mc:Ignorable="d">
     <Grid
         x:Name="RootGrid"
-        MinHeight="100"
         MinWidth="100"
-        Background="{DynamicResource SystemControlPageBackgroundChromeMediumLowBrush}"
+        MinHeight="100"
         MaxWidth="{Binding MaxImageWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"
+        Background="{DynamicResource SystemControlPageBackgroundChromeMediumLowBrush}"
         SnapsToDevicePixels="True">
         <Grid.Clip>
-            <RectangleGeometry x:Name="InitialClip" RadiusX="10" RadiusY="10" Rect="0,0,100,100" />
+            <RectangleGeometry
+                x:Name="InitialClip"
+                RadiusX="10"
+                RadiusY="10"
+                Rect="0,0,100,100" />
         </Grid.Clip>
         <Viewbox
             x:Name="ImageHost"
-            MinHeight="100"
             MinWidth="100"
+            MinHeight="100"
+            MaxHeight="{Binding MaxImageHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            MaxHeight="{Binding MaxImageHeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            MouseLeftButtonDown="ImageHost_MouseLeftButtonDown"
             RenderOptions.BitmapScalingMode="Fant"
-            Visibility="Collapsed"
-            MouseLeftButtonDown="ImageHost_MouseLeftButtonDown" />
+            Visibility="Collapsed" />
         <ui:ProgressRing
             x:Name="LoadingRing"
             Width="30"
@@ -41,13 +45,13 @@
             x:Name="RetryIcon"
             Width="16"
             Height="16"
-            FontFamily="{DynamicResource SymbolThemeFontFamily}"
-            FontSize="16"
-            Glyph="&#xF384;"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Cursor="Hand"
-            Visibility="Collapsed"
-            MouseLeftButtonDown="RetryIcon_MouseLeftButtonDown" />
+            FontFamily="{DynamicResource SymbolThemeFontFamily}"
+            FontSize="16"
+            Glyph="&#xF384;"
+            MouseLeftButtonDown="RetryIcon_MouseLeftButtonDown"
+            Visibility="Collapsed" />
     </Grid>
 </UserControl>

@@ -35,45 +35,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         private static ContextMenu ImageContextMenu { get; set; } = BuildImageContextMenu();
 
         /// <summary>
-        /// 向富文本框添加文本, 同步解析URL为超链接
-        /// </summary>
-        /// <param name="textBox"></param>
-        /// <param name="item"></param>
-        public static void AddTextToRichTextBox(Paragraph paragraph, string item)
-        {
-            Regex urlRegex = new("(https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?::\\d+)?(?:/[^\\s]*)?)");
-            var urlCaptures = urlRegex.Matches(item).Cast<Match>().Select(m => m.Value).ToList();
-            var urlSplit = urlRegex.Split(item);
-            foreach (var capture in urlSplit)
-            {
-                if (urlCaptures.Contains(capture))
-                {
-                    var hyperlink = new Hyperlink(new Run(capture))
-                    {
-                        NavigateUri = new Uri(capture),
-                        Tag = capture
-                    };
-                    hyperlink.RequestNavigate += (sender, args) =>
-                    {
-                        args.Handled = true;
-                        var startInfo = new ProcessStartInfo
-                        {
-                            FileName = capture,
-                            UseShellExecute = true,
-                        };
-                        Process.Start(startInfo);
-                    };
-
-                    paragraph.Inlines.Add(hyperlink);
-                }
-                else
-                {
-                    paragraph.Inlines.Add(new Run(capture));
-                }
-            }
-        }
-
-        /// <summary>
         /// 构建QQ表情元素
         /// </summary>
         /// <param name="id">表情Id</param>
@@ -174,26 +135,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 jumpAction?.Invoke();
             };
             return border;
-        }
-
-        /// <summary>
-        /// 构建文本元素 折叠框使用
-        /// </summary>
-        /// <param name="text">内容</param>
-        public static TextBox BuildTextElement(string text)
-        {
-            var textbox = new TextBox
-            {
-                Text = text,
-                Padding = new Thickness(10),
-                TextWrapping = TextWrapping.Wrap,
-                IsReadOnly = true,
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0),
-                ContextMenu = null
-            };
-            SetElementNoSelectEffect(textbox);
-            return textbox;
         }
 
         /// <summary>
