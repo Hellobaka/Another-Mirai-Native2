@@ -104,10 +104,10 @@
                         ItemContainerStyle="{StaticResource RowListBoxItemStyle}"
                         ItemTemplate="{StaticResource FaceRowTemplate}"
                         ItemsSource="{Binding AllFaceRows}"
+                        PreviewMouseWheel="FaceScroll_PreviewMouseWheel"
                         ScrollViewer.CanContentScroll="True"
                         VirtualizingPanel.IsVirtualizing="True"
-                        VirtualizingPanel.VirtualizationMode="Recycling"
-                        PreviewMouseWheel="FaceScroll_PreviewMouseWheel">
+                        VirtualizingPanel.VirtualizationMode="Recycling">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
