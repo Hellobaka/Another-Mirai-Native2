@@ -1,6 +1,8 @@
 ﻿using Another_Mirai_Native;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.ViewModel;
 using Another_Mirai_Native.UI.Windows;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Threading;
@@ -195,7 +197,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 Stretch = Stretch.Uniform,
                 Tag = imagePath,
-                ContextMenu = MessageItem_Common.GetImageContextMenu()
+                ContextMenu = (ContextMenu)Resources["ImageContextMenu"]
             };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
             AnimationBehavior.SetSourceUri(image, uri);
@@ -248,6 +250,52 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             LoadingRing.IsActive = false;
             LoadingRing.Visibility = Visibility.Collapsed;
             RetryIcon.Visibility = Visibility.Visible;
+        }
+
+        private void CollectImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_currentImagePath))
+            {
+                string path = _currentImagePath!;
+                string collectImagePath = Path.Combine("data", "image", "collected");
+                Directory.CreateDirectory(collectImagePath);
+                if (File.Exists(path))
+                {
+                    File.Copy(path, Path.Combine(collectImagePath, $"{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(path)}"));
+                }
+            }
+        }
+
+        private void SaveImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_currentImagePath))
+            {
+                string path = _currentImagePath!;
+                if (File.Exists(path) is false)
+                {
+                    return;
+                }
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Title = "图片另存为",
+                    AddExtension = true,
+                    FileName = Path.GetFileName(path),
+                    Filter = "JPG 图片|*.jpg|JPEG 图片|*.jpeg|PNG 图片|*.png|BMP 图片|*.bmp|Webp 图片|*.webp|所有文件|*.*",
+                };
+                if (saveFileDialog.ShowDialog() is false)
+                {
+                    return;
+                }
+                File.Copy(path, saveFileDialog.FileName, true);
+            }
+        }
+
+        private void PlusOne_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MessageViewModel viewModel)
+            {
+                viewModel.Message_Repeat(e);
+            }
         }
     }
 }

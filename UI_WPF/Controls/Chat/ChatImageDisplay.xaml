@@ -10,6 +10,26 @@
     d:DesignHeight="100"
     d:DesignWidth="150"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ContextMenu x:Key="ImageContextMenu">
+            <MenuItem Click="CollectImage_Click" Header="收藏">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xEB51;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Click="SaveImage_Click" Header="另存为">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xE792;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Click="PlusOne_Click" Header="+1">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xE8ED;" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
     <Grid
         x:Name="RootGrid"
         MinWidth="100"

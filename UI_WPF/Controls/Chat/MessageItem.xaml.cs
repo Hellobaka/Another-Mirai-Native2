@@ -127,11 +127,21 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 ImageBorder.Visibility = Visibility.Visible;
                 DetailBorder.Visibility = Visibility.Collapsed;
-                ImageDisplay.Children.Add(MessageItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5));
+                ImageDisplay.Children.Add(new ChatImageDisplay
+                {
+                    CQCode = cqcode,
+                    MaxImageWidth = MaxWidth * 0.5,
+                    MaxImageHeight = MessageItem_Common.ImageMaxHeight
+                });
                 return;
             }
 
-            var imageElement = MessageItem_Common.BuildImageElement(cqcode, MaxWidth * 0.5);
+            var imageElement = new ChatImageDisplay
+            {
+                CQCode = cqcode,
+                MaxImageWidth = MaxWidth * 0.5,
+                MaxImageHeight = MessageItem_Common.ImageMaxHeight
+            };
             if (MessageContent.Inlines.Count > 0 && !(MessageContent.Inlines.LastInline is LineBreak))
             {
                 MessageContent.Inlines.Add(new LineBreak());
@@ -163,11 +173,11 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 return;
             }
 
-            var faceElement = MessageItem_Common.BuildFaceElement(faceId, true);
-            if (faceElement != null)
+            var faceDisplay = new ChatFaceDisplay { FaceId = faceId };
+            if (faceDisplay.HasFace)
             {
-                faceElement.Margin = new Thickness(1, 0, 1, 0);
-                MessageContent.Inlines.Add(new InlineUIContainer(faceElement) { BaselineAlignment = BaselineAlignment.Center });
+                faceDisplay.Margin = new Thickness(1, 0, 1, 0);
+                MessageContent.Inlines.Add(new InlineUIContainer(faceDisplay) { BaselineAlignment = BaselineAlignment.Center });
             }
             else
             {
@@ -196,10 +206,15 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 ? await Caches.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID)
                 : await Caches.GetFriendNick(messageItem.SenderID);
 
-            var reply = MessageItem_Common.BuildReplyElement(nick, ViewModel.Content, () =>
+            var reply = new ChatReplyDisplay
             {
-                ChatViewModel.Instance.JumpToMessage(messageItem.MsgId);
-            });
+                Nick = nick,
+                Msg = messageItem.Message,
+                JumpAction = () =>
+                {
+                    ChatViewModel.Instance.JumpToMessage(messageItem.MsgId);
+                }
+            };
 
             if (MessageContent.Inlines.Count > 0 && !(MessageContent.Inlines.LastInline is LineBreak))
             {
