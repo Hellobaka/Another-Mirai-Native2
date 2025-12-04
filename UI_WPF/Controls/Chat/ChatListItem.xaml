@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Controls.Chat"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="clr-namespace:Another_Mirai_Native.UI.ViewModel"
@@ -41,7 +42,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock
+                <emoji:TextBlock
                     x:Name="GroupDisplay"
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -60,7 +61,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock
+                <emoji:TextBlock
                     x:Name="DetailDisplay"
                     Margin="0,0,5,0"
                     VerticalAlignment="Center"

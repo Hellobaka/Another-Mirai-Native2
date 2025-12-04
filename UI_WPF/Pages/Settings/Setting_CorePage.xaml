@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -28,13 +29,13 @@
             BorderThickness="1"
             CornerRadius="8">
             <ui:SimpleStackPanel Spacing="10">
-                <TextBlock
+                <emoji:TextBlock
                     Margin="0,0,0,5"
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
                     🚀 连接设置
-                </TextBlock>
+                </emoji:TextBlock>
 
                 <controls:SettingItem_ToggleButton
                     x:Name="AutoConnect"
@@ -67,13 +68,13 @@
             BorderThickness="1"
             CornerRadius="8">
             <ui:SimpleStackPanel Spacing="10">
-                <TextBlock
+                <emoji:TextBlock
                     Margin="0,0,0,5"
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
                     🔌 插件管理
-                </TextBlock>
+                </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
                     x:Name="PluginExitWhenCoreExit"
                     Title="框架退出时插件自动退出"
@@ -116,13 +117,13 @@
             BorderThickness="1"
             CornerRadius="8">
             <ui:SimpleStackPanel Spacing="10">
-                <TextBlock
+                <emoji:TextBlock
                     Margin="0,0,0,5"
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
                     💾 数据管理
-                </TextBlock>
+                </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
                     x:Name="UseDatabase"
                     Title="日志使用数据库"
@@ -147,13 +148,13 @@
             BorderThickness="1"
             CornerRadius="8">
             <ui:SimpleStackPanel Spacing="10">
-                <TextBlock
+                <emoji:TextBlock
                     Margin="0,0,0,5"
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
                     💬 聊天功能
-                </TextBlock>
+                </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
                     x:Name="EnableChat"
                     Title="启用聊天窗口"
@@ -207,13 +208,13 @@
             BorderThickness="1"
             CornerRadius="8">
             <ui:SimpleStackPanel Spacing="10">
-                <TextBlock
+                <emoji:TextBlock
                     Margin="0,0,0,5"
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
                     📴 离线操作
-                </TextBlock>
+                </emoji:TextBlock>
                 <controls:SettingItem_TextBox
                     x:Name="ActionAfterOfflineSeconds"
                     Title="离线操作等待时间"
@@ -230,13 +231,13 @@
                     BorderThickness="1"
                     CornerRadius="8">
                     <ui:SimpleStackPanel Spacing="10">
-                        <TextBlock
+                        <emoji:TextBlock
                             Margin="0,0,0,5"
                             FontSize="16"
                             FontWeight="SemiBold"
                             Style="{StaticResource TitleTextBlockStyle}">
                             📧 邮件通知
-                        </TextBlock>
+                        </emoji:TextBlock>
                         <controls:SettingItem_ToggleButton
                             x:Name="OfflineActionSendEmail"
                             Title="启用离线后邮件发送"
@@ -284,13 +285,13 @@
                     BorderThickness="1"
                     CornerRadius="8">
                     <ui:SimpleStackPanel Spacing="10">
-                        <TextBlock
+                        <emoji:TextBlock
                             Margin="0,0,0,5"
                             FontSize="16"
                             FontWeight="SemiBold"
                             Style="{StaticResource TitleTextBlockStyle}">
                             💻 终端指令
-                        </TextBlock>
+                        </emoji:TextBlock>
                         <controls:SettingItem_ToggleButton
                             x:Name="OfflineActionRunCommand"
                             Title="启用离线后执行终端指令"

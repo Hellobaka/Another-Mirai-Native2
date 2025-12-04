@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -28,13 +29,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,5"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         🚀 启动设置
-                    </TextBlock>
+                    </emoji:TextBlock>
                     <controls:SettingItem_ToggleButton
                         x:Name="AutoStartup"
                         Title="开机自动启动"
@@ -63,13 +64,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,15"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         📝 日志设置
-                    </TextBlock>
+                    </emoji:TextBlock>
                     <controls:SettingItem_TextBox
                         x:Name="LogItemsCount"
                         Title="日志最大数量"
@@ -99,13 +100,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,5"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         🔌 插件设置
-                    </TextBlock>
+                    </emoji:TextBlock>
                     <controls:SettingItem_ToggleButton
                         x:Name="ShowWhenError"
                         Title="插件崩溃时主窗口自动弹出"
@@ -122,13 +123,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,5"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         🎨 外观设置
-                    </TextBlock>
+                    </emoji:TextBlock>
 
                     <controls:SettingItem_ComboBox
                         x:Name="Theme"

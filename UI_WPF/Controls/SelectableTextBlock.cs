@@ -122,7 +122,7 @@ namespace Another_Mirai_Native.UI.Controls
         }
     }
 
-    public class SelectableTextBlock : TextBlock
+    public class SelectableTextBlock : Emoji.Wpf.TextBlock
     {
         static SelectableTextBlock()
         {
