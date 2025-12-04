@@ -44,7 +44,7 @@
                 x:Name="AtBtn"
                 Margin="0,0,5,8"
                 Click="AtButton_Click"
-                IsEnabled="{Binding IsGroupChat, Converter={StaticResource BoolVisibilityConverter}}">
+                IsEnabled="{Binding IsGroupChat}">
                 <ui:FontIcon
                     Width="16"
                     Height="16"

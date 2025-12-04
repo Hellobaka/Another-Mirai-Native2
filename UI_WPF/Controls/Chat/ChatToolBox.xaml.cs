@@ -120,6 +120,11 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                     img.Width = maxWidth;
                     img.Height = maxWidth * ratio;
                 }
+                else
+                {
+                    img.Width = image.PixelWidth;
+                    img.Height = image.PixelHeight;
+                }
                 if (SendText.Document.Blocks.Count == 0)
                 {
                     SendText.Document.Blocks.Add(new Paragraph());
