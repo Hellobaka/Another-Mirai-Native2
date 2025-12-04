@@ -185,7 +185,7 @@ namespace Another_Mirai_Native.Native
                     try
                     {
                         dir.Delete(true);
-                        LogHelper.Info("清理临时目录", $"已删除旧的临时目录: {dir.Name}");
+                        LogHelper.Debug("清理临时目录", $"已删除旧的临时目录: {dir.Name}");
                     }
                     catch (Exception ex)
                     {
