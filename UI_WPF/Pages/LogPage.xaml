@@ -7,8 +7,9 @@
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewModel="clr-namespace:Another_Mirai_Native.UI.ViewModel"
     Title="LogPage"
-    d:DataContext="{d:DesignInstance Type=local:LogPage}"
+    d:DataContext="{d:DesignInstance Type=viewModel:LogPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Loaded="LogPage_Loaded"
@@ -68,8 +69,7 @@
                 Grid.Column="0"
                 Margin="5"
                 HorizontalAlignment="Stretch"
-                SelectedIndex="1"
-                SelectionChanged="FilterLogLevelSelector_SelectionChanged">
+                SelectedIndex="{Binding FilterLogLevelIndex}">
                 <ComboBoxItem>Debug 调试</ComboBoxItem>
                 <ComboBoxItem>Info 消息</ComboBoxItem>
                 <ComboBoxItem>Warning 警告</ComboBoxItem>
@@ -81,13 +81,13 @@
                 Grid.Column="1"
                 Margin="5"
                 ui:ControlHelper.PlaceholderText="搜点什么？"
-                TextChanged="FilterTextValue_TextChanged" />
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <ui:ToggleSwitch
                 x:Name="AutoScroll"
                 Grid.Column="2"
                 OffContent="自动滚动"
                 OnContent="自动滚动"
-                Toggled="AutoScroll_Toggled" />
+                IsOn="{Binding AutoScroll}" />
         </Grid>
         <ListView
             x:Name="LogView"
@@ -96,7 +96,11 @@
             HorizontalAlignment="Stretch"
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding LogCollections}"
-            SelectionMode="Single">
+            ScrollViewer.CanContentScroll="True"
+            SelectedItem="{Binding SelectedLog}"
+            SelectionMode="Single"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Recycling">
             <ListView.View>
                 <GridView x:Name="LogGridView" ui:ScrollViewerHelper.AutoHideScrollBars="True">
                     <GridViewColumn Width="Auto" Header="时间">
