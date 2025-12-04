@@ -2,6 +2,7 @@
     x:Class="Another_Mirai_Native.UI.Pages.PluginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
@@ -18,15 +19,6 @@
         <converter:ObjectVisibilityInvertConverter x:Key="ObjectVisibilityInvertConverter" />
         <converter:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
         <converter:ProxyEnabledConverter x:Key="ProxyEnabledConverter" />
-        <Style
-            x:Key="SelectableTextBlock"
-            BasedOn="{StaticResource {x:Type TextBox}}"
-            TargetType="TextBox">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -138,30 +130,30 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Margin="0">
+                    <ui:SimpleStackPanel
+                        Grid.Row="0"
+                        Margin="0"
+                        Spacing="10">
                         <TextBlock FontSize="24">插件信息</TextBlock>
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="AppIdDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
                             Text="{Binding SelectedItem.TargetPlugin.AppInfo.AppId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="AuthorDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
                             Text="{Binding SelectedItem.TargetPlugin.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="VersionDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
                             Text="{Binding SelectedItem.TargetPlugin.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
-                    </StackPanel>
+                    </ui:SimpleStackPanel>
                     <StackPanel Grid.Row="1" Margin="0,5">
                         <TextBlock FontSize="24">插件描述</TextBlock>
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="DescriptionDisplay"
+                            Margin="0,10"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
                             Text="{Binding SelectedItem.TargetPlugin.AppInfo.description, ElementName=PluginListContainer}"
                             TextWrapping="Wrap" />
                     </StackPanel>

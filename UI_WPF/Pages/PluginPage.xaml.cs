@@ -174,17 +174,6 @@ namespace Another_Mirai_Native.UI.Pages
         {
             SelectedPlugin = (PluginListContainer.SelectedItem as CQPluginProxyWrapper)?.TargetPlugin;
             UpdateAuthList();
-
-            RemoveSelectEffect();
-        }
-
-        private async void RemoveSelectEffect()
-        {
-            await Task.Delay(100);
-            MessageItem_Common.SetElementNoSelectEffect(AppIdDisplayer);
-            MessageItem_Common.SetElementNoSelectEffect(AuthorDisplayer);
-            MessageItem_Common.SetElementNoSelectEffect(VersionDisplayer);
-            MessageItem_Common.SetElementNoSelectEffect(DescriptionDisplay);
         }
 
         private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
