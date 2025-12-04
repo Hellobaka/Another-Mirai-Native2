@@ -108,13 +108,18 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 string md5 = buffer.MD5();
 
                 File.WriteAllBytes(Path.Combine(cacheImagePath, md5 + ".png"), buffer);
+                int maxWidth = 200;
                 Image img = new()
                 {
                     Source = image,
-                    Width = image.Width,
-                    Height = image.Height,
                     Tag = $"[CQ:image,file=cached\\{md5}.png]"
                 };
+                if (image.PixelWidth > maxWidth)
+                {
+                    double ratio = (double)image.PixelHeight / image.PixelWidth;
+                    img.Width = maxWidth;
+                    img.Height = maxWidth * ratio;
+                }
                 if (SendText.Document.Blocks.Count == 0)
                 {
                     SendText.Document.Blocks.Add(new Paragraph());
