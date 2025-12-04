@@ -39,7 +39,7 @@
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Border>
-                    <TextBlock
+                    <controls:SelectableTextBlock
                         x:Name="GroupNameDisplay"
                         FontSize="18"
                         Text="{Binding ChatNameDisplay}" />

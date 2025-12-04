@@ -213,7 +213,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 JumpAction = () =>
                 {
                     ChatViewModel.Instance.JumpToMessage(messageItem.MsgId);
-                }
+                },
+                Margin = new Thickness(0, 0, 0, 5)
             };
 
             if (MessageContent.Inlines.Count > 0 && !(MessageContent.Inlines.LastInline is LineBreak))
