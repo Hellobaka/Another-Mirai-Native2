@@ -9,6 +9,14 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public CQPluginProxy TargetPlugin { get; set; }
 
+        public string AppId => TargetPlugin.AppInfo.AppId;
+
+        public string Author => TargetPlugin.AppInfo.author;
+
+        public string Version => TargetPlugin.AppInfo.version;
+
+        public string Description => TargetPlugin.AppInfo.description;
+
         public CQPluginProxyWrapper(CQPluginProxy proxy)
         {
             TargetPlugin = proxy;
