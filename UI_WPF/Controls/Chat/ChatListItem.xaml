@@ -10,10 +10,10 @@
     d:DataContext="{d:DesignInstance Type=viewmodel:ChatListItemViewModel}"
     d:DesignHeight="50"
     d:DesignWidth="230"
-    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     <UserControl.Resources>
         <Converters:DisplayTimeConverter x:Key="DisplayTimeConverter" />
+        <Converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
     </UserControl.Resources>
     <UserControl.ContextMenu>
         <StaticResource ResourceKey="ChatListContextMenu" />
@@ -62,7 +62,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="DetailDisplay"
-                    Margin="0,0,10,0"
+                    Margin="0,0,5,0"
                     VerticalAlignment="Center"
                     FontSize="12"
                     Text="{Binding Detail}"
@@ -71,21 +71,23 @@
                 <Border
                     x:Name="UnreadTip"
                     Grid.Column="1"
-                    Width="15"
                     Height="15"
+                    MinWidth="15"
                     Margin="0,0,10,0"
-                    HorizontalAlignment="Stretch"
+                    Padding="4,0"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="{DynamicResource SystemAccentColorLight3Brush}"
-                    CornerRadius="100"
+                    CornerRadius="8"
                     Cursor="Hand"
                     MouseDown="UnreadTip_MouseDown"
                     RenderOptions.BitmapScalingMode="HighQuality"
-                    Visibility="Visible">
+                    Visibility="{Binding UnreadBadgeVisible, Converter={StaticResource BoolVisibilityConverter}}">
                     <TextBlock
                         x:Name="UnreadCountDisplay"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
+                        FontSize="10"
                         Foreground="Black"
                         Text="{Binding UnreadCount}"
                         TextAlignment="Center" />

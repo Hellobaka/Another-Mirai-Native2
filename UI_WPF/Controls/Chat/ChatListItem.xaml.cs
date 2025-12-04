@@ -1,8 +1,5 @@
 ﻿using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Model;
-using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,46 +36,14 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
             newValue.Detail = newValue.Detail.Replace("\r", "").Replace("\n", "");
             control.ViewModel = newValue;
-            control.Id = newValue.Id;
-            control.GroupName = newValue.GroupName;
-            control.Detail = newValue.Detail;
-            control.Time = newValue.Time;
-            control.UnreadCount = newValue.UnreadCount;
-
-            control.UpdateControl();
         }
-
-        private void UpdateControl()
-        {
-            ViewModel.UnreadCount = UnreadCount;
-            UnreadTip.Visibility = UnreadCount > 0 ? Visibility.Visible : Visibility.Collapsed;
-            UnreadCountDisplay.FontSize = UnreadTip.Width * 0.6;
-        }
-
-        public int ItemId { get; set; }
-
-        public long Id { get; set; }
-
-        public string GroupName { get; set; } = "";
-
-        public string Detail { get; set; } = "";
-
-        public DateTime Time { get; set; } = DateTime.Now;
-
-        public int UnreadCount { get; set; }
 
         public ChatListItemViewModel ViewModel { get; set; }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void UnreadTip_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            // TODO: 无法清除未读
-            UnreadCount = 0;
-            UpdateControl();
-            // TODO: 更新数据库
+            ViewModel.UnreadCount = 0;
+            e.Handled = true;
         }
     }
 }

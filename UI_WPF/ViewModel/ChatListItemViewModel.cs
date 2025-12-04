@@ -1,6 +1,4 @@
-﻿using Another_Mirai_Native.UI.Controls;
-using Another_Mirai_Native.UI.Controls.Chat;
-using Another_Mirai_Native.UI.Models;
+﻿using Another_Mirai_Native.UI.Models;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -34,6 +32,8 @@ namespace Another_Mirai_Native.UI.ViewModel
         public DateTime Time { get; set; }
 
         public int UnreadCount { get; set; }
+
+        public bool UnreadBadgeVisible => UnreadCount > 0;
 
         #region Commands
 
