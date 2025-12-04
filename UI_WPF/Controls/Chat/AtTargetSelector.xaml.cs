@@ -57,6 +57,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             await PrepareData();
             FilterList = Data.OrderBy(x => x.GroupName).ToObservableCollection();
             Loading = false;
+
+            OnPropertyChanged(nameof(FilterList));
             SearchBox.Focus();
         }
 

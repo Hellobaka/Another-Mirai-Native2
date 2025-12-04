@@ -82,7 +82,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public async void Message_Repeat(object? parameter)
         {
-            await ChatViewModel.Instance.ExecuteSendMessageAsync(Id, AvatarType, Content);
+            await ChatViewModel.Instance.ExecuteSendMessageAsync(ParentId, AvatarType, Content);
         }
 
         public void Message_At(object? parameter)

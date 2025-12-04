@@ -234,6 +234,8 @@ namespace Another_Mirai_Native.UI.ViewModel
             // 更新数据库中的消息ID
             ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
                 , sqlId, messageViewModel.MsgId);
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            ScrollToBottom();
         }
 
         /// <summary>
@@ -504,7 +506,14 @@ namespace Another_Mirai_Native.UI.ViewModel
                 item.GroupName = await Caches.GetGroupName(group);
                 item.Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
-                item.UnreadCount++;
+                if (SelectedChat != item)
+                {
+                    item.UnreadCount++;
+                }
+                else
+                {
+                    item.UnreadCount = 0;
+                }
             }
             else
             {

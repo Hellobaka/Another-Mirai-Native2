@@ -16,6 +16,7 @@
     <UserControl.Resources>
         <Converters:AtTargetNameConverter x:Key="AtTargetNameConverter" />
         <Converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <Converters:BoolVisibilityRevertConverter x:Key="BoolVisibilityRevertConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,7 +31,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Visibility="{Binding Loading, Converter={StaticResource BoolVisibilityConverter}}" />
-        <ScrollViewer Grid.Row="1" Visibility="{Binding Loading, Converter={StaticResource BoolVisibilityConverter}}">
+        <ScrollViewer Grid.Row="1" Visibility="{Binding Loading, Converter={StaticResource BoolVisibilityRevertConverter}}">
             <ListBox
                 x:Name="ItemContainer"
                 Margin="0,5,0,0"
