@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.ViewModel
 {
@@ -87,12 +87,12 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public RelayCommand Command_ToggleEnable { get; set; }
 
-        private void OpenAllDataDirectory()
+        private void OpenAllDataDirectory(object? parameter)
         {
             Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "app"));
         }
 
-        private void OpenDataDirectory()
+        private void OpenDataDirectory(object? parameter)
         {
             if (SelectedPlugin == null) return;
             string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
@@ -106,12 +106,12 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
         }
 
-        private void OpenPluginPath()
+        private void OpenPluginPath(object? parameter)
         {
             Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
         }
 
-        private async Task ReloadAll()
+        private async Task ReloadAll(object? parameter)
         {
             if (!await DialogHelper.ShowConfirmDialog("重载插件", "确定要重载所有插件吗？这可能会需要一些时间"))
             {
@@ -126,7 +126,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             });
         }
 
-        private async Task ReloadPlugin()
+        private async Task ReloadPlugin(object? parameter)
         {
             if (SelectedPlugin == null) return;
             if (SelectedPlugin.Enabled == false)
@@ -146,7 +146,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             });
         }
 
-        private async Task TestPlugin()
+        private async Task TestPlugin(object? parameter)
         {
             if (SelectedPlugin == null) return;
             if (SelectedPlugin.AppInfo.AuthCode != AppConfig.Instance.TestingAuthCode && !await DialogHelper.ShowConfirmDialog("测试插件", $"确定要测试 {SelectedPlugin.PluginName} 吗？此操作会导致插件无法接收事件"))
@@ -167,7 +167,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
 
-        private void ToggleEnable()
+        private void ToggleEnable(object? parameter)
         {
             if (SelectedPlugin == null) return;
             ToggleEnableRunningStatus = true;
@@ -242,14 +242,13 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void LoadPluginList()
         {
-            Application.Current.Dispatcher.BeginInvoke(() =>
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
                 CQPlugins.Clear();
                 foreach (var item in PluginManagerProxy.Proxies)
                 {
                     CQPlugins.Add(new CQPluginProxyWrapper(item));
                 }
-                SortPlugins();
                 MainWindow.Instance.BuildTaskbarIconMenu();
             });
         }
@@ -261,35 +260,31 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy plugin)
         {
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
-            Application.Current.Dispatcher.Invoke(() => MainWindow.Instance.UpdateTrayToolTip());
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
+            {
+
+                var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+                target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
+                MainWindow.Instance.UpdateTrayToolTip();
+            });
         }
 
         private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy plugin)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
                 CQPlugins.Add(new CQPluginProxyWrapper(plugin));
-                SortPlugins();
                 MainWindow.Instance.BuildTaskbarIconMenu();
             });
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
         {
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
-        }
-
-        private void SortPlugins()
-        {
-            var sorted = CQPlugins.OrderBy(x => x.TargetPlugin.PluginName).ToList();
-            CQPlugins.Clear();
-            foreach (var item in sorted)
+            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
-                CQPlugins.Add(item);
-            }
+                var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
+                target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
+            });
         }
 
         private void UpdateAuthList()
