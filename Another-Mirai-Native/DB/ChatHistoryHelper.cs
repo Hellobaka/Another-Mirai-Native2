@@ -4,6 +4,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using SqlSugar;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.DB
 {
@@ -79,6 +80,14 @@ namespace Another_Mirai_Native.DB
             db.Updateable(item).ExecuteCommand();
         }
 
+        public static async Task<List<ChatHistory>> GetHistoriesByPageAsync(long id, ChatHistoryType historyType, int pageSize, int pageIndex)
+        {
+            using var db = GetInstance(GetDBPath(id, historyType));
+            var ls = await db.Queryable<ChatHistory>().OrderByDescending(x => x.Time).ToPageListAsync(pageIndex, pageSize);
+            ls.Reverse();
+            return ls;
+        }
+
         public static List<ChatHistory> GetHistoriesByPage(long id, ChatHistoryType historyType, int pageSize, int pageIndex)
         {
             using var db = GetInstance(GetDBPath(id, historyType));
@@ -106,14 +115,18 @@ namespace Another_Mirai_Native.DB
             return item;
         }
 
-        public static List<ChatHistory> GetHistoryCategroies()
+        public static List<ChatHistory> GetHistoryCategories()
         {
             using var db = GetInstance(GetDBPath(AppConfig.Instance.CurrentQQ, ChatHistoryType.Other));
             return db.Queryable<ChatHistory>().ToList();
         }
 
-        public static void UpdateHistoryCategory(ChatHistory chatHistory)
+        public static void UpdateHistoryCategory(ChatHistory? chatHistory)
         {
+            if (chatHistory == null)
+            {
+                return;
+            }
             using var db = GetInstance(GetDBPath(AppConfig.Instance.CurrentQQ, ChatHistoryType.Other));
             var item = db.Queryable<ChatHistory>().Where(x => x.ParentID == chatHistory.ParentID && x.Type == chatHistory.Type).First();
             if (item == null)

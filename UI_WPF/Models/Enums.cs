@@ -34,4 +34,29 @@ namespace Another_Mirai_Native.UI.Models
         MacOs = 1,
         Linux = 2
     }
+
+    public enum ChatType
+    {
+        QQGroup,
+
+        QQPrivate,
+
+        Fallback
+    }
+
+    public enum DetailItemType
+    {
+        Notice,
+
+        Receive,
+
+        Send
+    }
+
+    public enum MessageStatus
+    {
+        Sending,
+        Sent,
+        SendFailed
+    }
 }

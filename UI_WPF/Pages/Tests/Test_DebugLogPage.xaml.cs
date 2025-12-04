@@ -18,8 +18,6 @@ namespace Another_Mirai_Native.UI.Pages
     /// </summary>
     public partial class Test_DebugLogPage : Page, INotifyPropertyChanged
     {
-        private ObservableCollection<LogModelWrapper> logCollections;
-
         public Test_DebugLogPage()
         {
             InitializeComponent();
@@ -29,16 +27,7 @@ namespace Another_Mirai_Native.UI.Pages
 
         public bool FormLoaded { get; private set; }
 
-        public ObservableCollection<LogModelWrapper> LogCollections
-        {
-            get => logCollections;
-
-            set
-            {
-                logCollections = value;
-                OnPropertyChanged(nameof(LogCollections));
-            }
-        }
+        public ObservableCollection<LogModel> LogCollections { get; set; } = [];
 
         public bool PageEnabled { get; private set; }
 
@@ -70,7 +59,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                LogCollections.Add(new LogModelWrapper(logModel));
+                LogCollections.Add(logModel);
             });
 
             SelectLastLog();
@@ -87,11 +76,7 @@ namespace Another_Mirai_Native.UI.Pages
             }
             FormLoaded = true;
             DataContext = this;
-            LogCollections = new();
-            foreach (var item in LogHelper.DebugLogs)
-            {
-                LogCollections.Add(new LogModelWrapper(item));
-            }
+            LogCollections = [.. LogHelper.DebugLogs];
             LogHelper.DebugLogAdded -= LogHelper_DebugLogAdded;
             LogHelper.DebugLogAdded += LogHelper_DebugLogAdded;
         }

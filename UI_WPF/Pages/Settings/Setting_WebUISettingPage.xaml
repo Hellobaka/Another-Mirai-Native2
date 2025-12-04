@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converters="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -27,13 +28,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,5"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         🛜 通用设置
-                    </TextBlock>
+                    </emoji:TextBlock>
                     <controls:SettingItem_TextBox
                         x:Name="ListenIP"
                         Title="监听 IP"
@@ -58,13 +59,13 @@
                 BorderThickness="1"
                 CornerRadius="8">
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock
+                    <emoji:TextBlock
                         Margin="0,0,0,5"
                         FontSize="16"
                         FontWeight="SemiBold"
                         Style="{StaticResource TitleTextBlockStyle}">
                         🔒 HTTPS 设置
-                    </TextBlock>
+                    </emoji:TextBlock>
                     <controls:SettingItem_ToggleButton
                         x:Name="EnableHTTPS"
                         Title="启用 HTTPS"

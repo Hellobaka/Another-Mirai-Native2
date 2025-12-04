@@ -29,7 +29,6 @@ namespace Another_Mirai_Native.UI
 
             if (args.Length == 0)
             {
-                InitCore();
                 App.Main();
             }
             else
@@ -38,7 +37,7 @@ namespace Another_Mirai_Native.UI
             }
         }
 
-        private static void InitCore()
+        public static void InitCore()
         {
             AppConfig.Instance.IsCore = true;
             Another_Mirai_Native.Entry.CreateInitFolders();
@@ -58,7 +57,7 @@ namespace Another_Mirai_Native.UI
                 LogHelper.Error("初始化", "初始化连接参数失败，请检查配置内容");
                 return;
             }
-            LogHelper.Error("初始化", "启动插件服务器成功");
+            LogHelper.Info("初始化", "启动插件服务器成功");
             if (!ServerManager.Server.Start())
             {
                 LogHelper.Error("初始化", "构建服务器失败");

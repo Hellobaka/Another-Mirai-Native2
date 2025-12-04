@@ -15,9 +15,21 @@
     <PackageIcon>icon.ico</PackageIcon>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
 	<Version>2.9.2</Version>
+	<WeaverConfiguration Condition="'$(TargetFramework)' == 'net48'">
+		<Weavers>
+			<Costura />
+			<PropertyChanged />
+		</Weavers>
+	</WeaverConfiguration>
+	<WeaverConfiguration Condition="'$(TargetFramework)' == 'net9.0-windows'">
+		<Weavers>
+			<PropertyChanged />
+		</Weavers>
+	</WeaverConfiguration>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="FodyWeavers.xml" />
     <None Remove="Resources\qq-face\0.png" />
     <None Remove="Resources\qq-face\1.png" />
     <None Remove="Resources\qq-face\10.png" />
@@ -348,21 +360,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.9.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+	  <PackageReference Include="PropertyChanged.Fody" Version="4.1.0">
+		  <PrivateAssets>all</PrivateAssets>
+	  </PackageReference>
     <PackageReference Include="XamlAnimatedGif" Version="2.3.1" />
+	  <PackageReference Include="Fody" Version="6.9.3">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
 		<ProjectReference Include="..\UI_Blazor\UI_Blazor.csproj" />
 	</ItemGroup>
 	
+	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-		<PackageReference Include="Fody" Version="6.8.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Costura.Fody" Version="5.7.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

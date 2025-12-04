@@ -2,12 +2,17 @@
     x:Class="Another_Mirai_Native.UI.Pages.PluginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewmodel="clr-namespace:Another_Mirai_Native.UI.ViewModel"
     Title="PluginPage"
+    d:DataContext="{d:DesignInstance Type=viewmodel:PluginPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Loaded="Page_Loaded"
@@ -18,15 +23,11 @@
         <converter:ObjectVisibilityInvertConverter x:Key="ObjectVisibilityInvertConverter" />
         <converter:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
         <converter:ProxyEnabledConverter x:Key="ProxyEnabledConverter" />
-        <Style
-            x:Key="SelectableTextBlock"
-            BasedOn="{StaticResource {x:Type TextBox}}"
-            TargetType="TextBox">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
+        <CollectionViewSource x:Key="SortedPlugins" Source="{Binding CQPlugins}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="SelectedPlugin.PluginName" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -47,19 +48,25 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock FontSize="24">已加载插件</TextBlock>
-                <TextBlock Grid.Row="1" Margin="0,5">❌表示插件未启用</TextBlock>
+                <emoji:TextBlock Grid.Row="1" Margin="0,5">❌表示插件未启用</emoji:TextBlock>
                 <ListView
                     x:Name="PluginListContainer"
                     Grid.Row="2"
-                    ItemsSource="{Binding CQPlugins}"
-                    SelectionChanged="PluginListContainer_SelectionChanged">
+                    ItemsSource="{Binding Source={StaticResource SortedPlugins}}"
+                    SelectedItem="{Binding SelectedPlugin}">
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding TargetPlugin, Converter={StaticResource ProxyEnabledConverter}}" />
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.PluginName}">插件名称</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.author}">作者</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.version}">版本</GridViewColumn>
+                                <GridViewColumn Width="40">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <emoji:TextBlock Text="{Binding EnableStatusDisplay}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PluginName}">插件名称</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Author}">作者</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Version}">版本</GridViewColumn>
                             </GridView.Columns>
                         </GridView>
                     </ListView.View>
@@ -76,14 +83,14 @@
                         Grid.Column="0"
                         Margin="5,0"
                         HorizontalAlignment="Stretch"
-                        Click="ReloadAllBtn_Click"
+                        Command="{Binding Command_ReloadAll}"
                         Style="{StaticResource AccentButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>重载插件</TextBlock>
                             <ui:ProgressRing
                                 x:Name="ReloadAllStatus"
                                 Margin="5,0,0,0"
-                                IsActive="True"
+                                IsActive="{Binding ReloadAllRunningStatus}"
                                 Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
                                 <ui:ProgressRing.Foreground>
                                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
@@ -96,7 +103,7 @@
                         Grid.Column="1"
                         Margin="5,0"
                         HorizontalAlignment="Stretch"
-                        Click="OpenPluginPathBtn_Click">
+                        Command="{Binding Command_OpenPluginPath}">
                         插件路径
                     </Button>
                     <Button
@@ -104,7 +111,7 @@
                         Grid.Column="2"
                         Margin="5,0"
                         HorizontalAlignment="Stretch"
-                        Click="OpenAllDataBtn_Click">
+                        Command="{Binding Command_OpenDataDirectory}">
                         数据路径
                     </Button>
                 </Grid>
@@ -125,44 +132,44 @@
                     Grid.Row="0"
                     VerticalAlignment="Center"
                     TextAlignment="Center"
-                    Visibility="{Binding SelectedItem, Converter={StaticResource ObjectVisibilityInvertConverter}, ElementName=PluginListContainer}">
+                    Visibility="{Binding SelectedPlugin, Converter={StaticResource ObjectVisibilityInvertConverter}}">
                     从左侧点击一个插件以浏览信息
                 </TextBlock>
                 <Grid
                     x:Name="AppInfoDisplay"
                     Grid.Row="0"
-                    Visibility="{Binding SelectedItem, Converter={StaticResource ObjectVisibilityConverter}, ElementName=PluginListContainer}">
+                    Visibility="{Binding SelectedPlugin, Converter={StaticResource ObjectVisibilityConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Margin="0">
+                    <ui:SimpleStackPanel
+                        Grid.Row="0"
+                        Margin="0"
+                        Spacing="10">
                         <TextBlock FontSize="24">插件信息</TextBlock>
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="AppIdDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
-                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.AppId, StringFormat={}AppId: {0}, ElementName=PluginListContainer}" />
-                        <TextBox
+                            Text="{Binding SelectedPlugin.PluginDisplayId, StringFormat={}AppId: {0}}" />
+                        <controls:SelectableTextBlock
                             x:Name="AuthorDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
-                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.author, StringFormat={}作者: {0}, ElementName=PluginListContainer}" />
-                        <TextBox
+                            Text="{Binding SelectedPlugin.Author, StringFormat={}作者: {0}}" />
+                        <controls:SelectableTextBlock
                             x:Name="VersionDisplayer"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
-                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.version, StringFormat={}版本: {0}, ElementName=PluginListContainer}" />
-                    </StackPanel>
+                            Text="{Binding SelectedPlugin.Version, StringFormat={}版本: {0}}" />
+                    </ui:SimpleStackPanel>
                     <StackPanel Grid.Row="1" Margin="0,5">
                         <TextBlock FontSize="24">插件描述</TextBlock>
-                        <TextBox
+                        <controls:SelectableTextBlock
                             x:Name="DescriptionDisplay"
+                            Margin="0,10"
                             Background="Transparent"
-                            Style="{StaticResource SelectableTextBlock}"
-                            Text="{Binding SelectedItem.TargetPlugin.AppInfo.description, ElementName=PluginListContainer}"
+                            Text="{Binding SelectedPlugin.Description}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                     <Grid Grid.Row="2" Margin="0,5">
@@ -174,6 +181,7 @@
                         <ListView
                             x:Name="AuthDisplay"
                             Grid.Row="1"
+                            ItemsSource="{Binding AuthList}"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Visible" />
                     </Grid>
@@ -190,17 +198,17 @@
                             Grid.Column="0"
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
-                            Click="ToggleEnableBtn_Click"
+                            Command="{Binding Command_ToggleEnable}"
                             Style="{StaticResource AccentButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Visibility="{Binding SelectedItem.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityConverter}, ElementName=PluginListContainer}">
+                                <TextBlock Visibility="{Binding SelectedPlugin.Enabled, Converter={StaticResource BoolVisibilityConverter}}">
                                     停用
                                 </TextBlock>
-                                <TextBlock Visibility="{Binding SelectedItem.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityRevertConverter}, ElementName=PluginListContainer}">启用</TextBlock>
+                                <TextBlock Visibility="{Binding SelectedPlugin.Enabled, Converter={StaticResource BoolVisibilityRevertConverter}}">启用</TextBlock>
                                 <ui:ProgressRing
                                     x:Name="EnableStatus"
                                     Margin="5,0,0,0"
-                                    IsActive="True"
+                                    IsActive="{Binding ToggleEnableRunningStatus}"
                                     Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
                                     <ui:ProgressRing.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
@@ -221,7 +229,7 @@
                             Grid.Column="2"
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
-                            Click="OpenDataBtn_Click">
+                            Command="{Binding Command_OpenPluginPath}">
                             数据
                         </Button>
                         <Button
@@ -229,7 +237,8 @@
                             Grid.Column="3"
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
-                            Click="TestBtn_Click">
+                            Command="{Binding Command_TestPlugin}"
+                            IsEnabled="{Binding IsDebugMode}">
                             测试
                         </Button>
                         <Button
@@ -237,13 +246,13 @@
                             Grid.Column="4"
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
-                            Click="ReloadBtn_Click">
+                            Command="{Binding Command_ReloadPlugin}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>重载</TextBlock>
                                 <ui:ProgressRing
                                     x:Name="ReloadStatus"
                                     Margin="5,0,0,0"
-                                    IsActive="True"
+                                    IsActive="{Binding ReloadRunningStatus}"
                                     Visibility="{Binding IsActive, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolVisibilityConverter}}">
                                     <ui:ProgressRing.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />

@@ -1,7 +1,7 @@
-﻿using Another_Mirai_Native.UI.ViewModel;
+﻿using Another_Mirai_Native.UI.Models;
+using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Another_Mirai_Native.UI.Controls
+namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
     /// ChatAvatar.xaml 的交互逻辑
@@ -29,16 +29,7 @@ namespace Another_Mirai_Native.UI.Controls
             InitializeComponent();
         }
 
-        public enum AvatarTypes
-        {
-            QQGroup,
-
-            QQPrivate,
-
-            Fallback
-        }
-
-        public AvatarTypes AvatarType { get; set; } = AvatarTypes.Fallback;
+        public ChatType AvatarType { get; set; } = ChatType.Fallback;
 
         public Brush FallbackBrush { get; set; }
 
@@ -92,6 +83,10 @@ namespace Another_Mirai_Native.UI.Controls
         private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ChatAvatar control = (ChatAvatar)d;
+            if (control.Visibility != Visibility.Visible)
+            {
+                return;
+            }
             ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
 
             control.Id = newValue.Id;
@@ -110,15 +105,15 @@ namespace Another_Mirai_Native.UI.Controls
             string url = "";
             switch (AvatarType)
             {
-                case AvatarTypes.QQPrivate:
+                case ChatType.QQPrivate:
                     url = $"https://q.qlogo.cn/g?b=qq&nk={id}&s=160";
                     break;
 
-                case AvatarTypes.QQGroup:
+                case ChatType.QQGroup:
                     url = $"http://p.qlogo.cn/gh/{id}/{id}/0";
                     break;
 
-                case AvatarTypes.Fallback:
+                case ChatType.Fallback:
                     return;
             }
             Task.Run(async () =>

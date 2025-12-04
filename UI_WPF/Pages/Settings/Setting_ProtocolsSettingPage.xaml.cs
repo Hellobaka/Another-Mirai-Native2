@@ -113,7 +113,7 @@ namespace Another_Mirai_Native.UI.Pages
             container.Child = panel;
             ProtocolConfigContainer.Children.Add(container);
 
-            TextBlock textBlock = new()
+            Emoji.Wpf.TextBlock textBlock = new()
             {
                 Text = panelName,
                 Margin = new Thickness(0, 0, 0, 5),

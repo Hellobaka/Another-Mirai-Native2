@@ -3,11 +3,12 @@ using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace Another_Mirai_Native.Native
 {
-    public class CQPluginProxy
+    public class CQPluginProxy : INotifyPropertyChanged
     {
         private static readonly string SessionTempDirectory;
         private static readonly string TempRootDirectory;
@@ -44,10 +45,6 @@ namespace Another_Mirai_Native.Native
 
         public bool HasConnection { get; set; }
 
-        public string PluginId => AppInfo.AppId;
-
-        public string PluginName => AppInfo.name;
-
         public string PluginPath { get; set; } = "";
 
         public string PluginBasePath { get; set; } = "";
@@ -61,6 +58,45 @@ namespace Another_Mirai_Native.Native
         public PluginType PluginType { get; set; } = PluginType.CoolQ;
 
         public string LoaderProcessPath { get; set; } = "";
+
+        public string PluginId => AppInfo.AppId;
+
+        public string PluginName => AppInfo.name;
+
+        public string Author => AppInfo.author;
+
+        public string Description => AppInfo.description;
+
+        public string Version => AppInfo.version;
+
+        /// <summary>
+        /// UI 用，用于显示插件 AppId
+        /// </summary>
+        public string PluginDisplayId => Enabled ? PluginId : "启用插件以查看 AppId";
+
+        /// <summary>
+        /// UI 用，用于显示插件启用状态
+        /// </summary>
+        public string EnableStatusDisplay
+        {
+            get 
+            {
+                if (AppInfo.AuthCode == AppConfig.Instance.TestingAuthCode)
+                {
+                    return "🧪";
+                }
+                if (HasConnection && Enabled)
+                {
+                    return "";
+                }
+                else if (!Enabled)
+                {
+                    return "❌";
+                }
+                return "";
+
+            }
+        }
 
         private static List<string> APIAuthWhiteList { get; set; } = new()
         {
@@ -185,7 +221,7 @@ namespace Another_Mirai_Native.Native
                     try
                     {
                         dir.Delete(true);
-                        LogHelper.Info("清理临时目录", $"已删除旧的临时目录: {dir.Name}");
+                        LogHelper.Debug("清理临时目录", $"已删除旧的临时目录: {dir.Name}");
                     }
                     catch (Exception ex)
                     {
@@ -283,6 +319,38 @@ namespace Another_Mirai_Native.Native
                 return false;
             }
             return RequestWaiter.Wait($"ClientStartUp_{PluginProcess.Id}", PluginProcess.Id, AppConfig.Instance.LoadTimeout, out _);
+        }
+
+        private void OnAppInfoChanged(AppInfo oldValue, AppInfo newValue)
+        {
+            if (oldValue != null)
+            {
+                oldValue.PropertyChanged -= AppInfoPropertyChangedNotify;
+            }
+            if (newValue != null)
+            {
+                newValue.PropertyChanged += AppInfoPropertyChangedNotify;
+            }
+        }
+
+        private void AppInfoPropertyChangedNotify(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != null)
+            {
+                InvokePropertyChanged(nameof(PluginId));
+                InvokePropertyChanged(nameof(PluginName));
+                InvokePropertyChanged(nameof(Author));
+                InvokePropertyChanged(nameof(Description));
+                InvokePropertyChanged(nameof(Version));
+                InvokePropertyChanged(nameof(PluginDisplayId));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void InvokePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

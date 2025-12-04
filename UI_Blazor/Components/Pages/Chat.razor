@@ -225,7 +225,7 @@
 
     private async Task LoadChatHistory()
     {
-        var histories = ChatHistoryHelper.GetHistoryCategroies().OrderByDescending(x => x.Time);
+        var histories = ChatHistoryHelper.GetHistoryCategories().OrderByDescending(x => x.Time);
         HistoryItems = [];
         foreach (var item in histories)
         {

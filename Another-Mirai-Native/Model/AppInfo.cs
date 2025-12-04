@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using PropertyChanged;
+using System.ComponentModel;
 
 namespace Another_Mirai_Native.Model
 {
-    public class AppInfo
+    public class AppInfo : INotifyPropertyChanged
     {
         [JsonIgnore]
         public int AuthCode { get; set; }
@@ -56,6 +58,13 @@ namespace Another_Mirai_Native.Model
             public string function { get; set; }
 
             public int address { get; set; }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void InvokePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

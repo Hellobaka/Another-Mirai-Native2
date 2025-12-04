@@ -146,6 +146,7 @@ namespace Another_Mirai_Native.UI.Windows
             {
                 return;
             }
+            ImageDisplayer.UpdateLayout();
             double width = ImageDisplayer.Source.Width;
             double height = ImageDisplayer.Source.Height;
             double windowWidth = Width;
@@ -158,8 +159,8 @@ namespace Another_Mirai_Native.UI.Windows
                 if (scale > 1)// 窗口宽度大于图片，显示原图大小
                 {
                     UpdateImageScale(1 / scale - 1);
-                    imageScaleTransform.CenterX = windowWidth / 2;
-                    imageScaleTransform.CenterY = windowHeight / 2;
+                    imageScaleTransform.CenterX = ImageDisplayer.ActualWidth / 2;
+                    imageScaleTransform.CenterY = ImageDisplayer.ActualHeight / 2;
                     scale = 1;
                 }
             }
@@ -169,8 +170,8 @@ namespace Another_Mirai_Native.UI.Windows
                 if (scale > 1)
                 {
                     UpdateImageScale(1 / scale - 1);
-                    imageScaleTransform.CenterX = windowWidth / 2;
-                    imageScaleTransform.CenterY = windowHeight / 2;
+                    imageScaleTransform.CenterX = ImageDisplayer.ActualWidth / 2;
+                    imageScaleTransform.CenterY = ImageDisplayer.ActualHeight / 2;
                     scale = 1;
                 }
             }

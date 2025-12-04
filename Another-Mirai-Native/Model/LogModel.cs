@@ -1,8 +1,11 @@
-﻿using SqlSugar;
+﻿using PropertyChanged;
+using SqlSugar;
+using System.ComponentModel;
 
 namespace Another_Mirai_Native.Model
 {
     [SugarTable("log")]
+    [AddINotifyPropertyChangedInterface]
     public class LogModel
     {
         [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
