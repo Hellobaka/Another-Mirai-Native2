@@ -24,7 +24,7 @@
         <converter:ProxyEnabledConverter x:Key="ProxyEnabledConverter" />
         <CollectionViewSource x:Key="SortedPlugins" Source="{Binding CQPlugins}">
             <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription Direction="Ascending" PropertyName="TargetPlugin.PluginName" />
+                <scm:SortDescription Direction="Ascending" PropertyName="SelectedPlugin.PluginName" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </Page.Resources>
@@ -52,14 +52,14 @@
                     x:Name="PluginListContainer"
                     Grid.Row="2"
                     ItemsSource="{Binding Source={StaticResource SortedPlugins}}"
-                    SelectedItem="{Binding SelectedPluginWrapper}">
+                    SelectedItem="{Binding SelectedPlugin}">
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding TargetPlugin, Converter={StaticResource ProxyEnabledConverter}}" />
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.PluginName}">插件名称</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.author}">作者</GridViewColumn>
-                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding TargetPlugin.AppInfo.version}">版本</GridViewColumn>
+                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding EnableStatusDisplay}" />
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PluginName}">插件名称</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Author}">作者</GridViewColumn>
+                                <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Version}">版本</GridViewColumn>
                             </GridView.Columns>
                         </GridView>
                     </ListView.View>
@@ -125,13 +125,13 @@
                     Grid.Row="0"
                     VerticalAlignment="Center"
                     TextAlignment="Center"
-                    Visibility="{Binding SelectedPluginWrapper, Converter={StaticResource ObjectVisibilityInvertConverter}}">
+                    Visibility="{Binding SelectedPlugin, Converter={StaticResource ObjectVisibilityInvertConverter}}">
                     从左侧点击一个插件以浏览信息
                 </TextBlock>
                 <Grid
                     x:Name="AppInfoDisplay"
                     Grid.Row="0"
-                    Visibility="{Binding SelectedPluginWrapper, Converter={StaticResource ObjectVisibilityConverter}}">
+                    Visibility="{Binding SelectedPlugin, Converter={StaticResource ObjectVisibilityConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -146,15 +146,15 @@
                         <controls:SelectableTextBlock
                             x:Name="AppIdDisplayer"
                             Background="Transparent"
-                            Text="{Binding SelectedPluginWrapper.AppId, StringFormat={}AppId: {0}}" />
+                            Text="{Binding SelectedPlugin.PluginDisplayId, StringFormat={}AppId: {0}}" />
                         <controls:SelectableTextBlock
                             x:Name="AuthorDisplayer"
                             Background="Transparent"
-                            Text="{Binding SelectedPluginWrapper.Author, StringFormat={}作者: {0}}" />
+                            Text="{Binding SelectedPlugin.Author, StringFormat={}作者: {0}}" />
                         <controls:SelectableTextBlock
                             x:Name="VersionDisplayer"
                             Background="Transparent"
-                            Text="{Binding SelectedPluginWrapper.Version, StringFormat={}版本: {0}}" />
+                            Text="{Binding SelectedPlugin.Version, StringFormat={}版本: {0}}" />
                     </ui:SimpleStackPanel>
                     <StackPanel Grid.Row="1" Margin="0,5">
                         <TextBlock FontSize="24">插件描述</TextBlock>
@@ -162,7 +162,7 @@
                             x:Name="DescriptionDisplay"
                             Margin="0,10"
                             Background="Transparent"
-                            Text="{Binding SelectedPluginWrapper.Description}"
+                            Text="{Binding SelectedPlugin.Description}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                     <Grid Grid.Row="2" Margin="0,5">
@@ -194,10 +194,10 @@
                             Command="{Binding Command_ToggleEnable}"
                             Style="{StaticResource AccentButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Visibility="{Binding SelectedPluginWrapper.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityConverter}}">
+                                <TextBlock Visibility="{Binding SelectedPlugin.Enabled, Converter={StaticResource BoolVisibilityConverter}}">
                                     停用
                                 </TextBlock>
-                                <TextBlock Visibility="{Binding SelectedPluginWrapper.TargetPlugin.Enabled, Converter={StaticResource BoolVisibilityRevertConverter}}">启用</TextBlock>
+                                <TextBlock Visibility="{Binding SelectedPlugin.Enabled, Converter={StaticResource BoolVisibilityRevertConverter}}">启用</TextBlock>
                                 <ui:ProgressRing
                                     x:Name="EnableStatus"
                                     Margin="5,0,0,0"

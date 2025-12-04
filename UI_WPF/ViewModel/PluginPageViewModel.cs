@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public ObservableCollection<string> AuthList { get; set; } = [];
 
-        public ObservableCollection<CQPluginProxyWrapper> CQPlugins { get; set; } = [];
+        public ObservableCollection<CQPluginProxy> CQPlugins { get; set; } = [];
 
         public bool IsDebugMode { get; set; }
 
@@ -36,10 +36,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public bool ReloadRunningStatus { get; set; }
 
-        public CQPluginProxy? SelectedPlugin => SelectedPluginWrapper?.TargetPlugin;
-
-        [AlsoNotifyFor(nameof(SelectedPlugin))]
-        public CQPluginProxyWrapper? SelectedPluginWrapper { get; set; }
+        public CQPluginProxy? SelectedPlugin { get; set; }
 
         public bool ToggleEnableRunningStatus { get; set; }
 
@@ -118,12 +115,9 @@ namespace Another_Mirai_Native.UI.ViewModel
                 return;
             }
             ReloadAllRunningStatus = true;
-            await Task.Run(() =>
-            {
-                PluginManagerProxy.Instance.ReloadAllPlugins();
-                LoadPluginList();
-                ReloadAllRunningStatus = false;
-            });
+            await Task.Run(PluginManagerProxy.Instance.ReloadAllPlugins);
+            LoadPluginList();
+            ReloadAllRunningStatus = false;
         }
 
         private async Task ReloadPlugin(object? parameter)
@@ -163,8 +157,6 @@ namespace Another_Mirai_Native.UI.ViewModel
                 AppConfig.Instance.TestingAuthCode = 0;
                 DialogHelper.ShowSimpleDialog("测试已停止", "");
             }
-            var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == SelectedPlugin);
-            target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
         }
 
         private void ToggleEnable(object? parameter)
@@ -242,18 +234,15 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void LoadPluginList()
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
+            CQPlugins = [];
+            foreach (var item in PluginManagerProxy.Proxies)
             {
-                CQPlugins.Clear();
-                foreach (var item in PluginManagerProxy.Proxies)
-                {
-                    CQPlugins.Add(new CQPluginProxyWrapper(item));
-                }
-                MainWindow.Instance.BuildTaskbarIconMenu();
-            });
+                CQPlugins.Add(item);
+            }
+            MainWindow.Instance.BuildTaskbarIconMenu();
         }
 
-        private void OnSelectedPluginWrapperChanged()
+        private void OnSelectedPluginChanged()
         {
             UpdateAuthList();
         }
@@ -262,9 +251,6 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
-
-                var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-                target?.InvokePropertyChanged(nameof(target.TargetPlugin.Enabled));
                 MainWindow.Instance.UpdateTrayToolTip();
             });
         }
@@ -273,18 +259,13 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             Dispatcher.CurrentDispatcher.BeginInvoke(() =>
             {
-                CQPlugins.Add(new CQPluginProxyWrapper(plugin));
+                CQPlugins.Add(plugin);
                 MainWindow.Instance.BuildTaskbarIconMenu();
             });
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy plugin)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(() =>
-            {
-                var target = CQPlugins.FirstOrDefault(x => x.TargetPlugin == plugin);
-                target?.InvokePropertyChanged(nameof(target.TargetPlugin.HasConnection));
-            });
         }
 
         private void UpdateAuthList()
