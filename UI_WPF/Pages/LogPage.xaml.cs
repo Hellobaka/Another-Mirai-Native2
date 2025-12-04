@@ -75,13 +75,13 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogPage_Loaded(object? sender, RoutedEventArgs? e)
         {
+            ViewModel.Load();
             if (PageLoaded)
             {
                 return;
             }
             PageLoaded = true;
             InitColumnWidth();
-            ViewModel.Load();
             ViewModel.RequestScrollToBottom += ViewModel_RequestScrollToBottom;
         }
 

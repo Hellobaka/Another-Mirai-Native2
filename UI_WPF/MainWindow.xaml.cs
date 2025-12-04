@@ -286,6 +286,39 @@ namespace Another_Mirai_Native.UI
             ResizeTimer.Start();
         }
 
+        private void OnQRCodeDisplay(string filePath, byte[] data)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                string path = Path.Combine("data", "image", "LoginQRCode");
+                Directory.CreateDirectory(path);
+                string fileName = Guid.NewGuid().ToString() + ".png";
+                File.WriteAllBytes(Path.Combine(path, fileName), data);
+                if (Uri.TryCreate(Path.GetFullPath(Path.Combine(path, fileName)), UriKind.Absolute, out var uri))
+                {
+                    QRCodeViewer ??= new PictureViewer
+                    {
+                        Title = "二维码登录 关闭后无法再次打开",
+                        Owner = this
+                    };
+                    QRCodeViewer.Image = uri;
+                    QRCodeViewer.Show();
+                }
+                else
+                {
+                    DialogHelper.ShowSimpleDialog("二维码显示失败", "二维码显示失败，无法保存图片");
+                }
+            });
+        }
+
+        private void OnQRCodeFinish()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                QRCodeViewer?.Close();
+                QRCodeViewer = null;
+            });
+        }
         #region Startup Logic
         private void UpdateWindowMaterial()
         {
@@ -382,39 +415,7 @@ namespace Another_Mirai_Native.UI
 
         private void SetQrCodeAction(ProtocolManager protocolManager)
         {
-            Action<string, byte[]> displayAction = (string url, byte[] data) =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    string path = Path.Combine("data", "image", "LoginQRCode");
-                    Directory.CreateDirectory(path);
-                    string fileName = Guid.NewGuid().ToString() + ".png";
-                    File.WriteAllBytes(Path.Combine(path, fileName), data);
-                    if (Uri.TryCreate(Path.GetFullPath(Path.Combine(path, fileName)), UriKind.Absolute, out var uri))
-                    {
-                        QRCodeViewer ??= new PictureViewer
-                        {
-                            Title = "二维码登录 关闭后无法再次打开",
-                            Owner = this
-                        };
-                        QRCodeViewer.Image = uri;
-                        QRCodeViewer.Show();
-                    }
-                    else
-                    {
-                        DialogHelper.ShowSimpleDialog("二维码显示失败", "二维码显示失败，无法保存图片");
-                    }
-                });
-            };
-            Action finishedAction = () =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    QRCodeViewer?.Close();
-                    QRCodeViewer = null;
-                });
-            };
-            protocolManager.SetQrCodeAction(displayAction, finishedAction);
+            protocolManager.SetQrCodeAction(OnQRCodeDisplay, OnQRCodeFinish);
         }
         #endregion
     }
