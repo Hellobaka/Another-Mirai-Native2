@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.UI
 
         public double Height { get; set; } = 600;
 
-        public int LogItemsCount { get; set; } = 500;
+        public int LogPageSize { get; set; } = 500;
 
         public bool LogAutoScroll { get; set; } = true;
 
@@ -50,7 +50,7 @@ namespace Another_Mirai_Native.UI
             AccentColor = GetConfig("AccentColor", "");
             Width = GetConfig("Window_Width", 900);
             Height = GetConfig("Window_Height", 600);
-            LogItemsCount = GetConfig("LogItemsCount", 500);
+            LogPageSize = GetConfig("LogPageSize", 500);
             MessageContainerMaxCount = Math.Max(GetConfig("MessageContainerMaxCount", 15), 10);
             LogAutoScroll = GetConfig("LogAutoScroll", true);
             ShowBalloonTip = GetConfig("ShowBalloonTip", true);

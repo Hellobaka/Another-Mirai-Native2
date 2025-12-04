@@ -354,7 +354,7 @@ namespace Another_Mirai_Native.UI
                          ThemeManager.Current.ActualApplicationTheme == ApplicationTheme.Dark
                          ? ApplicationTheme.Light
                          : ApplicationTheme.Dark;
-            UIConfig.Instance.Theme = (SystemTheme)(int)ThemeManager.Current.ActualApplicationTheme;
+            UIConfig.Instance.Theme = (SystemTheme)((int)ThemeManager.Current.ActualApplicationTheme + 1);
             UIConfig.Instance.SetConfig("Theme", UIConfig.Instance.Theme);
         }
 

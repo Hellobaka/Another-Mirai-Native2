@@ -72,11 +72,11 @@
                         📝 日志设置
                     </emoji:TextBlock>
                     <controls:SettingItem_TextBox
-                        x:Name="LogItemsCount"
-                        Title="日志最大数量"
+                        x:Name="LogPageSize"
+                        Title="每页日志数量"
                         Data="1"
                         DataChanged="SettingItem_TextBox_DataChanged"
-                        Subtitle="日志窗口显示的日志条目数量限制"
+                        Subtitle="日志窗口每页显示的日志条目数量"
                         Unit="条" />
                     <controls:SettingItem_ToggleButton
                         x:Name="LogAutoScroll"
