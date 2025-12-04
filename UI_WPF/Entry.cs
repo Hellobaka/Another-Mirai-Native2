@@ -29,7 +29,6 @@ namespace Another_Mirai_Native.UI
 
             if (args.Length == 0)
             {
-                InitCore();
                 App.Main();
             }
             else
@@ -38,7 +37,7 @@ namespace Another_Mirai_Native.UI
             }
         }
 
-        private static void InitCore()
+        public static void InitCore()
         {
             AppConfig.Instance.IsCore = true;
             Another_Mirai_Native.Entry.CreateInitFolders();

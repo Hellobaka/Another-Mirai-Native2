@@ -19,13 +19,13 @@ namespace Another_Mirai_Native.UI.Pages
 
             DataContext = new LogPageViewModel();
             Instance = this;
-            InitColumnWidth();
-            LogPage_Loaded(null, null);
         }
 
         public static LogPage Instance { get; set; }
 
         public LogPageViewModel ViewModel => (LogPageViewModel)DataContext;
+
+        public bool PageLoaded { get; set; }
 
         private DispatcherTimer ResizeTimer { get; set; }
 
@@ -75,6 +75,12 @@ namespace Another_Mirai_Native.UI.Pages
 
         private void LogPage_Loaded(object? sender, RoutedEventArgs? e)
         {
+            if (PageLoaded)
+            {
+                return;
+            }
+            PageLoaded = true;
+            InitColumnWidth();
             ViewModel.Load();
             ViewModel.RequestScrollToBottom += ViewModel_RequestScrollToBottom;
         }

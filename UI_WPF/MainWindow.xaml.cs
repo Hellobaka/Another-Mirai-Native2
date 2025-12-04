@@ -233,6 +233,8 @@ namespace Another_Mirai_Native.UI
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
+            await Task.Delay(200);
+            await Task.Run(() => Entry.InitCore());
             ProtocolManager protocolManager = new();
             SetQrCodeAction(protocolManager);
             ProtocolSelectorDialog dialog = new();
