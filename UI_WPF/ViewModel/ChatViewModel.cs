@@ -544,6 +544,8 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
             CurrentPageIndex = 1;
             SelectedChat.UnreadCount = 0;
+            await Dispatcher.Yield();
+            ScrollToBottom();
         }
 
         public async Task LoadChatList()
