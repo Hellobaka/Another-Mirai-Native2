@@ -21,7 +21,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 {
     /// <summary>
     /// MessageItem.xaml 的交互逻辑
-    /// 统一处理 Left(Receive)、Right(Send)、Center(Notice) 三种消息类型
     /// </summary>
     public partial class MessageItem : UserControl
     {
@@ -315,24 +314,16 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
             ControlLoaded = true;
 
-            if (ViewModel.DetailItemType == DetailItemType.Send)
+            AvatarRight.Visibility = ViewModel.DetailItemType == DetailItemType.Send ? Visibility.Visible : Visibility.Collapsed;
+            AvatarLeft.Visibility = ViewModel.DetailItemType == DetailItemType.Receive ? Visibility.Visible : Visibility.Collapsed;
+            var avatarItem = new ChatListItemViewModel
             {
-                AvatarRight.Visibility = Visibility.Visible;
-                AvatarRight.Item = new ChatListItemViewModel
-                {
-                    AvatarType = ChatType.QQPrivate,
-                    GroupName = ViewModel.Nick,
-                };
-            }
-            else if (ViewModel.DetailItemType == DetailItemType.Receive)
-            {
-                AvatarLeft.Visibility = Visibility.Visible;
-                AvatarLeft.Item = new ChatListItemViewModel
-                {
-                    AvatarType = ChatType.QQPrivate,
-                    GroupName = ViewModel.Nick,
-                };
-            }
+                AvatarType = ChatType.QQPrivate,
+                GroupName = ViewModel.Nick,
+                Id = ViewModel.Id
+            };
+            AvatarRight.Item = avatarItem;
+            AvatarLeft.Item = avatarItem;
 
             ParseAndBuildDetail();
             ImageDisplay.MaxWidth = MaxWidth * 0.6;

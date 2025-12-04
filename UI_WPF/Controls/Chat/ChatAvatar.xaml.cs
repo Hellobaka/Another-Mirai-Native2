@@ -84,6 +84,10 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         private static void OnItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ChatAvatar control = (ChatAvatar)d;
+            if (control.Visibility != Visibility.Visible)
+            {
+                return;
+            }
             ChatListItemViewModel newValue = (ChatListItemViewModel)e.NewValue;
 
             control.Id = newValue.Id;

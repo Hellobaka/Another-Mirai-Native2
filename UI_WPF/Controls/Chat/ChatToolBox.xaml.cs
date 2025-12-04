@@ -26,12 +26,14 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private Flyout AtFlyout { get; set; }
 
+        private bool ControlLoaded { get; set; }
+
         private void SendText_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
             {
                 e.Handled = true;
-                ViewModel.ToolSendText(e);
+                _ = ViewModel.ToolSendText(e);
             }
             else if (e.Key == Key.D2 && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
             {
@@ -79,6 +81,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (ControlLoaded)
+            {
+                return;
+            }
+            ControlLoaded = true;
+            ViewModel.SendText = SendText.Document;
             ViewModel.OnTextAddRequested += ViewModel_OnTextAddRequested;
             DataObject.AddPastingHandler(SendText, RichTextboxPasteOverrideAction);
         }

@@ -26,6 +26,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private DispatcherTimer LazyLoadDebounceTimer { get; set; }
 
+        public bool ControlLoaded { get; set; }
+
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (sender is not ScrollViewer scrollViewer || e.VerticalChange == 0)
@@ -204,6 +206,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (ControlLoaded)
+            {
+                return;
+            }
+            ControlLoaded = true;
+
             ViewModel.OnMessageJumpRequested += ViewModel_OnMessageJumpRequested;
             ViewModel.OnScrollToBottomRequested += ViewModel_OnScrollToBottomRequested;
         }
