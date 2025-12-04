@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:Another_Mirai_Native.UI.Controls"
     xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -47,7 +48,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock FontSize="24">已加载插件</TextBlock>
-                <TextBlock Grid.Row="1" Margin="0,5">❌表示插件未启用</TextBlock>
+                <emoji:TextBlock Grid.Row="1" Margin="0,5">❌表示插件未启用</emoji:TextBlock>
                 <ListView
                     x:Name="PluginListContainer"
                     Grid.Row="2"
@@ -56,7 +57,13 @@
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
-                                <GridViewColumn Width="40" DisplayMemberBinding="{Binding EnableStatusDisplay}" />
+                                <GridViewColumn Width="40">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <emoji:TextBlock Text="{Binding EnableStatusDisplay}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding PluginName}">插件名称</GridViewColumn>
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Author}">作者</GridViewColumn>
                                 <GridViewColumn Width="auto" DisplayMemberBinding="{Binding Version}">版本</GridViewColumn>

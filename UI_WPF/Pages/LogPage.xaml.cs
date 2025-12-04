@@ -18,8 +18,8 @@ namespace Another_Mirai_Native.UI.Pages
             InitializeComponent();
 
             DataContext = new LogPageViewModel();
-            InitColumnWidth();
             Instance = this;
+            InitColumnWidth();
             LogPage_Loaded(null, null);
         }
 

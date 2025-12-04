@@ -18,7 +18,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         public LogPageViewModel()
         {
             Instance = this;
-            LogCollections = new ObservableCollection<LogModel>();
+            LogCollections = [];
             SearchDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
             SearchDebounceTimer.Tick += SearchDebounceTimer_Tick;
         }

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converter="clr-namespace:Another_Mirai_Native.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
     xmlns:local="clr-namespace:Another_Mirai_Native.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -18,33 +19,22 @@
         <converter:TimestampConverter x:Key="TimestampConverter" />
         <converter:BoolTextWrapConverter x:Key="BoolTextWrapConverter" />
         <converter:SelectHeightConverter x:Key="SelectHeightConverter" />
+        <converter:LogPriorityToBrushConverter x:Key="LogPriorityToBrushConverter" />
+        
         <Style x:Key="LogItemStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{Binding priority, Converter={StaticResource LogPriorityToBrushConverter}}" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding priority}" Value="20">
-                    <Setter Property="Foreground" Value="Orange" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="30">
-                    <Setter Property="Foreground" Value="Red" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="40">
-                    <Setter Property="Foreground" Value="DarkRed" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="0">
-                    <Setter Property="Foreground" Value="LightGray" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="12">
-                    <Setter Property="Foreground" Value="DodgerBlue" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="13">
-                    <Setter Property="Foreground" Value="#FF31C279" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding priority}" Value="11">
-                    <Setter Property="Foreground" Value="#FFB402B4" />
-                </DataTrigger>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
                 </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="LogEmojiItemStyle" TargetType="emoji:TextBlock">
+            <Setter Property="Foreground" Value="{Binding priority, Converter={StaticResource LogPriorityToBrushConverter}}" />
+            <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
                     <Setter Property="Text" Value="{Binding detail}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" Value="False">
@@ -85,9 +75,9 @@
             <ui:ToggleSwitch
                 x:Name="AutoScroll"
                 Grid.Column="2"
+                IsOn="{Binding AutoScroll}"
                 OffContent="自动滚动"
-                OnContent="自动滚动"
-                IsOn="{Binding AutoScroll}" />
+                OnContent="自动滚动" />
         </Grid>
         <ListView
             x:Name="LogView"
@@ -130,9 +120,9 @@
                     <GridViewColumn Width="400" Header="消息">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
+                                <emoji:TextBlock
                                     MouseRightButtonDown="ListViewItem_MouseRightButtonDown"
-                                    Style="{StaticResource LogItemStyle}"
+                                    Style="{StaticResource LogEmojiItemStyle}"
                                     TextTrimming="CharacterEllipsis"
                                     TextWrapping="{Binding IsSelected, Converter={StaticResource BoolTextWrapConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
                                     <ui:ContextFlyoutService.ContextFlyout>
@@ -142,7 +132,7 @@
                                             </StackPanel>
                                         </ui:Flyout>
                                     </ui:ContextFlyoutService.ContextFlyout>
-                                </TextBlock>
+                                </emoji:TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
