@@ -1,5 +1,4 @@
-﻿using Another_Mirai_Native;
-using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.ViewModel;
 using Another_Mirai_Native.UI.Windows;
 using Microsoft.Win32;
@@ -21,9 +20,13 @@ namespace Another_Mirai_Native.UI.Controls.Chat
     public partial class ChatImageDisplay : UserControl
     {
         private CancellationTokenSource? _loadCts;
+
         private bool _isLoaded;
+
         private Brush? _initialBackground;
+
         private Uri? _currentImageUri;
+
         private string? _currentImagePath;
 
         public ChatImageDisplay()

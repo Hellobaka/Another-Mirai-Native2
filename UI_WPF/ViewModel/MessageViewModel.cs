@@ -1,6 +1,5 @@
 ﻿using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using Another_Mirai_Native.UI.Controls;
 using Another_Mirai_Native.UI.Models;
 using System;
 using System.ComponentModel;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Another_Mirai_Native.UI.ViewModel
 {
@@ -57,6 +55,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         public MessageStatus MessageStatus { get; set; } = MessageStatus.Sent;
 
         #region Commands
+
         public RelayCommand Command_Message_Copy { get; set; }
 
         public RelayCommand Command_Message_Repeat { get; set; }
@@ -72,9 +71,11 @@ namespace Another_Mirai_Native.UI.ViewModel
         public RelayCommand Command_Avatar_CopyId { get; set; }
 
         public RelayCommand Command_Avatar_At { get; set; }
-        #endregion
+
+        #endregion Commands
 
         #region ContextMenu
+
         public void Message_Copy(object? parameter)
         {
             Clipboard.SetText(Content);
@@ -114,7 +115,8 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             ChatViewModel.Instance.AddTextToSendBox(CQCode.CQCode_At(Id).ToSendString());
         }
-        #endregion
+
+        #endregion ContextMenu
 
         private void CreateRelayCommands()
         {

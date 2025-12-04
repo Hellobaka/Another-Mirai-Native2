@@ -22,16 +22,6 @@ namespace Another_Mirai_Native.UI.ViewModel
 {
     public class ChatViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event Action<string>? OnTextAddRequested;
-        public event Action<int>? OnMessageJumpRequested;
-        public event Action? OnScrollToBottomRequested;
-
-        public void InvokePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public ChatViewModel()
         {
             CreateRelayCommands();
@@ -40,12 +30,38 @@ namespace Another_Mirai_Native.UI.ViewModel
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
         }
 
+        public event Action<int>? OnMessageJumpRequested;
+
+        public event Action? OnScrollToBottomRequested;
+
+        public event Action<string>? OnTextAddRequested;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public static ChatViewModel Instance { get; set; }
+
+        public bool Avatar_IsAtEnabled { get; set; }
 
         /// <summary>
         /// 侧边栏列表
         /// </summary>
         public ObservableCollection<ChatListItemViewModel> ChatList { get; set; } = [];
+
+        public string ChatNameDisplay => SelectedChat == null
+            ? "" : $"{SelectedChat.GroupName} [{SelectedChat.Id}]";
+
+        /// <summary>
+        /// 懒加载当前页数
+        /// </summary>
+        public int CurrentPageIndex { get; set; }
+
+        public bool EmptyHintVisible => ChatList.Count == 0;
+
+        public bool IsGroupChat => SelectedChat != null && SelectedChat.AvatarType == ChatType.QQGroup;
+
+        public bool LazyLoading { get; set; }
+
+        public bool Message_IsAtEnabled { get; set; }
 
         /// <summary>
         /// 消息容器列表
@@ -56,20 +72,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public FlowDocument SendText { get; set; } = new();
 
-        public bool IsGroupChat => SelectedChat != null && SelectedChat.AvatarType == ChatType.QQGroup;
-
-        public bool EmptyHintVisible => ChatList.Count == 0;
-
-        public bool Avatar_IsAtEnabled { get; set; }
-
-        public bool Message_IsAtEnabled { get; set; }
-
         public bool ToolBoxEnabled => SelectedChat != null;
-
-        public bool LazyLoading { get; set; }
-
-        public string ChatNameDisplay => SelectedChat == null 
-            ? "" : $"{SelectedChat.GroupName} [{SelectedChat.Id}]";
 
         /// <summary>
         /// 初始化加载时的消息数量
@@ -77,174 +80,12 @@ namespace Another_Mirai_Native.UI.ViewModel
         private int LoadCount { get; set; } = 15;
 
         /// <summary>
-        /// 懒加载当前页数
-        /// </summary>
-        public int CurrentPageIndex { get; set; }
-
-        #region Commands
-
-        public RelayCommand Command_ToolPicture { get; set; }
-
-        public RelayCommand Command_ToolAudio { get; set; }
-
-        public RelayCommand Command_ToolClear { get; set; }
-
-        public RelayCommand Command_ToolSendText { get; set; }
-
-        #endregion
-
-        private void CreateRelayCommands()
-        {
-            var fields = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.PropertyType == typeof(RelayCommand) && p.Name.StartsWith("Command_"));
-
-            foreach (var prop in fields)
-            {
-                string methodName = prop.Name.Replace("Command_", "");
-                var methodInfo = GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-
-                if (methodInfo != null)
-                {
-                    // 创建委托
-                    Action<object> action = (obj) => methodInfo.Invoke(this, [obj]);
-                    var cmd = new RelayCommand(action);
-                    prop.SetValue(this, cmd);
-                }
-                else
-                {
-                    // 没有找到方法时
-                    throw new Exception($"方法 {methodName} 未定义!");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 向发送框中添加文本
-        /// </summary>
-        /// <param name="text">添加的文本</param>
-        public void AddTextToSendBox(string text)
-        {
-            OnTextAddRequested?.Invoke(text);
-        }
-
-        public void ToolPicture(object? parameter)
-        {
-            OpenFileDialog openFileDialog = new()
-            {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "图片文件|*.jpg;*.jpeg;*.png;*.bmp;*.webp|所有文件|*.*",
-                Title = "请选择要发送的图片"
-            };
-            if (openFileDialog.ShowDialog() is false)
-            {
-                return;
-            }
-            foreach (var file in openFileDialog.FileNames)
-            {
-                string filePath = file;
-                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
-                Directory.CreateDirectory(picPath);
-                if (filePath.StartsWith(picPath))
-                {
-                    // 选中图片已经存在于缓存文件夹
-                    filePath = filePath.Replace(picPath, "");
-                }
-                else
-                {
-                    // 复制至缓存文件夹
-                    string fileName = Path.GetFileName(filePath);
-                    File.Copy(filePath, Path.Combine(picPath, fileName), true);
-                    filePath = @$"cached\\{fileName}";
-                }
-                AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
-            }
-        }
-
-        public void ToolClear(object? parameter)
-        {
-            Messages.Clear();
-        }
-
-        public async Task ToolSendText(object? parameter)
-        {
-            if (SelectedChat == null)
-            {
-                return;
-            }
-            string sendText = BuildTextFromRichTextBox();
-            ChatType avatar = SelectedChat.AvatarType;
-            long id = SelectedChat.Id;
-            await ExecuteSendMessageAsync(id, avatar, sendText);
-            // 清空发送框
-            SendText.Blocks.Clear();
-        }
-
-        public async Task ExecuteSendMessageAsync(long id, ChatType chatType, string message)
-        {
-            if (id == 0 || string.IsNullOrEmpty(message))
-            {
-                return;
-            }
-            // 插入历史数据库
-            var history = new ChatHistory
-            {
-                Message = message,
-                ParentID = id,
-                SenderID = AppConfig.Instance.CurrentQQ,
-                Type = chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private,
-                MsgId = 0,
-                PluginName = "",
-                Time = DateTime.Now,
-            };
-            int sqlId = ChatHistoryHelper.InsertHistory(history);
-
-            // 创建UI模型
-            Task<int> sendTask;
-            string nick;
-            if (chatType == ChatType.QQGroup)
-            {
-                sendTask = CallGroupMsgSendAsync(id, message);
-                nick = await Caches.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
-                await AddOrUpdateGroupChatList(id, AppConfig.Instance.CurrentQQ, message);
-            }
-            else
-            {
-                sendTask = CallPrivateMsgSendAsync(id, message);
-                nick = await Caches.GetFriendNick(AppConfig.Instance.CurrentQQ);
-                await AddOrUpdatePrivateChatList(id, AppConfig.Instance.CurrentQQ, message);
-            }
-            var messageViewModel = new MessageViewModel
-            {
-                AvatarType = chatType,
-                Content = message,
-                DetailItemType = DetailItemType.Send,
-                Id = AppConfig.Instance.CurrentQQ,
-                Nick = nick,
-                MsgId = 0,
-                Time = DateTime.Now,
-            };
-            Messages.Add(messageViewModel);
-
-            // 等待消息发送函数结果，更新消息发送状态与消息ID
-            messageViewModel.MsgId = await sendTask;
-            messageViewModel.MessageStatus = messageViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
-            
-            // 更新数据库中的消息ID
-            ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
-                , sqlId, messageViewModel.MsgId);
-            ChatHistoryHelper.UpdateHistoryCategory(history);
-            ScrollToBottom();
-        }
-
-        /// <summary>
         /// 将历史转换为消息模型
         /// </summary>
         /// <param name="avatarType">消息来源</param>
         /// <param name="history">聊天历史</param>
         /// <returns>消息模型</returns>
-        public async static Task<MessageViewModel> ParseChatHistoryToViewModel(ChatType avatarType, ChatHistory history)
+        public static async Task<MessageViewModel> ParseChatHistoryToViewModel(ChatType avatarType, ChatHistory history)
         {
             return new MessageViewModel
             {
@@ -260,123 +101,6 @@ namespace Another_Mirai_Native.UI.ViewModel
                 Time = history.Time,
                 SqlId = history.ID
             };
-        }
-
-        public void ToolAudio(object? parameter)
-        {
-            OpenFileDialog openFileDialog = new()
-            {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Multiselect = false,
-                Filter = "音频文件|*.wav;*.mp3;*.flac;*.amr;*.m4a|所有文件|*.*",
-                Title = "请选择要发送的音频"
-            };
-            if (openFileDialog.ShowDialog() is false)
-            {
-                return;
-            }
-            string filePath = openFileDialog.FileName;
-            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
-            Directory.CreateDirectory(audioPath);
-            // 选择的文件在缓存文件夹中
-            if (filePath.StartsWith(audioPath))
-            {
-                filePath = filePath.Replace(audioPath, "");
-            }
-            else
-            {
-                string fileName = Path.GetFileName(filePath);
-                // 复制文件到缓存文件夹中
-                File.Copy(filePath, Path.Combine(audioPath, fileName), true);
-                filePath = @$"cached\\{fileName}";
-            }
-            AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
-        }
-
-        public void ScrollToBottom()
-        {
-            OnScrollToBottomRequested?.Invoke();
-        }
-
-        public void JumpToMessage(int msgId)
-        {
-            OnMessageJumpRequested?.Invoke(msgId);
-        }
-
-        /// <summary>
-        /// 发送消息转CQ码
-        /// </summary>
-        /// <returns>处理后的CQ码消息</returns>
-        private string BuildTextFromRichTextBox()
-        {
-            StringBuilder stringBuilder = new();
-            foreach (Block item in SendText.Blocks)
-            {
-                // 粘贴的图片
-                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
-                {
-                    stringBuilder.Append(blockImg.Tag?.ToString());
-                    continue;
-                }
-                if (item is not Paragraph paragraph)
-                {
-                    continue;
-                }
-                foreach (Inline inline in paragraph.Inlines)
-                {
-                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
-                    {
-                        stringBuilder.Append(inlineImage.Tag?.ToString());
-                    }
-                    else
-                    {
-                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
-                    }
-                }
-            }
-            return stringBuilder.ToString();
-        }
-
-        /// <summary>
-        /// 调用发送群消息
-        /// </summary>
-        /// <param name="groupId">发送的群</param>
-        /// <param name="message">发送的消息</param>
-        /// <returns>返回的消息ID, 不为0时为成功</returns>
-        public async Task<int> CallGroupMsgSendAsync(long groupId, string message)
-        {
-            int msgId = 0;
-            await Task.Run(() =>
-            {
-                Stopwatch sw = Stopwatch.StartNew();
-                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
-                msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
-                sw.Stop();
-                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            });
-            return msgId;
-        }
-
-        /// <summary>
-        /// 调用发送好友消息
-        /// </summary>
-        /// <param name="qq">发送的好友</param>
-        /// <param name="message">发送的消息</param>
-        /// <returns>返回的消息ID, 不为0时为成功</returns>
-        public async Task<int> CallPrivateMsgSendAsync(long qq, string message)
-        {
-            int msgId = 0;
-            await Task.Run(() =>
-            {
-                Stopwatch sw = Stopwatch.StartNew();
-                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
-                int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
-                sw.Stop();
-                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
-            });
-            return msgId;
         }
 
         /// <summary>
@@ -459,36 +183,263 @@ namespace Another_Mirai_Native.UI.ViewModel
         }
 
         /// <summary>
-        /// 添加或更新左侧聊天列表好友内容
+        /// 向发送框中添加文本
         /// </summary>
-        /// <param name="qq">好友ID</param>
-        /// <param name="sender">发送者ID</param>
-        /// <param name="msg">消息</param>
-        private async Task AddOrUpdatePrivateChatList(long qq, long sender, string msg)
+        /// <param name="text">添加的文本</param>
+        public void AddTextToSendBox(string text)
         {
-            msg = msg.Replace("\r", "").Replace("\n", "");
-            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatType.QQPrivate);
-            if (item != null) // 消息已存在, 更新
+            OnTextAddRequested?.Invoke(text);
+        }
+
+        /// <summary>
+        /// 调用发送群消息
+        /// </summary>
+        /// <param name="groupId">发送的群</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
+        public async Task<int> CallGroupMsgSendAsync(long groupId, string message)
+        {
+            int msgId = 0;
+            await Task.Run(() =>
             {
-                item.GroupName = await Caches.GetFriendNick(qq);
-                item.Detail = msg;
-                item.Time = DateTime.Now;
-                item.UnreadCount++;
+                Stopwatch sw = Stopwatch.StartNew();
+                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送群组消息", $"群:{groupId} 消息:{message}", "处理中...");
+                msgId = ProtocolManager.Instance.CurrentProtocol.SendGroupMessage(groupId, message);
+                sw.Stop();
+                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            });
+            return msgId;
+        }
+
+        /// <summary>
+        /// 调用发送好友消息
+        /// </summary>
+        /// <param name="qq">发送的好友</param>
+        /// <param name="message">发送的消息</param>
+        /// <returns>返回的消息ID, 不为0时为成功</returns>
+        public async Task<int> CallPrivateMsgSendAsync(long qq, string message)
+        {
+            int msgId = 0;
+            await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
+                int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
+                sw.Stop();
+                LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
+            });
+            return msgId;
+        }
+
+        public async Task ExecuteSendMessageAsync(long id, ChatType chatType, string message)
+        {
+            if (id == 0 || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            // 插入历史数据库
+            var history = new ChatHistory
+            {
+                Message = message,
+                ParentID = id,
+                SenderID = AppConfig.Instance.CurrentQQ,
+                Type = chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private,
+                MsgId = 0,
+                PluginName = "",
+                Time = DateTime.Now,
+            };
+            int sqlId = ChatHistoryHelper.InsertHistory(history);
+
+            // 创建UI模型
+            Task<int> sendTask;
+            string nick;
+            if (chatType == ChatType.QQGroup)
+            {
+                sendTask = CallGroupMsgSendAsync(id, message);
+                nick = await Caches.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
+                await AddOrUpdateGroupChatList(id, AppConfig.Instance.CurrentQQ, message);
             }
             else
             {
-                item = new ChatListItemViewModel
+                sendTask = CallPrivateMsgSendAsync(id, message);
+                nick = await Caches.GetFriendNick(AppConfig.Instance.CurrentQQ);
+                await AddOrUpdatePrivateChatList(id, AppConfig.Instance.CurrentQQ, message);
+            }
+            var messageViewModel = new MessageViewModel
+            {
+                AvatarType = chatType,
+                Content = message,
+                DetailItemType = DetailItemType.Send,
+                Id = AppConfig.Instance.CurrentQQ,
+                Nick = nick,
+                MsgId = 0,
+                Time = DateTime.Now,
+            };
+            Messages.Add(messageViewModel);
+
+            // 等待消息发送函数结果，更新消息发送状态与消息ID
+            messageViewModel.MsgId = await sendTask;
+            messageViewModel.MessageStatus = messageViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
+
+            // 更新数据库中的消息ID
+            ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
+                , sqlId, messageViewModel.MsgId);
+            ChatHistoryHelper.UpdateHistoryCategory(history);
+            ScrollToBottom();
+        }
+
+        public void InvokePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #region Commands
+
+        public RelayCommand Command_ToolAudio { get; set; }
+
+        public RelayCommand Command_ToolClear { get; set; }
+
+        public RelayCommand Command_ToolPicture { get; set; }
+
+        public RelayCommand Command_ToolSendText { get; set; }
+
+        #endregion Commands
+
+        public void JumpToMessage(int msgId)
+        {
+            OnMessageJumpRequested?.Invoke(msgId);
+        }
+
+        public async Task LoadChatList()
+        {
+            var list = ChatHistoryHelper.GetHistoryCategories();
+            ChatList.Clear();
+            foreach (var item in list)
+            {
+                ChatList.Add(new ChatListItemViewModel
                 {
-                    AvatarType = ChatType.QQPrivate,
-                    Detail = msg,
-                    GroupName = await Caches.GetFriendNick(qq),
-                    Id = sender,
-                    Time = DateTime.Now,
-                    UnreadCount = 1
-                };
-                ChatList.Add(item);
+                    AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
+                    Detail = item.Message,
+                    GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
+                    Id = item.ParentID,
+                    Time = item.Time,
+                    UnreadCount = 0
+                });
             }
             await ReorderChatList();
+        }
+
+        public async void OnSelectedChatChanged()
+        {
+            Messages = [];
+            if (SelectedChat == null)
+            {
+                return;
+            }
+            var histories = SelectedChat.AvatarType == ChatType.QQGroup
+                ? await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Group, LoadCount, 1)
+                : await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Private, LoadCount, 1);
+
+            foreach (var item in histories)
+            {
+                Messages.Add(await ParseChatHistoryToViewModel(SelectedChat.AvatarType, item));
+            }
+            CurrentPageIndex = 1;
+            SelectedChat.UnreadCount = 0;
+            await Dispatcher.Yield();
+            ScrollToBottom();
+        }
+
+        public void ScrollToBottom()
+        {
+            OnScrollToBottomRequested?.Invoke();
+        }
+
+        public void ToolAudio(object? parameter)
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Multiselect = false,
+                Filter = "音频文件|*.wav;*.mp3;*.flac;*.amr;*.m4a|所有文件|*.*",
+                Title = "请选择要发送的音频"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            string filePath = openFileDialog.FileName;
+            string audioPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record\cached");
+            Directory.CreateDirectory(audioPath);
+            // 选择的文件在缓存文件夹中
+            if (filePath.StartsWith(audioPath))
+            {
+                filePath = filePath.Replace(audioPath, "");
+            }
+            else
+            {
+                string fileName = Path.GetFileName(filePath);
+                // 复制文件到缓存文件夹中
+                File.Copy(filePath, Path.Combine(audioPath, fileName), true);
+                filePath = @$"cached\\{fileName}";
+            }
+            AddTextToSendBox(CQCode.CQCode_Record(filePath).ToSendString());
+        }
+
+        public void ToolClear(object? parameter)
+        {
+            Messages.Clear();
+        }
+
+        public void ToolPicture(object? parameter)
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "图片文件|*.jpg;*.jpeg;*.png;*.bmp;*.webp|所有文件|*.*",
+                Title = "请选择要发送的图片"
+            };
+            if (openFileDialog.ShowDialog() is false)
+            {
+                return;
+            }
+            foreach (var file in openFileDialog.FileNames)
+            {
+                string filePath = file;
+                string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image\cached");
+                Directory.CreateDirectory(picPath);
+                if (filePath.StartsWith(picPath))
+                {
+                    // 选中图片已经存在于缓存文件夹
+                    filePath = filePath.Replace(picPath, "");
+                }
+                else
+                {
+                    // 复制至缓存文件夹
+                    string fileName = Path.GetFileName(filePath);
+                    File.Copy(filePath, Path.Combine(picPath, fileName), true);
+                    filePath = @$"cached\\{fileName}";
+                }
+                AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
+            }
+        }
+
+        public async Task ToolSendText(object? parameter)
+        {
+            if (SelectedChat == null)
+            {
+                return;
+            }
+            string sendText = BuildTextFromRichTextBox();
+            ChatType avatar = SelectedChat.AvatarType;
+            long id = SelectedChat.Id;
+            await ExecuteSendMessageAsync(id, avatar, sendText);
+            // 清空发送框
+            SendText.Blocks.Clear();
         }
 
         /// <summary>
@@ -531,61 +482,94 @@ namespace Another_Mirai_Native.UI.ViewModel
             await ReorderChatList();
         }
 
-        private async Task ReorderChatList()
+        /// <summary>
+        /// 添加或更新左侧聊天列表好友内容
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <param name="sender">发送者ID</param>
+        /// <param name="msg">消息</param>
+        private async Task AddOrUpdatePrivateChatList(long qq, long sender, string msg)
         {
-            ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
-        }
-
-        public async void OnSelectedChatChanged()
-        {
-            Messages = [];
-            if (SelectedChat == null)
+            msg = msg.Replace("\r", "").Replace("\n", "");
+            var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatType.QQPrivate);
+            if (item != null) // 消息已存在, 更新
             {
-                return;
+                item.GroupName = await Caches.GetFriendNick(qq);
+                item.Detail = msg;
+                item.Time = DateTime.Now;
+                item.UnreadCount++;
             }
-            var histories = SelectedChat.AvatarType == ChatType.QQGroup 
-                ? await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Group, LoadCount, 1)
-                : await ChatHistoryHelper.GetHistoriesByPageAsync(SelectedChat.Id, ChatHistoryType.Private, LoadCount, 1);
-
-            foreach(var item in histories)
+            else
             {
-                Messages.Add(await ParseChatHistoryToViewModel(SelectedChat.AvatarType, item));
-            }
-            CurrentPageIndex = 1;
-            SelectedChat.UnreadCount = 0;
-            await Dispatcher.Yield();
-            ScrollToBottom();
-        }
-
-        public async Task LoadChatList()
-        {
-            var list = ChatHistoryHelper.GetHistoryCategories();
-            ChatList.Clear();
-            foreach (var item in list)
-            {
-                ChatList.Add(new ChatListItemViewModel
+                item = new ChatListItemViewModel
                 {
-                    AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
-                    Detail = item.Message,
-                    GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
-                    Id = item.ParentID,
-                    Time = item.Time,
-                    UnreadCount = 0
-                });
+                    AvatarType = ChatType.QQPrivate,
+                    Detail = msg,
+                    GroupName = await Caches.GetFriendNick(qq),
+                    Id = sender,
+                    Time = DateTime.Now,
+                    UnreadCount = 1
+                };
+                ChatList.Add(item);
             }
             await ReorderChatList();
         }
 
-        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        /// <summary>
+        /// 发送消息转CQ码
+        /// </summary>
+        /// <returns>处理后的CQ码消息</returns>
+        private string BuildTextFromRichTextBox()
         {
-            if (SelectedChat != null 
-                && SelectedChat.AvatarType == ChatType.QQPrivate 
-                && SelectedChat.Id == qq)
+            StringBuilder stringBuilder = new();
+            foreach (Block item in SendText.Blocks)
             {
-                var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
-                if (item != null)
+                // 粘贴的图片
+                if (item is BlockUIContainer blockImgContainer && blockImgContainer.Child is Image blockImg)
                 {
-                    item.Recalled = true;
+                    stringBuilder.Append(blockImg.Tag?.ToString());
+                    continue;
+                }
+                if (item is not Paragraph paragraph)
+                {
+                    continue;
+                }
+                foreach (Inline inline in paragraph.Inlines)
+                {
+                    if (inline is InlineUIContainer uiContainer && uiContainer.Child is Image inlineImage)
+                    {
+                        stringBuilder.Append(inlineImage.Tag?.ToString());
+                    }
+                    else
+                    {
+                        stringBuilder.Append(new TextRange(inline.ContentStart, inline.ContentEnd).Text);
+                    }
+                }
+            }
+            return stringBuilder.ToString();
+        }
+
+        private void CreateRelayCommands()
+        {
+            var fields = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.PropertyType == typeof(RelayCommand) && p.Name.StartsWith("Command_"));
+
+            foreach (var prop in fields)
+            {
+                string methodName = prop.Name.Replace("Command_", "");
+                var methodInfo = GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+                if (methodInfo != null)
+                {
+                    // 创建委托
+                    Action<object> action = (obj) => methodInfo.Invoke(this, [obj]);
+                    var cmd = new RelayCommand(action);
+                    prop.SetValue(this, cmd);
+                }
+                else
+                {
+                    // 没有找到方法时
+                    throw new Exception($"方法 {methodName} 未定义!");
                 }
             }
         }
@@ -602,6 +586,25 @@ namespace Another_Mirai_Native.UI.ViewModel
                     item.Recalled = true;
                 }
             }
+        }
+
+        private void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
+        {
+            if (SelectedChat != null
+                && SelectedChat.AvatarType == ChatType.QQPrivate
+                && SelectedChat.Id == qq)
+            {
+                var item = Messages.FirstOrDefault(x => x.MsgId == msgId);
+                if (item != null)
+                {
+                    item.Recalled = true;
+                }
+            }
+        }
+
+        private async Task ReorderChatList()
+        {
+            ChatList = ChatList.OrderByDescending(x => x.Time).ToObservableCollection();
         }
     }
 }

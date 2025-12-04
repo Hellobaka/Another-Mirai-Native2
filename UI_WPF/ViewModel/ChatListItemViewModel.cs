@@ -41,9 +41,10 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public RelayCommand Command_ChatList_CopyId { get; set; }
 
-        #endregion
+        #endregion Commands
 
         #region ContextMenu
+
         public void ChatList_CopyNick(object? parameter)
         {
             Clipboard.SetText(GroupName);
@@ -54,7 +55,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             Clipboard.SetText(Id.ToString());
         }
 
-        #endregion
+        #endregion ContextMenu
 
         private void CreateRelayCommands()
         {

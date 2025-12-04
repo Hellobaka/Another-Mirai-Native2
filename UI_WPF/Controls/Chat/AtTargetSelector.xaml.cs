@@ -66,7 +66,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         {
             await Task.Run(() =>
             {
-
                 if (Caches.GroupMemberCache.ContainsKey(Id) is false)
                 {
                     Caches.LoadGroupMemberCaches(Id);

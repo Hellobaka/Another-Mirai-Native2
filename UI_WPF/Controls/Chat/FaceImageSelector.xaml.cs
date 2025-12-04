@@ -16,6 +16,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
     public partial class FaceImageSelector : UserControl
     {
         private const int FaceRowSize = 8;
+
         private const int ImageRowSize = 4;
 
         private Dictionary<int, string> _faceResourceCache = [];

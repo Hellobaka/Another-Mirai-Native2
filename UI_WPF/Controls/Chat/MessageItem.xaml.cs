@@ -4,18 +4,15 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.UI.Models;
 using Another_Mirai_Native.UI.Pages;
 using Another_Mirai_Native.UI.ViewModel;
-using Another_Mirai_Native.UI.Controls;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Documents;
 
 namespace Another_Mirai_Native.UI.Controls.Chat
 {
@@ -39,7 +36,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private Brush DefaultTextBrush => (Brush)FindResource("SystemControlForegroundBaseHighBrush");
 
-        #endregion
+        #endregion 属性定义
 
         #region 公开方法
 
@@ -87,7 +84,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             ChatPage.WindowSizeChanged -= ChatPage_WindowSizeChanged;
         }
 
-        #endregion
+        #endregion 公开方法
 
         #region 私有方法
 
@@ -105,15 +102,19 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 case CQCodeType.Image:
                     ProcessImageCQCode(cqcode, imageCount, splitCount);
                     break;
+
                 case CQCodeType.At:
                     await ProcessAtCQCode(cqcode);
                     break;
+
                 case CQCodeType.Face:
                     ProcessFaceCQCode(cqcode, item);
                     break;
+
                 case CQCodeType.Reply:
                     await ProcessReplyCQCode(cqcode, item);
                     break;
+
                 default:
                     AddExpanderForCQCode(cqcode.ToSendString());
                     break;
@@ -302,7 +303,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             MessageContent.MaxWidth = MaxWidth * 0.8;
         }
 
-        #endregion
+        #endregion 私有方法
 
         #region 事件处理
 
@@ -370,6 +371,6 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
         }
 
-        #endregion
+        #endregion 事件处理
     }
 }

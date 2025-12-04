@@ -1,5 +1,4 @@
-﻿using Another_Mirai_Native.DB;
-using Another_Mirai_Native.UI.ViewModel;
+﻿using Another_Mirai_Native.UI.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
