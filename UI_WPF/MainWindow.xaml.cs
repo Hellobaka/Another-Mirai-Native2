@@ -193,36 +193,12 @@ namespace Another_Mirai_Native.UI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MaxHeight = SystemParameters.WorkArea.Height + 10;
-            RefreshFrame();
-            RefreshDarkMode();
-            ThemeManager.Current.ActualApplicationThemeChanged += (_, _) => RefreshDarkMode();
-            Material material = UIConfig.Instance.WindowMaterial switch
-            {
-                WindowMaterial.Mica => Material.Mica,
-                WindowMaterial.Acrylic => Material.Acrylic,
-                WindowMaterial.Tabbed => Material.Tabbed,
-                WindowMaterial.None => Material.None,
-                _ => Material.None
-            };
             TestMenuItem.IsEnabled = AppConfig.Instance.DebugMode;
             ChatMenuItem.IsEnabled = AppConfig.Instance.EnableChat;
 #if NET5_0_OR_GREATER
             WebUIMenuItem.IsEnabled = true;
 #endif
-            try
-            {
-                if (material != Material.None)
-                {
-                    ChangeMaterial(material);
-                    SetNavigationViewTransparent(MainDrawer);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error("切换窗口材质", ex.Message);
-            }
-
+            UpdateWindowMaterial();
             TaskbarIcon.TrayMouseDoubleClick += (_, _) =>
             {
                 WindowState = WindowState.Normal;
@@ -233,74 +209,8 @@ namespace Another_Mirai_Native.UI
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ResizeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
             ResizeTimer.Tick += ResizeTimer_Tick;
-            await Task.Delay(200);
-            await Task.Run(() => Entry.InitCore());
-            ProtocolManager protocolManager = new();
-            SetQrCodeAction(protocolManager);
-            ProtocolSelectorDialog dialog = new();
-            await dialog.ShowAsync();
-            if (dialog.DialogResult == ContentDialogResult.Secondary)
-            {
-                Environment.Exit(0);
-            }
-            else
-            {
-                if (UIConfig.Instance.AutoCloseWindow)
-                {
-                    Close();
-                }
-                ChatHistoryHelper.Initialize();
-                // 登录成功后才有有效的QQ号，此时获取到的历史记录才有效
-                PageCache.Add("ChatPage", new ChatPage());
-                LoadPlugins();
-            }
-            DialogHelper.HandleDialogQueue();
-#if NET5_0_OR_GREATER
-            if (UIConfig.Instance.AutoStartWebUI)
-            {
-                await WebUIPage.Instance.StartWebUI();
-            }
-#endif
 
-            PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
-            PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
-        }
-
-        private void SetQrCodeAction(ProtocolManager protocolManager)
-        {
-            Action<string, byte[]> displayAction = (string url, byte[] data) =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    string path = Path.Combine("data", "image", "LoginQRCode");
-                    Directory.CreateDirectory(path);
-                    string fileName = Guid.NewGuid().ToString() + ".png";
-                    File.WriteAllBytes(Path.Combine(path, fileName), data);
-                    if (Uri.TryCreate(Path.GetFullPath(Path.Combine(path, fileName)), UriKind.Absolute, out var uri))
-                    {
-                        QRCodeViewer ??= new PictureViewer
-                        {
-                            Title = "二维码登录 关闭后无法再次打开",
-                            Owner = this
-                        };
-                        QRCodeViewer.Image = uri;
-                        QRCodeViewer.Show();
-                    }
-                    else
-                    {
-                        DialogHelper.ShowSimpleDialog("二维码显示失败", "二维码显示失败，无法保存图片");
-                    }
-                });
-            };
-            Action finishedAction = () =>
-            {
-                Dispatcher.BeginInvoke(() =>
-                {
-                    QRCodeViewer?.Close();
-                    QRCodeViewer = null;
-                });
-            };
-            protocolManager.SetQrCodeAction(displayAction, finishedAction);
+            await ExecuteStartupLogic();
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -375,5 +285,137 @@ namespace Another_Mirai_Native.UI
             ResizeTimer.Stop();
             ResizeTimer.Start();
         }
+
+        #region Startup Logic
+        private void UpdateWindowMaterial()
+        {
+            MaxHeight = SystemParameters.WorkArea.Height + 10;
+            RefreshFrame();
+            RefreshDarkMode();
+            ThemeManager.Current.ActualApplicationThemeChanged += (_, _) => RefreshDarkMode();
+            Material material = UIConfig.Instance.WindowMaterial switch
+            {
+                WindowMaterial.Mica => Material.Mica,
+                WindowMaterial.Acrylic => Material.Acrylic,
+                WindowMaterial.Tabbed => Material.Tabbed,
+                WindowMaterial.None => Material.None,
+                _ => Material.None
+            };
+            try
+            {
+                if (material != Material.None)
+                {
+                    ChangeMaterial(material);
+                    SetNavigationViewTransparent(MainDrawer);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("切换窗口材质", ex.Message);
+            }
+        }
+
+        private async Task ExecuteStartupLogic()
+        {
+            await Dispatcher.Yield();
+            await InitCoreLogic();
+            if (await InitProtocolLogic() is false)
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                await InitAfterLoginLogic();
+            }
+        }
+
+        private async Task InitCoreLogic()
+        {
+            await Task.Run(() => Entry.InitCore());
+        }
+
+        private async Task<bool> InitProtocolLogic()
+        {
+            ProtocolManager protocolManager = new();
+            SetQrCodeAction(protocolManager);
+            ProtocolSelectorDialog dialog = new();
+            await dialog.ShowAsync();
+            return dialog.DialogResult != ContentDialogResult.Secondary;
+        }
+
+        private async Task InitAfterLoginLogic()
+        {
+            if (UIConfig.Instance.AutoCloseWindow)
+            {
+                Close();
+            }
+            ChatHistoryHelper.Initialize();
+            // 登录成功后才有有效的QQ号，此时获取到的历史记录才有效
+            PageCache.Add("ChatPage", new ChatPage());
+            LoadPlugins();
+            DialogHelper.HandleDialogQueue();
+            InitEvents();
+            await InitWebUI();
+        }
+
+        private async Task InitWebUI()
+        {
+#if NET5_0_OR_GREATER
+            if (UIConfig.Instance.AutoStartWebUI)
+            {
+                await WebUIPage.Instance.StartWebUI();
+            }
+            else
+            {
+                await Task.CompletedTask;
+            }
+#else
+            await Task.CompletedTask;
+#endif
+        }
+
+        private void InitEvents()
+        {
+            PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
+            PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
+        }
+
+        private void SetQrCodeAction(ProtocolManager protocolManager)
+        {
+            Action<string, byte[]> displayAction = (string url, byte[] data) =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    string path = Path.Combine("data", "image", "LoginQRCode");
+                    Directory.CreateDirectory(path);
+                    string fileName = Guid.NewGuid().ToString() + ".png";
+                    File.WriteAllBytes(Path.Combine(path, fileName), data);
+                    if (Uri.TryCreate(Path.GetFullPath(Path.Combine(path, fileName)), UriKind.Absolute, out var uri))
+                    {
+                        QRCodeViewer ??= new PictureViewer
+                        {
+                            Title = "二维码登录 关闭后无法再次打开",
+                            Owner = this
+                        };
+                        QRCodeViewer.Image = uri;
+                        QRCodeViewer.Show();
+                    }
+                    else
+                    {
+                        DialogHelper.ShowSimpleDialog("二维码显示失败", "二维码显示失败，无法保存图片");
+                    }
+                });
+            };
+            Action finishedAction = () =>
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    QRCodeViewer?.Close();
+                    QRCodeViewer = null;
+                });
+            };
+            protocolManager.SetQrCodeAction(displayAction, finishedAction);
+        }
+        #endregion
     }
 }

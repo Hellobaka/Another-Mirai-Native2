@@ -18,17 +18,22 @@ namespace Another_Mirai_Native.UI.ViewModel
     [AddINotifyPropertyChangedInterface]
     public class LogPageViewModel
     {
+        private bool _isRefiltering;
+
+        private readonly DispatcherTimer _batchTimer;
+
+        private readonly ConcurrentQueue<LogModel> _pendingLogs = new();
+
         public LogPageViewModel()
         {
             Instance = this;
-            LogCollections = new ObservableCollection<LogModel>();
-            PageSizes = new ObservableCollection<int> { 100, 200, 500, 1000, 2000, 5000 };
+            LogCollections = [];
+            PageSizes = [100, 200, 500, 1000, 2000, 5000];
             SearchDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
             SearchDebounceTimer.Tick += SearchDebounceTimer_Tick;
-            
+
             _batchTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
             _batchTimer.Tick += BatchTimer_Tick;
-            _batchTimer.Start();
 
             NextPageCommand = new RelayCommand(NextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage);
@@ -36,45 +41,43 @@ namespace Another_Mirai_Native.UI.ViewModel
             LastPageCommand = new RelayCommand(LastPage);
         }
 
-        public static LogPageViewModel Instance { get; set; }
-
         public event Action RequestScrollToBottom;
 
+        public static LogPageViewModel Instance { get; set; }
+
         public bool AutoScroll { get; set; }
+
+        public int CurrentPage { get; set; } = 1;
 
         public int FilterLogLevel { get; set; } = 10;
 
         public int FilterLogLevelIndex { get; set; } = 1;
 
+        public RelayCommand FirstPageCommand { get; set; }
+
+        public int ItemsPerPage { get; set; } = 500;
+
+        public RelayCommand LastPageCommand { get; set; }
+
         public ObservableCollection<LogModel> LogCollections { get; set; }
+
+        public RelayCommand NextPageCommand { get; set; }
+
+        public ObservableCollection<int> PageSizes { get; set; }
+
+        public RelayCommand PreviousPageCommand { get; set; }
 
         public string SearchText { get; set; } = "";
 
         public LogModel? SelectedLog { get; set; }
-        
-        public int CurrentPage { get; set; } = 1;
 
         public int TotalItems { get; set; }
 
         public int TotalPages { get; set; }
 
-        public int ItemsPerPage { get; set; } = 500;
-        
-        public ObservableCollection<int> PageSizes { get; set; }
-
-        public RelayCommand NextPageCommand { get; set; }
-        public RelayCommand PreviousPageCommand { get; set; }
-        public RelayCommand FirstPageCommand { get; set; }
-        public RelayCommand LastPageCommand { get; set; }
-
         private bool FormLoaded { get; set; }
 
         private DispatcherTimer SearchDebounceTimer { get; set; }
-        
-        private DispatcherTimer _batchTimer;
-        private ConcurrentQueue<LogModel> _pendingLogs = new();
-
-        private bool _isRefiltering;
 
         public void Load()
         {
@@ -85,7 +88,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
 
             AutoScroll = UIConfig.Instance.LogAutoScroll;
-            
+
             int configItemsCount = UIConfig.Instance.LogPageSize;
             if (!PageSizes.Contains(configItemsCount))
             {
@@ -123,18 +126,6 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
             SelectLastLog();
         }
-        
-        public void OnItemsPerPageChanged()
-        {
-            if (FormLoaded)
-            {
-                UIConfig.Instance.LogPageSize = ItemsPerPage;
-                UIConfig.Instance.SetConfig("LogPageSize", ItemsPerPage);
-                
-                CurrentPage = -1;
-                RefilterLogCollection();
-            }
-        }
 
         public void OnCurrentPageChanged()
         {
@@ -152,6 +143,18 @@ namespace Another_Mirai_Native.UI.ViewModel
             SelectLastLog();
         }
 
+        public void OnItemsPerPageChanged()
+        {
+            if (FormLoaded)
+            {
+                UIConfig.Instance.LogPageSize = ItemsPerPage;
+                UIConfig.Instance.SetConfig("LogPageSize", ItemsPerPage);
+
+                CurrentPage = -1;
+                RefilterLogCollection();
+            }
+        }
+
         public void OnSearchTextChanged()
         {
             SearchDebounceTimer.Stop();
@@ -162,14 +165,14 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             if (_isRefiltering) return;
             _isRefiltering = true;
-            
+
             Task.Run(() =>
             {
                 try
                 {
                     int totalCount, totalPage;
                     var ls = LogHelper.DetailQueryLogs(FilterLogLevel, CurrentPage, ItemsPerPage, SearchText, out totalCount, out totalPage, null, null, true);
-                    
+
                     Application.Current.Dispatcher.BeginInvoke(() =>
                     {
                         TotalItems = totalCount;
@@ -202,22 +205,76 @@ namespace Another_Mirai_Native.UI.ViewModel
             });
         }
 
-        private void LogHelper_LogAdded(int logId, LogModel log)
-        {
-            _pendingLogs.Enqueue(log);
-        }
-
         private void BatchTimer_Tick(object? sender, EventArgs e)
         {
-            if (_pendingLogs.IsEmpty) return;
+            if (_pendingLogs.IsEmpty)
+            {
+                _batchTimer.Stop();
+                return;
+            }
 
             var newLogs = new List<LogModel>();
-            while (_pendingLogs.TryDequeue(out var log))
+            lock (this)
             {
-                newLogs.Add(log);
+                while (_pendingLogs.TryDequeue(out var log))
+                {
+                    newLogs.Add(log);
+                }
             }
 
             ProcessNewLogs(newLogs);
+        }
+
+        private void FirstPage(object? obj)
+        {
+            CurrentPage = 1;
+        }
+
+        private void LastPage(object? obj)
+        {
+            CurrentPage = TotalPages;
+        }
+
+        private void LogHelper_LogAdded(int logId, LogModel log)
+        {
+            _pendingLogs.Enqueue(log);
+            if (!_batchTimer.IsEnabled)
+            {
+                _batchTimer.Start();
+            }
+        }
+
+        private void LogHelper_LogStatusUpdated(int logId, string status)
+        {
+            lock (this)
+            {
+                LogModel? log = LogCollections.FirstOrDefault(x => x.id == logId);
+                LogModel? pendingLog = _pendingLogs.FirstOrDefault(x => x.id == logId);
+                if (log != null)
+                {
+                    log.status = status;
+                }
+                else if (pendingLog != null)
+                {
+                    pendingLog.status = status;
+                }
+            }
+        }
+
+        private void NextPage(object? obj)
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage++;
+            }
+        }
+
+        private void PreviousPage(object? obj)
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+            }
         }
 
         private void ProcessNewLogs(List<LogModel> logs)
@@ -244,9 +301,9 @@ namespace Another_Mirai_Native.UI.ViewModel
                         {
                             CurrentPage = TotalPages; // This will trigger OnCurrentPageChanged -> Refilter
                             // If we change page, we don't need to manually add logs to current collection as Refilter will reload
-                            // But we should continue processing other logs? 
+                            // But we should continue processing other logs?
                             // Actually if we change page, Refilter is async/queued.
-                            // We should probably stop processing this batch for UI update purposes, 
+                            // We should probably stop processing this batch for UI update purposes,
                             // but we still need to process BalloonTips.
                             // Let's just set a flag and continue loop for BalloonTips.
                             collectionChanged = true; // Triggered via property change
@@ -296,18 +353,6 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
         }
 
-        private void LogHelper_LogStatusUpdated(int logId, string status)
-        {
-            Application.Current.Dispatcher.BeginInvoke(() =>
-            {
-                LogModel? log = LogCollections.FirstOrDefault(x => x.id == logId);
-                if (log != null)
-                {
-                    log.status = status;
-                }
-            });
-        }
-
         private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
         {
             SearchDebounceTimer.Stop();
@@ -324,32 +369,6 @@ namespace Another_Mirai_Native.UI.ViewModel
                 item.detail = item.detail.Clean();
                 LogCollections.Add(item);
             }
-        }
-        
-        private void NextPage(object? obj)
-        {
-            if (CurrentPage < TotalPages)
-            {
-                CurrentPage++;
-            }
-        }
-
-        private void PreviousPage(object? obj)
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage--;
-            }
-        }
-
-        private void FirstPage(object? obj)
-        {
-            CurrentPage = 1;
-        }
-
-        private void LastPage(object? obj)
-        {
-            CurrentPage = TotalPages;
         }
     }
 }

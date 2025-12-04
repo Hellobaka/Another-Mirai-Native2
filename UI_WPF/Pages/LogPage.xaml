@@ -149,13 +149,15 @@
         </ListView>
         <Grid Grid.Row="2" Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <StackPanel
                 Grid.Column="0"
+                Margin="20,0"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <TextBlock
@@ -217,7 +219,7 @@
 
             <TextBlock
                 Grid.Column="2"
-                Margin="5,0"
+                Margin="20,0"
                 VerticalAlignment="Center"
                 Text="{Binding TotalItems, StringFormat='共 {0} 条'}" />
         </Grid>
