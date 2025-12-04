@@ -36,34 +36,7 @@ namespace Another_Mirai_Native.UI
             {
                 RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
             }
-            switch (UIConfig.Instance.Theme)
-            {
-                case SystemTheme.Light:
-                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
-                    break;
-
-                case SystemTheme.Dark:
-                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-                    break;
-
-                default:
-                    break;
-            }
-            try
-            {
-                if (string.IsNullOrEmpty(UIConfig.Instance.AccentColor) || UIConfig.Instance.AccentColor.StartsWith("#") is false)
-                {
-                    ThemeManager.Current.AccentColor = null;
-                }
-                else
-                {
-                    ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.Instance.AccentColor);
-                }
-            }
-            catch
-            {
-                ThemeManager.Current.AccentColor = null;
-            }
+           
             Width = Math.Max(MinWidth, UIConfig.Instance.Width);
             Height = Math.Max(MinHeight, UIConfig.Instance.Height);
             // 提前实例化重要页面
@@ -322,6 +295,34 @@ namespace Another_Mirai_Native.UI
         #region Startup Logic
         private void UpdateWindowMaterial()
         {
+            switch (UIConfig.Instance.Theme)
+            {
+                case SystemTheme.Light:
+                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+                    break;
+
+                case SystemTheme.Dark:
+                    ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+                    break;
+
+                default:
+                    break;
+            }
+            try
+            {
+                if (string.IsNullOrEmpty(UIConfig.Instance.AccentColor) || UIConfig.Instance.AccentColor.StartsWith("#") is false)
+                {
+                    ThemeManager.Current.AccentColor = null;
+                }
+                else
+                {
+                    ThemeManager.Current.AccentColor = (Color)ColorConverter.ConvertFromString(UIConfig.Instance.AccentColor);
+                }
+            }
+            catch
+            {
+                ThemeManager.Current.AccentColor = null;
+            }
             MaxHeight = SystemParameters.WorkArea.Height + 10;
             RefreshFrame();
             RefreshDarkMode();

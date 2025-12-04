@@ -19,6 +19,7 @@ namespace Another_Mirai_Native.UI.Pages
 
             DataContext = new LogPageViewModel();
             Instance = this;
+            LogPage_Loaded(null, null);
         }
 
         public static LogPage Instance { get; set; }
