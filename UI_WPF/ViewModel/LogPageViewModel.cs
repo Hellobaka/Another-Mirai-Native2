@@ -1,32 +1,31 @@
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
-using Another_Mirai_Native.UI.Models;
 using Hardcodet.Wpf.TaskbarNotification;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
-using Another_Mirai_Native.UI;
 
 namespace Another_Mirai_Native.UI.ViewModel
 {
-    public class LogPageViewModel : INotifyPropertyChanged
+    [AddINotifyPropertyChangedInterface]
+    public class LogPageViewModel
     {
         public LogPageViewModel()
         {
-            LogCollections = [];
+            Instance = this;
+            LogCollections = new ObservableCollection<LogModel>();
             SearchDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
             SearchDebounceTimer.Tick += SearchDebounceTimer_Tick;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public event Action RequestScrollToBottom;
+
+        public static LogPageViewModel Instance { get; set; }
 
         public bool AutoScroll { get; set; }
 
@@ -34,20 +33,15 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public int FilterLogLevelIndex { get; set; } = 1;
 
-        public ObservableCollection<LogModelWrapper> LogCollections { get; set; }
+        public ObservableCollection<LogModel> LogCollections { get; set; }
 
         public string SearchText { get; set; } = "";
 
-        public LogModelWrapper? SelectedLog { get; set; }
+        public LogModel? SelectedLog { get; set; }
 
         private bool FormLoaded { get; set; }
 
         private DispatcherTimer SearchDebounceTimer { get; set; }
-
-        public void InvokePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public void Load()
         {
@@ -61,7 +55,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             FilterLogLevelIndex = 1; // Default Info
 
             var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.Instance.LogItemsCount);
-            UpdateLogCollections(PackLogModelWrapper(ls));
+            UpdateLogCollections(ls);
 
             LogHelper.LogAdded -= LogHelper_LogAdded;
             LogHelper.LogAdded += LogHelper_LogAdded;
@@ -83,7 +77,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             FilterLogLevel = FilterLogLevelIndex * 10;
             var ls = LogHelper.GetDisplayLogs(FilterLogLevel, UIConfig.Instance.LogItemsCount);
-            UpdateLogCollections(PackLogModelWrapper(ls));
+            UpdateLogCollections(ls);
             RefilterLogCollection();
             SelectLastLog();
         }
@@ -96,9 +90,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public void RefilterLogCollection()
         {
-            var ls = PackLogModelWrapper(
-                    LogHelper.DetailQueryLogs(FilterLogLevel, 1, UIConfig.Instance.LogItemsCount, SearchText, out _, out _, null, null)
-                    );
+            var ls = LogHelper.DetailQueryLogs(FilterLogLevel, 1, UIConfig.Instance.LogItemsCount, SearchText, out _, out _, null, null);
 
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
@@ -119,16 +111,6 @@ namespace Another_Mirai_Native.UI.ViewModel
             });
         }
 
-        private static List<LogModelWrapper> PackLogModelWrapper(List<LogModel> ls)
-        {
-            List<LogModelWrapper> logs = new();
-            foreach (var log in ls)
-            {
-                logs.Add(new LogModelWrapper(log));
-            }
-            return logs;
-        }
-
         private void LogHelper_LogAdded(int logId, LogModel log)
         {
             Application.Current.Dispatcher.BeginInvoke(() =>
@@ -141,36 +123,34 @@ namespace Another_Mirai_Native.UI.ViewModel
                     {
                         LogCollections.RemoveAt(0);
                     }
-                    LogCollections.Add(new LogModelWrapper(log));
+                    log.detail = log.detail.Clean();
+                    LogCollections.Add(log);
                     SelectLastLog();
                 }
-                BalloonIcon tipIcon = BalloonIcon.Warning;
-                if (log.priority == (int)LogLevel.Warning)
-                {
-                    tipIcon = BalloonIcon.Warning;
-                }
-                else if (log.priority >= (int)LogLevel.Error)
-                {
-                    tipIcon = BalloonIcon.Error;
-                }
-                if (log.priority >= (int)LogLevel.Warning && UIConfig.Instance.ShowBalloonTip)
-                {
-                    MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
-                }
             });
+            BalloonIcon tipIcon = BalloonIcon.Warning;
+            if (log.priority == (int)LogLevel.Warning)
+            {
+                tipIcon = BalloonIcon.Warning;
+            }
+            else if (log.priority >= (int)LogLevel.Error)
+            {
+                tipIcon = BalloonIcon.Error;
+            }
+            if (log.priority >= (int)LogLevel.Warning && UIConfig.Instance.ShowBalloonTip)
+            {
+                MainWindow.Instance.TaskbarIcon?.ShowBalloonTip(log.source, log.detail, tipIcon);
+            }
+
         }
 
         private void LogHelper_LogStatusUpdated(int logId, string status)
         {
-            Application.Current.Dispatcher.BeginInvoke(() =>
+            LogModel? log = LogCollections.FirstOrDefault(x => x.id == logId);
+            if (log != null)
             {
-                LogModelWrapper? log = LogCollections.FirstOrDefault(x => x.id == logId);
-                if (log != null)
-                {
-                    log.status = status;
-                    log.InvokePropertyChanged("status");
-                }
-            });
+                log.status = status;
+            }
         }
 
         private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
@@ -180,11 +160,12 @@ namespace Another_Mirai_Native.UI.ViewModel
             SelectLastLog();
         }
 
-        private void UpdateLogCollections(List<LogModelWrapper> list)
+        private void UpdateLogCollections(List<LogModel> list)
         {
             LogCollections.Clear();
             foreach (var item in list)
             {
+                item.detail = item.detail.Clean();
                 LogCollections.Add(item);
             }
         }
