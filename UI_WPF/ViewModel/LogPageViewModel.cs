@@ -279,7 +279,6 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void ProcessNewLogs(List<LogModel> logs)
         {
-            bool collectionChanged = false;
             bool shouldScroll = false;
 
             foreach (var log in logs)
@@ -299,14 +298,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                     {
                         if (CurrentPage != TotalPages)
                         {
-                            CurrentPage = TotalPages; // This will trigger OnCurrentPageChanged -> Refilter
-                            // If we change page, we don't need to manually add logs to current collection as Refilter will reload
-                            // But we should continue processing other logs?
-                            // Actually if we change page, Refilter is async/queued.
-                            // We should probably stop processing this batch for UI update purposes,
-                            // but we still need to process BalloonTips.
-                            // Let's just set a flag and continue loop for BalloonTips.
-                            collectionChanged = true; // Triggered via property change
+                            CurrentPage = TotalPages;
                         }
                         else
                         {
