@@ -29,6 +29,7 @@ namespace Another_Mirai_Native.UI
 
             if (args.Length == 0)
             {
+                CreateDB();
                 App.Main();
             }
             else
@@ -39,12 +40,6 @@ namespace Another_Mirai_Native.UI
 
         public static void InitCore()
         {
-            AppConfig.Instance.IsCore = true;
-            Another_Mirai_Native.Entry.CreateInitFolders();
-            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
-            {
-                LogHelper.CreateDB();
-            }
             ServerManager serverManager = new();
             if (serverManager.Build(AppConfig.Instance.ServerType) is false)
             {
@@ -65,6 +60,16 @@ namespace Another_Mirai_Native.UI
             }
             ServerManager.Server.OnShowErrorDialogCalled += DialogHelper.ShowErrorDialog;
             Another_Mirai_Native.Entry.InitExceptionCapture();
+        }
+
+        private static void CreateDB()
+        {
+            AppConfig.Instance.IsCore = true;
+            Another_Mirai_Native.Entry.CreateInitFolders();
+            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            {
+                LogHelper.CreateDB();
+            }
         }
     }
 }
