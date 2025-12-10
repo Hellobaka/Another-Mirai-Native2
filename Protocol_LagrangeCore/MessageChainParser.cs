@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Lagrange.Core.Message;
 using Lagrange.Core.Message.Entity;
+using System.IO;
 using System.Text;
 
 namespace Another_Mirai_Native.Protocol.LagrangeCore
@@ -42,9 +43,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is ImageEntity image)
                 {
-                    string imgId = BitConverter.ToString(image.ImageMd5).ToUpper().Replace("-", "");
-                    Directory.CreateDirectory("data\\image");
-                    File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5={imgId}\nsize={image.ImageSize}\nurl={image.ImageUrl}");
+                    string imgId = ChatHistoryHelper.CacheMessageImage(image.ImageUrl).Result
+                        ?? BitConverter.ToString(image.ImageMd5).ToUpper().Replace("-", "");
                     message.Append($"[CQ:image,file={imgId},sub_type={image.SubType}]");
                 }
                 else if (item is JsonEntity json)
@@ -149,25 +149,24 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         break;
 
                     case Model.Enums.CQCodeType.Image:
-                        string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", cqcode.Items["file"]);
+                        string file = cqcode.Items["file"];
+                        string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", file);
                         if (File.Exists(picPath))
                         {
                             builder.Image(picPath);
                         }
-                        else if (File.Exists(picPath + ".cqimg"))
-                        {
-                            string picUrl = File.ReadAllText(picPath).Split('\n').Last().Replace("url=", "");
-                            string? path = Helper.DownloadImageAsync(picUrl, picPath).Result;
-                            if (string.IsNullOrEmpty(path))
-                            {
-                                LogHelper.Error("构建消息", $"从缓存下载图片失败：{picPath}");
-                                break;
-                            }
-                            builder.Image(path);
-                        }
                         else
                         {
-                            LogHelper.Error("构建消息", $"图片文件不存在：{picPath}");
+                            var cacheImagePath = CachedImage.GetCachedImageByHash(file);
+                            if (cacheImagePath == null)
+                            {
+                                LogHelper.Error("构建消息", $"图片文件不存在：{picPath}");
+                            }
+                            else
+                            {
+                                string baseDirectory = Path.Combine("data", "image", "cached");
+                                builder.Image(Path.Combine(baseDirectory, cacheImagePath.FileName));
+                            }
                         }
                         break;
 

@@ -114,7 +114,6 @@ namespace Another_Mirai_Native.UI.Pages
             Dispatcher.BeginInvoke(async () =>
             {
                 await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
-                ChatHistoryHelper.RemoveGroupMember(group, qq);
             });
         }
 

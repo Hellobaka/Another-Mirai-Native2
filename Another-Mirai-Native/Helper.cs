@@ -168,27 +168,6 @@ namespace Another_Mirai_Native
 
         public static int ToTimeStamp(this DateTime? time) => (int)DateTime2TimeStamp(time ?? DateTime.Now);
 
-        /// <summary>
-        /// 从cqimg中获取图片URL
-        /// </summary>
-        /// <param name="cqimg"></param>
-        /// <returns></returns>
-        public static string GetPicUrlFromCQImg(string cqimg)
-        {
-            string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", cqimg);
-            picPath = Path.ChangeExtension(picPath, ".cqimg");
-
-            if (File.Exists(picPath))
-            {
-                string picUrl = File.ReadAllText(picPath);
-                picUrl = picUrl.Split('\n').Last().Replace("url=", "");
-                return picUrl;
-            }
-            LogHelper.Error("图片下载", $"{cqimg} 获取下载链接失败");
-
-            return "";
-        }
-
         public static string GetPicName(this CQCode cqimg)
         {
             return cqimg.Items.TryGetValue("file", out var file) ? file : "";
@@ -427,7 +406,7 @@ namespace Another_Mirai_Native
         /// 下载或读取缓存图片
         /// </summary>
         /// <param name="imageUrl">欲下载的图片URL</param>
-        /// <returns>本地图片路径</returns>
+        /// <returns>本地图片绝对路径</returns>
         public static async Task<string?> DownloadImageAsync(string imageUrl, string fileName = "")
         {
             try

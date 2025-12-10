@@ -48,7 +48,8 @@ namespace Another_Mirai_Native.DB
                 typeof(FriendEntity),
                 typeof(GroupEntity),
                 typeof(GroupMemberEntity),
-                typeof(ChatCategoryEntity)
+                typeof(ChatCategoryEntity),
+                typeof(CachedImage)
             );
         }
     }
@@ -354,5 +355,30 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         [SugarColumn(IsNullable = false)]
         public bool IsPinned { get; set; }
+    }
+
+    [SugarTable]
+    public class CachedImage
+    {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        public int ID { get; set; }
+
+        public string Hash { get; set; } = string.Empty;
+
+        public string FileName { get; set; } = string.Empty;
+
+        public string Url { get; set; } = string.Empty;
+
+        public float FileSizeInKB { get; set; }
+
+        public DateTime InsertTime { get; set; }
+
+        public bool Deleted { get; set; }
+
+        public static CachedImage? GetCachedImageByHash(string hash)
+        {
+            var db = ChatHistoryDB.GetInstance();
+            return db.Queryable<CachedImage>().Where(ci => ci.Hash == hash && !ci.Deleted).First();
+        }
     }
 }

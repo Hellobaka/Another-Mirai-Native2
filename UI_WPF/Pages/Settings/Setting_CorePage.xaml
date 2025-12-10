@@ -161,17 +161,28 @@
                     OnToggled="SettingItem_Toggled" />
 
                 <controls:SettingItem_ToggleButton
-                    x:Name="EnableChatImageCache"
-                    Title="允许缓存聊天图片"
+                    x:Name="EnableChatImageCacheMaxSizeControl"
+                    Title="启用最大缓存图片体积控制"
                     OnToggled="SettingItem_Toggled"
-                    Subtitle="缓存聊天窗口中显示的图片" />
+                    Subtitle="缓存文件夹超出体积时，会从最久的图片开始删除" />
 
                 <controls:SettingItem_TextBox
                     x:Name="MaxChatImageCacheFolderSize"
                     Title="缓存文件夹最大大小"
                     DataChanged="SettingItem_TextBox_DataChanged"
-                    Subtitle="聊天图片缓存文件夹的最大大小限制"
                     Unit="MB" />
+
+                <controls:SettingItem_ToggleButton
+                    x:Name="EnableChatImageCacheExpireTimeControl"
+                    Title="启用缓存图片最大储存时限控制"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="图片最大保留一点天数后，会从最久的图片开始删除" />
+
+                <controls:SettingItem_TextBox
+                    x:Name="ChatImageCacheExpireTime"
+                    Title="缓存图片最大储存时限"
+                    DataChanged="SettingItem_TextBox_DataChanged"
+                    Unit="天" />
             </ui:SimpleStackPanel>
         </Border>
 

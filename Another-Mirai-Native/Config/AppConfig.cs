@@ -72,9 +72,16 @@ namespace Another_Mirai_Native.Config
 
         public bool EnableChat { get; set; }
 
-        public bool EnableChatImageCache { get; set; }
+        public bool EnableChatImageCacheMaxSizeControl { get; set; }
 
         public long MaxChatImageCacheFolderSize { get; set; }
+
+        public bool EnableChatImageCacheExpireTimeControl { get; set; }
+
+        /// <summary>
+        /// 单位：天
+        /// </summary>
+        public long ChatImageCacheExpireTime { get; set; }
 
         public bool QRCodeCompatibilityMode { get; set; }
 
@@ -103,11 +110,7 @@ namespace Another_Mirai_Native.Config
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
             AutoConnect = GetConfig("AutoConnect", false);
             QRCodeCompatibilityMode = GetConfig("QRCodeCompatibilityMode", false);
-#if NET5_0_OR_GREATER
-            AutoProtocol = GetConfig("AutoProtocol", "Lagrange.Core");
-#else
             AutoProtocol = GetConfig("AutoProtocol", "NoConnection");
-#endif
             if (string.IsNullOrEmpty(AutoProtocol))
             {
                 AutoProtocol = "NoConnection";
@@ -126,8 +129,10 @@ namespace Another_Mirai_Native.Config
             ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
             EnableChat = GetConfig("EnableChat", false);
-            EnableChatImageCache = GetConfig("EnableChatImageCache", false);
+            EnableChatImageCacheMaxSizeControl = GetConfig("EnableChatImageCacheMaxSizeControl", false);
             MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", (long)1024);
+            EnableChatImageCacheExpireTimeControl = GetConfig("EnableChatImageCacheExpireTimeControl", false);
+            ChatImageCacheExpireTime = GetConfig("ChatImageCacheExpireTime", (long)30);
             ActionAfterOfflineSeconds = GetConfig("ActionAfterOfflineSeconds", 120);
 
             OfflineActionSendEmail = GetConfig("OfflineActionSendEmail", false);

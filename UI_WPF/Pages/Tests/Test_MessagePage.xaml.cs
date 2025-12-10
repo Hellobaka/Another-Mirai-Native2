@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Native;
 using Microsoft.Win32;
 using System;
@@ -104,11 +105,24 @@ namespace Another_Mirai_Native.UI.Pages
                     {
                         Helper.OpenFolder(img_path);
                     }
-                    else if (File.Exists(img_path + ".cqimg"))
+                    else
                     {
-                        string picTmp = File.ReadAllText(img_path + ".cqimg");
-                        picTmp = picTmp.Split('\n').Last().Replace("url=", "");
-                        Helper.OpenFolder(picTmp);
+                        var cachedImage = CachedImage.GetCachedImageByHash(img_file);
+                        if (cachedImage == null)
+                        {
+                            DialogHelper.ShowSimpleDialog("打开图片失败了", "缓存结果可能已经被删除或不存在");
+                            return;
+                        }
+                        string baseDirectory = Path.Combine("data", "image", "cached");
+                        string fileName = Path.Combine(baseDirectory, cachedImage.FileName);
+                        if (File.Exists(fileName))
+                        {
+                            Helper.OpenFolder(fileName);
+                        }
+                        else
+                        {
+                            Helper.OpenFolder(cachedImage.Url);
+                        }
                     }
                 }
             };

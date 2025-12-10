@@ -745,17 +745,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     }
                     else
                     {
-                        // 若以上两个路径均不存在, 判断对应的 cqimg 文件是否存在
-                        picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", picPath + ".cqimg");
-                        if (!File.Exists(picPath))
+                        // 若以上两个路径均不存在, 判断对应的缓存文件是否存在
+                        var cachedImage = CachedImage.GetCachedImageByHash(picPath);
+                        if (cachedImage == null)
                         {
-                            LogHelper.WriteLog(LogLevel.Warning, "发送图片", "文件不存在", "");
+                            LogHelper.WriteLog(LogLevel.Warning, "发送图片", "缓存文件不存在", "");
                             continue;
                         }
-                        string picTmp = File.ReadAllText(picPath);
-                        // 分离 cqimg 文件中的 url
-                        picTmp = picTmp.Split('\n').Last().Replace("url=", "");
-                        newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", picTmp));
+                        newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", cachedImage.Url));
                         if (item.Items.ContainsKey("flash"))
                         {
                             newCQcode.Items.Add("type", "flash");

@@ -135,7 +135,7 @@ namespace Protocol_NoConnection
             SendValue.Text += $"[CQ:at,qq={Protocol.Instance.GetLoginQQ()}]";
         }
 
-        private void PicButton_Click(object sender, EventArgs e)
+        private async void PicButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new()
             {
@@ -162,14 +162,13 @@ namespace Protocol_NoConnection
                     File.Copy(item, Path.Combine(dialog.InitialDirectory, Path.GetFileName(item)), true);
                     path = Path.GetFileName(item);
                 }
-                string fileName = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
                 if (path.EndsWith(".cqimg"))
                 {
                     SendValue.Text += $"[CQ:image,file={Path.GetFileNameWithoutExtension(path)}] ";
                     continue;
                 }
-                File.WriteAllText(Path.Combine(dialog.InitialDirectory, fileName + ".cqimg"), $"[url]\r\nmd5=0\r\nsize=0\r\nurl={PicServer.Instance.ListenURL}{path}");
-                SendValue.Text += $"[CQ:image,file={fileName}] ";
+                string imgId = await ChatHistoryHelper.CacheMessageImage($"{PicServer.Instance.ListenURL}{path}");
+                SendValue.Text += $"[CQ:image,file={imgId}] ";
             }
         }
 
