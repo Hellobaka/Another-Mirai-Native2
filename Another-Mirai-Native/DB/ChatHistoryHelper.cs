@@ -3,8 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using SqlSugar;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Another_Mirai_Native.DB
 {
@@ -12,11 +11,20 @@ namespace Another_Mirai_Native.DB
     {
         private static SemaphoreSlim APILock { get; set; } = new(1, 1);
 
-        public static Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
+        /// <summary>
+        /// 好友信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
 
-        public static Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
+        /// <summary>
+        /// 群信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
-        public static Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
+        /// <summary>
+        /// 群成员信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
         private static bool Deleteing { get; set; }
 
@@ -539,174 +547,6 @@ namespace Another_Mirai_Native.DB
                 LogHelper.Error("聊天记录管理", $"清空未读数失败: {ex}");
             }
         }
-        
-        /// <summary>
-        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
-        /// 若缓存中不存在则调用协议API
-        /// </summary>
-        /// <param name="qq">好友ID</param>
-        /// <returns>昵称, 失败时返回QQ号</returns>
-        public static async Task<string> GetFriendNick(long qq)
-        {
-            try
-            {
-                await APILock.WaitAsync();
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (FriendInfoCache.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return info.Nick;
-                }
-                else
-                {
-                    string r = qq.ToString();
-                    await Task.Run(async () =>
-                    {
-                        var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
-                        foreach (var item in ls)
-                        {
-                            item.Nick = item.Nick.Replace("\r", "").Replace("\n", "");
-                            item.Postscript = item.Postscript.Replace("\r", "").Replace("\n", "");
-                            
-                            FriendInfoCache[item.QQ] = item;
-                            
-                            // 保存到数据库
-                            await SaveFriendToDBAsync(item);
-                            
-                            if (item.QQ == qq)
-                            {
-                                r = item.Nick;
-                            }
-                        }
-                    });
-                    return r;
-                }
-            }
-            catch
-            {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
-        }
-
-        /// <summary>
-        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
-        /// 若缓存中不存在则调用协议API
-        /// </summary>
-        /// <param name="group">群来源</param>
-        /// <param name="qq">群员QQ</param>
-        /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
-        public static async Task<string> GetGroupMemberNick(long group, long qq)
-        {
-            try
-            {
-                await APILock.WaitAsync();
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(info.Card) ? info.Nick : info.Card;
-                }
-                else
-                {
-                    if (GroupMemberCache.ContainsKey(group) is false)
-                    {
-                        GroupMemberCache.Add(group, []);
-                    }
-                    if (GroupMemberCache[group].ContainsKey(qq) is false)
-                    {
-                        await Task.Run(async () =>
-                        {
-                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                            memberInfo.Card = memberInfo.Card.Replace("\r", "").Replace("\n", "");
-                            memberInfo.Nick = memberInfo.Nick.Replace("\r", "").Replace("\n", "");
-                            GroupMemberCache[group].Add(qq, memberInfo);
-                            
-                            // 保存到数据库
-                            await SaveGroupMemberToDBAsync(memberInfo);
-                        });
-                    }
-                    if (GroupMemberCache[group][qq] == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(GroupMemberCache[group][qq].Card) ? GroupMemberCache[group][qq].Nick : GroupMemberCache[group][qq].Card;
-                }
-            }
-            catch
-            {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
-        }
-
-        /// <summary>
-        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
-        /// 若缓存中不存在则调用协议API
-        /// </summary>
-        /// <param name="groupId">群号</param>
-        /// <returns>群名称, 若不存在则返回群号</returns>
-        public static async Task<string> GetGroupName(long groupId)
-        {
-            try
-            {
-                await APILock.WaitAsync();
-                if (GroupInfoCache.TryGetValue(groupId, out var info))
-                {
-                    if (info == null)
-                    {
-                        return groupId.ToString();
-                    }
-                    return info.Name;
-                }
-                else
-                {
-                    string r = groupId.ToString();
-                    await Task.Run(async () =>
-                    {
-                        var info = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
-                        info.Name = info.Name.Replace("\n", "").Replace("\r", "");
-                        GroupInfoCache.Add(groupId, info);
-                        
-                        // 保存到数据库
-                        await SaveGroupToDBAsync(info);
-                        
-                        if (GroupInfoCache[groupId] == null)
-                        {
-                            r = groupId.ToString();
-                        }
-                        r = GroupInfoCache[groupId]?.Name ?? groupId.ToString();
-                    });
-                    return r;
-                }
-            }
-            catch
-            {
-                return groupId.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
-        }
 
         public static void Initialize()
         {
@@ -764,7 +604,6 @@ namespace Another_Mirai_Native.DB
 
         private static async void PluginManagerProxy_OnFriendAdded(long qq)
         {
-            FriendInfoCache.Remove(qq);
             await GetFriendNick(qq);
         }
 
@@ -955,6 +794,128 @@ namespace Another_Mirai_Native.DB
             finally
             {
                 Deleteing = false;
+            }
+        }
+
+        public static void LoadFriendCaches()
+        {
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
+            foreach (var item in rawList)
+            {
+                FriendInfoCache[item.QQ] = item;
+            }
+        }
+
+        public static void LoadGroupInfoCaches(long groupId)
+        {
+            var rawGroupInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
+            GroupInfoCache[groupId] = rawGroupInfo;
+        }
+
+        public static void LoadGroupMemberCaches(long groupId)
+        {
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(groupId);
+            GroupMemberCache[groupId] = [];
+            foreach (var item in rawList)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+                GroupMemberCache[groupId][item.QQ] = item;
+            }
+        }
+
+        /// <summary>
+        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <returns>昵称, 失败时返回QQ号</returns>
+        public static async Task<string> GetFriendNick(long qq, bool retry = false)
+        {
+            if (FriendInfoCache.TryGetValue(qq, out var info)
+                && info != null)
+            {
+                if (string.IsNullOrEmpty(info.Postscript))
+                {
+                    return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
+                }
+                else
+                {
+                    return info.Postscript;
+                }
+            }
+            else if (!retry)
+            {
+                LoadFriendCaches();
+                return await GetFriendNick(qq, true);
+            }
+            return qq.ToString();
+        }
+
+        /// <summary>
+        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="group">群来源</param>
+        /// <param name="qq">群员QQ</param>
+        /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
+        public static async Task<string> GetGroupMemberNick(long groupId, long qq, bool retry = false)
+        {
+            if (GroupMemberCache.TryGetValue(groupId, out var member)
+                && member != null)
+            {
+                if (member.TryGetValue(qq, out var info))
+                {
+                    if (string.IsNullOrEmpty(info.Card))
+                    {
+                        return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
+                    }
+                    else
+                    {
+                        return info.Card;
+                    }
+                }
+                else
+                {
+                    return qq.ToString();
+                }
+            }
+            else if (!retry)
+            {
+                LoadGroupMemberCaches(groupId);
+                return await GetGroupMemberNick(groupId, qq, true);
+            }
+            return qq.ToString();
+        }
+
+        /// <summary>
+        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="groupId">群号</param>
+        /// <returns>群名称, 若不存在则返回群号</returns>
+        public static async Task<string> GetGroupName(long groupId, bool retry = false)
+        {
+            if (GroupInfoCache.TryGetValue(groupId, out var info)
+                && info != null)
+            {
+                return string.IsNullOrEmpty(info.Name) ? groupId.ToString() : info.Name;
+            }
+            else if (!retry)
+            {
+                LoadGroupInfoCaches(groupId);
+                return await GetGroupName(groupId, true);
+            }
+            return groupId.ToString();
+        }
+
+        public static void RemoveGroupMember(long group, long qq)
+        {
+            if (GroupMemberCache.TryGetValue(group, out var member))
+            {
+                member.Remove(qq);
             }
         }
     }

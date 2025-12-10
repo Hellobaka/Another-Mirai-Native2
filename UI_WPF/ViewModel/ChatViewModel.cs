@@ -97,7 +97,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 Id = history.SenderID,
                 ParentId = history.ParentID,
                 MsgId = history.MsgId,
-                Nick = (avatarType == ChatType.QQPrivate ? await Caches.GetFriendNick(history.SenderID) : await Caches.GetGroupMemberNick(history.ParentID, history.SenderID))
+                Nick = (avatarType == ChatType.QQPrivate ? await ChatHistoryHelper.GetFriendNick(history.SenderID) : await ChatHistoryHelper.GetGroupMemberNick(history.ParentID, history.SenderID))
                      + (string.IsNullOrEmpty(history.PluginName) ? "" : $" [{history.PluginName}]"),
                 Recalled = history.Recalled,
                 Time = history.Time,
@@ -116,7 +116,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="plugin">发送来源插件</param>
         public async Task AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
         {
-            string nick = await Caches.GetGroupMemberNick(group, qq) ?? qq.ToString();
+            string nick = await ChatHistoryHelper.GetGroupMemberNick(group, qq) ?? qq.ToString();
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -158,7 +158,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="plugin">消息来源的插件</param>
         public async Task AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
-            string nick = await Caches.GetFriendNick(sender);
+            string nick = await ChatHistoryHelper.GetFriendNick(sender);
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -262,13 +262,13 @@ namespace Another_Mirai_Native.UI.ViewModel
             if (chatType == ChatType.QQGroup)
             {
                 sendTask = CallGroupMsgSendAsync(id, message);
-                nick = await Caches.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
+                nick = await ChatHistoryHelper.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
                 await AddOrUpdateGroupChatList(id, AppConfig.Instance.CurrentQQ, message);
             }
             else
             {
                 sendTask = CallPrivateMsgSendAsync(id, message);
-                nick = await Caches.GetFriendNick(AppConfig.Instance.CurrentQQ);
+                nick = await ChatHistoryHelper.GetFriendNick(AppConfig.Instance.CurrentQQ);
                 await AddOrUpdatePrivateChatList(id, AppConfig.Instance.CurrentQQ, message);
             }
             var messageViewModel = new MessageViewModel
@@ -324,8 +324,8 @@ namespace Another_Mirai_Native.UI.ViewModel
                 ChatList.Add(new ChatListItemViewModel
                 {
                     AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
-                    Detail = item.Type == ChatHistoryType.Private ? $"{await Caches.GetFriendNick(item.ParentID)}: {item.Message}" : $"{await Caches.GetGroupMemberNick(item.ParentID, item.SenderID)}: {item.Message}",
-                    GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
+                    Detail = item.Type == ChatHistoryType.Private ? $"{await ChatHistoryHelper.GetFriendNick(item.ParentID)}: {item.Message}" : $"{await ChatHistoryHelper.GetGroupMemberNick(item.ParentID, item.SenderID)}: {item.Message}",
+                    GroupName = item.Type == ChatHistoryType.Private ? await ChatHistoryHelper.GetFriendNick(item.ParentID) : await ChatHistoryHelper.GetGroupName(item.ParentID),
                     Id = item.ParentID,
                     Time = item.Time.ToDateTime(),
                     UnreadCount = item.UnreadCount
@@ -460,8 +460,8 @@ namespace Another_Mirai_Native.UI.ViewModel
             var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatType.QQGroup);
             if (item != null) // 消息已存在, 更新
             {
-                item.GroupName = await Caches.GetGroupName(group);
-                item.Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}";
+                item.GroupName = await ChatHistoryHelper.GetGroupName(group);
+                item.Detail = $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
                 if (SelectedChat != item)
                 {
@@ -477,8 +477,8 @@ namespace Another_Mirai_Native.UI.ViewModel
                 item = new ChatListItemViewModel
                 {
                     AvatarType = ChatType.QQGroup,
-                    Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}",
-                    GroupName = await Caches.GetGroupName(group),
+                    Detail = $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)}: {msg}",
+                    GroupName = await ChatHistoryHelper.GetGroupName(group),
                     Id = group,
                     Time = DateTime.Now,
                     UnreadCount = 1
@@ -501,7 +501,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatType.QQPrivate);
             if (item != null) // 消息已存在, 更新
             {
-                item.GroupName = await Caches.GetFriendNick(qq);
+                item.GroupName = await ChatHistoryHelper.GetFriendNick(qq);
                 item.Detail = msg;
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
@@ -512,7 +512,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 {
                     AvatarType = ChatType.QQPrivate,
                     Detail = msg,
-                    GroupName = await Caches.GetFriendNick(qq),
+                    GroupName = await ChatHistoryHelper.GetFriendNick(qq),
                     Id = sender,
                     Time = DateTime.Now,
                     UnreadCount = 1

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.UI.Models;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.UI.Models;
 using Another_Mirai_Native.UI.ViewModel;
 using System;
 using System.Collections.ObjectModel;
@@ -66,12 +67,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         {
             await Task.Run(() =>
             {
-                if (Caches.GroupMemberCache.ContainsKey(Id) is false)
+                if (ChatHistoryHelper.GroupMemberCache.ContainsKey(Id) is false)
                 {
-                    Caches.LoadGroupMemberCaches(Id);
+                    ChatHistoryHelper.LoadGroupMemberCaches(Id);
                 }
                 Data = [];
-                var members = Caches.GroupMemberCache[Id];
+                var members = ChatHistoryHelper.GroupMemberCache[Id];
                 foreach (var member in members.Values)
                 {
                     Data.Add(new ChatListItemViewModel

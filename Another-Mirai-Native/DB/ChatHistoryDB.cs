@@ -198,8 +198,8 @@ namespace Another_Mirai_Native.DB
     /// 持久化 GroupMemberCache 的内容
     /// </summary>
     [SugarTable("GroupMembers")]
-    [SugarIndex("IX_GroupMember_Composite", nameof(GroupMemberEntity.GroupID), OrderByType.Asc, nameof(GroupMemberEntity.QQ), OrderByType.Asc, true)]
-    [SugarIndex("IX_GroupMember_Group", nameof(GroupMemberEntity.GroupID), OrderByType.Asc)]
+    [SugarIndex("IX_GroupMember_Composite", nameof(GroupID), OrderByType.Asc, nameof(QQ), OrderByType.Asc, true)]
+    [SugarIndex("IX_GroupMember_Group", nameof(GroupID), OrderByType.Asc)]
     public class GroupMemberEntity
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
@@ -307,7 +307,7 @@ namespace Another_Mirai_Native.DB
     /// 对应原来的 ChatHistoryType.Other 类型记录
     /// </summary>
     [SugarTable("ChatCategories")]
-    [SugarIndex("IX_Category_Composite", nameof(ChatCategoryEntity.ParentID), OrderByType.Asc, nameof(ChatCategoryEntity.Type), OrderByType.Asc, true)]
+    [SugarIndex("IX_Category_Composite", nameof(ParentID), OrderByType.Asc, nameof(Type), OrderByType.Asc, true)]
     public class ChatCategoryEntity
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]

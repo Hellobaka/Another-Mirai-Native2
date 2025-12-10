@@ -158,8 +158,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             string nick = ViewModel.AvatarType == ChatType.QQGroup
-                ? await Caches.GetGroupMemberNick(ViewModel.ParentId, id)
-                : await Caches.GetFriendNick(id);
+                ? await ChatHistoryHelper.GetGroupMemberNick(ViewModel.ParentId, id)
+                : await ChatHistoryHelper.GetFriendNick(id);
 
             var element = CreateHyperlinkElement(nick, cqcode);
             MessageContent.Inlines.Add(new InlineUIContainer(element) { BaselineAlignment = BaselineAlignment.Center });
@@ -203,8 +203,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             string nick = ViewModel.AvatarType == ChatType.QQGroup
-                ? await Caches.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID)
-                : await Caches.GetFriendNick(messageItem.SenderID);
+                ? await ChatHistoryHelper.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID)
+                : await ChatHistoryHelper.GetFriendNick(messageItem.SenderID);
 
             var reply = new ChatReplyDisplay
             {
