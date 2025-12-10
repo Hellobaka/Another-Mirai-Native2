@@ -26,7 +26,6 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public ChatType AvatarType { get; set; } = ChatType.Fallback;
 
-        // TODO: 留意如何赋值
         public ChatType ParentAvatarType { get; set; } = ChatType.Fallback;
 
         public string Content { get; set; } = "";
@@ -37,7 +36,6 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public long Id { get; set; }
 
-        // TODO: 留意如何赋值
         public long ParentId { get; set; }
 
         public string Nick { get; set; } = "";
@@ -72,6 +70,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public RelayCommand Command_Avatar_At { get; set; }
 
+        public bool Avatar_IsAtEnabled { get; set; } = true;
         #endregion Commands
 
         #region ContextMenu

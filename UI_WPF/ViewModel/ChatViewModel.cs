@@ -40,7 +40,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         public static ChatViewModel Instance { get; set; }
 
-        public bool Avatar_IsAtEnabled { get; set; }
+        public bool Avatar_IsAtEnabled { get; set; } = true;
 
         /// <summary>
         /// 侧边栏列表
