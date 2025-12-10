@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -16,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.ViewModel
@@ -111,7 +113,6 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="msg">消息</param>
         /// <param name="itemType">消息位置</param>
         /// <param name="msgId">消息ID</param>
-        /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         public async Task AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
         {
@@ -136,9 +137,11 @@ namespace Another_Mirai_Native.UI.ViewModel
             await AddOrUpdateGroupChatList(group, qq, msg);
             if (SelectedChat?.Id == group)
             {
-                // TODO: 考虑是否需要限制数量
+                if (Messages.Count > UIConfig.Instance.MessageContainerMaxCount)
+                {
+                    Messages.RemoveAt(0);
+                }
                 Messages.Add(item);
-                // TODO: 可能没那么必要
                 ScrollToBottom();
             }
         }
@@ -175,9 +178,12 @@ namespace Another_Mirai_Native.UI.ViewModel
             await AddOrUpdatePrivateChatList(qq, sender, msg);
             if (SelectedChat?.Id == qq)
             {
-                // TODO: 考虑是否需要限制数量
+                if (Messages.Count > UIConfig.Instance.MessageContainerMaxCount)
+                {
+                    Messages.RemoveAt(0);
+                }
                 Messages.Add(item);
-                // TODO: 可能没那么必要
+
                 ScrollToBottom();
             }
         }
@@ -282,8 +288,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             messageViewModel.MessageStatus = messageViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
 
             // 更新数据库中的消息ID
-            ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
-                , sqlId, messageViewModel.MsgId);
+            ChatHistoryHelper.UpdateHistoryMessageId(id, sqlId, messageViewModel.MsgId);
             ChatHistoryHelper.UpdateHistoryCategory(history);
             ScrollToBottom();
         }
@@ -319,11 +324,11 @@ namespace Another_Mirai_Native.UI.ViewModel
                 ChatList.Add(new ChatListItemViewModel
                 {
                     AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
-                    Detail = item.Message,
+                    Detail = item.Type == ChatHistoryType.Private ? $"{await Caches.GetFriendNick(item.ParentID)}: {item.Message}" : $"{await Caches.GetGroupMemberNick(item.ParentID, item.SenderID)}: {item.Message}",
                     GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
                     Id = item.ParentID,
-                    Time = item.Time,
-                    UnreadCount = 0
+                    Time = item.Time.ToDateTime(),
+                    UnreadCount = item.UnreadCount
                 });
             }
             await ReorderChatList();
@@ -346,6 +351,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
             CurrentPageIndex = 1;
             SelectedChat.UnreadCount = 0;
+            ChatHistoryHelper.SetUnreadCount(SelectedChat.Id, SelectedChat.AvatarType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, 0);
             await Dispatcher.Yield();
             ScrollToBottom();
         }
@@ -479,6 +485,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 };
                 ChatList.Add(item);
             }
+            ChatHistoryHelper.SetUnreadCount(group, ChatHistoryType.Group, item.UnreadCount);
             await ReorderChatList();
         }
 
@@ -512,6 +519,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 };
                 ChatList.Add(item);
             }
+            ChatHistoryHelper.SetUnreadCount(qq, ChatHistoryType.Private, item.UnreadCount);
             await ReorderChatList();
         }
 

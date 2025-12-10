@@ -345,17 +345,14 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         {
             ViewModel.MessageStatus = MessageStatus.Sending;
             Task<int>? sendTask = null;
-            ChatHistoryType chatHistoryType = ChatHistoryType.Other;
             switch (ViewModel.AvatarType)
             {
                 case ChatType.QQGroup:
                     sendTask = ChatViewModel.Instance.CallGroupMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
-                    chatHistoryType = ChatHistoryType.Group;
                     break;
 
                 case ChatType.QQPrivate:
                     sendTask = ChatViewModel.Instance.CallPrivateMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
-                    chatHistoryType = ChatHistoryType.Private;
                     break;
 
                 case ChatType.Fallback:
@@ -366,7 +363,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 ViewModel.MsgId = await sendTask;
                 ViewModel.MessageStatus = ViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
-                ChatHistoryHelper.UpdateHistoryMessageId(ViewModel.ParentId, chatHistoryType, ViewModel.SqlId, ViewModel.MsgId);
+                ChatHistoryHelper.UpdateHistoryMessageId(ViewModel.ParentId, ViewModel.SqlId, ViewModel.MsgId);
             }
             else
             {

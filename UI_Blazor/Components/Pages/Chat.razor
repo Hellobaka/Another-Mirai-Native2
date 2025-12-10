@@ -235,7 +235,7 @@
                 Detail = item.Message,
                 Name = item.Type == ChatHistoryType.Private ? await ChatHistoryHelper.GetFriendNick(item.ParentID) : await ChatHistoryHelper.GetGroupName(item.ParentID),
                 Id = item.ParentID,
-                Time = item.Time,
+                Time = item.Time.ToDateTime(),
                 UnreadCount = 0,
             };
             if (Shared.SelectChatHistoryId == history.Id)
@@ -549,7 +549,6 @@
         item.MsgId = msgId;
         item.HistoryId = history.ID;
         ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
-            , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
             , item.HistoryId
             , msgId);
         StateHasChanged();
@@ -633,7 +632,6 @@
         await MessageCommandPanel.ClearSendText();
         chatItem.MsgId = msgId;
         ChatHistoryHelper.UpdateHistoryMessageId(SelectedHistoryItem.Id
-            , SelectedHistoryItem.AvatarType == AvatarTypes.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
             , chatItem.HistoryId
             , msgId);
         StateHasChanged();

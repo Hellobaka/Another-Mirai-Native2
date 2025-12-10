@@ -160,9 +160,13 @@ namespace Another_Mirai_Native
             return encoding.GetString(buffer);
         }
 
-        public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        public static DateTime ToDateTime(this long timestamp) => TimeStamp2DateTime(timestamp);
 
-        public static int ToTimeStamp(this DateTime? time) => (int)((time ?? DateTime.Now) - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        public static DateTime ToDateTime(this int timestamp) => TimeStamp2DateTime(timestamp);
+
+        public static int ToTimeStamp(this DateTime time) => (int)DateTime2TimeStamp(time);
+
+        public static int ToTimeStamp(this DateTime? time) => (int)DateTime2TimeStamp(time ?? DateTime.Now);
 
         /// <summary>
         /// 从cqimg中获取图片URL
