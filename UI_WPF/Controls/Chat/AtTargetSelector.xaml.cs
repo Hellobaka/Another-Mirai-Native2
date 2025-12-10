@@ -65,24 +65,21 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private async Task PrepareData()
         {
-            await Task.Run(() =>
+            if (ChatHistoryHelper.GroupMemberCache.ContainsKey(Id) is false)
             {
-                if (ChatHistoryHelper.GroupMemberCache.ContainsKey(Id) is false)
+                await ChatHistoryHelper.LoadGroupMemberCaches(Id);
+            }
+            Data = [];
+            var members = ChatHistoryHelper.GroupMemberCache[Id];
+            foreach (var member in members.Values)
+            {
+                Data.Add(new ChatListItemViewModel
                 {
-                    ChatHistoryHelper.LoadGroupMemberCaches(Id);
-                }
-                Data = [];
-                var members = ChatHistoryHelper.GroupMemberCache[Id];
-                foreach (var member in members.Values)
-                {
-                    Data.Add(new ChatListItemViewModel
-                    {
-                        Id = member.QQ,
-                        GroupName = string.IsNullOrEmpty(member.Card) ? member.Nick : member.Card,
-                        AvatarType = AvatarType
-                    });
-                }
-            });
+                    Id = member.QQ,
+                    GroupName = string.IsNullOrEmpty(member.Card) ? member.Nick : member.Card,
+                    AvatarType = AvatarType
+                });
+            }
         }
 
         private void DebounceTimer_Elapsed(object? sender, ElapsedEventArgs e)

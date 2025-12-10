@@ -4,13 +4,12 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using SqlSugar;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.DB
 {
     public static class ChatHistoryHelper
     {
-        private static SemaphoreSlim APILock { get; set; } = new(1, 1);
-
         /// <summary>
         /// 好友信息列表缓存
         /// </summary>
@@ -797,22 +796,24 @@ namespace Another_Mirai_Native.DB
             }
         }
 
-        public static void LoadFriendCaches()
+        public static async Task LoadFriendCaches()
         {
             var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
             foreach (var item in rawList)
             {
                 FriendInfoCache[item.QQ] = item;
-            }
+                await SaveFriendToDBAsync(item);
+             }
         }
 
-        public static void LoadGroupInfoCaches(long groupId)
+        public static async Task LoadGroupInfoCaches(long groupId)
         {
             var rawGroupInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
             GroupInfoCache[groupId] = rawGroupInfo;
+            await SaveGroupToDBAsync(rawGroupInfo);
         }
 
-        public static void LoadGroupMemberCaches(long groupId)
+        public static async Task LoadGroupMemberCaches(long groupId)
         {
             var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(groupId);
             GroupMemberCache[groupId] = [];
@@ -823,6 +824,7 @@ namespace Another_Mirai_Native.DB
                     continue;
                 }
                 GroupMemberCache[groupId][item.QQ] = item;
+                await SaveGroupMemberToDBAsync(item);
             }
         }
 
@@ -848,7 +850,7 @@ namespace Another_Mirai_Native.DB
             }
             else if (!retry)
             {
-                LoadFriendCaches();
+                await LoadFriendCaches();
                 return await GetFriendNick(qq, true);
             }
             return qq.ToString();
@@ -884,7 +886,7 @@ namespace Another_Mirai_Native.DB
             }
             else if (!retry)
             {
-                LoadGroupMemberCaches(groupId);
+                await LoadGroupMemberCaches(groupId);
                 return await GetGroupMemberNick(groupId, qq, true);
             }
             return qq.ToString();
@@ -905,7 +907,7 @@ namespace Another_Mirai_Native.DB
             }
             else if (!retry)
             {
-                LoadGroupInfoCaches(groupId);
+                await LoadGroupInfoCaches(groupId);
                 return await GetGroupName(groupId, true);
             }
             return groupId.ToString();

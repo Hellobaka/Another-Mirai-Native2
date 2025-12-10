@@ -156,7 +156,7 @@ namespace Another_Mirai_Native.DB
     /// 持久化 GroupInfoCache 的内容
     /// </summary>
     [SugarTable("Groups")]
-    [SugarIndex("IX_Group_GroupID", nameof(GroupEntity.GroupID), OrderByType.Asc, true)]
+    [SugarIndex("IX_Group_GroupID", nameof(GroupID), OrderByType.Asc, true)]
     public class GroupEntity
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
