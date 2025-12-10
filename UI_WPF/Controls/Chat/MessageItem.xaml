@@ -77,7 +77,7 @@
                 MinHeight="38"
                 Margin="0,5,0,0"
                 HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
-                Background="{DynamicResource SystemControlTransientBorderBrush}"
+                Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                 CornerRadius="10">
                 <Border.ContextMenu>
                     <StaticResource ResourceKey="MessageContextMenu" />
@@ -106,7 +106,7 @@
             </Border>
 
             <!--  时间和状态显示  -->
-            <StackPanel
+            <StackPanel x:Name="TimeDisplay"
                 Grid.Row="2"
                 HorizontalAlignment="{Binding DetailItemType, Converter={StaticResource DetailHorizontalAlignmentConverter}}"
                 Orientation="Horizontal">

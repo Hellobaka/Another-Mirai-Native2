@@ -318,6 +318,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
             AvatarRight.Visibility = ViewModel.DetailItemType == DetailItemType.Send ? Visibility.Visible : Visibility.Collapsed;
             AvatarLeft.Visibility = ViewModel.DetailItemType == DetailItemType.Receive ? Visibility.Visible : Visibility.Collapsed;
+            NameDisplay.Visibility = ViewModel.DetailItemType == DetailItemType.Notice ? Visibility.Collapsed : Visibility.Visible;
+            TimeDisplay.Visibility = ViewModel.DetailItemType == DetailItemType.Notice ? Visibility.Collapsed : Visibility.Visible;
             var avatarItem = new ChatListItemViewModel
             {
                 AvatarType = ChatType.QQPrivate,
