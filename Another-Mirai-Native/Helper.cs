@@ -173,6 +173,11 @@ namespace Another_Mirai_Native
             return cqimg.Items.TryGetValue("file", out var file) ? file : "";
         }
 
+        public static string GetCachePictureDirectory()
+        {
+            return Path.Combine("data", "image", "cached");
+        }
+
         /// <summary>
         /// 下载文件
         /// </summary>
@@ -351,57 +356,6 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static string GetImageUrlOrPathFromCQCode(CQCode cqCode)
-        {
-            string ParseUrlFromCQImg(string filePath)
-            {
-                Regex regex = new("url=(.*)");
-                var a = regex.Match(File.ReadAllText(filePath));
-                if (a.Groups.Count > 1)
-                {
-                    string capture = a.Groups[1].Value;
-                    capture = capture.Split('\r').First();
-                    return capture;
-                }
-                else
-                {
-                    return "";
-                }
-            }
-
-            if (cqCode.IsImageCQCode is false)
-            {
-                return "";
-            }
-            string file = cqCode.Items["file"];
-            string basePath = @"data\image";
-
-            string filePath = Path.Combine(basePath, file);
-            if (File.Exists(filePath) || File.Exists(Path.ChangeExtension(filePath, ".cqimg")))
-            {
-                if (filePath.EndsWith(".cqimg"))
-                {
-                    return ParseUrlFromCQImg(filePath);
-                }
-                else
-                {
-                    return new FileInfo(filePath).FullName;
-                }
-            }
-            else
-            {
-                filePath += ".cqimg";
-                if (File.Exists(filePath))
-                {
-                    return ParseUrlFromCQImg(filePath);
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
-
         /// <summary>
         /// 下载或读取缓存图片
         /// </summary>
@@ -415,7 +369,7 @@ namespace Another_Mirai_Native
                 {
                     return null;
                 }
-                string cacheImagePath = Path.Combine("data", "image", "cached");
+                string cacheImagePath = Helper.GetCachePictureDirectory();
 
                 Directory.CreateDirectory(cacheImagePath);
                 if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件

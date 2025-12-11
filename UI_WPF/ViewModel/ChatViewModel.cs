@@ -428,7 +428,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                     // 复制至缓存文件夹
                     string fileName = Path.GetFileName(filePath);
                     File.Copy(filePath, Path.Combine(picPath, fileName), true);
-                    filePath = @$"cached\\{fileName}";
+                    filePath = @$"cached\{fileName}";
                 }
                 AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
             }

@@ -113,7 +113,7 @@ namespace Another_Mirai_Native.UI.Pages
                             DialogHelper.ShowSimpleDialog("打开图片失败了", "缓存结果可能已经被删除或不存在");
                             return;
                         }
-                        string baseDirectory = Path.Combine("data", "image", "cached");
+                        string baseDirectory = Helper.GetCachePictureDirectory();
                         string fileName = Path.Combine(baseDirectory, cachedImage.FileName);
                         if (File.Exists(fileName))
                         {

@@ -153,13 +153,8 @@
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
-                    💬 聊天功能
+                    💬 图片缓存
                 </emoji:TextBlock>
-                <controls:SettingItem_ToggleButton
-                    x:Name="EnableChat"
-                    Title="启用聊天窗口"
-                    OnToggled="SettingItem_Toggled" />
-
                 <controls:SettingItem_ToggleButton
                     x:Name="EnableChatImageCacheMaxSizeControl"
                     Title="启用最大缓存图片体积控制"

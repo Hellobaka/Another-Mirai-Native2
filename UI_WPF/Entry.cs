@@ -69,6 +69,7 @@ namespace Another_Mirai_Native.UI
             if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
             {
                 LogHelper.CreateDB();
+                ChatHistoryDB.GetInstance();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.ViewModel;
 using Another_Mirai_Native.UI.Windows;
 using Microsoft.Win32;
@@ -156,11 +157,19 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
         private async Task LoadImageAsync(CQCode cqCode, CancellationToken token)
         {
-            string url = Helper.GetImageUrlOrPathFromCQCode(cqCode);
             string fileName = cqCode.GetPicName();
             try
             {
-                var imagePath = await Helper.DownloadImageAsync(url, fileName);
+                string imagePath = "";
+                CachedImage? cachedImage = CachedImage.GetCachedImageByHash(fileName);
+                if (cachedImage != null)
+                {
+                    imagePath = Path.Combine(Helper.GetCachePictureDirectory(), cachedImage.FileName);
+                }
+                else
+                {
+                    imagePath = Path.GetFullPath(Path.Combine("data", "image", fileName));
+                }
                 if (token.IsCancellationRequested)
                 {
                     return;
@@ -216,12 +225,18 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             double imageHeight = bitmap.PixelHeight > 0 ? bitmap.PixelHeight : bitmap.Height;
             double imageWidth = bitmap.PixelWidth > 0 ? bitmap.PixelWidth : bitmap.Width;
             double hostHeight = Math.Min(imageHeight, MaxImageHeight);
+            double hostWidth = Math.Min(imageWidth, MaxImageWidth);
             if (hostHeight <= 0)
             {
                 hostHeight = MaxImageHeight;
             }
+            if (hostWidth <= 0)
+            {
+                hostWidth = MaxImageWidth;
+            }
 
             ImageHost.Height = hostHeight;
+            ImageHost.Width = hostWidth;
             double rate = imageHeight / hostHeight;
             if (double.IsNaN(rate) || double.IsInfinity(rate) || rate <= 0)
             {
@@ -230,12 +245,12 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
             RectangleGeometry clipGeometry = new()
             {
-                RadiusX = 10 * rate,
-                RadiusY = 10 * rate,
-                Rect = new Rect(0, 0, imageWidth, imageHeight)
+                RadiusX = rate,
+                RadiusY = rate,
+                Rect = new Rect(0, 0, ImageHost.Width, ImageHost.Height)
             };
-            image.Clip = clipGeometry;
 
+            ImageHost.Clip = clipGeometry;
             ImageHost.Child = image;
             ImageHost.Visibility = Visibility.Visible;
             LoadingRing.IsActive = false;

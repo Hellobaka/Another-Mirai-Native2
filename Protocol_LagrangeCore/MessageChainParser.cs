@@ -164,7 +164,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                             }
                             else
                             {
-                                string baseDirectory = Path.Combine("data", "image", "cached");
+                                string baseDirectory = Helper.GetCachePictureDirectory();
                                 builder.Image(Path.Combine(baseDirectory, cacheImagePath.FileName));
                             }
                         }

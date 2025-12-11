@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.DB
 
         private static bool Deleteing { get; set; }
 
-        private static System.Timers.Timer FreeCacheTimer { get; set; } = new();
+        private static System.Timers.Timer DailyMaintenanceTimer { get; set; }
 
         /// <summary>
         /// 从数据库加载缓存数据到内存
@@ -104,6 +104,10 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         private static async Task SaveFriendToDBAsync(FriendInfo friend)
         {
+            if (friend == null)
+            {
+                return;
+            }
             try
             {
                 var db = ChatHistoryDB.GetInstance();
@@ -140,6 +144,10 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         private static async Task SaveGroupToDBAsync(GroupInfo group)
         {
+            if (group == null)
+            {
+                return;
+            }
             try
             {
                 var db = ChatHistoryDB.GetInstance();
@@ -177,6 +185,10 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         private static async Task SaveGroupMemberToDBAsync(GroupMemberInfo member)
         {
+            if (member == null)
+            {
+                return;
+            }
             try
             {
                 var db = ChatHistoryDB.GetInstance();
@@ -574,16 +586,7 @@ namespace Another_Mirai_Native.DB
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
 
-            FreeCacheTimer = new()
-            {
-                Interval = TimeSpan.FromMinutes(1).TotalMilliseconds,
-                AutoReset = true
-            };
-            FreeCacheTimer.Elapsed += async (_, _) =>
-            {
-                await CheckAndFreeCache();
-            };
-            FreeCacheTimer.Start();
+            ScheduleDailyMaintenance();
         }
 
         private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
@@ -738,7 +741,7 @@ namespace Another_Mirai_Native.DB
         {
             using var db = ChatHistoryDB.GetInstance();
 
-            string baseDirectory = Path.Combine("data", "image", "cached");
+            string baseDirectory = Helper.GetCachePictureDirectory();
             Directory.CreateDirectory(baseDirectory);
             string? absoluteFilePath = await Helper.DownloadImageAsync(url, fileName ?? Helper.GetPicNameFromUrl(url));
             if (string.IsNullOrEmpty(absoluteFilePath)
@@ -850,7 +853,7 @@ namespace Another_Mirai_Native.DB
             {
                 try
                 {
-                    string dir = Path.Combine("data", "image", "cached");
+                    string dir = Helper.GetCachePictureDirectory();
                     double length = 0;
                     var db = ChatHistoryDB.GetInstance();
                     
@@ -1027,6 +1030,31 @@ namespace Another_Mirai_Native.DB
                 return await GetGroupName(groupId, true);
             }
             return groupId.ToString();
+        }
+
+        private static void ScheduleDailyMaintenance()
+        {
+            var now = DateTime.Now;
+            var nextRun = DateTime.Today.AddHours(4);
+            if (now.Hour >= 4)
+            {
+                nextRun = nextRun.AddDays(1);
+            }
+
+            DailyMaintenanceTimer = new System.Timers.Timer((nextRun - now).TotalMilliseconds)
+            {
+                AutoReset = false
+            };
+            DailyMaintenanceTimer.Elapsed += async (_, _) =>
+            {
+                await CheckAndFreeCache();
+
+                // 重置为每24小时执行
+                DailyMaintenanceTimer.Interval = TimeSpan.FromHours(24).TotalMilliseconds;
+                DailyMaintenanceTimer.AutoReset = true;
+                DailyMaintenanceTimer.Start();
+            };
+            DailyMaintenanceTimer.Start();
         }
     }
 }

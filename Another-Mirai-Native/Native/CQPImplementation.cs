@@ -239,7 +239,7 @@ namespace Another_Mirai_Native.Native
         /// <returns>下载成功时，返回绝对路径；下载失败时，返回空字符串</returns>
         private string CQ_getImage(int authCode, string file)
         {
-            string baseDirectory = Path.Combine("data", "image", "cached");
+            string baseDirectory = Helper.GetCachePictureDirectory();
 
             var cached = CachedImage.GetCachedImageByHash(file);
             if (cached != null && !cached.Deleted

@@ -49,7 +49,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             DetailBorder.Visibility = Visibility.Visible;
             ImageBorder.Visibility = Visibility.Collapsed;
             ImageDisplay.Children.Clear();
-
+            ViewModel.Content = ViewModel.Content.Trim();
             if (ViewModel.DetailItemType == DetailItemType.Notice)
             {
                 AddTextSegment(ViewModel.Content);
@@ -147,6 +147,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 MessageContent.Inlines.Add(new LineBreak());
             }
             MessageContent.Inlines.Add(new InlineUIContainer(imageElement) { BaselineAlignment = BaselineAlignment.Bottom });
+            MessageContent.Inlines.Add(new LineBreak());
         }
 
         private async Task ProcessAtCQCode(CQCode cqcode)

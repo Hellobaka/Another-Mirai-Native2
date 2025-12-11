@@ -99,7 +99,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             if (e.DataObject.GetDataPresent(DataFormats.Bitmap) && e.DataObject.GetData(DataFormats.Bitmap) is BitmapSource image)
             {
                 // 粘贴内容为图片 将图片保存进缓存文件夹
-                string cacheImagePath = Path.Combine("data", "image", "cached");
+                string cacheImagePath = Helper.GetCachePictureDirectory();
                 using MemoryStream memoryStream = new();
                 BitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(image));
