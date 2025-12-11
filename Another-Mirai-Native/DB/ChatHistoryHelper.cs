@@ -659,10 +659,6 @@ namespace Another_Mirai_Native.DB
         {
             var history = InsertHistory(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
             UpdateHistoryCategory(history);
-            if (history.Type != ChatHistoryType.Notice)
-            {
-                CacheMessageImage(msg);
-            }
         }
 
         private static void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
@@ -674,10 +670,6 @@ namespace Another_Mirai_Native.DB
         {
             var history = InsertHistory(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
             UpdateHistoryCategory(history);
-            if (history.Type != ChatHistoryType.Notice)
-            {
-                CacheMessageImage(msg);
-            }
         }
 
         private static void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
