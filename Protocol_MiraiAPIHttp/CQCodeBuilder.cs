@@ -311,7 +311,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     {
                         // 若以上两个路径均不存在, 判断对应的缓存文件是否存在
                         var cacheImagePath = CachedImage.GetCachedImageByHash(picPath);
-                        if (cacheImagePath != null)
+                        if (cacheImagePath == null)
                         {
                             // 未找到缓存结果
                             LogHelper.WriteLog(LogLevel.Warning, "发送图片", "缓存文件不存在", ""); 
