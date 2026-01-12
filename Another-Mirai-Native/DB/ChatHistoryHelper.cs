@@ -612,7 +612,7 @@ namespace Another_Mirai_Native.DB
                 memberInfo.MemberType = type;
 
                 // 异步保存到数据库
-                Task.Run(async () => await SaveGroupMemberToDBAsync(memberInfo));
+                Task.Run(() => SaveGroupMemberToDBAsync(memberInfo));
             }
         }
 
@@ -685,7 +685,7 @@ namespace Another_Mirai_Native.DB
                 info.Nick = nick;
 
                 // 异步保存到数据库
-                Task.Run(async () => await SaveFriendToDBAsync(info));
+                Task.Run(() => SaveFriendToDBAsync(info));
             }
         }
 
@@ -696,7 +696,7 @@ namespace Another_Mirai_Native.DB
                 info.Name = name;
 
                 // 异步保存到数据库
-                Task.Run(async () => await SaveGroupToDBAsync(info));
+                Task.Run(() => SaveGroupToDBAsync(info));
             }
         }
 
@@ -707,7 +707,7 @@ namespace Another_Mirai_Native.DB
                 info.Card = card;
 
                 // 异步保存到数据库
-                Task.Run(async () => await SaveGroupMemberToDBAsync(info));
+                Task.Run(() => SaveGroupMemberToDBAsync(info));
             }
         }
 
@@ -884,7 +884,7 @@ namespace Another_Mirai_Native.DB
                                     if (cachedImage != null)
                                     {
                                         db.Updateable<CachedImage>()
-                                            .SetColumns(x => x.Deleted == true)
+                                            .SetColumns(x => x.Deleted)
                                             .Where(x => x.ID == cachedImage.ID)
                                             .ExecuteCommand();
                                     }
