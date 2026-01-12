@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static ConcurrentDictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
-        private static bool Deleteing { get; set; }
+        private static bool Deleting { get; set; }
 
         private static System.Timers.Timer DailyMaintenanceTimer { get; set; }
 
@@ -618,6 +618,7 @@ namespace Another_Mirai_Native.DB
 
         private static async void PluginManagerProxy_OnFriendAdded(long qq)
         {
+            FriendInfoCache.TryRemove(qq, out _); 
             await GetFriendNick(qq);
         }
 
@@ -767,13 +768,13 @@ namespace Another_Mirai_Native.DB
 
         private static async Task CheckAndFreeCache()
         {
-            if (Deleteing)
+            if (Deleting)
             {
                 return;
             }
             try
             {
-                Deleteing = true;
+                Deleting = true;
                 await FreeSpaceBySize();
                 await FreeSpaceByExpireTime();
             }
@@ -783,7 +784,7 @@ namespace Another_Mirai_Native.DB
             }
             finally
             {
-                Deleteing = false;
+                Deleting = false;
             }
         }
 
@@ -810,27 +811,28 @@ namespace Another_Mirai_Native.DB
                     {
                         try
                         {
+                            string fullPath = Path.Combine(Helper.GetCachePictureDirectory(), image.FileName);
                             // 删除文件
-                            if (File.Exists(image.FileName))
+                            if (File.Exists(fullPath))
                             {
-                                File.Delete(image.FileName);
+                                File.Delete(fullPath);
                             }
 
                             // 标记为已删除
                             db.Updateable<CachedImage>()
-                                .SetColumns(x => x.Deleted == true)
+                                .SetColumns(x => x.Deleted)
                                 .Where(x => x.ID == image.ID)
                                 .ExecuteCommand();
                         }
                         catch (Exception ex)
                         {
-                            LogHelper.WriteLog($"删除过期缓存图片失败：{image.FileName}，错误：{ex.Message}");
+                            LogHelper.WriteLog($"删除过期缓存图片失败：{image.FileName}，错误：{ex}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteLog($"清理过期缓存图片失败：{ex.Message}\n{ex.StackTrace}");
+                    LogHelper.WriteLog($"清理过期缓存图片失败：{ex}");
                 }
             });
         }
