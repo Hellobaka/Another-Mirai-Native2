@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -16,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Threading;
 
 namespace Another_Mirai_Native.UI.ViewModel
@@ -95,7 +97,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 Id = history.SenderID,
                 ParentId = history.ParentID,
                 MsgId = history.MsgId,
-                Nick = (avatarType == ChatType.QQPrivate ? await Caches.GetFriendNick(history.SenderID) : await Caches.GetGroupMemberNick(history.ParentID, history.SenderID))
+                Nick = (avatarType == ChatType.QQPrivate ? await ChatHistoryHelper.GetFriendNick(history.SenderID) : await ChatHistoryHelper.GetGroupMemberNick(history.ParentID, history.SenderID))
                      + (string.IsNullOrEmpty(history.PluginName) ? "" : $" [{history.PluginName}]"),
                 Recalled = history.Recalled,
                 Time = history.Time,
@@ -111,11 +113,10 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="msg">消息</param>
         /// <param name="itemType">消息位置</param>
         /// <param name="msgId">消息ID</param>
-        /// <param name="itemAdded">消息添加后的回调</param>
         /// <param name="plugin">发送来源插件</param>
         public async Task AddGroupChatItem(long group, long qq, string msg, DetailItemType itemType, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
         {
-            string nick = await Caches.GetGroupMemberNick(group, qq) ?? qq.ToString();
+            string nick = await ChatHistoryHelper.GetGroupMemberNick(group, qq) ?? qq.ToString();
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -136,9 +137,11 @@ namespace Another_Mirai_Native.UI.ViewModel
             await AddOrUpdateGroupChatList(group, qq, msg);
             if (SelectedChat?.Id == group)
             {
-                // TODO: 考虑是否需要限制数量
+                if (Messages.Count > UIConfig.Instance.MessageContainerMaxCount)
+                {
+                    Messages.RemoveAt(0);
+                }
                 Messages.Add(item);
-                // TODO: 可能没那么必要
                 ScrollToBottom();
             }
         }
@@ -155,7 +158,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         /// <param name="plugin">消息来源的插件</param>
         public async Task AddPrivateChatItem(long qq, long sender, string msg, DetailItemType itemType, DateTime time, int msgId = 0, Action<string>? itemAdded = null, CQPluginProxy? plugin = null)
         {
-            string nick = await Caches.GetFriendNick(sender);
+            string nick = await ChatHistoryHelper.GetFriendNick(sender);
             if (nick != null && plugin != null)
             {
                 nick = $"{nick} [{plugin.PluginName}]";
@@ -175,9 +178,12 @@ namespace Another_Mirai_Native.UI.ViewModel
             await AddOrUpdatePrivateChatList(qq, sender, msg);
             if (SelectedChat?.Id == qq)
             {
-                // TODO: 考虑是否需要限制数量
+                if (Messages.Count > UIConfig.Instance.MessageContainerMaxCount)
+                {
+                    Messages.RemoveAt(0);
+                }
                 Messages.Add(item);
-                // TODO: 可能没那么必要
+
                 ScrollToBottom();
             }
         }
@@ -256,13 +262,13 @@ namespace Another_Mirai_Native.UI.ViewModel
             if (chatType == ChatType.QQGroup)
             {
                 sendTask = CallGroupMsgSendAsync(id, message);
-                nick = await Caches.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
+                nick = await ChatHistoryHelper.GetGroupMemberNick(id, AppConfig.Instance.CurrentQQ);
                 await AddOrUpdateGroupChatList(id, AppConfig.Instance.CurrentQQ, message);
             }
             else
             {
                 sendTask = CallPrivateMsgSendAsync(id, message);
-                nick = await Caches.GetFriendNick(AppConfig.Instance.CurrentQQ);
+                nick = await ChatHistoryHelper.GetFriendNick(AppConfig.Instance.CurrentQQ);
                 await AddOrUpdatePrivateChatList(id, AppConfig.Instance.CurrentQQ, message);
             }
             var messageViewModel = new MessageViewModel
@@ -282,8 +288,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             messageViewModel.MessageStatus = messageViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
 
             // 更新数据库中的消息ID
-            ChatHistoryHelper.UpdateHistoryMessageId(id, chatType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private
-                , sqlId, messageViewModel.MsgId);
+            ChatHistoryHelper.UpdateHistoryMessageId(id, sqlId, messageViewModel.MsgId);
             ChatHistoryHelper.UpdateHistoryCategory(history);
             ScrollToBottom();
         }
@@ -319,11 +324,11 @@ namespace Another_Mirai_Native.UI.ViewModel
                 ChatList.Add(new ChatListItemViewModel
                 {
                     AvatarType = item.Type == ChatHistoryType.Private ? ChatType.QQPrivate : ChatType.QQGroup,
-                    Detail = item.Message,
-                    GroupName = item.Type == ChatHistoryType.Private ? await Caches.GetFriendNick(item.ParentID) : await Caches.GetGroupName(item.ParentID),
+                    Detail = item.Type == ChatHistoryType.Private ? $"{await ChatHistoryHelper.GetFriendNick(item.ParentID)}: {item.Message}" : $"{await ChatHistoryHelper.GetGroupMemberNick(item.ParentID, item.SenderID)}: {item.Message}",
+                    GroupName = item.Type == ChatHistoryType.Private ? await ChatHistoryHelper.GetFriendNick(item.ParentID) : await ChatHistoryHelper.GetGroupName(item.ParentID),
                     Id = item.ParentID,
-                    Time = item.Time,
-                    UnreadCount = 0
+                    Time = item.Time.ToDateTime(),
+                    UnreadCount = item.UnreadCount
                 });
             }
             await ReorderChatList();
@@ -346,6 +351,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
             CurrentPageIndex = 1;
             SelectedChat.UnreadCount = 0;
+            ChatHistoryHelper.SetUnreadCount(SelectedChat.Id, SelectedChat.AvatarType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, 0);
             await Dispatcher.Yield();
             ScrollToBottom();
         }
@@ -422,7 +428,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                     // 复制至缓存文件夹
                     string fileName = Path.GetFileName(filePath);
                     File.Copy(filePath, Path.Combine(picPath, fileName), true);
-                    filePath = @$"cached\\{fileName}";
+                    filePath = @$"cached\{fileName}";
                 }
                 AddTextToSendBox(CQCode.CQCode_Image(filePath).ToSendString());
             }
@@ -454,8 +460,8 @@ namespace Another_Mirai_Native.UI.ViewModel
             var item = ChatList.FirstOrDefault(x => x.Id == group && x.AvatarType == ChatType.QQGroup);
             if (item != null) // 消息已存在, 更新
             {
-                item.GroupName = await Caches.GetGroupName(group);
-                item.Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}";
+                item.GroupName = await ChatHistoryHelper.GetGroupName(group);
+                item.Detail = $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)}: {msg}";
                 item.Time = DateTime.Now;
                 if (SelectedChat != item)
                 {
@@ -471,14 +477,15 @@ namespace Another_Mirai_Native.UI.ViewModel
                 item = new ChatListItemViewModel
                 {
                     AvatarType = ChatType.QQGroup,
-                    Detail = $"{await Caches.GetGroupMemberNick(group, qq)}: {msg}",
-                    GroupName = await Caches.GetGroupName(group),
+                    Detail = $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)}: {msg}",
+                    GroupName = await ChatHistoryHelper.GetGroupName(group),
                     Id = group,
                     Time = DateTime.Now,
                     UnreadCount = 1
                 };
                 ChatList.Add(item);
             }
+            ChatHistoryHelper.SetUnreadCount(group, ChatHistoryType.Group, item.UnreadCount);
             await ReorderChatList();
         }
 
@@ -494,7 +501,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             var item = ChatList.FirstOrDefault(x => x.Id == qq && x.AvatarType == ChatType.QQPrivate);
             if (item != null) // 消息已存在, 更新
             {
-                item.GroupName = await Caches.GetFriendNick(qq);
+                item.GroupName = await ChatHistoryHelper.GetFriendNick(qq);
                 item.Detail = msg;
                 item.Time = DateTime.Now;
                 item.UnreadCount++;
@@ -505,13 +512,14 @@ namespace Another_Mirai_Native.UI.ViewModel
                 {
                     AvatarType = ChatType.QQPrivate,
                     Detail = msg,
-                    GroupName = await Caches.GetFriendNick(qq),
+                    GroupName = await ChatHistoryHelper.GetFriendNick(qq),
                     Id = sender,
                     Time = DateTime.Now,
                     UnreadCount = 1
                 };
                 ChatList.Add(item);
             }
+            ChatHistoryHelper.SetUnreadCount(qq, ChatHistoryType.Private, item.UnreadCount);
             await ReorderChatList();
         }
 

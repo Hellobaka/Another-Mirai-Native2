@@ -3,43 +3,233 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using SqlSugar;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Another_Mirai_Native.DB
 {
     public static class ChatHistoryHelper
     {
-        private static SemaphoreSlim APILock { get; set; } = new(1, 1);
+        /// <summary>
+        /// 好友信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
 
-        public static Dictionary<long, FriendInfo> FriendInfoCache { get; set; } = new();
+        /// <summary>
+        /// 群信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
 
-        public static Dictionary<long, GroupInfo> GroupInfoCache { get; set; } = new();
+        /// <summary>
+        /// 群成员信息列表缓存
+        /// </summary>
+        public static ConcurrentDictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
-        public static Dictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
+        private static bool Deleting { get; set; }
 
-        private static bool Deleteing { get; set; }
+        private static System.Timers.Timer DailyMaintenanceTimer { get; set; }
 
-        private static string GetDBPath(long id, ChatHistoryType type)
+        /// <summary>
+        /// 从数据库加载缓存数据到内存
+        /// </summary>
+        public static async Task LoadCacheFromDatabaseAsync()
         {
-            var path = Path.Combine("logs", "ChatHistory", type.ToString(), id.ToString() + ".db");
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            if (File.Exists(path) is false)
+            try
             {
-                CreateDB(path);
+                var db = ChatHistoryDB.GetInstance();
+
+                // 加载好友缓存
+                var friends = await db.Queryable<FriendEntity>().ToListAsync();
+                foreach (var friend in friends)
+                {
+                    FriendInfoCache[friend.QQ] = new FriendInfo
+                    {
+                        QQ = friend.QQ,
+                        Nick = friend.Nick,
+                        Postscript = friend.Postscript
+                    };
+                }
+
+                // 加载群缓存
+                var groups = await db.Queryable<GroupEntity>().ToListAsync();
+                foreach (var group in groups)
+                {
+                    GroupInfoCache[group.GroupID] = new GroupInfo
+                    {
+                        Group = group.GroupID,
+                        Name = group.Name,
+                        CurrentMemberCount = group.CurrentMemberCount,
+                        MaxMemberCount = group.MaxMemberCount
+                    };
+                }
+
+                // 加载群成员缓存
+                var groupMembers = await db.Queryable<GroupMemberEntity>().ToListAsync();
+                foreach (var member in groupMembers)
+                {
+                    if (!GroupMemberCache.TryGetValue(member.GroupID, out Dictionary<long, GroupMemberInfo>? value))
+                    {
+                        value = [];
+                        GroupMemberCache[member.GroupID] = value;
+                    }
+
+                    value[member.QQ] = new GroupMemberInfo
+                    {
+                        Group = member.GroupID,
+                        QQ = member.QQ,
+                        Nick = member.Nick,
+                        Card = member.Card,
+                        MemberType = member.MemberType,
+                        Sex = member.Sex,
+                        Age = member.Age,
+                        Area = member.Area,
+                        JoinGroupDateTime = Helper.TimeStamp2DateTime(member.JoinGroupTime),
+                        LastSpeakDateTime = Helper.TimeStamp2DateTime(member.LastSpeakTime),
+                        Level = member.Level,
+                        ExclusiveTitle = member.ExclusiveTitle,
+                        ExclusiveTitleExpirationTime = member.ExclusiveTitleExpirationTime > 0
+                            ? Helper.TimeStamp2DateTime(member.ExclusiveTitleExpirationTime) : null,
+                        IsBadRecord = member.IsBadRecord,
+                        IsAllowEditorCard = member.IsAllowEditorCard
+                    };
+                }
             }
-            return path;
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"缓存加载失败: {ex}");
+            }
         }
 
-        public static void CreateDB(string path)
+        /// <summary>
+        /// 保存好友信息到数据库
+        /// </summary>
+        private static async Task SaveFriendToDBAsync(FriendInfo friend)
         {
-            if (File.Exists(path))
+            if (friend == null)
             {
                 return;
             }
-            using var db = GetInstance(path);
-            db.DbMaintenance.CreateDatabase();
-            db.CodeFirst.InitTables(typeof(ChatHistory));
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = new FriendEntity
+                {
+                    QQ = friend.QQ,
+                    Nick = friend.Nick,
+                    Postscript = friend.Postscript,
+                    LastUpdateTime = Helper.TimeStamp
+                };
+
+                var existing = await db.Queryable<FriendEntity>()
+                    .Where(x => x.QQ == friend.QQ)
+                    .FirstAsync();
+
+                if (existing == null)
+                {
+                    await db.Insertable(entity).ExecuteCommandAsync();
+                }
+                else
+                {
+                    entity.ID = existing.ID;
+                    await db.Updateable(entity).ExecuteCommandAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"保存好友信息失败: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// 保存群信息到数据库
+        /// </summary>
+        private static async Task SaveGroupToDBAsync(GroupInfo group)
+        {
+            if (group == null)
+            {
+                return;
+            }
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = new GroupEntity
+                {
+                    GroupID = group.Group,
+                    Name = group.Name,
+                    CurrentMemberCount = group.CurrentMemberCount,
+                    MaxMemberCount = group.MaxMemberCount,
+                    LastUpdateTime = Helper.TimeStamp
+                };
+
+                var existing = await db.Queryable<GroupEntity>()
+                    .Where(x => x.GroupID == group.Group)
+                    .FirstAsync();
+
+                if (existing == null)
+                {
+                    await db.Insertable(entity).ExecuteCommandAsync();
+                }
+                else
+                {
+                    entity.ID = existing.ID;
+                    await db.Updateable(entity).ExecuteCommandAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"保存群信息失败: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// 保存群成员信息到数据库
+        /// </summary>
+        private static async Task SaveGroupMemberToDBAsync(GroupMemberInfo member)
+        {
+            if (member == null)
+            {
+                return;
+            }
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = new GroupMemberEntity
+                {
+                    GroupID = member.Group,
+                    QQ = member.QQ,
+                    Nick = member.Nick,
+                    Card = member.Card,
+                    MemberType = member.MemberType,
+                    Sex = member.Sex,
+                    Age = member.Age,
+                    Area = member.Area,
+                    JoinGroupTime = member.JoinGroupDateTime.ToTimeStamp(),
+                    LastSpeakTime = member.LastSpeakDateTime.ToTimeStamp(),
+                    Level = member.Level,
+                    ExclusiveTitle = member.ExclusiveTitle,
+                    ExclusiveTitleExpirationTime = member.ExclusiveTitleExpirationTime.ToTimeStamp(),
+                    IsBadRecord = member.IsBadRecord,
+                    IsAllowEditorCard = member.IsAllowEditorCard,
+                    LastUpdateTime = Helper.TimeStamp
+                };
+
+                var existing = await db.Queryable<GroupMemberEntity>()
+                    .Where(x => x.GroupID == member.Group && x.QQ == member.QQ)
+                    .FirstAsync();
+
+                if (existing == null)
+                {
+                    await db.Insertable(entity).ExecuteCommandAsync();
+                }
+                else
+                {
+                    entity.ID = existing.ID;
+                    await db.Updateable(entity).ExecuteCommandAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"保存群成员信息失败: {ex}");
+            }
         }
 
         public static int InsertHistory(ChatHistory history)
@@ -48,14 +238,45 @@ namespace Another_Mirai_Native.DB
             {
                 return -1;
             }
-            using var db = GetInstance(GetDBPath(history.ParentID, history.Type));
-            return db.Insertable(history).ExecuteReturnIdentity();
+
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = new ChatHistoryEntity
+                {
+                    Time = history.Time.ToTimeStamp(),
+                    Type = history.Type,
+                    ParentID = history.ParentID,
+                    SenderID = history.SenderID,
+                    Message = history.Message,
+                    MsgId = history.MsgId,
+                    Recalled = history.Recalled,
+                    PluginName = history.PluginName
+                };
+
+                return db.Insertable(entity).ExecuteReturnIdentity();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"插入聊天记录失败: {ex}");
+                return -1;
+            }
         }
 
-        public static void UpdateHistoryMessageId(long parentId, ChatHistoryType chatHistoryType, int id, int msgId)
+        public static void UpdateHistoryMessageId(long parentId, int id, int msgId)
         {
-            using var db = GetInstance(GetDBPath(parentId, chatHistoryType));
-            db.Updateable<ChatHistory>().Where(x => x.ID == id).SetColumns(x => x.MsgId == msgId).ExecuteCommand();
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                db.Updateable<ChatHistoryEntity>()
+                    .SetColumns(x => x.MsgId == msgId)
+                    .Where(x => x.ID == id && x.ParentID == parentId)
+                    .ExecuteCommand();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"更新消息ID失败: {ex}");
+            }
         }
 
         public static void UpdateHistory(ChatHistory history)
@@ -64,61 +285,212 @@ namespace Another_Mirai_Native.DB
             {
                 return;
             }
-            using var db = GetInstance(GetDBPath(history.ParentID, history.Type));
-            db.Updateable(history).ExecuteCommand();
+
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = new ChatHistoryEntity
+                {
+                    ID = history.ID,
+                    Time = history.Time.ToTimeStamp(),
+                    Type = history.Type,
+                    ParentID = history.ParentID,
+                    SenderID = history.SenderID,
+                    Message = history.Message,
+                    MsgId = history.MsgId,
+                    Recalled = history.Recalled,
+                    PluginName = history.PluginName
+                };
+
+                db.Updateable(entity).ExecuteCommand();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"更新聊天记录失败: {ex}");
+            }
         }
 
         public static void UpdateHistoryRecall(long id, int msgId, ChatHistoryType type, bool recalled)
         {
-            using var db = GetInstance(GetDBPath(id, type));
-            var item = db.Queryable<ChatHistory>().Where(x => x.ParentID == id && x.MsgId == msgId).OrderByDescending(x => x.ID).First();
-            if (item == null)
+            try
             {
-                return;
+                var db = ChatHistoryDB.GetInstance();
+                var item = db.Queryable<ChatHistoryEntity>()
+                    .Where(x => x.ParentID == id && x.MsgId == msgId && x.Type == type)
+                    .OrderByDescending(x => x.ID)
+                    .First();
+
+                if (item == null)
+                {
+                    return;
+                }
+
+                db.Updateable<ChatHistoryEntity>()
+                    .SetColumns(x => x.Recalled == recalled)
+                    .Where(x => x.ID == item.ID)
+                    .ExecuteCommand();
             }
-            item.Recalled = recalled;
-            db.Updateable(item).ExecuteCommand();
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"更新撤回状态失败: {ex.Message}");
+            }
         }
 
         public static async Task<List<ChatHistory>> GetHistoriesByPageAsync(long id, ChatHistoryType historyType, int pageSize, int pageIndex)
         {
-            using var db = GetInstance(GetDBPath(id, historyType));
-            var ls = await db.Queryable<ChatHistory>().OrderByDescending(x => x.Time).ToPageListAsync(pageIndex, pageSize);
-            ls.Reverse();
-            return ls;
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entities = await db.Queryable<ChatHistoryEntity>()
+                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .OrderByDescending(x => x.Time)
+                    .ToPageListAsync(pageIndex, pageSize);
+
+                var result = entities.Select(e => new ChatHistory
+                {
+                    ID = (int)e.ID,
+                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Type = e.Type,
+                    ParentID = e.ParentID,
+                    SenderID = e.SenderID,
+                    Message = e.Message,
+                    MsgId = e.MsgId,
+                    Recalled = e.Recalled,
+                    PluginName = e.PluginName
+                }).ToList();
+
+                result.Reverse();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"分页查询失败: {ex.Message}");
+                return [];
+            }
         }
 
         public static List<ChatHistory> GetHistoriesByPage(long id, ChatHistoryType historyType, int pageSize, int pageIndex)
         {
-            using var db = GetInstance(GetDBPath(id, historyType));
-            var ls = db.Queryable<ChatHistory>().OrderByDescending(x => x.Time).ToPageList(pageIndex, pageSize);
-            ls.Reverse();
-            return ls;
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entities = db.Queryable<ChatHistoryEntity>()
+                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .OrderByDescending(x => x.Time)
+                    .ToPageList(pageIndex, pageSize);
+
+                var result = entities.Select(e => new ChatHistory
+                {
+                    ID = (int)e.ID,
+                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Type = e.Type,
+                    ParentID = e.ParentID,
+                    SenderID = e.SenderID,
+                    Message = e.Message,
+                    MsgId = e.MsgId,
+                    Recalled = e.Recalled,
+                    PluginName = e.PluginName
+                }).ToList();
+
+                result.Reverse();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"分页查询失败: {ex.Message}");
+                return [];
+            }
         }
 
         public static List<ChatHistory> GetHistoriesByCount(long groupId, long qq, int count)
         {
-            long id = groupId > 0 ? groupId : qq;
-            ChatHistoryType historyType = groupId > 0 ? ChatHistoryType.Group : ChatHistoryType.Private;
-            using var db = GetInstance(GetDBPath(id, historyType));
-            List<ChatHistory> list = db.Queryable<ChatHistory>()
-                .WhereIF(qq > 0, x => x.SenderID == groupId)
-                .OrderByDescending(x => x.Time).Take(count)
-                .ToList();
-            return list;
+            try
+            {
+                long id = groupId > 0 ? groupId : qq;
+                ChatHistoryType historyType = groupId > 0 ? ChatHistoryType.Group : ChatHistoryType.Private;
+
+                var db = ChatHistoryDB.GetInstance();
+                var entities = db.Queryable<ChatHistoryEntity>()
+                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .WhereIF(qq > 0 && groupId > 0, x => x.SenderID == qq)
+                    .OrderByDescending(x => x.Time)
+                    .Take(count)
+                    .ToList();
+
+                return entities.Select(e => new ChatHistory
+                {
+                    ID = (int)e.ID,
+                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Type = e.Type,
+                    ParentID = e.ParentID,
+                    SenderID = e.SenderID,
+                    Message = e.Message,
+                    MsgId = e.MsgId,
+                    Recalled = e.Recalled,
+                    PluginName = e.PluginName
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"按数量查询失败: {ex}");
+                return [];
+            }
         }
 
         public static ChatHistory? GetHistoriesByMsgId(long id, int msgId, ChatHistoryType historyType)
         {
-            using var db = GetInstance(GetDBPath(id, historyType));
-            var item = db.Queryable<ChatHistory>().First(x => x.MsgId == msgId);
-            return item;
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entity = db.Queryable<ChatHistoryEntity>()
+                    .Where(x => x.ParentID == id && x.MsgId == msgId && x.Type == historyType)
+                    .First();
+
+                if (entity == null)
+                {
+                    return null;
+                }
+
+                return new ChatHistory
+                {
+                    ID = (int)entity.ID,
+                    Time = Helper.TimeStamp2DateTime(entity.Time),
+                    Type = entity.Type,
+                    ParentID = entity.ParentID,
+                    SenderID = entity.SenderID,
+                    Message = entity.Message,
+                    MsgId = entity.MsgId,
+                    Recalled = entity.Recalled,
+                    PluginName = entity.PluginName
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"按消息ID查询失败: {ex}");
+                return null;
+            }
         }
 
-        public static List<ChatHistory> GetHistoryCategories()
+        public static List<ChatCategoryEntity> GetHistoryCategories()
         {
-            using var db = GetInstance(GetDBPath(AppConfig.Instance.CurrentQQ, ChatHistoryType.Other));
-            return db.Queryable<ChatHistory>().ToList();
+            try
+            {
+                var db = ChatHistoryDB.GetInstance();
+                var entities = db.Queryable<ChatCategoryEntity>()
+                    .OrderBy(x => x.IsPinned, OrderByType.Desc)
+                    .OrderBy(x => x.Time, OrderByType.Desc)
+                    .ToList();
+
+                return entities;
+            }
+            catch (Exception ex)
+            {
+                if (!ex.Message.Contains("not an error"))
+                {
+                    LogHelper.Error("聊天记录管理", $"获取会话列表失败: {ex}");
+                }
+                return [];
+            }
         }
 
         public static void UpdateHistoryCategory(ChatHistory? chatHistory)
@@ -127,182 +499,64 @@ namespace Another_Mirai_Native.DB
             {
                 return;
             }
-            using var db = GetInstance(GetDBPath(AppConfig.Instance.CurrentQQ, ChatHistoryType.Other));
-            var item = db.Queryable<ChatHistory>().Where(x => x.ParentID == chatHistory.ParentID && x.Type == chatHistory.Type).First();
-            if (item == null)
+
+            try
             {
-                db.Insertable(chatHistory).ExecuteCommand();
-            }
-            else
-            {
-                db.Updateable(chatHistory).ReSetValue(x =>
+                var db = ChatHistoryDB.GetInstance();
+                var existing = db.Queryable<ChatCategoryEntity>()
+                    .Where(x => x.ParentID == chatHistory.ParentID && x.Type == chatHistory.Type)
+                    .First();
+
+                if (existing == null)
                 {
-                    x.Time = chatHistory.Time;
-                    x.Message = chatHistory.Message;
-                }).Where(x => x.ParentID == chatHistory.ParentID && x.Type == chatHistory.Type).ExecuteCommand();
+                    var entity = new ChatCategoryEntity
+                    {
+                        ParentID = chatHistory.ParentID,
+                        SenderID = chatHistory.SenderID,
+                        Type = chatHistory.Type,
+                        Time = chatHistory.Time.ToTimeStamp(),
+                        Message = chatHistory.Message,
+                        UnreadCount = 0,
+                        IsPinned = false
+                    };
+                    db.Insertable(entity).ExecuteCommand();
+                }
+                else
+                {
+                    db.Updateable<ChatCategoryEntity>()
+                        .SetColumns(x => new ChatCategoryEntity
+                        {
+                            Time = chatHistory.Time.ToTimeStamp(),
+                            Message = chatHistory.Message,
+                        })
+                        .Where(x => x.ID == existing.ID)
+                        .ExecuteCommand();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error("聊天记录管理", $"更新会话分类失败: {ex}");
             }
         }
 
         /// <summary>
-        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
-        /// 若缓存中不存在则调用协议API
+        /// 清空指定会话的未读消息数
         /// </summary>
-        /// <param name="qq">好友ID</param>
-        /// <returns>昵称, 失败时返回QQ号</returns>
-        public static async Task<string> GetFriendNick(long qq)
+        /// <param name="parentId">会话ID(群号或QQ号)</param>
+        /// <param name="type">会话类型</param>
+        public static void SetUnreadCount(long parentId, ChatHistoryType type, int unreadCount)
         {
             try
             {
-                await APILock.WaitAsync();
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (FriendInfoCache.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return info.Nick;
-                }
-                else
-                {
-                    string r = qq.ToString();
-                    await Task.Run(() =>
-                    {
-                        var ls = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
-                        foreach (var item in ls)
-                        {
-                            item.Nick = item.Nick.Replace("\r", "").Replace("\n", "");
-                            item.Postscript = item.Postscript.Replace("\r", "").Replace("\n", "");
-                            if (FriendInfoCache.ContainsKey(item.QQ))
-                            {
-                                FriendInfoCache[item.QQ] = item;
-                            }
-                            else
-                            {
-                                FriendInfoCache.Add(item.QQ, item);
-                            }
-                            if (item.QQ == qq)
-                            {
-                                r = item.Nick;
-                            }
-                        }
-                    });
-                    return r;
-                }
+                var db = ChatHistoryDB.GetInstance();
+                db.Updateable<ChatCategoryEntity>()
+                    .SetColumns(x => x.UnreadCount == unreadCount)
+                    .Where(x => x.ParentID == parentId && x.Type == type)
+                    .ExecuteCommand();
             }
-            catch
+            catch (Exception ex)
             {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
-        }
-
-        /// <summary>
-        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
-        /// 若缓存中不存在则调用协议API
-        /// </summary>
-        /// <param name="group">群来源</param>
-        /// <param name="qq">群员QQ</param>
-        /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
-        public static async Task<string> GetGroupMemberNick(long group, long qq)
-        {
-            try
-            {
-                await APILock.WaitAsync();
-                if (qq == AppConfig.Instance.CurrentQQ)
-                {
-                    return AppConfig.Instance.CurrentNickName;
-                }
-                if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var info))
-                {
-                    if (info == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(info.Card) ? info.Nick : info.Card;
-                }
-                else
-                {
-                    if (GroupMemberCache.ContainsKey(group) is false)
-                    {
-                        GroupMemberCache.Add(group, new Dictionary<long, GroupMemberInfo>());
-                    }
-                    if (GroupMemberCache[group].ContainsKey(qq) is false)
-                    {
-                        await Task.Run(() =>
-                        {
-                            var memberInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberInfo(group, qq, false);
-                            memberInfo.Card = memberInfo.Card.Replace("\r", "").Replace("\n", "");
-                            memberInfo.Nick = memberInfo.Nick.Replace("\r", "").Replace("\n", "");
-                            GroupMemberCache[group].Add(qq, memberInfo);
-                        });
-                    }
-                    if (GroupMemberCache[group][qq] == null)
-                    {
-                        return qq.ToString();
-                    }
-                    return string.IsNullOrEmpty(GroupMemberCache[group][qq].Card) ? GroupMemberCache[group][qq].Nick : GroupMemberCache[group][qq].Card;
-                }
-            }
-            catch
-            {
-                return qq.ToString();
-            }
-            finally
-            {
-                APILock.Release();
-            }
-        }
-
-        /// <summary>
-        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
-        /// 若缓存中不存在则调用协议API
-        /// </summary>
-        /// <param name="groupId">群号</param>
-        /// <returns>群名称, 若不存在则返回群号</returns>
-        public static async Task<string> GetGroupName(long groupId)
-        {
-            try
-            {
-                await APILock.WaitAsync();
-                if (GroupInfoCache.TryGetValue(groupId, out var info))
-                {
-                    if (info == null)
-                    {
-                        return groupId.ToString();
-                    }
-                    return info.Name;
-                }
-                else
-                {
-                    string r = groupId.ToString();
-                    await Task.Run(() =>
-                    {
-                        var info = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
-                        info.Name = info.Name.Replace("\n", "").Replace("\r", "");
-                        GroupInfoCache.Add(groupId, info);
-                        if (GroupInfoCache[groupId] == null)
-                        {
-                            r = groupId.ToString();
-                        }
-                        r = GroupInfoCache[groupId]?.Name ?? groupId.ToString();
-                    });
-                    return r;
-                }
-            }
-            catch
-            {
-                return groupId.ToString();
-            }
-            finally
-            {
-                APILock.Release();
+                LogHelper.Error("聊天记录管理", $"清空未读数失败: {ex}");
             }
         }
 
@@ -312,6 +566,10 @@ namespace Another_Mirai_Native.DB
             {
                 return;
             }
+
+            // 加载缓存
+            Task.Run(LoadCacheFromDatabaseAsync);
+
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
             PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
             PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
@@ -327,9 +585,11 @@ namespace Another_Mirai_Native.DB
 
             CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
             CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+
+            ScheduleDailyMaintenance();
         }
 
-        private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, bool sending = false, int msgId = 0, CQPluginProxy? plugin = null)
+        private static ChatHistory InsertHistory(long id, long qq, string msg, ChatHistoryType type, DateTime time, int msgId = 0, CQPluginProxy? plugin = null)
         {
             var history = new ChatHistory
             {
@@ -350,12 +610,15 @@ namespace Another_Mirai_Native.DB
             if (GroupMemberCache.TryGetValue(group, out var dict) && dict.TryGetValue(qq, out var memberInfo))
             {
                 memberInfo.MemberType = type;
+
+                // 异步保存到数据库
+                Task.Run(() => SaveGroupMemberToDBAsync(memberInfo));
             }
         }
 
         private static async void PluginManagerProxy_OnFriendAdded(long qq)
         {
-            FriendInfoCache.Remove(qq);
+            FriendInfoCache.TryRemove(qq, out _); 
             await GetFriendNick(qq);
         }
 
@@ -396,11 +659,7 @@ namespace Another_Mirai_Native.DB
         private static void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
         {
             var history = InsertHistory(group, qq, msg, ChatHistoryType.Group, time, msgId: msgId);
-            if (history.Type != ChatHistoryType.Notice)
-            {
-                UpdateHistoryCategory(history);
-                CacheMessageImage(msg);
-            }
+            UpdateHistoryCategory(history);
         }
 
         private static void PluginManagerProxy_OnGroupMsgRecall(int msgId, long groupId, string msg)
@@ -411,11 +670,7 @@ namespace Another_Mirai_Native.DB
         private static void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
         {
             var history = InsertHistory(qq, qq, msg, ChatHistoryType.Private, time, msgId: msgId);
-            if (history.Type != ChatHistoryType.Notice)
-            {
-                UpdateHistoryCategory(history);
-                CacheMessageImage(msg);
-            }
+            UpdateHistoryCategory(history);
         }
 
         private static void PluginManagerProxy_OnPrivateMsgRecall(int msgId, long qq, string msg)
@@ -428,6 +683,9 @@ namespace Another_Mirai_Native.DB
             if (FriendInfoCache.TryGetValue(qq, out var info) && info != null)
             {
                 info.Nick = nick;
+
+                // 异步保存到数据库
+                Task.Run(() => SaveFriendToDBAsync(info));
             }
         }
 
@@ -436,6 +694,9 @@ namespace Another_Mirai_Native.DB
             if (GroupInfoCache.TryGetValue(group, out var info) && info != null)
             {
                 info.Name = name;
+
+                // 异步保存到数据库
+                Task.Run(() => SaveGroupToDBAsync(info));
             }
         }
 
@@ -444,6 +705,9 @@ namespace Another_Mirai_Native.DB
             if (GroupMemberCache.TryGetValue(group, out var member) && member.TryGetValue(qq, out var info) && info != null)
             {
                 info.Card = card;
+
+                // 异步保存到数据库
+                Task.Run(() => SaveGroupMemberToDBAsync(info));
             }
         }
 
@@ -460,51 +724,133 @@ namespace Another_Mirai_Native.DB
             InsertHistory(qq, AppConfig.Instance.CurrentQQ, msg, ChatHistoryType.Private, DateTime.Now, msgId: msgId, plugin: plugin);
         }
 
-        private static SqlSugarClient GetInstance(string path)
+        /// <summary>
+        /// 通过url下载图片
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="fileName">若提供文件名可填</param>
+        /// <returns>图片 Hash</returns>
+        public static async Task<string?> CacheMessageImage(string url, string? fileName = null)
         {
-            SqlSugarClient db = new(new ConnectionConfig()
-            {
-                ConnectionString = $"data source={path}",
-                DbType = DbType.Sqlite,
-                IsAutoCloseConnection = false,
-                InitKeyType = InitKeyType.Attribute,
-            });
-            return db;
-        }
+            using var db = ChatHistoryDB.GetInstance();
 
-        private static async void CacheMessageImage(string msg)
-        {
-            if (AppConfig.Instance.EnableChatImageCache is false)
+            string baseDirectory = Helper.GetCachePictureDirectory();
+            Directory.CreateDirectory(baseDirectory);
+            string? absoluteFilePath = await Helper.DownloadImageAsync(url, fileName ?? Helper.GetPicNameFromUrl(url));
+            if (string.IsNullOrEmpty(absoluteFilePath)
+                || !File.Exists(absoluteFilePath))
             {
-                return;
+                // 下载失败了
+                return null;
             }
-            Directory.CreateDirectory(Path.Combine("data", "image", "cached"));
-            var imgs = CQCode.Parse(msg).Where(x => x.IsImageCQCode);
-            if (!imgs.Any())
+            var fileBuffer = File.ReadAllBytes(absoluteFilePath);
+            string hash = Helper.MD5(fileBuffer);
+            CachedImage cachedImage = new()
             {
-                return;
-            }
-            foreach (var item in imgs)
+                FileName = Helper.GetRelativePath(absoluteFilePath!, baseDirectory),
+                Hash = hash,
+                InsertTime = DateTime.Now,
+                Url = url,
+                FileSizeInKB = fileBuffer.Length / 1024.0f,
+            };
+            CachedImage exist = db.Queryable<CachedImage>().Where(x => x.Hash == hash).First();
+            if (exist != null)
             {
-                string url = Helper.GetImageUrlOrPathFromCQCode(item);
-                await Helper.DownloadImageAsync(url, item.GetPicName());
+                cachedImage.ID = exist.ID;
+                await db.Updateable(cachedImage).ExecuteCommandAsync();
             }
-            await CheckAndFreeCache();
+            else
+            {
+                await db.Insertable(cachedImage).ExecuteCommandAsync();
+            }
+            return hash;
         }
 
         private static async Task CheckAndFreeCache()
         {
-            if (Deleteing)
+            if (Deleting)
             {
                 return;
             }
             try
             {
-                Deleteing = true;
-                await Task.Run(() =>
+                Deleting = true;
+                await FreeSpaceBySize();
+                await FreeSpaceByExpireTime();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog($"缓存图片释放失败：{ex.Message}\n{ex.StackTrace}");
+            }
+            finally
+            {
+                Deleting = false;
+            }
+        }
+
+        private static async Task FreeSpaceByExpireTime()
+        {
+            if (!AppConfig.Instance.EnableChatImageCacheExpireTimeControl)
+            {
+                return;
+            }
+
+            await Task.Run(() =>
+            {
+                try
                 {
-                    string dir = Path.Combine("data", "image", "cached");
+                    var db = ChatHistoryDB.GetInstance();
+                    DateTime expireTime = DateTime.Now.AddDays(-AppConfig.Instance.ChatImageCacheExpireTime);
+                    
+                    // 查询过期的缓存图片
+                    var expiredImages = db.Queryable<CachedImage>()
+                        .Where(x => x.InsertTime < expireTime && !x.Deleted)
+                        .ToList();
+
+                    foreach (var image in expiredImages)
+                    {
+                        try
+                        {
+                            string fullPath = Path.Combine(Helper.GetCachePictureDirectory(), image.FileName);
+                            // 删除文件
+                            if (File.Exists(fullPath))
+                            {
+                                File.Delete(fullPath);
+                            }
+
+                            // 标记为已删除
+                            db.Updateable<CachedImage>()
+                                .SetColumns(x => x.Deleted)
+                                .Where(x => x.ID == image.ID)
+                                .ExecuteCommand();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.WriteLog($"删除过期缓存图片失败：{image.FileName}，错误：{ex}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog($"清理过期缓存图片失败：{ex}");
+                }
+            });
+        }
+
+        private static async Task FreeSpaceBySize()
+        {
+            if (!AppConfig.Instance.EnableChatImageCacheMaxSizeControl)
+            {
+                return;
+            }
+            await Task.Run(() =>
+            {
+                try
+                {
+                    string dir = Helper.GetCachePictureDirectory();
                     double length = 0;
+                    var db = ChatHistoryDB.GetInstance();
+                    
                     // 统计缓存文件夹总大小
                     List<FileInfo> files = [];
                     foreach (var item in Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly))
@@ -529,9 +875,24 @@ namespace Another_Mirai_Native.DB
                                 try
                                 {
                                     file.Delete();
+                                    
+                                    // 同步更新数据库
+                                    var cachedImage = db.Queryable<CachedImage>()
+                                        .Where(x => x.FileName == Path.GetFileName(file.FullName))
+                                        .First();
+                                    
+                                    if (cachedImage != null)
+                                    {
+                                        db.Updateable<CachedImage>()
+                                            .SetColumns(x => x.Deleted)
+                                            .Where(x => x.ID == cachedImage.ID)
+                                            .ExecuteCommand();
+                                    }
                                 }
-                                catch
-                                { }
+                                catch (Exception ex)
+                                {
+                                    LogHelper.WriteLog($"删除缓存图片失败：{file.FullName}，错误：{ex.Message}");
+                                }
                                 files.Remove(file);
                             }
                             else
@@ -540,16 +901,154 @@ namespace Another_Mirai_Native.DB
                             }
                         } while (length > maxSize);
                     }
-                });                
-            }
-            catch (Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog($"按大小清理缓存图片失败：{ex.Message}\n{ex.StackTrace}");
+                }
+            });
+        }
+
+        public static async Task LoadFriendCaches()
+        {
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawFriendList(false);
+            foreach (var item in rawList)
             {
-                LogHelper.WriteLog($"缓存图片释放失败：{ex.Message}\n{ex.StackTrace}");
+                FriendInfoCache[item.QQ] = item;
+                await SaveFriendToDBAsync(item);
             }
-            finally
+        }
+
+        public static async Task LoadGroupInfoCaches(long groupId)
+        {
+            var rawGroupInfo = ProtocolManager.Instance.CurrentProtocol.GetRawGroupInfo(groupId, false);
+            GroupInfoCache[groupId] = rawGroupInfo;
+            await SaveGroupToDBAsync(rawGroupInfo);
+        }
+
+        public static async Task LoadGroupMemberCaches(long groupId)
+        {
+            var rawList = ProtocolManager.Instance.CurrentProtocol.GetRawGroupMemberList(groupId);
+            GroupMemberCache[groupId] = [];
+            foreach (var item in rawList)
             {
-                Deleteing = false;
+                if (item == null)
+                {
+                    continue;
+                }
+                GroupMemberCache[groupId][item.QQ] = item;
+                await SaveGroupMemberToDBAsync(item);
             }
+        }
+
+        /// <summary>
+        /// 从 <see cref="FriendInfoCache"/> 中获取好友昵称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="qq">好友ID</param>
+        /// <returns>昵称, 失败时返回QQ号</returns>
+        public static async Task<string> GetFriendNick(long qq, bool retry = false)
+        {
+            if (FriendInfoCache.TryGetValue(qq, out var info)
+                && info != null)
+            {
+                if (string.IsNullOrEmpty(info.Postscript))
+                {
+                    return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
+                }
+                else
+                {
+                    return info.Postscript;
+                }
+            }
+            else if (!retry)
+            {
+                await LoadFriendCaches();
+                return await GetFriendNick(qq, true);
+            }
+            return qq.ToString();
+        }
+
+        /// <summary>
+        /// 从 <see cref="GroupMemberCache"/> 中获取群员名片
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="group">群来源</param>
+        /// <param name="qq">群员QQ</param>
+        /// <returns>群员名片, 若不存在则返回昵称, 若调用失败则返回QQ号</returns>
+        public static async Task<string> GetGroupMemberNick(long groupId, long qq, bool retry = false)
+        {
+            if (GroupMemberCache.TryGetValue(groupId, out var member)
+                && member != null)
+            {
+                if (member.TryGetValue(qq, out var info))
+                {
+                    if (string.IsNullOrEmpty(info.Card))
+                    {
+                        return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
+                    }
+                    else
+                    {
+                        return info.Card;
+                    }
+                }
+                else
+                {
+                    return qq.ToString();
+                }
+            }
+            else if (!retry)
+            {
+                await LoadGroupMemberCaches(groupId);
+                return await GetGroupMemberNick(groupId, qq, true);
+            }
+            return qq.ToString();
+        }
+
+        /// <summary>
+        /// 从 <see cref="GroupInfoCache"/> 中获取群名称
+        /// 若缓存中不存在则调用协议API
+        /// </summary>
+        /// <param name="groupId">群号</param>
+        /// <returns>群名称, 若不存在则返回群号</returns>
+        public static async Task<string> GetGroupName(long groupId, bool retry = false)
+        {
+            if (GroupInfoCache.TryGetValue(groupId, out var info)
+                && info != null)
+            {
+                return string.IsNullOrEmpty(info.Name) ? groupId.ToString() : info.Name;
+            }
+            else if (!retry)
+            {
+                await LoadGroupInfoCaches(groupId);
+                return await GetGroupName(groupId, true);
+            }
+            return groupId.ToString();
+        }
+
+        private static void ScheduleDailyMaintenance()
+        {
+            var now = DateTime.Now;
+            var nextRun = DateTime.Today.AddHours(4);
+            if (now.Hour >= 4)
+            {
+                nextRun = nextRun.AddDays(1);
+            }
+
+            DailyMaintenanceTimer = new System.Timers.Timer((nextRun - now).TotalMilliseconds)
+            {
+                AutoReset = false
+            };
+            DailyMaintenanceTimer.Elapsed += async (_, _) =>
+            {
+                await CheckAndFreeCache();
+
+                // 重置为每24小时执行
+                DailyMaintenanceTimer.Interval = TimeSpan.FromHours(24).TotalMilliseconds;
+                DailyMaintenanceTimer.AutoReset = true;
+                DailyMaintenanceTimer.Start();
+            };
+            DailyMaintenanceTimer.Start();
         }
     }
 }

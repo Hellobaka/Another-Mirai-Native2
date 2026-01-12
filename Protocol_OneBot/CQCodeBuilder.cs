@@ -45,14 +45,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             break;
                         }
 
-                        // 检查图片是否下载成功
-                        string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", imageFile);
-                        if (!File.Exists(picPath) && !File.Exists(picPath + ".cqimg"))
-                        {
-                            LogHelper.Error("构建消息", $"从缓存下载图片失败：{picPath}");
-                            break;
-                        }
-
                         if (string.IsNullOrEmpty(imageSubType))
                         {
                             // 直接使用file字段
@@ -77,7 +69,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         // 检查是否下载成功
                         string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordFile);
 
-                        if (!File.Exists(recordPath) && !File.Exists(recordPath + ".cqimg"))
+                        if (!File.Exists(recordPath) && !File.Exists(recordPath + ".cqrecord"))
                         {
                             LogHelper.Error("构建消息", $"下载音频失败：{recordPath}");
                             break;
@@ -204,9 +196,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
-            string hash = file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file);
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, Path.ChangeExtension(hash, ".cqimg"));
-            File.WriteAllText(filePath, $"[{folderName}]\nmd5=0\nsize=0\nurl={url}");
+
+            string hash = ChatHistoryHelper.CacheMessageImage(url).Result ?? (file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file));
             return (hash, subType);
         }
 

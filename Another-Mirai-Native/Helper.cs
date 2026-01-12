@@ -160,34 +160,22 @@ namespace Another_Mirai_Native
             return encoding.GetString(buffer);
         }
 
-        public static int ToTimeStamp(this DateTime time) => (int)(time - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        public static DateTime ToDateTime(this long timestamp) => TimeStamp2DateTime(timestamp);
 
-        public static int ToTimeStamp(this DateTime? time) => (int)((time ?? DateTime.Now) - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        public static DateTime ToDateTime(this int timestamp) => TimeStamp2DateTime(timestamp);
 
-        /// <summary>
-        /// 从cqimg中获取图片URL
-        /// </summary>
-        /// <param name="cqimg"></param>
-        /// <returns></returns>
-        public static string GetPicUrlFromCQImg(string cqimg)
-        {
-            string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", cqimg);
-            picPath = Path.ChangeExtension(picPath, ".cqimg");
+        public static int ToTimeStamp(this DateTime time) => (int)DateTime2TimeStamp(time);
 
-            if (File.Exists(picPath))
-            {
-                string picUrl = File.ReadAllText(picPath);
-                picUrl = picUrl.Split('\n').Last().Replace("url=", "");
-                return picUrl;
-            }
-            LogHelper.Error("图片下载", $"{cqimg} 获取下载链接失败");
-
-            return "";
-        }
+        public static int ToTimeStamp(this DateTime? time) => (int)DateTime2TimeStamp(time ?? DateTime.Now);
 
         public static string GetPicName(this CQCode cqimg)
         {
             return cqimg.Items.TryGetValue("file", out var file) ? file : "";
+        }
+
+        public static string GetCachePictureDirectory()
+        {
+            return Path.Combine("data", "image", "cached");
         }
 
         /// <summary>
@@ -368,62 +356,11 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static string GetImageUrlOrPathFromCQCode(CQCode cqCode)
-        {
-            string ParseUrlFromCQImg(string filePath)
-            {
-                Regex regex = new("url=(.*)");
-                var a = regex.Match(File.ReadAllText(filePath));
-                if (a.Groups.Count > 1)
-                {
-                    string capture = a.Groups[1].Value;
-                    capture = capture.Split('\r').First();
-                    return capture;
-                }
-                else
-                {
-                    return "";
-                }
-            }
-
-            if (cqCode.IsImageCQCode is false)
-            {
-                return "";
-            }
-            string file = cqCode.Items["file"];
-            string basePath = @"data\image";
-
-            string filePath = Path.Combine(basePath, file);
-            if (File.Exists(filePath) || File.Exists(Path.ChangeExtension(filePath, ".cqimg")))
-            {
-                if (filePath.EndsWith(".cqimg"))
-                {
-                    return ParseUrlFromCQImg(filePath);
-                }
-                else
-                {
-                    return new FileInfo(filePath).FullName;
-                }
-            }
-            else
-            {
-                filePath += ".cqimg";
-                if (File.Exists(filePath))
-                {
-                    return ParseUrlFromCQImg(filePath);
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
-
         /// <summary>
         /// 下载或读取缓存图片
         /// </summary>
         /// <param name="imageUrl">欲下载的图片URL</param>
-        /// <returns>本地图片路径</returns>
+        /// <returns>本地图片绝对路径</returns>
         public static async Task<string?> DownloadImageAsync(string imageUrl, string fileName = "")
         {
             try
@@ -432,7 +369,7 @@ namespace Another_Mirai_Native
                 {
                     return null;
                 }
-                string cacheImagePath = Path.Combine("data", "image", "cached");
+                string cacheImagePath = Helper.GetCachePictureDirectory();
 
                 Directory.CreateDirectory(cacheImagePath);
                 if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件

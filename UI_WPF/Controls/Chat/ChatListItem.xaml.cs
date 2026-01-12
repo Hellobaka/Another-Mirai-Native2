@@ -1,4 +1,7 @@
-﻿using Another_Mirai_Native.UI.ViewModel;
+﻿using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
+using Another_Mirai_Native.UI.Models;
+using Another_Mirai_Native.UI.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -42,6 +45,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         private void UnreadTip_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ViewModel.UnreadCount = 0;
+            ChatHistoryHelper.SetUnreadCount(Item.Id, Item.AvatarType == ChatType.QQGroup ? ChatHistoryType.Group : ChatHistoryType.Private, 0);
             e.Handled = true;
         }
     }

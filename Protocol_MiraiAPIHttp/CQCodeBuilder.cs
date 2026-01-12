@@ -96,25 +96,36 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Image:
                         var image = (MiraiMessageTypeDetail.Image)item;
-                        string imgId;
-                        if (image.imageId.StartsWith("http"))
+                        
+                        string imgId = ChatHistoryHelper.CacheMessageImage(image.url).Result;
+                        if (string.IsNullOrEmpty(imgId))
                         {
-                            imgId = image.imageId.MD5();
+                            if (image.imageId.StartsWith("http"))
+                            {
+                                imgId = image.imageId.MD5();
+                            }
+                            else
+                            {
+                                imgId = image.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
+                            }
                         }
-                        else
-                        {
-                            imgId = image.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
-                        }
-                        Directory.CreateDirectory("data\\image");
-                        File.WriteAllText($"data\\image\\{imgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={image.url}");
                         Result.Append($"[CQ:image,file={imgId},sub_type={(image.isEmoji ? 1 : 0)}]");
                         break;
 
                     case MiraiMessageType.FlashImage:
                         var flashImage = (MiraiMessageTypeDetail.FlashImage)item;
-                        string flashImgId = flashImage.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
-                        Directory.CreateDirectory("data\\image");
-                        File.WriteAllText($"data\\image\\{flashImgId}.cqimg", $"[image]\nmd5=0\nsize=0\nurl={flashImage.url}");
+                        string flashImgId = ChatHistoryHelper.CacheMessageImage(flashImage.url).Result;
+                        if (string.IsNullOrEmpty(flashImgId))
+                        {
+                            if (flashImage.imageId.StartsWith("http"))
+                            {
+                                flashImgId = flashImage.imageId.MD5();
+                            }
+                            else
+                            {
+                                flashImgId = flashImage.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
+                            }
+                        }
                         Result.Append($"[CQ:image,file={flashImgId},flash=true]");
                         break;
 
@@ -298,19 +309,20 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                     else
                     {
-                        // 若以上两个路径均不存在, 判断对应的 cqimg 文件是否存在
-                        picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", picPath + ".cqimg");
-                        if (!File.Exists(picPath))
+                        // 若以上两个路径均不存在, 判断对应的缓存文件是否存在
+                        var cacheImagePath = CachedImage.GetCachedImageByHash(picPath);
+                        if (cacheImagePath == null)
                         {
-                            LogHelper.WriteLog(LogLevel.Warning, "发送图片", "文件不存在", "");
+                            // 未找到缓存结果
+                            LogHelper.WriteLog(LogLevel.Warning, "发送图片", "缓存文件不存在", ""); 
                             return null;
                         }
-                        string picTmp = File.ReadAllText(picPath);
-                        // 分离 cqimg 文件中的 url
-                        picTmp = picTmp.Split('\n').Last().Replace("url=", "");
-                        return cqCode.Items.ContainsKey("flash")
-                            ? new MiraiMessageTypeDetail.FlashImage { url = picTmp }
-                            : new MiraiMessageTypeDetail.Image { url = picTmp };
+                        else
+                        {
+                            return cqCode.Items.ContainsKey("flash")
+                                ? new MiraiMessageTypeDetail.FlashImage { url = cacheImagePath.Url }
+                                : new MiraiMessageTypeDetail.Image { url = cacheImagePath.Url };
+                        }
                     }
                     // 将图片转换为 base64
                     string picBase64 = Helper.ParsePic2Base64(picPath);

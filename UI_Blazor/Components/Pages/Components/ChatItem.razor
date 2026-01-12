@@ -50,7 +50,7 @@ else
                         }
                         else
                         {
-                            <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive? "" : "mud-theme-primary")" Elevation="3" Style="padding: 12px; max-width:100%;">
+                            <MudPaper Class="@(Item.DetailItemType == DetailItemType.Receive ? "" : "mud-theme-primary")" Elevation="3" Style="padding: 12px; max-width:100%;">
                                 <div style="@(Item.DetailItemType == DetailItemType.Send ? "text-align: left" : "")">
                                     @foreach (var item in RenderItems)
                                     {
@@ -122,7 +122,7 @@ else
                         <MudMenuItem OnClick="RepeatClicked" Disabled="!RepeatEnabled" Icon="@Icons.Material.Filled.PlusOne">复读</MudMenuItem>
                         <MudMenuItem OnClick="AtClicked" Disabled="!AtEnabled" Icon="@Icons.Material.Filled.AlternateEmail">@@TA</MudMenuItem>
                         <MudMenuItem OnClick="ReplyClicked" Disabled="!ReplyEnabled" Icon="@Icons.Material.Filled.Reply">回复</MudMenuItem>
-                        <MudDivider/>
+                        <MudDivider />
                         <MudMenuItem OnClick="RevokeClicked" Disabled="!RevokeEnabled" Icon="@Icons.Material.Filled.Delete">撤回</MudMenuItem>
                     </ChildContent>
                 </MudMenu>
@@ -149,9 +149,10 @@ else
 }
 
 <style>
-    .mud-menu *{
+    .mud-menu * {
         cursor: auto;
     }
+
     .replyItem {
         padding: 9px;
         border: 1px solid var(--mud-palette-text-primary);
@@ -163,6 +164,7 @@ else
         background: #ffffff00;
         margin-bottom: 10px;
     }
+
     .replySubItem {
         cursor: inherit;
         overflow: hidden;
@@ -170,7 +172,8 @@ else
         max-width: 200px;
         white-space: nowrap;
     }
-    .replyItem:hover{
+
+    .replyItem:hover {
         background: #ffffff40;
     }
 </style>
@@ -268,7 +271,7 @@ else
         Task.Run(async () =>
         {
             string name = "";
-            if(Item.ParentType == AvatarTypes.QQGroup)
+            if (Item.ParentType == AvatarTypes.QQGroup)
             {
                 name = await ChatHistoryHelper.GetGroupMemberNick(Item.ParentId, Item.Id);
             }
@@ -419,7 +422,7 @@ else
             }
             else
             {
-                foreach(var item in cqcodes)
+                foreach (var item in cqcodes)
                 {
                     try
                     {
@@ -482,7 +485,7 @@ else
                     catch
                     {
                         // Snackbar.Add($"转换CQ码失败，内容：{item}", Severity.Error);
-                    }                    
+                    }
                 }
             }
         }
@@ -493,20 +496,14 @@ else
     {
         if (cqCode.IsImageCQCode)
         {
-            string? path = Helper.GetImageUrlOrPathFromCQCode(cqCode);
-            if (path.StartsWith("http"))
+            string file = cqCode.GetPicName();
+            var cachedImage = CachedImage.GetCachedImageByHash(file);
+            if (cachedImage == null)
             {
-                path = await Helper.DownloadImageAsync(path, cqCode.GetPicName());
-                if (string.IsNullOrEmpty(path))
-                {
-                    return null;
-                }
-                else
-                {
-                    return "/" + Path.GetRelativePath("data", path);
-                }
+                return null;
             }
-            else if (!string.IsNullOrEmpty(path))
+            string? path = Path.Combine(Helper.GetCachePictureDirectory(), cachedImage.FileName);
+            if (!string.IsNullOrEmpty(path))
             {
                 return "/" + Path.GetRelativePath("data", path);
             }
@@ -517,7 +514,7 @@ else
     private List<RenderChatItem> ParsePlainText(string plain)
     {
         List<RenderChatItem> result = [];
-        foreach(var item in URLRegex.Split(plain).Where(x => !string.IsNullOrEmpty(x)))
+        foreach (var item in URLRegex.Split(plain).Where(x => !string.IsNullOrEmpty(x)))
         {
             if (item.StartsWith("http"))
             {

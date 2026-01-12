@@ -49,7 +49,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             DetailBorder.Visibility = Visibility.Visible;
             ImageBorder.Visibility = Visibility.Collapsed;
             ImageDisplay.Children.Clear();
-
+            ViewModel.Content = ViewModel.Content.Trim();
             if (ViewModel.DetailItemType == DetailItemType.Notice)
             {
                 AddTextSegment(ViewModel.Content);
@@ -147,6 +147,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 MessageContent.Inlines.Add(new LineBreak());
             }
             MessageContent.Inlines.Add(new InlineUIContainer(imageElement) { BaselineAlignment = BaselineAlignment.Bottom });
+            MessageContent.Inlines.Add(new LineBreak());
         }
 
         private async Task ProcessAtCQCode(CQCode cqcode)
@@ -158,8 +159,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             string nick = ViewModel.AvatarType == ChatType.QQGroup
-                ? await Caches.GetGroupMemberNick(ViewModel.ParentId, id)
-                : await Caches.GetFriendNick(id);
+                ? await ChatHistoryHelper.GetGroupMemberNick(ViewModel.ParentId, id)
+                : await ChatHistoryHelper.GetFriendNick(id);
 
             var element = CreateHyperlinkElement(nick, cqcode);
             MessageContent.Inlines.Add(new InlineUIContainer(element) { BaselineAlignment = BaselineAlignment.Center });
@@ -203,8 +204,8 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
 
             string nick = ViewModel.AvatarType == ChatType.QQGroup
-                ? await Caches.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID)
-                : await Caches.GetFriendNick(messageItem.SenderID);
+                ? await ChatHistoryHelper.GetGroupMemberNick(ViewModel.ParentId, messageItem.SenderID)
+                : await ChatHistoryHelper.GetFriendNick(messageItem.SenderID);
 
             var reply = new ChatReplyDisplay
             {
@@ -345,17 +346,14 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         {
             ViewModel.MessageStatus = MessageStatus.Sending;
             Task<int>? sendTask = null;
-            ChatHistoryType chatHistoryType = ChatHistoryType.Other;
             switch (ViewModel.AvatarType)
             {
                 case ChatType.QQGroup:
                     sendTask = ChatViewModel.Instance.CallGroupMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
-                    chatHistoryType = ChatHistoryType.Group;
                     break;
 
                 case ChatType.QQPrivate:
                     sendTask = ChatViewModel.Instance.CallPrivateMsgSendAsync(ViewModel.ParentId, ViewModel.Content);
-                    chatHistoryType = ChatHistoryType.Private;
                     break;
 
                 case ChatType.Fallback:
@@ -366,7 +364,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 ViewModel.MsgId = await sendTask;
                 ViewModel.MessageStatus = ViewModel.MsgId != 0 ? MessageStatus.Sent : MessageStatus.SendFailed;
-                ChatHistoryHelper.UpdateHistoryMessageId(ViewModel.ParentId, chatHistoryType, ViewModel.SqlId, ViewModel.MsgId);
+                ChatHistoryHelper.UpdateHistoryMessageId(ViewModel.ParentId, ViewModel.SqlId, ViewModel.MsgId);
             }
             else
             {

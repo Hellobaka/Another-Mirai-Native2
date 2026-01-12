@@ -97,7 +97,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(async () =>
             {
-                await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
+                await ViewModel.AddGroupChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 加入了本群", DetailItemType.Notice, DateTime.Now);
             });
         }
 
@@ -105,7 +105,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(async () =>
             {
-                await ViewModel.AddGroupChatItem(group, qq, $"{await Caches.GetGroupMemberNick(group, qq)} 禁言了 {await Caches.GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
+                await ViewModel.AddGroupChatItem(group, qq, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 禁言了 {await ChatHistoryHelper.GetGroupMemberNick(group, operatedQQ)} {time}秒", DetailItemType.Notice, DateTime.Now);
             });
         }
 
@@ -113,8 +113,7 @@ namespace Another_Mirai_Native.UI.Pages
         {
             Dispatcher.BeginInvoke(async () =>
             {
-                await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await Caches.GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
-                Caches.RemoveGroupMember(group, qq);
+                await ViewModel.AddGroupChatItem(group, AppConfig.Instance.CurrentQQ, $"{await ChatHistoryHelper.GetGroupMemberNick(group, qq)} 离开了群", DetailItemType.Notice, DateTime.Now);
             });
         }
 
