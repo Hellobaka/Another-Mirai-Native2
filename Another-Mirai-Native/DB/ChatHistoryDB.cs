@@ -26,7 +26,6 @@ namespace Another_Mirai_Native.DB
                 }
 
                 string dbPath = GetDBPath();
-                bool isNewDb = !File.Exists(dbPath);
 
                 _dbInstance = new SqlSugarClient(new ConnectionConfig()
                 {
