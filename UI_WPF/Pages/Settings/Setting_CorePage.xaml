@@ -171,7 +171,7 @@
                     x:Name="EnableChatImageCacheExpireTimeControl"
                     Title="启用缓存图片最大储存时限控制"
                     OnToggled="SettingItem_Toggled"
-                    Subtitle="图片最大保留一点天数后，会从最久的图片开始删除" />
+                    Subtitle="图片最大保留一定天数后，会从最久的图片开始删除" />
 
                 <controls:SettingItem_TextBox
                     x:Name="ChatImageCacheExpireTime"
