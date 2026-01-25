@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
+    <ProjectReference Include="..\..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
     <ProjectReference Include="Lagrange.Core\Lagrange.Core\Lagrange.Core.csproj" />
   </ItemGroup>
 
