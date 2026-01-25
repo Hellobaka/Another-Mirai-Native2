@@ -72,9 +72,25 @@ namespace Another_Mirai_Native.Native
         {
             long position = binary.BaseStream.Position;     // 记录原指针位置
 
+            if (binary.BaseStream.Length > int.MaxValue)
+            {
+                throw new IOException("Stream is too large to be converted to a single byte array.");
+            }
+
             byte[] buffer = new byte[binary.BaseStream.Length];
             binary.BaseStream.Position = 0;                 // 设置读取位置为 0
-            binary.BaseStream.Read(buffer, 0, buffer.Length);
+
+            int offset = 0;
+            int count;
+            while (offset < buffer.Length && (count = binary.BaseStream.Read(buffer, offset, buffer.Length - offset)) > 0)
+            {
+                offset += count;
+            }
+
+            if (offset != buffer.Length)
+            {
+                throw new EndOfStreamException("Unable to read the entire stream.");
+            }
 
             binary.BaseStream.Position = position;          // 还原原指针位置
             return buffer;
