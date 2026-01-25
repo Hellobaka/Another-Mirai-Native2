@@ -79,6 +79,11 @@ namespace Another_Mirai_Native.BlazorUI
                     builder.Logging.AddProvider(Logging.Instance);
                 }
                 WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
+                if (Blazor_Config.Instance.EnableHTTPS)
+                {
+                    WebUIURL = WebUIURL.Replace("http://", "https://");
+                }
+                LoadHTTPsCertificate(builder.WebHost);
                 builder.WebHost.UseUrls(WebUIURL);
                 if (Blazor_Config.Instance.ListenIP == "0.0.0.0" || Blazor_Config.Instance.ListenIP == "*")
                 {
@@ -88,7 +93,6 @@ namespace Another_Mirai_Native.BlazorUI
                 {
                     WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
                 }
-                LoadHTTPsCertificate(builder.WebHost);
                 var app = builder.Build();
                 BlazorHost = app;
                 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
