@@ -93,6 +93,11 @@ namespace Another_Mirai_Native.BlazorUI
                 {
                     WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
                 }
+                if (Blazor_Config.Instance.EnableHTTPS)
+                {
+                    // for UI ContextMenu
+                    WebUIURL = WebUIURL.Replace("http://", "https://");
+                }
                 var app = builder.Build();
                 BlazorHost = app;
                 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
@@ -147,7 +152,6 @@ namespace Another_Mirai_Native.BlazorUI
             {
                 if (File.Exists(Blazor_Config.Instance.CertificatePath) && File.Exists(Blazor_Config.Instance.CertificateKeyPath))
                 {
-                    bool httpsLoaded = false;
                     webHost.ConfigureKestrel(serverOptions =>
                     {
                         serverOptions.ConfigureHttpsDefaults(httpsOptions =>
@@ -155,12 +159,10 @@ namespace Another_Mirai_Native.BlazorUI
                             if (TryLoadPEM(httpsOptions))
                             {
                                 LogHelper.Info("加载 HTTPS", "成功加载了 PEM 证书");
-                                httpsLoaded = true;
                             }
                             else if (TryLoadPFX(httpsOptions))
                             {
                                 LogHelper.Info("加载 HTTPS", "成功加载了 PFX 证书");
-                                httpsLoaded = true;
                             }
                             else
                             {
@@ -168,10 +170,6 @@ namespace Another_Mirai_Native.BlazorUI
                             }
                         });
                     });
-                    if (httpsLoaded)
-                    {
-                        WebUIURL = WebUIURL.Replace("http://", "https://");
-                    }
                 }
                 else
                 {
