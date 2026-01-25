@@ -29,7 +29,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.1" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
     <PackageReference Include="MudBlazor" Version="7.16.0" />
   </ItemGroup>
 
