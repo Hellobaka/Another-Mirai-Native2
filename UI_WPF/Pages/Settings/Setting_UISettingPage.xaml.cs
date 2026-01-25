@@ -118,7 +118,7 @@ namespace Another_Mirai_Native.UI.Pages
             SetConfigToControl();
             AutoStartup.Toggled = CheckHasStartupRegistry();
 #if NET48
-            WebUIAutoStart.IsEnabled = false;
+            AutoStartWebUI.IsEnabled = false;
 #endif
             FormLoaded = true;
         }

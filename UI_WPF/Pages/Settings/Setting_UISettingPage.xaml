@@ -49,7 +49,7 @@
                         Subtitle="协议连接成功后最小化主窗口" />
 
                     <controls:SettingItem_ToggleButton
-                        x:Name="WebUIAutoStart"
+                        x:Name="AutoStartWebUI"
                         Title="自动启动 WebUI"
                         OnToggled="SettingItem_Toggled" />
                 </ui:SimpleStackPanel>
