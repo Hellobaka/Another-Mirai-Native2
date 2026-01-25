@@ -23,6 +23,18 @@ namespace Another_Mirai_Native.BlazorUI
 
         private static bool ConsoleMode { get; set; }
 
+        private static string GetWebUIScheme() => Blazor_Config.Instance.EnableHTTPS ? "https" : "http";
+
+        private static string BuildUrl(string scheme, string host, int port) => $"{scheme}://{host}:{port}";
+
+        private static string GetDisplayListenIp(string listenIp) => listenIp switch
+        {
+            "0.0.0.0" => "127.0.0.1",
+            "*" => "127.0.0.1",
+            "[::]" => "[::1]",
+            _ => listenIp
+        };
+
         /// <summary>
         /// Console Start Entry
         /// </summary>
@@ -78,26 +90,17 @@ namespace Another_Mirai_Native.BlazorUI
                     builder.Logging.ClearProviders();
                     builder.Logging.AddProvider(Logging.Instance);
                 }
-                WebUIURL = $"http://{Blazor_Config.Instance.ListenIP}:{Blazor_Config.Instance.ListenPort}";
-                if (Blazor_Config.Instance.EnableHTTPS)
-                {
-                    WebUIURL = WebUIURL.Replace("http://", "https://");
-                }
+                var scheme = GetWebUIScheme();
+
                 LoadHTTPsCertificate(builder.WebHost);
-                builder.WebHost.UseUrls(WebUIURL);
-                if (Blazor_Config.Instance.ListenIP == "0.0.0.0" || Blazor_Config.Instance.ListenIP == "*")
-                {
-                    WebUIURL = $"http://127.0.0.1:{Blazor_Config.Instance.ListenPort}";
-                }
-                else if (Blazor_Config.Instance.ListenIP == "[::]")
-                {
-                    WebUIURL = $"http://[::1]:{Blazor_Config.Instance.ListenPort}";
-                }
-                if (Blazor_Config.Instance.EnableHTTPS)
-                {
-                    // for UI ContextMenu
-                    WebUIURL = WebUIURL.Replace("http://", "https://");
-                }
+
+                var listenUrl = BuildUrl(scheme, Blazor_Config.Instance.ListenIP, Blazor_Config.Instance.ListenPort);
+                builder.WebHost.UseUrls(listenUrl);
+
+                // for UI ContextMenu / displaying a local reachable URL
+                var displayIp = GetDisplayListenIp(Blazor_Config.Instance.ListenIP);
+                WebUIURL = BuildUrl(scheme, displayIp, Blazor_Config.Instance.ListenPort);
+
                 var app = builder.Build();
                 BlazorHost = app;
                 var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
