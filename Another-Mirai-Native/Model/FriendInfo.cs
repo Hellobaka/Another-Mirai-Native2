@@ -21,6 +21,11 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         public string Postscript { get; set; } = "";
 
+        /// <summary>
+        /// 最后更新时间(时间戳)
+        /// </summary>
+        public long LastUpdateTime { get; set; }
+
         public override string ToString()
         {
             return $"QQ={QQ}; 昵称={Nick}; 备注={Postscript};";

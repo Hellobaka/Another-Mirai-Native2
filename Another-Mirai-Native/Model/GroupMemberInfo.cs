@@ -82,6 +82,11 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         public bool IsAllowEditorCard { get; set; }
 
+        /// <summary>
+        /// 最后更新时间(时间戳)
+        /// </summary>
+        public long LastUpdateTime { get; set; }
+
         public override string ToString()
         {
             return $"群: {Group}; " +

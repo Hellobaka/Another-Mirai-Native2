@@ -24,9 +24,24 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static ConcurrentDictionary<long, Dictionary<long, GroupMemberInfo>> GroupMemberCache { get; set; } = new();
 
+        /// <summary>
+        /// 缓存判定为过期的时间
+        /// </summary>
+        private static readonly TimeSpan CacheStaleThreshold = TimeSpan.FromDays(1);
+
         private static bool Deleting { get; set; }
 
         private static System.Timers.Timer DailyMaintenanceTimer { get; set; }
+
+        private static bool IsCacheStale(long lastUpdateTime)
+        {
+            if (lastUpdateTime <= 0)
+            {
+                return true;
+            }
+
+            return (DateTime.Now - Helper.TimeStamp2DateTime((int)lastUpdateTime)) > CacheStaleThreshold;
+        }
 
         /// <summary>
         /// 从数据库加载缓存数据到内存
@@ -45,7 +60,8 @@ namespace Another_Mirai_Native.DB
                     {
                         QQ = friend.QQ,
                         Nick = friend.Nick,
-                        Postscript = friend.Postscript
+                        Postscript = friend.Postscript,
+                        LastUpdateTime = friend.LastUpdateTime
                     };
                 }
 
@@ -58,7 +74,8 @@ namespace Another_Mirai_Native.DB
                         Group = group.GroupID,
                         Name = group.Name,
                         CurrentMemberCount = group.CurrentMemberCount,
-                        MaxMemberCount = group.MaxMemberCount
+                        MaxMemberCount = group.MaxMemberCount,
+                        LastUpdateTime = group.LastUpdateTime
                     };
                 }
 
@@ -89,7 +106,8 @@ namespace Another_Mirai_Native.DB
                         ExclusiveTitleExpirationTime = member.ExclusiveTitleExpirationTime > 0
                             ? Helper.TimeStamp2DateTime(member.ExclusiveTitleExpirationTime) : null,
                         IsBadRecord = member.IsBadRecord,
-                        IsAllowEditorCard = member.IsAllowEditorCard
+                        IsAllowEditorCard = member.IsAllowEditorCard,
+                        LastUpdateTime = member.LastUpdateTime
                     };
                 }
             }
@@ -118,6 +136,8 @@ namespace Another_Mirai_Native.DB
                     Postscript = friend.Postscript,
                     LastUpdateTime = Helper.TimeStamp
                 };
+
+                friend.LastUpdateTime = entity.LastUpdateTime;
 
                 var existing = await db.Queryable<FriendEntity>()
                     .Where(x => x.QQ == friend.QQ)
@@ -159,6 +179,8 @@ namespace Another_Mirai_Native.DB
                     MaxMemberCount = group.MaxMemberCount,
                     LastUpdateTime = Helper.TimeStamp
                 };
+
+                group.LastUpdateTime = entity.LastUpdateTime;
 
                 var existing = await db.Queryable<GroupEntity>()
                     .Where(x => x.GroupID == group.Group)
@@ -211,6 +233,8 @@ namespace Another_Mirai_Native.DB
                     IsAllowEditorCard = member.IsAllowEditorCard,
                     LastUpdateTime = Helper.TimeStamp
                 };
+
+                member.LastUpdateTime = entity.LastUpdateTime;
 
                 var existing = await db.Queryable<GroupMemberEntity>()
                     .Where(x => x.GroupID == member.Group && x.QQ == member.QQ)
@@ -528,6 +552,9 @@ namespace Another_Mirai_Native.DB
                         {
                             Time = chatHistory.Time.ToTimeStamp(),
                             Message = chatHistory.Message,
+                            SenderID = chatHistory.SenderID,
+                            ParentID = chatHistory.ParentID,
+                            Type = chatHistory.Type,
                         })
                         .Where(x => x.ID == existing.ID)
                         .ExecuteCommand();
@@ -952,6 +979,12 @@ namespace Another_Mirai_Native.DB
             if (FriendInfoCache.TryGetValue(qq, out var info)
                 && info != null)
             {
+                if (!retry && IsCacheStale(info.LastUpdateTime))
+                {
+                    await LoadFriendCaches();
+                    return await GetFriendNick(qq, true);
+                }
+
                 if (string.IsNullOrEmpty(info.Postscript))
                 {
                     return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
@@ -983,6 +1016,13 @@ namespace Another_Mirai_Native.DB
             {
                 if (member.TryGetValue(qq, out var info))
                 {
+                    // 缓存存在但可能过期：以数据库记录的最后更新时间为准
+                    if (!retry && info != null && IsCacheStale(info.LastUpdateTime))
+                    {
+                        await LoadGroupMemberCaches(groupId);
+                        return await GetGroupMemberNick(groupId, qq, true);
+                    }
+
                     if (string.IsNullOrEmpty(info.Card))
                     {
                         return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;
@@ -1016,6 +1056,12 @@ namespace Another_Mirai_Native.DB
             if (GroupInfoCache.TryGetValue(groupId, out var info)
                 && info != null)
             {
+                if (!retry && IsCacheStale(info.LastUpdateTime))
+                {
+                    await LoadGroupInfoCaches(groupId);
+                    return await GetGroupName(groupId, true);
+                }
+
                 return string.IsNullOrEmpty(info.Name) ? groupId.ToString() : info.Name;
             }
             else if (!retry)
