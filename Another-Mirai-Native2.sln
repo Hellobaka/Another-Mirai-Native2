@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Another-Mirai-Native", "Ano
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQP", "CQP\CQP.csproj", "{FAF82352-4013-4622-911A-DAD4E6F1754B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_MiraiAPIHttp", "Protocol_MiraiAPIHttp\Protocol_MiraiAPIHttp.csproj", "{7EAE6816-8FD9-4456-9387-851F075F73FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_MiraiAPIHttp", "Protocols\Protocol_MiraiAPIHttp\Protocol_MiraiAPIHttp.csproj", "{7EAE6816-8FD9-4456-9387-851F075F73FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5A3ED6B2-A57C-4086-A425-6EEE89894A29}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,17 +16,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protocols", "Protocols", "{2D9E67CC-6EDC-495E-876E-50DD65E6B28B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_NoConnection", "Protocol_NoConnection\Protocol_NoConnection.csproj", "{D1C15118-1FBC-4FD6-BE22-A85EDABB7321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_NoConnection", "Protocols\Protocol_NoConnection\Protocol_NoConnection.csproj", "{D1C15118-1FBC-4FD6-BE22-A85EDABB7321}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_WPF", "UI_WPF\UI_WPF.csproj", "{6CC7B4F1-4DF6-41A3-87A5-A7A8ED1DCDFC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_OneBotv11", "Protocol_OneBot\Protocol_OneBotv11.csproj", "{40258B40-0DBD-4E63-9D04-E09A4BF3E5B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_OneBotv11", "Protocols\Protocol_OneBot\Protocol_OneBotv11.csproj", "{40258B40-0DBD-4E63-9D04-E09A4BF3E5B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_Blazor", "UI_Blazor\UI_Blazor.csproj", "{D2B1680B-0D64-4C40-A589-0BC6D5583517}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol_LagrangeCore", "Protocol_LagrangeCore\Protocol_LagrangeCore.csproj", "{729FD802-1CD5-4FB7-9AE4-02BA2F1E0092}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol_LagrangeCore", "Protocols\Protocol_LagrangeCore\Protocol_LagrangeCore.csproj", "{729FD802-1CD5-4FB7-9AE4-02BA2F1E0092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lagrange.Core", "Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core\Lagrange.Core.csproj", "{C07E9DA3-A71A-4653-89A6-D92A9556F33F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lagrange.Core", "Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core\Lagrange.Core.csproj", "{C07E9DA3-A71A-4653-89A6-D92A9556F33F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
