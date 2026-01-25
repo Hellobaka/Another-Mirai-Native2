@@ -6,7 +6,6 @@
 ## 协议实现进度
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [x] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
-- [-] 实现[Satori](https://satori.js.org/zh-CN/introduction.html)协议
 - [x] 实现[Lagrange.Core](https://github.com/LagrangeDev/Lagrange.Core)协议
 - [ ] 实现官方协议
 - [ ] 实现OPQBot协议
@@ -21,43 +20,43 @@
 | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |--  | -- | -- | -- | -- | -- | -- | -- | -- | -- | --| -- | -- | -- |  --| -- |
 | MiraiApiHttp | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ❓ |⭕  | ❌ | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
 | OneBot v11 | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |⭕  | ⭕ | ⭕ |⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
-| Satori v1 | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ⭕ | ❓ | ❓ | ⭕ | ⭕ | ❌ |⭕  | ❌ | ⭕ | ❌ | ❌ | ⭕ | ⭕ | ❌ | ❌ | ❌ | ⭕ | ❌ | ⭕ | ⭕ |  ❌| ⭕ |
 | Lagrange.Core | ⭕ | ⭕ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |⭕  | ⭕ | ⭕ |❌ | ❌ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ | ⭕ |  ⭕| ⭕ |
 
 ## 协议CQ码可发送情况
-||MiraiAPIHttp|OneBot v11|Satori v1|Lagrange.Core|
-|--|--|--|--|--|
-|face|⭕|⭕|⭕|⭕|
-|image|⭕|⭕|⭕|⭕|
-|record|⭕|⭕|⭕|⭕|
-|at|⭕|⭕|⭕|⭕|
-|dice|⭕|⭕|❌|❌|
-|music|⭕|⭕|❌|❌|
-|rich|⭕|⭕|❌|❌|
-|reply|⭕|⭕|❌|⭕|
+||MiraiAPIHttp|OneBot v11|Lagrange.Core|
+|--|--|--|--|
+|face|⭕|⭕|⭕|
+|image|⭕|⭕|⭕|
+|record|⭕|⭕|⭕|
+|at|⭕|⭕|⭕|
+|dice|⭕|⭕|❌|
+|music|⭕|⭕|❌|
+|rich|⭕|⭕|❌|
+|reply|⭕|⭕|⭕|
 
 ## 协议CQ码可解析情况
-||MiraiAPIHttp|OneBot v11|Satori v1|Lagrange.Core|
-|--|--|--|--|--|
-|face|⭕|⭕|⭕|⭕|
-|bigface|⭕|⭕|❌|⭕|
-|image|⭕|⭕|⭕|⭕|
-|flashimage|⭕|⭕|❌|⭕|
-|record|⭕|⭕|⭕|⭕|
-|at|⭕|⭕|⭕|⭕|
-|atall|⭕|⭕|❌|⭕|
-|dice|⭕|⭕|❌|❌|
-|music|⭕|⭕|❌|❌|
-|xml|⭕|⭕|❌|⭕|
-|json|⭕|⭕|❌|⭕|
-|app|⭕|⭕|❌|⭕|
-|rich|⭕|⭕|❌|⭕|
-|reply|⭕|⭕|❌|⭕|
-|poke|⭕|⭕|❌|❌|
+||MiraiAPIHttp|OneBot v11|Lagrange.Core|
+|--|--|--|--|
+|face|⭕|⭕|⭕|
+|bigface|⭕|⭕|⭕|
+|image|⭕|⭕|⭕|
+|flashimage|⭕|⭕|⭕|
+|record|⭕|⭕|⭕|
+|at|⭕|⭕|⭕|
+|atall|⭕|⭕|⭕|
+|dice|⭕|⭕|❌|
+|music|⭕|⭕|❌|
+|xml|⭕|⭕|⭕|
+|json|⭕|⭕|⭕|
+|app|⭕|⭕|⭕|
+|rich|⭕|⭕|⭕|
+|reply|⭕|⭕|⭕|
+|poke|⭕|⭕|❌|
 
 </details>
 
 ## 关于 Lagrange.Core
+- 协议由于社区原因，可能无法正常使用
 - 登录逻辑借鉴于Lagrange.Onebot项目
 - 仅.net9.0版本可用
 - 若控制台输出的二维码无法扫码，可修改`conf\Config.json`配置中的`QRCodeCompatibilityMode`为true
