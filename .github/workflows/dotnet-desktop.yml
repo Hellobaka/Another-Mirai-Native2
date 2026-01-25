@@ -36,13 +36,13 @@ jobs:
       run: nuget restore Another-Mirai-Native2.sln 
     
     - name: Restore NuGet packages
-      run: nuget restore Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
+      run: nuget restore Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
       
     - name: Restore DllExport    
       run: .\DllExport -action Restore
           
     - name: Run MSBuild
-      run: msbuild Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
+      run: msbuild Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.Core.sln
   
     - name: Run MSBuild
       run: msbuild Another-Mirai-Native2.sln -p:Configuration=Debug -p:Platform=x86
