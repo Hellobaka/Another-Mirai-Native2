@@ -847,7 +847,7 @@ namespace Another_Mirai_Native.DB
 
                             // 标记为已删除
                             db.Updateable<CachedImage>()
-                                .SetColumns(x => x.Deleted)
+                                .SetColumns(x => new CachedImage { Deleted = true })
                                 .Where(x => x.ID == image.ID)
                                 .ExecuteCommand();
                         }
@@ -911,7 +911,7 @@ namespace Another_Mirai_Native.DB
                                     if (cachedImage != null)
                                     {
                                         db.Updateable<CachedImage>()
-                                            .SetColumns(x => x.Deleted)
+                                            .SetColumns(x => new CachedImage { Deleted = true })
                                             .Where(x => x.ID == cachedImage.ID)
                                             .ExecuteCommand();
                                     }
