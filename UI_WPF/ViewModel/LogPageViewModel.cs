@@ -18,6 +18,8 @@ namespace Another_Mirai_Native.UI.ViewModel
     [AddINotifyPropertyChangedInterface]
     public class LogPageViewModel
     {
+        private const int LastPageMarker = -1;
+
         private bool _isRefiltering;
 
         private readonly DispatcherTimer _batchTimer;
@@ -104,7 +106,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
             FilterLogLevelIndex = 1; // Default Info
 
-            CurrentPage = -1; // Start at last page
+            CurrentPage = LastPageMarker; // Start at last page
             RefilterLogCollection();
 
             LogHelper.LogAdded -= LogHelper_LogAdded;
@@ -138,7 +140,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         public void OnFilterLogLevelIndexChanged()
         {
             FilterLogLevel = FilterLogLevelIndex * 10;
-            CurrentPage = -1;
+            CurrentPage = LastPageMarker;
             RefilterLogCollection();
             SelectLastLog();
         }
@@ -150,7 +152,7 @@ namespace Another_Mirai_Native.UI.ViewModel
                 UIConfig.Instance.LogPageSize = ItemsPerPage;
                 UIConfig.Instance.SetConfig("LogPageSize", ItemsPerPage);
 
-                CurrentPage = -1;
+                CurrentPage = LastPageMarker;
                 RefilterLogCollection();
             }
         }
@@ -177,18 +179,11 @@ namespace Another_Mirai_Native.UI.ViewModel
                     {
                         TotalItems = totalCount;
                         TotalPages = totalPage;
-                        if (CurrentPage == -1)
+                        if (CurrentPage == LastPageMarker)
                         {
                             CurrentPage = TotalPages;
                         }
-                        else if (CurrentPage > TotalPages)
-                        {
-                            CurrentPage = TotalPages;
-                        }
-                        else if (CurrentPage < 1)
-                        {
-                            CurrentPage = 1;
-                        }
+                        CurrentPage = Math.Max(1, Math.Min(CurrentPage, TotalPages));
                         UpdateLogCollections(ls);
                         SelectLastLog();
                     });
@@ -289,7 +284,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         {
             if (TotalItems > 0 && IsLogIndexReset(logs))
             {
-                CurrentPage = -1;
+                CurrentPage = LastPageMarker;
                 RefilterLogCollection();
                 return;
             }
@@ -362,7 +357,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private bool IsLogIndexReset(List<LogModel> logs)
         {
-            if (logs.Any(x => x.id <= 1))
+            if (logs.Any(x => x.id == 1))
             {
                 return true;
             }
@@ -379,7 +374,7 @@ namespace Another_Mirai_Native.UI.ViewModel
         private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
         {
             SearchDebounceTimer.Stop();
-            CurrentPage = -1;
+            CurrentPage = LastPageMarker;
             RefilterLogCollection();
             SelectLastLog();
         }
