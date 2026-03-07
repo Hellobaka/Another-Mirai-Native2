@@ -289,7 +289,7 @@ else
         });
         Task.Run(async () =>
         {
-            RenderItems = await ParseMessageToRenderItems(Item.Message);
+            RenderItems = await ParseMessageToRenderItems(Item.Message.Trim());
             SingleImageMode = RenderItems.Count == 1 && RenderItems.First().RenderType == RenderType.Image;
             await InvokeAsync(() => StateHasChanged());
         });
@@ -505,7 +505,7 @@ else
             string? path = Path.Combine(Helper.GetCachePictureDirectory(), cachedImage.FileName);
             if (!string.IsNullOrEmpty(path))
             {
-                return "/" + Path.GetRelativePath("data", path);
+                return "/" + Path.GetRelativePath("data", path).Replace("\\", "/");
             }
         }
         return null;

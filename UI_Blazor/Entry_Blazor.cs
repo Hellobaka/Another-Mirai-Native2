@@ -132,7 +132,7 @@ namespace Another_Mirai_Native.BlazorUI
                 app.UseStaticFiles(new StaticFileOptions
                 {
                     FileProvider = new PhysicalFileProvider(imageDirectory),
-                    RequestPath = "/data/image"
+                    RequestPath = "/image"
                 });
                 
                 app.UseAntiforgery();
