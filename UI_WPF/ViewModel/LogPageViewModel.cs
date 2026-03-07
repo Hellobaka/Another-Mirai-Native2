@@ -181,6 +181,14 @@ namespace Another_Mirai_Native.UI.ViewModel
                         {
                             CurrentPage = TotalPages;
                         }
+                        else if (CurrentPage > TotalPages)
+                        {
+                            CurrentPage = TotalPages;
+                        }
+                        else if (CurrentPage < 1)
+                        {
+                            CurrentPage = 1;
+                        }
                         UpdateLogCollections(ls);
                         SelectLastLog();
                     });
@@ -279,6 +287,13 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void ProcessNewLogs(List<LogModel> logs)
         {
+            if (TotalItems > 0 && IsLogIndexReset(logs))
+            {
+                CurrentPage = -1;
+                RefilterLogCollection();
+                return;
+            }
+
             bool shouldScroll = false;
 
             foreach (var log in logs)
@@ -343,6 +358,22 @@ namespace Another_Mirai_Native.UI.ViewModel
             {
                 SelectLastLog();
             }
+        }
+
+        private bool IsLogIndexReset(List<LogModel> logs)
+        {
+            if (logs.Any(x => x.id <= 1))
+            {
+                return true;
+            }
+
+            if (LogCollections.Count == 0)
+            {
+                return false;
+            }
+
+            int displayedLastLogId = LogCollections.Last().id;
+            return displayedLastLogId > 0 && logs.Any(x => x.id > 0 && x.id < displayedLastLogId);
         }
 
         private void SearchDebounceTimer_Tick(object? sender, EventArgs e)
