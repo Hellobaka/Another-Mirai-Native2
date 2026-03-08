@@ -3,7 +3,8 @@ name: Build and Deploy Docs to Cloudflare Pages
 on:
   push:
     branches:
-      - main
+      - master
+      - csharp-plugin
 
 jobs:
   build-and-deploy:
