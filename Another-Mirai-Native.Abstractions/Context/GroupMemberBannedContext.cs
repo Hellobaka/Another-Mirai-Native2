@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
     /// 提供用于描述群成员被禁言事件参数的类
     /// </summary>
-    public class GroupMemberBannedEventArg
+    public class GroupMemberBannedContext
     {
         /// <summary>
         /// 获取当前事件的发送时间

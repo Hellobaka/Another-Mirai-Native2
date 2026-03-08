@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using System;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述群全员禁言解除事件参数的类
+    /// 提供用于描述群全员禁言事件参数的类
     /// </summary>
-    public class GroupWholeUnbannedEventArg
+    public class GroupWholeBannedContext
     {
         /// <summary>
         /// 获取当前事件的发送时间

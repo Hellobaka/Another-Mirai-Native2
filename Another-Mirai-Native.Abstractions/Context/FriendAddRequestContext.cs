@@ -1,12 +1,13 @@
 ﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
 using System;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
     /// 提供用于描述好友添加请求事件参数的类
     /// </summary>
-    public class FriendAddRequestEventArg
+    public class FriendAddRequestContext
     {
         /// <summary>
         /// 获取当前事件的发送时间
@@ -28,7 +29,7 @@ namespace Another_Mirai_Native.Abstractions.Models.EventArgs
         /// </summary>
         private string RequestFlag { get; set; }
 
-        internal FriendAddRequestEventArg(string requestFlag)
+        internal FriendAddRequestContext(string requestFlag)
         {
             RequestFlag = requestFlag;
         }

@@ -7,7 +7,7 @@ namespace Another_Mirai_Native.Abstractions.Services
     /// <summary>
     /// 提供用于管理群组操作的抽象，包括成员管理、群组信息检索以及在群组上下文中的管理操作。
     /// </summary>
-    public interface IGroupAPI
+    public interface IGroupApi
     {
         /// <summary>
         /// 全群禁言/解除全群禁言；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作

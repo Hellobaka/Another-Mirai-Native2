@@ -6,7 +6,7 @@ namespace Another_Mirai_Native.Abstractions.Services
     /// <summary>
     /// 发送消息相关的接口，提供发送私聊消息、群聊消息和撤回消息的方法。
     /// </summary>
-    public interface IMessageAPI
+    public interface IMessageApi
     {
         /// <summary>
         /// 发送私聊消息

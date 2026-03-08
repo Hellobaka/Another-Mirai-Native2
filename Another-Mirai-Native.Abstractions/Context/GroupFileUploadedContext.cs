@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using System;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述群全员禁言事件参数的类
+    /// 提供用于描述群文件上传事件参数的类
     /// </summary>
-    public class GroupWholeBannedEventArg
+    public class GroupFileUploadedContext
     {
         /// <summary>
         /// 获取当前事件的发送时间
@@ -18,8 +19,13 @@ namespace Another_Mirai_Native.Abstractions.Models.EventArgs
         public Group FromGroup { get; private set; }
 
         /// <summary>
-        /// 获取当前事件的操作者QQ
+        /// 获取当前事件的来源QQ
         /// </summary>
         public QQ FromQQ { get; private set; }
+
+        /// <summary>
+        /// 获取当前事件的文件信息
+        /// </summary>
+        public GroupFileInfo FileInfo { get; private set; }
     }
 }

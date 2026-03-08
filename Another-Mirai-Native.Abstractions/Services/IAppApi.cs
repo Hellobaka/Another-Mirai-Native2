@@ -9,7 +9,7 @@ namespace Another_Mirai_Native.Abstractions.Services
     /// </summary>
     /// <remarks>此接口旨在供插件用于访问应用程序特定的数据并控制其生命周期。
     /// </remarks>
-    public interface IApp
+    public interface IAppApi
     {
         /// <summary>
         /// 获取框架分配给插件的数据目录

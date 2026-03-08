@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using System;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述群群成员被解除禁言事件参数的类
+    /// 提供用于描述群全员禁言解除事件参数的类
     /// </summary>
-    public class GroupMemberUnbannedEventArg
+    public class GroupWholeUnbannedContext
     {
         /// <summary>
         /// 获取当前事件的发送时间
@@ -21,10 +22,5 @@ namespace Another_Mirai_Native.Abstractions.Models.EventArgs
         /// 获取当前事件的操作者QQ
         /// </summary>
         public QQ FromQQ { get; private set; }
-
-        /// <summary>
-        /// 获取当前事件的被操作QQ
-        /// </summary>
-        public QQ BeingOperateQQ { get; private set; }
     }
 }

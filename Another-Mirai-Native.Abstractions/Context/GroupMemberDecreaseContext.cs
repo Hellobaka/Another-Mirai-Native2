@@ -1,12 +1,18 @@
-﻿using System;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using System;
 
-namespace Another_Mirai_Native.Abstractions.Models.EventArgs
+namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述群文件上传事件参数的类
+    /// 为处理群成员退出群聊事件的处理器。
     /// </summary>
-    public class GroupFileUploadedEventArg
+    public class GroupMemberDecreaseContext
     {
+        /// <summary>
+        /// 是否是被管理员踢出，如果是成员主动退群则为 false
+        /// </summary>
+        public bool IsKicked { get; set; }
+
         /// <summary>
         /// 获取当前事件的发送时间
         /// </summary>
@@ -23,8 +29,9 @@ namespace Another_Mirai_Native.Abstractions.Models.EventArgs
         public QQ FromQQ { get; private set; }
 
         /// <summary>
-        /// 获取当前事件的文件信息
+        /// 获取当前事件被操作的QQ
         /// </summary>
-        public GroupFileInfo FileInfo { get; private set; }
+        public QQ BeingOperateQQ { get; private set; }
+
     }
 }

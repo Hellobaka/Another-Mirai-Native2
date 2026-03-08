@@ -6,7 +6,7 @@ namespace Another_Mirai_Native.Abstractions.Services
     /// <summary>
     /// 好友相关的接口，提供获取好友列表的方法。
     /// </summary>
-    public interface IFriendAPI
+    public interface IFriendApi
     {
         /// <summary>
         /// 获取好友列表
