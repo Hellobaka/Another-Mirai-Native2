@@ -32,7 +32,7 @@ jobs:
       # 5. 部署到 Cloudflare Pages
       - name: Deploy to Cloudflare Pages
         run: |
-          npx wrangler pages deploy docs/_site \
+          npx wrangler pages deploy Another-Mirai-Native.Abstractions/docs/_site \
             --project-name=amn2-plugin-docs \
             --branch=main
         env:
