@@ -1,0 +1,39 @@
+name: Build and Deploy Docs to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. 安装 .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # 3. 安装 docfx
+      - name: Install DocFX
+        run: dotnet tool install -g docfx
+
+      # 4. 生成文档
+      - name: Build Docs
+        run: docfx Another-Mirai-Native2/Another-Mirai-Native.Abstractions/docs/docfx.json
+
+      # 5. 部署到 Cloudflare Pages
+      - name: Deploy to Cloudflare Pages
+        run: |
+          npx wrangler pages deploy docs/_site \
+            --project-name=amn2-plugin-docs \
+            --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
