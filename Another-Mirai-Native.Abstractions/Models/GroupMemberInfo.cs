@@ -6,87 +6,87 @@ namespace Another_Mirai_Native.Abstractions.Models
     /// <summary>
     /// 表示群成员信息的类
     /// </summary>
-    public class GroupMemberInfo
+    public class GroupMemberInfo(long group, long qq, string nick, string card, QQSex sex, int age, string area, DateTime joinGroupDateTime, DateTime lastSpeakDateTime, string level, QQGroupMemberType memberType, bool isBadRecord, string exclusiveTitle, DateTime? exclusiveTitleExpirationTime, bool isAllowEditorCard, long lastUpdateTime)
     {
         /// <summary>
         /// 获取一个值, 指示成员所在群的实例
         /// </summary>
-        public long Group { get; set; }
+        public long Group { get; private set; } = group;
 
         /// <summary>
         /// 获取一个值, 指示当前成员的QQ号的实例
         /// </summary>
-        public long QQ { get; set; }
+        public long QQ { get; private set; } = qq;
 
         /// <summary>
         /// 获取一个值, 指示当前成员的QQ昵称
         /// </summary>
-        public string Nick { get; set; } = "";
+        public string Nick { get; private set; } = nick;
 
         /// <summary>
         /// 获取一个值, 指示当前成员在此群的群名片
         /// </summary>
-        public string Card { get; set; } = "";
+        public string Card { get; private set; } = card;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员的性别
         /// </summary>
-        public QQSex Sex { get; set; }
+        public QQSex Sex { get; private set; } = sex;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员年龄
         /// </summary>
-        public int Age { get; set; }
+        public int Age { get; private set; } = age;
 
         /// <summary>
         /// 获取一个值, 指示当前成员所在地区
         /// </summary>
-        public string Area { get; set; } = "";
+        public string Area { get; private set; } = area;
 
         /// <summary>
         /// 获取一个值, 指示当前成员加入群的日期和时间
         /// </summary>
-        public DateTime JoinGroupDateTime { get; set; }
+        public DateTime JoinGroupDateTime { get; private set; } = joinGroupDateTime;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员最后一次发言的日期和时间
         /// </summary>
-        public DateTime LastSpeakDateTime { get; set; }
+        public DateTime LastSpeakDateTime { get; private set; } = lastSpeakDateTime;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员的等级
         /// </summary>
-        public string Level { get; set; } = "";
+        public string Level { get; private set; } = level;
 
         /// <summary>
         /// 获取一个值, 指示当前的群成员类型
         /// </summary>
-        public QQGroupMemberType MemberType { get; set; }
+        public QQGroupMemberType MemberType { get; private set; } = memberType;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员是否为不良记录群成员
         /// </summary>
-        public bool IsBadRecord { get; set; }
+        public bool IsBadRecord { get; private set; } = isBadRecord;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员在此群获得的专属头衔
         /// </summary>
-        public string ExclusiveTitle { get; set; } = "";
+        public string ExclusiveTitle { get; private set; } = exclusiveTitle;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员在此群的专属头衔过期时间, 若本属性为 null 则表示无期限
         /// </summary>
-        public DateTime? ExclusiveTitleExpirationTime { get; set; }
+        public DateTime? ExclusiveTitleExpirationTime { get; private set; } = exclusiveTitleExpirationTime;
 
         /// <summary>
         /// 获取一个值, 指示当前群成员是否允许修改群名片
         /// </summary>
-        public bool IsAllowEditorCard { get; set; }
+        public bool IsAllowEditorCard { get; private set; } = isAllowEditorCard;
 
         /// <summary>
         /// 最后更新时间(时间戳)
         /// </summary>
-        public long LastUpdateTime { get; set; }
+        public long LastUpdateTime { get; private set; } = lastUpdateTime;
 
         /// <summary>
         /// ToString 的重写，用于提供当前群成员信息的字符串表示形式
