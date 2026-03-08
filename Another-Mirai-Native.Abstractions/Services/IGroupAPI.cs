@@ -24,19 +24,19 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="qq">操作的目标群成员</param>
         /// <param name="duration">禁言时长（秒）；当值为 <see langword="0"/> 时，表示解除此人的禁言</param>
         /// <returns>操作是否成功</returns>
-        bool BanUser(long groupId, long qq, long duration);
+        bool BanMember(long groupId, long qq, long duration);
 
         /// <summary>
         /// 通过群号获取群信息
         /// </summary>
         /// <param name="groupId">期望获取群消息的群号</param>
-        /// <returns>获取成功则返回群信息对象，否则会返回 <see langword="null"/></returns>
+        /// <returns>获取成功则返回 <see cref="GroupInfo"/> 对象，否则会返回 <see langword="null"/></returns>
         GroupInfo? GetGroupInfo(long groupId);
 
         /// <summary>
         /// 获取当前登录账号已加入的群列表
         /// </summary>
-        /// <returns>群信息数组</returns>
+        /// <returns>获取成功则返回 <see cref="GroupMemberInfo"/> 数组</returns>
         List<GroupInfo> GetGroupList();
 
         /// <summary>
@@ -44,14 +44,14 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// </summary>
         /// <param name="groupId">目标成员所在群</param>
         /// <param name="qq">目标成员QQ</param>
-        /// <returns>获取成功则返回群成员信息对象，否则会返回 <see langword="null"/></returns>
+        /// <returns>获取成功则返回 <see cref="GroupMemberInfo"/> 信息对象，否则会返回 <see langword="null"/></returns>
         GroupMemberInfo? GetGroupMemberInfo(long groupId, long qq);
 
         /// <summary>
         /// 获取某个群的成员列表，成员较多时会耗时较长
         /// </summary>
         /// <param name="groupId">查询群的群号</param>
-        /// <returns>群成员信息数组</returns>
+        /// <returns>获取成功则返回 <see cref="GroupMemberInfo"/> 数组</returns>
         List<GroupMemberInfo> GetGroupMembers(long groupId);
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Another_Mirai_Native.Abstractions.Services
         bool Kick(long groupId, long qq, bool rejectAddRequest = false);
 
         /// <summary>
-        /// 使当前账号退出某个群
+        /// 使当前账号退出某个群；当账号为群主时，此操作将解散群；
         /// </summary>
         /// <param name="groupId">将要离开的群号</param>
         /// <returns>操作是否成功</returns>
@@ -86,7 +86,7 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="qq">操作的群成员QQ</param>
         /// <param name="card">将要设置的名片，不可为空</param>
         /// <returns>操作是否成功</returns>
-        bool SetGroupCard(long groupId, long qq, string card);
+        bool SetMemberCard(long groupId, long qq, string card);
 
         /// <summary>
         /// 设置某个群成员显示的头衔；要求当前账号必须是群主
@@ -95,6 +95,6 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="qq">操作的群成员QQ</param>
         /// <param name="title">将要设置的头衔，不可为空</param>
         /// <returns>操作是否成功</returns>
-        bool SetSpecialTitle(long groupId, long qq, string title);
+        bool SetMemberTitle(long groupId, long qq, string title);
     }
 }

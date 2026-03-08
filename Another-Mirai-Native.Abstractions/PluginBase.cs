@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.Abstractions
         /// <summary>
         /// 框架提供给插件的核心接口，包含了日志记录、消息处理、好友管理、群组管理和应用程序交互等功能的访问点。插件开发者通过实现此接口来与框架进行交互，实现插件的具体功能。
         /// </summary>
-        public IPluginAPI API { get; internal set; } = default!;
+        public IPluginApi API { get; internal set; } = default!;
 
         /// <summary>
         /// 插件信息。
