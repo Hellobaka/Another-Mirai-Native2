@@ -1,0 +1,251 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IAppApi
+  id: IAppApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  children:
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+  langs:
+  - csharp
+  - vb
+  name: IAppApi
+  nameWithType: IAppApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 提供与应用程序环境交互的方法，包括检索用户信息和管理插件状态。
+  remarks: 此接口旨在供插件用于访问应用程序特定的数据并控制其生命周期。
+  example: []
+  syntax:
+    content: public interface IAppApi
+    content.vb: Public Interface IAppApi
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+  id: GetAppDirectory
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetAppDirectory()
+  nameWithType: IAppApi.GetAppDirectory()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取框架分配给插件的数据目录
+  example: []
+  syntax:
+    content: string GetAppDirectory()
+    return:
+      type: System.String
+      description: 绝对路径
+    content.vb: Function GetAppDirectory() As String
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+  id: GetLoginQQ
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetLoginQQ()
+  nameWithType: IAppApi.GetLoginQQ()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取当前已登录的QQ号码。
+  example: []
+  syntax:
+    content: long GetLoginQQ()
+    return:
+      type: System.Int64
+      description: 表示已登录用户QQ号码的 64 位整数。如果用户未登录，则返回 0。
+    content.vb: Function GetLoginQQ() As Long
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+  id: GetLoginQQNick
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetLoginQQNick()
+  nameWithType: IAppApi.GetLoginQQNick()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取当前已登录的QQ昵称。
+  example: []
+  syntax:
+    content: string GetLoginQQNick()
+    return:
+      type: System.String
+      description: 表示已登录用户QQ号码的昵称。如果用户未登录，则返回 <xref href="System.String?text=string.Empty" data-throw-if-not-resolved="false"></xref>
+    content.vb: Function GetLoginQQNick() As String
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+  id: ReloadPlugin
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: ReloadPlugin()
+  nameWithType: IAppApi.ReloadPlugin()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 重载当前插件，会导致插件进程终止
+  example: []
+  syntax:
+    content: void ReloadPlugin()
+    content.vb: Sub ReloadPlugin()
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+  id: DisablePlugin
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: DisablePlugin()
+  nameWithType: IAppApi.DisablePlugin()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 禁用当前插件，会导致插件进程终止
+  example: []
+  syntax:
+    content: void DisablePlugin()
+    content.vb: Sub DisablePlugin()
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin*
+references:
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetAppDirectory
+  name: GetAppDirectory
+  nameWithType: IAppApi.GetAppDirectory
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetLoginQQ
+  name: GetLoginQQ
+  nameWithType: IAppApi.GetLoginQQ
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetLoginQQNick
+  name: GetLoginQQNick
+  nameWithType: IAppApi.GetLoginQQNick
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_ReloadPlugin
+  name: ReloadPlugin
+  nameWithType: IAppApi.ReloadPlugin
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_DisablePlugin
+  name: DisablePlugin
+  nameWithType: IAppApi.DisablePlugin
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin

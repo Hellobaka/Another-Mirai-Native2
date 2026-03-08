@@ -1,0 +1,649 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.PluginBase
+  commentId: T:Another_Mirai_Native.Abstractions.PluginBase
+  id: PluginBase
+  parent: Another_Mirai_Native.Abstractions
+  children:
+  - Another_Mirai_Native.Abstractions.PluginBase.#ctor
+  - Another_Mirai_Native.Abstractions.PluginBase.API
+  - Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+  - Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync(System.Threading.CancellationToken)
+  - Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync(System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: PluginBase
+  nameWithType: PluginBase
+  fullName: Another_Mirai_Native.Abstractions.PluginBase
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  summary: >-
+    作为插件的抽象基类，为框架内的日志记录、消息收发、好友管理、群组管理和应用程序交互提供核心功能及接口。
+
+    插件开发者应从此类派生以实现自定义插件行为。
+  remarks: 派生类必须重写所提供的方法来实现具体的插件逻辑。此类公开了用于访问框架 API 的受保护属性，使插件能够与消息、好友、群组以及应用程序级别的功能进行交互。GetPluginInfo 的基础实现会抛出 NotImplementedException，以强制派生类提供插件元数据。
+  example: []
+  syntax:
+    content: public abstract class PluginBase
+    content.vb: Public MustInherit Class PluginBase
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync(System.Threading.CancellationToken)
+  commentId: M:Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync(System.Threading.CancellationToken)
+  id: OnEnableAsync(System.Threading.CancellationToken)
+  parent: Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: OnEnableAsync(CancellationToken)
+  nameWithType: PluginBase.OnEnableAsync(CancellationToken)
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  summary: 在插件启用时异步处理逻辑。
+  remarks: 在派生类中重写此方法以实现自定义的启用逻辑。默认实现会立即完成。
+  example: []
+  syntax:
+    content: public virtual Task OnEnableAsync(CancellationToken ct)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: 可用于取消启用操作的取消令牌。
+    return:
+      type: System.Threading.Tasks.Task
+      description: 表示异步启用操作的任务。
+    content.vb: Public Overridable Function OnEnableAsync(ct As CancellationToken) As Task
+  overload: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync*
+- uid: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync(System.Threading.CancellationToken)
+  commentId: M:Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync(System.Threading.CancellationToken)
+  id: OnDisableAsync(System.Threading.CancellationToken)
+  parent: Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: OnDisableAsync(CancellationToken)
+  nameWithType: PluginBase.OnDisableAsync(CancellationToken)
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  summary: 在插件禁用时异步执行必要的清理操作。
+  remarks: 可在派生类中重写此方法以实现自定义的退出逻辑。如果取消令牌被触发，应适当处理来中止退出操作。
+  example: []
+  syntax:
+    content: public virtual Task OnDisableAsync(CancellationToken ct)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: 可用于发出退出操作取消信号的取消令牌。
+    return:
+      type: System.Threading.Tasks.Task
+      description: 表示异步退出操作的任务。当退出操作完成时，任务也将完成。
+    content.vb: Public Overridable Function OnDisableAsync(ct As CancellationToken) As Task
+  overload: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync*
+- uid: Another_Mirai_Native.Abstractions.PluginBase.#ctor
+  commentId: M:Another_Mirai_Native.Abstractions.PluginBase.#ctor
+  id: '#ctor'
+  parent: Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: PluginBase()
+  nameWithType: PluginBase.PluginBase()
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.PluginBase()
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  syntax:
+    content: protected PluginBase()
+    content.vb: Protected Sub New()
+  overload: Another_Mirai_Native.Abstractions.PluginBase.#ctor*
+  nameWithType.vb: PluginBase.New()
+  fullName.vb: Another_Mirai_Native.Abstractions.PluginBase.New()
+  name.vb: New()
+- uid: Another_Mirai_Native.Abstractions.PluginBase.API
+  commentId: P:Another_Mirai_Native.Abstractions.PluginBase.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: PluginBase.API
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  summary: 框架提供给插件的核心接口，包含了日志记录、消息处理、好友管理、群组管理和应用程序交互等功能的访问点。插件开发者通过实现此接口来与框架进行交互，实现插件的具体功能。
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.PluginBase.API*
+- uid: Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+  commentId: P:Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+  id: AppInfo
+  parent: Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: AppInfo
+  nameWithType: PluginBase.AppInfo
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/PluginBase.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions
+  summary: 插件信息。
+  example: []
+  syntax:
+    content: public abstract PluginInfo AppInfo { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.PluginInfo
+    content.vb: Public MustOverride ReadOnly Property AppInfo As PluginInfo
+  overload: Another_Mirai_Native.Abstractions.PluginBase.AppInfo*
+references:
+- uid: Another_Mirai_Native.Abstractions
+  commentId: N:Another_Mirai_Native.Abstractions
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions
+  nameWithType: Another_Mirai_Native.Abstractions
+  fullName: Another_Mirai_Native.Abstractions
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html#Another_Mirai_Native_Abstractions_PluginBase_OnEnableAsync_System_Threading_CancellationToken_
+  name: OnEnableAsync
+  nameWithType: PluginBase.OnEnableAsync
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html#Another_Mirai_Native_Abstractions_PluginBase_OnDisableAsync_System_Threading_CancellationToken_
+  name: OnDisableAsync
+  nameWithType: PluginBase.OnDisableAsync
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync
+- uid: Another_Mirai_Native.Abstractions.PluginBase.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.PluginBase.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html#Another_Mirai_Native_Abstractions_PluginBase__ctor
+  name: PluginBase
+  nameWithType: PluginBase.PluginBase
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.PluginBase
+  nameWithType.vb: PluginBase.New
+  fullName.vb: Another_Mirai_Native.Abstractions.PluginBase.New
+  name.vb: New
+- uid: Another_Mirai_Native.Abstractions.PluginBase.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.PluginBase.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html#Another_Mirai_Native_Abstractions_PluginBase_API
+  name: API
+  nameWithType: PluginBase.API
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.API
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.PluginBase.AppInfo*
+  commentId: Overload:Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html#Another_Mirai_Native_Abstractions_PluginBase_AppInfo
+  name: AppInfo
+  nameWithType: PluginBase.AppInfo
+  fullName: Another_Mirai_Native.Abstractions.PluginBase.AppInfo
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html
+  name: PluginInfo
+  nameWithType: PluginInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html

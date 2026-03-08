@@ -1,0 +1,124 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  id: Another_Mirai_Native.Abstractions.Models
+  children:
+  - Another_Mirai_Native.Abstractions.Models.ChatHistory
+  - Another_Mirai_Native.Abstractions.Models.FriendInfo
+  - Another_Mirai_Native.Abstractions.Models.Group
+  - Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  - Another_Mirai_Native.Abstractions.Models.Message
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo
+  - Another_Mirai_Native.Abstractions.Models.QQ
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+  commentId: T:Another_Mirai_Native.Abstractions.Models.ChatHistory
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.ChatHistory.html
+  name: ChatHistory
+  nameWithType: ChatHistory
+  fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory
+- uid: Another_Mirai_Native.Abstractions.Models.FriendInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.FriendInfo
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.FriendInfo.html
+  name: FriendInfo
+  nameWithType: FriendInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.FriendInfo
+- uid: Another_Mirai_Native.Abstractions.Models.Group
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Group
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Group.html
+  name: Group
+  nameWithType: Group
+  fullName: Another_Mirai_Native.Abstractions.Models.Group
+- uid: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.html
+  name: GroupFileInfo
+  nameWithType: GroupFileInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  name: GroupMemberInfo
+  nameWithType: GroupMemberInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+- uid: Another_Mirai_Native.Abstractions.Models.Message
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Message
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Message.html
+  name: Message
+  nameWithType: Message
+  fullName: Another_Mirai_Native.Abstractions.Models.Message
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html
+  name: PluginInfo
+  nameWithType: PluginInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
+- uid: Another_Mirai_Native.Abstractions.Models.QQ
+  commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.QQ.html
+  name: QQ
+  nameWithType: QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html

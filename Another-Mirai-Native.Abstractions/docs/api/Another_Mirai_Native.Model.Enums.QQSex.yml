@@ -1,0 +1,139 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Model.Enums.QQSex
+  commentId: T:Another_Mirai_Native.Model.Enums.QQSex
+  id: QQSex
+  parent: Another_Mirai_Native.Model.Enums
+  children:
+  - Another_Mirai_Native.Model.Enums.QQSex.Man
+  - Another_Mirai_Native.Model.Enums.QQSex.Unknown
+  - Another_Mirai_Native.Model.Enums.QQSex.Woman
+  langs:
+  - csharp
+  - vb
+  name: QQSex
+  nameWithType: QQSex
+  fullName: Another_Mirai_Native.Model.Enums.QQSex
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQSex.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 表示QQ性别的枚举
+  example: []
+  syntax:
+    content: public enum QQSex
+    content.vb: Public Enum QQSex
+- uid: Another_Mirai_Native.Model.Enums.QQSex.Man
+  commentId: F:Another_Mirai_Native.Model.Enums.QQSex.Man
+  id: Man
+  parent: Another_Mirai_Native.Model.Enums.QQSex
+  langs:
+  - csharp
+  - vb
+  name: Man
+  nameWithType: QQSex.Man
+  fullName: Another_Mirai_Native.Model.Enums.QQSex.Man
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQSex.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 男性
+  example: []
+  syntax:
+    content: Man = 0
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQSex
+- uid: Another_Mirai_Native.Model.Enums.QQSex.Woman
+  commentId: F:Another_Mirai_Native.Model.Enums.QQSex.Woman
+  id: Woman
+  parent: Another_Mirai_Native.Model.Enums.QQSex
+  langs:
+  - csharp
+  - vb
+  name: Woman
+  nameWithType: QQSex.Woman
+  fullName: Another_Mirai_Native.Model.Enums.QQSex.Woman
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQSex.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 女性
+  example: []
+  syntax:
+    content: Woman = 1
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQSex
+- uid: Another_Mirai_Native.Model.Enums.QQSex.Unknown
+  commentId: F:Another_Mirai_Native.Model.Enums.QQSex.Unknown
+  id: Unknown
+  parent: Another_Mirai_Native.Model.Enums.QQSex
+  langs:
+  - csharp
+  - vb
+  name: Unknown
+  nameWithType: QQSex.Unknown
+  fullName: Another_Mirai_Native.Model.Enums.QQSex.Unknown
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQSex.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 未知
+  example: []
+  syntax:
+    content: Unknown = 255
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQSex
+references:
+- uid: Another_Mirai_Native.Model.Enums
+  commentId: N:Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Model.Enums
+  nameWithType: Another_Mirai_Native.Model.Enums
+  fullName: Another_Mirai_Native.Model.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+- uid: Another_Mirai_Native.Model.Enums.QQSex
+  commentId: T:Another_Mirai_Native.Model.Enums.QQSex
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQSex.html
+  name: QQSex
+  nameWithType: QQSex
+  fullName: Another_Mirai_Native.Model.Enums.QQSex

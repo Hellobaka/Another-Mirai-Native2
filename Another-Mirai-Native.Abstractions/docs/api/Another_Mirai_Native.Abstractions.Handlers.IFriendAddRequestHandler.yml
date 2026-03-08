@@ -1,0 +1,297 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  id: IFriendAddRequestHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  children:
+  - Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync(Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IFriendAddRequestHandler
+  nameWithType: IFriendAddRequestHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/FriendAddRequestHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 提供处理好友添加请求事件的处理器。
+  remarks: 默认情况下，除非重写处理器，否则好友添加请求将被忽略。
+  example: []
+  syntax:
+    content: public interface IFriendAddRequestHandler
+    content.vb: Public Interface IFriendAddRequestHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync(Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext,System.Threading.CancellationToken)
+  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync(Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext,System.Threading.CancellationToken)
+  id: OnFriendAddRequestAsync(Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext,System.Threading.CancellationToken)
+  parent: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  langs:
+  - csharp
+  - vb
+  name: OnFriendAddRequestAsync(FriendAddRequestContext, CancellationToken)
+  nameWithType: IFriendAddRequestHandler.OnFriendAddRequestAsync(FriendAddRequestContext, CancellationToken)
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync(Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext, System.Threading.CancellationToken)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/FriendAddRequestHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 在收到好友添加请求时触发。可以通过重写此方法来处理好友添加请求，例如自动接受、拒绝或忽略请求。不重写时默认行为是忽略请求，即不做任何处理。处理请求请调用参数的 <a href="FriendAddedContext.SetRequestResult">FriendAddedContext.SetRequestResult</a> 方法
+  example: []
+  syntax:
+    content: Task<EventHandleResult> OnFriendAddRequestAsync(FriendAddRequestContext e, CancellationToken ct)
+    parameters:
+    - id: e
+      type: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
+      description: 包含好友添加请求的详细信息。
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: 可用于发出退出操作取消信号的取消令牌。
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+      description: 事件的处理结果；<xref href="Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass" data-throw-if-not-resolved="false"></xref> 不阻塞事件的继续传递；<xref href="Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block" data-throw-if-not-resolved="false"></xref> 将会阻塞事件的继续传递；
+    content.vb: Function OnFriendAddRequestAsync(e As FriendAddRequestContext, ct As CancellationToken) As Task(Of EventHandleResult)
+  overload: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync*
+references:
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html#Another_Mirai_Native_Abstractions_Enums_EventHandleResult_Pass
+  name: Pass
+  nameWithType: EventHandleResult.Pass
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html#Another_Mirai_Native_Abstractions_Enums_EventHandleResult_Block
+  name: Block
+  nameWithType: EventHandleResult.Block
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+- uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.html#Another_Mirai_Native_Abstractions_Handlers_IFriendAddRequestHandler_OnFriendAddRequestAsync_Another_Mirai_Native_Abstractions_Context_FriendAddRequestContext_System_Threading_CancellationToken_
+  name: OnFriendAddRequestAsync
+  nameWithType: IFriendAddRequestHandler.OnFriendAddRequestAsync
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.OnFriendAddRequestAsync
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.html
+  name: FriendAddRequestContext
+  nameWithType: FriendAddRequestContext
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<EventHandleResult>
+  nameWithType: Task<EventHandleResult>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Enums.EventHandleResult>
+  nameWithType.vb: Task(Of EventHandleResult)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Enums.EventHandleResult)
+  name.vb: Task(Of EventHandleResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+    name: EventHandleResult
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+    name: EventHandleResult
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

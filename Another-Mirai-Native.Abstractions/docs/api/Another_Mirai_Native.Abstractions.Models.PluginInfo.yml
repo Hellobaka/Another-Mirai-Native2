@@ -1,0 +1,591 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
+  id: PluginInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  children:
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  langs:
+  - csharp
+  - vb
+  name: PluginInfo
+  nameWithType: PluginInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。
+  remarks: 使用此类存储和访问插件元数据，用于插件发现、用户界面显示或插件管理等目的。
+  example: []
+  syntax:
+    content: public class PluginInfo
+    content.vb: Public Class PluginInfo
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.String)'
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: PluginInfo(string, string, string)
+  nameWithType: PluginInfo.PluginInfo(string, string, string)
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo(string, string, string)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。
+  remarks: 使用此类存储和访问插件元数据，用于插件发现、用户界面显示或插件管理等目的。
+  example: []
+  syntax:
+    content: public PluginInfo(string appId, string name, string version)
+    parameters:
+    - id: appId
+      type: System.String
+      description: >-
+        插件应用程序的唯一标识符。该值用于将插件与其他插件区分开。通常建议使用 反向域名 + 插件用途 命名约定来确保唯一性。
+
+
+        <ul><li>示例：</li><li>com.demo.dice</li><li>me.cqp.luohuaming.dice</li></ul>
+    - id: name
+      type: System.String
+      description: >-
+        插件的显示名称。
+
+                    <ul><li>聊天插件</li><li>查天气</li></ul>
+    - id: version
+      type: System.String
+      description: 插件的版本号，通常遵循语义化版本控制规范。
+    content.vb: Public Sub New(appId As String, name As String, version As String)
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
+  nameWithType.vb: PluginInfo.New(String, String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New(String, String, String)
+  name.vb: New(String, String, String)
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.String,System.String,System.String)'
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: PluginInfo(string, string, string?, string, string?)
+  nameWithType: PluginInfo.PluginInfo(string, string, string?, string, string?)
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo(string, string, string?, string, string?)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 完全构造函数，允许同时设置所有属性，包括可选的描述和作者信息。
+  example: []
+  syntax:
+    content: public PluginInfo(string appId, string name, string? description, string version, string? author)
+    parameters:
+    - id: appId
+      type: System.String
+    - id: name
+      type: System.String
+    - id: description
+      type: System.String
+    - id: version
+      type: System.String
+    - id: author
+      type: System.String
+    content.vb: Public Sub New(appId As String, name As String, description As String, version As String, author As String)
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
+  nameWithType.vb: PluginInfo.New(String, String, String, String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New(String, String, String, String, String)
+  name.vb: New(String, String, String, String, String)
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  id: AppId
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: AppId
+  nameWithType: PluginInfo.AppId
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: >-
+    插件应用程序的唯一标识符。该值用于将插件与其他插件区分开。通常建议使用 反向域名 +插件用途 命名约定来确保唯一性。
+
+
+    <ul><li>示例：</li><li>com.demo.dice</li><li>me.cqp.luohuaming.dice</li></ul>
+  example: []
+  syntax:
+    content: public string AppId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property AppId As String
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId*
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  id: Name
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: PluginInfo.Name
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: >-
+    插件的显示名称。
+
+
+    <ul><li>聊天插件</li><li>查天气</li></ul>
+  example: []
+  syntax:
+    content: public string Name { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name*
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  id: Version
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: Version
+  nameWithType: PluginInfo.Version
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: >-
+    插件的版本号，通常遵循语义化版本控制规范。
+
+
+    <ul><li>1.0.0</li><li>2.1.0b2</li></ul>
+  example: []
+  syntax:
+    content: public string Version { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Version As String
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version*
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  id: Description
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: PluginInfo.Description
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 用于插件显示的描述信息，提供有关插件功能、用途或其他相关信息的简要说明。
+  remarks: 可留空或null，插件信息侧会显示<strong>未提供</strong>
+  example: []
+  syntax:
+    content: public string? Description { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Description As String
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description*
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  id: Author
+  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  langs:
+  - csharp
+  - vb
+  name: Author
+  nameWithType: PluginInfo.Author
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 用于显示插件的作者。提供有关插件开发者或维护者的信息，通常是一个人名、团队名或组织名。
+  remarks: 可留空或null，插件信息侧会显示<strong>未提供</strong>
+  example: []
+  syntax:
+    content: public string? Author { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Author As String
+  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author*
+references:
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo__ctor_System_String_System_String_System_String_
+  name: PluginInfo
+  nameWithType: PluginInfo.PluginInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo
+  nameWithType.vb: PluginInfo.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New
+  name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_AppId
+  name: AppId
+  nameWithType: PluginInfo.AppId
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Name
+  name: Name
+  nameWithType: PluginInfo.Name
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Version
+  name: Version
+  nameWithType: PluginInfo.Version
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Description
+  name: Description
+  nameWithType: PluginInfo.Description
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Author
+  name: Author
+  nameWithType: PluginInfo.Author
+  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author

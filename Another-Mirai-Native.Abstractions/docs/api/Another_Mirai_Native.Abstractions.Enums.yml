@@ -1,0 +1,89 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  id: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+  - Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+  - Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  - Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.AdminChangedType.html
+  name: AdminChangedType
+  nameWithType: AdminChangedType
+  fullName: Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+- uid: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType.html
+  name: ChatHistoryType
+  nameWithType: ChatHistoryType
+  fullName: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  name: EventHandleResult
+  nameWithType: EventHandleResult
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult.html
+  name: RequestHandleResult
+  nameWithType: RequestHandleResult
+  fullName: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html

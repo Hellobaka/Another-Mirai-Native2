@@ -1,0 +1,71 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Model.Enums
+  commentId: N:Another_Mirai_Native.Model.Enums
+  id: Another_Mirai_Native.Model.Enums
+  children:
+  - Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  - Another_Mirai_Native.Model.Enums.QQSex
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Model.Enums
+  nameWithType: Another_Mirai_Native.Model.Enums
+  fullName: Another_Mirai_Native.Model.Enums
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  commentId: T:Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQGroupMemberType.html
+  name: QQGroupMemberType
+  nameWithType: QQGroupMemberType
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+- uid: Another_Mirai_Native.Model.Enums.QQSex
+  commentId: T:Another_Mirai_Native.Model.Enums.QQSex
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQSex.html
+  name: QQSex
+  nameWithType: QQSex
+  fullName: Another_Mirai_Native.Model.Enums.QQSex
+- uid: Another_Mirai_Native.Model.Enums
+  commentId: N:Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Model.Enums
+  nameWithType: Another_Mirai_Native.Model.Enums
+  fullName: Another_Mirai_Native.Model.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html

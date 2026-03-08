@@ -1,0 +1,117 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  id: IMenuHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  children:
+  - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
+  langs:
+  - csharp
+  - vb
+  name: IMenuHandler
+  nameWithType: IMenuHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 为处理菜单事件的处理器。
+  example: []
+  syntax:
+    content: public interface IMenuHandler
+    content.vb: Public Interface IMenuHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
+  id: OnMenu(System.String)
+  parent: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  langs:
+  - csharp
+  - vb
+  name: OnMenu(string)
+  nameWithType: IMenuHandler.OnMenu(string)
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 当框架调用菜单事件时执行的操作。框架上层会在独立的 UI 线程中同步执行此方法，阻塞此方法不会导致框架卡死。
+  example: []
+  syntax:
+    content: void OnMenu(string menu)
+    parameters:
+    - id: menu
+      type: System.String
+      description: 菜单名称
+    content.vb: Sub OnMenu(menu As String)
+  overload: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
+  nameWithType.vb: IMenuHandler.OnMenu(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(String)
+  name.vb: OnMenu(String)
+references:
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.html#Another_Mirai_Native_Abstractions_Handlers_IMenuHandler_OnMenu_System_String_
+  name: OnMenu
+  nameWithType: IMenuHandler.OnMenu
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System

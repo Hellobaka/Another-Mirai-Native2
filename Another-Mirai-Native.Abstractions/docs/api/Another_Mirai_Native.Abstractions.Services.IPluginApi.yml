@@ -1,0 +1,267 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  id: IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  children:
+  - Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+  - Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+  - Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+  - Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+  - Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+  langs:
+  - csharp
+  - vb
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 框架提供给插件的核心接口，包含了日志记录、消息处理、好友管理、群组管理和应用程序交互等功能的访问点。插件开发者通过实现此接口来与框架进行交互，实现插件的具体功能。
+  example: []
+  syntax:
+    content: public interface IPluginApi
+    content.vb: Public Interface IPluginApi
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+  commentId: P:Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+  id: Logger
+  parent: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  langs:
+  - csharp
+  - vb
+  name: Logger
+  nameWithType: IPluginApi.Logger
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 用于记录插件相关信息、调试信息和错误的日志记录器实例。插件开发者可以使用此属性来输出日志，以便在开发和运行时跟踪插件的行为和状态。
+  example: []
+  syntax:
+    content: ILogger Logger { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.ILogger
+    content.vb: ReadOnly Property Logger As ILogger
+  overload: Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger*
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+  commentId: P:Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+  id: MessageApi
+  parent: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  langs:
+  - csharp
+  - vb
+  name: MessageApi
+  nameWithType: IPluginApi.MessageApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 用于调用框架提供的消息相关功能的接口实例。插件开发者可以通过此属性发送消息、撤回消息等操作，以实现与用户的交互和消息处理功能。
+  example: []
+  syntax:
+    content: IMessageApi MessageApi { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IMessageApi
+    content.vb: ReadOnly Property MessageApi As IMessageApi
+  overload: Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi*
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+  commentId: P:Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+  id: FriendApi
+  parent: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  langs:
+  - csharp
+  - vb
+  name: FriendApi
+  nameWithType: IPluginApi.FriendApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 用于调用框架提供的好友相关功能的接口实例。插件开发者可以通过此属性管理好友列表、获取好友信息等操作，以实现与好友相关的功能。
+  example: []
+  syntax:
+    content: IFriendApi FriendApi { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IFriendApi
+    content.vb: ReadOnly Property FriendApi As IFriendApi
+  overload: Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi*
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+  commentId: P:Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+  id: GroupApi
+  parent: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  langs:
+  - csharp
+  - vb
+  name: GroupApi
+  nameWithType: IPluginApi.GroupApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 用于调用框架提供的群相关功能的接口实例。插件开发者可以通过此属性管理群列表、获取群信息等操作，以实现与群相关的功能。
+  example: []
+  syntax:
+    content: IGroupApi GroupApi { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IGroupApi
+    content.vb: ReadOnly Property GroupApi As IGroupApi
+  overload: Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi*
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+  commentId: P:Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+  id: AppApi
+  parent: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  langs:
+  - csharp
+  - vb
+  name: AppApi
+  nameWithType: IPluginApi.AppApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IPluginApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 用于调用框架提供的应用相关功能的接口实例。插件开发者可以通过此属性获取应用信息、调用应用功能等操作，以实现与应用相关的功能。
+  example: []
+  syntax:
+    content: IAppApi AppApi { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IAppApi
+    content.vb: ReadOnly Property AppApi As IAppApi
+  overload: Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi*
+references:
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html#Another_Mirai_Native_Abstractions_Services_IPluginApi_Logger
+  name: Logger
+  nameWithType: IPluginApi.Logger
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.Logger
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger
+  commentId: T:Another_Mirai_Native.Abstractions.Services.ILogger
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html
+  name: ILogger
+  nameWithType: ILogger
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html#Another_Mirai_Native_Abstractions_Services_IPluginApi_MessageApi
+  name: MessageApi
+  nameWithType: IPluginApi.MessageApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.MessageApi
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IMessageApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html
+  name: IMessageApi
+  nameWithType: IMessageApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html#Another_Mirai_Native_Abstractions_Services_IPluginApi_FriendApi
+  name: FriendApi
+  nameWithType: IPluginApi.FriendApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.FriendApi
+- uid: Another_Mirai_Native.Abstractions.Services.IFriendApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IFriendApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IFriendApi.html
+  name: IFriendApi
+  nameWithType: IFriendApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IFriendApi
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html#Another_Mirai_Native_Abstractions_Services_IPluginApi_GroupApi
+  name: GroupApi
+  nameWithType: IPluginApi.GroupApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.GroupApi
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IGroupApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html
+  name: IGroupApi
+  nameWithType: IGroupApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html#Another_Mirai_Native_Abstractions_Services_IPluginApi_AppApi
+  name: AppApi
+  nameWithType: IPluginApi.AppApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi.AppApi
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IAppApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html
+  name: IAppApi
+  nameWithType: IAppApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi

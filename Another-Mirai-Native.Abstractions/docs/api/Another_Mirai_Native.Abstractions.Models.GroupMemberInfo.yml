@@ -1,0 +1,1097 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  id: GroupMemberInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  children:
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor(System.Int64,System.Int64,System.String,System.String,Another_Mirai_Native.Model.Enums.QQSex,System.Int32,System.String,System.DateTime,System.DateTime,System.String,Another_Mirai_Native.Model.Enums.QQGroupMemberType,System.Boolean,System.String,System.Nullable{System.DateTime},System.Boolean,System.Int64)
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+  - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberInfo
+  nameWithType: GroupMemberInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 表示群成员信息的类
+  example: []
+  syntax:
+    content: public class GroupMemberInfo
+    content.vb: Public Class GroupMemberInfo
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor(System.Int64,System.Int64,System.String,System.String,Another_Mirai_Native.Model.Enums.QQSex,System.Int32,System.String,System.DateTime,System.DateTime,System.String,Another_Mirai_Native.Model.Enums.QQGroupMemberType,System.Boolean,System.String,System.Nullable{System.DateTime},System.Boolean,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor(System.Int64,System.Int64,System.String,System.String,Another_Mirai_Native.Model.Enums.QQSex,System.Int32,System.String,System.DateTime,System.DateTime,System.String,Another_Mirai_Native.Model.Enums.QQGroupMemberType,System.Boolean,System.String,System.Nullable{System.DateTime},System.Boolean,System.Int64)
+  id: '#ctor(System.Int64,System.Int64,System.String,System.String,Another_Mirai_Native.Model.Enums.QQSex,System.Int32,System.String,System.DateTime,System.DateTime,System.String,Another_Mirai_Native.Model.Enums.QQGroupMemberType,System.Boolean,System.String,System.Nullable{System.DateTime},System.Boolean,System.Int64)'
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberInfo(long, long, string, string, QQSex, int, string, DateTime, DateTime, string, QQGroupMemberType, bool, string, DateTime?, bool, long)
+  nameWithType: GroupMemberInfo.GroupMemberInfo(long, long, string, string, QQSex, int, string, DateTime, DateTime, string, QQGroupMemberType, bool, string, DateTime?, bool, long)
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.GroupMemberInfo(long, long, string, string, Another_Mirai_Native.Model.Enums.QQSex, int, string, System.DateTime, System.DateTime, string, Another_Mirai_Native.Model.Enums.QQGroupMemberType, bool, string, System.DateTime?, bool, long)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 表示群成员信息的类
+  example: []
+  syntax:
+    content: public GroupMemberInfo(long group, long qq, string nick, string card, QQSex sex, int age, string area, DateTime joinGroupDateTime, DateTime lastSpeakDateTime, string level, QQGroupMemberType memberType, bool isBadRecord, string exclusiveTitle, DateTime? exclusiveTitleExpirationTime, bool isAllowEditorCard, long lastUpdateTime)
+    parameters:
+    - id: group
+      type: System.Int64
+    - id: qq
+      type: System.Int64
+    - id: nick
+      type: System.String
+    - id: card
+      type: System.String
+    - id: sex
+      type: Another_Mirai_Native.Model.Enums.QQSex
+    - id: age
+      type: System.Int32
+    - id: area
+      type: System.String
+    - id: joinGroupDateTime
+      type: System.DateTime
+    - id: lastSpeakDateTime
+      type: System.DateTime
+    - id: level
+      type: System.String
+    - id: memberType
+      type: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+    - id: isBadRecord
+      type: System.Boolean
+    - id: exclusiveTitle
+      type: System.String
+    - id: exclusiveTitleExpirationTime
+      type: System.Nullable{System.DateTime}
+    - id: isAllowEditorCard
+      type: System.Boolean
+    - id: lastUpdateTime
+      type: System.Int64
+    content.vb: Public Sub New(group As Long, qq As Long, nick As String, card As String, sex As QQSex, age As Integer, area As String, joinGroupDateTime As Date, lastSpeakDateTime As Date, level As String, memberType As QQGroupMemberType, isBadRecord As Boolean, exclusiveTitle As String, exclusiveTitleExpirationTime As Date?, isAllowEditorCard As Boolean, lastUpdateTime As Long)
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor*
+  nameWithType.vb: GroupMemberInfo.New(Long, Long, String, String, QQSex, Integer, String, Date, Date, String, QQGroupMemberType, Boolean, String, Date?, Boolean, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.New(Long, Long, String, String, Another_Mirai_Native.Model.Enums.QQSex, Integer, String, Date, Date, String, Another_Mirai_Native.Model.Enums.QQGroupMemberType, Boolean, String, Date?, Boolean, Long)
+  name.vb: New(Long, Long, String, String, QQSex, Integer, String, Date, Date, String, QQGroupMemberType, Boolean, String, Date?, Boolean, Long)
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString
+  commentId: M:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString
+  id: ToString
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: GroupMemberInfo.ToString()
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: ToString 的重写，用于提供当前群成员信息的字符串表示形式
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.Object.ToString
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+  id: Group
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Group
+  nameWithType: GroupMemberInfo.Group
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示成员所在群的实例
+  example: []
+  syntax:
+    content: public long Group { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property Group As Long
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+  id: QQ
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: QQ
+  nameWithType: GroupMemberInfo.QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前成员的QQ号的实例
+  example: []
+  syntax:
+    content: public long QQ { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property QQ As Long
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+  id: Nick
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Nick
+  nameWithType: GroupMemberInfo.Nick
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前成员的QQ昵称
+  example: []
+  syntax:
+    content: public string Nick { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Nick As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+  id: Card
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Card
+  nameWithType: GroupMemberInfo.Card
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前成员在此群的群名片
+  example: []
+  syntax:
+    content: public string Card { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Card As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+  id: Sex
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Sex
+  nameWithType: GroupMemberInfo.Sex
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员的性别
+  example: []
+  syntax:
+    content: public QQSex Sex { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQSex
+    content.vb: Public ReadOnly Property Sex As QQSex
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+  id: Age
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Age
+  nameWithType: GroupMemberInfo.Age
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员年龄
+  example: []
+  syntax:
+    content: public int Age { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public ReadOnly Property Age As Integer
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+  id: Area
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Area
+  nameWithType: GroupMemberInfo.Area
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前成员所在地区
+  example: []
+  syntax:
+    content: public string Area { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Area As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+  id: JoinGroupDateTime
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: JoinGroupDateTime
+  nameWithType: GroupMemberInfo.JoinGroupDateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前成员加入群的日期和时间
+  example: []
+  syntax:
+    content: public DateTime JoinGroupDateTime { get; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public ReadOnly Property JoinGroupDateTime As Date
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+  id: LastSpeakDateTime
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: LastSpeakDateTime
+  nameWithType: GroupMemberInfo.LastSpeakDateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员最后一次发言的日期和时间
+  example: []
+  syntax:
+    content: public DateTime LastSpeakDateTime { get; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public ReadOnly Property LastSpeakDateTime As Date
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+  id: Level
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: Level
+  nameWithType: GroupMemberInfo.Level
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员的等级
+  example: []
+  syntax:
+    content: public string Level { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Level As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+  id: MemberType
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: MemberType
+  nameWithType: GroupMemberInfo.MemberType
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前的群成员类型
+  example: []
+  syntax:
+    content: public QQGroupMemberType MemberType { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+    content.vb: Public ReadOnly Property MemberType As QQGroupMemberType
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+  id: IsBadRecord
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: IsBadRecord
+  nameWithType: GroupMemberInfo.IsBadRecord
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员是否为不良记录群成员
+  example: []
+  syntax:
+    content: public bool IsBadRecord { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property IsBadRecord As Boolean
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+  id: ExclusiveTitle
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: ExclusiveTitle
+  nameWithType: GroupMemberInfo.ExclusiveTitle
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员在此群获得的专属头衔
+  example: []
+  syntax:
+    content: public string ExclusiveTitle { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property ExclusiveTitle As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+  id: ExclusiveTitleExpirationTime
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: ExclusiveTitleExpirationTime
+  nameWithType: GroupMemberInfo.ExclusiveTitleExpirationTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员在此群的专属头衔过期时间, 若本属性为 null 则表示无期限
+  example: []
+  syntax:
+    content: public DateTime? ExclusiveTitleExpirationTime { get; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTime}
+    content.vb: Public ReadOnly Property ExclusiveTitleExpirationTime As Date?
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+  id: IsAllowEditorCard
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: IsAllowEditorCard
+  nameWithType: GroupMemberInfo.IsAllowEditorCard
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前群成员是否允许修改群名片
+  example: []
+  syntax:
+    content: public bool IsAllowEditorCard { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property IsAllowEditorCard As Boolean
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
+  id: LastUpdateTime
+  parent: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  langs:
+  - csharp
+  - vb
+  name: LastUpdateTime
+  nameWithType: GroupMemberInfo.LastUpdateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/GroupMemberInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 最后更新时间(时间戳)
+  example: []
+  syntax:
+    content: public long LastUpdateTime { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property LastUpdateTime As Long
+  overload: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime*
+references:
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo__ctor_System_Int64_System_Int64_System_String_System_String_Another_Mirai_Native_Model_Enums_QQSex_System_Int32_System_String_System_DateTime_System_DateTime_System_String_Another_Mirai_Native_Model_Enums_QQGroupMemberType_System_Boolean_System_String_System_Nullable_System_DateTime__System_Boolean_System_Int64_
+  name: GroupMemberInfo
+  nameWithType: GroupMemberInfo.GroupMemberInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.GroupMemberInfo
+  nameWithType.vb: GroupMemberInfo.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.New
+  name.vb: New
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Model.Enums.QQSex
+  commentId: T:Another_Mirai_Native.Model.Enums.QQSex
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQSex.html
+  name: QQSex
+  nameWithType: QQSex
+  fullName: Another_Mirai_Native.Model.Enums.QQSex
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  commentId: T:Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQGroupMemberType.html
+  name: QQGroupMemberType
+  nameWithType: QQGroupMemberType
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: System.Nullable{System.DateTime}
+  commentId: T:System.Nullable{System.DateTime}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime?
+  nameWithType: DateTime?
+  fullName: System.DateTime?
+  nameWithType.vb: Date?
+  fullName.vb: Date?
+  name.vb: Date?
+  spec.csharp:
+  - uid: System.DateTime
+    name: DateTime
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTime
+    name: Date
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+- uid: Another_Mirai_Native.Model.Enums
+  commentId: N:Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Model.Enums
+  nameWithType: Another_Mirai_Native.Model.Enums
+  fullName: Another_Mirai_Native.Model.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_ToString
+  name: ToString
+  nameWithType: GroupMemberInfo.ToString
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ToString
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Group
+  name: Group
+  nameWithType: GroupMemberInfo.Group
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Group
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_QQ
+  name: QQ
+  nameWithType: GroupMemberInfo.QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.QQ
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Nick
+  name: Nick
+  nameWithType: GroupMemberInfo.Nick
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Nick
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Card
+  name: Card
+  nameWithType: GroupMemberInfo.Card
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Card
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Sex
+  name: Sex
+  nameWithType: GroupMemberInfo.Sex
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Sex
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Age
+  name: Age
+  nameWithType: GroupMemberInfo.Age
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Age
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Area
+  name: Area
+  nameWithType: GroupMemberInfo.Area
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Area
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_JoinGroupDateTime
+  name: JoinGroupDateTime
+  nameWithType: GroupMemberInfo.JoinGroupDateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.JoinGroupDateTime
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_LastSpeakDateTime
+  name: LastSpeakDateTime
+  nameWithType: GroupMemberInfo.LastSpeakDateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastSpeakDateTime
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_Level
+  name: Level
+  nameWithType: GroupMemberInfo.Level
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.Level
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_MemberType
+  name: MemberType
+  nameWithType: GroupMemberInfo.MemberType
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.MemberType
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_IsBadRecord
+  name: IsBadRecord
+  nameWithType: GroupMemberInfo.IsBadRecord
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsBadRecord
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_ExclusiveTitle
+  name: ExclusiveTitle
+  nameWithType: GroupMemberInfo.ExclusiveTitle
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitle
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_ExclusiveTitleExpirationTime
+  name: ExclusiveTitleExpirationTime
+  nameWithType: GroupMemberInfo.ExclusiveTitleExpirationTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.ExclusiveTitleExpirationTime
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_IsAllowEditorCard
+  name: IsAllowEditorCard
+  nameWithType: GroupMemberInfo.IsAllowEditorCard
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.IsAllowEditorCard
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html#Another_Mirai_Native_Abstractions_Models_GroupMemberInfo_LastUpdateTime
+  name: LastUpdateTime
+  nameWithType: GroupMemberInfo.LastUpdateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.LastUpdateTime
