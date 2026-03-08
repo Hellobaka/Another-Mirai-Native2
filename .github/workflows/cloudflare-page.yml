@@ -27,7 +27,7 @@ jobs:
 
       # 4. 生成文档
       - name: Build Docs
-        run: docfx Another-Mirai-Native2/Another-Mirai-Native.Abstractions/docs/docfx.json
+        run: docfx Another-Mirai-Native.Abstractions/docs/docfx.json
 
       # 5. 部署到 Cloudflare Pages
       - name: Deploy to Cloudflare Pages
