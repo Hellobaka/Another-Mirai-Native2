@@ -245,6 +245,11 @@ namespace Another_Mirai_Native
         public static void ShowErrorDialog(Exception ex, bool canIgnore)
         {
             string guid = Guid.NewGuid().ToString();
+            if (ServerManager.Server == null)
+            {
+                // TODO: 控制台版本如何处理
+                return;
+            }
             if (AppConfig.Instance.IsCore)
             {
                 ServerManager.Server.ActiveShowErrorDialog(guid,

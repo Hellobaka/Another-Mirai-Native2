@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Another-Mirai-Native", "Another-Mirai-Native\Another-Mirai-Native.csproj", "{28FDFD9E-59DC-4EFF-BB5F-D07C077C74C5}"
 EndProject
