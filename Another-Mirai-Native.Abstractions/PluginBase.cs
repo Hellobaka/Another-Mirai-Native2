@@ -10,7 +10,6 @@ namespace Another_Mirai_Native.Abstractions
     /// 作为插件的抽象基类，为框架内的日志记录、消息收发、好友管理、群组管理和应用程序交互提供核心功能及接口。
     /// 插件开发者应从此类派生以实现自定义插件行为。
     /// </summary>
-    /// <remarks>派生类必须重写所提供的方法来实现具体的插件逻辑。此类公开了用于访问框架 API 的受保护属性，使插件能够与消息、好友、群组以及应用程序级别的功能进行交互。GetPluginInfo 的基础实现会抛出 NotImplementedException，以强制派生类提供插件元数据。</remarks>
     public abstract class PluginBase
     {
         /// <summary>
@@ -34,9 +33,9 @@ namespace Another_Mirai_Native.Abstractions
         /// <summary>
         /// 在插件禁用时异步执行必要的清理操作。
         /// </summary>
-        /// <remarks>可在派生类中重写此方法以实现自定义的退出逻辑。如果取消令牌被触发，应适当处理来中止退出操作。</remarks>
+        /// <remarks>可在派生类中重写此方法以实现自定义的退出逻辑。默认实现会立即完成。</remarks>
         /// <param name="ct">可用于发出退出操作取消信号的取消令牌。</param>
-        /// <returns>表示异步退出操作的任务。当退出操作完成时，任务也将完成。</returns>
+        /// <returns>表示异步退出操作的任务。</returns>
         public virtual Task OnDisableAsync(CancellationToken ct) => Task.CompletedTask;
     }
 }
