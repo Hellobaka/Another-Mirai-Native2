@@ -58,6 +58,10 @@
 		<PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="1.6.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj" />
+	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
 	</Target>
