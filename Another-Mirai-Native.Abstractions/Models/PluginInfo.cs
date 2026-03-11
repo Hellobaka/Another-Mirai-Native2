@@ -1,4 +1,6 @@
-﻿namespace Another_Mirai_Native.Abstractions.Models
+﻿using System;
+
+namespace Another_Mirai_Native.Abstractions.Models
 {
     /// <summary>
     /// 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。
@@ -21,7 +23,7 @@
     /// </list>
     /// </param>
     /// <param name="version">插件的版本号，通常遵循语义化版本控制规范。</param>
-    public class PluginInfo(string appId, string name, string version)
+    public class PluginInfo(string appId, string name, string version) : Attribute
     {
         /// <summary>
         /// 完全构造函数，允许同时设置所有属性，包括可选的描述和作者信息。
