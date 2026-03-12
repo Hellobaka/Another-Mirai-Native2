@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.Abstractions.Models
     /// </list>
     /// </param>
     /// <param name="version">插件的版本号，通常遵循语义化版本控制规范。</param>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class PluginInfo(string appId, string name, string version) : Attribute
     {
         /// <summary>

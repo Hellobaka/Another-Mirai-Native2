@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Attributes;
 using Another_Mirai_Native.Abstractions.Context;
 using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Handlers;
@@ -43,7 +44,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         private IGroupWholeUnbannedHandler? GroupWholeUnbannedHandler { get; set; }
 
-        private IMenuHandler? MenuHandler { get; set; }
+        private IMenuHandler[] MenuHandler { get; set; }
 
         private IPrivateMessageHandle? PrivateMessageHandle { get; set; }
 
@@ -51,13 +52,15 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         private IPluginApi PluginApi { get; set; }
 
+        private Type[] AssemblyTypes { get; set; } = [];
+
         public override bool LoadPlugin()
         {
             try
             {
                 var assembly = Assembly.Load(File.ReadAllBytes(PluginPath));
-                var pluginType = assembly.GetTypes()
-                    .FirstOrDefault(t => t.IsSubclassOf(typeof(PluginBase)));
+                AssemblyTypes = assembly.GetTypes();
+                var pluginType = AssemblyTypes.FirstOrDefault(t => t.IsSubclassOf(typeof(PluginBase)));
                 if (pluginType == null)
                 {
                     LogHelper.Error("加载 C# 插件", $"无法从 {PluginPath} 中找到插件类型");
@@ -213,7 +216,9 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             {
                 UIForm.BeginInvoke(() =>
                 {
-                    MenuHandler.OnMenu(menu);
+                    // 寻找菜单名称匹配的处理器并调用
+                    var t = MenuHandler.FirstOrDefault(m => m.GetType().GetCustomAttribute<MenuAttribute>()?.Name == menu);
+                    t?.OnMenu();
                 });
                 return 1;
             }
@@ -226,22 +231,20 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         public override bool CreateMethodDelegates()
         {
-            var type = Plugin.GetType();
-
-            AdminChangeHandler = typeof(IAdminChangeHandler).IsAssignableFrom(type) ? (IAdminChangeHandler)Plugin : null;
-            FriendAddedHandler = typeof(IFriendAddedHandler).IsAssignableFrom(type) ? (IFriendAddedHandler)Plugin : null;
-            FriendAddRequestHandler = typeof(IFriendAddRequestHandler).IsAssignableFrom(type) ? (IFriendAddRequestHandler)Plugin : null;
-            GroupAddRequestHandler = typeof(IGroupAddRequestHandler).IsAssignableFrom(type) ? (IGroupAddRequestHandler)Plugin : null;
-            GroupFileUploadHandler = typeof(IGroupFileUploadHandler).IsAssignableFrom(type) ? (IGroupFileUploadHandler)Plugin : null;
-            GroupMemberBannedHandler = typeof(IGroupMemberBannedHandler).IsAssignableFrom(type) ? (IGroupMemberBannedHandler)Plugin : null;
-            GroupMemberDecreaseHandler = typeof(IGroupMemberDecreaseHandler).IsAssignableFrom(type) ? (IGroupMemberDecreaseHandler)Plugin : null;
-            GroupMemberIncreaseHandler = typeof(IGroupMemberIncreaseHandler).IsAssignableFrom(type) ? (IGroupMemberIncreaseHandler)Plugin : null;
-            GroupMemberUnbannedHandler = typeof(IGroupMemberUnbannedHandler).IsAssignableFrom(type) ? (IGroupMemberUnbannedHandler)Plugin : null;
-            GroupMessageHandler = typeof(IGroupMessageHandler).IsAssignableFrom(type) ? (IGroupMessageHandler)Plugin : null;
-            GroupWholeBannedHandler = typeof(IGroupWholeBannedHandler).IsAssignableFrom(type) ? (IGroupWholeBannedHandler)Plugin : null;
-            GroupWholeUnbannedHandler = typeof(IGroupWholeUnbannedHandler).IsAssignableFrom(type) ? (IGroupWholeUnbannedHandler)Plugin : null;
-            MenuHandler = typeof(IMenuHandler).IsAssignableFrom(type) ? (IMenuHandler)Plugin : null;
-            PrivateMessageHandle = typeof(IPrivateMessageHandle).IsAssignableFrom(type) ? (IPrivateMessageHandle)Plugin : null;
+            AdminChangeHandler = FindEventHandler<IAdminChangeHandler>();
+            FriendAddedHandler = FindEventHandler<IFriendAddedHandler>();
+            FriendAddRequestHandler = FindEventHandler<IFriendAddRequestHandler>();
+            GroupAddRequestHandler = FindEventHandler<IGroupAddRequestHandler>();
+            GroupFileUploadHandler = FindEventHandler<IGroupFileUploadHandler>();
+            GroupMemberBannedHandler = FindEventHandler<IGroupMemberBannedHandler>();
+            GroupMemberDecreaseHandler = FindEventHandler<IGroupMemberDecreaseHandler>();
+            GroupMemberIncreaseHandler = FindEventHandler<IGroupMemberIncreaseHandler>();
+            GroupMemberUnbannedHandler = FindEventHandler<IGroupMemberUnbannedHandler>();
+            GroupMessageHandler = FindEventHandler<IGroupMessageHandler>();
+            GroupWholeBannedHandler = FindEventHandler<IGroupWholeBannedHandler>();
+            GroupWholeUnbannedHandler = FindEventHandler<IGroupWholeUnbannedHandler>();
+            MenuHandler = FindEventHandlers<IMenuHandler>();
+            PrivateMessageHandle = FindEventHandler<IPrivateMessageHandle>();
 
             if (MenuHandler != null)
             {
@@ -252,6 +255,65 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             return true;
         }
 
+        /// <summary>
+        /// 搜索指定事件处理器接口类型的具体实现，并创建其实例。
+        /// </summary>
+        /// <remarks>如果找到接口的多个实现，则使用最先发现的那个。
+        /// 此方法使用实现类型的默认构造函数创建新实例。</remarks>
+        /// <typeparam name="T">要定位的事件处理器的接口类型。必须是引用类型接口。</typeparam>
+        /// <returns>实现了指定接口的类型的实例，如果未找到实现则返回 null。</returns>
+        /// <exception cref="ArgumentException">如果指定的类型参数不是接口类型，则抛出此异常。</exception>
+        private T? FindEventHandler<T>() where T : class
+        {
+            Type targetType = typeof(T);
+            if (!targetType.IsInterface)
+            {
+                throw new ArgumentException($"{targetType.FullName} 不是一个接口类型");
+            }
+            var assignableTypes = AssemblyTypes.Where(t => targetType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
+            if (assignableTypes.Count == 0)
+            {
+                return null;
+            }
+            if (assignableTypes.Count > 1)
+            {
+                LogHelper.Warning("加载 C# 插件", $"找到多个实现 {targetType.FullName} 的类型，默认使用第一个找到的类型 {assignableTypes[0].FullName}");
+            }
+            return (T?)Activator.CreateInstance(assignableTypes[0]);
+        }
+
+        /// <summary>
+        /// 查找并实例化实现指定事件处理接口的所有类型的实例。
+        /// </summary>
+        /// <remarks>返回的每个实例均为通过无参数构造函数创建的新对象。仅查找非抽象、非接口类型。</remarks>
+        /// <typeparam name="T">要查找的事件处理接口类型。必须为接口类型。</typeparam>
+        /// <returns>一个包含所有实现指定接口的事件处理程序实例的数组。如果未找到任何实现，则返回空数组。</returns>
+        /// <exception cref="ArgumentException">当类型参数 T 不是接口类型时抛出。</exception>
+        private T[] FindEventHandlers<T>() where T : class
+        {
+            Type targetType = typeof(T);
+            if (!targetType.IsInterface)
+            {
+                throw new ArgumentException($"{targetType.FullName} 不是一个接口类型");
+            }
+            var assignableTypes = AssemblyTypes.Where(t => targetType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
+            if (assignableTypes.Count == 0)
+            {
+                return [];
+            }
+            List<T> r = [];
+            foreach(var item in assignableTypes)
+            {
+                var t = Activator.CreateInstance(assignableTypes[0]);
+                if (t != null)
+                {
+                    r.Add((T)t);
+                }
+            }
+            return r.ToArray();
+        }
+
+        #region 事件分发
         private Task<EventHandleResult> CallGroupAddRequestEvent(object[] args)
         {
             if (GroupAddRequestHandler == null)
@@ -613,5 +675,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             int busId = reader.ReadInt32_Ex();
             return new GroupFileInfo(busId, fileName, fileId, fileSize);
         }
+        #endregion
     }
 }

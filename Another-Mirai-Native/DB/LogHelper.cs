@@ -178,6 +178,11 @@ namespace Another_Mirai_Native.DB
             return WriteLog(LogLevel.Error, type, message);
         }
 
+        public static int Warning(string type, string message)
+        {
+            return WriteLog(LogLevel.Warning, type, message);
+        }
+
         public static int Error(string type, Exception e)
         {
             if (e.InnerException != null)
