@@ -35,12 +35,25 @@ namespace Another_Mirai_Native.Native
             }
             if (AppConfig.Instance.DebugMode && AppConfig.Instance.DebugLazyLoad)
             {
-                Console.WriteLine("[-]LazyLoad已开启，请按回车以继续加载");
-                Console.ReadLine();
+                Console.WriteLine("[-]LazyLoad已开启，等待调试器中");
+                if (Debugger.Launch())
+                {
+                    Console.WriteLine("[+]成功启动调试器");
+                }
+                else
+                {
+                    Console.WriteLine("[-]未成功启动调试器，请按回车以继续加载");
+                    Console.ReadLine();
+                }
             }
-            if (Path.GetFileName(pluginPath).StartsWith("XiaoLiZi_"))
+            string fileName = Path.GetFileName(pluginPath);
+            if (fileName.StartsWith("XiaoLiZi_"))
             {
                 LoadedPlugin = new Handler.XiaoLiZi.Loader(pluginPath);
+            }
+            else if (fileName.StartsWith("Native_"))
+            {
+                LoadedPlugin = new Handler.CSharp.Loader(pluginPath);
             }
             else
             {

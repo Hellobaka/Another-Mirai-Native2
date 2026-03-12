@@ -28,7 +28,9 @@ namespace Another_Mirai_Native.Abstractions
         /// <remarks>在派生类中重写此方法以实现自定义的启用逻辑。默认实现会立即完成。</remarks>
         /// <param name="ct">可用于取消启用操作的取消令牌。</param>
         /// <returns>表示异步启用操作的任务。</returns>
-        public virtual Task OnEnableAsync(CancellationToken ct) => Task.CompletedTask;
+        public virtual async Task OnEnableAsync(CancellationToken ct)
+        {
+        }
 
         /// <summary>
         /// 在插件禁用时异步执行必要的清理操作。
@@ -36,6 +38,8 @@ namespace Another_Mirai_Native.Abstractions
         /// <remarks>可在派生类中重写此方法以实现自定义的退出逻辑。默认实现会立即完成。</remarks>
         /// <param name="ct">可用于发出退出操作取消信号的取消令牌。</param>
         /// <returns>表示异步退出操作的任务。</returns>
-        public virtual Task OnDisableAsync(CancellationToken ct) => Task.CompletedTask;
+        public virtual async Task OnDisableAsync(CancellationToken ct)
+        {
+        }
     }
 }

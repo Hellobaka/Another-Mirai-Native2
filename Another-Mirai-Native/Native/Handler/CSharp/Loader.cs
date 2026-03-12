@@ -6,6 +6,7 @@ using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using System.Reflection;
 
@@ -69,13 +70,35 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                     return false;
                 }
                 Plugin = plugin;
-                return true;
+                if (LoadAppInfo() && CreateMethodDelegates())
+                {
+                    AppInfo = ParseNativePluginInfo();
+                    LogHelper.Info("加载 C# 插件", $"{PluginName}, 加载成功");
+                    return true;
+                }
+                else
+                {
+                    LogHelper.Error("加载 C# 插件", $"加载插件信息或创建插件失败");
+                    return false;
+                }
             }
             catch (Exception e)
             {
                 LogHelper.Error("加载 C# 插件", $"加载过程发生异常：{e}");
                 return false;
             }
+        }
+
+        private AppInfo ParseNativePluginInfo()
+        {
+            return new AppInfo
+            {
+                AppId = PluginInfo.AppId,
+                author = PluginInfo.Author ?? string.Empty,
+                version = PluginInfo.Version,
+                name = PluginInfo.Name,
+                description = PluginInfo.Description ?? string.Empty,
+            };
         }
 
         public override bool LoadAppInfo()
