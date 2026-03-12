@@ -1,8 +1,13 @@
 ﻿using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Handlers;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Services;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
+using System.IO;
 using System.Reflection;
 
 namespace Another_Mirai_Native.Native.Handler.CSharp
@@ -13,7 +18,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
         private PluginBase Plugin { get; set; }
 
         private PluginInfo PluginInfo { get; set; }
-
 
         private IAdminChangeHandler? AdminChangeHandler { get; set; }
 
@@ -44,6 +48,8 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
         private IPrivateMessageHandle? PrivateMessageHandle { get; set; }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
+
+        private IPluginApi PluginApi { get; set; }
 
         public override bool LoadPlugin()
         {
@@ -113,37 +119,45 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 switch (eventName)
                 {
                     case PluginEventType.PrivateMsg:
-                        break;
+                        return (int)await CallPrivateMsgEvent(args);
+
                     case PluginEventType.GroupMsg:
-                        break;
-                    case PluginEventType.DiscussMsg:
-                        break;
+                        return (int)await CallGroupMsgEvent(args);
+
                     case PluginEventType.Upload:
-                        break;
+                        return (int)await CallUploadEvent(args);
+
                     case PluginEventType.AdminChange:
-                        break;
+                        return (int)await CallAdminChangeEvent(args);
+
                     case PluginEventType.GroupMemberDecrease:
-                        break;
+                        return (int)await CallGroupMemberDecreaseEvent(args);
+
                     case PluginEventType.GroupMemberIncrease:
-                        break;
+                        return (int)await CallGroupMemberIncreaseEvent(args);
+
                     case PluginEventType.GroupBan:
-                        break;
+                        return (int)await CallGroupBanEvent(args);
+
                     case PluginEventType.FriendAdded:
-                        break;
+                        return (int)await CallFriendAddedEvent(args);
+
                     case PluginEventType.FriendRequest:
-                        break;
+                        return (int)await CallFriendRequestEvent(args);
+
                     case PluginEventType.GroupAddRequest:
-                        break;
+                        return (int)await CallGroupAddRequestEvent(args);
+
 
                     case PluginEventType.StartUp:
                         CancellationTokenSource = new();
                         await Plugin.OnEnableAsync(CancellationTokenSource.Token);
-                        return 1;
+                        return 0;
 
                     case PluginEventType.Exit:
                         await Plugin.OnDisableAsync(CancellationTokenSource.Token);
                         CancellationTokenSource.Cancel();
-                        return 1;
+                        return 0;
                 }
 
                 return 0;
@@ -202,6 +216,368 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 CreateUIThread();
             }
             return true;
+        }
+
+        private Task<EventHandleResult> CallGroupAddRequestEvent(object[] args)
+        {
+            if (GroupAddRequestHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            // int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag
+            if (args.Length != 6)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数数量不匹配，期望 6 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[4] is not string msg
+                || args[5] is not string responseFlag)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (int, long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            GroupAddRequestContext e = new(dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
+            return GroupAddRequestHandler.OnGroupAddRequestAsync(e, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallFriendRequestEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromQQ, string msg, string responseFlag
+            if (FriendAddRequestHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 5)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int sendTime
+                || args[2] is not long fromQQ
+                || args[3] is not string msg
+                || args[4] is not string responseFlag)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数类型不匹配，期望 (int, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            FriendAddRequestContext context = new(dateTime, new QQ(PluginApi, fromQQ), msg, responseFlag);
+            return FriendAddRequestHandler.OnFriendAddRequestAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallFriendAddedEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromQQ
+            if (FriendAddedHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 3)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数数量不匹配，期望 3 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int sendTime
+                || args[2] is not long fromQQ)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数类型不匹配，期望 (int, long) 但实际 ({args[1].GetType()}, {args[2].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            FriendAddedContext context = new(dateTime, new QQ(PluginApi, fromQQ));
+            return FriendAddedHandler.OnFriendAddedAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallGroupBanEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration
+            if (args.Length != 6)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 参数数量不匹配，期望 6 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[0] is not int subType
+                || args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[4] is not long beingOperateQQ
+                || args[5] is not long duration)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 参数类型不匹配，期望 (int, int, long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            Group group = new(PluginApi, fromGroup);
+            QQ operatorQQ = new(PluginApi, fromQQ);
+
+            if (beingOperateQQ == 0)
+            {
+                if (subType == 1)
+                {
+                    if (GroupWholeUnbannedHandler == null)
+                    {
+                        return Task.FromResult(EventHandleResult.Pass);
+                    }
+                    GroupWholeUnbannedContext context = new(dateTime, group, operatorQQ);
+                    return GroupWholeUnbannedHandler.OnGroupWholeUnbannedAsync(context, CancellationTokenSource.Token);
+                }
+                if (subType == 2)
+                {
+                    if (GroupWholeBannedHandler == null)
+                    {
+                        return Task.FromResult(EventHandleResult.Pass);
+                    }
+                    GroupWholeBannedContext context = new(dateTime, group, operatorQQ);
+                    return GroupWholeBannedHandler.OnGroupWholeBannedAsync(context, CancellationTokenSource.Token);
+                }
+
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 子类型无效，期望 1(解除禁言) 或 2(禁言) 但实际 {subType}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            QQ targetQQ = new(PluginApi, beingOperateQQ);
+            if (subType == 1)
+            {
+                if (GroupMemberUnbannedHandler == null)
+                {
+                    return Task.FromResult(EventHandleResult.Pass);
+                }
+                GroupMemberUnbannedContext context = new(dateTime, group, operatorQQ, targetQQ);
+                return GroupMemberUnbannedHandler.OnGroupMemberUnbannedAsync(context, CancellationTokenSource.Token);
+            }
+            if (subType == 2)
+            {
+                if (GroupMemberBannedHandler == null)
+                {
+                    return Task.FromResult(EventHandleResult.Pass);
+                }
+                GroupMemberBannedContext context = new(dateTime, group, operatorQQ, targetQQ, TimeSpan.FromSeconds(duration));
+                return GroupMemberBannedHandler.OnGroupMemberBannedAsync(context, CancellationTokenSource.Token);
+            }
+
+            LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 子类型无效，期望 1(解除禁言) 或 2(禁言) 但实际 {subType}");
+            return Task.FromResult(EventHandleResult.Pass);
+        }
+
+        private Task<EventHandleResult> CallGroupMemberIncreaseEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ
+            if (GroupMemberIncreaseHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 5)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[0] is not int subType
+                || args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[4] is not long beingOperateQQ)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 参数类型不匹配，期望 (int, int, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (subType is not 1 and not 2)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 子类型无效，期望 1(主动入群) 或 2(邀请入群) 但实际 {subType}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            GroupMemberIncreaseContext context = new(
+                subType == 2,
+                dateTime,
+                new(PluginApi, fromGroup),
+                new(PluginApi, fromQQ),
+                new(PluginApi, beingOperateQQ));
+            return GroupMemberIncreaseHandler.OnGroupMemberIncreaseAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallGroupMemberDecreaseEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ
+            if (GroupMemberDecreaseHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 5)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[0] is not int subType
+                || args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[4] is not long beingOperateQQ)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 参数类型不匹配，期望 (int, int, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (subType is not 1 and not 2)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 子类型无效，期望 1(主动退出) 或 2(被踢出) 但实际 {subType}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            GroupMemberDecreaseContext context = new(
+                subType == 2,
+                dateTime,
+                new(PluginApi, fromGroup),
+                new(PluginApi, fromQQ),
+                new(PluginApi, beingOperateQQ));
+            return GroupMemberDecreaseHandler.OnGroupMemberDecreaseAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallAdminChangeEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromGroup, long beingOperateQQ
+            if (AdminChangeHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 4)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数数量不匹配，期望 4 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[0] is not int subType
+                || args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long beingOperateQQ)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数类型不匹配，期望 (int, int, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (!Enum.IsDefined(typeof(AdminChangedType), subType))
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 子类型无效，期望 1(取消管理员) 或 2(设置管理员) 但实际 {subType}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            AdminChangedContext context = new(
+                (AdminChangedType)subType,
+                dateTime,
+                new(PluginApi, fromGroup),
+                new(PluginApi, beingOperateQQ));
+            return AdminChangeHandler.OnAdminChangedAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallUploadEvent(object[] args)
+        {
+            // int subType, int sendTime, long fromGroup, long fromQQ, string file
+            if (GroupFileUploadHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 5)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int sendTime
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[4] is not string file)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 参数类型不匹配，期望 (int, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            GroupFileInfo fileInfo;
+            try
+            {
+                fileInfo = ParseGroupFileInfo(file);
+            }
+            catch (FormatException e)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 文件信息 Base64 解码失败：{e}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            catch (EndOfStreamException e)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 文件信息二进制解析失败：{e}");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            GroupFileUploadedContext context = new(
+                dateTime,
+                new(PluginApi, fromGroup),
+                new(PluginApi, fromQQ),
+                fileInfo);
+            return GroupFileUploadHandler.OnGroupFileUploadedAsync(context, CancellationTokenSource.Token);
+        }
+
+        private Task<EventHandleResult> CallGroupMsgEvent(object[] args)
+        {
+            // int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font
+            if (GroupMessageHandler == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args.Length != 7)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceiveGroupMessageAsync; 参数数量不匹配，期望 7 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int msgId
+                || args[2] is not long fromGroup
+                || args[3] is not long fromQQ
+                || args[5] is not string msg)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceiveGroupMessageAsync; 参数类型不匹配，期望 (int, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[5].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+
+            GroupMessageContext context = new(
+                new(PluginApi, fromGroup),
+                new(PluginApi, fromQQ),
+                new(PluginApi, msgId, msg));
+            return GroupMessageHandler.OnReceiveGroupMessageAsync(context, CancellationTokenSource.Token);
+        }
+
+        private static GroupFileInfo ParseGroupFileInfo(string file)
+        {
+            byte[] binary = Convert.FromBase64String(file);
+            using MemoryStream stream = new(binary);
+            using BinaryReader reader = new(stream);
+            string fileId = reader.ReadString_Ex();
+            string fileName = reader.ReadString_Ex();
+            long fileSize = reader.ReadInt64_Ex();
+            int busId = reader.ReadInt32_Ex();
+            return new GroupFileInfo(busId, fileName, fileId, fileSize);
+        }
+
+        private Task<EventHandleResult> CallPrivateMsgEvent(object[] args)
+        {
+            if (PrivateMessageHandle == null)
+            {
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            // int subType, int msgId, long fromQQ, string msg, int font
+            if (args.Length != 5)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            if (args[1] is not int msgId || args[2] is not long fromQQ || args[3] is not string msg)
+            {
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数类型不匹配，期望 (int, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
+                return Task.FromResult(EventHandleResult.Pass);
+            }
+            PrivateMessageContext e = new(new(PluginApi, fromQQ), new(PluginApi, msgId, msg));
+            return PrivateMessageHandle.OnReceivePrivateMessageAsync(e, CancellationTokenSource.Token);
         }
     }
 }

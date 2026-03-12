@@ -7,37 +7,32 @@ namespace Another_Mirai_Native.Abstractions.Context
     /// <summary>
     /// 提供用于描述群添加申请事件参数的类
     /// </summary>
-    public class GroupAddRequestContext
+    public class GroupAddRequestContext(DateTime sendTime, Group fromGroup, QQ fromQQ, string appendMessage, string requestFlag)
     {
         /// <summary>
         /// 获取当前事件的发送时间
         /// </summary>
-        public DateTime SendTime { get; private set; }
+        public DateTime SendTime { get; } = sendTime;
 
         /// <summary>
         /// 获取当前事件的来源群
         /// </summary>
-        public Group FromGroup { get; private set; }
+        public Group FromGroup { get; } = fromGroup;
 
         /// <summary>
         /// 获取当前事件的来源QQ
         /// </summary>
-        public QQ FromQQ { get; private set; }
+        public QQ FromQQ { get; } = fromQQ;
 
         /// <summary>
         /// 获取当前事件的附加消息
         /// </summary>
-        public string AppendMessage { get; private set; }
+        public string AppendMessage { get; } = appendMessage;
 
         /// <summary>
         /// 框架内部对于请求的标识
         /// </summary>
-        private string RequestFlag { get; set; }
-
-        internal GroupAddRequestContext(string requestFlag)
-        {
-            RequestFlag = requestFlag;
-        }
+        private string RequestFlag { get; } = requestFlag;
 
         /// <summary>
         /// 处理请求结果的方法

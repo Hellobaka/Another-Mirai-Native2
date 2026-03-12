@@ -101,7 +101,7 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public virtual void ClientStartUp()
         {
-            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.LoadedPlugin.AppInfo?.AppId }.ToJson());
+            Send(new InvokeResult() { Type = $"ClientStartUp_{PID}", Result = PluginManager.Instance.LoadedPlugin.AppInfo?.AppId }.ToJson());
         }
 
         public virtual void UpdateConnection()

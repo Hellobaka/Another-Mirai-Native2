@@ -150,7 +150,7 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                UpdateConsoleTitle($"[{ClientBase.PID}] [{PluginManager.LoadedPlugin.PluginName}]");
+                UpdateConsoleTitle($"[{ClientBase.PID}] [{PluginManager.Instance.LoadedPlugin.PluginName}]");
             }
             ChatHistoryHelper.Initialize();
             ServerStarted?.Invoke();
