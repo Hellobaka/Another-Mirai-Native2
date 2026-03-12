@@ -9,14 +9,15 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<Version>1.0.0</Version>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Attributes\" />
-  </ItemGroup>
 	
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Another-Mirai-Native</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+	
+	<ItemGroup>
+		<None Include="tools\AMN.ManifestGen.exe" Pack="true" PackagePath="tools\" />
+		<None Include="buildTransitive\Another-Mirai-Native.Abstractions.targets" Pack="true" PackagePath="buildTransitive\" />
+	</ItemGroup>
 </Project>
