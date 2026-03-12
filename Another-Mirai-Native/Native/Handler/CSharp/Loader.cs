@@ -76,6 +76,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 if (LoadAppInfo() && CreateMethodDelegates())
                 {
                     AppInfo = ParseNativePluginInfo();
+                    PluginName = AppInfo.name;
                     LogHelper.Info("加载 C# 插件", $"{PluginName}, 加载成功");
                     return true;
                 }
@@ -184,12 +185,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                     case PluginEventType.GroupAddRequest:
                         return (int)await CallGroupAddRequestEvent(args);
 
-                    case PluginEventType.StartUp:
+                    case PluginEventType.Enable:
                         CancellationTokenSource = new();
                         await Plugin.OnEnableAsync(CancellationTokenSource.Token);
                         return 0;
 
-                    case PluginEventType.Exit:
+                    case PluginEventType.Disable:
                         await Plugin.OnDisableAsync(CancellationTokenSource.Token);
                         CancellationTokenSource.Cancel();
                         return 0;
@@ -251,6 +252,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 CreateUIThread();
             }
             PluginApi = new API(PluginInfo);
+            Plugin.API = PluginApi;
 
             return true;
         }
@@ -334,13 +336,13 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数数量不匹配，期望 6 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int sendTime
+            if (args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not string msg
                 || args[5] is not string responseFlag)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (int, long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (long, long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
@@ -360,12 +362,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int sendTime
+            if (args[1] is not long sendTime
                 || args[2] is not long fromQQ
                 || args[3] is not string msg
                 || args[4] is not string responseFlag)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数类型不匹配，期望 (int, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数类型不匹配，期望 (long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
@@ -385,10 +387,10 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数数量不匹配，期望 3 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int sendTime
+            if (args[1] is not long sendTime
                 || args[2] is not long fromQQ)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数类型不匹配，期望 (int, long) 但实际 ({args[1].GetType()}, {args[2].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数类型不匹配，期望 (long, long) 但实际 ({args[1].GetType()}, {args[2].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
@@ -404,14 +406,14 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 参数数量不匹配，期望 6 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[0] is not int subType
-                || args[1] is not int sendTime
+            if (args[0] is not long subType
+                || args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not long beingOperateQQ
                 || args[5] is not long duration)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 参数类型不匹配，期望 (int, int, long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupBan; 参数类型不匹配，期望 (long, long, long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
@@ -480,13 +482,13 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[0] is not int subType
-                || args[1] is not int sendTime
+            if (args[0] is not long subType
+                || args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not long beingOperateQQ)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 参数类型不匹配，期望 (int, int, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberIncreaseAsync; 参数类型不匹配，期望 (long, long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             if (subType is not 1 and not 2)
@@ -517,13 +519,13 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[0] is not int subType
-                || args[1] is not int sendTime
+            if (args[0] is not long subType
+                || args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not long beingOperateQQ)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 参数类型不匹配，期望 (int, int, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupMemberDecreaseAsync; 参数类型不匹配，期望 (long, long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             if (subType is not 1 and not 2)
@@ -554,12 +556,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数数量不匹配，期望 4 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[0] is not int subType
-                || args[1] is not int sendTime
+            if (args[0] is not long subType
+                || args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long beingOperateQQ)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数类型不匹配，期望 (int, int, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数类型不匹配，期望 (long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             if (!Enum.IsDefined(typeof(AdminChangedType), subType))
@@ -589,12 +591,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int sendTime
+            if (args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not string file)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 参数类型不匹配，期望 (int, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupFileUploadedAsync; 参数类型不匹配，期望 (long, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
@@ -635,19 +637,19 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnReceiveGroupMessageAsync; 参数数量不匹配，期望 7 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int msgId
+            if (args[1] is not long msgId
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[5] is not string msg)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceiveGroupMessageAsync; 参数类型不匹配，期望 (int, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[5].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceiveGroupMessageAsync; 参数类型不匹配，期望 (long, long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[5].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
             GroupMessageContext context = new(
                 new(PluginApi, fromGroup),
                 new(PluginApi, fromQQ),
-                new(PluginApi, msgId, msg));
+                new(PluginApi, (int)msgId, msg));
             return GroupMessageHandler.OnReceiveGroupMessageAsync(context, CancellationTokenSource.Token);
         }
 
@@ -663,12 +665,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数数量不匹配，期望 5 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not int msgId || args[2] is not long fromQQ || args[3] is not string msg)
+            if (args[1] is not long msgId || args[2] is not long fromQQ || args[3] is not string msg)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数类型不匹配，期望 (int, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数类型不匹配，期望 (long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            PrivateMessageContext e = new(new(PluginApi, fromQQ), new(PluginApi, msgId, msg));
+            PrivateMessageContext e = new(new(PluginApi, fromQQ), new(PluginApi, (int)msgId, msg));
             return PrivateMessageHandle.OnReceivePrivateMessageAsync(e, CancellationTokenSource.Token);
         }
 

@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
         public bool DeleteMessage(long messageId)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_deleteMsg", true, AuthCode, messageId);
-            if (ret is int r)
+            if (ret is long r)
             {
                 return r == 1;
             }
@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                         Recalled = item.Recalled,
                         SenderID = item.SenderID,
                         Time = item.Time,
-                        Type = (Abstractions.Enums.ChatHistoryType)item.Type
+                        Type = item.Type
                     });
                 }
                 return result;
@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                     Recalled = item.Recalled,
                     SenderID = item.SenderID,
                     Time = item.Time,
-                    Type = (Abstractions.Enums.ChatHistoryType)item.Type
+                    Type = item.Type
                 };
             }
             throw new InvalidCastException($"GetChatHistoryById 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
@@ -72,9 +72,9 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
         public int SendGroupMessage(long groupId, string message)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, AuthCode, groupId, message);
-            if (ret is int r)
+            if (ret is long r)
             {
-                return r;
+                return (int)r;
             }
             throw new InvalidCastException($"SendGroupMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
@@ -82,9 +82,9 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
         public int SendPrivateMessage(long userId, string message)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, AuthCode, userId, message);
-            if (ret is int r)
+            if (ret is long r)
             {
-                return r;
+                return (int)r;
             }
             throw new InvalidCastException($"SendPrivateMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
