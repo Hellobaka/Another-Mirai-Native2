@@ -246,7 +246,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             MenuHandler = FindEventHandlers<IMenuHandler>();
             PrivateMessageHandle = FindEventHandler<IPrivateMessageHandle>();
 
-            if (MenuHandler != null)
+            if (MenuHandler.Length > 0)
             {
                 CreateUIThread();
             }
@@ -269,6 +269,10 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             if (!targetType.IsInterface)
             {
                 throw new ArgumentException($"{targetType.FullName} 不是一个接口类型");
+            }
+            if (Plugin is T pluginHandler)
+            {
+                return pluginHandler;
             }
             var assignableTypes = AssemblyTypes.Where(t => targetType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
             if (assignableTypes.Count == 0)
@@ -297,14 +301,18 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 throw new ArgumentException($"{targetType.FullName} 不是一个接口类型");
             }
             var assignableTypes = AssemblyTypes.Where(t => targetType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract).ToList();
-            if (assignableTypes.Count == 0)
-            {
-                return [];
-            }
             List<T> r = [];
-            foreach(var item in assignableTypes)
+            if (Plugin is T pluginHandler)
             {
-                var t = Activator.CreateInstance(assignableTypes[0]);
+                r.Add(pluginHandler);
+            }
+            foreach (var item in assignableTypes)
+            {
+                if (item == Plugin.GetType())
+                {
+                    continue;
+                }
+                var t = Activator.CreateInstance(item);
                 if (t != null)
                 {
                     r.Add((T)t);
