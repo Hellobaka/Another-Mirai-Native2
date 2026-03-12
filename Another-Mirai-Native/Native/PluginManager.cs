@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Another_Mirai_Native.RPC;
 using Another_Mirai_Native.Native.Handler;
 using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Abstractions.Enums;
 
 namespace Another_Mirai_Native.Native
 {

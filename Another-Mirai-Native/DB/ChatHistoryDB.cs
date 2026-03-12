@@ -1,6 +1,7 @@
 using SqlSugar;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Abstractions.Enums;
 
 namespace Another_Mirai_Native.DB
 {

@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 using Another_Mirai_Native.Native.Handler.XiaoLiZi;
+using Another_Mirai_Native.Abstractions.Enums;
 
 namespace Another_Mirai_Native.Export
 {

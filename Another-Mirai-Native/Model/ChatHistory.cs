@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Native;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Native;
 using SqlSugar;
 
 namespace Another_Mirai_Native.Model
@@ -95,13 +96,5 @@ namespace Another_Mirai_Native.Model
         {
             return Convert.ToBase64String(ToNative());
         }
-    }
-
-    public enum ChatHistoryType
-    {
-        Group,
-        Private,
-        Notice,
-        Other
     }
 }

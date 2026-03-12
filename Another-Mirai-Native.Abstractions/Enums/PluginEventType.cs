@@ -1,4 +1,4 @@
-﻿namespace Another_Mirai_Native.Model.Enums
+﻿namespace Another_Mirai_Native.Abstractions.Enums
 {
     public enum PluginEventType
     {
