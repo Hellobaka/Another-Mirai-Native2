@@ -44,7 +44,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         private IGroupWholeUnbannedHandler? GroupWholeUnbannedHandler { get; set; }
 
-        private IMenuHandler[] MenuHandler { get; set; }
+        private IMenuHandler[] MenuHandlers { get; set; }
 
         private IPrivateMessageHandle? PrivateMessageHandle { get; set; }
 
@@ -203,7 +203,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         public override int CallMenu(string menu)
         {
-            if (MenuHandler == null)
+            if (MenuHandlers == null)
             {
                 return -1;
             }
@@ -217,7 +217,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 UIForm.BeginInvoke(() =>
                 {
                     // 寻找菜单名称匹配的处理器并调用
-                    var t = MenuHandler.FirstOrDefault(m => m.GetType().GetCustomAttribute<MenuAttribute>()?.Name == menu);
+                    var t = MenuHandlers.FirstOrDefault(m => m.GetType().GetCustomAttribute<MenuAttribute>()?.Name == menu);
                     t?.OnMenu();
                 });
                 return 1;
@@ -243,10 +243,10 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             GroupMessageHandler = FindEventHandler<IGroupMessageHandler>();
             GroupWholeBannedHandler = FindEventHandler<IGroupWholeBannedHandler>();
             GroupWholeUnbannedHandler = FindEventHandler<IGroupWholeUnbannedHandler>();
-            MenuHandler = FindEventHandlers<IMenuHandler>();
+            MenuHandlers = FindEventHandlers<IMenuHandler>();
             PrivateMessageHandle = FindEventHandler<IPrivateMessageHandle>();
 
-            if (MenuHandler.Length > 0)
+            if (MenuHandlers.Length > 0)
             {
                 CreateUIThread();
             }
