@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Another_Mirai_Native.Abstractions.Models
 {
@@ -74,5 +75,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// </summary>
         /// <remarks>可留空或null，插件信息侧会显示<strong>未提供</strong></remarks>
         public string? Author { get; set; }
+
+        internal int AuthCode { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Another_Mirai_Native.Abstractions
         /// <summary>
         /// 插件信息。
         /// </summary>
-        public abstract PluginInfo PluginInfo { get; }
+        public virtual PluginInfo PluginInfo { get; }
 
         /// <summary>
         /// 在插件启用时异步处理逻辑。

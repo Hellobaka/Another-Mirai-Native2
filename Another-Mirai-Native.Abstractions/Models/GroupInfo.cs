@@ -1,4 +1,4 @@
-﻿namespace Another_Mirai_Native.Model
+﻿namespace Another_Mirai_Native.Abstractions.Models
 {
     /// <summary>
     /// 用于表示群信息的类

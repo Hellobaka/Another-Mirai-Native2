@@ -1,4 +1,4 @@
-﻿using Another_Mirai_Native.Model.Enums;
+﻿using Another_Mirai_Native.Abstractions.Enums;
 using System;
 
 namespace Another_Mirai_Native.Abstractions.Models

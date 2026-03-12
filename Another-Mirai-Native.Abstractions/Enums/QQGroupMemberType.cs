@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Another_Mirai_Native.Model.Enums
+namespace Another_Mirai_Native.Abstractions.Enums
 {
     /// <summary>
     /// 表示群成员对于所在群的群成员类型

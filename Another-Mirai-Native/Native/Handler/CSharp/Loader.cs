@@ -4,10 +4,9 @@ using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Handlers;
 using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
-using Another_Mirai_Native.Native;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
-using System.IO;
 using System.Reflection;
 
 namespace Another_Mirai_Native.Native.Handler.CSharp
@@ -95,6 +94,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                         LogHelper.Error("加载 C# 插件", $"获取插件元数据失败，由于插件元数据的 AppId 或者插件名称或者版本号为空");
                         return false;
                     }
+                    attribute.AuthCode = AppConfig.Instance.Core_AuthCode;
                     return true;
                 }
                 // 如果没有获取到特性则尝试使用插件基类的PluginInfo属性
@@ -102,8 +102,18 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 if (PluginInfo == null)
                 {
                     LogHelper.Error("加载 C# 插件", $"获取插件元数据失败，由于插件未定义元数据");
+                    return false;
                 }
-                return PluginInfo != null;
+                if (string.IsNullOrEmpty(PluginInfo.AppId)
+                     || string.IsNullOrEmpty(PluginInfo.Name)
+                     || string.IsNullOrEmpty(PluginInfo.Version))
+                {
+                    LogHelper.Error("加载 C# 插件", $"获取插件元数据失败，由于插件元数据的 AppId 或者插件名称或者版本号为空");
+                    return false;
+                }
+
+                PluginInfo.AuthCode = AppConfig.Instance.Core_AuthCode;
+                return true;
             }
             catch (Exception e)
             {
@@ -147,7 +157,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
                     case PluginEventType.GroupAddRequest:
                         return (int)await CallGroupAddRequestEvent(args);
-
 
                     case PluginEventType.StartUp:
                         CancellationTokenSource = new();
@@ -215,6 +224,8 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             {
                 CreateUIThread();
             }
+            PluginApi = new API(PluginInfo);
+
             return true;
         }
 
@@ -547,18 +558,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             return GroupMessageHandler.OnReceiveGroupMessageAsync(context, CancellationTokenSource.Token);
         }
 
-        private static GroupFileInfo ParseGroupFileInfo(string file)
-        {
-            byte[] binary = Convert.FromBase64String(file);
-            using MemoryStream stream = new(binary);
-            using BinaryReader reader = new(stream);
-            string fileId = reader.ReadString_Ex();
-            string fileName = reader.ReadString_Ex();
-            long fileSize = reader.ReadInt64_Ex();
-            int busId = reader.ReadInt32_Ex();
-            return new GroupFileInfo(busId, fileName, fileId, fileSize);
-        }
-
         private Task<EventHandleResult> CallPrivateMsgEvent(object[] args)
         {
             if (PrivateMessageHandle == null)
@@ -578,6 +577,18 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             }
             PrivateMessageContext e = new(new(PluginApi, fromQQ), new(PluginApi, msgId, msg));
             return PrivateMessageHandle.OnReceivePrivateMessageAsync(e, CancellationTokenSource.Token);
+        }
+
+        private static GroupFileInfo ParseGroupFileInfo(string file)
+        {
+            byte[] binary = Convert.FromBase64String(file);
+            using MemoryStream stream = new(binary);
+            using BinaryReader reader = new(stream);
+            string fileId = reader.ReadString_Ex();
+            string fileName = reader.ReadString_Ex();
+            long fileSize = reader.ReadInt64_Ex();
+            int busId = reader.ReadInt32_Ex();
+            return new GroupFileInfo(busId, fileName, fileId, fileSize);
         }
     }
 }

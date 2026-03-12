@@ -11,26 +11,30 @@
         /// <summary>
         /// 记录 Debug 等级的日志
         /// </summary>
+        /// <param name="type">日志的类别</param>
         /// <param name="message">要记录的消息。</param>
-        void Debug(string message);
+        void Debug(string type, string message);
 
         /// <summary>
         /// 记录 Info 等级的日志
         /// </summary>
+        /// <param name="type">日志的类别</param>
         /// <param name="message">要记录的消息。</param>
-        void Info(string message);
+        void Info(string type, string message);
 
         /// <summary>
         /// 记录 Warn 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。
         /// </summary>
+        /// <param name="type">日志的类别</param>
         /// <param name="message">要记录的消息。</param>
-        void Warn(string message);
+        void Warn(string type, string message);
 
         /// <summary>
         /// 记录 Error 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。
         /// </summary>
+        /// <param name="type">日志的类别</param>
         /// <param name="message">要记录的消息。</param>
-        void Error(string message);
+        void Error(string type, string message);
 
         /// <summary>
         /// 记录 Fatal 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。

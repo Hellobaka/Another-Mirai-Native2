@@ -40,6 +40,11 @@ namespace Another_Mirai_Native.Model
             return stream.ToArray();
         }
 
+        public static ChatHistory FromNative(string raw)
+        {
+            return FromNative(Convert.FromBase64String(raw));
+        }
+
         public static ChatHistory FromNative(byte[] buffer)
         {
             ChatHistory history = new();
