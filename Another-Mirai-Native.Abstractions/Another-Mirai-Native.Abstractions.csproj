@@ -9,6 +9,12 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<Version>1.0.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="docs\**" />
+    <EmbeddedResource Remove="docs\**" />
+    <None Remove="docs\**" />
+  </ItemGroup>
 	
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
