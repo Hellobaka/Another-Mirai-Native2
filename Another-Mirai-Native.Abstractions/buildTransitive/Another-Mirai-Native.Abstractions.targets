@@ -24,7 +24,7 @@
 		<Error Condition="!Exists('$(TargetPath)')" Text="[AMN] Target assembly not found: $(TargetPath)" />
 		
 		<Exec Condition="Exists('$(AmnManifestGenExe)')"
-			  Command="&quot;$(AmnManifestGenExe)&quot; -i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot;"
+			  Command="&quot;$(AmnManifestGenExe)&quot; -i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot; -t &quot;$(TargetFramework)&quot;"
 			  ConsoleToMSBuild="true"
 			  StandardOutputImportance="High"
 			  StandardErrorImportance="High"/>

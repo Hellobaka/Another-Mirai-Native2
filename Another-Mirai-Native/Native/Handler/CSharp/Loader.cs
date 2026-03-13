@@ -194,6 +194,9 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                         await Plugin.OnDisableAsync(CancellationTokenSource.Token);
                         CancellationTokenSource.Cancel();
                         return 0;
+
+                    case PluginEventType.Menu:
+                        return CallMenu(args.FirstOrDefault()?.ToString());
                 }
 
                 return 0;
@@ -202,10 +205,15 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             return r;
         }
 
-        public override int CallMenu(string menu)
+        public override int CallMenu(string? menu)
         {
             if (MenuHandlers == null)
             {
+                return -1;
+            }
+            if (string.IsNullOrEmpty(menu))
+            {
+                LogHelper.Error("调用Menu事件", $"传递的菜单名称无效");
                 return -1;
             }
             if (UIForm == null)
