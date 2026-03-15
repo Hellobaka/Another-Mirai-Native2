@@ -10,6 +10,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         private int AuthCode => PluginInfo.AuthCode;
 
+        // TODO: 提供异步版本
         public bool BanGroup(long groupId, bool enable)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupWholeBan", true, AuthCode, groupId, enable);

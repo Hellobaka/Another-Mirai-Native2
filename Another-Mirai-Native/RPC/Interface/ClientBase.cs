@@ -119,6 +119,7 @@ namespace Another_Mirai_Native.RPC.Interface
             return false;
         }
 
+        // TODO: 提供异步版本
         public virtual object? InvokeCQPFuntcion(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();

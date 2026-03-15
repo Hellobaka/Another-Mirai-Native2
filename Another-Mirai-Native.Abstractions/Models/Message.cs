@@ -23,12 +23,13 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// 获取当前消息的原文
         /// </summary>
         public string Text { get; private set; } = text;
+        // TODO: 提供Reply方法
 
         /// <summary>
         /// 撤回消息
         /// </summary>
         /// <returns>消息撤回成功与否</returns>
-		public bool RemoveMessage()
+        public bool RemoveMessage()
         {
             return PluginApi.MessageApi.DeleteMessage(Id);
         }
