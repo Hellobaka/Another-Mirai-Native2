@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
+          fc-cache -f -v
+          fc-list | grep -i "noto.*cjk" | head
+
       # 1. 检出代码
       - name: Checkout
         uses: actions/checkout@v4
