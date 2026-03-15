@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Services;
 using System;
 
 namespace Another_Mirai_Native.Abstractions.Context
@@ -7,8 +8,13 @@ namespace Another_Mirai_Native.Abstractions.Context
     /// <summary>
     /// 提供用于描述好友添加请求事件参数的类
     /// </summary>
-    public class FriendAddRequestContext(DateTime sendTime, QQ fromQQ, string appendMessage, string requestFlag)
+    public class FriendAddRequestContext(IPluginApi api, DateTime sendTime, QQ fromQQ, string appendMessage, string requestFlag)
     {
+        /// <summary>
+        /// 获取插件 API 实例
+        /// </summary>
+        public IPluginApi API { get; } = api;
+
         /// <summary>
         /// 获取当前事件的发送时间
         /// </summary>

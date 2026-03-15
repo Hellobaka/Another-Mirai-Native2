@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Services;
 using System;
 
 namespace Another_Mirai_Native.Abstractions.Context
@@ -7,8 +8,13 @@ namespace Another_Mirai_Native.Abstractions.Context
     /// <summary>
     /// 提供用于描述群管理变化事件参数的类
     /// </summary>
-    public class AdminChangedContext(AdminChangedType adminChangedType, DateTime sendTime, Group fromGroup, QQ beingOperateQQ)
+    public class AdminChangedContext(IPluginApi api, AdminChangedType adminChangedType, DateTime sendTime, Group fromGroup, QQ beingOperateQQ)
     {
+        /// <summary>
+        /// 获取插件 API 实例
+        /// </summary>
+        public IPluginApi API { get; } = api;
+
         /// <summary>
         /// 获取管理员成员变更的类型，指示是添加管理员还是移除管理员。
         /// </summary>

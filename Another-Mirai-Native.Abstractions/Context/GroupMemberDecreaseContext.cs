@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Services;
 using System;
 
 namespace Another_Mirai_Native.Abstractions.Context
@@ -6,8 +7,13 @@ namespace Another_Mirai_Native.Abstractions.Context
     /// <summary>
     /// 为处理群成员退出群聊事件的处理器。
     /// </summary>
-    public class GroupMemberDecreaseContext(bool isKicked, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
+    public class GroupMemberDecreaseContext(IPluginApi api, bool isKicked, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
     {
+        /// <summary>
+        /// 获取插件 API 实例
+        /// </summary>
+        public IPluginApi API { get; } = api;
+
         /// <summary>
         /// 是否是被管理员踢出，如果是成员主动退群则为 false
         /// </summary>

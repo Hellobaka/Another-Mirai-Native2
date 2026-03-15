@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Services;
 using System;
 
 namespace Another_Mirai_Native.Abstractions.Context
@@ -6,8 +7,13 @@ namespace Another_Mirai_Native.Abstractions.Context
     /// <summary>
     /// 提供用于描述群成员入群事件参数的类
     /// </summary>
-    public class GroupMemberIncreaseContext(bool isInvited, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
+    public class GroupMemberIncreaseContext(IPluginApi api, bool isInvited, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
     {
+        /// <summary>
+        /// 获取插件 API 实例
+        /// </summary>
+        public IPluginApi API { get; } = api;
+
         /// <summary>
         /// 群成员是否是受邀请入群的
         /// </summary>

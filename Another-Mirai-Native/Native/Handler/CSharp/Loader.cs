@@ -8,7 +8,6 @@ using Another_Mirai_Native.Abstractions.Services;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
-using Another_Mirai_Native.Model.Enums;
 using System.Reflection;
 
 namespace Another_Mirai_Native.Native.Handler.CSharp
@@ -227,7 +226,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 {
                     // 寻找菜单名称匹配的处理器并调用
                     var t = MenuHandlers.FirstOrDefault(m => m.GetType().GetCustomAttribute<MenuAttribute>()?.Name == menu);
-                    t?.OnMenu();
+                    t?.OnMenu(new(PluginApi));
                 });
                 return 1;
             }
@@ -354,7 +353,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
-            GroupAddRequestContext e = new(dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
+            GroupAddRequestContext e = new(PluginApi, dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
             return GroupAddRequestHandler.OnGroupAddRequestAsync(e, CancellationTokenSource.Token);
         }
 
@@ -379,7 +378,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
-            FriendAddRequestContext context = new(dateTime, new QQ(PluginApi, fromQQ), msg, responseFlag);
+            FriendAddRequestContext context = new(PluginApi, dateTime, new QQ(PluginApi, fromQQ), msg, responseFlag);
             return FriendAddRequestHandler.OnFriendAddRequestAsync(context, CancellationTokenSource.Token);
         }
 
@@ -402,7 +401,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
-            FriendAddedContext context = new(dateTime, new QQ(PluginApi, fromQQ));
+            FriendAddedContext context = new(PluginApi, dateTime, new QQ(PluginApi, fromQQ));
             return FriendAddedHandler.OnFriendAddedAsync(context, CancellationTokenSource.Token);
         }
 
@@ -437,7 +436,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                     {
                         return Task.FromResult(EventHandleResult.Pass);
                     }
-                    GroupWholeUnbannedContext context = new(dateTime, group, operatorQQ);
+                    GroupWholeUnbannedContext context = new(PluginApi, dateTime, group, operatorQQ);
                     return GroupWholeUnbannedHandler.OnGroupWholeUnbannedAsync(context, CancellationTokenSource.Token);
                 }
                 if (subType == 2)
@@ -446,7 +445,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                     {
                         return Task.FromResult(EventHandleResult.Pass);
                     }
-                    GroupWholeBannedContext context = new(dateTime, group, operatorQQ);
+                    GroupWholeBannedContext context = new(PluginApi, dateTime, group, operatorQQ);
                     return GroupWholeBannedHandler.OnGroupWholeBannedAsync(context, CancellationTokenSource.Token);
                 }
 
@@ -461,7 +460,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 {
                     return Task.FromResult(EventHandleResult.Pass);
                 }
-                GroupMemberUnbannedContext context = new(dateTime, group, operatorQQ, targetQQ);
+                GroupMemberUnbannedContext context = new(PluginApi, dateTime, group, operatorQQ, targetQQ);
                 return GroupMemberUnbannedHandler.OnGroupMemberUnbannedAsync(context, CancellationTokenSource.Token);
             }
             if (subType == 2)
@@ -470,7 +469,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 {
                     return Task.FromResult(EventHandleResult.Pass);
                 }
-                GroupMemberBannedContext context = new(dateTime, group, operatorQQ, targetQQ, TimeSpan.FromSeconds(duration));
+                GroupMemberBannedContext context = new(PluginApi, dateTime, group, operatorQQ, targetQQ, TimeSpan.FromSeconds(duration));
                 return GroupMemberBannedHandler.OnGroupMemberBannedAsync(context, CancellationTokenSource.Token);
             }
 
@@ -507,6 +506,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
             GroupMemberIncreaseContext context = new(
+                PluginApi,
                 subType == 2,
                 dateTime,
                 new(PluginApi, fromGroup),
@@ -544,6 +544,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
             GroupMemberDecreaseContext context = new(
+                PluginApi,
                 subType == 2,
                 dateTime,
                 new(PluginApi, fromGroup),
@@ -580,6 +581,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
             AdminChangedContext context = new(
+                PluginApi,
                 (AdminChangedType)subType,
                 dateTime,
                 new(PluginApi, fromGroup),
@@ -626,6 +628,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
             GroupFileUploadedContext context = new(
+                PluginApi,
                 dateTime,
                 new(PluginApi, fromGroup),
                 new(PluginApi, fromQQ),
@@ -655,6 +658,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             }
 
             GroupMessageContext context = new(
+                PluginApi,
                 new(PluginApi, fromGroup),
                 new(PluginApi, fromQQ),
                 new(PluginApi, (int)msgId, msg));
@@ -678,7 +682,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnReceivePrivateMessageAsync; 参数类型不匹配，期望 (long, long, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            PrivateMessageContext e = new(new(PluginApi, fromQQ), new(PluginApi, (int)msgId, msg));
+            PrivateMessageContext e = new(PluginApi, new(PluginApi, fromQQ), new(PluginApi, (int)msgId, msg));
             return PrivateMessageHandle.OnReceivePrivateMessageAsync(e, CancellationTokenSource.Token);
         }
 
