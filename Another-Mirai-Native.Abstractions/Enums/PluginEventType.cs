@@ -1,5 +1,8 @@
 ﻿namespace Another_Mirai_Native.Abstractions.Enums
 {
+    /// <summary>
+    /// 插件事件类型枚举
+    /// </summary>
     public enum PluginEventType
     {
         /// <summary>
@@ -77,6 +80,9 @@
         /// </summary>
         Disable = 1004,
 
+        /// <summary>
+        /// 菜单事件
+        /// </summary>
         Menu
     }
 }

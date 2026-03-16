@@ -17,6 +17,7 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <summary>
         /// 异步获取好友列表
         /// </summary>
+        /// <returns>好友列表</returns>
         Task<List<FriendInfo>> GetFriendInfosAsync();
 
         /// <summary>

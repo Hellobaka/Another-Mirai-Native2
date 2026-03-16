@@ -11,8 +11,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         private int AuthCode => PluginInfo.AuthCode;
 
-        // TODO: 提供Reply方法
-
         public bool DeleteMessage(long messageId)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_deleteMsg", true, AuthCode, messageId);
