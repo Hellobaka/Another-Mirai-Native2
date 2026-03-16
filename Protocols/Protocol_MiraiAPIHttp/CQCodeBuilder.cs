@@ -159,12 +159,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Dice:
                         var dice = (MiraiMessageTypeDetail.Dice)item;
-                        Result.Append($"[CQ:dice,point={dice.value}]");
+                        Result.Append($"[CQ:dice,type={dice.value}]");
                         break;
 
                     case MiraiMessageType.MarketFace:
                         var marketFace = (MiraiMessageTypeDetail.MarketFace)item;
-                        Result.Append($"[CQ:bigface,id={marketFace.id}]");
+                        Result.Append($"[CQ:bface,id={marketFace.id}]");
                         break;
 
                     case MiraiMessageType.MusicShare:
