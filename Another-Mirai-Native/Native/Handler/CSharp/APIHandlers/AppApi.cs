@@ -13,13 +13,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public void DisablePlugin()
         {
-            throw new NotImplementedException();
+            ClientManager.Client.InvokeCQPFuntcion("InvokeCore_DisablePlugin", true, AuthCode);
         }
 
-        public Task DisablePluginAsync()
+        public async Task DisablePluginAsync()
         {
-            DisablePlugin();
-            return Task.CompletedTask;
+            await ClientManager.Client.InvokeCQPFuntcionAsync("InvokeCore_DisablePlugin", true, AuthCode);
         }
 
         public string GetAppDirectory()
@@ -32,9 +31,14 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetAppDirectory 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
-        public Task<string> GetAppDirectoryAsync()
+        public async Task<string> GetAppDirectoryAsync()
         {
-            return Task.FromResult(GetAppDirectory());
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getAppDirectory", true, AuthCode);
+            if (ret is string dir)
+            {
+                return dir;
+            }
+            throw new InvalidCastException($"GetAppDirectoryAsync 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
         public long GetLoginQQ()
@@ -47,9 +51,14 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetLoginQQ 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
 
-        public Task<long> GetLoginQQAsync()
+        public async Task<long> GetLoginQQAsync()
         {
-            return Task.FromResult(GetLoginQQ());
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getLoginQQ", true, AuthCode);
+            if (ret is long qq)
+            {
+                return qq;
+            }
+            throw new InvalidCastException($"GetLoginQQAsync 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
 
         public string GetLoginQQNick()
@@ -62,20 +71,24 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetLoginQQNick 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
-        public Task<string> GetLoginQQNickAsync()
+        public async Task<string> GetLoginQQNickAsync()
         {
-            return Task.FromResult(GetLoginQQNick());
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getLoginNick", true, AuthCode);
+            if (ret is string dir)
+            {
+                return dir;
+            }
+            throw new InvalidCastException($"GetLoginQQNickAsync 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
         public void ReloadPlugin()
         {
-            throw new NotImplementedException();
+            ClientManager.Client.InvokeCQPFuntcion("InvokeCore_Restart", true, AuthCode);
         }
 
-        public Task ReloadPluginAsync()
+        public async Task ReloadPluginAsync()
         {
-            ReloadPlugin();
-            return Task.CompletedTask;
+            await ClientManager.Client.InvokeCQPFuntcionAsync("InvokeCore_Restart", true, AuthCode);
         }
     }
 }
