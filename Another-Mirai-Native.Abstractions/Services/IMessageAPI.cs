@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Abstractions.Services
 {
@@ -16,6 +17,8 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
         int SendPrivateMessage(long userId, string message);
 
+        Task<int> SendPrivateMessageAsync(long userId, string message);
+
         /// <summary>
         /// 发送群聊消息
         /// </summary>
@@ -24,12 +27,16 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
         int SendGroupMessage(long groupId, string message);
 
+        Task<int> SendGroupMessageAsync(long groupId, string message);
+
         /// <summary>
         /// 撤回消息
         /// </summary>
         /// <param name="messageId">通过发送消息接口返回的消息ID</param>
         /// <returns>消息撤回成功与否</returns>
         bool DeleteMessage(long messageId);
+
+        Task<bool> DeleteMessageAsync(long messageId);
 
         /// <summary>
         /// 检索指定来源的聊天记录历史。
@@ -44,6 +51,8 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// 如果未找到聊天记录，则列表为空。</returns>
         List<ChatHistory> GetChatHistories(long groupId, long qq, int count);
 
+        Task<List<ChatHistory>> GetChatHistoriesAsync(long groupId, long qq, int count);
+
         /// <summary>
         /// 通过消息ID检索聊天记录历史。未找到对应记录时返回 <see langword="null"/>。
         /// </summary>
@@ -51,5 +60,7 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="isGroup">指示关联来源是否为群聊。如果是群聊则设置为 <see langword="true"/>；否则为 <see langword="false"/>。</param>
         /// <param name="messageId">通过发送消息接口返回的消息ID</param>
         ChatHistory? GetChatHistoryById(long parentId, bool isGroup, int messageId);
+
+        Task<ChatHistory?> GetChatHistoryByIdAsync(long parentId, bool isGroup, int messageId);
     }
 }

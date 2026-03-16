@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
 using Another_Mirai_Native.RPC;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 {
@@ -20,6 +21,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return r == 1;
             }
             throw new InvalidCastException($"DeleteMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<bool> DeleteMessageAsync(long messageId)
+        {
+            return Task.FromResult(DeleteMessage(messageId));
         }
 
         public List<ChatHistory> GetChatHistories(long groupId, long qq, int count)
@@ -49,6 +55,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetChatHistories 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public Task<List<ChatHistory>> GetChatHistoriesAsync(long groupId, long qq, int count)
+        {
+            return Task.FromResult(GetChatHistories(groupId, qq, count));
+        }
+
         public ChatHistory? GetChatHistoryById(long parentId, bool isGroup, int messageId)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getChatHistoryById", true, AuthCode, parentId, isGroup, messageId);
@@ -71,6 +82,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetChatHistoryById 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public Task<ChatHistory?> GetChatHistoryByIdAsync(long parentId, bool isGroup, int messageId)
+        {
+            return Task.FromResult(GetChatHistoryById(parentId, isGroup, messageId));
+        }
+
         public int SendGroupMessage(long groupId, string message)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, AuthCode, groupId, message);
@@ -81,6 +97,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"SendGroupMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
 
+        public Task<int> SendGroupMessageAsync(long groupId, string message)
+        {
+            return Task.FromResult(SendGroupMessage(groupId, message));
+        }
+
         public int SendPrivateMessage(long userId, string message)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, AuthCode, userId, message);
@@ -89,6 +110,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return (int)r;
             }
             throw new InvalidCastException($"SendPrivateMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<int> SendPrivateMessageAsync(long userId, string message)
+        {
+            return Task.FromResult(SendPrivateMessage(userId, message));
         }
     }
 }

@@ -6,6 +6,7 @@ using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.RPC.Interface
 {
@@ -53,7 +54,7 @@ namespace Another_Mirai_Native.RPC.Interface
                     }
                     else if (caller.Function == "CurrentQQChanged")
                     {
-                        if (caller.Args.Length == 2 
+                        if (caller.Args.Length == 2
                             && long.TryParse(caller.Args[0].ToString(), out long v)
                             && string.IsNullOrEmpty(caller.Args[1]?.ToString()))
                         {
@@ -119,7 +120,6 @@ namespace Another_Mirai_Native.RPC.Interface
             return false;
         }
 
-        // TODO: 提供异步版本
         public virtual object? InvokeCQPFuntcion(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
@@ -135,9 +135,49 @@ namespace Another_Mirai_Native.RPC.Interface
                 return null;
             }
             if (RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout,
-                () => {
+                () =>
+                {
                     Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
                 }, out _) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
+            {
+                var result = value;
+                WaitingMessage.Remove(guid);
+                if (result.Success)
+                {
+                    return result.Result;
+                }
+                else
+                {
+                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
+                    return null;
+                }
+            }
+            else
+            {
+                LogHelper.Error("调用超时", "Timeout");
+                return null;
+            }
+        }
+
+        public virtual async Task<object?> InvokeCQPFuntcionAsync(string function, bool waiting, params object[] args)
+        {
+            string guid = Guid.NewGuid().ToString();
+            if (function.StartsWith("CQ_"))
+            {
+                function = "InvokeCQP_" + function;
+            }
+            WaitingMessage.Add(guid, new InvokeResult());
+            if (!waiting)
+            {
+                Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
+                WaitingMessage.Remove(guid);
+                return null;
+            }
+            if (await Task.Run(() => RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout,
+                () =>
+                {
+                    Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
+                }, out _)).ConfigureAwait(false) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
             {
                 var result = value;
                 WaitingMessage.Remove(guid);

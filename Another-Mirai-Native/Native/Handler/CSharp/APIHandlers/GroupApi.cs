@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
 using Another_Mirai_Native.RPC;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 {
@@ -10,7 +11,6 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         private int AuthCode => PluginInfo.AuthCode;
 
-        // TODO: 提供异步版本
         public bool BanGroup(long groupId, bool enable)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupWholeBan", true, AuthCode, groupId, enable);
@@ -21,6 +21,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"BanGroup 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
 
+        public Task<bool> BanGroupAsync(long groupId, bool enable)
+        {
+            return Task.FromResult(BanGroup(groupId, enable));
+        }
+
         public bool BanMember(long groupId, long qq, long duration)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupBan", true, AuthCode, groupId, qq, duration);
@@ -29,6 +34,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return r == 1;
             }
             throw new InvalidCastException($"BanMember 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<bool> BanMemberAsync(long groupId, long qq, long duration)
+        {
+            return Task.FromResult(BanMember(groupId, qq, duration));
         }
 
         public GroupInfo? GetGroupInfo(long groupId)
@@ -42,6 +52,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetGroupInfo 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public Task<GroupInfo?> GetGroupInfoAsync(long groupId)
+        {
+            return Task.FromResult(GetGroupInfo(groupId));
+        }
+
         public List<GroupInfo> GetGroupList()
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupList", true, AuthCode);
@@ -50,6 +65,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return Model.GroupInfo.RawToList(r).Select(x=>new GroupInfo(x.Group, x.Name, x.CurrentMemberCount, x.MaxMemberCount, x.LastUpdateTime)).ToList();
             }
             throw new InvalidCastException($"GetGroupList 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<List<GroupInfo>> GetGroupListAsync()
+        {
+            return Task.FromResult(GetGroupList());
         }
 
         public GroupMemberInfo? GetGroupMemberInfo(long groupId, long qq)
@@ -78,6 +98,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetGroupMemberInfo 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public Task<GroupMemberInfo?> GetGroupMemberInfoAsync(long groupId, long qq)
+        {
+            return Task.FromResult(GetGroupMemberInfo(groupId, qq));
+        }
+
         public List<GroupMemberInfo> GetGroupMembers(long groupId)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getGroupMemberList", true, AuthCode, groupId);
@@ -103,6 +128,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetGroupMembers 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public Task<List<GroupMemberInfo>> GetGroupMembersAsync(long groupId)
+        {
+            return Task.FromResult(GetGroupMembers(groupId));
+        }
+
         public bool Kick(long groupId, long qq, bool rejectAddRequest = false)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupKick", true, AuthCode, groupId, qq, rejectAddRequest);
@@ -111,6 +141,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return r == 1;
             }
             throw new InvalidCastException($"Kick 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<bool> KickAsync(long groupId, long qq, bool rejectAddRequest = false)
+        {
+            return Task.FromResult(Kick(groupId, qq, rejectAddRequest));
         }
 
         public bool Leave(long groupId)
@@ -124,6 +159,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"Leave 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
 
+        public Task<bool> LeaveAsync(long groupId)
+        {
+            return Task.FromResult(Leave(groupId));
+        }
+
         public bool SetAdmin(long groupId, long qq, bool isAdmin)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAdmin", true, AuthCode, groupId, qq, isAdmin);
@@ -132,6 +172,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return r == 1;
             }
             throw new InvalidCastException($"SetAdmin 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<bool> SetAdminAsync(long groupId, long qq, bool isAdmin)
+        {
+            return Task.FromResult(SetAdmin(groupId, qq, isAdmin));
         }
 
         public bool SetMemberCard(long groupId, long qq, string card)
@@ -144,6 +189,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"SetMemberCard 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
 
+        public Task<bool> SetMemberCardAsync(long groupId, long qq, string card)
+        {
+            return Task.FromResult(SetMemberCard(groupId, qq, card));
+        }
+
         public bool SetMemberTitle(long groupId, long qq, string title)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupSpecialTitle", true, AuthCode, groupId, qq, title, -1);
@@ -152,6 +202,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return r == 1;
             }
             throw new InvalidCastException($"SetMemberTitle 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public Task<bool> SetMemberTitleAsync(long groupId, long qq, string title)
+        {
+            return Task.FromResult(SetMemberTitle(groupId, qq, title));
         }
     }
 }
