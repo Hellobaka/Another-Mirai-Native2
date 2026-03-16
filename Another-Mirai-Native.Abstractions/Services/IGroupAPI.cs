@@ -184,5 +184,41 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="title">将要设置的头衔，不可为空</param>
         /// <returns>操作是否成功</returns>
         Task<bool> SetMemberTitleAsync(long groupId, long qq, string title);
+
+        /// <summary>
+        /// 处理群添加请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="refuseReason">若不接受时传递的拒绝理由</param>
+        /// <returns>操作是否成功</returns>
+        bool SetGroupAddRequest(string flag, bool accept, string refuseReason = "");
+
+        /// <summary>
+        /// 异步处理群添加请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="refuseReason">若不接受时传递的拒绝理由</param>
+        /// <returns>操作是否成功</returns>
+        Task<bool> SetGroupAddRequestAsync(string flag, bool accept, string refuseReason = "");
+
+        /// <summary>
+        /// 处理受群邀请请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="refuseReason">若不接受时传递的拒绝理由</param>
+        /// <returns>操作是否成功</returns>
+        bool SetGroupInviteRequest(string flag, bool accept, string refuseReason = "");
+
+        /// <summary>
+        /// 异步处理受群邀请请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="refuseReason">若不接受时传递的拒绝理由</param>
+        /// <returns>操作是否成功</returns>
+        Task<bool> SetGroupInviteRequestAsync(string flag, bool accept, string refuseReason = "");
     }
 }

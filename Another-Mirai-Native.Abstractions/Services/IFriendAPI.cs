@@ -35,5 +35,23 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="count">发送赞是数量</param>
         /// <returns>操作是否成功</returns>
         Task<bool> SendPraiseAsync(long qq, int count);
+
+        /// <summary>
+        /// 处理好友添加请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="card">接受后的备注</param>
+        /// <returns></returns>
+        bool SetFriendAddRequest(string flag, bool accept, string card = "");
+
+        /// <summary>
+        /// 异步处理好友添加请求
+        /// </summary>
+        /// <param name="flag">框架内部标记添加请求的标志</param>
+        /// <param name="accept">是否接受</param>
+        /// <param name="card">接受后的备注</param>
+        /// <returns></returns>
+        Task<bool> SetFriendAddRequestAsync(string flag, bool accept, string card = "");
     }
 }

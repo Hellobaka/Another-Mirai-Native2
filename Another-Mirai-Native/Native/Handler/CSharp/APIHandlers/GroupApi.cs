@@ -295,5 +295,45 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             }
             throw new InvalidCastException($"SetMemberTitleAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
+
+        public bool SetGroupAddRequest(string flag, bool accept, string refuseReason = "")
+        {
+            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAddRequestV2", true, AuthCode, flag, 1, accept ? 1 : 2, refuseReason);
+            if (ret is int r)
+            {
+                return r == 1;
+            }
+            throw new InvalidCastException($"SetGroupAddRequest 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public async Task<bool> SetGroupAddRequestAsync(string flag, bool accept, string refuseReason = "")
+        {
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_setGroupAddRequestV2", true, AuthCode, flag, 1, accept ? 1 : 2, refuseReason);
+            if (ret is int r)
+            {
+                return r == 1;
+            }
+            throw new InvalidCastException($"SetGroupAddRequestAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public bool SetGroupInviteRequest(string flag, bool accept, string refuseReason = "")
+        {
+            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setGroupAddRequestV2", true, AuthCode, flag, 2, accept ? 1 : 2, refuseReason);
+            if (ret is int r)
+            {
+                return r == 1;
+            }
+            throw new InvalidCastException($"SetGroupInviteRequest 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public async Task<bool> SetGroupInviteRequestAsync(string flag, bool accept, string refuseReason = "")
+        {
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_setGroupAddRequestV2", true, AuthCode, flag, 2, accept ? 1 : 2, refuseReason);
+            if (ret is int r)
+            {
+                return r == 1;
+            }
+            throw new InvalidCastException($"SetGroupInviteRequestAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
     }
 }

@@ -25,6 +25,8 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         private IFriendAddRequestHandler? FriendAddRequestHandler { get; set; }
 
+        private IGroupInviteRequestHandler? GroupInviteRequestHandler { get; set; }
+
         private IGroupAddRequestHandler? GroupAddRequestHandler { get; set; }
 
         private IGroupFileUploadHandler? GroupFileUploadHandler { get; set; }
@@ -242,6 +244,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             AdminChangeHandler = FindEventHandler<IAdminChangeHandler>();
             FriendAddedHandler = FindEventHandler<IFriendAddedHandler>();
             FriendAddRequestHandler = FindEventHandler<IFriendAddRequestHandler>();
+            GroupInviteRequestHandler = FindEventHandler<IGroupInviteRequestHandler>();
             GroupAddRequestHandler = FindEventHandler<IGroupAddRequestHandler>();
             GroupFileUploadHandler = FindEventHandler<IGroupFileUploadHandler>();
             GroupMemberBannedHandler = FindEventHandler<IGroupMemberBannedHandler>();
@@ -333,28 +336,41 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
         #region 事件分发
         private Task<EventHandleResult> CallGroupAddRequestEvent(object[] args)
         {
-            if (GroupAddRequestHandler == null)
-            {
-                return Task.FromResult(EventHandleResult.Pass);
-            }
             // int subType, int sendTime, long fromGroup, long fromQQ, string msg, string responseFlag
             if (args.Length != 6)
             {
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数数量不匹配，期望 6 个但实际 {args.Length} 个");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (args[1] is not long sendTime
+            if (args[0] is not long subType
+                ||args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not string msg
                 || args[5] is not string responseFlag)
             {
-                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (long, long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
+                LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (long, long, long, long, string, string) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
             DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
-            GroupAddRequestContext e = new(PluginApi, dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
-            return GroupAddRequestHandler.OnGroupAddRequestAsync(e, CancellationTokenSource.Token);
+            if (subType == 1)
+            {
+                if (GroupAddRequestHandler == null)
+                {
+                    return Task.FromResult(EventHandleResult.Pass);
+                }
+                GroupAddRequestContext e = new(PluginApi, dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
+                return GroupAddRequestHandler.OnGroupAddRequestAsync(e, CancellationTokenSource.Token);
+            }
+            else
+            {
+                if (GroupInviteRequestHandler == null)
+                {
+                    return Task.FromResult(EventHandleResult.Pass);
+                }
+                GroupInviteRequestContext e = new(PluginApi, dateTime, new(PluginApi, fromGroup), new(PluginApi, fromQQ), msg, responseFlag);
+                return GroupInviteRequestHandler.OnGroupInviteRequestAsync(e, CancellationTokenSource.Token);
+            }
         }
 
         private Task<EventHandleResult> CallFriendRequestEvent(object[] args)

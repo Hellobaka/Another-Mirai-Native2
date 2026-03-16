@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述好友添加请求事件参数的类
+    /// 提供用于描述被邀请加入群事件参数的类
     /// </summary>
-    public class FriendAddRequestContext(IPluginApi api, DateTime sendTime, QQ fromQQ, string appendMessage, string requestFlag)
+    public class GroupInviteRequestContext(IPluginApi api, DateTime sendTime, Group fromGroup, QQ fromQQ, string appendMessage, string requestFlag)
     {
         /// <summary>
         /// 获取插件 API 实例
@@ -20,6 +20,11 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// 获取当前事件的发送时间
         /// </summary>
         public DateTime SendTime { get; } = sendTime;
+
+        /// <summary>
+        /// 获取当前事件的来源群
+        /// </summary>
+        public Group FromGroup { get; } = fromGroup;
 
         /// <summary>
         /// 获取当前事件的来源QQ
@@ -42,7 +47,7 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// <param name="result">处理结果</param>
         public void SetRequestResult(RequestHandleResult result)
         {
-            API.FriendApi.SetFriendAddRequest(RequestFlag, result == RequestHandleResult.Accept);
+            API.GroupApi.SetGroupInviteRequest(RequestFlag, result == RequestHandleResult.Accept);
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// <param name="result">处理结果</param>
         public async Task SetRequestResultAsync(RequestHandleResult result)
         {
-            await API.FriendApi.SetFriendAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept);
+            await API.GroupApi.SetGroupInviteRequestAsync(RequestFlag, result == RequestHandleResult.Accept);
         }
     }
 }

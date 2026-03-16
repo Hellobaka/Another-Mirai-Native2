@@ -2,6 +2,7 @@
 using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Abstractions.Context
 {
@@ -46,7 +47,16 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// <param name="result">处理结果</param>
         public void SetRequestResult(RequestHandleResult result)
         {
-            // TODO: Handle Friend Add Request
+            API.GroupApi.SetGroupAddRequest(RequestFlag, result == RequestHandleResult.Accept);
+        }
+
+        /// <summary>
+        /// 异步处理请求结果的方法
+        /// </summary>
+        /// <param name="result">处理结果</param>
+        public async Task SetRequestResultAsync(RequestHandleResult result)
+        {
+            await API.GroupApi.SetGroupAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept);
         }
     }
 }
