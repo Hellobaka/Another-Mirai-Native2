@@ -60,6 +60,11 @@
         /// <summary>
         /// 引用消息
         /// </summary>
-        Reply
+        Reply,
+
+        /// <summary>
+        /// 纯文本
+        /// </summary>
+        Text
     }
 }

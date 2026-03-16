@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Another_Mirai_Native.Abstractions
 {
@@ -29,5 +31,14 @@ namespace Another_Mirai_Native.Abstractions
             }
         }
 
+        public static string[] SplitV2(this string message, string pattern)
+        {
+            string regexPattern = $"({pattern})";
+            var parts = Regex.Split(message, regexPattern);
+
+            var ls = parts.ToList();
+            ls.RemoveAll(string.IsNullOrEmpty);
+            return ls.ToArray();
+        }
     }
 }

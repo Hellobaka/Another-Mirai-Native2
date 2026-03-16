@@ -1,18 +1,33 @@
-﻿using Another_Mirai_Native.Abstractions.Services;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
+using Another_Mirai_Native.Abstractions.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Another_Mirai_Native.Abstractions.Models
-{   
+{
     /// <summary>
     /// 描述消息的类
     /// </summary>
-    public class Message(IPluginApi pluginApi, int id, string text)
+    public class Message
     {
+        internal readonly IPluginApi pluginApi;
+
+        public Message(IPluginApi pluginApi, int id, string text)
+        {
+            this.pluginApi = pluginApi;
+            Id = id;
+            Text = text;
+            BuildMessageChain();
+        }
+
         internal IPluginApi PluginApi => pluginApi;
 
         /// <summary>
         /// 获取当前消息的全局唯一标识
         /// </summary>
-        public int Id { get; private set; } = id;
+        public int Id { get; private set; }
 
         /// <summary>
         /// 获取一个值, 指示当前消息是否发送成功
@@ -22,8 +37,9 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// <summary>
         /// 获取当前消息的原文
         /// </summary>
-        public string Text { get; private set; } = text;
-        // TODO: 提供类CQ码消息对象
+        public string Text { get; private set; }
+
+        public List<MessageItemBase> MessageChain { get; private set; } = [];
 
         /// <summary>
         /// 撤回消息
@@ -32,6 +48,121 @@ namespace Another_Mirai_Native.Abstractions.Models
         public bool RemoveMessage()
         {
             return PluginApi.MessageApi.DeleteMessage(Id);
+        }
+
+        private void BuildMessageChain()
+        {
+            var parts = Text.SplitV2("\\[CQ:.*?\\]");
+            foreach (var item in parts)
+            {
+                if (item.StartsWith("[CQ:"))
+                {
+                    var cqcode = CQCode.Parse(item).FirstOrDefault();
+                    if (cqcode == null)
+                    {
+                        continue;
+                    }
+                    switch (cqcode.Function)
+                    {
+                        case MessageItemType.Face:
+                            if (int.TryParse(cqcode.Items["id"], out int id))
+                            {
+                                MessageChain.Add(new Face(id));
+                            }
+                            break;
+
+                        case MessageItemType.Bface:
+                            if (int.TryParse(cqcode.Items["id"], out id))
+                            {
+                                MessageChain.Add(new Face(id));
+                            }
+                            break;
+
+                        case MessageItemType.Image:
+                            string file = cqcode.Items["file"];
+                            bool isFlash = cqcode.Items.ContainsKey("flash") && cqcode.Items["flash"] == "true";
+                            bool isPath = file.Contains("\\");
+                            bool isEmoji = cqcode.Items.ContainsKey("sub_type") && cqcode.Items["sub_type"] == "1";
+                            if (isPath)
+                            {
+                                MessageChain.Add(new Image(filePath: file, isFlash: isFlash, isEmoji: isEmoji));
+                            }
+                            else
+                            {
+                                MessageChain.Add(new Image(hash: file, isFlash: isFlash, isEmoji: isEmoji));
+                            }
+
+                            break;
+
+                        case MessageItemType.Record:
+                            file = cqcode.Items["file"];
+                            isPath = file.Contains("\\");
+                            if (isPath)
+                            {
+                                MessageChain.Add(new Record(filePath: file));
+                            }
+                            else
+                            {
+                                MessageChain.Add(new Record(hash: file));
+                            }
+                            break;
+
+                        case MessageItemType.At:
+                            var qq = cqcode.Items["qq"];
+                            if (qq == "all")
+                            {
+                                MessageChain.Add(new At(0, true));
+                            }
+                            else if (long.TryParse(qq, out long qqNum))
+                            {
+                                MessageChain.Add(new At(qqNum, false));
+                            }
+                            break;
+
+                        case MessageItemType.Rps:
+                            if (int.TryParse(cqcode.Items["type"], out int type))
+                            {
+                                MessageChain.Add(new RPS((RpsType)type));
+                            }
+                            break;
+
+                        case MessageItemType.Shake:
+                            MessageChain.Add(new Shake());
+                            break;
+
+                        case MessageItemType.Dice:
+                            if (int.TryParse(cqcode.Items["type"], out type))
+                            {
+                                MessageChain.Add(new Dice(type));
+                            }
+                            break;
+
+                        case MessageItemType.Poke:
+                            MessageChain.Add(new Poke(cqcode.Items["name"]));
+                            break;
+
+                        case MessageItemType.Rich:
+                            RichContentType richContentType = Enum.TryParse<RichContentType>(cqcode.Items["type"], true, out var result) ? result : RichContentType.Json;
+                            MessageChain.Add(new RichContent(richContentType, cqcode.Items["content"]));
+                            break;
+
+                        case MessageItemType.Reply:
+                            if (int.TryParse(cqcode.Items["id"], out id))
+                            {
+                                MessageChain.Add(new Reply(id));
+                            }
+                            break;
+
+                        default:
+                            // 无效的CQ码
+                            continue;
+                    }
+                }
+                else
+                {
+                    MessageChain.Add(new Text(item));
+                }
+            }
         }
     }
 }
