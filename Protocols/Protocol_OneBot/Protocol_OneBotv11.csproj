@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj" />
     <ProjectReference Include="..\..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
   </ItemGroup>
 

@@ -3,6 +3,11 @@
     public enum MessageItemType
     {
         /// <summary>
+        /// 默认值
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// QQ表情
         /// </summary>
         Face,
@@ -48,19 +53,9 @@
         Poke,
 
         /// <summary>
-        /// 音乐
-        /// </summary>
-        Music,
-
-        /// <summary>
         /// 卡片消息
         /// </summary>
         Rich,
-
-        /// <summary>
-        /// 位置分享
-        /// </summary>
-        Location,
 
         /// <summary>
         /// 引用消息

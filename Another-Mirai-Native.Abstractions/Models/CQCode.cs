@@ -1,13 +1,15 @@
-﻿using Another_Mirai_Native.Model.Enums;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Another_Mirai_Native.Model
+namespace Another_Mirai_Native.Abstractions.Models
 {
     /// <summary>
     /// 表示 CQ码 的类
     /// </summary>
-    public class CQCode
+    internal class CQCode
     {
         #region --字段--
 
@@ -15,7 +17,7 @@ namespace Another_Mirai_Native.Model
 
         private string _originalString;
 
-        private CQCodeType _type;
+        private MessageItemType _type;
 
         #endregion --字段--
 
@@ -24,7 +26,7 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 获取一个值, 指示当前实例的功能
         /// </summary>
-        public CQCodeType Function
+        public MessageItemType Function
         { get { return _type; } }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace Another_Mirai_Native.Model
         /// </summary>
         /// <param name="type">CQ码类型</param>
         /// <param name="keyValues">包含的键值对</param>
-        public CQCode(CQCodeType type, params KeyValuePair<string, string>[] keyValues)
+        public CQCode(MessageItemType type, params KeyValuePair<string, string>[] keyValues)
         {
             this._type = type;
             this.Items = new Dictionary<string, string>(keyValues.Length);
@@ -85,9 +87,9 @@ namespace Another_Mirai_Native.Model
 
             #region --解析CQ码类型--
 
-            if (!System.Enum.TryParse<CQCodeType>(match.Groups[1].Value, true, out _type))
+            if (!System.Enum.TryParse<MessageItemType>(match.Groups[1].Value, true, out _type))
             {
-                this._type = CQCodeType.Unknown;    // 解析不出来的时候, 直接给一个默认
+                this._type = MessageItemType.Unknown;    // 解析不出来的时候, 直接给一个默认
             }
 
             #endregion --解析CQ码类型--
@@ -115,7 +117,7 @@ namespace Another_Mirai_Native.Model
         /// <returns>如果是图片 <see cref="CQCode"/> 返回 <see langword="true"/> 否则返回 <see langword="false"/></returns>
         public static bool EqualIsImageCQCode(CQCode code)
         {
-            return code.Function == CQCodeType.Image;
+            return code.Function == MessageItemType.Image;
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace Another_Mirai_Native.Model
         /// <returns>如果是语音 <see cref="CQCode"/> 返回 <see langword="true"/> 否则返回 <see langword="false"/></returns>
         public static bool EqualIsRecordCQCode(CQCode code)
         {
-            return code.Function == CQCodeType.Record;
+            return code.Function == MessageItemType.Record;
         }
 
         /// <summary>
@@ -188,14 +190,14 @@ namespace Another_Mirai_Native.Model
                 if (this.Items.Count == 0)
                 {
                     // 特殊CQ码, 抖动窗口
-                    this._originalString = string.Format("[CQ:{0}]", _type.GetDescription());
+                    this._originalString = string.Format("[CQ:{0}]", _type.ToString().ToLower());
                 }
                 else
                 {
                     // 普通CQ码, 带参数
                     StringBuilder builder = new();
                     builder.Append("[CQ:");
-                    builder.Append(this._type.GetDescription());   // function
+                    builder.Append(this._type.ToString().ToLower());   // function
                     foreach (KeyValuePair<string, string> item in this.Items)
                     {
                         builder.AppendFormat(",{0}={1}", item.Key, CQEnCode(item.Value, true));
@@ -230,21 +232,6 @@ namespace Another_Mirai_Native.Model
         #region --CQ码类方法--
 
         /// <summary>
-        /// 获取酷Q "匿名" 代码
-        /// </summary>
-        /// <param name="forced">强制发送, 若本参数为 <code>true</code> 发送失败时将转换为普通消息</param>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_Anonymous(bool forced = false)
-        {
-            CQCode code = new(CQCodeType.Anonymous);
-            if (forced)
-            {
-                code.Items.Add("ignore", "true");
-            }
-            return code;
-        }
-
-        /// <summary>
         /// 获取酷Q "At某人" 代码
         /// </summary>
         /// <param name="qqId">QQ号</param>
@@ -255,7 +242,7 @@ namespace Another_Mirai_Native.Model
             return qqId < 0
                 ? throw new ArgumentOutOfRangeException("qqId")
                 : new CQCode(
-                CQCodeType.At,
+                MessageItemType.At,
                 new KeyValuePair<string, string>("qq", Convert.ToString(qqId)));
         }
 
@@ -266,64 +253,8 @@ namespace Another_Mirai_Native.Model
         public static CQCode CQCode_AtAll()
         {
             return new CQCode(
-                CQCodeType.At,
+                MessageItemType.At,
                 new KeyValuePair<string, string>("qq", "all"));
-        }
-
-        /// <summary>
-        /// 获取酷Q "音乐自定义" 代码
-        /// </summary>
-        /// <param name="url">分享链接, 点击后进入的页面 (歌曲介绍)</param>
-        /// <param name="musicUrl">歌曲链接, 音频链接 (mp3链接)</param>
-        /// <param name="title">标题, 建议12字以内</param>
-        /// <param name="content">简介, 建议30字以内</param>
-        /// <param name="imageUrl">封面图片链接, 留空为默认</param>
-        /// <exception cref="ArgumentException">参数: url 或 musicUrl 是空字符串或为 null</exception>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_DIYMusic(string url, string musicUrl, string? title = null, string? content = null, string? imageUrl = null)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                throw new ArgumentException("分享链接不能为空", "url");
-            }
-
-            if (string.IsNullOrEmpty(musicUrl))
-            {
-                throw new ArgumentException("歌曲链接不能为空", "musicUrl");
-            }
-
-            CQCode code = new(
-                CQCodeType.Music,
-                new KeyValuePair<string, string>("type", "custom"),
-                new KeyValuePair<string, string>("url", url),
-                new KeyValuePair<string, string>("audio", musicUrl));
-            if (!string.IsNullOrEmpty(title))
-            {
-                code.Items.Add("title", title!);
-            }
-
-            if (!string.IsNullOrEmpty(content))
-            {
-                code.Items.Add("content", content!);
-            }
-
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                code.Items.Add("imageUrl", imageUrl!);
-            }
-            return code;
-        }
-
-        /// <summary>
-        /// 获取酷Q "Emoji" 代码
-        /// </summary>
-        /// <param name="id">Emoji的Id</param>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_Emoji(int id)
-        {
-            return new CQCode(
-                CQCodeType.Emoji,
-                new KeyValuePair<string, string>("id", Convert.ToString(id)));
         }
 
         /// <summary>
@@ -334,7 +265,7 @@ namespace Another_Mirai_Native.Model
         public static CQCode CQCode_Face(int face)
         {
             return new CQCode(
-                CQCodeType.Face,
+                MessageItemType.Face,
                 new KeyValuePair<string, string>("id", Convert.ToString(face)));
         }
 
@@ -349,24 +280,8 @@ namespace Another_Mirai_Native.Model
             return string.IsNullOrEmpty(path)
                 ? throw new ArgumentException("路径不能为空", "path")
                 : new CQCode(
-                CQCodeType.Image,
+                MessageItemType.Image,
                 new KeyValuePair<string, string>("file", path));
-        }
-
-        /// <summary>
-        /// 获取酷Q "音乐" 代码
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="type"></param>
-        /// <param name="style"></param>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_Music(long id, string type = "qq", int style = 0)
-        {
-            return new CQCode(
-                CQCodeType.Music,
-                new KeyValuePair<string, string>("id", Convert.ToString(id)),
-                new KeyValuePair<string, string>("type", type),
-                new KeyValuePair<string, string>("style", Convert.ToString(style)));
         }
 
         /// <summary>
@@ -380,7 +295,7 @@ namespace Another_Mirai_Native.Model
             return string.IsNullOrEmpty(path)
                 ? throw new ArgumentException("语音路径不允许为空", "path")
                 : new CQCode(
-                CQCodeType.Record,
+                MessageItemType.Record,
                 new KeyValuePair<string, string>("file", path));
         }
 
@@ -390,101 +305,7 @@ namespace Another_Mirai_Native.Model
         /// <returns>返回 <see cref="CQCode"/> 对象</returns>
         public static CQCode CQCode_Shake()
         {
-            return new CQCode(CQCodeType.Shake);
-        }
-
-        /// <summary>
-        /// 获取酷Q "好友名片分享" 代码
-        /// </summary>
-        /// <param name="qqId">QQ号码</param>
-        /// <exception cref="ArgumentOutOfRangeException">参数: qqId 超出范围</exception>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_ShareFriendCard(long qqId)
-        {
-            return qqId < 0
-                ? throw new ArgumentOutOfRangeException("qqId")
-                : new CQCode(CQCodeType.Contact,
-                new KeyValuePair<string, string>("type", "qq"),
-                new KeyValuePair<string, string>("id", Convert.ToString(qqId)));
-        }
-
-        /// <summary>
-        /// 获取酷Q "位置分享" 代码
-        /// </summary>
-        /// <param name="site">地点, 建议12字以内</param>
-        /// <param name="detail">详细地址, 建议20字以内</param>
-        /// <param name="lat">维度</param>
-        /// <param name="lon">经度</param>
-        /// <param name="zoom">放大倍数, 默认: 15倍</param>
-        /// <exception cref="ArgumentException">参数: site 或 detail 是空字符串或为 null</exception>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_ShareGPS(string site, string detail, double lat, double lon, int zoom = 15)
-        {
-            if (string.IsNullOrEmpty(site))
-            {
-                throw new ArgumentException("分享的地点不能为空", "site");
-            }
-
-            return string.IsNullOrEmpty(detail)
-                ? throw new ArgumentException("详细地址不能为空", "detail")
-                : new CQCode(
-                CQCodeType.Location,
-                new KeyValuePair<string, string>("lat", Convert.ToString(lat)),
-                new KeyValuePair<string, string>("lon", Convert.ToString(lon)),
-                new KeyValuePair<string, string>("zoom", Convert.ToString(zoom)),
-                new KeyValuePair<string, string>("title", site),
-                new KeyValuePair<string, string>("content", detail));
-        }
-
-        /// <summary>
-        /// 获取酷Q "群名片分享" 代码
-        /// </summary>
-        /// <param name="groupId">群组</param>
-        /// <exception cref="ArgumentOutOfRangeException">参数: groupId 超出范围</exception>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_ShareGroupCard(long groupId)
-        {
-            return groupId < 0
-                ? throw new ArgumentOutOfRangeException("groupId")
-                : new CQCode(CQCodeType.Contact,
-                new KeyValuePair<string, string>("type", "group"),
-                new KeyValuePair<string, string>("group", Convert.ToString(groupId)));
-        }
-
-        /// <summary>
-        /// 获取酷Q "链接分享" 代码
-        /// </summary>
-        /// <param name="url">分享的链接</param>
-        /// <param name="title">显示的标题, 建议12字以内</param>
-        /// <param name="content">简介信息, 建议30字以内</param>
-        /// <param name="imageUrl">分享的图片链接, 留空则为默认图片</param>
-        /// <exception cref="ArgumentException">参数: url 是空字符串或为 null</exception>
-        /// <returns>返回 <see cref="CQCode"/> 对象</returns>
-        public static CQCode CQCode_ShareLink(string url, string title, string content, string? imageUrl = null)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                throw new ArgumentException("分享的链接为空", "url");
-            }
-
-            CQCode code = new(
-                CQCodeType.Share,
-                new KeyValuePair<string, string>("url", url));
-
-            if (!string.IsNullOrEmpty(title))
-            {
-                code.Items.Add("title", title);
-            }
-            if (!string.IsNullOrEmpty(content))
-            {
-                code.Items.Add("content", content);
-            }
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                code.Items.Add("image", imageUrl!);
-            }
-
-            return code;
+            return new CQCode(MessageItemType.Shake);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native;
 using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
@@ -20,6 +21,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using ChatHistory = Another_Mirai_Native.Model.ChatHistory;
 
 namespace Another_Mirai_Native.UI.ViewModel
 {

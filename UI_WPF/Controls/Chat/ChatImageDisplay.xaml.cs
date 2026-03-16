@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.UI.ViewModel;
 using Another_Mirai_Native.UI.Windows;
@@ -43,7 +44,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             });
         }
 
-        public CQCode? CQCode
+        internal CQCode? CQCode
         {
             get => (CQCode?)GetValue(CQCodeProperty);
             set => SetValue(CQCodeProperty, value);
