@@ -24,7 +24,6 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// </summary>
         public string Text { get; private set; } = text;
         // TODO: 提供类CQ码消息对象
-        // TODO: 提供Reply方法
 
         /// <summary>
         /// 撤回消息

@@ -22,5 +22,17 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// 获取当前事件的消息内容
         /// </summary>
         public Message Message { get; } = message;
+
+        /// <summary>
+        /// 回复当前消息
+        /// </summary>
+        /// <param name="msg">回复内容</param>
+        /// <returns>回复后消息</returns>
+        public Message Reply(string msg)
+        {
+            string content = $"[CQ:reply,id={Message.Id}]" + msg;
+            int msgId = API.MessageApi.SendPrivateMessage(FromQQ.Id, content);
+            return new(API, msgId, content);
+        }
     }
 }
