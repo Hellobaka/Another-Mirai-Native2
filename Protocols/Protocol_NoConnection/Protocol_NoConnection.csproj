@@ -6,6 +6,8 @@
     <Platforms>AnyCPU;x86</Platforms>
 	  <UseWindowsForms>True</UseWindowsForms>
 	  <Version>2.10.1</Version>
+	  <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+	  <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
 
   <ItemGroup>

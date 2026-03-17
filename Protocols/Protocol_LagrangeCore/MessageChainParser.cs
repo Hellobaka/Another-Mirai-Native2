@@ -122,7 +122,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             return message.ToString();
         }
 
-        public static void ParseCQCodeToMessageChain(MessageBuilder builder, string message)
+        public static void ParseCQCodeToMessageChain(Lagrange.Core.Message.MessageBuilder builder, string message)
         {
             var splits = message.SplitV2("\\[CQ:.*?\\]");
             foreach (var s in splits)
