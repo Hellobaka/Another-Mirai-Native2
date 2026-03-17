@@ -6,8 +6,18 @@ using System.Text;
 
 namespace Another_Mirai_Native.Abstractions.Models.MessageItem
 {
+    /// <summary>
+    /// 图片消息片段。
+    /// </summary>
     public class Image : MessageItemBase
     {
+        /// <summary>
+        /// 初始化 <see cref="Image"/>。filePath 与 hash 只能二选一，并且最少传递一个。若两个都被传递，则优先使用 filePath。
+        /// </summary>
+        /// <param name="filePath">图片文件路径。</param>
+        /// <param name="hash">图片哈希。</param>
+        /// <param name="isFlash">是否为闪照。</param>
+        /// <param name="isEmoji">是否为表情包样式。</param>
         public Image(string filePath = "", string hash = "", bool isFlash = false, bool isEmoji = false)
         {
             FilePath = filePath;
@@ -16,16 +26,30 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             IsEmoji = isEmoji;
         }
 
+        /// <inheritdoc/>
         public override MessageItemType MessageItemType { get; set; } = MessageItemType.Image;
 
+        /// <summary>
+        /// 图片文件路径。
+        /// </summary>
         public string FilePath { get; set; }
 
+        /// <summary>
+        /// 图片哈希。
+        /// </summary>
         public string Hash { get; set; }
 
+        /// <summary>
+        /// 是否为闪照。
+        /// </summary>
         public bool IsFlash { get; set; }
 
+        /// <summary>
+        /// 是否为表情包子类型。
+        /// </summary>
         public bool IsEmoji { get; set; }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(FilePath))

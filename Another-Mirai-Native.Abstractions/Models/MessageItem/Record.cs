@@ -4,20 +4,36 @@ using System.IO;
 
 namespace Another_Mirai_Native.Abstractions.Models.MessageItem
 {
+    /// <summary>
+    /// 语音消息片段。
+    /// </summary>
     public class Record : MessageItemBase
     {
+        /// <summary>
+        /// 初始化 <see cref="Record"/>。filePath 与 hash 只能二选一，并且最少传递一个。若两个都被传递，则优先使用 filePath。
+        /// </summary>
+        /// <param name="filePath">语音文件路径。</param>
+        /// <param name="hash">语音哈希。</param>
         public Record(string filePath = "", string hash = "")
         {
             FilePath = filePath;
             Hash = hash;
         }
 
+        /// <inheritdoc/>
         public override MessageItemType MessageItemType { get; set; } = MessageItemType.Record;
 
+        /// <summary>
+        /// 语音文件路径。
+        /// </summary>
         public string FilePath { get; set; }
 
+        /// <summary>
+        /// 语音哈希。
+        /// </summary>
         public string Hash { get; set; }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(FilePath))

@@ -15,6 +15,12 @@ namespace Another_Mirai_Native.Abstractions.Models
     {
         internal readonly IPluginApi pluginApi;
 
+        /// <summary>
+        /// 初始化 <see cref="Message"/> 实例。
+        /// </summary>
+        /// <param name="pluginApi">插件 API 实例。</param>
+        /// <param name="id">消息唯一标识。</param>
+        /// <param name="text">消息原文。</param>
         public Message(IPluginApi pluginApi, int id, string text)
         {
             this.pluginApi = pluginApi;
@@ -40,6 +46,9 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// </summary>
         public string Text { get; private set; }
 
+        /// <summary>
+        /// 获取当前消息解析后的消息链。
+        /// </summary>
         public List<MessageItemBase> MessageChain { get; private set; } = [];
 
         /// <summary>

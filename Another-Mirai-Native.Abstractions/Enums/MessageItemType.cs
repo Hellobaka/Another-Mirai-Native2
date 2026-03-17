@@ -1,5 +1,8 @@
 ﻿namespace Another_Mirai_Native.Abstractions.Enums
 {
+    /// <summary>
+    /// 消息片段类型。
+    /// </summary>
     public enum MessageItemType
     {
         /// <summary>
