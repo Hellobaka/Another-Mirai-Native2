@@ -4,6 +4,7 @@ using Another_Mirai_Native.Abstractions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Abstractions.Models
 {
@@ -48,6 +49,15 @@ namespace Another_Mirai_Native.Abstractions.Models
         public bool RemoveMessage()
         {
             return PluginApi.MessageApi.DeleteMessage(Id);
+        }
+
+        /// <summary>
+        /// 异步撤回消息
+        /// </summary>
+        /// <returns>消息撤回成功与否</returns>
+        public Task<bool> RemoveMessageAsync()
+        {
+            return PluginApi.MessageApi.DeleteMessageAsync(Id);
         }
 
         private void BuildMessageChain()

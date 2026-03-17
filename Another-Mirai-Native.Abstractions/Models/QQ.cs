@@ -1,4 +1,5 @@
 ﻿using Another_Mirai_Native.Abstractions.Services;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Abstractions.Models
 {
@@ -25,6 +26,16 @@ namespace Another_Mirai_Native.Abstractions.Models
         }
 
         /// <summary>
+        /// 异步发送私聊消息
+        /// </summary>
+        /// <param name="message">将要发送的消息</param>
+        /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
+        public Task<int> SendPrivateMessageAsync(string message)
+        {
+            return PluginApi.MessageApi.SendPrivateMessageAsync(Id, message);
+        }
+
+        /// <summary>
         /// 向目标用户发送名片赞。根据不同的框架实现，可能会有一些限制，例如每天只能发送一次赞等。
         /// </summary>
         /// <param name="count">发送赞是数量</param>
@@ -32,6 +43,16 @@ namespace Another_Mirai_Native.Abstractions.Models
         public bool SendPraise(int count = 1)
         {
             return PluginApi.FriendApi.SendPraise(Id, count);
+        }
+
+        /// <summary>
+        /// 异步向目标用户发送名片赞。根据不同的框架实现，可能会有一些限制，例如每天只能发送一次赞等。
+        /// </summary>
+        /// <param name="count">发送赞是数量</param>
+        /// <returns>操作是否成功</returns>
+        public Task<bool> SendPraiseAsync(int count = 1)
+        {
+            return PluginApi.FriendApi.SendPraiseAsync(Id, count);
         }
     }
 }
