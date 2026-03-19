@@ -47,7 +47,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
 
         private IMenuHandler[] MenuHandlers { get; set; }
 
-        private IPrivateMessageHandle? PrivateMessageHandle { get; set; }
+        private IPrivateMessageHandler? PrivateMessageHandle { get; set; }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
 
@@ -255,7 +255,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             GroupWholeBannedHandler = FindEventHandler<IGroupWholeBannedHandler>();
             GroupWholeUnbannedHandler = FindEventHandler<IGroupWholeUnbannedHandler>();
             MenuHandlers = FindEventHandlers<IMenuHandler>();
-            PrivateMessageHandle = FindEventHandler<IPrivateMessageHandle>();
+            PrivateMessageHandle = FindEventHandler<IPrivateMessageHandler>();
 
             if (MenuHandlers.Length > 0)
             {
@@ -589,7 +589,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 参数类型不匹配，期望 (long, long, long, long) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            if (!Enum.IsDefined(typeof(AdminChangedType), subType))
+            if ((subType is not 1) && (subType is not 2))
             {
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnAdminChangedAsync; 子类型无效，期望 1(取消管理员) 或 2(设置管理员) 但实际 {subType}");
                 return Task.FromResult(EventHandleResult.Pass);

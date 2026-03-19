@@ -8,7 +8,7 @@ namespace Another_Mirai_Native.Abstractions.Handlers
     /// <summary>
     /// 为处理收到私聊消息事件的处理器。
     /// </summary>
-    public interface IPrivateMessageHandle
+    public interface IPrivateMessageHandler
     {
         /// <summary>
         /// 在收到私聊消息时异步执行操作。
