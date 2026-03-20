@@ -85,6 +85,7 @@ namespace Protocol_NoConnection
                 {
                     msgId = MsgId++;
                 }
+                RequestCache.AddMessageCache(msgId, msg);
                 if (PrivateSelector.Checked)
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");

@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -21,7 +23,6 @@ namespace Protocol_NoConnection
         private static readonly Dictionary<string, string> EventDisplayNames = new()
         {
             ["Event_OnAdminChange"] = "群管理员变动",
-            ["Event_OnDiscussMsg"] = "收到讨论组消息",
             ["Event_OnEnable"] = "应用启用",
             ["Event_OnDisable"] = "应用禁用",
             ["Event_OnExit"] = "框架退出",
@@ -54,7 +55,7 @@ namespace Protocol_NoConnection
             ["font"] = "字体ID",
             ["duration"] = "时长(秒)",
             ["responseFlag"] = "响应标识",
-            ["file"] = "文件名",
+            ["file"] = "文件信息",
             ["group"] = "群号",
             ["qq"] = "QQ",
             ["card"] = "群名片",
@@ -134,7 +135,11 @@ namespace Protocol_NoConnection
                 ["sendTime"] = "事件发生时间（将自动转为时间戳）",
                 ["fromGroup"] = "来源群ID",
                 ["fromQQ"] = "文件来源QQ",
-                ["file"] = "文件名"
+                ["file"] = "支持填写 key=value：fileId=xxx;fileName=xxx;fileSize=1024;busId=0（将自动转 Base64）",
+                ["fileId"] = "文件ID",
+                ["fileName"] = "文件名称",
+                ["fileSize"] = "文件尺寸(KB)",
+                ["busId"] = "busId",
             }
         };
 
@@ -169,6 +174,7 @@ namespace Protocol_NoConnection
                 .Where(x => x.Name.StartsWith("Event_", StringComparison.Ordinal))
                 .Where(x => x.Name != nameof(PluginManagerProxy.Event_OnPrivateMsg) && x.Name != nameof(PluginManagerProxy.Event_OnGroupMsg))
                 .Where(x => x.GetParameters().Any() is false || x.GetParameters()[0].ParameterType != typeof(CQPluginProxy))
+                .Where(x=> !x.Name.Contains("Discuss"))
                 .OrderBy(x => x.Name)
                 .ThenBy(x => x.GetParameters().Length)
                 .ToList();
@@ -377,6 +383,12 @@ namespace Protocol_NoConnection
             {
                 return string.IsNullOrWhiteSpace(SendValue.Text) ? "test" : SendValue.Text;
             }
+            if (parameter.ParameterType == typeof(string)
+                && parameter.Name == "file"
+                && GetSelectedMethod()?.Name == nameof(PluginManagerProxy.Event_OnUpload))
+            {
+                return "fileId=test-file-id;fileName=test.txt;fileSize=1024;busId=0";
+            }
             if (parameter.HasDefaultValue && parameter.DefaultValue != null)
             {
                 return parameter.DefaultValue.ToString();
@@ -467,12 +479,44 @@ namespace Protocol_NoConnection
             for (int i = 0; i < method.GetParameters().Length; i++)
             {
                 var parameter = method.GetParameters()[i];
-                if (!EventParamInputs.TryGetValue(parameter.Name, out Control input) || !TryParseInputValue(input, parameter.ParameterType, out object value))
+                if (!EventParamInputs.TryGetValue(parameter.Name, out Control input))
+                {
+                    MessageBox.Show($"参数 {parameter.Name} 无效，期望类型: {GetFriendlyTypeName(parameter.ParameterType)}", "参数错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                bool parseSuccess;
+                object value;
+                if (IsUploadFileParameter(method.Name, parameter))
+                {
+                    parseSuccess = TryParseUploadFileInput(input, out string fileValue, out string parseError);
+                    value = fileValue;
+                    if (!parseSuccess)
+                    {
+                        MessageBox.Show($"参数 {parameter.Name} 无效：{parseError}", "参数错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    parseSuccess = TryParseInputValue(input, parameter.ParameterType, out value);
+                }
+
+                if (!parseSuccess)
                 {
                     MessageBox.Show($"参数 {parameter.Name} 无效，期望类型: {GetFriendlyTypeName(parameter.ParameterType)}", "参数错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 args[i] = value;
+            }
+
+            if (method.Name.Contains("FriendAddRequest"))
+            {
+                RequestCache.FriendRequest.Add((string)args[4], ((long)args[2], "nick"));
+            }
+            if (method.Name.Contains("GroupAddRequest"))
+            {
+                RequestCache.GroupRequest.Add((string)args[5], ((long)args[3], "Card", (long)args[2], "GroupName"));
             }
 
             int logId = LogHelper.WriteLog(
@@ -508,6 +552,137 @@ namespace Protocol_NoConnection
                 LogHelper.UpdateLogStatus(logId, $"x {sw.ElapsedMilliseconds / (double)1000:f2} s");
                 LogHelper.Error("事件测试调用", ex);
                 MessageBox.Show($"调用失败\n方法: {method.Name}\n耗时: {sw.ElapsedMilliseconds} ms\n异常: {ex.Message}", "事件调用结果", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static bool IsUploadFileParameter(string methodName, ParameterInfo parameter)
+        {
+            return methodName == nameof(PluginManagerProxy.Event_OnUpload)
+                && parameter.Name == "file"
+                && parameter.ParameterType == typeof(string);
+        }
+
+        private static bool TryParseUploadFileInput(Control inputControl, out string value, out string error)
+        {
+            value = string.Empty;
+            error = string.Empty;
+
+            string input = inputControl.Text?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                error = "不能为空";
+                return false;
+            }
+
+            if (TryBuildUploadFileBase64(input, out string base64))
+            {
+                value = base64;
+                return true;
+            }
+
+            error = "格式错误。请使用 fileId=xxx;fileName=xxx;fileSize=1024;busId=0 或直接填写已编码 Base64";
+            return false;
+        }
+
+        private static bool TryBuildUploadFileBase64(string input, out string base64)
+        {
+            base64 = string.Empty;
+            string text = input.Trim();
+
+            if (TryParseUploadFileBase64(text, out _, out _, out _, out _))
+            {
+                base64 = text;
+                return true;
+            }
+
+            if (!TryParseUploadFileKv(text, out string fileId, out string fileName, out long fileSize, out int busId))
+            {
+                return false;
+            }
+
+            using MemoryStream stream = new();
+            using BinaryWriter writer = new(stream);
+            writer.Write_Ex(fileId);
+            writer.Write_Ex(fileName);
+            writer.Write_Ex(fileSize);
+            writer.Write_Ex(busId);
+            base64 = Convert.ToBase64String(stream.ToArray());
+            return true;
+        }
+
+        private static bool TryParseUploadFileKv(string input, out string fileId, out string fileName, out long fileSize, out int busId)
+        {
+            fileId = string.Empty;
+            fileName = string.Empty;
+            fileSize = 0;
+            busId = 0;
+
+            string normalized = input.Replace("\r", string.Empty).Replace("\n", ";");
+            string[] segments = normalized.Split([';', ','], StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> map = new(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string segment in segments)
+            {
+                string trimmedSegment = segment.Trim();
+                int index = trimmedSegment.IndexOf('=');
+                if (index <= 0)
+                {
+                    index = trimmedSegment.IndexOf(':');
+                }
+                if (index <= 0 || index >= trimmedSegment.Length - 1)
+                {
+                    continue;
+                }
+                string key = trimmedSegment.Substring(0, index).Trim();
+                string val = trimmedSegment.Substring(index + 1).Trim();
+                if (string.IsNullOrEmpty(key))
+                {
+                    continue;
+                }
+                map[key] = val;
+            }
+
+            if (!map.TryGetValue("fileId", out fileId) || string.IsNullOrWhiteSpace(fileId))
+            {
+                return false;
+            }
+            if (!map.TryGetValue("fileName", out fileName) || string.IsNullOrWhiteSpace(fileName))
+            {
+                return false;
+            }
+            if (!map.TryGetValue("fileSize", out string fileSizeText) || !long.TryParse(fileSizeText, out fileSize))
+            {
+                return false;
+            }
+            if (!map.TryGetValue("busId", out string busIdText) || !int.TryParse(busIdText, out busId))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool TryParseUploadFileBase64(string input, out string fileId, out string fileName, out long fileSize, out int busId)
+        {
+            fileId = string.Empty;
+            fileName = string.Empty;
+            fileSize = 0;
+            busId = 0;
+
+            try
+            {
+                byte[] binary = Convert.FromBase64String(input);
+                using MemoryStream stream = new(binary);
+                using BinaryReader reader = new(stream);
+                fileId = reader.ReadString_Ex();
+                fileName = reader.ReadString_Ex();
+                fileSize = reader.ReadInt64_Ex();
+                busId = reader.ReadInt32_Ex();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
