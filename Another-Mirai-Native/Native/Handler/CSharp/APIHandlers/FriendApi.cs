@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public List<FriendInfo> GetFriendInfos()
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, AuthCode);
+            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getFriendList", true, AuthCode, false);
             if (ret is string r)
             {
                 var l = Model.FriendInfo.RawToList(r);
@@ -24,7 +24,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<List<FriendInfo>> GetFriendInfosAsync()
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getFriendList", true, AuthCode);
+            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getFriendList", true, AuthCode, false);
             if (ret is string r)
             {
                 var l = Model.FriendInfo.RawToList(r);
@@ -36,41 +36,41 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
         public bool SendPraise(long qq, int count)
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendLikeV2", true, AuthCode, count);
-            if (ret is int r)
+            if (ret is long r)
             {
                 return r == 1;
             }
-            throw new InvalidCastException($"SendPraise 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+            throw new InvalidCastException($"SendPraise 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
 
         public async Task<bool> SendPraiseAsync(long qq, int count)
         {
             var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_sendLikeV2", true, AuthCode, count);
-            if (ret is int r)
+            if (ret is long r)
             {
                 return r == 1;
             }
-            throw new InvalidCastException($"SendPraiseAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+            throw new InvalidCastException($"SendPraiseAsync 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
 
         public bool SetFriendAddRequest(string flag, bool accept, string card = "")
         {
             var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_setFriendAddRequest", true, AuthCode, flag, accept ? 1 : 2, card);
-            if (ret is int r)
+            if (ret is long r)
             {
                 return r == 1;
             }
-            throw new InvalidCastException($"SetFriendAddRequest 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+            throw new InvalidCastException($"SetFriendAddRequest 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
 
         public async Task<bool> SetFriendAddRequestAsync(string flag, bool accept, string card = "")
         {
             var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_setFriendAddRequest", true, AuthCode, flag, accept ? 1 : 2, card);
-            if (ret is int r)
+            if (ret is long r)
             {
                 return r == 1;
             }
-            throw new InvalidCastException($"SetFriendAddRequestAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+            throw new InvalidCastException($"SetFriendAddRequestAsync 返回值类型错误，应当返回 long，实际返回 {ret?.GetType()}");
         }
     }
 }
