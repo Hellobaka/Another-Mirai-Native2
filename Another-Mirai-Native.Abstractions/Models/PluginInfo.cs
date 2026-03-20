@@ -30,7 +30,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// <summary>
         /// 完全构造函数，允许同时设置所有属性，包括可选的描述和作者信息。
         /// </summary>
-        public PluginInfo(string appId, string name, string? description, string version, string? author)
+        public PluginInfo(string appId, string name, string version, string? description, string? author)
             : this(appId, name, version)
         {
             Description = description;
