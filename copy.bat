@@ -61,5 +61,6 @@ copy "CleanI18nFolders.exe" "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows"
 echo Delete CleanI18nFolders.exe
 del %ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\CleanI18nFolders.exe
 
+Another-Mirai-Native2-DependencyManifest.exe -i "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows" -o "%ROOT%\Another-Mirai-Native.Abstractions\tools\DependencyManifest-dotnet9.json"
 
 endlocal
