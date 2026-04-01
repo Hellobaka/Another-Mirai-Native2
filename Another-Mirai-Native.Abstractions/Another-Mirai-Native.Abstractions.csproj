@@ -39,6 +39,9 @@
 	
 	<ItemGroup>
 		<None Include="tools\AMN.ManifestGen.exe" Pack="true" PackagePath="tools\" />
+		<None Include="tools\DependencyManifest-dotnet9.json" Pack="true" PackagePath="tools\" />
+		<None Include="tools\ILRepack.exe" Pack="true" PackagePath="tools\" />
+		<None Include="tools\ILRepack.runtimeconfig.json" Pack="true" PackagePath="tools\" />
 		<None Include="buildTransitive\Another-Mirai-Native.Abstractions.targets" Pack="true" PackagePath="buildTransitive\" />
 	</ItemGroup>
 </Project>

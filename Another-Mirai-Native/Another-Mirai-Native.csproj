@@ -6,6 +6,7 @@
 		<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Another_Mirai_Native</RootNamespace>
 		<Platforms>AnyCPU;x86</Platforms>

@@ -1,58 +1,100 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<PropertyGroup>
-		<GenerateAmnManifest Condition="'$(GenerateAmnManifest)'==''">true</GenerateAmnManifest>
-		<AmnManifestGenExe>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\tools\AMN.ManifestGen.exe'))</AmnManifestGenExe>
+		<PropertyGroup>
+			<GenerateAmnManifest Condition="'$(GenerateAmnManifest)'==''">true</GenerateAmnManifest>
+			<AmnManifestGenExe>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\tools\AMN.ManifestGen.exe'))</AmnManifestGenExe>
 
-		<AmnNormalizedName Condition="$([System.String]::Copy('$(TargetName)').StartsWith('Native_'))">$(TargetName)</AmnNormalizedName>
-		<AmnNormalizedName Condition="'$(AmnNormalizedName)'==''">Native_$(TargetName)</AmnNormalizedName>
-	</PropertyGroup>
+			<!-- 是否清理输出目录（合并依赖并删除多余文件），默认启用 -->
+			<CleanAmnOutputDir Condition="'$(CleanAmnOutputDir)'==''">true</CleanAmnOutputDir>
+			<!-- 是否忽略依赖版本匹配（仅匹配程序集名称），默认禁用 -->
+			<IgnoreDependencyVersion Condition="'$(IgnoreDependencyVersion)'==''">false</IgnoreDependencyVersion>
 
-	<Target Name="AmnGenerateManifestAndRename"
-			AfterTargets="Build"
-			Condition="'$(OS)'=='Windows_NT' and '$(GenerateAmnManifest)'!='false'">
-		<Message Importance="high" Text="[AMN] Target start: AmnGenerateManifestAndRename" />
-		<Message Importance="high" Text="[AMN] TargetPath=$(TargetPath)" />
-		<Message Importance="high" Text="[AMN] TargetDir=$(TargetDir)" />
-		<Message Importance="high" Text="[AMN] TargetName=$(TargetName)" />
-		<Message Importance="high" Text="[AMN] AmnNormalizedName=$(AmnNormalizedName)" />
-		<Message Importance="high" Text="[AMN] ManifestGenExe=$(AmnManifestGenExe)" />
-		<Message Importance="high" Text="[AMN] ManifestGenExists=$([System.IO.File]::Exists('$(AmnManifestGenExe)'))" />
+			<AmnNormalizedName Condition="$([System.String]::Copy('$(TargetName)').StartsWith('Native_'))">$(TargetName)</AmnNormalizedName>
+			<AmnNormalizedName Condition="'$(AmnNormalizedName)'==''">Native_$(TargetName)</AmnNormalizedName>
+		</PropertyGroup>
 
-		<Warning Condition="!Exists('$(AmnManifestGenExe)')" Text="[AMN] Manifest generator not found:
+		<Target Name="AmnGenerateManifestAndRename"
+				AfterTargets="Build"
+				Condition="'$(OS)'=='Windows_NT' and '$(GenerateAmnManifest)'!='false'">
+			<Message Importance="high" Text="[AMN] Target start: AmnGenerateManifestAndRename" />
+			<Message Importance="high" Text="[AMN] TargetPath=$(TargetPath)" />
+			<Message Importance="high" Text="[AMN] TargetDir=$(TargetDir)" />
+			<Message Importance="high" Text="[AMN] TargetName=$(TargetName)" />
+			<Message Importance="high" Text="[AMN] AmnNormalizedName=$(AmnNormalizedName)" />
+			<Message Importance="high" Text="[AMN] ManifestGenExe=$(AmnManifestGenExe)" />
+			<Message Importance="high" Text="[AMN] ManifestGenExists=$([System.IO.File]::Exists('$(AmnManifestGenExe)'))" />
+			<Message Importance="high" Text="[AMN] CleanAmnOutputDir=$(CleanAmnOutputDir)" />
+			<Message Importance="high" Text="[AMN] IgnoreDependencyVersion=$(IgnoreDependencyVersion)" />
+
+			<Warning Condition="!Exists('$(AmnManifestGenExe)')" Text="[AMN] Manifest generator not found:
   $(AmnManifestGenExe)" />
-		<Error Condition="!Exists('$(TargetPath)')" Text="[AMN] Target assembly not found: $(TargetPath)" />
-		
-		<Exec Condition="Exists('$(AmnManifestGenExe)')"
-			  Command="&quot;$(AmnManifestGenExe)&quot; -i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot; -t &quot;$(TargetFramework)&quot;"
-			  ConsoleToMSBuild="true"
-			  StandardOutputImportance="High"
-			  StandardErrorImportance="High"/>
-		
-		<Message Importance="high" Text="[AMN] Manifest expected at: $(TargetDir)$(AmnNormalizedName).json" />
-		
-		<Copy SourceFiles="$(TargetDir)$(TargetName).dll"
-			  DestinationFiles="$(TargetDir)$(AmnNormalizedName).dll"
-			  Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
-		<Delete Files="$(TargetDir)$(TargetName).dll"
-				Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
-		
-		<Message Importance="high"
-					Condition="'$(AmnNormalizedName)'!='$(TargetName)'"
-					Text="[AMN] DLL renamed: $(TargetName).dll -> $(AmnNormalizedName).dll" />
-		
-		<Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
-			  DestinationFiles="$(TargetDir)$(AmnNormalizedName).pdb"
-			  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
-		<Delete Files="$(TargetDir)$(TargetName).pdb"
-				Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
+			<Error Condition="!Exists('$(TargetPath)')" Text="[AMN] Target assembly not found: $(TargetPath)" />
 
-		<Copy SourceFiles="$(TargetDir)$(TargetName).xml"
-			  DestinationFiles="$(TargetDir)$(AmnNormalizedName).xml"
-			  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
-		<Delete Files="$(TargetDir)$(TargetName).xml"
-				Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
-		
-		<Message Importance="high" Text="[AMN] Target done." />
-	</Target>
-</Project>
+			<!-- 构建命令行参数 -->
+			<PropertyGroup>
+				<AmnManifestGenArgs>-i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot; -t &quot;$(TargetFramework)&quot;</AmnManifestGenArgs>
+				<AmnManifestGenArgs Condition="'$(CleanAmnOutputDir)'=='true'">$(AmnManifestGenArgs) -c</AmnManifestGenArgs>
+				<AmnManifestGenArgs Condition="'$(IgnoreDependencyVersion)'=='true'">$(AmnManifestGenArgs) --ignoreDependencyVersion</AmnManifestGenArgs>
+			</PropertyGroup>
+
+			<Exec Condition="Exists('$(AmnManifestGenExe)')"
+				  Command="&quot;$(AmnManifestGenExe)&quot; $(AmnManifestGenArgs)"
+				  ConsoleToMSBuild="true"
+				  StandardOutputImportance="High"
+				  StandardErrorImportance="High"/>
+
+			<Message Importance="high" Text="[AMN] Manifest expected at: $(TargetDir)$(AmnNormalizedName).json" />
+
+			<!-- 如果启用了 CleanAmnOutputDir，ManifestGen 会输出 Merged.dll，需要用它替换原始 DLL -->
+			<PropertyGroup>
+				<AmnMergedDllPath Condition="'$(CleanAmnOutputDir)'=='true'">$(TargetDir)$(TargetName).Merged.dll</AmnMergedDllPath>
+			</PropertyGroup>
+
+			<!-- 用合并后的 DLL 替换原始 DLL -->
+			<Copy Condition="'$(CleanAmnOutputDir)'=='true' and Exists('$(AmnMergedDllPath)')"
+				  SourceFiles="$(AmnMergedDllPath)"
+				  DestinationFiles="$(TargetPath)"
+				  SkipUnchangedFiles="true" />
+			<Delete Condition="'$(CleanAmnOutputDir)'=='true' and Exists('$(AmnMergedDllPath)')"
+					Files="$(AmnMergedDllPath)" />
+			<Message Importance="high"
+					 Condition="'$(CleanAmnOutputDir)'=='true' and Exists('$(AmnMergedDllPath)')"
+					 Text="[AMN] Merged DLL applied: $(TargetName).Merged.dll -> $(TargetName).dll" />
+
+			<!-- 处理 pdb 文件 -->
+			<PropertyGroup>
+				<AmnMergedPdbPath Condition="'$(CleanAmnOutputDir)'=='true'">$(TargetDir)$(TargetName).Merged.pdb</AmnMergedPdbPath>
+			</PropertyGroup>
+			<Copy Condition="'$(CleanAmnOutputDir)'=='true' and Exists('$(AmnMergedPdbPath)')"
+				  SourceFiles="$(AmnMergedPdbPath)"
+				  DestinationFiles="$(TargetDir)$(TargetName).pdb"
+				  SkipUnchangedFiles="true" />
+			<Delete Condition="'$(CleanAmnOutputDir)'=='true' and Exists('$(AmnMergedPdbPath)')"
+					Files="$(AmnMergedPdbPath)" />
+
+			<!-- 重命名为 Native_ 前缀 -->
+			<Copy SourceFiles="$(TargetDir)$(TargetName).dll"
+				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).dll"
+				  Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
+			<Delete Files="$(TargetDir)$(TargetName).dll"
+					Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
+
+			<Message Importance="high"
+						Condition="'$(AmnNormalizedName)'!='$(TargetName)'"
+						Text="[AMN] DLL renamed: $(TargetName).dll -> $(AmnNormalizedName).dll" />
+
+			<Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).pdb"
+				  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
+			<Delete Files="$(TargetDir)$(TargetName).pdb"
+					Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
+
+			<Copy SourceFiles="$(TargetDir)$(TargetName).xml"
+				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).xml"
+				  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
+			<Delete Files="$(TargetDir)$(TargetName).xml"
+					Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
+
+			<Message Importance="high" Text="[AMN] Target done." />
+		</Target>
+	</Project>
