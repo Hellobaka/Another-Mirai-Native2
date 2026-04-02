@@ -9,6 +9,7 @@ items:
   - Another_Mirai_Native.Abstractions.Context.FriendAddedContext
   - Another_Mirai_Native.Abstractions.Context.GroupAddRequestContext
   - Another_Mirai_Native.Abstractions.Context.GroupFileUploadedContext
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
   - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
   - Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext
   - Another_Mirai_Native.Abstractions.Context.GroupMemberIncreaseContext
@@ -16,6 +17,7 @@ items:
   - Another_Mirai_Native.Abstractions.Context.GroupMessageContext
   - Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext
   - Another_Mirai_Native.Abstractions.Context.GroupWholeUnbannedContext
+  - Another_Mirai_Native.Abstractions.Context.MenuContext
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   langs:
   - csharp
@@ -67,6 +69,14 @@ references:
   name: GroupFileUploadedContext
   nameWithType: GroupFileUploadedContext
   fullName: Another_Mirai_Native.Abstractions.Context.GroupFileUploadedContext
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html
+  name: GroupInviteRequestContext
+  nameWithType: GroupInviteRequestContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
 - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
   commentId: T:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
   parent: Another_Mirai_Native.Abstractions.Context
@@ -123,6 +133,14 @@ references:
   name: GroupWholeUnbannedContext
   nameWithType: GroupWholeUnbannedContext
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeUnbannedContext
+- uid: Another_Mirai_Native.Abstractions.Context.MenuContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.MenuContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.MenuContext.html
+  name: MenuContext
+  nameWithType: MenuContext
+  fullName: Another_Mirai_Native.Abstractions.Context.MenuContext
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   commentId: T:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   parent: Another_Mirai_Native.Abstractions.Context

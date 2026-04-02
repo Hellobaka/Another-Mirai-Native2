@@ -8,7 +8,9 @@ items:
   - Another_Mirai_Native.Abstractions.Models.Message.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.Int32,System.String)
   - Another_Mirai_Native.Abstractions.Models.Message.Id
   - Another_Mirai_Native.Abstractions.Models.Message.IsSuccess
+  - Another_Mirai_Native.Abstractions.Models.Message.MessageChain
   - Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
+  - Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
   - Another_Mirai_Native.Abstractions.Models.Message.Text
   langs:
   - csharp
@@ -18,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -49,21 +51,24 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Message(Another_Mirai_Native.Abstractions.Services.IPluginApi, int, string)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 描述消息的类
+  summary: 初始化 <xref href="Another_Mirai_Native.Abstractions.Models.Message" data-throw-if-not-resolved="false"></xref> 实例。
   example: []
   syntax:
     content: public Message(IPluginApi pluginApi, int id, string text)
     parameters:
     - id: pluginApi
       type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+      description: 插件 API 实例。
     - id: id
       type: System.Int32
+      description: 消息唯一标识。
     - id: text
       type: System.String
+      description: 消息原文。
     content.vb: Public Sub New(pluginApi As IPluginApi, id As Integer, text As String)
   overload: Another_Mirai_Native.Abstractions.Models.Message.#ctor*
   nameWithType.vb: Message.New(IPluginApi, Integer, String)
@@ -81,7 +86,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -94,6 +99,31 @@ items:
       description: 消息撤回成功与否
     content.vb: Public Function RemoveMessage() As Boolean
   overload: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage*
+- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+  id: RemoveMessageAsync
+  parent: Another_Mirai_Native.Abstractions.Models.Message
+  langs:
+  - csharp
+  - vb
+  name: RemoveMessageAsync()
+  nameWithType: Message.RemoveMessageAsync()
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 异步撤回消息
+  example: []
+  syntax:
+    content: public Task<bool> RemoveMessageAsync()
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 消息撤回成功与否
+    content.vb: Public Function RemoveMessageAsync() As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync*
 - uid: Another_Mirai_Native.Abstractions.Models.Message.Id
   commentId: P:Another_Mirai_Native.Abstractions.Models.Message.Id
   id: Id
@@ -106,7 +136,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Id
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -131,7 +161,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.IsSuccess
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -156,7 +186,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Text
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -169,6 +199,31 @@ items:
       type: System.String
     content.vb: Public ReadOnly Property Text As String
   overload: Another_Mirai_Native.Abstractions.Models.Message.Text*
+- uid: Another_Mirai_Native.Abstractions.Models.Message.MessageChain
+  commentId: P:Another_Mirai_Native.Abstractions.Models.Message.MessageChain
+  id: MessageChain
+  parent: Another_Mirai_Native.Abstractions.Models.Message
+  langs:
+  - csharp
+  - vb
+  name: MessageChain
+  nameWithType: Message.MessageChain
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.MessageChain
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/Message.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取当前消息解析后的消息链。
+  example: []
+  syntax:
+    content: public List<MessageItemBase> MessageChain { get; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+    content.vb: Public ReadOnly Property MessageChain As List(Of MessageItemBase)
+  overload: Another_Mirai_Native.Abstractions.Models.Message.MessageChain*
 references:
 - uid: Another_Mirai_Native.Abstractions.Models
   commentId: N:Another_Mirai_Native.Abstractions.Models
@@ -444,6 +499,14 @@ references:
   name: System
   nameWithType: System
   fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.Message
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Message
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Message.html
+  name: Message
+  nameWithType: Message
+  fullName: Another_Mirai_Native.Abstractions.Models.Message
 - uid: Another_Mirai_Native.Abstractions.Models.Message.#ctor*
   commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.#ctor
   isExternal: true
@@ -539,6 +602,113 @@ references:
   nameWithType.vb: Boolean
   fullName.vb: Boolean
   name.vb: Boolean
+- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_RemoveMessageAsync
+  name: RemoveMessageAsync
+  nameWithType: Message.RemoveMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+- uid: System.Threading.Tasks.Task{System.Boolean}
+  commentId: T:System.Threading.Tasks.Task{System.Boolean}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<bool>
+  nameWithType: Task<bool>
+  fullName: System.Threading.Tasks.Task<bool>
+  nameWithType.vb: Task(Of Boolean)
+  fullName.vb: System.Threading.Tasks.Task(Of Boolean)
+  name.vb: Task(Of Boolean)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
 - uid: Another_Mirai_Native.Abstractions.Models.Message.Id*
   commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.Id
   isExternal: true
@@ -560,3 +730,110 @@ references:
   name: Text
   nameWithType: Message.Text
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Text
+- uid: Another_Mirai_Native.Abstractions.Models.Message.MessageChain*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.MessageChain
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_MessageChain
+  name: MessageChain
+  nameWithType: Message.MessageChain
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.MessageChain
+- uid: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+  commentId: T:System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<MessageItemBase>
+  nameWithType: List<MessageItemBase>
+  fullName: System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase>
+  nameWithType.vb: List(Of MessageItemBase)
+  fullName.vb: System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase)
+  name.vb: List(Of MessageItemBase)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

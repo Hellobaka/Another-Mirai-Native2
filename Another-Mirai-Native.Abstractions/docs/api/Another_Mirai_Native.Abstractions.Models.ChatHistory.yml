@@ -23,7 +23,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -54,7 +54,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.ChatHistory()
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -77,7 +77,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.ID
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -102,7 +102,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.Time
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -127,7 +127,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.Type
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -152,7 +152,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.ParentID
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -177,7 +177,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.SenderID
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -202,7 +202,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.Message
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -227,7 +227,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.MessageId
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -252,7 +252,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.Recalled
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -277,7 +277,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.ChatHistory.PluginName
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/ChatHistory.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models

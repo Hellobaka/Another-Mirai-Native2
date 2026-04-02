@@ -7,6 +7,16 @@ items:
   - uid: Another_Mirai_Native.Abstractions.PluginBase
     name: PluginBase
     type: Class
+- uid: Another_Mirai_Native.Abstractions.Attributes
+  name: Another_Mirai_Native.Abstractions.Attributes
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute
+    name: EventPriorityAttribute
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Attributes.MenuAttribute
+    name: MenuAttribute
+    type: Class
 - uid: Another_Mirai_Native.Abstractions.Context
   name: Another_Mirai_Native.Abstractions.Context
   type: Namespace
@@ -25,6 +35,9 @@ items:
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Context.GroupFileUploadedContext
     name: GroupFileUploadedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+    name: GroupInviteRequestContext
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
     name: GroupMemberBannedContext
@@ -47,6 +60,9 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Context.GroupWholeUnbannedContext
     name: GroupWholeUnbannedContext
     type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.MenuContext
+    name: MenuContext
+    type: Class
   - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
     name: PrivateMessageContext
     type: Class
@@ -57,14 +73,35 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Enums.AdminChangedType
     name: AdminChangedType
     type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+    name: CQFace
+    type: Enum
   - uid: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
     name: ChatHistoryType
     type: Enum
   - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
     name: EventHandleResult
     type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+    name: MessageItemType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+    name: PluginEventType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+    name: QQGroupMemberType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.QQSex
+    name: QQSex
+    type: Enum
   - uid: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
     name: RequestHandleResult
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.RichContentType
+    name: RichContentType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.RpsType
+    name: RpsType
     type: Enum
 - uid: Another_Mirai_Native.Abstractions.Handlers
   name: Another_Mirai_Native.Abstractions.Handlers
@@ -84,6 +121,9 @@ items:
     type: Interface
   - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
     name: IGroupFileUploadHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+    name: IGroupInviteRequestHandler
     type: Interface
   - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
     name: IGroupMemberBannedHandler
@@ -109,8 +149,8 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
     name: IMenuHandler
     type: Interface
-  - uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle
-    name: IPrivateMessageHandle
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+    name: IPrivateMessageHandler
     type: Interface
 - uid: Another_Mirai_Native.Abstractions.Models
   name: Another_Mirai_Native.Abstractions.Models
@@ -128,17 +168,66 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
     name: GroupFileInfo
     type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
     name: GroupMemberInfo
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.Message
     name: Message
     type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+    name: MessageBuilder
+    type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
     name: PluginInfo
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.QQ
     name: QQ
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+  name: Another_Mirai_Native.Abstractions.Models.MessageItem
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.At
+    name: At
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+    name: BFace
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+    name: Dice
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+    name: Face
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+    name: Image
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+    name: Poke
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+    name: RPS
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+    name: Record
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+    name: Reply
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+    name: RichContent
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+    name: Shake
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+    name: Text
     type: Class
 - uid: Another_Mirai_Native.Abstractions.Services
   name: Another_Mirai_Native.Abstractions.Services
@@ -162,21 +251,4 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
     name: IPluginApi
     type: Interface
-- uid: Another_Mirai_Native.Model
-  name: Another_Mirai_Native.Model
-  type: Namespace
-  items:
-  - uid: Another_Mirai_Native.Model.GroupInfo
-    name: GroupInfo
-    type: Class
-- uid: Another_Mirai_Native.Model.Enums
-  name: Another_Mirai_Native.Model.Enums
-  type: Namespace
-  items:
-  - uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType
-    name: QQGroupMemberType
-    type: Enum
-  - uid: Another_Mirai_Native.Model.Enums.QQSex
-    name: QQSex
-    type: Enum
 memberLayout: SamePage

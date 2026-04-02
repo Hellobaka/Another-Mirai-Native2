@@ -1,0 +1,4900 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.CQFace
+  id: CQFace
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.K歌
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.doge
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.emm中
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.一展宏图
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.下雨
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.下面
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.不
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.乒乓
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.亲亲
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.仔细分析
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.伸舌头眨眼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.你真棒棒
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.便便
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.偷感
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.偷笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.傲慢
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.元宝
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.再见
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.冷汗
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.冷漠喝茶
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.凋谢
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.刀
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.划龙舟
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.勾引
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.半信半疑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.单手比耶
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.卖萌
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.双喜
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.双手比666
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.发呆
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.发怒
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.发抖
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.发财
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.变形
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.可怜
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.可爱
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.右亲亲
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.右哼哼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.右太极
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.右拜年
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.吃瓜
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.吃糖
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.吐
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.吐血
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.吓
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.呲牙
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.呵呵哒
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.咒骂
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.咖啡
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.哈欠
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.哦哟
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.啤酒
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.喝奶
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.喝彩
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.嘟嘴真的假的
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.回头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.困
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.坏笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.坚强
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.多云
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.大兵
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.大哭
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.大怨种
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.太阳
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.头秃
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.奋斗
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.好
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.委屈
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.嫌弃
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.害羞
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.小幽灵
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.小熊点赞
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.小纠结
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.尴尬
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.崇拜
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.左哼哼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.左太极
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.左拜年
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.差劲
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.帅
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.庆祝
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.开车
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.弱
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.强
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.彩球
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.得意
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.微笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.心碎
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.快哭了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.怄火
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.惊吓
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.惊恐
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.惊讶
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.憨笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.我想开了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.我方了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.我最美
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.戳一戳
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.手枪
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.打call
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.打伞
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.打招呼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.托腮
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.抓狂
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.折磨
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.抠鼻
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.抱拳
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拍手期待
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拜托了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拜谢
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拥抱
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拳头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.拿到红包
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.挥手
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.捂脸
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.握手
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.摸锦鲤
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.摸鱼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.撇嘴
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.擦汗
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.收到
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.敬礼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.敲打
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.敲敲
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.斜眼笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.新年快乐
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.无奈
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.无眼笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.晕
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.暗中观察
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.暴富
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.月亮
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.棒棒糖
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.比心
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.求放过
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.汗
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.汪汪斜眼笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.沙发
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.沧桑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.泪奔
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.流汗
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.流泪
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.激动
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.火车
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.灯泡
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.灯笼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.炸弹
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.烟花
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.熊猫
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.爆筋
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.爱你
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.爱心
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.爱情
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.牛哇
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.猪头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.献吻
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.玩火
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.玫瑰
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.瓢虫
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.生气
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.略略略
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.疑问
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.白眼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.睁大眼睛
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.睡
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.磕头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.示爱
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.礼物
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.祈祷
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.笑哭
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.篮球
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.糗大了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.红包多多
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.纸巾
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.续标识
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.羊驼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.胖了
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.胜利
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.脑阔疼
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.舔屏
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.色
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.花朵脸
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.茶
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.药
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.菜刀
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.菜汪
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.虎虎生威
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.蛇年快乐
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.蛋糕
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.街舞
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.衰
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.裂开
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.西瓜
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.调皮
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.购物
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.贴贴
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.足球
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.跳绳
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.跳跳
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.车厢
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.转圈
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.辣眼睛
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.邮件
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.鄙视
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.酷
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.酸
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.酸Q
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.钞票
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.钻戒
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.闪电
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.闭嘴
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.问号脸
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.闹钟
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.阴险
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.难过
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.青蛙
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.面无表情
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.鞭炮
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.风车
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.飞吻
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.飞机
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.饥饿
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.饭
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.香蕉
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.骷髅
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.高铁右车头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.高铁左车头
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.魔鬼笑
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.鼓掌
+  - Another_Mirai_Native.Abstractions.Enums.CQFace.龙年快乐
+  langs:
+  - csharp
+  - vb
+  name: CQFace
+  nameWithType: CQFace
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 指示酷Q表情代码
+  example: []
+  syntax:
+    content: public enum CQFace
+    content.vb: Public Enum CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.惊讶
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.惊讶
+  id: 惊讶
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 惊讶
+  nameWithType: CQFace.惊讶
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.惊讶
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 惊讶 = 0
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.撇嘴
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.撇嘴
+  id: 撇嘴
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 撇嘴
+  nameWithType: CQFace.撇嘴
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.撇嘴
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 撇嘴 = 1
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.色
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.色
+  id: 色
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 色
+  nameWithType: CQFace.色
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.色
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 色 = 2
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.发呆
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.发呆
+  id: 发呆
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 发呆
+  nameWithType: CQFace.发呆
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.发呆
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 发呆 = 3
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.得意
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.得意
+  id: 得意
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 得意
+  nameWithType: CQFace.得意
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.得意
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 得意 = 4
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.流泪
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.流泪
+  id: 流泪
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 流泪
+  nameWithType: CQFace.流泪
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.流泪
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 流泪 = 5
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.害羞
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.害羞
+  id: 害羞
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 害羞
+  nameWithType: CQFace.害羞
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.害羞
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 害羞 = 6
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.闭嘴
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.闭嘴
+  id: 闭嘴
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 闭嘴
+  nameWithType: CQFace.闭嘴
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.闭嘴
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 闭嘴 = 7
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.睡
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.睡
+  id: 睡
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 睡
+  nameWithType: CQFace.睡
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.睡
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 睡 = 8
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.大哭
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.大哭
+  id: 大哭
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 大哭
+  nameWithType: CQFace.大哭
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.大哭
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 大哭 = 9
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.尴尬
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.尴尬
+  id: 尴尬
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 尴尬
+  nameWithType: CQFace.尴尬
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.尴尬
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 尴尬 = 10
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.发怒
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.发怒
+  id: 发怒
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 发怒
+  nameWithType: CQFace.发怒
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.发怒
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 发怒 = 11
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.调皮
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.调皮
+  id: 调皮
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 调皮
+  nameWithType: CQFace.调皮
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.调皮
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 调皮 = 12
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.呲牙
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.呲牙
+  id: 呲牙
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 呲牙
+  nameWithType: CQFace.呲牙
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.呲牙
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 呲牙 = 13
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.微笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.微笑
+  id: 微笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 微笑
+  nameWithType: CQFace.微笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.微笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 微笑 = 14
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.难过
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.难过
+  id: 难过
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 难过
+  nameWithType: CQFace.难过
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.难过
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 难过 = 15
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.酷
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.酷
+  id: 酷
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 酷
+  nameWithType: CQFace.酷
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.酷
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 酷 = 16
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.抓狂
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.抓狂
+  id: 抓狂
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 抓狂
+  nameWithType: CQFace.抓狂
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.抓狂
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 抓狂 = 18
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.吐
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.吐
+  id: 吐
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 吐
+  nameWithType: CQFace.吐
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.吐
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 吐 = 19
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.偷笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.偷笑
+  id: 偷笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 偷笑
+  nameWithType: CQFace.偷笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.偷笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 偷笑 = 20
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.可爱
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.可爱
+  id: 可爱
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 可爱
+  nameWithType: CQFace.可爱
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.可爱
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 可爱 = 21
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.白眼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.白眼
+  id: 白眼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 白眼
+  nameWithType: CQFace.白眼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.白眼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 白眼 = 22
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.傲慢
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.傲慢
+  id: 傲慢
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 傲慢
+  nameWithType: CQFace.傲慢
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.傲慢
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 傲慢 = 23
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.饥饿
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.饥饿
+  id: 饥饿
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 饥饿
+  nameWithType: CQFace.饥饿
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.饥饿
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 饥饿 = 24
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.困
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.困
+  id: 困
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 困
+  nameWithType: CQFace.困
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.困
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 困 = 25
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.惊恐
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.惊恐
+  id: 惊恐
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 惊恐
+  nameWithType: CQFace.惊恐
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.惊恐
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 惊恐 = 26
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.流汗
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.流汗
+  id: 流汗
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 流汗
+  nameWithType: CQFace.流汗
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.流汗
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 流汗 = 27
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.憨笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.憨笑
+  id: 憨笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 憨笑
+  nameWithType: CQFace.憨笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.憨笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 憨笑 = 28
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.大兵
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.大兵
+  id: 大兵
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 大兵
+  nameWithType: CQFace.大兵
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.大兵
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 大兵 = 29
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.奋斗
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.奋斗
+  id: 奋斗
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 奋斗
+  nameWithType: CQFace.奋斗
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.奋斗
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 奋斗 = 30
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.咒骂
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.咒骂
+  id: 咒骂
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 咒骂
+  nameWithType: CQFace.咒骂
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.咒骂
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 咒骂 = 31
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.疑问
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.疑问
+  id: 疑问
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 疑问
+  nameWithType: CQFace.疑问
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.疑问
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 疑问 = 32
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.晕
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.晕
+  id: 晕
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 晕
+  nameWithType: CQFace.晕
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.晕
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 晕 = 34
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.折磨
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.折磨
+  id: 折磨
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 折磨
+  nameWithType: CQFace.折磨
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.折磨
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 折磨 = 35
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.衰
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.衰
+  id: 衰
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 衰
+  nameWithType: CQFace.衰
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.衰
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 衰 = 36
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.骷髅
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.骷髅
+  id: 骷髅
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 骷髅
+  nameWithType: CQFace.骷髅
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.骷髅
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 骷髅 = 37
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.敲打
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.敲打
+  id: 敲打
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 敲打
+  nameWithType: CQFace.敲打
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.敲打
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 敲打 = 38
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.再见
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.再见
+  id: 再见
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 再见
+  nameWithType: CQFace.再见
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.再见
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 再见 = 39
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.发抖
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.发抖
+  id: 发抖
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 发抖
+  nameWithType: CQFace.发抖
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.发抖
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 发抖 = 41
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.爱情
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.爱情
+  id: 爱情
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 爱情
+  nameWithType: CQFace.爱情
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.爱情
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 爱情 = 42
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.跳跳
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.跳跳
+  id: 跳跳
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 跳跳
+  nameWithType: CQFace.跳跳
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.跳跳
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 跳跳 = 43
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.猪头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.猪头
+  id: 猪头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 猪头
+  nameWithType: CQFace.猪头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.猪头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 猪头 = 46
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拥抱
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拥抱
+  id: 拥抱
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拥抱
+  nameWithType: CQFace.拥抱
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拥抱
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拥抱 = 49
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.蛋糕
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.蛋糕
+  id: 蛋糕
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 蛋糕
+  nameWithType: CQFace.蛋糕
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.蛋糕
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 蛋糕 = 53
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.闪电
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.闪电
+  id: 闪电
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 闪电
+  nameWithType: CQFace.闪电
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.闪电
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 闪电 = 54
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.炸弹
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.炸弹
+  id: 炸弹
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 炸弹
+  nameWithType: CQFace.炸弹
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.炸弹
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 炸弹 = 55
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.刀
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.刀
+  id: 刀
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 刀
+  nameWithType: CQFace.刀
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.刀
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 刀 = 56
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.足球
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.足球
+  id: 足球
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 足球
+  nameWithType: CQFace.足球
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.足球
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 足球 = 57
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.便便
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.便便
+  id: 便便
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 便便
+  nameWithType: CQFace.便便
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.便便
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 便便 = 59
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.咖啡
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.咖啡
+  id: 咖啡
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 咖啡
+  nameWithType: CQFace.咖啡
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.咖啡
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 咖啡 = 60
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.饭
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.饭
+  id: 饭
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 饭
+  nameWithType: CQFace.饭
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.饭
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 饭 = 61
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.玫瑰
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.玫瑰
+  id: 玫瑰
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 玫瑰
+  nameWithType: CQFace.玫瑰
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.玫瑰
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 玫瑰 = 63
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.凋谢
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.凋谢
+  id: 凋谢
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 凋谢
+  nameWithType: CQFace.凋谢
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.凋谢
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 凋谢 = 64
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.爱心
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.爱心
+  id: 爱心
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 爱心
+  nameWithType: CQFace.爱心
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.爱心
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 爱心 = 66
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.心碎
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.心碎
+  id: 心碎
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 心碎
+  nameWithType: CQFace.心碎
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.心碎
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 心碎 = 67
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.礼物
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.礼物
+  id: 礼物
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 礼物
+  nameWithType: CQFace.礼物
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.礼物
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 礼物 = 69
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.太阳
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.太阳
+  id: 太阳
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 太阳
+  nameWithType: CQFace.太阳
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.太阳
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 太阳 = 74
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.月亮
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.月亮
+  id: 月亮
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 月亮
+  nameWithType: CQFace.月亮
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.月亮
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 月亮 = 75
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.强
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.强
+  id: 强
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 强
+  nameWithType: CQFace.强
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.强
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 强 = 76
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.弱
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.弱
+  id: 弱
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 弱
+  nameWithType: CQFace.弱
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.弱
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 弱 = 77
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.握手
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.握手
+  id: 握手
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 握手
+  nameWithType: CQFace.握手
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.握手
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 握手 = 78
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.胜利
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.胜利
+  id: 胜利
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 胜利
+  nameWithType: CQFace.胜利
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.胜利
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 胜利 = 79
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.飞吻
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.飞吻
+  id: 飞吻
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 飞吻
+  nameWithType: CQFace.飞吻
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.飞吻
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 飞吻 = 85
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.怄火
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.怄火
+  id: 怄火
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 怄火
+  nameWithType: CQFace.怄火
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.怄火
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 怄火 = 86
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.西瓜
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.西瓜
+  id: 西瓜
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 西瓜
+  nameWithType: CQFace.西瓜
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.西瓜
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 西瓜 = 89
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.冷汗
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.冷汗
+  id: 冷汗
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 冷汗
+  nameWithType: CQFace.冷汗
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.冷汗
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 冷汗 = 96
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.擦汗
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.擦汗
+  id: 擦汗
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 擦汗
+  nameWithType: CQFace.擦汗
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.擦汗
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 擦汗 = 97
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.抠鼻
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.抠鼻
+  id: 抠鼻
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 抠鼻
+  nameWithType: CQFace.抠鼻
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.抠鼻
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 抠鼻 = 98
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.鼓掌
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.鼓掌
+  id: 鼓掌
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 鼓掌
+  nameWithType: CQFace.鼓掌
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.鼓掌
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 鼓掌 = 99
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.糗大了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.糗大了
+  id: 糗大了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 糗大了
+  nameWithType: CQFace.糗大了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.糗大了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 糗大了 = 100
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.坏笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.坏笑
+  id: 坏笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 坏笑
+  nameWithType: CQFace.坏笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.坏笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 坏笑 = 101
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.左哼哼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.左哼哼
+  id: 左哼哼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 左哼哼
+  nameWithType: CQFace.左哼哼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.左哼哼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 左哼哼 = 102
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.右哼哼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.右哼哼
+  id: 右哼哼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 右哼哼
+  nameWithType: CQFace.右哼哼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.右哼哼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 右哼哼 = 103
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.哈欠
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.哈欠
+  id: 哈欠
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 哈欠
+  nameWithType: CQFace.哈欠
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.哈欠
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 哈欠 = 104
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.鄙视
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.鄙视
+  id: 鄙视
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 鄙视
+  nameWithType: CQFace.鄙视
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.鄙视
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 鄙视 = 105
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.委屈
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.委屈
+  id: 委屈
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 委屈
+  nameWithType: CQFace.委屈
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.委屈
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 委屈 = 106
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.快哭了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.快哭了
+  id: 快哭了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 快哭了
+  nameWithType: CQFace.快哭了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.快哭了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 快哭了 = 107
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.阴险
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.阴险
+  id: 阴险
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 阴险
+  nameWithType: CQFace.阴险
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.阴险
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 阴险 = 108
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.亲亲
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.亲亲
+  id: 亲亲
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 亲亲
+  nameWithType: CQFace.亲亲
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.亲亲
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 亲亲 = 109
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.吓
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.吓
+  id: 吓
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 吓
+  nameWithType: CQFace.吓
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.吓
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 吓 = 110
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.可怜
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.可怜
+  id: 可怜
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 可怜
+  nameWithType: CQFace.可怜
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.可怜
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 可怜 = 111
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.菜刀
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.菜刀
+  id: 菜刀
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 菜刀
+  nameWithType: CQFace.菜刀
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.菜刀
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 菜刀 = 112
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.啤酒
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.啤酒
+  id: 啤酒
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 啤酒
+  nameWithType: CQFace.啤酒
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.啤酒
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 啤酒 = 113
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.篮球
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.篮球
+  id: 篮球
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 篮球
+  nameWithType: CQFace.篮球
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.篮球
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 篮球 = 114
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.乒乓
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.乒乓
+  id: 乒乓
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 乒乓
+  nameWithType: CQFace.乒乓
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.乒乓
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 乒乓 = 115
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.示爱
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.示爱
+  id: 示爱
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 示爱
+  nameWithType: CQFace.示爱
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.示爱
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 示爱 = 116
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.瓢虫
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.瓢虫
+  id: 瓢虫
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 瓢虫
+  nameWithType: CQFace.瓢虫
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.瓢虫
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 瓢虫 = 117
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.抱拳
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.抱拳
+  id: 抱拳
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 抱拳
+  nameWithType: CQFace.抱拳
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.抱拳
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 抱拳 = 118
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.勾引
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.勾引
+  id: 勾引
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 勾引
+  nameWithType: CQFace.勾引
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.勾引
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 勾引 = 119
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拳头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拳头
+  id: 拳头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拳头
+  nameWithType: CQFace.拳头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拳头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拳头 = 120
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.差劲
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.差劲
+  id: 差劲
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 差劲
+  nameWithType: CQFace.差劲
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.差劲
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 差劲 = 121
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.爱你
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.爱你
+  id: 爱你
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 爱你
+  nameWithType: CQFace.爱你
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.爱你
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 爱你 = 122
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.不
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.不
+  id: 不
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 不
+  nameWithType: CQFace.不
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.不
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 不 = 123
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.好
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.好
+  id: 好
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 好
+  nameWithType: CQFace.好
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.好
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 好 = 124
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.转圈
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.转圈
+  id: 转圈
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 转圈
+  nameWithType: CQFace.转圈
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.转圈
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 转圈 = 125
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.磕头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.磕头
+  id: 磕头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 磕头
+  nameWithType: CQFace.磕头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.磕头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 磕头 = 126
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.回头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.回头
+  id: 回头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 回头
+  nameWithType: CQFace.回头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.回头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 回头 = 127
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.跳绳
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.跳绳
+  id: 跳绳
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 跳绳
+  nameWithType: CQFace.跳绳
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.跳绳
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 跳绳 = 128
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.挥手
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.挥手
+  id: 挥手
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 挥手
+  nameWithType: CQFace.挥手
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.挥手
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 挥手 = 129
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.激动
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.激动
+  id: 激动
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 激动
+  nameWithType: CQFace.激动
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.激动
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 激动 = 130
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.街舞
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.街舞
+  id: 街舞
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 街舞
+  nameWithType: CQFace.街舞
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.街舞
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 街舞 = 131
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.献吻
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.献吻
+  id: 献吻
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 献吻
+  nameWithType: CQFace.献吻
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.献吻
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 献吻 = 132
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.左太极
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.左太极
+  id: 左太极
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 左太极
+  nameWithType: CQFace.左太极
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.左太极
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 左太极 = 133
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.右太极
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.右太极
+  id: 右太极
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 右太极
+  nameWithType: CQFace.右太极
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.右太极
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 右太极 = 134
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.双喜
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.双喜
+  id: 双喜
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 双喜
+  nameWithType: CQFace.双喜
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.双喜
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 双喜 = 136
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.鞭炮
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.鞭炮
+  id: 鞭炮
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 鞭炮
+  nameWithType: CQFace.鞭炮
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.鞭炮
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 鞭炮 = 137
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.灯笼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.灯笼
+  id: 灯笼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 灯笼
+  nameWithType: CQFace.灯笼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.灯笼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 灯笼 = 138
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.发财
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.发财
+  id: 发财
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 发财
+  nameWithType: CQFace.发财
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.发财
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 发财 = 139
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.K歌
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.K歌
+  id: K歌
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: K歌
+  nameWithType: CQFace.K歌
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.K歌
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: K歌 = 140
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.购物
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.购物
+  id: 购物
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 购物
+  nameWithType: CQFace.购物
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.购物
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 购物 = 141
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.邮件
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.邮件
+  id: 邮件
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 邮件
+  nameWithType: CQFace.邮件
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.邮件
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 邮件 = 142
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.帅
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.帅
+  id: 帅
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 帅
+  nameWithType: CQFace.帅
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.帅
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 帅 = 143
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.喝彩
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.喝彩
+  id: 喝彩
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 喝彩
+  nameWithType: CQFace.喝彩
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.喝彩
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 喝彩 = 144
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.祈祷
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.祈祷
+  id: 祈祷
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 祈祷
+  nameWithType: CQFace.祈祷
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.祈祷
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 祈祷 = 145
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.爆筋
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.爆筋
+  id: 爆筋
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 爆筋
+  nameWithType: CQFace.爆筋
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.爆筋
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 爆筋 = 146
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.棒棒糖
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.棒棒糖
+  id: 棒棒糖
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 棒棒糖
+  nameWithType: CQFace.棒棒糖
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.棒棒糖
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 棒棒糖 = 147
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.喝奶
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.喝奶
+  id: 喝奶
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 喝奶
+  nameWithType: CQFace.喝奶
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.喝奶
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 喝奶 = 148
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.下面
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.下面
+  id: 下面
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 下面
+  nameWithType: CQFace.下面
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.下面
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 下面 = 149
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.香蕉
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.香蕉
+  id: 香蕉
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 香蕉
+  nameWithType: CQFace.香蕉
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.香蕉
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 香蕉 = 150
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.飞机
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.飞机
+  id: 飞机
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 飞机
+  nameWithType: CQFace.飞机
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.飞机
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 飞机 = 151
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.开车
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.开车
+  id: 开车
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 开车
+  nameWithType: CQFace.开车
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.开车
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 开车 = 152
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.高铁左车头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.高铁左车头
+  id: 高铁左车头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 高铁左车头
+  nameWithType: CQFace.高铁左车头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.高铁左车头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 高铁左车头 = 153
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.车厢
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.车厢
+  id: 车厢
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 车厢
+  nameWithType: CQFace.车厢
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.车厢
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 车厢 = 154
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.高铁右车头
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.高铁右车头
+  id: 高铁右车头
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 高铁右车头
+  nameWithType: CQFace.高铁右车头
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.高铁右车头
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 高铁右车头 = 155
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.多云
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.多云
+  id: 多云
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 多云
+  nameWithType: CQFace.多云
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.多云
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 多云 = 156
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.下雨
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.下雨
+  id: 下雨
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 下雨
+  nameWithType: CQFace.下雨
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.下雨
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 下雨 = 157
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.钞票
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.钞票
+  id: 钞票
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 钞票
+  nameWithType: CQFace.钞票
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.钞票
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 钞票 = 158
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.熊猫
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.熊猫
+  id: 熊猫
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 熊猫
+  nameWithType: CQFace.熊猫
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.熊猫
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 熊猫 = 159
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.灯泡
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.灯泡
+  id: 灯泡
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 灯泡
+  nameWithType: CQFace.灯泡
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.灯泡
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 灯泡 = 160
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.风车
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.风车
+  id: 风车
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 风车
+  nameWithType: CQFace.风车
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.风车
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 风车 = 161
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.闹钟
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.闹钟
+  id: 闹钟
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 闹钟
+  nameWithType: CQFace.闹钟
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.闹钟
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 闹钟 = 162
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.打伞
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.打伞
+  id: 打伞
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 打伞
+  nameWithType: CQFace.打伞
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.打伞
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 打伞 = 163
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.彩球
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.彩球
+  id: 彩球
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 彩球
+  nameWithType: CQFace.彩球
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.彩球
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 彩球 = 164
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.钻戒
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.钻戒
+  id: 钻戒
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 钻戒
+  nameWithType: CQFace.钻戒
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.钻戒
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 钻戒 = 165
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.沙发
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.沙发
+  id: 沙发
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 沙发
+  nameWithType: CQFace.沙发
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.沙发
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 沙发 = 166
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.纸巾
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.纸巾
+  id: 纸巾
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 纸巾
+  nameWithType: CQFace.纸巾
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.纸巾
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 纸巾 = 167
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.药
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.药
+  id: 药
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 药
+  nameWithType: CQFace.药
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.药
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 药 = 168
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.手枪
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.手枪
+  id: 手枪
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 手枪
+  nameWithType: CQFace.手枪
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.手枪
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 手枪 = 169
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.青蛙
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.青蛙
+  id: 青蛙
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 青蛙
+  nameWithType: CQFace.青蛙
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.青蛙
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 青蛙 = 170
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.茶
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.茶
+  id: 茶
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 茶
+  nameWithType: CQFace.茶
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.茶
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 茶 = 171
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.伸舌头眨眼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.伸舌头眨眼
+  id: 伸舌头眨眼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 伸舌头眨眼
+  nameWithType: CQFace.伸舌头眨眼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.伸舌头眨眼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 伸舌头眨眼 = 172
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.泪奔
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.泪奔
+  id: 泪奔
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 泪奔
+  nameWithType: CQFace.泪奔
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.泪奔
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 泪奔 = 173
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.无奈
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.无奈
+  id: 无奈
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 无奈
+  nameWithType: CQFace.无奈
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.无奈
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 无奈 = 174
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.卖萌
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.卖萌
+  id: 卖萌
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 卖萌
+  nameWithType: CQFace.卖萌
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.卖萌
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 卖萌 = 175
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.小纠结
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.小纠结
+  id: 小纠结
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 小纠结
+  nameWithType: CQFace.小纠结
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.小纠结
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 小纠结 = 176
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.吐血
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.吐血
+  id: 吐血
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 吐血
+  nameWithType: CQFace.吐血
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.吐血
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 吐血 = 177
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.斜眼笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.斜眼笑
+  id: 斜眼笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 斜眼笑
+  nameWithType: CQFace.斜眼笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.斜眼笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 斜眼笑 = 178
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.doge
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.doge
+  id: doge
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: doge
+  nameWithType: CQFace.doge
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.doge
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: doge = 179
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.戳一戳
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.戳一戳
+  id: 戳一戳
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 戳一戳
+  nameWithType: CQFace.戳一戳
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.戳一戳
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 戳一戳 = 181
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.笑哭
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.笑哭
+  id: 笑哭
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 笑哭
+  nameWithType: CQFace.笑哭
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.笑哭
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 笑哭 = 182
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.我最美
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.我最美
+  id: 我最美
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 我最美
+  nameWithType: CQFace.我最美
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.我最美
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 我最美 = 183
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.羊驼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.羊驼
+  id: 羊驼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 羊驼
+  nameWithType: CQFace.羊驼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.羊驼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 羊驼 = 185
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.小幽灵
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.小幽灵
+  id: 小幽灵
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 小幽灵
+  nameWithType: CQFace.小幽灵
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.小幽灵
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 小幽灵 = 187
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.小熊点赞
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.小熊点赞
+  id: 小熊点赞
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 小熊点赞
+  nameWithType: CQFace.小熊点赞
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.小熊点赞
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 小熊点赞 = 201
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.托腮
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.托腮
+  id: 托腮
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 托腮
+  nameWithType: CQFace.托腮
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.托腮
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 托腮 = 212
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.脑阔疼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.脑阔疼
+  id: 脑阔疼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 脑阔疼
+  nameWithType: CQFace.脑阔疼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.脑阔疼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 脑阔疼 = 262
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.沧桑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.沧桑
+  id: 沧桑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 沧桑
+  nameWithType: CQFace.沧桑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.沧桑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 沧桑 = 263
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.捂脸
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.捂脸
+  id: 捂脸
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 捂脸
+  nameWithType: CQFace.捂脸
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.捂脸
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 捂脸 = 264
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.辣眼睛
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.辣眼睛
+  id: 辣眼睛
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 辣眼睛
+  nameWithType: CQFace.辣眼睛
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.辣眼睛
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 辣眼睛 = 265
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.哦哟
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.哦哟
+  id: 哦哟
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 哦哟
+  nameWithType: CQFace.哦哟
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.哦哟
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 哦哟 = 266
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.头秃
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.头秃
+  id: 头秃
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 头秃
+  nameWithType: CQFace.头秃
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.头秃
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 头秃 = 267
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.问号脸
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.问号脸
+  id: 问号脸
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 问号脸
+  nameWithType: CQFace.问号脸
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.问号脸
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 问号脸 = 268
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.暗中观察
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.暗中观察
+  id: 暗中观察
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 暗中观察
+  nameWithType: CQFace.暗中观察
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.暗中观察
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 暗中观察 = 269
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.emm中
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.emm中
+  id: emm中
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: emm中
+  nameWithType: CQFace.emm中
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.emm中
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: emm中 = 270
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.吃瓜
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.吃瓜
+  id: 吃瓜
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 吃瓜
+  nameWithType: CQFace.吃瓜
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.吃瓜
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 吃瓜 = 271
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.呵呵哒
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.呵呵哒
+  id: 呵呵哒
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 呵呵哒
+  nameWithType: CQFace.呵呵哒
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.呵呵哒
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 呵呵哒 = 272
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.酸
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.酸
+  id: 酸
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 酸
+  nameWithType: CQFace.酸
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.酸
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 酸 = 273
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.汪汪斜眼笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.汪汪斜眼笑
+  id: 汪汪斜眼笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 汪汪斜眼笑
+  nameWithType: CQFace.汪汪斜眼笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.汪汪斜眼笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 汪汪斜眼笑 = 277
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.汗
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.汗
+  id: 汗
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 汗
+  nameWithType: CQFace.汗
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.汗
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 汗 = 278
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.无眼笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.无眼笑
+  id: 无眼笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 无眼笑
+  nameWithType: CQFace.无眼笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.无眼笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 无眼笑 = 281
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.敬礼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.敬礼
+  id: 敬礼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 敬礼
+  nameWithType: CQFace.敬礼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.敬礼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 敬礼 = 282
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.面无表情
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.面无表情
+  id: 面无表情
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 面无表情
+  nameWithType: CQFace.面无表情
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.面无表情
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 面无表情 = 284
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.摸鱼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.摸鱼
+  id: 摸鱼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 摸鱼
+  nameWithType: CQFace.摸鱼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.摸鱼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 摸鱼 = 285
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.魔鬼笑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.魔鬼笑
+  id: 魔鬼笑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 魔鬼笑
+  nameWithType: CQFace.魔鬼笑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.魔鬼笑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 魔鬼笑 = 286
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.冷漠喝茶
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.冷漠喝茶
+  id: 冷漠喝茶
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 冷漠喝茶
+  nameWithType: CQFace.冷漠喝茶
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.冷漠喝茶
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 冷漠喝茶 = 287
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.睁大眼睛
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.睁大眼睛
+  id: 睁大眼睛
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 睁大眼睛
+  nameWithType: CQFace.睁大眼睛
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.睁大眼睛
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 睁大眼睛 = 289
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.摸锦鲤
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.摸锦鲤
+  id: 摸锦鲤
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 摸锦鲤
+  nameWithType: CQFace.摸锦鲤
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.摸锦鲤
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 摸锦鲤 = 293
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拍手期待
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拍手期待
+  id: 拍手期待
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拍手期待
+  nameWithType: CQFace.拍手期待
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拍手期待
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拍手期待 = 294
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拿到红包
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拿到红包
+  id: 拿到红包
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拿到红包
+  nameWithType: CQFace.拿到红包
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拿到红包
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拿到红包 = 295
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拜谢
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拜谢
+  id: 拜谢
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拜谢
+  nameWithType: CQFace.拜谢
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拜谢
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拜谢 = 297
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.元宝
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.元宝
+  id: 元宝
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 元宝
+  nameWithType: CQFace.元宝
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.元宝
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 元宝 = 298
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.牛哇
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.牛哇
+  id: 牛哇
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 牛哇
+  nameWithType: CQFace.牛哇
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.牛哇
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 牛哇 = 299
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.胖了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.胖了
+  id: 胖了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 胖了
+  nameWithType: CQFace.胖了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.胖了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 胖了 = 300
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.左拜年
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.左拜年
+  id: 左拜年
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 左拜年
+  nameWithType: CQFace.左拜年
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.左拜年
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 左拜年 = 302
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.右拜年
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.右拜年
+  id: 右拜年
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 右拜年
+  nameWithType: CQFace.右拜年
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.右拜年
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 右拜年 = 303
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.右亲亲
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.右亲亲
+  id: 右亲亲
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 右亲亲
+  nameWithType: CQFace.右亲亲
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.右亲亲
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 右亲亲 = 305
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.打call
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.打call
+  id: 打call
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 打call
+  nameWithType: CQFace.打call
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.打call
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 打call = 311
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.变形
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.变形
+  id: 变形
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 变形
+  nameWithType: CQFace.变形
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.变形
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 变形 = 312
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.仔细分析
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.仔细分析
+  id: 仔细分析
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 仔细分析
+  nameWithType: CQFace.仔细分析
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.仔细分析
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 仔细分析 = 314
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.菜汪
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.菜汪
+  id: 菜汪
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 菜汪
+  nameWithType: CQFace.菜汪
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.菜汪
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 菜汪 = 317
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.崇拜
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.崇拜
+  id: 崇拜
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 崇拜
+  nameWithType: CQFace.崇拜
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.崇拜
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 崇拜 = 318
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.比心
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.比心
+  id: 比心
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 比心
+  nameWithType: CQFace.比心
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.比心
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 比心 = 319
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.庆祝
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.庆祝
+  id: 庆祝
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 庆祝
+  nameWithType: CQFace.庆祝
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.庆祝
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 庆祝 = 320
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.嫌弃
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.嫌弃
+  id: 嫌弃
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 嫌弃
+  nameWithType: CQFace.嫌弃
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.嫌弃
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 嫌弃 = 323
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.吃糖
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.吃糖
+  id: 吃糖
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 吃糖
+  nameWithType: CQFace.吃糖
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.吃糖
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 吃糖 = 324
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.惊吓
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.惊吓
+  id: 惊吓
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 惊吓
+  nameWithType: CQFace.惊吓
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.惊吓
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 惊吓 = 325
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.生气
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.生气
+  id: 生气
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 生气
+  nameWithType: CQFace.生气
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.生气
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 生气 = 326
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.新年快乐
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.新年快乐
+  id: 新年快乐
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 新年快乐
+  nameWithType: CQFace.新年快乐
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.新年快乐
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 新年快乐 = 332
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.烟花
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.烟花
+  id: 烟花
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 烟花
+  nameWithType: CQFace.烟花
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.烟花
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 烟花 = 333
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.虎虎生威
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.虎虎生威
+  id: 虎虎生威
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 虎虎生威
+  nameWithType: CQFace.虎虎生威
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.虎虎生威
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 虎虎生威 = 334
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.暴富
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.暴富
+  id: 暴富
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 暴富
+  nameWithType: CQFace.暴富
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.暴富
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 暴富 = 336
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.花朵脸
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.花朵脸
+  id: 花朵脸
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 花朵脸
+  nameWithType: CQFace.花朵脸
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.花朵脸
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 花朵脸 = 337
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.我想开了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.我想开了
+  id: 我想开了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 我想开了
+  nameWithType: CQFace.我想开了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.我想开了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 我想开了 = 338
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.舔屏
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.舔屏
+  id: 舔屏
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 舔屏
+  nameWithType: CQFace.舔屏
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.舔屏
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 舔屏 = 339
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.打招呼
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.打招呼
+  id: 打招呼
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 打招呼
+  nameWithType: CQFace.打招呼
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.打招呼
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 打招呼 = 341
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.酸Q
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.酸Q
+  id: 酸Q
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 酸Q
+  nameWithType: CQFace.酸Q
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.酸Q
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 酸Q = 342
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.我方了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.我方了
+  id: 我方了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 我方了
+  nameWithType: CQFace.我方了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.我方了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 我方了 = 343
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.大怨种
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.大怨种
+  id: 大怨种
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 大怨种
+  nameWithType: CQFace.大怨种
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.大怨种
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 大怨种 = 344
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.红包多多
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.红包多多
+  id: 红包多多
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 红包多多
+  nameWithType: CQFace.红包多多
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.红包多多
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 红包多多 = 345
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.你真棒棒
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.你真棒棒
+  id: 你真棒棒
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 你真棒棒
+  nameWithType: CQFace.你真棒棒
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.你真棒棒
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 你真棒棒 = 346
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.一展宏图
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.一展宏图
+  id: 一展宏图
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 一展宏图
+  nameWithType: CQFace.一展宏图
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.一展宏图
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 一展宏图 = 347
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.坚强
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.坚强
+  id: 坚强
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 坚强
+  nameWithType: CQFace.坚强
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.坚强
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 坚强 = 349
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.贴贴
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.贴贴
+  id: 贴贴
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 贴贴
+  nameWithType: CQFace.贴贴
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.贴贴
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 贴贴 = 350
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.敲敲
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.敲敲
+  id: 敲敲
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 敲敲
+  nameWithType: CQFace.敲敲
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.敲敲
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 敲敲 = 351
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.半信半疑
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.半信半疑
+  id: 半信半疑
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 半信半疑
+  nameWithType: CQFace.半信半疑
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.半信半疑
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 半信半疑 = 352
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.拜托了
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.拜托了
+  id: 拜托了
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 拜托了
+  nameWithType: CQFace.拜托了
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.拜托了
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 拜托了 = 353
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.嘟嘴真的假的
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.嘟嘴真的假的
+  id: 嘟嘴真的假的
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 嘟嘴真的假的
+  nameWithType: CQFace.嘟嘴真的假的
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.嘟嘴真的假的
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 嘟嘴真的假的 = 354
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.单手比耶
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.单手比耶
+  id: 单手比耶
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 单手比耶
+  nameWithType: CQFace.单手比耶
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.单手比耶
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 单手比耶 = 355
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.双手比666
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.双手比666
+  id: 双手比666
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 双手比666
+  nameWithType: CQFace.双手比666
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.双手比666
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 双手比666 = 356
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.裂开
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.裂开
+  id: 裂开
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 裂开
+  nameWithType: CQFace.裂开
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.裂开
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 裂开 = 357
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.龙年快乐
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.龙年快乐
+  id: 龙年快乐
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 龙年快乐
+  nameWithType: CQFace.龙年快乐
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.龙年快乐
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 龙年快乐 = 392
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.略略略
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.略略略
+  id: 略略略
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 略略略
+  nameWithType: CQFace.略略略
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.略略略
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 略略略 = 395
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.划龙舟
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.划龙舟
+  id: 划龙舟
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 划龙舟
+  nameWithType: CQFace.划龙舟
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.划龙舟
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 划龙舟 = 415
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.火车
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.火车
+  id: 火车
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 火车
+  nameWithType: CQFace.火车
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.火车
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 火车 = 419
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.续标识
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.续标识
+  id: 续标识
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 续标识
+  nameWithType: CQFace.续标识
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.续标识
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 续标识 = 424
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.求放过
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.求放过
+  id: 求放过
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 求放过
+  nameWithType: CQFace.求放过
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.求放过
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 求放过 = 425
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.玩火
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.玩火
+  id: 玩火
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 玩火
+  nameWithType: CQFace.玩火
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.玩火
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 玩火 = 426
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.偷感
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.偷感
+  id: 偷感
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 偷感
+  nameWithType: CQFace.偷感
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.偷感
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 偷感 = 427
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.收到
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.收到
+  id: 收到
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 收到
+  nameWithType: CQFace.收到
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.收到
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 收到 = 428
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace.蛇年快乐
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.CQFace.蛇年快乐
+  id: 蛇年快乐
+  parent: Another_Mirai_Native.Abstractions.Enums.CQFace
+  langs:
+  - csharp
+  - vb
+  name: 蛇年快乐
+  nameWithType: CQFace.蛇年快乐
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace.蛇年快乐
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/CQFace.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  syntax:
+    content: 蛇年快乐 = 429
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.CQFace
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.CQFace.html
+  name: CQFace
+  nameWithType: CQFace
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace

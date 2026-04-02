@@ -5,9 +5,16 @@ items:
   id: Another_Mirai_Native.Abstractions.Enums
   children:
   - Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+  - Another_Mirai_Native.Abstractions.Enums.CQFace
   - Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
   - Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  - Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+  - Another_Mirai_Native.Abstractions.Enums.QQSex
   - Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  - Another_Mirai_Native.Abstractions.Enums.RichContentType
+  - Another_Mirai_Native.Abstractions.Enums.RpsType
   langs:
   - csharp
   - vb
@@ -34,6 +41,14 @@ references:
   name: ChatHistoryType
   nameWithType: ChatHistoryType
   fullName: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.CQFace
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.CQFace.html
+  name: CQFace
+  nameWithType: CQFace
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace
 - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
   commentId: T:Another_Mirai_Native.Abstractions.Enums.EventHandleResult
   parent: Another_Mirai_Native.Abstractions.Enums
@@ -42,6 +57,38 @@ references:
   name: EventHandleResult
   nameWithType: EventHandleResult
   fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageItemType.html
+  name: MessageItemType
+  nameWithType: MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.PluginEventType.html
+  name: PluginEventType
+  nameWithType: PluginEventType
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType.html
+  name: QQGroupMemberType
+  nameWithType: QQGroupMemberType
+  fullName: Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+- uid: Another_Mirai_Native.Abstractions.Enums.QQSex
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.QQSex
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.QQSex.html
+  name: QQSex
+  nameWithType: QQSex
+  fullName: Another_Mirai_Native.Abstractions.Enums.QQSex
 - uid: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
   commentId: T:Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
   parent: Another_Mirai_Native.Abstractions.Enums
@@ -50,6 +97,22 @@ references:
   name: RequestHandleResult
   nameWithType: RequestHandleResult
   fullName: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RichContentType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RichContentType.html
+  name: RichContentType
+  nameWithType: RichContentType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RpsType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RpsType.html
+  name: RpsType
+  nameWithType: RpsType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType
 - uid: Another_Mirai_Native.Abstractions.Enums
   commentId: N:Another_Mirai_Native.Abstractions.Enums
   isExternal: true

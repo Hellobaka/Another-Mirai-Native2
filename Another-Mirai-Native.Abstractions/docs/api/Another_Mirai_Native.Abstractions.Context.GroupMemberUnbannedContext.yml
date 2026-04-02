@@ -5,7 +5,8 @@ items:
   id: GroupMemberUnbannedContext
   parent: Another_Mirai_Native.Abstractions.Context
   children:
-  - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ)
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
   - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.BeingOperateQQ
   - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
   - Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromQQ
@@ -18,7 +19,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -37,29 +38,67 @@ items:
   - System.Object.Equals(System.Object,System.Object)
   - System.Object.ReferenceEquals(System.Object,System.Object)
   - System.Object.GetHashCode
-- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor
-  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor
-  id: '#ctor'
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ)'
   parent: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext
   langs:
   - csharp
   - vb
-  name: GroupMemberUnbannedContext()
-  nameWithType: GroupMemberUnbannedContext.GroupMemberUnbannedContext()
-  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.GroupMemberUnbannedContext()
+  name: GroupMemberUnbannedContext(IPluginApi, DateTime, Group, QQ, QQ)
+  nameWithType: GroupMemberUnbannedContext.GroupMemberUnbannedContext(IPluginApi, DateTime, Group, QQ, QQ)
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.GroupMemberUnbannedContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.QQ)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述群群成员被解除禁言事件参数的类
+  example: []
   syntax:
-    content: public GroupMemberUnbannedContext()
-    content.vb: Public Sub New()
+    content: public GroupMemberUnbannedContext(IPluginApi api, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
+    parameters:
+    - id: api
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    - id: sendTime
+      type: System.DateTime
+    - id: fromGroup
+      type: Another_Mirai_Native.Abstractions.Models.Group
+    - id: fromQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    - id: beingOperateQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    content.vb: Public Sub New(api As IPluginApi, sendTime As Date, fromGroup As Group, fromQQ As QQ, beingOperateQQ As QQ)
   overload: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor*
-  nameWithType.vb: GroupMemberUnbannedContext.New()
-  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.New()
-  name.vb: New()
+  nameWithType.vb: GroupMemberUnbannedContext.New(IPluginApi, Date, Group, QQ, QQ)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Date, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.QQ)
+  name.vb: New(IPluginApi, Date, Group, QQ, QQ)
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: GroupMemberUnbannedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取插件 API 实例
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API*
 - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
   commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
   id: SendTime
@@ -72,7 +111,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -97,7 +136,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -122,7 +161,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -147,7 +186,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.BeingOperateQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberUnbannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -438,20 +477,21 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.#ctor
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext__ctor
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext__ctor_Another_Mirai_Native_Abstractions_Services_IPluginApi_System_DateTime_Another_Mirai_Native_Abstractions_Models_Group_Another_Mirai_Native_Abstractions_Models_QQ_Another_Mirai_Native_Abstractions_Models_QQ_
   name: GroupMemberUnbannedContext
   nameWithType: GroupMemberUnbannedContext.GroupMemberUnbannedContext
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.GroupMemberUnbannedContext
   nameWithType.vb: GroupMemberUnbannedContext.New
   fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.New
   name.vb: New
-- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext_SendTime
-  name: SendTime
-  nameWithType: GroupMemberUnbannedContext.SendTime
-  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
 - uid: System.DateTime
   commentId: T:System.DateTime
   parent: System
@@ -463,13 +503,6 @@ references:
   nameWithType.vb: Date
   fullName.vb: Date
   name.vb: Date
-- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext_FromGroup
-  name: FromGroup
-  nameWithType: GroupMemberUnbannedContext.FromGroup
-  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
 - uid: Another_Mirai_Native.Abstractions.Models.Group
   commentId: T:Another_Mirai_Native.Abstractions.Models.Group
   parent: Another_Mirai_Native.Abstractions.Models
@@ -478,6 +511,51 @@ references:
   name: Group
   nameWithType: Group
   fullName: Another_Mirai_Native.Abstractions.Models.Group
+- uid: Another_Mirai_Native.Abstractions.Models.QQ
+  commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.QQ.html
+  name: QQ
+  nameWithType: QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
 - uid: Another_Mirai_Native.Abstractions.Models
   commentId: N:Another_Mirai_Native.Abstractions.Models
   isExternal: true
@@ -515,6 +593,27 @@ references:
     name: Models
     isExternal: true
     href: Another_Mirai_Native.Abstractions.Models.html
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext_API
+  name: API
+  nameWithType: GroupMemberUnbannedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.API
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext_SendTime
+  name: SendTime
+  nameWithType: GroupMemberUnbannedContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberUnbannedContext_FromGroup
+  name: FromGroup
+  nameWithType: GroupMemberUnbannedContext.FromGroup
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromGroup
 - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromQQ*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromQQ
   isExternal: true
@@ -522,14 +621,6 @@ references:
   name: FromQQ
   nameWithType: GroupMemberUnbannedContext.FromQQ
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.FromQQ
-- uid: Another_Mirai_Native.Abstractions.Models.QQ
-  commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
-  parent: Another_Mirai_Native.Abstractions.Models
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.QQ.html
-  name: QQ
-  nameWithType: QQ
-  fullName: Another_Mirai_Native.Abstractions.Models.QQ
 - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.BeingOperateQQ*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext.BeingOperateQQ
   isExternal: true

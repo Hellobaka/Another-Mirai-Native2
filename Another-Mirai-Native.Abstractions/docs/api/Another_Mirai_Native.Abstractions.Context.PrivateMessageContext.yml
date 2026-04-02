@@ -5,9 +5,11 @@ items:
   id: PrivateMessageContext
   parent: Another_Mirai_Native.Abstractions.Context
   children:
-  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor
+  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.Message)
+  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
+  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(System.String)
   langs:
   - csharp
   - vb
@@ -16,7 +18,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -35,29 +37,95 @@ items:
   - System.Object.Equals(System.Object,System.Object)
   - System.Object.ReferenceEquals(System.Object,System.Object)
   - System.Object.GetHashCode
-- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor
-  commentId: M:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor
-  id: '#ctor'
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.Message)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.Message)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.Message)'
   parent: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   langs:
   - csharp
   - vb
-  name: PrivateMessageContext()
-  nameWithType: PrivateMessageContext.PrivateMessageContext()
-  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.PrivateMessageContext()
+  name: PrivateMessageContext(IPluginApi, QQ, Message)
+  nameWithType: PrivateMessageContext.PrivateMessageContext(IPluginApi, QQ, Message)
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.PrivateMessageContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.Message)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述收到私聊消息事件参数的类
+  example: []
   syntax:
-    content: public PrivateMessageContext()
-    content.vb: Public Sub New()
+    content: public PrivateMessageContext(IPluginApi api, QQ fromQQ, Message message)
+    parameters:
+    - id: api
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    - id: fromQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    - id: message
+      type: Another_Mirai_Native.Abstractions.Models.Message
+    content.vb: Public Sub New(api As IPluginApi, fromQQ As QQ, message As Message)
   overload: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor*
-  nameWithType.vb: PrivateMessageContext.New()
-  fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.New()
-  name.vb: New()
+  nameWithType.vb: PrivateMessageContext.New(IPluginApi, QQ, Message)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.Message)
+  name.vb: New(IPluginApi, QQ, Message)
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(System.String)
+  id: Reply(System.String)
+  parent: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
+  langs:
+  - csharp
+  - vb
+  name: Reply(string)
+  nameWithType: PrivateMessageContext.Reply(string)
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 回复当前消息
+  example: []
+  syntax:
+    content: public Message Reply(string msg)
+    parameters:
+    - id: msg
+      type: System.String
+      description: 回复内容
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.Message
+      description: 回复后消息
+    content.vb: Public Function Reply(msg As String) As Message
+  overload: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply*
+  nameWithType.vb: PrivateMessageContext.Reply(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(String)
+  name.vb: Reply(String)
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
+  commentId: P:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: PrivateMessageContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取插件 API 实例
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API*
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   commentId: P:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   id: FromQQ
@@ -70,7 +138,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -95,7 +163,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -386,20 +454,21 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.#ctor
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext__ctor
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext__ctor_Another_Mirai_Native_Abstractions_Services_IPluginApi_Another_Mirai_Native_Abstractions_Models_QQ_Another_Mirai_Native_Abstractions_Models_Message_
   name: PrivateMessageContext
   nameWithType: PrivateMessageContext.PrivateMessageContext
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.PrivateMessageContext
   nameWithType.vb: PrivateMessageContext.New
   fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.New
   name.vb: New
-- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_FromQQ
-  name: FromQQ
-  nameWithType: PrivateMessageContext.FromQQ
-  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
 - uid: Another_Mirai_Native.Abstractions.Models.QQ
   commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
   parent: Another_Mirai_Native.Abstractions.Models
@@ -408,6 +477,51 @@ references:
   name: QQ
   nameWithType: QQ
   fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: Another_Mirai_Native.Abstractions.Models.Message
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Message
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Message.html
+  name: Message
+  nameWithType: Message
+  fullName: Another_Mirai_Native.Abstractions.Models.Message
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
 - uid: Another_Mirai_Native.Abstractions.Models
   commentId: N:Another_Mirai_Native.Abstractions.Models
   isExternal: true
@@ -445,6 +559,38 @@ references:
     name: Models
     isExternal: true
     href: Another_Mirai_Native.Abstractions.Models.html
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_Reply_System_String_
+  name: Reply
+  nameWithType: PrivateMessageContext.Reply
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_API
+  name: API
+  nameWithType: PrivateMessageContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_FromQQ
+  name: FromQQ
+  nameWithType: PrivateMessageContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
   isExternal: true
@@ -452,11 +598,3 @@ references:
   name: Message
   nameWithType: PrivateMessageContext.Message
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
-- uid: Another_Mirai_Native.Abstractions.Models.Message
-  commentId: T:Another_Mirai_Native.Abstractions.Models.Message
-  parent: Another_Mirai_Native.Abstractions.Models
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.Message.html
-  name: Message
-  nameWithType: Message
-  fullName: Another_Mirai_Native.Abstractions.Models.Message

@@ -6,10 +6,15 @@ items:
   parent: Another_Mirai_Native.Abstractions.Services
   children:
   - Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync
   - Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync
   - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync
   - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync
   - Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+  - Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync
   langs:
   - csharp
   - vb
@@ -18,7 +23,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -40,7 +45,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -53,6 +58,31 @@ items:
       description: 绝对路径
     content.vb: Function GetAppDirectory() As String
   overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync
+  id: GetAppDirectoryAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetAppDirectoryAsync()
+  nameWithType: IAppApi.GetAppDirectoryAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取框架分配给插件的数据目录
+  example: []
+  syntax:
+    content: Task<string> GetAppDirectoryAsync()
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: 绝对路径
+    content.vb: Function GetAppDirectoryAsync() As Task(Of String)
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync*
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
   commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
   id: GetLoginQQ
@@ -65,7 +95,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -78,6 +108,31 @@ items:
       description: 表示已登录用户QQ号码的 64 位整数。如果用户未登录，则返回 0。
     content.vb: Function GetLoginQQ() As Long
   overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync
+  id: GetLoginQQAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetLoginQQAsync()
+  nameWithType: IAppApi.GetLoginQQAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取当前已登录的QQ号码。
+  example: []
+  syntax:
+    content: Task<long> GetLoginQQAsync()
+    return:
+      type: System.Threading.Tasks.Task{System.Int64}
+      description: 表示已登录用户QQ号码的 64 位整数。如果用户未登录，则返回 0。
+    content.vb: Function GetLoginQQAsync() As Task(Of Long)
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync*
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
   commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
   id: GetLoginQQNick
@@ -90,7 +145,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -103,6 +158,31 @@ items:
       description: 表示已登录用户QQ号码的昵称。如果用户未登录，则返回 <xref href="System.String?text=string.Empty" data-throw-if-not-resolved="false"></xref>
     content.vb: Function GetLoginQQNick() As String
   overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync
+  id: GetLoginQQNickAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: GetLoginQQNickAsync()
+  nameWithType: IAppApi.GetLoginQQNickAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取当前已登录的QQ昵称。
+  example: []
+  syntax:
+    content: Task<string> GetLoginQQNickAsync()
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: 表示已登录用户QQ号码的昵称。如果用户未登录，则返回 <xref href="System.String?text=string.Empty" data-throw-if-not-resolved="false"></xref>
+    content.vb: Function GetLoginQQNickAsync() As Task(Of String)
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync*
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
   commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
   id: ReloadPlugin
@@ -115,7 +195,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -125,6 +205,30 @@ items:
     content: void ReloadPlugin()
     content.vb: Sub ReloadPlugin()
   overload: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync
+  id: ReloadPluginAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: ReloadPluginAsync()
+  nameWithType: IAppApi.ReloadPluginAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步重载当前插件，会导致插件进程终止
+  example: []
+  syntax:
+    content: Task ReloadPluginAsync()
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function ReloadPluginAsync() As Task
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync*
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
   commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
   id: DisablePlugin
@@ -137,7 +241,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -147,6 +251,30 @@ items:
     content: void DisablePlugin()
     content.vb: Sub DisablePlugin()
   overload: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin*
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync
+  id: DisablePluginAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IAppApi
+  langs:
+  - csharp
+  - vb
+  name: DisablePluginAsync()
+  nameWithType: IAppApi.DisablePluginAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步禁用当前插件，会导致插件进程终止
+  example: []
+  syntax:
+    content: Task DisablePluginAsync()
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function DisablePluginAsync() As Task
+  overload: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync*
 references:
 - uid: Another_Mirai_Native.Abstractions.Services
   commentId: N:Another_Mirai_Native.Abstractions.Services
@@ -210,6 +338,113 @@ references:
   name: System
   nameWithType: System
   fullName: System
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetAppDirectoryAsync
+  name: GetAppDirectoryAsync
+  nameWithType: IAppApi.GetAppDirectoryAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync
+- uid: System.Threading.Tasks.Task{System.String}
+  commentId: T:System.Threading.Tasks.Task{System.String}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<string>
+  nameWithType: Task<string>
+  fullName: System.Threading.Tasks.Task<string>
+  nameWithType.vb: Task(Of String)
+  fullName.vb: System.Threading.Tasks.Task(Of String)
+  name.vb: Task(Of String)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ
   isExternal: true
@@ -228,6 +463,48 @@ references:
   nameWithType.vb: Long
   fullName.vb: Long
   name.vb: Long
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetLoginQQAsync
+  name: GetLoginQQAsync
+  nameWithType: IAppApi.GetLoginQQAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync
+- uid: System.Threading.Tasks.Task{System.Int64}
+  commentId: T:System.Threading.Tasks.Task{System.Int64}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<long>
+  nameWithType: Task<long>
+  fullName: System.Threading.Tasks.Task<long>
+  nameWithType.vb: Task(Of Long)
+  fullName.vb: System.Threading.Tasks.Task(Of Long)
+  name.vb: Task(Of Long)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Int64
+    name: long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Int64
+    name: Long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: )
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
   isExternal: true
@@ -235,6 +512,13 @@ references:
   name: GetLoginQQNick
   nameWithType: IAppApi.GetLoginQQNick
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_GetLoginQQNickAsync
+  name: GetLoginQQNickAsync
+  nameWithType: IAppApi.GetLoginQQNickAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
   isExternal: true
@@ -242,6 +526,21 @@ references:
   name: ReloadPlugin
   nameWithType: IAppApi.ReloadPlugin
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_ReloadPluginAsync
+  name: ReloadPluginAsync
+  nameWithType: IAppApi.ReloadPluginAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
 - uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
   isExternal: true
@@ -249,3 +548,10 @@ references:
   name: DisablePlugin
   nameWithType: IAppApi.DisablePlugin
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin
+- uid: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IAppApi.html#Another_Mirai_Native_Abstractions_Services_IAppApi_DisablePluginAsync
+  name: DisablePluginAsync
+  nameWithType: IAppApi.DisablePluginAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync

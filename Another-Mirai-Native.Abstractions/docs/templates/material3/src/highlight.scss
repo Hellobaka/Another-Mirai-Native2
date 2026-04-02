@@ -1,0 +1,189 @@
+/**
+ * Syntax highlighting styles for Material Design 3 theme
+ * Based on highlight.js VS theme with MD3 colors
+ */
+
+.hljs {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+}
+
+// Comments
+.hljs-comment,
+.hljs-quote {
+  color: var(--md-sys-color-outline);
+  font-style: italic;
+}
+
+// Keywords
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #C792EA;
+}
+
+// Strings
+.hljs-string,
+.hljs-meta .hljs-meta-string,
+.hljs-section,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-selector-pseudo {
+  color: #C3E88D;
+}
+
+// Numbers
+.hljs-number,
+.hljs-literal {
+  color: #F78C6C;
+}
+
+// Built-ins, types
+.hljs-built_in,
+.hljs-type {
+  color: #82AAFF;
+}
+
+// Functions
+.hljs-function,
+.hljs-title,
+.hljs-class .hljs-title {
+  color: #FFCB6B;
+}
+
+// Variables, parameters
+.hljs-variable,
+.hljs-params,
+.hljs-attr {
+  color: var(--md-sys-color-on-surface);
+}
+
+// Symbols, regex
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta {
+  color: #89DDFF;
+}
+
+// Tags (HTML/XML)
+.hljs-tag {
+  color: #F07178;
+}
+
+.hljs-name,
+.hljs-attribute {
+  color: #FFCB6B;
+}
+
+// Additions and deletions (diff)
+.hljs-addition {
+  background-color: rgba(200, 230, 201, 0.2);
+}
+
+.hljs-deletion {
+  color: #F07178;
+  background-color: rgba(255, 138, 128, 0.2);
+}
+
+// Emphasis
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+// Line highlight
+pre > code .line-highlight {
+  background-color: rgba(103, 80, 164, 0.15);
+  display: block;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+// Dark theme adjustments
+[data-theme="dark"] .hljs {
+  background-color: #1E1E1E;
+}
+
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .hljs-quote {
+  color: #6A9955;
+}
+
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .hljs-selector-tag {
+  color: #C586C0;
+}
+
+[data-theme="dark"] .hljs-string {
+  color: #CE9178;
+}
+
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-literal {
+  color: #B5CEA8;
+}
+
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .hljs-type {
+  color: #4EC9B0;
+}
+
+[data-theme="dark"] .hljs-function,
+[data-theme="dark"] .hljs-title {
+  color: #DCDCAA;
+}
+
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .hljs-params {
+  color: #9CDCFE;
+}
+
+[data-theme="dark"] .hljs-tag {
+  color: #569CD6;
+}
+
+[data-theme="dark"] .hljs-name {
+  color: #4EC9B0;
+}
+
+[data-theme="dark"] .hljs-attribute {
+  color: #9CDCFE;
+}
+
+[data-theme="dark"] pre > code .line-highlight {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+// Code wrapper
+.codewrapper {
+  position: relative;
+  margin: 16px 0;
+}
+
+.codewrapper pre {
+  margin: 0;
+}
+
+// Copy button
+.code-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.code-action md-icon-button {
+  --md-icon-button-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+.code-action md-icon-button:hover {
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.code-action .material-symbols-outlined {
+  font-size: 20px;
+}

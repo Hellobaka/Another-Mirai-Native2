@@ -1,0 +1,381 @@
+/**
+ * Markdown content styles for Material Design 3 theme
+ */
+
+article {
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.7;
+}
+
+// Headings
+article h1 {
+  font-size: var(--md-sys-typescale-display-small);
+  font-weight: 400;
+  line-height: 1.22;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 24px 0;
+}
+
+article h2 {
+  font-size: var(--md-sys-typescale-headline-medium);
+  font-weight: 400;
+  line-height: 1.29;
+  color: var(--md-sys-color-on-surface);
+  margin: 32px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+article h3 {
+  font-size: var(--md-sys-typescale-headline-small);
+  font-weight: 400;
+  line-height: 1.33;
+  color: var(--md-sys-color-on-surface);
+  margin: 24px 0 12px 0;
+}
+
+article h4 {
+  font-size: var(--md-sys-typescale-title-large);
+  font-weight: 500;
+  line-height: 1.27;
+  color: var(--md-sys-color-on-surface);
+  margin: 20px 0 8px 0;
+}
+
+article h5 {
+  font-size: var(--md-sys-typescale-title-medium);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface);
+  margin: 16px 0 8px 0;
+}
+
+article h6 {
+  font-size: var(--md-sys-typescale-title-small);
+  font-weight: 500;
+  line-height: 1.43;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 16px 0 8px 0;
+}
+
+// Paragraphs
+article p {
+  margin: 0 0 16px 0;
+}
+
+// Links
+article a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+article a:hover {
+  text-decoration: underline;
+}
+
+article a.external[href]::after {
+  content: 'open_in_new';
+  font-family: 'Material Symbols Outlined';
+  font-size: 14px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+// Lists
+article ul,
+article ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+article li {
+  margin: 4px 0;
+}
+
+article li > ul,
+article li > ol {
+  margin: 4px 0 0 0;
+}
+
+// Blockquote
+article blockquote {
+  margin: 16px 0;
+  padding: 16px 20px;
+  background-color: var(--md-sys-color-surface-container);
+  border-left: 4px solid var(--md-sys-color-primary);
+  border-radius: 0 var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium) 0;
+}
+
+article blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+// Code
+article code {
+  font-family: 'Roboto Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 0.9em;
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  padding: 2px 6px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+article pre {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--md-sys-color-surface-container-highest);
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow-x: auto;
+  position: relative;
+}
+
+article pre code {
+  padding: 0;
+  background-color: transparent;
+  font-size: var(--md-sys-typescale-body-small);
+  line-height: 1.6;
+}
+
+// Code action (copy button)
+article pre > .code-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+article pre:hover > .code-action {
+  opacity: 1;
+}
+
+article pre > .code-action .material-symbols-outlined {
+  font-size: 20px;
+}
+
+// Tables
+article table {
+  width: 100%;
+  margin: 16px 0;
+  border-collapse: collapse;
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+}
+
+article th,
+article td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+article th {
+  background-color: var(--md-sys-color-surface-container);
+  font-weight: 500;
+  font-size: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+article tr:last-child td {
+  border-bottom: none;
+}
+
+article tr:hover td {
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+// Images
+article img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+// Horizontal rule
+article hr {
+  border: none;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin: 24px 0;
+}
+
+// Definition lists
+article dl {
+  margin: 16px 0;
+}
+
+article dt {
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  margin-top: 8px;
+}
+
+article dd {
+  margin: 0 0 8px 24px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+// Section headers (API docs)
+article h2.section {
+  font-size: var(--md-sys-typescale-title-large);
+  font-weight: 500;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--md-sys-color-primary);
+  color: var(--md-sys-color-primary);
+}
+
+article h3 {
+  scroll-margin-top: calc(var(--md-layout-top-app-bar-height) + 16px);
+}
+
+// Alerts/Callouts
+.alert {
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+  border-left: 4px solid;
+}
+
+.alert-info {
+  background-color: var(--md-sys-color-primary-container);
+  border-color: var(--md-sys-color-primary);
+}
+
+.alert-info h5 {
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.alert-warning {
+  background-color: var(--md-sys-color-tertiary-container);
+  border-color: var(--md-sys-color-tertiary);
+}
+
+.alert-warning h5 {
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.alert-danger {
+  background-color: var(--md-sys-color-error-container);
+  border-color: var(--md-sys-color-error);
+}
+
+.alert-danger h5 {
+  color: var(--md-sys-color-on-error-container);
+}
+
+.alert h5 {
+  margin: 0 0 8px 0;
+  font-size: var(--md-sys-typescale-title-small);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert h5::before {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+}
+
+.alert-info h5::before {
+  content: 'info';
+}
+
+.alert-warning h5::before {
+  content: 'warning';
+}
+
+.alert-danger h5::before {
+  content: 'error';
+}
+
+.alert p:last-child {
+  margin-bottom: 0;
+}
+
+// Tabbed content
+.tabGroup {
+  margin: 16px 0;
+}
+
+.tabGroup > section {
+  padding: 16px;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: 0 0 var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium);
+}
+
+// Embedded video
+div.embeddedvideo {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  margin: 16px 0;
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+}
+
+div.embeddedvideo iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// Anchor links
+article h2 a,
+article h3 a,
+article h4 a {
+  color: inherit;
+}
+
+article h2:hover a,
+article h3:hover a,
+article h4:hover a {
+  text-decoration: none;
+}
+
+// Parameters table
+.parameters {
+  margin: 16px 0;
+}
+
+.parameters dt {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+  color: var(--md-sys-color-primary);
+}
+
+.parameters dd {
+  margin-left: 24px;
+}
+
+// See also section
+.seealso {
+  margin-top: 16px;
+}
+
+.typelist.seealso {
+  padding: 16px;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+}
+
+// XREF links
+.xref {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.xref:hover {
+  text-decoration: underline;
+}
+
+// Text break utility
+.text-break {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}

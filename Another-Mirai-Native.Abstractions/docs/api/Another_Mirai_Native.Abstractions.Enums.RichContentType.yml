@@ -1,0 +1,139 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RichContentType
+  id: RichContentType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.RichContentType.App
+  - Another_Mirai_Native.Abstractions.Enums.RichContentType.Json
+  - Another_Mirai_Native.Abstractions.Enums.RichContentType.Xml
+  langs:
+  - csharp
+  - vb
+  name: RichContentType
+  nameWithType: RichContentType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/RichContentType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 卡片消息内容类型。
+  example: []
+  syntax:
+    content: public enum RichContentType
+    content.vb: Public Enum RichContentType
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType.Json
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RichContentType.Json
+  id: Json
+  parent: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  langs:
+  - csharp
+  - vb
+  name: Json
+  nameWithType: RichContentType.Json
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType.Json
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/RichContentType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: JSON 格式。
+  example: []
+  syntax:
+    content: Json = 0
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RichContentType
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType.Xml
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RichContentType.Xml
+  id: Xml
+  parent: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  langs:
+  - csharp
+  - vb
+  name: Xml
+  nameWithType: RichContentType.Xml
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType.Xml
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/RichContentType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: XML 格式。
+  example: []
+  syntax:
+    content: Xml = 1
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RichContentType
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType.App
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RichContentType.App
+  id: App
+  parent: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  langs:
+  - csharp
+  - vb
+  name: App
+  nameWithType: RichContentType.App
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType.App
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/RichContentType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 应用卡片格式。
+  example: []
+  syntax:
+    content: App = 2
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RichContentType
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.RichContentType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RichContentType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RichContentType.html
+  name: RichContentType
+  nameWithType: RichContentType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RichContentType

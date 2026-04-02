@@ -1,0 +1,586 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupInfo
+  id: GroupInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  children:
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor(System.Int64,System.String,System.Int32,System.Int32,System.Int64)
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString
+  langs:
+  - csharp
+  - vb
+  name: GroupInfo
+  nameWithType: GroupInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 用于表示群信息的类
+  example: []
+  syntax:
+    content: public class GroupInfo
+    content.vb: Public Class GroupInfo
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor(System.Int64,System.String,System.Int32,System.Int32,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor(System.Int64,System.String,System.Int32,System.Int32,System.Int64)
+  id: '#ctor(System.Int64,System.String,System.Int32,System.Int32,System.Int64)'
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: GroupInfo(long, string, int, int, long)
+  nameWithType: GroupInfo.GroupInfo(long, string, int, int, long)
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.GroupInfo(long, string, int, int, long)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 用于表示群信息的类
+  example: []
+  syntax:
+    content: public GroupInfo(long group, string name, int currentMemberCount, int maxMemberCount, long lastUpdateTime)
+    parameters:
+    - id: group
+      type: System.Int64
+    - id: name
+      type: System.String
+    - id: currentMemberCount
+      type: System.Int32
+    - id: maxMemberCount
+      type: System.Int32
+    - id: lastUpdateTime
+      type: System.Int64
+    content.vb: Public Sub New(group As Long, name As String, currentMemberCount As Integer, maxMemberCount As Integer, lastUpdateTime As Long)
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor*
+  nameWithType.vb: GroupInfo.New(Long, String, Integer, Integer, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.GroupInfo.New(Long, String, Integer, Integer, Long)
+  name.vb: New(Long, String, Integer, Integer, Long)
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString
+  commentId: M:Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString
+  id: ToString
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: GroupInfo.ToString()
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: ToString 方法的重写, 用于提供当前群信息的字符串表示形式
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.Object.ToString
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+  id: Group
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: Group
+  nameWithType: GroupInfo.Group
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前QQ群对象
+  example: []
+  syntax:
+    content: public long Group { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property Group As Long
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+  id: Name
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: GroupInfo.Name
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取当前QQ群的名称
+  example: []
+  syntax:
+    content: public string Name { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Name As String
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+  id: CurrentMemberCount
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: CurrentMemberCount
+  nameWithType: GroupInfo.CurrentMemberCount
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示QQ群的当前人数;
+  example: []
+  syntax:
+    content: public int CurrentMemberCount { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public ReadOnly Property CurrentMemberCount As Integer
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+  id: MaxMemberCount
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: MaxMemberCount
+  nameWithType: GroupInfo.MaxMemberCount
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 获取一个值, 指示当前QQ群最大可容纳的人数;
+  example: []
+  syntax:
+    content: public int MaxMemberCount { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public ReadOnly Property MaxMemberCount As Integer
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount*
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
+  commentId: P:Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
+  id: LastUpdateTime
+  parent: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  langs:
+  - csharp
+  - vb
+  name: LastUpdateTime
+  nameWithType: GroupInfo.LastUpdateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 最后更新时间(时间戳)
+  example: []
+  syntax:
+    content: public long LastUpdateTime { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property LastUpdateTime As Long
+  overload: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime*
+references:
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo__ctor_System_Int64_System_String_System_Int32_System_Int32_System_Int64_
+  name: GroupInfo
+  nameWithType: GroupInfo.GroupInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.GroupInfo
+  nameWithType.vb: GroupInfo.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.GroupInfo.New
+  name.vb: New
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_ToString
+  name: ToString
+  nameWithType: GroupInfo.ToString
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_Group
+  name: Group
+  nameWithType: GroupInfo.Group
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_Name
+  name: Name
+  nameWithType: GroupInfo.Name
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_CurrentMemberCount
+  name: CurrentMemberCount
+  nameWithType: GroupInfo.CurrentMemberCount
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_MaxMemberCount
+  name: MaxMemberCount
+  nameWithType: GroupInfo.MaxMemberCount
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html#Another_Mirai_Native_Abstractions_Models_GroupInfo_LastUpdateTime
+  name: LastUpdateTime
+  nameWithType: GroupInfo.LastUpdateTime
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime

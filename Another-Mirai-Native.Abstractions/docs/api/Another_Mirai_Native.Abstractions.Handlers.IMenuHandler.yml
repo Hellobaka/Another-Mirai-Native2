@@ -5,7 +5,7 @@ items:
   id: IMenuHandler
   parent: Another_Mirai_Native.Abstractions.Handlers
   children:
-  - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
+  - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
   langs:
   - csharp
   - vb
@@ -14,7 +14,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers
@@ -23,35 +23,31 @@ items:
   syntax:
     content: public interface IMenuHandler
     content.vb: Public Interface IMenuHandler
-- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
-  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(System.String)
-  id: OnMenu(System.String)
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  id: OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
   parent: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
   langs:
   - csharp
   - vb
-  name: OnMenu(string)
-  nameWithType: IMenuHandler.OnMenu(string)
-  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(string)
+  name: OnMenu(MenuContext)
+  nameWithType: IMenuHandler.OnMenu(MenuContext)
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers
   summary: 当框架调用菜单事件时执行的操作。框架上层会在独立的 UI 线程中同步执行此方法，阻塞此方法不会导致框架卡死。
   example: []
   syntax:
-    content: void OnMenu(string menu)
+    content: void OnMenu(MenuContext e)
     parameters:
-    - id: menu
-      type: System.String
-      description: 菜单名称
-    content.vb: Sub OnMenu(menu As String)
+    - id: e
+      type: Another_Mirai_Native.Abstractions.Context.MenuContext
+    content.vb: Sub OnMenu(e As MenuContext)
   overload: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
-  nameWithType.vb: IMenuHandler.OnMenu(String)
-  fullName.vb: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(String)
-  name.vb: OnMenu(String)
 references:
 - uid: Another_Mirai_Native.Abstractions.Handlers
   commentId: N:Another_Mirai_Native.Abstractions.Handlers
@@ -93,25 +89,52 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
   commentId: Overload:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.html#Another_Mirai_Native_Abstractions_Handlers_IMenuHandler_OnMenu_System_String_
+  href: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.html#Another_Mirai_Native_Abstractions_Handlers_IMenuHandler_OnMenu_Another_Mirai_Native_Abstractions_Context_MenuContext_
   name: OnMenu
   nameWithType: IMenuHandler.OnMenu
   fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
-- uid: System.String
-  commentId: T:System.String
-  parent: System
+- uid: Another_Mirai_Native.Abstractions.Context.MenuContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.MenuContext
+  parent: Another_Mirai_Native.Abstractions.Context
   isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system.string
-  name: string
-  nameWithType: string
-  fullName: string
-  nameWithType.vb: String
-  fullName.vb: String
-  name.vb: String
-- uid: System
-  commentId: N:System
+  href: Another_Mirai_Native.Abstractions.Context.MenuContext.html
+  name: MenuContext
+  nameWithType: MenuContext
+  fullName: Another_Mirai_Native.Abstractions.Context.MenuContext
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
   isExternal: true
-  href: https://learn.microsoft.com/dotnet/api/system
-  name: System
-  nameWithType: System
-  fullName: System
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html

@@ -8,8 +8,10 @@ items:
   - Another_Mirai_Native.Abstractions.Models.FriendInfo
   - Another_Mirai_Native.Abstractions.Models.Group
   - Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+  - Another_Mirai_Native.Abstractions.Models.GroupInfo
   - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
   - Another_Mirai_Native.Abstractions.Models.Message
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder
   - Another_Mirai_Native.Abstractions.Models.PluginInfo
   - Another_Mirai_Native.Abstractions.Models.QQ
   langs:
@@ -53,6 +55,14 @@ references:
   name: GroupFileInfo
   nameWithType: GroupFileInfo
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  name: GroupInfo
+  nameWithType: GroupInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo
 - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
   commentId: T:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
   parent: Another_Mirai_Native.Abstractions.Models
@@ -69,6 +79,14 @@ references:
   name: Message
   nameWithType: Message
   fullName: Another_Mirai_Native.Abstractions.Models.Message
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html
+  name: MessageBuilder
+  nameWithType: MessageBuilder
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder
 - uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
   commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
   parent: Another_Mirai_Native.Abstractions.Models

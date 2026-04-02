@@ -5,7 +5,8 @@ items:
   id: FriendAddedContext
   parent: Another_Mirai_Native.Abstractions.Context
   children:
-  - Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor
+  - Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.QQ)
+  - Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
   - Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ
   - Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
   langs:
@@ -16,7 +17,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -35,29 +36,63 @@ items:
   - System.Object.Equals(System.Object,System.Object)
   - System.Object.ReferenceEquals(System.Object,System.Object)
   - System.Object.GetHashCode
-- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor
-  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor
-  id: '#ctor'
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.QQ)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.QQ)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.QQ)'
   parent: Another_Mirai_Native.Abstractions.Context.FriendAddedContext
   langs:
   - csharp
   - vb
-  name: FriendAddedContext()
-  nameWithType: FriendAddedContext.FriendAddedContext()
-  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FriendAddedContext()
+  name: FriendAddedContext(IPluginApi, DateTime, QQ)
+  nameWithType: FriendAddedContext.FriendAddedContext(IPluginApi, DateTime, QQ)
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FriendAddedContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.QQ)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述好友已添加事件参数的类
+  example: []
   syntax:
-    content: public FriendAddedContext()
-    content.vb: Public Sub New()
+    content: public FriendAddedContext(IPluginApi api, DateTime sendTime, QQ fromQQ)
+    parameters:
+    - id: api
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    - id: sendTime
+      type: System.DateTime
+    - id: fromQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    content.vb: Public Sub New(api As IPluginApi, sendTime As Date, fromQQ As QQ)
   overload: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor*
-  nameWithType.vb: FriendAddedContext.New()
-  fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.New()
-  name.vb: New()
+  nameWithType.vb: FriendAddedContext.New(IPluginApi, Date, QQ)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Date, Another_Mirai_Native.Abstractions.Models.QQ)
+  name.vb: New(IPluginApi, Date, QQ)
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
+  commentId: P:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.Context.FriendAddedContext
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: FriendAddedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取插件 API 实例
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API*
 - uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
   commentId: P:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
   id: SendTime
@@ -70,7 +105,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -95,7 +130,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/FriendAddedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -386,20 +421,21 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.#ctor
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext__ctor
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext__ctor_Another_Mirai_Native_Abstractions_Services_IPluginApi_System_DateTime_Another_Mirai_Native_Abstractions_Models_QQ_
   name: FriendAddedContext
   nameWithType: FriendAddedContext.FriendAddedContext
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FriendAddedContext
   nameWithType.vb: FriendAddedContext.New
   fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.New
   name.vb: New
-- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext_SendTime
-  name: SendTime
-  nameWithType: FriendAddedContext.SendTime
-  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
 - uid: System.DateTime
   commentId: T:System.DateTime
   parent: System
@@ -411,13 +447,6 @@ references:
   nameWithType.vb: Date
   fullName.vb: Date
   name.vb: Date
-- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext_FromQQ
-  name: FromQQ
-  nameWithType: FriendAddedContext.FromQQ
-  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ
 - uid: Another_Mirai_Native.Abstractions.Models.QQ
   commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
   parent: Another_Mirai_Native.Abstractions.Models
@@ -426,6 +455,43 @@ references:
   name: QQ
   nameWithType: QQ
   fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
 - uid: Another_Mirai_Native.Abstractions.Models
   commentId: N:Another_Mirai_Native.Abstractions.Models
   isExternal: true
@@ -463,3 +529,24 @@ references:
     name: Models
     isExternal: true
     href: Another_Mirai_Native.Abstractions.Models.html
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext_API
+  name: API
+  nameWithType: FriendAddedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.API
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext_SendTime
+  name: SendTime
+  nameWithType: FriendAddedContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddedContext_FromQQ
+  name: FromQQ
+  nameWithType: FriendAddedContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddedContext.FromQQ

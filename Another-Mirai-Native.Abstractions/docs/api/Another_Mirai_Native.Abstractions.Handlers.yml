@@ -9,6 +9,7 @@ items:
   - Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
@@ -17,7 +18,7 @@ items:
   - Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
   - Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
   - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
-  - Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle
+  - Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
   langs:
   - csharp
   - vb
@@ -63,6 +64,13 @@ references:
   name: IGroupFileUploadHandler
   nameWithType: IGroupFileUploadHandler
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler.html
+  name: IGroupInviteRequestHandler
+  nameWithType: IGroupInviteRequestHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
 - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
   commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
   isExternal: true
@@ -119,10 +127,10 @@ references:
   name: IMenuHandler
   nameWithType: IMenuHandler
   fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
-- uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle
-  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle
+- uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle.html
-  name: IPrivateMessageHandle
-  nameWithType: IPrivateMessageHandle
-  fullName: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandle
+  href: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler.html
+  name: IPrivateMessageHandler
+  nameWithType: IPrivateMessageHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler

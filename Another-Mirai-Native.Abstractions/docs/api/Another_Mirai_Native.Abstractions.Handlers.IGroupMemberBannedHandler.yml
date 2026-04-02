@@ -14,7 +14,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers
@@ -35,7 +35,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers

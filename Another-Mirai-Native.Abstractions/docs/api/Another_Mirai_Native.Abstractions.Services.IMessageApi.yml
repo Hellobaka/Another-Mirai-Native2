@@ -6,10 +6,15 @@ items:
   parent: Another_Mirai_Native.Abstractions.Services
   children:
   - Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync(System.Int64)
   - Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistories(System.Int64,System.Int64,System.Int32)
+  - Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync(System.Int64,System.Int64,System.Int32)
   - Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById(System.Int64,System.Boolean,System.Int32)
+  - Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync(System.Int64,System.Boolean,System.Int32)
   - Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage(System.Int64,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync(System.Int64,System.String)
   - Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessage(System.Int64,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync(System.Int64,System.String)
   langs:
   - csharp
   - vb
@@ -18,7 +23,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -39,7 +44,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessage(long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -62,6 +67,41 @@ items:
   nameWithType.vb: IMessageApi.SendPrivateMessage(Long, String)
   fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessage(Long, String)
   name.vb: SendPrivateMessage(Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync(System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync(System.Int64,System.String)
+  id: SendPrivateMessageAsync(System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  langs:
+  - csharp
+  - vb
+  name: SendPrivateMessageAsync(long, string)
+  nameWithType: IMessageApi.SendPrivateMessageAsync(long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync(long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步发送私聊消息
+  example: []
+  syntax:
+    content: Task<int> SendPrivateMessageAsync(long userId, string message)
+    parameters:
+    - id: userId
+      type: System.Int64
+      description: 目标QQ
+    - id: message
+      type: System.String
+      description: 将要发送的消息
+    return:
+      type: System.Threading.Tasks.Task{System.Int32}
+      description: 若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0
+    content.vb: Function SendPrivateMessageAsync(userId As Long, message As String) As Task(Of Integer)
+  overload: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync*
+  nameWithType.vb: IMessageApi.SendPrivateMessageAsync(Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync(Long, String)
+  name.vb: SendPrivateMessageAsync(Long, String)
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage(System.Int64,System.String)
   commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage(System.Int64,System.String)
   id: SendGroupMessage(System.Int64,System.String)
@@ -74,7 +114,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage(long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -97,6 +137,41 @@ items:
   nameWithType.vb: IMessageApi.SendGroupMessage(Long, String)
   fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage(Long, String)
   name.vb: SendGroupMessage(Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync(System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync(System.Int64,System.String)
+  id: SendGroupMessageAsync(System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  langs:
+  - csharp
+  - vb
+  name: SendGroupMessageAsync(long, string)
+  nameWithType: IMessageApi.SendGroupMessageAsync(long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync(long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步发送群聊消息
+  example: []
+  syntax:
+    content: Task<int> SendGroupMessageAsync(long groupId, string message)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 目标群聊ID
+    - id: message
+      type: System.String
+      description: 将要发送的消息
+    return:
+      type: System.Threading.Tasks.Task{System.Int32}
+      description: 若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0
+    content.vb: Function SendGroupMessageAsync(groupId As Long, message As String) As Task(Of Integer)
+  overload: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync*
+  nameWithType.vb: IMessageApi.SendGroupMessageAsync(Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync(Long, String)
+  name.vb: SendGroupMessageAsync(Long, String)
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage(System.Int64)
   commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage(System.Int64)
   id: DeleteMessage(System.Int64)
@@ -109,7 +184,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -129,6 +204,38 @@ items:
   nameWithType.vb: IMessageApi.DeleteMessage(Long)
   fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage(Long)
   name.vb: DeleteMessage(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync(System.Int64)
+  id: DeleteMessageAsync(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  langs:
+  - csharp
+  - vb
+  name: DeleteMessageAsync(long)
+  nameWithType: IMessageApi.DeleteMessageAsync(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步撤回消息
+  example: []
+  syntax:
+    content: Task<bool> DeleteMessageAsync(long messageId)
+    parameters:
+    - id: messageId
+      type: System.Int64
+      description: 通过发送消息接口返回的消息ID
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 消息撤回成功与否
+    content.vb: Function DeleteMessageAsync(messageId As Long) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync*
+  nameWithType.vb: IMessageApi.DeleteMessageAsync(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync(Long)
+  name.vb: DeleteMessageAsync(Long)
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistories(System.Int64,System.Int64,System.Int32)
   commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistories(System.Int64,System.Int64,System.Int32)
   id: GetChatHistories(System.Int64,System.Int64,System.Int32)
@@ -141,7 +248,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistories(long, long, int)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -172,6 +279,49 @@ items:
   nameWithType.vb: IMessageApi.GetChatHistories(Long, Long, Integer)
   fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistories(Long, Long, Integer)
   name.vb: GetChatHistories(Long, Long, Integer)
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync(System.Int64,System.Int64,System.Int32)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync(System.Int64,System.Int64,System.Int32)
+  id: GetChatHistoriesAsync(System.Int64,System.Int64,System.Int32)
+  parent: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  langs:
+  - csharp
+  - vb
+  name: GetChatHistoriesAsync(long, long, int)
+  nameWithType: IMessageApi.GetChatHistoriesAsync(long, long, int)
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync(long, long, int)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步检索指定来源的聊天记录历史。
+  remarks: >-
+    确保提供的 groupId 和 qq 对应有效的群组和用户标识符。
+                若只是查询私聊记录，请将 groupId 设置为 0，并使用 qq 参数指定用户标识符。
+  example: []
+  syntax:
+    content: Task<List<ChatHistory>> GetChatHistoriesAsync(long groupId, long qq, int count)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 从中检索聊天记录的群组唯一标识符。
+    - id: qq
+      type: System.Int64
+      description: 要检索其聊天记录的用户唯一标识符。
+    - id: count
+      type: System.Int32
+      description: 要返回的聊天记录条目的最大数量。必须是正整数。
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.ChatHistory}}
+      description: >-
+        表示指定群组和用户聊天记录的 <xref href="Another_Mirai_Native.Abstractions.Models.ChatHistory" data-throw-if-not-resolved="false"></xref> 对象列表。
+                    如果未找到聊天记录，则列表为空。
+    content.vb: Function GetChatHistoriesAsync(groupId As Long, qq As Long, count As Integer) As Task(Of List(Of ChatHistory))
+  overload: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync*
+  nameWithType.vb: IMessageApi.GetChatHistoriesAsync(Long, Long, Integer)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync(Long, Long, Integer)
+  name.vb: GetChatHistoriesAsync(Long, Long, Integer)
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById(System.Int64,System.Boolean,System.Int32)
   commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById(System.Int64,System.Boolean,System.Int32)
   id: GetChatHistoryById(System.Int64,System.Boolean,System.Int32)
@@ -184,7 +334,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById(long, bool, int)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Services/IMessageApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -209,6 +359,44 @@ items:
   nameWithType.vb: IMessageApi.GetChatHistoryById(Long, Boolean, Integer)
   fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById(Long, Boolean, Integer)
   name.vb: GetChatHistoryById(Long, Boolean, Integer)
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync(System.Int64,System.Boolean,System.Int32)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync(System.Int64,System.Boolean,System.Int32)
+  id: GetChatHistoryByIdAsync(System.Int64,System.Boolean,System.Int32)
+  parent: Another_Mirai_Native.Abstractions.Services.IMessageApi
+  langs:
+  - csharp
+  - vb
+  name: GetChatHistoryByIdAsync(long, bool, int)
+  nameWithType: IMessageApi.GetChatHistoryByIdAsync(long, bool, int)
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync(long, bool, int)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Services/IMessageAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步通过消息ID检索聊天记录历史。未找到对应记录时返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>。
+  example: []
+  syntax:
+    content: Task<ChatHistory?> GetChatHistoryByIdAsync(long parentId, bool isGroup, int messageId)
+    parameters:
+    - id: parentId
+      type: System.Int64
+      description: 关联的来源ID，可能是群号或是QQ
+    - id: isGroup
+      type: System.Boolean
+      description: 指示关联来源是否为群聊。如果是群聊则设置为 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>；否则为 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>。
+    - id: messageId
+      type: System.Int32
+      description: 通过发送消息接口返回的消息ID
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.ChatHistory}
+      description: 对应的聊天记录，未找到时返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>。
+    content.vb: Function GetChatHistoryByIdAsync(parentId As Long, isGroup As Boolean, messageId As Integer) As Task(Of ChatHistory)
+  overload: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync*
+  nameWithType.vb: IMessageApi.GetChatHistoryByIdAsync(Long, Boolean, Integer)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync(Long, Boolean, Integer)
+  name.vb: GetChatHistoryByIdAsync(Long, Boolean, Integer)
 references:
 - uid: Another_Mirai_Native.Abstractions.Services
   commentId: N:Another_Mirai_Native.Abstractions.Services
@@ -294,6 +482,113 @@ references:
   name: System
   nameWithType: System
   fullName: System
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html#Another_Mirai_Native_Abstractions_Services_IMessageApi_SendPrivateMessageAsync_System_Int64_System_String_
+  name: SendPrivateMessageAsync
+  nameWithType: IMessageApi.SendPrivateMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendPrivateMessageAsync
+- uid: System.Threading.Tasks.Task{System.Int32}
+  commentId: T:System.Threading.Tasks.Task{System.Int32}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<int>
+  nameWithType: Task<int>
+  fullName: System.Threading.Tasks.Task<int>
+  nameWithType.vb: Task(Of Integer)
+  fullName.vb: System.Threading.Tasks.Task(Of Integer)
+  name.vb: Task(Of Integer)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage
   isExternal: true
@@ -301,6 +596,13 @@ references:
   name: SendGroupMessage
   nameWithType: IMessageApi.SendGroupMessage
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessage
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html#Another_Mirai_Native_Abstractions_Services_IMessageApi_SendGroupMessageAsync_System_Int64_System_String_
+  name: SendGroupMessageAsync
+  nameWithType: IMessageApi.SendGroupMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.SendGroupMessageAsync
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessage
   isExternal: true
@@ -319,6 +621,48 @@ references:
   nameWithType.vb: Boolean
   fullName.vb: Boolean
   name.vb: Boolean
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html#Another_Mirai_Native_Abstractions_Services_IMessageApi_DeleteMessageAsync_System_Int64_
+  name: DeleteMessageAsync
+  nameWithType: IMessageApi.DeleteMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.DeleteMessageAsync
+- uid: System.Threading.Tasks.Task{System.Boolean}
+  commentId: T:System.Threading.Tasks.Task{System.Boolean}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<bool>
+  nameWithType: Task<bool>
+  fullName: System.Threading.Tasks.Task<bool>
+  nameWithType.vb: Task(Of Boolean)
+  fullName.vb: System.Threading.Tasks.Task(Of Boolean)
+  name.vb: Task(Of Boolean)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: )
 - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
   commentId: T:Another_Mirai_Native.Abstractions.Models.ChatHistory
   parent: Another_Mirai_Native.Abstractions.Models
@@ -471,6 +815,62 @@ references:
     name: Generic
     isExternal: true
     href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html#Another_Mirai_Native_Abstractions_Services_IMessageApi_GetChatHistoriesAsync_System_Int64_System_Int64_System_Int32_
+  name: GetChatHistoriesAsync
+  nameWithType: IMessageApi.GetChatHistoriesAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoriesAsync
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.ChatHistory}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.ChatHistory}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<List<ChatHistory>>
+  nameWithType: Task<List<ChatHistory>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.ChatHistory>>
+  nameWithType.vb: Task(Of List(Of ChatHistory))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.ChatHistory))
+  name.vb: Task(Of List(Of ChatHistory))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+    name: ChatHistory
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.ChatHistory.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+    name: ChatHistory
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.ChatHistory.html
+  - name: )
+  - name: )
 - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById*
   commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById
   isExternal: true
@@ -478,3 +878,45 @@ references:
   name: GetChatHistoryById
   nameWithType: IMessageApi.GetChatHistoryById
   fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryById
+- uid: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IMessageApi.html#Another_Mirai_Native_Abstractions_Services_IMessageApi_GetChatHistoryByIdAsync_System_Int64_System_Boolean_System_Int32_
+  name: GetChatHistoryByIdAsync
+  nameWithType: IMessageApi.GetChatHistoryByIdAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IMessageApi.GetChatHistoryByIdAsync
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.ChatHistory}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.ChatHistory}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ChatHistory>
+  nameWithType: Task<ChatHistory>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Models.ChatHistory>
+  nameWithType.vb: Task(Of ChatHistory)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Models.ChatHistory)
+  name.vb: Task(Of ChatHistory)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+    name: ChatHistory
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.ChatHistory.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+    name: ChatHistory
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.ChatHistory.html
+  - name: )

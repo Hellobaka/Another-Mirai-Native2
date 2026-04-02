@@ -32,8 +32,7 @@
     "output": "_site",
     "template": [
       "default",
-      "modern",
-      "templates/modern"
+      "templates/material3"
     ],
     "globalMetadata": {
       "_appName": "",

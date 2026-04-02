@@ -1,0 +1,168 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+  commentId: N:Another_Mirai_Native.Abstractions.Models.MessageItem
+  id: Another_Mirai_Native.Abstractions.Models.MessageItem
+  children:
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.At
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Abstractions.Models.MessageItem
+  nameWithType: Another_Mirai_Native.Abstractions.Models.MessageItem
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.At
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.At
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.At.html
+  name: At
+  nameWithType: At
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.At
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.BFace.html
+  name: BFace
+  nameWithType: BFace
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Dice.html
+  name: Dice
+  nameWithType: Dice
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Face.html
+  name: Face
+  nameWithType: Face
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.html
+  name: Image
+  nameWithType: Image
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  name: MessageItemBase
+  nameWithType: MessageItemBase
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke.html
+  name: Poke
+  nameWithType: Poke
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Record.html
+  name: Record
+  nameWithType: Record
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Reply.html
+  name: Reply
+  nameWithType: Reply
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent.html
+  name: RichContent
+  nameWithType: RichContent
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.RPS.html
+  name: RPS
+  nameWithType: RPS
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.html
+  name: Shake
+  nameWithType: Shake
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Text.html
+  name: Text
+  nameWithType: Text
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+  commentId: N:Another_Mirai_Native.Abstractions.Models.MessageItem
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models.MessageItem
+  nameWithType: Another_Mirai_Native.Abstractions.Models.MessageItem
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+    name: MessageItem
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+    name: MessageItem
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.html

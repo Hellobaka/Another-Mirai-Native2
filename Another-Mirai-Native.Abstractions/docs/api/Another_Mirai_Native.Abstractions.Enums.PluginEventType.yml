@@ -1,0 +1,438 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  id: PluginEventType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.AdminChange
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.Disable
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.DiscussMsg
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.Enable
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.Exit
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendAdded
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendRequest
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupAddRequest
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupBan
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberDecrease
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberIncrease
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMsg
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.Menu
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.PrivateMsg
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.StartUp
+  - Another_Mirai_Native.Abstractions.Enums.PluginEventType.Upload
+  langs:
+  - csharp
+  - vb
+  name: PluginEventType
+  nameWithType: PluginEventType
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 插件事件类型枚举
+  example: []
+  syntax:
+    content: public enum PluginEventType
+    content.vb: Public Enum PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.PrivateMsg
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.PrivateMsg
+  id: PrivateMsg
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: PrivateMsg
+  nameWithType: PluginEventType.PrivateMsg
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.PrivateMsg
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 私聊消息事件
+  example: []
+  syntax:
+    content: PrivateMsg = 21
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMsg
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMsg
+  id: GroupMsg
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: GroupMsg
+  nameWithType: PluginEventType.GroupMsg
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMsg
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 群聊消息事件
+  example: []
+  syntax:
+    content: GroupMsg = 2
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.DiscussMsg
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.DiscussMsg
+  id: DiscussMsg
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: DiscussMsg
+  nameWithType: PluginEventType.DiscussMsg
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.DiscussMsg
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 讨论组消息事件
+  example: []
+  syntax:
+    content: DiscussMsg = 4
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Upload
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.Upload
+  id: Upload
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: Upload
+  nameWithType: PluginEventType.Upload
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Upload
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 文件上传事件
+  example: []
+  syntax:
+    content: Upload = 11
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.AdminChange
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.AdminChange
+  id: AdminChange
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: AdminChange
+  nameWithType: PluginEventType.AdminChange
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.AdminChange
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 管理员变更事件
+  example: []
+  syntax:
+    content: AdminChange = 101
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberDecrease
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberDecrease
+  id: GroupMemberDecrease
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberDecrease
+  nameWithType: PluginEventType.GroupMemberDecrease
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberDecrease
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 群成员减少事件
+  example: []
+  syntax:
+    content: GroupMemberDecrease = 102
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberIncrease
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberIncrease
+  id: GroupMemberIncrease
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberIncrease
+  nameWithType: PluginEventType.GroupMemberIncrease
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberIncrease
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 群成员增加事件
+  example: []
+  syntax:
+    content: GroupMemberIncrease = 103
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupBan
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupBan
+  id: GroupBan
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: GroupBan
+  nameWithType: PluginEventType.GroupBan
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupBan
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 群禁言事件
+  example: []
+  syntax:
+    content: GroupBan = 104
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendAdded
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendAdded
+  id: FriendAdded
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: FriendAdded
+  nameWithType: PluginEventType.FriendAdded
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendAdded
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 好友添加完成事件
+  example: []
+  syntax:
+    content: FriendAdded = 201
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendRequest
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendRequest
+  id: FriendRequest
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: FriendRequest
+  nameWithType: PluginEventType.FriendRequest
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendRequest
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 好友添加请求事件
+  example: []
+  syntax:
+    content: FriendRequest = 301
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupAddRequest
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupAddRequest
+  id: GroupAddRequest
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: GroupAddRequest
+  nameWithType: PluginEventType.GroupAddRequest
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupAddRequest
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 加群申请事件
+  example: []
+  syntax:
+    content: GroupAddRequest = 302
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.StartUp
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.StartUp
+  id: StartUp
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: StartUp
+  nameWithType: PluginEventType.StartUp
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.StartUp
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 酷Q启动事件
+  example: []
+  syntax:
+    content: StartUp = 1001
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Exit
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.Exit
+  id: Exit
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: Exit
+  nameWithType: PluginEventType.Exit
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Exit
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 酷Q退出事件
+  example: []
+  syntax:
+    content: Exit = 1002
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Enable
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.Enable
+  id: Enable
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: Enable
+  nameWithType: PluginEventType.Enable
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Enable
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 插件启用事件
+  example: []
+  syntax:
+    content: Enable = 1003
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Disable
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.Disable
+  id: Disable
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: Disable
+  nameWithType: PluginEventType.Disable
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Disable
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 插件禁用事件
+  example: []
+  syntax:
+    content: Disable = 1004
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Menu
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.PluginEventType.Menu
+  id: Menu
+  parent: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  langs:
+  - csharp
+  - vb
+  name: Menu
+  nameWithType: PluginEventType.Menu
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Menu
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 菜单事件
+  example: []
+  syntax:
+    content: Menu = 1005
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.PluginEventType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.PluginEventType.html
+  name: PluginEventType
+  nameWithType: PluginEventType
+  fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType
