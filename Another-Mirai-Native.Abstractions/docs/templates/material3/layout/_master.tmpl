@@ -111,11 +111,9 @@
       {{^_disableNavbar}}
       <div class="md-top-app-bar-content">
         <div class="md-top-app-bar-start">
-          {{^_disableToc}}
           <md-icon-button id="nav-toggle" aria-label="Toggle navigation">
             <span class="material-symbols-outlined">menu</span>
           </md-icon-button>
-          {{/_disableToc}}
           <a class="md-brand" href="{{_appLogoUrl}}{{^_appLogoUrl}}{{_rel}}index.html{{/_appLogoUrl}}">
             <img id="logo" class="md-brand-logo" src="{{_rel}}{{{_appLogoPath}}}{{^_appLogoPath}}logo.svg{{/_appLogoPath}}" alt="{{_appName}}">
             {{#_appName}}<span class="md-brand-name">{{_appName}}</span>{{/_appName}}
@@ -143,13 +141,11 @@
 
     {{! Main Layout }}
     <div class="md-layout">
-      {{^_disableToc}}
-      <aside class="md-nav-drawer" id="nav-drawer">
+      <aside class="md-nav-drawer{{^_disableToc}} has-toc{{/_disableToc}}" id="nav-drawer">
         <nav class="md-toc" id="toc"></nav>
       </aside>
-      {{/_disableToc}}
 
-      <main class="md-content">
+      <main class="md-content{{^_disableToc}} has-drawer{{/_disableToc}}">
         <div class="md-article-container">
           {{^_disableBreadcrumb}}
           <nav class="md-breadcrumb" id="breadcrumb"></nav>
