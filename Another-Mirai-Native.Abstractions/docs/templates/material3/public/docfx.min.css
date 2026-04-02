@@ -297,6 +297,8 @@ a:hover {
   left: 0;
   bottom: 0;
   width: var(--md-layout-nav-drawer-width);
+  min-width: 200px;
+  max-width: 500px;
   background-color: var(--md-sys-color-surface-container-low);
   border-right: 1px solid var(--md-sys-color-outline-variant);
   overflow-y: auto;
@@ -307,6 +309,41 @@ a:hover {
 
 .md-nav-drawer.collapsed {
   transform: translateX(-100%);
+}
+
+/* Resize handle */
+.md-nav-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+  z-index: 101;
+}
+
+.md-nav-resize-handle:hover,
+.md-nav-resize-handle.dragging {
+  background-color: var(--md-sys-color-primary);
+}
+
+.md-nav-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -2px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 48px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+.md-nav-resize-handle:hover::after {
+  background-color: var(--md-sys-color-surface-container-highest);
 }
 
 /* Content */
