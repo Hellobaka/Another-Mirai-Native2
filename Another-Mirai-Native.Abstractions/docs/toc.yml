@@ -1,4 +1,4 @@
-- name: Docs
+- name: 开发指导
   href: docs/
-- name: API
+- name: API 文档
   href: api/

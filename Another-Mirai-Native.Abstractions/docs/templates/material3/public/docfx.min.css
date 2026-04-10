@@ -982,7 +982,7 @@ article blockquote p:last-child {
 }
 
 article code {
-  font-family: 'Roboto Mono', 'Consolas', 'Monaco', monospace;
+  font-family: 'Roboto Mono', 'Consolas', 'Monaco', var(--md-ref-typeface-plain), monospace;
   font-size: 0.875em;
   background-color: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-primary);
