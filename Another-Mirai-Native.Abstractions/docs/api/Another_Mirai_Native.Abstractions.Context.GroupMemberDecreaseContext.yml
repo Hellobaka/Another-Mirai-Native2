@@ -20,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -51,7 +51,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.GroupMemberDecreaseContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, bool, System.DateTime, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.QQ)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -89,7 +89,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.API
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -114,7 +114,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.IsKicked
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -139,7 +139,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.SendTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -164,7 +164,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.FromGroup
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -189,7 +189,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -214,7 +214,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext.BeingOperateQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupMemberDecreaseContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context

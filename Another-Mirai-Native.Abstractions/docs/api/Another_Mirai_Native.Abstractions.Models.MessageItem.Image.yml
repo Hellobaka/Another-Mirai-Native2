@@ -20,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -52,7 +52,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.Image(string, string, bool, bool)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -90,7 +90,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.ToString()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -116,7 +116,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.MessageItemType
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -142,7 +142,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.FilePath
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -167,7 +167,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.Hash
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -192,7 +192,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.IsFlash
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -217,7 +217,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Image.IsEmoji
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Image.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem

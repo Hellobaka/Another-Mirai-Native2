@@ -17,7 +17,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -49,7 +49,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke.Poke(string)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -78,7 +78,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke.ToString()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -104,7 +104,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke.MessageItemType
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
@@ -130,7 +130,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke.Action
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/MessageItem/Poke.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models.MessageItem

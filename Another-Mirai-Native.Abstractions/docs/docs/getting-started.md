@@ -1,10 +1,10 @@
 ## CSharp Start!
-通过本文可以快速了解插件基础，并完成一个骰子插件
+通过本文，你将在 15 分钟内创建一个能响应群消息的骰子插件，体验 AMN2 插件开发的完整流程。
 
 ## 先决条件
-- Windows
-- .net framework4.8 / .net9.0
-- Visual Studio / 其他 C# 开发环境
+- **Windows** 操作系统
+- **.NET Framework 4.8** 或 **.NET 9.0**（任选其一）
+- **Visual Studio 2022 或更新版本**或其他 C# 开发环境
 
 ## 创建项目
 示例均以 Visual Studio 2026 做示例。
@@ -17,7 +17,13 @@
 3. 下一步选择项目位置，随后选择模板框架。
 4. 看见代码页面后即为创建完成。
 ![创建完成](/images/CreateFinish.png)
-5. 启用本地依赖输出，双击解决方案下的项目，在项目中添加`<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>`
+
+5. **重要**：启用本地依赖输出，以便生成完整的插件文件。
+   - 在解决方案资源管理器中双击项目文件
+   - 在 `.csproj` 文件的 `<PropertyGroup>` 部分添加：
+     ```xml
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     ```
 ![启用本地依赖输出](/images/CopyLocalAssemblies.png)
 
 
@@ -28,49 +34,53 @@
 ![安装Nuget](/images/InstallNuget.png)
 
 ## 编写插件
-### 继承插件基类
-1. 添加`using Another_Mirai_Native.Abstractions;` `using Another_Mirai_Native.Abstractions.Models;`
-2. 在类后添加插件基类继承`PluginBase`
+用以下完整代码替换 `Class1.cs` 文件的内容：
 
-### 声明插件元数据
-添加插件描述特性`[PluginInfo]`，填入三个必须参数，此后还有两个可选参数
->  
-    1. AppId: 插件应用程序的唯一标识符。该值用于将插件与其他插件区分开。通常建议使用 反向域名 + 插件用途，例如：com.demo.dice
-    2. 插件名称，用于在插件管理器上显示的名称
-    3. 插件版本，无格式要求
-    4. 描述（可选）：用于在插件管理器上显示对于插件用途的描述
-    5. 作者（可选）：用于在插件管理器上显示插件作者
 ```csharp
 using Another_Mirai_Native.Abstractions;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Handlers;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DemoPlugin
 {
-    [PluginInfo("com.demo.dice", "R!", "1.0.0")]
-    public class Entry : PluginBase
+    [PluginInfo(
+        appId: "com.demo.dice",           // 插件唯一标识，建议使用反向域名格式
+        name: "骰子插件",                 // 在插件管理器中显示的名称
+        version: "1.0.0",                 // 版本号，建议遵循语义化版本
+        description: "一个简单的骰子插件，输入 'r' 掷骰子",  // 可选：插件描述
+        author: "示例作者"                 // 可选：作者信息
+    )]
+    public class Entry : PluginBase, IGroupMessageHandler
     {
-
-    }
-}
-
-```
-到此插件可以被框架加载，但是还没有处理逻辑，我们在下面的步骤继续完成。
-
-### 添加消息处理逻辑
-实现`IGroupMessageHandler`接口以处理群消息。我们通过接收一个`r`的消息指令，返回一个`[1-6]`的随机数来实现骰子功能。
-```csharp
-public class Entry : PluginBase, IGroupMessageHandler
-{
-    public async Task<EventHandleResult> OnReceiveGroupMessageAsync(GroupMessageContext e, CancellationToken ct)
-    {
-        if (e.Message.Text.ToLower() == "r")
+        /// <summary>
+        /// 当收到群消息时触发
+        /// </summary>
+        public async Task<EventHandleResult> OnReceiveGroupMessageAsync(
+            GroupMessageContext context, 
+            CancellationToken cancellationToken)
         {
-            var random = new Random();
-            var dice = random.Next(1, 7);
-            e.FromGroup.SendGroupMessage($"你掷出了 {dice} 点！");
-            return EventHandleResult.Block;
+            // 检查消息内容是否为 'r'（不区分大小写，忽略前后空格）
+            if (context.Message.Text.Trim().ToLower() == "r")
+            {
+                // 生成 1-6 的随机数
+                var random = new Random();
+                var dice = random.Next(1, 7);
+                
+                // 异步回复骰子结果
+                await context.FromGroup.SendGroupMessageAsync($"🎲 你掷出了 {dice} 点！");
+                
+                // 返回 Block 阻止其他插件处理此消息
+                return EventHandleResult.Block;
+            }
+            
+            // 返回 Pass 让其他插件可以继续处理此消息
+            return EventHandleResult.Pass;
         }
-        return EventHandleResult.Pass;
     }
 }
 ```
@@ -80,7 +90,7 @@ public class Entry : PluginBase, IGroupMessageHandler
 ![打开生成目录](/images/OpenOutputDir.png)
 2. 复制其中`Native_`开头的 dll 与 json 文件，至框架的`data\plugins`文件夹
 ![复制dll](/images/CopyPlugin.png)
-3. 重启框架或者点击框架的重载插件
+3. 重启框架或者点击框架的重载插件 <br>
 ![重载插件](/images/ReloadPlugins.png)
 
 4. 查看框架日志是否显示了我们的插件
@@ -93,16 +103,55 @@ public class Entry : PluginBase, IGroupMessageHandler
 这样我们就实现了一个骰子功能！
 
 ### 代码做了什么
-#### 插件加载
-1. 框架通过反射加载程序集，寻找继承了`PluginBase`插件基类的类，并实例化
-2. 优先查看此类是否使用了`[PluginInfo]`特性，如果没有此特性则查看是否重写了基类的`PluginInfo`，以加载插件元数据
-3. 调用插件的`OnEnableAsync`事件
 
-#### 消息处理
-1. 我们实现了`IGroupMessageHandler`接口，这样框架在收到群消息时会按事件的优先级依次调用插件的群消息处理事件。
-2. 我们事件的参数`e`，表示了此事件所携带的上下文，其中有一个属性`Message`表示群消息内容。
-3. 当群消息内容**转换为小写**为`r`时，会通过我们的if块判断，此时我们通过`new Random()`生成一个随机数对象，随后生成一个`[1-6]`的数字
-4. 我们的事件参数`e`中包含消息来源的群，就是`e.FromGroup`对象，我们的 SDK 将对群的操作封装进了上下文对象，以便省去输入群号的步骤，所以我们输入`e.FromGroup.SendGroupMessage()`就可以向来源群发送消息
+#### 1. 插件元数据 (`[PluginInfo]`)
+- `appId`: 插件唯一标识，**必须使用反向域名格式**确保全局唯一性
+- `name`: 在 AMN2 插件管理器中显示的友好名称
+- `version`: 版本号，建议使用语义化版本（如 `1.0.0`、`2.1.0-beta.1`）
+- `description`（可选）: 插件功能描述，显示在 UI 中
+- `author`（可选）: 作者信息
 
-#### EventHandleResult.Block 是什么
-我们的返回值`EventHandleResult.Block`是指我们插件对这条消息的处理结果，`Block`表示阻塞，意为此消息不会再向后续的插件投递；而`Pass`表示通过，即后续插件仍旧可以处理此消息。
+#### 2. 基类和接口
+- 继承 `PluginBase`: 获取框架提供的 `API` 属性，可访问日志、消息、群组等 API
+- 实现 `IGroupMessageHandler`: 告诉框架"我要处理群消息"
+
+#### 3. 消息处理逻辑
+- `context.Message.Text`: 获取消息文本内容
+- `Trim().ToLower()`: 规范化输入（忽略空格和大小写）
+- `context.FromGroup`: 获取消息来源的群组对象，已绑定群号
+- `SendGroupMessageAsync()`: **异步发送群消息**，避免阻塞主线程
+
+#### 4. 返回值含义
+- `EventHandleResult.Block`: 阻止其他插件处理此消息
+- `EventHandleResult.Pass`: 允许其他插件继续处理此消息
+
+## 🎉 恭喜！你的第一个插件已完成！
+
+你已经成功创建了一个功能完整的 AMN2 插件。这个骰子插件展示了：
+- ✅ 插件创建和元数据定义
+- ✅ 群消息事件处理
+- ✅ 异步消息发送
+- ✅ 插件部署和测试流程
+
+## 遇到问题？
+
+### ❌ 插件没有加载？
+- 检查 `data\plugins` 目录是否正确
+- 确认文件名为 `Native_` 开头
+- 查看框架日志中的错误信息
+
+### ❌ 消息没有回复？
+- 确认机器人已登录且在线
+- 检查插件是否成功加载（查看日志）
+- 确认消息内容匹配（'r' 前后不要有空格）
+
+### ❌ 构建失败？
+- 确保已安装 `Another-Mirai-Native.Abstractions` NuGet 包
+- 检查 `.csproj` 中是否有 `<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>`
+
+---
+
+现在你已经掌握了 AMN2 插件开发的基础！探索 `Another_Mirai_Native.Abstractions` 命名空间中的其他接口，创建更强大的插件吧！
+
+> **提示**：完整 API 文档可在 [API 文档](/api/Another_Mirai_Native.Abstractions.html) 页面查看，更多示例请参考 [GitHub 仓库](https://github.com/Hellobaka/Another-Mirai-Native2)。
+

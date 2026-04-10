@@ -18,7 +18,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -49,7 +49,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.GroupFileInfo(int, string, string, long)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -83,7 +83,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.Id
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -108,7 +108,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.FileName
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -133,7 +133,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.FileId
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -158,7 +158,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupFileInfo.FileSize
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Models/GroupFileInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models

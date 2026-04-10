@@ -18,7 +18,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -49,7 +49,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext.GroupWholeBannedContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -83,7 +83,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext.API
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -108,7 +108,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext.SendTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -133,7 +133,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext.FromGroup
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -158,7 +158,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/2000edac1aa4a1f39047b8bc4cf5961e5d96ceff/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/GroupWholeBannedContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
