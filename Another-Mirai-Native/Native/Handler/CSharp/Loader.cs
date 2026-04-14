@@ -99,10 +99,10 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             return new AppInfo
             {
                 AppId = PluginInfo.AppId,
-                author = PluginInfo.Author ?? string.Empty,
+                author = PluginInfo.Author ?? "未提供",
                 version = PluginInfo.Version,
                 name = PluginInfo.Name,
-                description = PluginInfo.Description ?? string.Empty,
+                description = PluginInfo.Description ?? "未提供",
             };
         }
 

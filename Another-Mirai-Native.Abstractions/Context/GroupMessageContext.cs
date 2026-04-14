@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.Abstractions.Services;
+using System.Threading.Tasks;
 
 namespace Another_Mirai_Native.Abstractions.Context
 {
@@ -38,6 +39,28 @@ namespace Another_Mirai_Native.Abstractions.Context
             string content = $"[CQ:reply,id={Message.Id}]" + msg;
             int msgId = API.MessageApi.SendGroupMessage(FromGroup.Id, content);
             return new(API, msgId, content);
+        }
+
+        /// <summary>
+        /// 向当前消息的来源群发送消息
+        /// </summary>
+        /// <param name="msg">消息内容</param>
+        /// <returns>发送后消息</returns>
+        public Message SendMessage(string msg)
+        {
+            int msgId = API.MessageApi.SendGroupMessage(FromGroup.Id, msg);
+            return new(API, msgId, msg);
+        }
+
+        /// <summary>
+        /// 异步向当前消息的来源群发送消息
+        /// </summary>
+        /// <param name="msg">消息内容</param>
+        /// <returns>发送后消息</returns>
+        public async Task<Message> SendMessageAsync(string msg)
+        {
+            int msgId = await API.MessageApi.SendGroupMessageAsync(FromGroup.Id, msg);
+            return new(API, msgId, msg);
         }
     }
 }
