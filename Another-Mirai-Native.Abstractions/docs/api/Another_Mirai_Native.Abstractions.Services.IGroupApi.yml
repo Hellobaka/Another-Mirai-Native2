@@ -39,7 +39,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -60,7 +60,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -95,7 +95,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -130,7 +130,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(long, long, long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -168,7 +168,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(long, long, long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -206,7 +206,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -238,7 +238,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -270,7 +270,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -295,7 +295,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -320,7 +320,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(long, long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -355,7 +355,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(long, long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -390,7 +390,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -422,7 +422,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -454,7 +454,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(long, long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -492,7 +492,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(long, long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -530,7 +530,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -562,7 +562,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(long)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -594,7 +594,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(long, long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -632,7 +632,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(long, long, bool)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -670,7 +670,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(long, long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -708,7 +708,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(long, long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -746,7 +746,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(long, long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -784,7 +784,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(long, long, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -822,7 +822,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(string, bool, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -860,7 +860,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(string, bool, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -898,7 +898,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(string, bool, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -936,7 +936,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(string, bool, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services

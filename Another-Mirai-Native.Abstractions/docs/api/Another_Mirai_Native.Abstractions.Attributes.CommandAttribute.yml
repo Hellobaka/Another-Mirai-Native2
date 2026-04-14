@@ -1,41 +1,40 @@
 ### YamlMime:ManagedReference
 items:
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
-  id: PluginInfo
-  parent: Another_Mirai_Native.Abstractions.Models
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
+  commentId: T:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
+  id: CommandAttribute
+  parent: Another_Mirai_Native.Abstractions.Attributes
   children:
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
+  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
+  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
   langs:
   - csharp
   - vb
-  name: PluginInfo
-  nameWithType: PluginInfo
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
+  name: CommandAttribute
+  nameWithType: CommandAttribute
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。
-  remarks: 使用此类存储和访问插件元数据，用于插件发现、用户界面显示或插件管理等目的。
+  namespace: Another_Mirai_Native.Abstractions.Attributes
+  summary: >-
+    将一个方法标记为指令处理器。框架将根据 <xref href="Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode" data-throw-if-not-resolved="false"></xref> 和 <xref href="Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template" data-throw-if-not-resolved="false"></xref>
+
+    自动将匹配的消息路由到该方法。
   example: []
   syntax:
     content: >-
-      [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 
-      public class PluginInfo : Attribute
+      public class CommandAttribute : Attribute
     content.vb: >-
-      <AttributeUsage(AttributeTargets.Class, AllowMultiple:=False)>
+      <AttributeUsage(AttributeTargets.Method, AllowMultiple:=True)>
 
-      Public Class PluginInfo Inherits Attribute
+      Public Class CommandAttribute Inherits Attribute
   inheritance:
   - System.Object
   - System.Attribute
@@ -87,237 +86,146 @@ items:
     ctor: System.AttributeUsageAttribute.#ctor(System.AttributeTargets)
     arguments:
     - type: System.AttributeTargets
-      value: 4
+      value: 64
     namedArguments:
     - name: AllowMultiple
       type: System.Boolean
-      value: false
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
-  commentId: M:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String)
-  id: '#ctor(System.String,System.String,System.String)'
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+      value: true
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)'
+  parent: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   langs:
   - csharp
   - vb
-  name: PluginInfo(string, string, string)
-  nameWithType: PluginInfo.PluginInfo(string, string, string)
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo(string, string, string)
+  name: CommandAttribute(MatchMode, string)
+  nameWithType: CommandAttribute.CommandAttribute(MatchMode, string)
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.CommandAttribute(Another_Mirai_Native.Abstractions.Enums.MatchMode, string)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。
-  remarks: 使用此类存储和访问插件元数据，用于插件发现、用户界面显示或插件管理等目的。
+  namespace: Another_Mirai_Native.Abstractions.Attributes
+  summary: >-
+    将一个方法标记为指令处理器。框架将根据 <xref href="Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode" data-throw-if-not-resolved="false"></xref> 和 <xref href="Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template" data-throw-if-not-resolved="false"></xref>
+
+    自动将匹配的消息路由到该方法。
   example: []
   syntax:
-    content: public PluginInfo(string appId, string name, string version)
+    content: public CommandAttribute(MatchMode matchMode, string template)
     parameters:
-    - id: appId
+    - id: matchMode
+      type: Another_Mirai_Native.Abstractions.Enums.MatchMode
+      description: 指令的匹配模式。
+    - id: template
       type: System.String
-      description: >-
-        插件应用程序的唯一标识符。该值用于将插件与其他插件区分开。通常建议使用 反向域名 + 插件用途 命名约定来确保唯一性。
-
-
-        <ul><li>示例：</li><li>com.demo.dice</li><li>me.cqp.luohuaming.dice</li></ul>
-    - id: name
-      type: System.String
-      description: >-
-        插件的显示名称。
-
-                    <ul><li>聊天插件</li><li>查天气</li></ul>
-    - id: version
-      type: System.String
-      description: 插件的版本号，通常遵循语义化版本控制规范。
-    content.vb: Public Sub New(appId As String, name As String, version As String)
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
-  nameWithType.vb: PluginInfo.New(String, String, String)
-  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New(String, String, String)
-  name.vb: New(String, String, String)
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
-  commentId: M:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor(System.String,System.String,System.String,System.String,System.String)
-  id: '#ctor(System.String,System.String,System.String,System.String,System.String)'
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+      description: 用于匹配消息内容的模板字符串。
+    content.vb: Public Sub New(matchMode As MatchMode, template As String)
+  overload: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor*
+  nameWithType.vb: CommandAttribute.New(MatchMode, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.New(Another_Mirai_Native.Abstractions.Enums.MatchMode, String)
+  name.vb: New(MatchMode, String)
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+  commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+  id: MatchMode
+  parent: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   langs:
   - csharp
   - vb
-  name: PluginInfo(string, string, string, string?, string?)
-  nameWithType: PluginInfo.PluginInfo(string, string, string, string?, string?)
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo(string, string, string, string?, string?)
-  type: Constructor
-  source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
-  assemblies:
-  - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 完全构造函数，允许同时设置所有属性，包括可选的描述和作者信息。
-  example: []
-  syntax:
-    content: public PluginInfo(string appId, string name, string version, string? description, string? author)
-    parameters:
-    - id: appId
-      type: System.String
-    - id: name
-      type: System.String
-    - id: version
-      type: System.String
-    - id: description
-      type: System.String
-    - id: author
-      type: System.String
-    content.vb: Public Sub New(appId As String, name As String, version As String, description As String, author As String)
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
-  nameWithType.vb: PluginInfo.New(String, String, String, String, String)
-  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New(String, String, String, String, String)
-  name.vb: New(String, String, String, String, String)
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
-  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
-  id: AppId
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  langs:
-  - csharp
-  - vb
-  name: AppId
-  nameWithType: PluginInfo.AppId
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+  name: MatchMode
+  nameWithType: CommandAttribute.MatchMode
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
+  namespace: Another_Mirai_Native.Abstractions.Attributes
+  summary: 指令的匹配模式。
+  example: []
+  syntax:
+    content: public MatchMode MatchMode { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MatchMode
+    content.vb: Public ReadOnly Property MatchMode As MatchMode
+  overload: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode*
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+  commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+  id: Template
+  parent: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
+  langs:
+  - csharp
+  - vb
+  name: Template
+  nameWithType: CommandAttribute.Template
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Attributes
   summary: >-
-    插件应用程序的唯一标识符。该值用于将插件与其他插件区分开。通常建议使用 反向域名 +插件用途 命名约定来确保唯一性。
+    用于匹配消息内容的模板字符串。
 
-
-    <ul><li>示例：</li><li>com.demo.dice</li><li>me.cqp.luohuaming.dice</li></ul>
+    当 <xref href="Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode" data-throw-if-not-resolved="false"></xref> 为 <xref href="Another_Mirai_Native.Abstractions.Enums.MatchMode.Regex" data-throw-if-not-resolved="false"></xref> 时，此值为正则表达式。
   example: []
   syntax:
-    content: public string AppId { get; set; }
+    content: public string Template { get; }
     parameters: []
     return:
       type: System.String
-    content.vb: Public Property AppId As String
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId*
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
-  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
-  id: Name
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
+    content.vb: Public ReadOnly Property Template As String
+  overload: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template*
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
+  commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
+  id: Scope
+  parent: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   langs:
   - csharp
   - vb
-  name: Name
-  nameWithType: PluginInfo.Name
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  name: Scope
+  nameWithType: CommandAttribute.Scope
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: >-
-    插件的显示名称。
-
-
-    <ul><li>聊天插件</li><li>查天气</li></ul>
+  namespace: Another_Mirai_Native.Abstractions.Attributes
+  summary: 此指令响应的消息来源范围。默认为 <xref href="Another_Mirai_Native.Abstractions.Enums.MessageScope.All" data-throw-if-not-resolved="false"></xref>。
   example: []
   syntax:
-    content: public string Name { get; set; }
+    content: public MessageScope Scope { get; set; }
     parameters: []
     return:
-      type: System.String
-    content.vb: Public Property Name As String
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name*
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
-  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
-  id: Version
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  langs:
-  - csharp
-  - vb
-  name: Version
-  nameWithType: PluginInfo.Version
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
-  type: Property
-  source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
-  assemblies:
-  - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: >-
-    插件的版本号，通常遵循语义化版本控制规范。
-
-
-    <ul><li>1.0.0</li><li>2.1.0b2</li></ul>
-  example: []
-  syntax:
-    content: public string Version { get; set; }
-    parameters: []
-    return:
-      type: System.String
-    content.vb: Public Property Version As String
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version*
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
-  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
-  id: Description
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  langs:
-  - csharp
-  - vb
-  name: Description
-  nameWithType: PluginInfo.Description
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
-  type: Property
-  source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
-  assemblies:
-  - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 用于插件显示的描述信息，提供有关插件功能、用途或其他相关信息的简要说明。
-  remarks: 可留空或null，插件信息侧会显示<strong>未提供</strong>
-  example: []
-  syntax:
-    content: public string? Description { get; set; }
-    parameters: []
-    return:
-      type: System.String
-    content.vb: Public Property Description As String
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description*
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
-  commentId: P:Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
-  id: Author
-  parent: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  langs:
-  - csharp
-  - vb
-  name: Author
-  nameWithType: PluginInfo.Author
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
-  type: Property
-  source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/PluginInfo.cs
-  assemblies:
-  - Another-Mirai-Native.Abstractions
-  namespace: Another_Mirai_Native.Abstractions.Models
-  summary: 用于显示插件的作者。提供有关插件开发者或维护者的信息，通常是一个人名、团队名或组织名。
-  remarks: 可留空或null，插件信息侧会显示<strong>未提供</strong>
-  example: []
-  syntax:
-    content: public string? Author { get; set; }
-    parameters: []
-    return:
-      type: System.String
-    content.vb: Public Property Author As String
-  overload: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author*
+      type: Another_Mirai_Native.Abstractions.Enums.MessageScope
+    content.vb: Public Property Scope As MessageScope
+  overload: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope*
 references:
-- uid: Another_Mirai_Native.Abstractions.Models
-  commentId: N:Another_Mirai_Native.Abstractions.Models
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+  commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute_MatchMode
+  name: MatchMode
+  nameWithType: CommandAttribute.MatchMode
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+  commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute_Template
+  name: Template
+  nameWithType: CommandAttribute.Template
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+- uid: Another_Mirai_Native.Abstractions.Attributes
+  commentId: N:Another_Mirai_Native.Abstractions.Attributes
   isExternal: true
   href: Another_Mirai_Native.html
-  name: Another_Mirai_Native.Abstractions.Models
-  nameWithType: Another_Mirai_Native.Abstractions.Models
-  fullName: Another_Mirai_Native.Abstractions.Models
+  name: Another_Mirai_Native.Abstractions.Attributes
+  nameWithType: Another_Mirai_Native.Abstractions.Attributes
+  fullName: Another_Mirai_Native.Abstractions.Attributes
   spec.csharp:
   - uid: Another_Mirai_Native
     name: Another_Mirai_Native
@@ -329,10 +237,10 @@ references:
     isExternal: true
     href: Another_Mirai_Native.Abstractions.html
   - name: .
-  - uid: Another_Mirai_Native.Abstractions.Models
-    name: Models
+  - uid: Another_Mirai_Native.Abstractions.Attributes
+    name: Attributes
     isExternal: true
-    href: Another_Mirai_Native.Abstractions.Models.html
+    href: Another_Mirai_Native.Abstractions.Attributes.html
   spec.vb:
   - uid: Another_Mirai_Native
     name: Another_Mirai_Native
@@ -344,10 +252,10 @@ references:
     isExternal: true
     href: Another_Mirai_Native.Abstractions.html
   - name: .
-  - uid: Another_Mirai_Native.Abstractions.Models
-    name: Models
+  - uid: Another_Mirai_Native.Abstractions.Attributes
+    name: Attributes
     isExternal: true
-    href: Another_Mirai_Native.Abstractions.Models.html
+    href: Another_Mirai_Native.Abstractions.Attributes.html
 - uid: System.Object
   commentId: T:System.Object
   parent: System
@@ -2142,16 +2050,24 @@ references:
   name: System
   nameWithType: System
   fullName: System
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.#ctor
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo__ctor_System_String_System_String_System_String_
-  name: PluginInfo
-  nameWithType: PluginInfo.PluginInfo
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.PluginInfo
-  nameWithType.vb: PluginInfo.New
-  fullName.vb: Another_Mirai_Native.Abstractions.Models.PluginInfo.New
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute__ctor_Another_Mirai_Native_Abstractions_Enums_MatchMode_System_String_
+  name: CommandAttribute
+  nameWithType: CommandAttribute.CommandAttribute
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.CommandAttribute
+  nameWithType.vb: CommandAttribute.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.New
   name.vb: New
+- uid: Another_Mirai_Native.Abstractions.Enums.MatchMode
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MatchMode
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MatchMode.html
+  name: MatchMode
+  nameWithType: MatchMode
+  fullName: Another_Mirai_Native.Abstractions.Enums.MatchMode
 - uid: System.String
   commentId: T:System.String
   parent: System
@@ -2163,38 +2079,83 @@ references:
   nameWithType.vb: String
   fullName.vb: String
   name.vb: String
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_AppId
-  name: AppId
-  nameWithType: PluginInfo.AppId
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.AppId
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Name
-  name: Name
-  nameWithType: PluginInfo.Name
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Name
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute_MatchMode
+  name: MatchMode
+  nameWithType: CommandAttribute.MatchMode
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
+- uid: Another_Mirai_Native.Abstractions.Enums.MatchMode.Regex
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MatchMode.Regex
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Version
-  name: Version
-  nameWithType: PluginInfo.Version
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Version
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
+  href: Another_Mirai_Native.Abstractions.Enums.MatchMode.html#Another_Mirai_Native_Abstractions_Enums_MatchMode_Regex
+  name: Regex
+  nameWithType: MatchMode.Regex
+  fullName: Another_Mirai_Native.Abstractions.Enums.MatchMode.Regex
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Description
-  name: Description
-  nameWithType: PluginInfo.Description
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Description
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute_Template
+  name: Template
+  nameWithType: CommandAttribute.Template
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageScope.All
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html#Another_Mirai_Native_Abstractions_Models_PluginInfo_Author
-  name: Author
-  nameWithType: PluginInfo.Author
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo.Author
+  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html#Another_Mirai_Native_Abstractions_Enums_MessageScope_All
+  name: All
+  nameWithType: MessageScope.All
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute_Scope
+  name: Scope
+  nameWithType: CommandAttribute.Scope
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageScope
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html
+  name: MessageScope
+  nameWithType: MessageScope
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope

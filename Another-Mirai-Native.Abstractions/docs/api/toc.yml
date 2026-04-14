@@ -4,6 +4,9 @@ items:
   name: Another_Mirai_Native.Abstractions
   type: Namespace
   items:
+  - uid: Another_Mirai_Native.Abstractions.CommandHandlerBase
+    name: CommandHandlerBase
+    type: Class
   - uid: Another_Mirai_Native.Abstractions.PluginBase
     name: PluginBase
     type: Class
@@ -11,6 +14,9 @@ items:
   name: Another_Mirai_Native.Abstractions.Attributes
   type: Namespace
   items:
+  - uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
+    name: CommandAttribute
+    type: Class
   - uid: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute
     name: EventPriorityAttribute
     type: Class
@@ -82,8 +88,14 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
     name: EventHandleResult
     type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MatchMode
+    name: MatchMode
+    type: Enum
   - uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
     name: MessageItemType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
+    name: MessageScope
     type: Enum
   - uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
     name: PluginEventType

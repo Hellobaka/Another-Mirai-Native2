@@ -101,6 +101,7 @@ references:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
 - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
   commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
   isExternal: true
   href: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler.html
   name: IGroupMessageHandler
@@ -129,8 +130,46 @@ references:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
 - uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
   commentId: T:Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
   isExternal: true
   href: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler.html
   name: IPrivateMessageHandler
   nameWithType: IPrivateMessageHandler
   fullName: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html

@@ -16,7 +16,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -99,7 +99,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute.EventPriorityAttribute(Another_Mirai_Native.Abstractions.Enums.PluginEventType, int)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -131,7 +131,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute.EventType
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -156,7 +156,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute.Priority
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/EventPriorityAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes

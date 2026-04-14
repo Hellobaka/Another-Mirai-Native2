@@ -35,10 +35,11 @@
       "templates/material3"
     ],
     "globalMetadata": {
-      "_appName": "",
-      "_appTitle": "",
+      "_appName": "AMN2 SDK",
+      "_appTitle": "AMN2 SDK Documentation",
       "_enableSearch": true,
-      "pdf": true
+      "pdf": true,
+      "_gitSource": "https://github.com/Hellobaka/Another-Mirai-Native2/blob/csharp-plugin"
     }
   }
 }

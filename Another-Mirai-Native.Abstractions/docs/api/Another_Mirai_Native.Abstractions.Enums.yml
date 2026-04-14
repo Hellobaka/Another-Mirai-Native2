@@ -8,7 +8,9 @@ items:
   - Another_Mirai_Native.Abstractions.Enums.CQFace
   - Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
   - Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  - Another_Mirai_Native.Abstractions.Enums.MatchMode
   - Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  - Another_Mirai_Native.Abstractions.Enums.MessageScope
   - Another_Mirai_Native.Abstractions.Enums.PluginEventType
   - Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
   - Another_Mirai_Native.Abstractions.Enums.QQSex
@@ -57,6 +59,14 @@ references:
   name: EventHandleResult
   nameWithType: EventHandleResult
   fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.MatchMode
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MatchMode
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MatchMode.html
+  name: MatchMode
+  nameWithType: MatchMode
+  fullName: Another_Mirai_Native.Abstractions.Enums.MatchMode
 - uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
   commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageItemType
   parent: Another_Mirai_Native.Abstractions.Enums
@@ -65,6 +75,14 @@ references:
   name: MessageItemType
   nameWithType: MessageItemType
   fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageScope
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html
+  name: MessageScope
+  nameWithType: MessageScope
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope
 - uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
   commentId: T:Another_Mirai_Native.Abstractions.Enums.PluginEventType
   parent: Another_Mirai_Native.Abstractions.Enums

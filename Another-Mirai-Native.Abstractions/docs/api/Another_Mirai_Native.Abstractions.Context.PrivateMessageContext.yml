@@ -10,6 +10,8 @@ items:
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
   - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(System.String)
+  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage(System.String)
+  - Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync(System.String)
   langs:
   - csharp
   - vb
@@ -18,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -49,7 +51,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.PrivateMessageContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.Message)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -81,7 +83,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -101,6 +103,70 @@ items:
   nameWithType.vb: PrivateMessageContext.Reply(String)
   fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Reply(String)
   name.vb: Reply(String)
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage(System.String)
+  id: SendMessage(System.String)
+  parent: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
+  langs:
+  - csharp
+  - vb
+  name: SendMessage(string)
+  nameWithType: PrivateMessageContext.SendMessage(string)
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 向当前消息的来源个人发送消息
+  example: []
+  syntax:
+    content: public Message SendMessage(string msg)
+    parameters:
+    - id: msg
+      type: System.String
+      description: 消息内容
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.Message
+      description: 发送后消息
+    content.vb: Public Function SendMessage(msg As String) As Message
+  overload: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage*
+  nameWithType.vb: PrivateMessageContext.SendMessage(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage(String)
+  name.vb: SendMessage(String)
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync(System.String)
+  id: SendMessageAsync(System.String)
+  parent: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
+  langs:
+  - csharp
+  - vb
+  name: SendMessageAsync(string)
+  nameWithType: PrivateMessageContext.SendMessageAsync(string)
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 异步向当前消息的来源个人发送消息
+  example: []
+  syntax:
+    content: public Task<Message> SendMessageAsync(string msg)
+    parameters:
+    - id: msg
+      type: System.String
+      description: 消息内容
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.Message}
+      description: 发送后消息
+    content.vb: Public Function SendMessageAsync(msg As String) As Task(Of Message)
+  overload: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync*
+  nameWithType.vb: PrivateMessageContext.SendMessageAsync(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync(String)
+  name.vb: SendMessageAsync(String)
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
   commentId: P:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
   id: API
@@ -113,7 +179,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -138,7 +204,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -163,7 +229,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.Message
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/PrivateMessageContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -577,6 +643,120 @@ references:
   nameWithType.vb: String
   fullName.vb: String
   name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_SendMessage_System_String_
+  name: SendMessage
+  nameWithType: PrivateMessageContext.SendMessage
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessage
+- uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.html#Another_Mirai_Native_Abstractions_Context_PrivateMessageContext_SendMessageAsync_System_String_
+  name: SendMessageAsync
+  nameWithType: PrivateMessageContext.SendMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.SendMessageAsync
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.Message}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.Message}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<Message>
+  nameWithType: Task<Message>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Models.Message>
+  nameWithType.vb: Task(Of Message)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Models.Message)
+  name.vb: Task(Of Message)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.Message
+    name: Message
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.Message.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.Message
+    name: Message
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.Message.html
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
 - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.PrivateMessageContext.API
   isExternal: true

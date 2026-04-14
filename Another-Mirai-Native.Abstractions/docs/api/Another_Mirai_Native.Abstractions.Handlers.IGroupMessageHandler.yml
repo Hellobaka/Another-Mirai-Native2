@@ -14,7 +14,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Handlers/GroupMessageHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Handlers/GroupMessageHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers
@@ -23,6 +23,8 @@ items:
   syntax:
     content: public interface IGroupMessageHandler
     content.vb: Public Interface IGroupMessageHandler
+  derivedClasses:
+  - Another_Mirai_Native.Abstractions.CommandHandlerBase
 - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler.OnReceiveGroupMessageAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext,System.Threading.CancellationToken)
   commentId: M:Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler.OnReceiveGroupMessageAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext,System.Threading.CancellationToken)
   id: OnReceiveGroupMessageAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext,System.Threading.CancellationToken)
@@ -35,7 +37,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler.OnReceiveGroupMessageAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/108afa6be67a64f82f9bb4de08a09a41f8125a0d/Another-Mirai-Native.Abstractions/Handlers/GroupMessageHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Handlers/GroupMessageHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers

@@ -4,6 +4,7 @@ items:
   commentId: N:Another_Mirai_Native.Abstractions
   id: Another_Mirai_Native.Abstractions
   children:
+  - Another_Mirai_Native.Abstractions.CommandHandlerBase
   - Another_Mirai_Native.Abstractions.PluginBase
   langs:
   - csharp
@@ -15,6 +16,13 @@ items:
   assemblies:
   - Another-Mirai-Native.Abstractions
 references:
+- uid: Another_Mirai_Native.Abstractions.CommandHandlerBase
+  commentId: T:Another_Mirai_Native.Abstractions.CommandHandlerBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.CommandHandlerBase.html
+  name: CommandHandlerBase
+  nameWithType: CommandHandlerBase
+  fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase
 - uid: Another_Mirai_Native.Abstractions.PluginBase
   commentId: T:Another_Mirai_Native.Abstractions.PluginBase
   isExternal: true
