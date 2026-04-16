@@ -33,6 +33,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 _site
+Another-Mirai-Native.Abstractions/docs/api
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

@@ -1,4 +1,20 @@
-- name: Introduction
-  href: introduction.md
 - name: 快速开始
   href: getting-started.md
+
+- name: 处理事件
+  href: event-handling.md
+
+- name: 发送消息
+  href: sending-messages.md
+
+- name: 新建窗口
+  href: create-window.md
+
+- name: 指令模式
+  href: command-mode.md
+
+- name: 新增依赖与插件分发
+  href: plugin-distribution.md
+
+- name: Vibe Coding
+  href: vibe-coding.md
