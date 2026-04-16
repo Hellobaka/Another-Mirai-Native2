@@ -257,7 +257,7 @@ namespace Another_Mirai_Native.Native
                 PluginLoaderType = (PluginLoaderType)AppInfo.LoaderType;
                 LoaderProcessPath = PluginLoaderType switch
                 {
-                    PluginLoaderType.Net8 => @"loaders\Net8\Another-Mirai-Native.exe",
+                    PluginLoaderType.NetCore => @"loaders\NetCore\Another-Mirai-Native.exe",
                     _ => @"loaders\NetFramework48\Another-Mirai-Native.exe",
                 };
 

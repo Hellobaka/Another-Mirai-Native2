@@ -31,7 +31,9 @@ del %ROOT%\UI_WPF\bin\x86\Debug\net48\CleanI18nFolders.exe
 echo Net8...
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders"
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
+mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders\NetCore"
 xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" /E /I /H /Y
+copy "%ROOT%\build\Console\net9\Another-Mirai-Native.exe" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders\NetCore\Another-Mirai-Native.exe" /Y
 
 mkdir "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols"
 copy "%ROOT%\Protocols\Protocol_OneBot\bin\x86\Debug\net9.0-windows\Protocol_OneBotv11.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
@@ -44,14 +46,18 @@ copy "%ROOT%\Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.OneBot\bin\D
 
 mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders"
 mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
+mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetCore"
 xcopy "%ROOT%\UI_Blazor\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" /E /I /H /Y
+copy "%ROOT%\build\Console\net9\Another-Mirai-Native.exe" "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetCore\Another-Mirai-Native.exe" /Y
 
 mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\protocols"
 xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\protocols" /E /I /H /Y
 
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders"
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
+mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders\NetCore"
 xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" /E /I /H /Y
+copy "%ROOT%\build\Console\net9\Another-Mirai-Native.exe" "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders\NetCore\Another-Mirai-Native.exe" /Y
 
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\protocols"
 xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\protocols" /E /I /H /Y

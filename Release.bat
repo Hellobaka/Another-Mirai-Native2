@@ -10,10 +10,12 @@ dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net9.pubxml -f net9.0-wind
 
 echo Loaders...
 mkdir ".\build\loaders\NetFramework48"
+mkdir ".\build\loaders\NetCore"
 xcopy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\x86" ".\build\loaders\NetFramework48\x86" /E /I /H /Y
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe" ".\build\loaders\NetFramework48" /Y
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe.config" ".\build\loaders\NetFramework48" /Y
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\CQP.dll" ".\build\loaders\NetFramework48" /Y
+copy ".\build\Console\net9\Another-Mirai-Native.exe" ".\build\loaders\NetCore\Another-Mirai-Native.exe" /Y
 
 echo Generate Minimal Console(.net48)
 echo Copy Protocols
