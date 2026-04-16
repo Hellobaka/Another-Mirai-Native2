@@ -154,50 +154,62 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
         {
             int r = Task.Run(async () =>
             {
-                switch (eventName)
+                try
                 {
-                    case PluginEventType.PrivateMsg:
-                        return (int)await CallPrivateMsgEvent(args);
 
-                    case PluginEventType.GroupMsg:
-                        return (int)await CallGroupMsgEvent(args);
+                    switch (eventName)
+                    {
+                        case PluginEventType.PrivateMsg:
+                            return (int)await CallPrivateMsgEvent(args);
 
-                    case PluginEventType.Upload:
-                        return (int)await CallUploadEvent(args);
+                        case PluginEventType.GroupMsg:
+                            return (int)await CallGroupMsgEvent(args);
 
-                    case PluginEventType.AdminChange:
-                        return (int)await CallAdminChangeEvent(args);
+                        case PluginEventType.Upload:
+                            return (int)await CallUploadEvent(args);
 
-                    case PluginEventType.GroupMemberDecrease:
-                        return (int)await CallGroupMemberDecreaseEvent(args);
+                        case PluginEventType.AdminChange:
+                            return (int)await CallAdminChangeEvent(args);
 
-                    case PluginEventType.GroupMemberIncrease:
-                        return (int)await CallGroupMemberIncreaseEvent(args);
+                        case PluginEventType.GroupMemberDecrease:
+                            return (int)await CallGroupMemberDecreaseEvent(args);
 
-                    case PluginEventType.GroupBan:
-                        return (int)await CallGroupBanEvent(args);
+                        case PluginEventType.GroupMemberIncrease:
+                            return (int)await CallGroupMemberIncreaseEvent(args);
 
-                    case PluginEventType.FriendAdded:
-                        return (int)await CallFriendAddedEvent(args);
+                        case PluginEventType.GroupBan:
+                            return (int)await CallGroupBanEvent(args);
 
-                    case PluginEventType.FriendRequest:
-                        return (int)await CallFriendRequestEvent(args);
+                        case PluginEventType.FriendAdded:
+                            return (int)await CallFriendAddedEvent(args);
 
-                    case PluginEventType.GroupAddRequest:
-                        return (int)await CallGroupAddRequestEvent(args);
+                        case PluginEventType.FriendRequest:
+                            return (int)await CallFriendRequestEvent(args);
 
-                    case PluginEventType.Enable:
-                        CancellationTokenSource = new();
-                        await Plugin.OnEnableAsync(CancellationTokenSource.Token);
-                        return 0;
+                        case PluginEventType.GroupAddRequest:
+                            return (int)await CallGroupAddRequestEvent(args);
 
-                    case PluginEventType.Disable:
-                        await Plugin.OnDisableAsync(CancellationTokenSource.Token);
-                        CancellationTokenSource.Cancel();
-                        return 0;
+                        case PluginEventType.Enable:
+                            CancellationTokenSource = new();
+                            await Plugin.OnEnableAsync(CancellationTokenSource.Token);
+                            return 0;
 
-                    case PluginEventType.Menu:
-                        return CallMenu(args.FirstOrDefault()?.ToString());
+                        case PluginEventType.Disable:
+                            await Plugin.OnDisableAsync(CancellationTokenSource.Token);
+                            CancellationTokenSource.Cancel();
+                            return 0;
+
+                        case PluginEventType.Menu:
+                            return CallMenu(args.FirstOrDefault()?.ToString());
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // ignore
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error("调用 C# 插件事件", $"事件：{eventName}; 调用过程中发生异常：{e}");
                 }
 
                 return 0;
@@ -343,7 +355,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
             if (args[0] is not long subType
-                ||args[1] is not long sendTime
+                || args[1] is not long sendTime
                 || args[2] is not long fromGroup
                 || args[3] is not long fromQQ
                 || args[4] is not string msg
