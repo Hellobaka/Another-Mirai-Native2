@@ -45,18 +45,20 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// 处理请求结果的方法
         /// </summary>
         /// <param name="result">处理结果</param>
-        public void SetRequestResult(RequestHandleResult result)
+        /// <param name="refuseReason">拒绝原因</param>
+        public void SetRequestResult(RequestHandleResult result, string refuseReason = "")
         {
-            API.GroupApi.SetGroupAddRequest(RequestFlag, result == RequestHandleResult.Accept);
+            API.GroupApi.SetGroupAddRequest(RequestFlag, result == RequestHandleResult.Accept, refuseReason);
         }
 
         /// <summary>
         /// 异步处理请求结果的方法
         /// </summary>
         /// <param name="result">处理结果</param>
-        public async Task SetRequestResultAsync(RequestHandleResult result)
+        /// <param name="refuseReason">拒绝原因</param>
+        public async Task SetRequestResultAsync(RequestHandleResult result, string refuseReason = "")
         {
-            await API.GroupApi.SetGroupAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept);
+            await API.GroupApi.SetGroupAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept, refuseReason);
         }
     }
 }
