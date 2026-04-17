@@ -55,7 +55,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// 撤回消息
         /// </summary>
         /// <returns>消息撤回成功与否</returns>
-        public bool RemoveMessage()
+        public bool DeleteMessage()
         {
             return PluginApi.MessageApi.DeleteMessage(Id);
         }
@@ -64,7 +64,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// 异步撤回消息
         /// </summary>
         /// <returns>消息撤回成功与否</returns>
-        public Task<bool> RemoveMessageAsync()
+        public Task<bool> DeleteMessageAsync()
         {
             return PluginApi.MessageApi.DeleteMessageAsync(Id);
         }

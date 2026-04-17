@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Abstractions.Models.MessageItem;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
 using System.Collections.Generic;
 using System.Text;
 
@@ -102,6 +103,16 @@ namespace Another_Mirai_Native.Abstractions.Models
         public MessageBuilder AtAll()
         {
             Items.Add(new At(0, true));
+            return this;
+        }
+
+        /// <summary>
+        /// 添加表情消息片段。
+        /// </summary>
+        /// <returns>当前构建器实例。</returns>
+        public MessageBuilder Face(CQFace face)
+        {
+            Items.Add(new Face(face));
             return this;
         }
     }
