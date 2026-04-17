@@ -4,6 +4,9 @@
 - name: 处理事件
   href: event-handling.md
 
+- name: API 对象参考
+  href: api-reference.md
+
 - name: 发送消息
   href: sending-messages.md
 
