@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /.idea
 /UI_Blazor/.config
 /UI_Blazor/wwwroot/image
+/.claude
