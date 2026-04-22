@@ -211,20 +211,37 @@ namespace Another_Mirai_Native.Native
         public void EnablePluginByConfig()
         {
             Stopwatch sw = Stopwatch.StartNew();
-            foreach (var item in Proxies)
+            var autoLoadList = Proxies.Where(x => AppConfig.Instance.AutoEnablePlugin.Any(a => a == x.AppInfo.name));
+            if (AppConfig.Instance.ParallelPluginLoad)
             {
-                string appName = item.AppInfo.name;
-                if (AppConfig.Instance.AutoEnablePlugin.Any(x => x == appName))
+                Parallel.ForEach(autoLoadList, item =>
+                {
+                    item.Load();
+                });
+            }
+            else
+            {
+                foreach (var item in autoLoadList)
                 {
                     item.Load();
                 }
-            };
+            }
             LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
             sw = Stopwatch.StartNew();
-            foreach (var item in Proxies.Where(x => x.HasConnection))
+            if (AppConfig.Instance.ParallelPluginLoad)
             {
-                SetPluginEnabled(item, true);
-            };
+                Parallel.ForEach(Proxies.Where(x => x.HasConnection), item =>
+                {
+                    SetPluginEnabled(item, true);
+                });
+            }
+            else
+            {
+                foreach (var item in Proxies.Where(x => x.HasConnection))
+                {
+                    SetPluginEnabled(item, true);
+                }
+            }
             LogHelper.Info("启用插件", "插件启动完成，开始处理消息逻辑", $"√ {sw.ElapsedMilliseconds} ms");
         }
 

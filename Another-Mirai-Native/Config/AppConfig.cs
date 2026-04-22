@@ -105,6 +105,8 @@ namespace Another_Mirai_Native.Config
 
         public List<string> OfflineActionCommands { get; set; } = [];
 
+        public bool ParallelPluginLoad { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);
@@ -145,6 +147,7 @@ namespace Another_Mirai_Native.Config
 
             OfflineActionRunCommand = GetConfig("OfflineActionRunCommand", false);
             OfflineActionCommands = GetConfig("OfflineActionCommands", new List<string>());
+            ParallelPluginLoad = GetConfig("ParallelPluginLoad", true);
         }
     }
 }
