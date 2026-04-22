@@ -78,7 +78,7 @@ namespace Another_Mirai_Native
                 {
                     Console.WriteLine();
                     Console.WriteLine("[-]可用协议列表：");
-                    foreach(var item in ProtocolManager.Protocols)
+                    foreach (var item in ProtocolManager.Protocols)
                     {
                         Console.WriteLine(item.Name);
                     }
@@ -102,23 +102,13 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                int count = 0;
                 if (AppConfig.Instance.ShowTaskBar)
                 {
                     BuildTaskBar();
                 }
-                foreach (var item in PluginManagerProxy.Proxies)
-                {
-                    if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
-                    {
-                        if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
-                        {
-                            LogHelper.Info("加载插件", $"{item.PluginName} 启动完成");
-                            UpdateConsoleTitle($"Another-Mirai-Native2 加载了 {++count} 个插件");
-                        }
-                    }
-                }
-                LogHelper.Info("加载插件", $"插件启动完成，开始处理事件");
+
+                PluginManagerProxy.Instance.EnablePluginByConfig();
+                UpdateConsoleTitle($"Another-Mirai-Native2 加载了 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件");
                 PluginManagerProxy.Instance.OnPluginLoaded();
             }
             else

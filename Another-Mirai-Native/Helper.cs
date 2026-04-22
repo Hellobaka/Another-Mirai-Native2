@@ -253,7 +253,7 @@ namespace Another_Mirai_Native
                         $"框架发生异常，错误窗口关闭后，框架将会退出：{ex.Message}",
                         ex.StackTrace ?? "",
                         canIgnore);
-                ServerManager.Server.WaitingMessage.Add(guid, new InvokeResult());
+                ServerManager.Server.WaitingMessage.AddOrUpdate(guid, new InvokeResult(), (key, oldValue) => new InvokeResult());
             }
             else
             {
