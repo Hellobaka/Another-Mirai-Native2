@@ -37,8 +37,11 @@ namespace Another_Mirai_Native.Abstractions
         }
 
         /// <summary>
-        /// 当没有任何指令匹配时调用。可在派生类中重写以实现自定义的回退逻辑。
+        /// 当没有任何指令匹配群聊消息时调用。可在派生类中重写以实现自定义的回退逻辑。
         /// </summary>
+        /// <param name="e">包含当前群聊消息事件信息的上下文。</param>
+        /// <param name="ct">可用于取消操作的取消令牌。</param>
+        /// <returns>事件的处理结果。默认返回 <see cref="EventHandleResult.Pass"/>。</returns>
         protected virtual Task<EventHandleResult> OnNoMatchAsync(GroupMessageContext e, CancellationToken ct)
         {
             return Task.FromResult(EventHandleResult.Pass);
@@ -139,7 +142,7 @@ namespace Another_Mirai_Native.Abstractions
                 }
             }
 
-            if (!TryBuildArgs(parameters, regexMatch, groupCtx, privateCtx, ct, out object[] args))
+            if (!TryBuildArgs(parameters, regexMatch, groupCtx, privateCtx, ct, messageText, out object[] args))
             {
                 return null;
             }
@@ -165,9 +168,10 @@ namespace Another_Mirai_Native.Abstractions
         /// <param name="groupCtx">群消息上下文；来自私聊时为 <see langword="null"/>。</param>
         /// <param name="privateCtx">私聊消息上下文；来自群聊时为 <see langword="null"/>。</param>
         /// <param name="ct">可用于取消操作的取消令牌。</param>
+        /// <param name="raw">指令的原始消息内容。</param>
         /// <param name="args">构造成功时输出可直接传入 <see cref="MethodBase.Invoke(object, object[])"/> 的参数数组；失败时输出空数组。</param>
         /// <returns>所有参数均成功填充时返回 <see langword="true"/>；否则返回 <see langword="false"/>。</returns>
-        private bool TryBuildArgs(ParameterInfo[] parameters, Match? regexMatch, GroupMessageContext? groupCtx, PrivateMessageContext? privateCtx, CancellationToken ct, out object[] args)
+        private bool TryBuildArgs(ParameterInfo[] parameters, Match? regexMatch, GroupMessageContext? groupCtx, PrivateMessageContext? privateCtx, CancellationToken ct, string raw, out object[] args)
         {
             args = new object[parameters.Length];
 
@@ -201,6 +205,11 @@ namespace Another_Mirai_Native.Abstractions
                 if (paramType == typeof(CancellationToken))
                 {
                     args[i] = ct;
+                    continue;
+                }
+                if (param.Name == "raw")
+                {
+                    args[i] = raw;
                     continue;
                 }
 
