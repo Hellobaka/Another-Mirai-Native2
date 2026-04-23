@@ -13,17 +13,17 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public void DisablePlugin()
         {
-            ClientManager.Client.InvokeCQPFuntcion("InvokeCore_DisablePlugin", true, AuthCode);
+            ClientManager.Client.InvokeCQPFunction("InvokeCore_DisablePlugin", true, AuthCode);
         }
 
         public async Task DisablePluginAsync()
         {
-            await ClientManager.Client.InvokeCQPFuntcionAsync("InvokeCore_DisablePlugin", true, AuthCode);
+            await ClientManager.Client.InvokeCQPFunctionAsync("InvokeCore_DisablePlugin", true, AuthCode);
         }
 
         public string GetAppDirectory()
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getAppDirectory", true, AuthCode);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getAppDirectory", true, AuthCode);
             if (ret is string dir)
             {
                 return dir;
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<string> GetAppDirectoryAsync()
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getAppDirectory", true, AuthCode);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_getAppDirectory", true, AuthCode);
             if (ret is string dir)
             {
                 return dir;
@@ -43,7 +43,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public long GetLoginQQ()
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getLoginQQ", true, AuthCode);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getLoginQQ", true, AuthCode);
             if (ret is long qq)
             {
                 return qq;
@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<long> GetLoginQQAsync()
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getLoginQQ", true, AuthCode);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_getLoginQQ", true, AuthCode);
             if (ret is long qq)
             {
                 return qq;
@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public string GetLoginQQNick()
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getLoginNick", true, AuthCode);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getLoginNick", true, AuthCode);
             if (ret is string dir)
             {
                 return dir;
@@ -73,7 +73,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<string> GetLoginQQNickAsync()
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getLoginNick", true, AuthCode);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_getLoginNick", true, AuthCode);
             if (ret is string dir)
             {
                 return dir;
@@ -83,12 +83,12 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public void ReloadPlugin()
         {
-            ClientManager.Client.InvokeCQPFuntcion("InvokeCore_Restart", true, AuthCode);
+            ClientManager.Client.InvokeCQPFunction("InvokeCore_Restart", true, AuthCode);
         }
 
         public async Task ReloadPluginAsync()
         {
-            await ClientManager.Client.InvokeCQPFuntcionAsync("InvokeCore_Restart", true, AuthCode);
+            await ClientManager.Client.InvokeCQPFunctionAsync("InvokeCore_Restart", true, AuthCode);
         }
     }
 }

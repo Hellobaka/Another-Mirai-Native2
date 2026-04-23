@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public bool DeleteMessage(long messageId)
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_deleteMsg", true, AuthCode, messageId);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_deleteMsg", true, AuthCode, messageId);
             if (ret is long r)
             {
                 return r == 1;
@@ -23,7 +23,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<bool> DeleteMessageAsync(long messageId)
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_deleteMsg", true, AuthCode, messageId);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_deleteMsg", true, AuthCode, messageId);
             if (ret is long r)
             {
                 return r == 1;
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public List<ChatHistory> GetChatHistories(long groupId, long qq, int count)
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getChatHistory", true, AuthCode, groupId, qq, count);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getChatHistory", true, AuthCode, groupId, qq, count);
             if (ret is string r)
             {
                 var l = Model.ChatHistory.RawToList(r);
@@ -60,7 +60,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<List<ChatHistory>> GetChatHistoriesAsync(long groupId, long qq, int count)
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getChatHistory", true, AuthCode, groupId, qq, count);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_getChatHistory", true, AuthCode, groupId, qq, count);
             if (ret is string r)
             {
                 var l = Model.ChatHistory.RawToList(r);
@@ -87,7 +87,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public ChatHistory? GetChatHistoryById(long parentId, bool isGroup, int messageId)
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_getChatHistoryById", true, AuthCode, parentId, isGroup, messageId);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getChatHistoryById", true, AuthCode, parentId, isGroup, messageId);
             if (ret is string r)
             {
                 var item = Model.ChatHistory.FromNative(r);
@@ -109,7 +109,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<ChatHistory?> GetChatHistoryByIdAsync(long parentId, bool isGroup, int messageId)
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_getChatHistoryById", true, AuthCode, parentId, isGroup, messageId);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_getChatHistoryById", true, AuthCode, parentId, isGroup, messageId);
             if (ret is string r)
             {
                 var item = Model.ChatHistory.FromNative(r);
@@ -131,7 +131,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public int SendGroupMessage(long groupId, string message)
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendGroupMsg", true, AuthCode, groupId, message);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_sendGroupMsg", true, AuthCode, groupId, message);
             if (ret is long r)
             {
                 return (int)r;
@@ -141,7 +141,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<int> SendGroupMessageAsync(long groupId, string message)
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_sendGroupMsg", true, AuthCode, groupId, message);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_sendGroupMsg", true, AuthCode, groupId, message);
             if (ret is long r)
             {
                 return (int)r;
@@ -151,7 +151,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public int SendPrivateMessage(long userId, string message)
         {
-            var ret = ClientManager.Client.InvokeCQPFuntcion("CQ_sendPrivateMsg", true, AuthCode, userId, message);
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_sendPrivateMsg", true, AuthCode, userId, message);
             if (ret is long r)
             {
                 return (int)r;
@@ -161,7 +161,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
 
         public async Task<int> SendPrivateMessageAsync(long userId, string message)
         {
-            var ret = await ClientManager.Client.InvokeCQPFuntcionAsync("CQ_sendPrivateMsg", true, AuthCode, userId, message);
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_sendPrivateMsg", true, AuthCode, userId, message);
             if (ret is long r)
             {
                 return (int)r;

@@ -524,7 +524,7 @@ namespace Another_Mirai_Native.Export
             if (stackFrames.Length > 1)
             {
                 string functionName = stackFrames[1].GetMethod().Name;
-                var r = ClientManager.Client.InvokeCQPFuntcion(functionName, true, args);
+                var r = ClientManager.Client.InvokeCQPFunction(functionName, true, args);
                 if (r != null)
                 {
                     return r;

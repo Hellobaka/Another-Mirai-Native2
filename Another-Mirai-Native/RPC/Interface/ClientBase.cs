@@ -98,7 +98,7 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public virtual void AddLog(LogModel model)
         {
-            InvokeCQPFuntcion("InvokeCore_AddLog", false, model);
+            InvokeCQPFunction("InvokeCore_AddLog", false, model);
         }
 
         public virtual void ClientStartUp()
@@ -120,7 +120,7 @@ namespace Another_Mirai_Native.RPC.Interface
             return false;
         }
 
-        public virtual object? InvokeCQPFuntcion(string function, bool waiting, params object[] args)
+        public virtual object? InvokeCQPFunction(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
             if (function.StartsWith("CQ_"))
@@ -159,7 +159,7 @@ namespace Another_Mirai_Native.RPC.Interface
             }
         }
 
-        public virtual async Task<object?> InvokeCQPFuntcionAsync(string function, bool waiting, params object[] args)
+        public virtual async Task<object?> InvokeCQPFunctionAsync(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
             if (function.StartsWith("CQ_"))
