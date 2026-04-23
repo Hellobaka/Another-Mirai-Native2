@@ -15,6 +15,7 @@ CQ码是指`酷Q`所定义的一种用纯文本表示非文本元素格式，以
 其中 `CQ:at` 为消息类别，后面的部分为消息内容（键值对形式）。各元素的具体格式请参考 [OneBot11 文档](https://github.com/botuniverse/onebot-11/blob/master/message/segment.md)。
 
 > 💡 **提示**：可以直接发送 CQ码字符串，框架会自动解析。在构造器中对应使用 `Text()` 方法：
+>
 > ```csharp
 > await e.SendMessageAsync("");
 > // 等价于
