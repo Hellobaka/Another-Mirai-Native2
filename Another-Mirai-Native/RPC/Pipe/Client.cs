@@ -89,7 +89,7 @@ namespace Another_Mirai_Native.RPC.Pipe
             bool r = false;
             lock (_lock)
             {
-                LogHelper.LocalDebug("Websocket_Close", "Connection Lost...");
+                LogHelper.LocalDebug("Pipe_Close", "Connection Lost...");
 
                 ReconnectCount++;
                 LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
