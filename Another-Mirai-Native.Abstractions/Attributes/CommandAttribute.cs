@@ -10,8 +10,9 @@ namespace Another_Mirai_Native.Abstractions.Attributes
     /// </summary>
     /// <param name="matchMode">指令的匹配模式。</param>
     /// <param name="template">用于匹配消息内容的模板字符串。</param>
+    /// <param name="scope">此指令响应的消息来源范围。默认为 <see cref="MessageScope.All"/>。</param>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class CommandAttribute(MatchMode matchMode, string template) : Attribute
+    public class CommandAttribute(MatchMode matchMode, string template, MessageScope scope = MessageScope.All) : Attribute
     {
         /// <summary>
         /// 指令的匹配模式。
@@ -27,6 +28,6 @@ namespace Another_Mirai_Native.Abstractions.Attributes
         /// <summary>
         /// 此指令响应的消息来源范围。默认为 <see cref="MessageScope.All"/>。
         /// </summary>
-        public MessageScope Scope { get; set; } = MessageScope.All;
+        public MessageScope Scope { get; set; } = scope;
     }
 }
