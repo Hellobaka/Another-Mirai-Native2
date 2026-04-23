@@ -16,8 +16,11 @@
 - name: 指令模式
   href: command-mode.md
 
-- name: 新增依赖与插件分发
+- name: 插件构建
   href: plugin-distribution.md
+
+- name: 插件调试
+  href: plugin-debugging.md
 
 - name: Vibe Coding
   href: vibe-coding.md
