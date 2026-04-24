@@ -93,7 +93,7 @@ namespace Another_Mirai_Native.Abstractions.Models
                         case MessageItemType.Bface:
                             if (int.TryParse(cqcode.Items["id"], out id))
                             {
-                                MessageChain.Add(new Face(id));
+                                MessageChain.Add(new BFace(id));
                             }
                             break;
 

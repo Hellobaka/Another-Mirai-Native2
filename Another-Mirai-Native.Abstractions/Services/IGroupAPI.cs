@@ -60,13 +60,13 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <summary>
         /// 获取当前登录账号已加入的群列表
         /// </summary>
-        /// <returns>获取成功则返回 <see cref="GroupMemberInfo"/> 数组</returns>
+        /// <returns>获取成功则返回 <see cref="GroupInfo"/> 数组</returns>
         List<GroupInfo> GetGroupList();
 
         /// <summary>
         /// 异步获取当前登录账号已加入的群列表
         /// </summary>
-        /// <returns>获取成功则返回 <see cref="GroupMemberInfo"/> 数组</returns>
+        /// <returns>获取成功则返回 <see cref="GroupInfo"/> 数组</returns>
         Task<List<GroupInfo>> GetGroupListAsync();
 
         /// <summary>

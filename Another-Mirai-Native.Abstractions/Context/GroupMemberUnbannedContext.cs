@@ -5,7 +5,7 @@ using System;
 namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 提供用于描述群群成员被解除禁言事件参数的类
+    /// 提供用于描述群成员被解除禁言事件参数的类
     /// </summary>
     public class GroupMemberUnbannedContext(IPluginApi api, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
     {
