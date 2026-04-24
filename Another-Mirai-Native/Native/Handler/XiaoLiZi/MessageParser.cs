@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Model;
 using System.Text;
 
 namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
@@ -19,11 +21,11 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                         string? value = "";
                         switch (cqcode.Function)
                         {
-                            case Model.Enums.CQCodeType.Face:
+                            case MessageItemType.Face:
                                 sb.Append($"[bq{cqcode.Items["id"]}]");
                                 break;
 
-                            case Model.Enums.CQCodeType.Image:
+                            case MessageItemType.Image:
                                 if (cqcode.Items.TryGetValue("id", out value))
                                 {
                                     sb.Append($"[pic,hash={value}]");
@@ -34,7 +36,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                                 }
                                 break;
 
-                            case Model.Enums.CQCodeType.Record:
+                            case MessageItemType.Record:
                                 if (cqcode.Items.TryGetValue("id", out value))
                                 {
                                     sb.Append($"[audio,hash={value}]");
@@ -45,15 +47,15 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                                 }
                                 break;
 
-                            case Model.Enums.CQCodeType.At:
+                            case MessageItemType.At:
                                 sb.Append($"[@{cqcode.Items["qq"]}]");
                                 break;
 
-                            case Model.Enums.CQCodeType.Reply:
+                            case MessageItemType.Reply:
                                 sb.Append($"[Reply,Req={cqcode.Items["id"]}]");
                                 break;
 
-                            case Model.Enums.CQCodeType.Shake:
+                            case MessageItemType.Shake:
                                 sb.Append($"[Shake]");
                                 break;
 

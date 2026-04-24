@@ -1,0 +1,26 @@
+- name: 快速开始
+  href: getting-started.md
+
+- name: 处理事件
+  href: event-handling.md
+
+- name: API 对象参考
+  href: api-reference.md
+
+- name: 发送消息
+  href: sending-messages.md
+
+- name: 新建窗口
+  href: create-window.md
+
+- name: 指令模式
+  href: command-mode.md
+
+- name: 插件构建
+  href: plugin-distribution.md
+
+- name: 插件调试
+  href: plugin-debugging.md
+
+- name: Vibe Coding
+  href: vibe-coding.md

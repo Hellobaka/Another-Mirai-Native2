@@ -1,0 +1,200 @@
+{{!Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license.}}
+{{!include(/^public/.*/)}}
+{{!include(favicon.ico)}}
+{{!include(logo.svg)}}
+<!DOCTYPE html>
+<html {{#_lang}}lang="{{_lang}}"{{/_lang}}>
+  <head>
+    <meta charset="utf-8">
+    {{#redirect_url}}
+      <meta http-equiv="refresh" content="0;URL='{{redirect_url}}'">
+    {{/redirect_url}}
+    {{^redirect_url}}
+      <title>{{#title}}{{title}}{{/title}}{{^title}}{{>partials/title}}{{/title}}{{#_appTitle}} | {{_appTitle}}{{/_appTitle}}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="{{#title}}{{title}}{{/title}}{{^title}}{{>partials/title}}{{/title}}{{#_appTitle}} | {{_appTitle}}{{/_appTitle}}">
+      {{#_description}}<meta name="description" content="{{_description}}">{{/_description}}
+      {{#description}}<meta name="description" content="{{description}}">{{/description}}
+      <link rel="icon" href="{{_rel}}{{{_appFaviconPath}}}{{^_appFaviconPath}}favicon.ico{{/_appFaviconPath}}">
+
+      {{! Material Design 3 Fonts }}
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100..700&display=swap" rel="stylesheet">
+      
+      {{! Material Web Components via CDN }}
+      <script type="importmap">
+        {
+          "imports": {
+            "@material/web/": "https://esm.run/@material/web/"
+          }
+        }
+      </script>
+
+      {{! Styles }}
+      <link rel="stylesheet" href="{{_rel}}public/docfx.min.css">
+      <link rel="stylesheet" href="{{_rel}}public/main.css">
+
+      {{! Meta tags for docfx }}
+      <meta name="docfx:navrel" content="{{_navRel}}">
+      <meta name="docfx:tocrel" content="{{_tocRel}}">
+      {{#_noindex}}<meta name="searchOption" content="noindex">{{/_noindex}}
+      {{#_enableSearch}}<meta name="docfx:rel" content="{{_rel}}">{{/_enableSearch}}
+      {{#_disableNewTab}}<meta name="docfx:disablenewtab" content="true">{{/_disableNewTab}}
+      {{#_disableTocFilter}}<meta name="docfx:disabletocfilter" content="true">{{/_disableTocFilter}}
+      {{#docurl}}<meta name="docfx:docurl" content="{{docurl}}">{{/docurl}}
+      <meta name="loc:inThisArticle" content="{{__global.inThisArticle}}">
+      <meta name="loc:searchResultsCount" content="{{__global.searchResultsCount}}">
+      <meta name="loc:searchNoResults" content="{{__global.searchNoResults}}">
+      <meta name="loc:tocFilter" content="{{__global.tocFilter}}">
+      <meta name="loc:nextArticle" content="{{__global.nextArticle}}">
+      <meta name="loc:prevArticle" content="{{__global.prevArticle}}">
+      <meta name="loc:themeLight" content="{{__global.themeLight}}">
+      <meta name="loc:themeDark" content="{{__global.themeDark}}">
+      <meta name="loc:themeAuto" content="{{__global.themeAuto}}">
+      <meta name="loc:changeTheme" content="{{__global.changeTheme}}">
+      <meta name="loc:copy" content="{{__global.copy}}">
+      <meta name="loc:downloadPdf" content="{{__global.downloadPdf}}">
+
+      <script type="module" src="./{{_rel}}public/docfx.min.js"></script>
+
+      {{! Theme initialization }}
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'auto') {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-applied-theme', prefersDark ? 'dark' : 'light');
+        } else {
+          document.documentElement.setAttribute('data-applied-theme', theme);
+        }
+      </script>
+
+      {{! Material Web Components initialization }}
+      <script type="module">
+        import '@material/web/all.js';
+        import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+        document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+      </script>
+
+      {{! Highlight.js for code syntax highlighting }}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/vs.min.css" media="(prefers-color-scheme: light)">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/vs2015.min.css" media="(prefers-color-scheme: dark)">
+      <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/csharp.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('pre code').forEach(block => {
+            hljs.highlightElement(block);
+          });
+        });
+      </script>
+
+      {{#_googleAnalyticsTagId}}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{_googleAnalyticsTagId}}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', '{{_googleAnalyticsTagId}}');
+      </script>
+      {{/_googleAnalyticsTagId}}
+    {{/redirect_url}}
+  </head>
+
+  {{^redirect_url}}
+  <body class="tex2jax_ignore" data-layout="{{_layout}}{{layout}}" data-yaml-mime="{{yamlmime}}">
+    {{! Top App Bar }}
+    <header class="md-top-app-bar">
+      {{^_disableNavbar}}
+      <div class="md-top-app-bar-content">
+        <div class="md-top-app-bar-start">
+          <md-icon-button id="nav-toggle" aria-label="Toggle navigation">
+            <span class="material-symbols-outlined">menu</span>
+          </md-icon-button>
+          <a class="md-brand" href="{{_appLogoUrl}}{{^_appLogoUrl}}{{_rel}}index.html{{/_appLogoUrl}}">
+            <img id="logo" class="md-brand-logo" src="{{_rel}}{{{_appLogoPath}}}{{^_appLogoPath}}logo.svg{{/_appLogoPath}}" alt="{{_appName}}">
+            {{#_appName}}<span class="md-brand-name">{{_appName}}</span>{{/_appName}}
+          </a>
+        </div>
+        <div class="md-top-app-bar-end">
+          <nav id="navbar" class="md-navbar-nav"></nav>
+          {{#_enableSearch}}
+          <form class="md-search" role="search" id="search">
+            <span class="material-symbols-outlined md-search-icon">search</span>
+            <input class="md-search-input" id="search-query" type="search" disabled placeholder="{{__global.search}}" autocomplete="off" aria-label="Search">
+          </form>
+          {{/_enableSearch}}
+          <div class="md-theme-switch">
+            <md-icon-button id="theme-toggle" aria-label="{{__global.changeTheme}}">
+              <span class="material-symbols-outlined theme-icon-light">light_mode</span>
+              <span class="material-symbols-outlined theme-icon-dark">dark_mode</span>
+              <span class="material-symbols-outlined theme-icon-auto">routine</span>
+            </md-icon-button>
+          </div>
+        </div>
+      </div>
+      {{/_disableNavbar}}
+    </header>
+
+    {{! Main Layout }}
+    <div class="md-layout">
+      <aside class="md-nav-drawer{{^_disableToc}} has-toc{{/_disableToc}}" id="nav-drawer">
+        <nav class="md-toc" id="toc"></nav>
+      </aside>
+
+      <main class="md-content{{^_disableToc}} has-drawer{{/_disableToc}}">
+        <div class="md-article-container">
+          {{^_disableBreadcrumb}}
+          <nav class="md-breadcrumb" id="breadcrumb"></nav>
+          {{/_disableBreadcrumb}}
+
+          <article data-uid="{{uid}}">
+            {{!body}}
+          </article>
+
+          {{^_disableContribution}}
+          <div class="md-contribution d-print-none">
+            {{#sourceurl}}
+            <a href="{{sourceurl}}" class="md-edit-link">
+              <span class="material-symbols-outlined">edit</span>
+              {{__global.improveThisDoc}}
+            </a>
+            {{/sourceurl}}
+            {{^sourceurl}}{{#docurl}}
+            <a href="{{docurl}}" class="md-edit-link">
+              <span class="material-symbols-outlined">edit</span>
+              {{__global.improveThisDoc}}
+            </a>
+            {{/docurl}}{{/sourceurl}}
+          </div>
+          {{/_disableContribution}}
+
+          {{^_disableNextArticle}}
+          <div class="md-next-article d-print-none" id="nextArticle"></div>
+          {{/_disableNextArticle}}
+        </div>
+
+        {{^_disableAffix}}
+        <aside class="md-affix">
+          <nav id="affix"></nav>
+        </aside>
+        {{/_disableAffix}}
+      </main>
+    </div>
+
+    {{#_enableSearch}}
+    <div class="md-search-results" id="search-results"></div>
+    {{/_enableSearch}}
+
+    {{! Footer }}
+    <footer class="md-footer">
+      <div class="md-footer-content">
+        {{{_appFooter}}}{{^_appFooter}}<span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>{{/_appFooter}}
+      </div>
+    </footer>
+  </body>
+  {{/redirect_url}}
+</html>

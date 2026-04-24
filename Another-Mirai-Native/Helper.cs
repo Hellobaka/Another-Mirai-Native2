@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using Another_Mirai_Native.Abstractions.Models;
 
 namespace Another_Mirai_Native
 {
@@ -168,7 +169,7 @@ namespace Another_Mirai_Native
 
         public static int ToTimeStamp(this DateTime? time) => (int)DateTime2TimeStamp(time ?? DateTime.Now);
 
-        public static string GetPicName(this CQCode cqimg)
+        internal static string GetPicName(this CQCode cqimg)
         {
             return cqimg.Items.TryGetValue("file", out var file) ? file : "";
         }
@@ -257,7 +258,7 @@ namespace Another_Mirai_Native
                         $"框架发生异常，错误窗口关闭后，框架将会退出：{ex.Message}",
                         ex.StackTrace ?? "",
                         canIgnore);
-                ServerManager.Server.WaitingMessage.Add(guid, new InvokeResult());
+                ServerManager.Server.WaitingMessage.AddOrUpdate(guid, new InvokeResult(), (key, oldValue) => new InvokeResult());
             }
             else
             {

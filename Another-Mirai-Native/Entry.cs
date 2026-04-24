@@ -77,20 +77,14 @@ namespace Another_Mirai_Native
                 if (!AppConfig.Instance.AutoConnect)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("[-]可用协议列表：");
-                    foreach(var item in ProtocolManager.Protocols)
+                    Console.WriteLine("[-] 可用协议列表：");
+                    foreach (var item in ProtocolManager.Protocols)
                     {
                         Console.WriteLine(item.Name);
                     }
-                    Console.WriteLine("[-]当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
-                    Console.WriteLine("[-]请输入 connect 以进行手动连接。");
-                    while (true)
-                    {
-                        if (Console.ReadLine()?.ToLower() == "connect")
-                        {
-                            break;
-                        }
-                    }
+                    Console.WriteLine("[-] 当前配置不会自动连接协议，修改请前往 conf/Config.json 配置文件中，修改 AutoConnect 配置为 true。");
+                    Console.WriteLine("[-] 请按回车以继续连接。");
+                    Console.ReadLine();
                 }
                 // 若配置无需UI则自动连接之后加载插件
                 if (!protocolManager.Start(AppConfig.Instance.AutoProtocol))
@@ -102,23 +96,13 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                int count = 0;
                 if (AppConfig.Instance.ShowTaskBar)
                 {
                     BuildTaskBar();
                 }
-                foreach (var item in PluginManagerProxy.Proxies)
-                {
-                    if (AppConfig.Instance.AutoEnablePlugin.Contains(item.PluginName))
-                    {
-                        if (item.Load() && PluginManagerProxy.Instance.SetPluginEnabled(item, true))
-                        {
-                            LogHelper.Info("加载插件", $"{item.PluginName} 启动完成");
-                            UpdateConsoleTitle($"Another-Mirai-Native2 加载了 {++count} 个插件");
-                        }
-                    }
-                }
-                LogHelper.Info("加载插件", $"插件启动完成，开始处理事件");
+
+                PluginManagerProxy.Instance.EnablePluginByConfig();
+                UpdateConsoleTitle($"Another-Mirai-Native2 加载了 {PluginManagerProxy.Proxies.Count(x => x.Enabled)} 个插件");
                 PluginManagerProxy.Instance.OnPluginLoaded();
             }
             else
@@ -150,7 +134,7 @@ namespace Another_Mirai_Native
                 {
                     return;
                 }
-                UpdateConsoleTitle($"[{ClientBase.PID}] [{PluginManager.LoadedPlugin.PluginName}]");
+                UpdateConsoleTitle($"[{ClientBase.PID}] [{PluginManager.Instance.LoadedPlugin.PluginName}]");
             }
             ChatHistoryHelper.Initialize();
             ServerStarted?.Invoke();

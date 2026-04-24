@@ -1,0 +1,1680 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IGroupApi
+  id: IGroupApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  children:
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(System.Int64,System.Int64,System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(System.Int64,System.Int64,System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(System.Int64,System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(System.Int64,System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(System.Int64,System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(System.Int64,System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(System.Int64)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(System.Int64,System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(System.Int64,System.Int64,System.Boolean)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(System.String,System.Boolean,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(System.String,System.Boolean,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(System.String,System.Boolean,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(System.String,System.Boolean,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(System.Int64,System.Int64,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(System.Int64,System.Int64,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(System.Int64,System.Int64,System.String)
+  - Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(System.Int64,System.Int64,System.String)
+  langs:
+  - csharp
+  - vb
+  name: IGroupApi
+  nameWithType: IGroupApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 提供用于管理群组操作的抽象，包括成员管理、群组信息检索以及在群组上下文中的管理操作。
+  example: []
+  syntax:
+    content: public interface IGroupApi
+    content.vb: Public Interface IGroupApi
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(System.Int64,System.Boolean)
+  id: BanGroup(System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: BanGroup(long, bool)
+  nameWithType: IGroupApi.BanGroup(long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 全群禁言/解除全群禁言；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: bool BanGroup(long groupId, bool enable)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: enable
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> 表示开启全群禁言；<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> 表示解除全群禁言
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function BanGroup(groupId As Long, enable As Boolean) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup*
+  nameWithType.vb: IGroupApi.BanGroup(Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup(Long, Boolean)
+  name.vb: BanGroup(Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(System.Int64,System.Boolean)
+  id: BanGroupAsync(System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: BanGroupAsync(long, bool)
+  nameWithType: IGroupApi.BanGroupAsync(long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步全群禁言/解除全群禁言；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: Task<bool> BanGroupAsync(long groupId, bool enable)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: enable
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> 表示开启全群禁言；<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> 表示解除全群禁言
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function BanGroupAsync(groupId As Long, enable As Boolean) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync*
+  nameWithType.vb: IGroupApi.BanGroupAsync(Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync(Long, Boolean)
+  name.vb: BanGroupAsync(Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(System.Int64,System.Int64,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(System.Int64,System.Int64,System.Int64)
+  id: BanMember(System.Int64,System.Int64,System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: BanMember(long, long, long)
+  nameWithType: IGroupApi.BanMember(long, long, long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(long, long, long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 禁言/解除禁言群成员；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: bool BanMember(long groupId, long qq, long duration)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的目标群成员
+    - id: duration
+      type: System.Int64
+      description: 禁言时长（秒）；当值为 <code>0</code> 时，表示解除此人的禁言
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function BanMember(groupId As Long, qq As Long, duration As Long) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember*
+  nameWithType.vb: IGroupApi.BanMember(Long, Long, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember(Long, Long, Long)
+  name.vb: BanMember(Long, Long, Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(System.Int64,System.Int64,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(System.Int64,System.Int64,System.Int64)
+  id: BanMemberAsync(System.Int64,System.Int64,System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: BanMemberAsync(long, long, long)
+  nameWithType: IGroupApi.BanMemberAsync(long, long, long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(long, long, long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步禁言/解除禁言群成员；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: Task<bool> BanMemberAsync(long groupId, long qq, long duration)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的目标群成员
+    - id: duration
+      type: System.Int64
+      description: 禁言时长（秒）；当值为 <code>0</code> 时，表示解除此人的禁言
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function BanMemberAsync(groupId As Long, qq As Long, duration As Long) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync*
+  nameWithType.vb: IGroupApi.BanMemberAsync(Long, Long, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync(Long, Long, Long)
+  name.vb: BanMemberAsync(Long, Long, Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(System.Int64)
+  id: GetGroupInfo(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupInfo(long)
+  nameWithType: IGroupApi.GetGroupInfo(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 通过群号获取群信息
+  example: []
+  syntax:
+    content: GroupInfo? GetGroupInfo(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 期望获取群消息的群号
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.GroupInfo
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupInfo" data-throw-if-not-resolved="false"></xref> 对象，否则会返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+    content.vb: Function GetGroupInfo(groupId As Long) As GroupInfo
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo*
+  nameWithType.vb: IGroupApi.GetGroupInfo(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo(Long)
+  name.vb: GetGroupInfo(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(System.Int64)
+  id: GetGroupInfoAsync(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupInfoAsync(long)
+  nameWithType: IGroupApi.GetGroupInfoAsync(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步通过群号获取群信息
+  example: []
+  syntax:
+    content: Task<GroupInfo?> GetGroupInfoAsync(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 期望获取群消息的群号
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupInfo" data-throw-if-not-resolved="false"></xref> 对象，否则会返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+    content.vb: Function GetGroupInfoAsync(groupId As Long) As Task(Of GroupInfo)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync*
+  nameWithType.vb: IGroupApi.GetGroupInfoAsync(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync(Long)
+  name.vb: GetGroupInfoAsync(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList
+  id: GetGroupList
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupList()
+  nameWithType: IGroupApi.GetGroupList()
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取当前登录账号已加入的群列表
+  example: []
+  syntax:
+    content: List<GroupInfo> GetGroupList()
+    return:
+      type: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 数组
+    content.vb: Function GetGroupList() As List(Of GroupInfo)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList*
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync
+  id: GetGroupListAsync
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupListAsync()
+  nameWithType: IGroupApi.GetGroupListAsync()
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取当前登录账号已加入的群列表
+  example: []
+  syntax:
+    content: Task<List<GroupInfo>> GetGroupListAsync()
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 数组
+    content.vb: Function GetGroupListAsync() As Task(Of List(Of GroupInfo))
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync*
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(System.Int64,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(System.Int64,System.Int64)
+  id: GetGroupMemberInfo(System.Int64,System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupMemberInfo(long, long)
+  nameWithType: IGroupApi.GetGroupMemberInfo(long, long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(long, long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取群成员信息
+  example: []
+  syntax:
+    content: GroupMemberInfo? GetGroupMemberInfo(long groupId, long qq)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 目标成员所在群
+    - id: qq
+      type: System.Int64
+      description: 目标成员QQ
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 信息对象，否则会返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+    content.vb: Function GetGroupMemberInfo(groupId As Long, qq As Long) As GroupMemberInfo
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo*
+  nameWithType.vb: IGroupApi.GetGroupMemberInfo(Long, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo(Long, Long)
+  name.vb: GetGroupMemberInfo(Long, Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(System.Int64,System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(System.Int64,System.Int64)
+  id: GetGroupMemberInfoAsync(System.Int64,System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupMemberInfoAsync(long, long)
+  nameWithType: IGroupApi.GetGroupMemberInfoAsync(long, long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(long, long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取群成员信息
+  example: []
+  syntax:
+    content: Task<GroupMemberInfo?> GetGroupMemberInfoAsync(long groupId, long qq)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 目标成员所在群
+    - id: qq
+      type: System.Int64
+      description: 目标成员QQ
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 信息对象，否则会返回 <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>
+    content.vb: Function GetGroupMemberInfoAsync(groupId As Long, qq As Long) As Task(Of GroupMemberInfo)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync*
+  nameWithType.vb: IGroupApi.GetGroupMemberInfoAsync(Long, Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync(Long, Long)
+  name.vb: GetGroupMemberInfoAsync(Long, Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(System.Int64)
+  id: GetGroupMembers(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupMembers(long)
+  nameWithType: IGroupApi.GetGroupMembers(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 获取某个群的成员列表，成员较多时会耗时较长
+  example: []
+  syntax:
+    content: List<GroupMemberInfo> GetGroupMembers(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 查询群的群号
+    return:
+      type: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 数组
+    content.vb: Function GetGroupMembers(groupId As Long) As List(Of GroupMemberInfo)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers*
+  nameWithType.vb: IGroupApi.GetGroupMembers(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers(Long)
+  name.vb: GetGroupMembers(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(System.Int64)
+  id: GetGroupMembersAsync(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: GetGroupMembersAsync(long)
+  nameWithType: IGroupApi.GetGroupMembersAsync(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步获取某个群的成员列表，成员较多时会耗时较长
+  example: []
+  syntax:
+    content: Task<List<GroupMemberInfo>> GetGroupMembersAsync(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 查询群的群号
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}}
+      description: 获取成功则返回 <xref href="Another_Mirai_Native.Abstractions.Models.GroupMemberInfo" data-throw-if-not-resolved="false"></xref> 数组
+    content.vb: Function GetGroupMembersAsync(groupId As Long) As Task(Of List(Of GroupMemberInfo))
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync*
+  nameWithType.vb: IGroupApi.GetGroupMembersAsync(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync(Long)
+  name.vb: GetGroupMembersAsync(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(System.Int64,System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(System.Int64,System.Int64,System.Boolean)
+  id: Kick(System.Int64,System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: Kick(long, long, bool)
+  nameWithType: IGroupApi.Kick(long, long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(long, long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 将群成员从某个群移除；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: bool Kick(long groupId, long qq, bool rejectAddRequest = false)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: rejectAddRequest
+      type: System.Boolean
+      description: 拒绝后续入群
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function Kick(groupId As Long, qq As Long, rejectAddRequest As Boolean = False) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick*
+  nameWithType.vb: IGroupApi.Kick(Long, Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick(Long, Long, Boolean)
+  name.vb: Kick(Long, Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(System.Int64,System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(System.Int64,System.Int64,System.Boolean)
+  id: KickAsync(System.Int64,System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: KickAsync(long, long, bool)
+  nameWithType: IGroupApi.KickAsync(long, long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(long, long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步将群成员从某个群移除；要求当前账号必须是群主或管理员，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: Task<bool> KickAsync(long groupId, long qq, bool rejectAddRequest = false)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: rejectAddRequest
+      type: System.Boolean
+      description: 拒绝后续入群
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function KickAsync(groupId As Long, qq As Long, rejectAddRequest As Boolean = False) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync*
+  nameWithType.vb: IGroupApi.KickAsync(Long, Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync(Long, Long, Boolean)
+  name.vb: KickAsync(Long, Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(System.Int64)
+  id: Leave(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: Leave(long)
+  nameWithType: IGroupApi.Leave(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 使当前账号退出某个群；当账号为群主时，此操作将解散群；
+  example: []
+  syntax:
+    content: bool Leave(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 将要离开的群号
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function Leave(groupId As Long) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave*
+  nameWithType.vb: IGroupApi.Leave(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave(Long)
+  name.vb: Leave(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(System.Int64)
+  id: LeaveAsync(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: LeaveAsync(long)
+  nameWithType: IGroupApi.LeaveAsync(long)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步使当前账号退出某个群；当账号为群主时，此操作将解散群；
+  example: []
+  syntax:
+    content: Task<bool> LeaveAsync(long groupId)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 将要离开的群号
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function LeaveAsync(groupId As Long) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync*
+  nameWithType.vb: IGroupApi.LeaveAsync(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync(Long)
+  name.vb: LeaveAsync(Long)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(System.Int64,System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(System.Int64,System.Int64,System.Boolean)
+  id: SetAdmin(System.Int64,System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetAdmin(long, long, bool)
+  nameWithType: IGroupApi.SetAdmin(long, long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(long, long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 将群成员设置为管理员或取消管理员；要求当前账号必须是群主，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: bool SetAdmin(long groupId, long qq, bool isAdmin)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: isAdmin
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> 表示设置为管理员；<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> 表示解除管理员
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function SetAdmin(groupId As Long, qq As Long, isAdmin As Boolean) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin*
+  nameWithType.vb: IGroupApi.SetAdmin(Long, Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin(Long, Long, Boolean)
+  name.vb: SetAdmin(Long, Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(System.Int64,System.Int64,System.Boolean)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(System.Int64,System.Int64,System.Boolean)
+  id: SetAdminAsync(System.Int64,System.Int64,System.Boolean)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetAdminAsync(long, long, bool)
+  nameWithType: IGroupApi.SetAdminAsync(long, long, bool)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(long, long, bool)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步将群成员设置为管理员或取消管理员；要求当前账号必须是群主，且不能对群主或自己进行此操作
+  example: []
+  syntax:
+    content: Task<bool> SetAdminAsync(long groupId, long qq, bool isAdmin)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: isAdmin
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> 表示设置为管理员；<a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> 表示解除管理员
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function SetAdminAsync(groupId As Long, qq As Long, isAdmin As Boolean) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync*
+  nameWithType.vb: IGroupApi.SetAdminAsync(Long, Long, Boolean)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync(Long, Long, Boolean)
+  name.vb: SetAdminAsync(Long, Long, Boolean)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(System.Int64,System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(System.Int64,System.Int64,System.String)
+  id: SetMemberCard(System.Int64,System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetMemberCard(long, long, string)
+  nameWithType: IGroupApi.SetMemberCard(long, long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(long, long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 设置某个群成员显示的名片；要求当前账号必须是群主或管理员
+  example: []
+  syntax:
+    content: bool SetMemberCard(long groupId, long qq, string card)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: card
+      type: System.String
+      description: 将要设置的名片，不可为空
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function SetMemberCard(groupId As Long, qq As Long, card As String) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard*
+  nameWithType.vb: IGroupApi.SetMemberCard(Long, Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard(Long, Long, String)
+  name.vb: SetMemberCard(Long, Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(System.Int64,System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(System.Int64,System.Int64,System.String)
+  id: SetMemberCardAsync(System.Int64,System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetMemberCardAsync(long, long, string)
+  nameWithType: IGroupApi.SetMemberCardAsync(long, long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(long, long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步设置某个群成员显示的名片；要求当前账号必须是群主或管理员
+  example: []
+  syntax:
+    content: Task<bool> SetMemberCardAsync(long groupId, long qq, string card)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: card
+      type: System.String
+      description: 将要设置的名片，不可为空
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function SetMemberCardAsync(groupId As Long, qq As Long, card As String) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync*
+  nameWithType.vb: IGroupApi.SetMemberCardAsync(Long, Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync(Long, Long, String)
+  name.vb: SetMemberCardAsync(Long, Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(System.Int64,System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(System.Int64,System.Int64,System.String)
+  id: SetMemberTitle(System.Int64,System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetMemberTitle(long, long, string)
+  nameWithType: IGroupApi.SetMemberTitle(long, long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(long, long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 设置某个群成员显示的头衔；要求当前账号必须是群主
+  example: []
+  syntax:
+    content: bool SetMemberTitle(long groupId, long qq, string title)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: title
+      type: System.String
+      description: 将要设置的头衔，不可为空
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function SetMemberTitle(groupId As Long, qq As Long, title As String) As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle*
+  nameWithType.vb: IGroupApi.SetMemberTitle(Long, Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle(Long, Long, String)
+  name.vb: SetMemberTitle(Long, Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(System.Int64,System.Int64,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(System.Int64,System.Int64,System.String)
+  id: SetMemberTitleAsync(System.Int64,System.Int64,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetMemberTitleAsync(long, long, string)
+  nameWithType: IGroupApi.SetMemberTitleAsync(long, long, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(long, long, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步设置某个群成员显示的头衔；要求当前账号必须是群主
+  example: []
+  syntax:
+    content: Task<bool> SetMemberTitleAsync(long groupId, long qq, string title)
+    parameters:
+    - id: groupId
+      type: System.Int64
+      description: 操作的群号
+    - id: qq
+      type: System.Int64
+      description: 操作的群成员QQ
+    - id: title
+      type: System.String
+      description: 将要设置的头衔，不可为空
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function SetMemberTitleAsync(groupId As Long, qq As Long, title As String) As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync*
+  nameWithType.vb: IGroupApi.SetMemberTitleAsync(Long, Long, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync(Long, Long, String)
+  name.vb: SetMemberTitleAsync(Long, Long, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(System.String,System.Boolean,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(System.String,System.Boolean,System.String)
+  id: SetGroupAddRequest(System.String,System.Boolean,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetGroupAddRequest(string, bool, string)
+  nameWithType: IGroupApi.SetGroupAddRequest(string, bool, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(string, bool, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 处理群添加请求
+  example: []
+  syntax:
+    content: bool SetGroupAddRequest(string flag, bool accept, string refuseReason = "")
+    parameters:
+    - id: flag
+      type: System.String
+      description: 框架内部标记添加请求的标志
+    - id: accept
+      type: System.Boolean
+      description: 是否接受
+    - id: refuseReason
+      type: System.String
+      description: 若不接受时传递的拒绝理由
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function SetGroupAddRequest(flag As String, accept As Boolean, refuseReason As String = "") As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest*
+  nameWithType.vb: IGroupApi.SetGroupAddRequest(String, Boolean, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest(String, Boolean, String)
+  name.vb: SetGroupAddRequest(String, Boolean, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(System.String,System.Boolean,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(System.String,System.Boolean,System.String)
+  id: SetGroupAddRequestAsync(System.String,System.Boolean,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetGroupAddRequestAsync(string, bool, string)
+  nameWithType: IGroupApi.SetGroupAddRequestAsync(string, bool, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(string, bool, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步处理群添加请求
+  example: []
+  syntax:
+    content: Task<bool> SetGroupAddRequestAsync(string flag, bool accept, string refuseReason = "")
+    parameters:
+    - id: flag
+      type: System.String
+      description: 框架内部标记添加请求的标志
+    - id: accept
+      type: System.Boolean
+      description: 是否接受
+    - id: refuseReason
+      type: System.String
+      description: 若不接受时传递的拒绝理由
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function SetGroupAddRequestAsync(flag As String, accept As Boolean, refuseReason As String = "") As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync*
+  nameWithType.vb: IGroupApi.SetGroupAddRequestAsync(String, Boolean, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync(String, Boolean, String)
+  name.vb: SetGroupAddRequestAsync(String, Boolean, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(System.String,System.Boolean,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(System.String,System.Boolean,System.String)
+  id: SetGroupInviteRequest(System.String,System.Boolean,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetGroupInviteRequest(string, bool, string)
+  nameWithType: IGroupApi.SetGroupInviteRequest(string, bool, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(string, bool, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 处理受群邀请请求
+  example: []
+  syntax:
+    content: bool SetGroupInviteRequest(string flag, bool accept, string refuseReason = "")
+    parameters:
+    - id: flag
+      type: System.String
+      description: 框架内部标记添加请求的标志
+    - id: accept
+      type: System.Boolean
+      description: 是否接受
+    - id: refuseReason
+      type: System.String
+      description: 若不接受时传递的拒绝理由
+    return:
+      type: System.Boolean
+      description: 操作是否成功
+    content.vb: Function SetGroupInviteRequest(flag As String, accept As Boolean, refuseReason As String = "") As Boolean
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest*
+  nameWithType.vb: IGroupApi.SetGroupInviteRequest(String, Boolean, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest(String, Boolean, String)
+  name.vb: SetGroupInviteRequest(String, Boolean, String)
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(System.String,System.Boolean,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(System.String,System.Boolean,System.String)
+  id: SetGroupInviteRequestAsync(System.String,System.Boolean,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.IGroupApi
+  langs:
+  - csharp
+  - vb
+  name: SetGroupInviteRequestAsync(string, bool, string)
+  nameWithType: IGroupApi.SetGroupInviteRequestAsync(string, bool, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(string, bool, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IGroupAPI.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 异步处理受群邀请请求
+  example: []
+  syntax:
+    content: Task<bool> SetGroupInviteRequestAsync(string flag, bool accept, string refuseReason = "")
+    parameters:
+    - id: flag
+      type: System.String
+      description: 框架内部标记添加请求的标志
+    - id: accept
+      type: System.Boolean
+      description: 是否接受
+    - id: refuseReason
+      type: System.String
+      description: 若不接受时传递的拒绝理由
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: 操作是否成功
+    content.vb: Function SetGroupInviteRequestAsync(flag As String, accept As Boolean, refuseReason As String = "") As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync*
+  nameWithType.vb: IGroupApi.SetGroupInviteRequestAsync(String, Boolean, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync(String, Boolean, String)
+  name.vb: SetGroupInviteRequestAsync(String, Boolean, String)
+references:
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_BanGroup_System_Int64_System_Boolean_
+  name: BanGroup
+  nameWithType: IGroupApi.BanGroup
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroup
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_BanGroupAsync_System_Int64_System_Boolean_
+  name: BanGroupAsync
+  nameWithType: IGroupApi.BanGroupAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanGroupAsync
+- uid: System.Threading.Tasks.Task{System.Boolean}
+  commentId: T:System.Threading.Tasks.Task{System.Boolean}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<bool>
+  nameWithType: Task<bool>
+  fullName: System.Threading.Tasks.Task<bool>
+  nameWithType.vb: Task(Of Boolean)
+  fullName.vb: System.Threading.Tasks.Task(Of Boolean)
+  name.vb: Task(Of Boolean)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_BanMember_System_Int64_System_Int64_System_Int64_
+  name: BanMember
+  nameWithType: IGroupApi.BanMember
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMember
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_BanMemberAsync_System_Int64_System_Int64_System_Int64_
+  name: BanMemberAsync
+  nameWithType: IGroupApi.BanMemberAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.BanMemberAsync
+- uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  name: GroupInfo
+  nameWithType: GroupInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupInfo_System_Int64_
+  name: GetGroupInfo
+  nameWithType: IGroupApi.GetGroupInfo
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfo
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupInfoAsync_System_Int64_
+  name: GetGroupInfoAsync
+  nameWithType: IGroupApi.GetGroupInfoAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupInfoAsync
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GroupInfo>
+  nameWithType: Task<GroupInfo>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Models.GroupInfo>
+  nameWithType.vb: Task(Of GroupInfo)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Models.GroupInfo)
+  name.vb: Task(Of GroupInfo)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  name: GroupMemberInfo
+  nameWithType: GroupMemberInfo
+  fullName: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupList
+  name: GetGroupList
+  nameWithType: IGroupApi.GetGroupList
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupList
+- uid: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+  commentId: T:System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<GroupInfo>
+  nameWithType: List<GroupInfo>
+  fullName: System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.GroupInfo>
+  nameWithType.vb: List(Of GroupInfo)
+  fullName.vb: System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.GroupInfo)
+  name.vb: List(Of GroupInfo)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupListAsync
+  name: GetGroupListAsync
+  nameWithType: IGroupApi.GetGroupListAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupListAsync
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupInfo}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<List<GroupInfo>>
+  nameWithType: Task<List<GroupInfo>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.GroupInfo>>
+  nameWithType.vb: Task(Of List(Of GroupInfo))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.GroupInfo))
+  name.vb: Task(Of List(Of GroupInfo))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupInfo.html
+  - name: )
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupMemberInfo_System_Int64_System_Int64_
+  name: GetGroupMemberInfo
+  nameWithType: IGroupApi.GetGroupMemberInfo
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfo
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupMemberInfoAsync_System_Int64_System_Int64_
+  name: GetGroupMemberInfoAsync
+  nameWithType: IGroupApi.GetGroupMemberInfoAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMemberInfoAsync
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GroupMemberInfo>
+  nameWithType: Task<GroupMemberInfo>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Models.GroupMemberInfo>
+  nameWithType.vb: Task(Of GroupMemberInfo)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Models.GroupMemberInfo)
+  name.vb: Task(Of GroupMemberInfo)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupMembers_System_Int64_
+  name: GetGroupMembers
+  nameWithType: IGroupApi.GetGroupMembers
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembers
+- uid: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+  commentId: T:System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<GroupMemberInfo>
+  nameWithType: List<GroupMemberInfo>
+  fullName: System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.GroupMemberInfo>
+  nameWithType.vb: List(Of GroupMemberInfo)
+  fullName.vb: System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.GroupMemberInfo)
+  name.vb: List(Of GroupMemberInfo)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_GetGroupMembersAsync_System_Int64_
+  name: GetGroupMembersAsync
+  nameWithType: IGroupApi.GetGroupMembersAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.GetGroupMembersAsync
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.GroupMemberInfo}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<List<GroupMemberInfo>>
+  nameWithType: Task<List<GroupMemberInfo>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.GroupMemberInfo>>
+  nameWithType.vb: Task(Of List(Of GroupMemberInfo))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.GroupMemberInfo))
+  name.vb: Task(Of List(Of GroupMemberInfo))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo.html
+  - name: )
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_Kick_System_Int64_System_Int64_System_Boolean_
+  name: Kick
+  nameWithType: IGroupApi.Kick
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Kick
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_KickAsync_System_Int64_System_Int64_System_Boolean_
+  name: KickAsync
+  nameWithType: IGroupApi.KickAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.KickAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_Leave_System_Int64_
+  name: Leave
+  nameWithType: IGroupApi.Leave
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.Leave
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_LeaveAsync_System_Int64_
+  name: LeaveAsync
+  nameWithType: IGroupApi.LeaveAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.LeaveAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetAdmin_System_Int64_System_Int64_System_Boolean_
+  name: SetAdmin
+  nameWithType: IGroupApi.SetAdmin
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdmin
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetAdminAsync_System_Int64_System_Int64_System_Boolean_
+  name: SetAdminAsync
+  nameWithType: IGroupApi.SetAdminAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetAdminAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetMemberCard_System_Int64_System_Int64_System_String_
+  name: SetMemberCard
+  nameWithType: IGroupApi.SetMemberCard
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCard
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetMemberCardAsync_System_Int64_System_Int64_System_String_
+  name: SetMemberCardAsync
+  nameWithType: IGroupApi.SetMemberCardAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberCardAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetMemberTitle_System_Int64_System_Int64_System_String_
+  name: SetMemberTitle
+  nameWithType: IGroupApi.SetMemberTitle
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitle
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetMemberTitleAsync_System_Int64_System_Int64_System_String_
+  name: SetMemberTitleAsync
+  nameWithType: IGroupApi.SetMemberTitleAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetMemberTitleAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetGroupAddRequest_System_String_System_Boolean_System_String_
+  name: SetGroupAddRequest
+  nameWithType: IGroupApi.SetGroupAddRequest
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequest
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetGroupAddRequestAsync_System_String_System_Boolean_System_String_
+  name: SetGroupAddRequestAsync
+  nameWithType: IGroupApi.SetGroupAddRequestAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupAddRequestAsync
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetGroupInviteRequest_System_String_System_Boolean_System_String_
+  name: SetGroupInviteRequest
+  nameWithType: IGroupApi.SetGroupInviteRequest
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequest
+- uid: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IGroupApi.html#Another_Mirai_Native_Abstractions_Services_IGroupApi_SetGroupInviteRequestAsync_System_String_System_Boolean_System_String_
+  name: SetGroupInviteRequestAsync
+  nameWithType: IGroupApi.SetGroupInviteRequestAsync
+  fullName: Another_Mirai_Native.Abstractions.Services.IGroupApi.SetGroupInviteRequestAsync

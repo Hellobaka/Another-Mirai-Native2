@@ -1,0 +1,893 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  id: MessageBuilder
+  parent: Another_Mirai_Native.Abstractions.Models
+  children:
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.At(System.Int64)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face(Another_Mirai_Native.Abstractions.Enums.CQFace)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image(System.String)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash(System.String)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record(System.String)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash(System.String)
+  - Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text(System.String)
+  langs:
+  - csharp
+  - vb
+  name: MessageBuilder
+  nameWithType: MessageBuilder
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 用于构建 CQ 消息内容的构建器。
+  example: []
+  syntax:
+    content: public class MessageBuilder
+    content.vb: Public Class MessageBuilder
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build
+  id: Build
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Build()
+  nameWithType: MessageBuilder.Build()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 构建最终消息字符串。
+  example: []
+  syntax:
+    content: public string Build()
+    return:
+      type: System.String
+      description: 拼接后的消息文本。
+    content.vb: Public Function Build() As String
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build*
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text(System.String)
+  id: Text(System.String)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Text(string)
+  nameWithType: MessageBuilder.Text(string)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加文本消息片段。
+  example: []
+  syntax:
+    content: public MessageBuilder Text(string text)
+    parameters:
+    - id: text
+      type: System.String
+      description: 文本内容。
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function Text(text As String) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text*
+  nameWithType.vb: MessageBuilder.Text(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text(String)
+  name.vb: Text(String)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image(System.String)
+  id: Image(System.String)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Image(string)
+  nameWithType: MessageBuilder.Image(string)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加图片消息片段（本地路径）。
+  example: []
+  syntax:
+    content: public MessageBuilder Image(string filePath)
+    parameters:
+    - id: filePath
+      type: System.String
+      description: 图片路径，绝对路径或相对于 data\image 路径
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function Image(filePath As String) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image*
+  nameWithType.vb: MessageBuilder.Image(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image(String)
+  name.vb: Image(String)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash(System.String)
+  id: ImageHash(System.String)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: ImageHash(string)
+  nameWithType: MessageBuilder.ImageHash(string)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加图片消息片段（图片哈希）。
+  example: []
+  syntax:
+    content: public MessageBuilder ImageHash(string hash)
+    parameters:
+    - id: hash
+      type: System.String
+      description: 图片哈希值。
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function ImageHash(hash As String) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash*
+  nameWithType.vb: MessageBuilder.ImageHash(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash(String)
+  name.vb: ImageHash(String)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record(System.String)
+  id: Record(System.String)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Record(string)
+  nameWithType: MessageBuilder.Record(string)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加语音消息片段（本地路径）。
+  example: []
+  syntax:
+    content: public MessageBuilder Record(string filePath)
+    parameters:
+    - id: filePath
+      type: System.String
+      description: 语音文件路径，绝对路径或相对于 data\record 路径
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function Record(filePath As String) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record*
+  nameWithType.vb: MessageBuilder.Record(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record(String)
+  name.vb: Record(String)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash(System.String)
+  id: RecordHash(System.String)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: RecordHash(string)
+  nameWithType: MessageBuilder.RecordHash(string)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加语音消息片段（语音哈希）。
+  example: []
+  syntax:
+    content: public MessageBuilder RecordHash(string hash)
+    parameters:
+    - id: hash
+      type: System.String
+      description: 语音哈希值。
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function RecordHash(hash As String) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash*
+  nameWithType.vb: MessageBuilder.RecordHash(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash(String)
+  name.vb: RecordHash(String)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At(System.Int64)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.At(System.Int64)
+  id: At(System.Int64)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: At(long)
+  nameWithType: MessageBuilder.At(long)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At(long)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加 @某人 消息片段。
+  example: []
+  syntax:
+    content: public MessageBuilder At(long qq)
+    parameters:
+    - id: qq
+      type: System.Int64
+      description: 目标 QQ。
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function At(qq As Long) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At*
+  nameWithType.vb: MessageBuilder.At(Long)
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At(Long)
+  name.vb: At(Long)
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll
+  id: AtAll
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: AtAll()
+  nameWithType: MessageBuilder.AtAll()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加 @全体成员 消息片段。
+  example: []
+  syntax:
+    content: public MessageBuilder AtAll()
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function AtAll() As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll*
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face(Another_Mirai_Native.Abstractions.Enums.CQFace)
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face(Another_Mirai_Native.Abstractions.Enums.CQFace)
+  id: Face(Another_Mirai_Native.Abstractions.Enums.CQFace)
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Face(CQFace)
+  nameWithType: MessageBuilder.Face(CQFace)
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face(Another_Mirai_Native.Abstractions.Enums.CQFace)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 添加表情消息片段。
+  example: []
+  syntax:
+    content: public MessageBuilder Face(CQFace face)
+    parameters:
+    - id: face
+      type: Another_Mirai_Native.Abstractions.Enums.CQFace
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+      description: 当前构建器实例。
+    content.vb: Public Function Face(face As CQFace) As MessageBuilder
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face*
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor
+  id: '#ctor'
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: MessageBuilder()
+  nameWithType: MessageBuilder.MessageBuilder()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.MessageBuilder()
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  syntax:
+    content: public MessageBuilder()
+    content.vb: Public Sub New()
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor*
+  nameWithType.vb: MessageBuilder.New()
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.New()
+  name.vb: New()
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+  commentId: P:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+  id: Items
+  parent: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  langs:
+  - csharp
+  - vb
+  name: Items
+  nameWithType: MessageBuilder.Items
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageBuilder.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models
+  summary: 当前构建中的消息片段集合。
+  example: []
+  syntax:
+    content: public List<MessageItemBase> Items { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+    content.vb: Public Property Items As List(Of MessageItemBase)
+  overload: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items*
+references:
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Build
+  name: Build
+  nameWithType: MessageBuilder.Build
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Build
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Text_System_String_
+  name: Text
+  nameWithType: MessageBuilder.Text
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Text
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageBuilder
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html
+  name: MessageBuilder
+  nameWithType: MessageBuilder
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Image_System_String_
+  name: Image
+  nameWithType: MessageBuilder.Image
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Image
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_ImageHash_System_String_
+  name: ImageHash
+  nameWithType: MessageBuilder.ImageHash
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.ImageHash
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Record_System_String_
+  name: Record
+  nameWithType: MessageBuilder.Record
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Record
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_RecordHash_System_String_
+  name: RecordHash
+  nameWithType: MessageBuilder.RecordHash
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.RecordHash
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.At
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_At_System_Int64_
+  name: At
+  nameWithType: MessageBuilder.At
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.At
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_AtAll
+  name: AtAll
+  nameWithType: MessageBuilder.AtAll
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.AtAll
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Face_Another_Mirai_Native_Abstractions_Enums_CQFace_
+  name: Face
+  nameWithType: MessageBuilder.Face
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Face
+- uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.CQFace
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.CQFace.html
+  name: CQFace
+  nameWithType: CQFace
+  fullName: Another_Mirai_Native.Abstractions.Enums.CQFace
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder__ctor
+  name: MessageBuilder
+  nameWithType: MessageBuilder.MessageBuilder
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.MessageBuilder
+  nameWithType.vb: MessageBuilder.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageBuilder.New
+  name.vb: New
+- uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageBuilder.html#Another_Mirai_Native_Abstractions_Models_MessageBuilder_Items
+  name: Items
+  nameWithType: MessageBuilder.Items
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder.Items
+- uid: System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+  commentId: T:System.Collections.Generic.List{Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<MessageItemBase>
+  nameWithType: List<MessageItemBase>
+  fullName: System.Collections.Generic.List<Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase>
+  nameWithType.vb: List(Of MessageItemBase)
+  fullName.vb: System.Collections.Generic.List(Of Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase)
+  name.vb: List(Of MessageItemBase)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.Model;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.UI.Models;
 using System;

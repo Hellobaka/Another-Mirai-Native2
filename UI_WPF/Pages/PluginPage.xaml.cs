@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using Another_Mirai_Native.UI.Controls;
+using Another_Mirai_Native.Abstractions.Enums;
 
 namespace Another_Mirai_Native.UI.Pages
 {

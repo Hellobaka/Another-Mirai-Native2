@@ -1,0 +1,296 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  id: IGroupMemberBannedHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  children:
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IGroupMemberBannedHandler
+  nameWithType: IGroupMemberBannedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 为处理群成员被禁言事件的处理器。
+  example: []
+  syntax:
+    content: public interface IGroupMemberBannedHandler
+    content.vb: Public Interface IGroupMemberBannedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext,System.Threading.CancellationToken)
+  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext,System.Threading.CancellationToken)
+  id: OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext,System.Threading.CancellationToken)
+  parent: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  langs:
+  - csharp
+  - vb
+  name: OnGroupMemberBannedAsync(GroupMemberBannedContext, CancellationToken)
+  nameWithType: IGroupMemberBannedHandler.OnGroupMemberBannedAsync(GroupMemberBannedContext, CancellationToken)
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext, System.Threading.CancellationToken)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/GroupMemberBannedHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 在群成员被禁言时异步执行操作。
+  example: []
+  syntax:
+    content: Task<EventHandleResult> OnGroupMemberBannedAsync(GroupMemberBannedContext e, CancellationToken ct)
+    parameters:
+    - id: e
+      type: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+      description: 包含群成员被禁言事件相关信息的事件参数对象。
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: 可用于发出退出操作取消信号的取消令牌。
+    return:
+      type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+      description: 事件的处理结果；<xref href="Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass" data-throw-if-not-resolved="false"></xref> 不阻塞事件的继续传递；<xref href="Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block" data-throw-if-not-resolved="false"></xref> 将会阻塞事件的继续传递；
+    content.vb: Function OnGroupMemberBannedAsync(e As GroupMemberBannedContext, ct As CancellationToken) As Task(Of EventHandleResult)
+  overload: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync*
+references:
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html#Another_Mirai_Native_Abstractions_Enums_EventHandleResult_Pass
+  name: Pass
+  nameWithType: EventHandleResult.Pass
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html#Another_Mirai_Native_Abstractions_Enums_EventHandleResult_Block
+  name: Block
+  nameWithType: EventHandleResult.Block
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.html#Another_Mirai_Native_Abstractions_Handlers_IGroupMemberBannedHandler_OnGroupMemberBannedAsync_Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_System_Threading_CancellationToken_
+  name: OnGroupMemberBannedAsync
+  nameWithType: IGroupMemberBannedHandler.OnGroupMemberBannedAsync
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.OnGroupMemberBannedAsync
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html
+  name: GroupMemberBannedContext
+  nameWithType: GroupMemberBannedContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+  commentId: T:System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<EventHandleResult>
+  nameWithType: Task<EventHandleResult>
+  fullName: System.Threading.Tasks.Task<Another_Mirai_Native.Abstractions.Enums.EventHandleResult>
+  nameWithType.vb: Task(Of EventHandleResult)
+  fullName.vb: System.Threading.Tasks.Task(Of Another_Mirai_Native.Abstractions.Enums.EventHandleResult)
+  name.vb: Task(Of EventHandleResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+    name: EventHandleResult
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+    name: EventHandleResult
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

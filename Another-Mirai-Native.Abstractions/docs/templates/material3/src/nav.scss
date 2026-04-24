@@ -1,0 +1,151 @@
+/**
+ * Navigation and breadcrumb styles for Material Design 3 theme
+ */
+
+// Breadcrumb
+.md-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+  font-size: var(--md-sys-typescale-body-small);
+}
+
+.md-breadcrumb ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-breadcrumb li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.md-breadcrumb li:not(:last-child)::after {
+  content: '/';
+  color: var(--md-sys-color-on-surface-variant);
+  margin-left: 4px;
+}
+
+.md-breadcrumb a {
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: var(--md-sys-shape-corner-small);
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+.md-breadcrumb a:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  text-decoration: none;
+}
+
+.md-breadcrumb li:last-child a {
+  color: var(--md-sys-color-on-surface);
+}
+
+// Affix (In This Article)
+#affix {
+  font-size: var(--md-sys-typescale-body-small);
+}
+
+#affix h5 {
+  font-size: var(--md-sys-typescale-label-large);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+#affix ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#affix li {
+  margin: 4px 0;
+}
+
+#affix a {
+  display: block;
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--md-sys-shape-corner-small);
+  border-left: 2px solid transparent;
+  transition: all var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+#affix a:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  text-decoration: none;
+}
+
+#affix li.active a,
+#affix a:focus {
+  color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-primary-container);
+  border-left-color: var(--md-sys-color-primary);
+}
+
+// Navbar (inside drawer)
+.md-navbar {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.md-navbar-section {
+  margin-bottom: 8px;
+}
+
+.md-navbar-section-title {
+  font-size: var(--md-sys-typescale-label-small);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px 8px;
+}
+
+// Navigation link
+.md-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--md-sys-color-on-surface);
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-large);
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+.md-nav-link:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  text-decoration: none;
+}
+
+.md-nav-link.active {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.md-nav-link .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-nav-link.active .material-symbols-outlined {
+  color: var(--md-sys-color-on-secondary-container);
+}

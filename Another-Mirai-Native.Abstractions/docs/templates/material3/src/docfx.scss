@@ -1,0 +1,393 @@
+/**
+ * Material Design 3 Theme for Docfx
+ * Based on Material Web Components
+ */
+
+// MD3 Design Tokens
+:root {
+  // Primary colors
+  --md-sys-color-primary: #6750A4;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #EADDFF;
+  --md-sys-color-on-primary-container: #21005D;
+
+  // Secondary colors
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+
+  // Tertiary colors
+  --md-sys-color-tertiary: #7D5260;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD8E4;
+  --md-sys-color-on-tertiary-container: #31111D;
+
+  // Error colors
+  --md-sys-color-error: #B3261E;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #F9DEDC;
+  --md-sys-color-on-error-container: #410E0B;
+
+  // Surface colors
+  --md-sys-color-surface: #FFFBFE;
+  --md-sys-color-on-surface: #1C1B1F;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-low: #F7F2FA;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-surface-container-highest: #E6E0E9;
+  --md-sys-color-surface-dim: #DED8E1;
+  --md-sys-color-surface-bright: #FFFBFE;
+
+  // Outline
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+
+  // Inverse colors
+  --md-sys-color-inverse-surface: #313033;
+  --md-sys-color-inverse-on-surface: #F4EFF4;
+  --md-sys-color-inverse-primary: #D0BCFF;
+
+  // Shadow & Scrim
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+
+  // Typography
+  --md-ref-typeface-plain: 'Roboto', system-ui, sans-serif;
+  --md-ref-typeface-brand: 'Roboto', system-ui, sans-serif;
+
+  // Typescale - Display
+  --md-sys-typescale-display-large: 57px;
+  --md-sys-typescale-display-medium: 45px;
+  --md-sys-typescale-display-small: 36px;
+
+  // Typescale - Headline
+  --md-sys-typescale-headline-large: 32px;
+  --md-sys-typescale-headline-medium: 28px;
+  --md-sys-typescale-headline-small: 24px;
+
+  // Typescale - Title
+  --md-sys-typescale-title-large: 22px;
+  --md-sys-typescale-title-medium: 16px;
+  --md-sys-typescale-title-small: 14px;
+
+  // Typescale - Body
+  --md-sys-typescale-body-large: 16px;
+  --md-sys-typescale-body-medium: 14px;
+  --md-sys-typescale-body-small: 12px;
+
+  // Typescale - Label
+  --md-sys-typescale-label-large: 14px;
+  --md-sys-typescale-label-medium: 12px;
+  --md-sys-typescale-label-small: 11px;
+
+  // Shape
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  // Elevation
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
+
+  // Motion
+  --md-sys-motion-duration-short100: 50ms;
+  --md-sys-motion-duration-short200: 100ms;
+  --md-sys-motion-duration-short300: 150ms;
+  --md-sys-motion-duration-short400: 200ms;
+  --md-sys-motion-duration-medium100: 250ms;
+  --md-sys-motion-duration-medium200: 300ms;
+  --md-sys-motion-duration-medium300: 350ms;
+  --md-sys-motion-duration-medium400: 400ms;
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  // Layout custom properties
+  --md-layout-top-app-bar-height: 64px;
+  --md-layout-nav-drawer-width: 280px;
+  --md-layout-affix-width: 220px;
+  --md-layout-content-max-width: 1200px;
+}
+
+// Dark theme
+[data-theme="dark"] {
+  // Primary colors
+  --md-sys-color-primary: #D0BCFF;
+  --md-sys-color-on-primary: #381E72;
+  --md-sys-color-primary-container: #4F378B;
+  --md-sys-color-on-primary-container: #EADDFF;
+
+  // Secondary colors
+  --md-sys-color-secondary: #CCC2DC;
+  --md-sys-color-on-secondary: #332D41;
+  --md-sys-color-secondary-container: #4A4458;
+  --md-sys-color-on-secondary-container: #E8DEF8;
+
+  // Tertiary colors
+  --md-sys-color-tertiary: #EFB8C8;
+  --md-sys-color-on-tertiary: #492532;
+  --md-sys-color-tertiary-container: #633B48;
+  --md-sys-color-on-tertiary-container: #FFD8E4;
+
+  // Error colors
+  --md-sys-color-error: #F2B8B5;
+  --md-sys-color-on-error: #601410;
+  --md-sys-color-error-container: #8C1D18;
+  --md-sys-color-on-error-container: #F9DEDC;
+
+  // Surface colors
+  --md-sys-color-surface: #1C1B1F;
+  --md-sys-color-on-surface: #E6E1E5;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-surface-container: #211F26;
+  --md-sys-color-surface-container-low: #1D1B20;
+  --md-sys-color-surface-container-high: #2B2930;
+  --md-sys-color-surface-container-highest: #36343B;
+  --md-sys-color-surface-dim: #141218;
+  --md-sys-color-surface-bright: #3B383E;
+
+  // Outline
+  --md-sys-color-outline: #938F99;
+  --md-sys-color-outline-variant: #49454F;
+
+  // Inverse colors
+  --md-sys-color-inverse-surface: #E6E1E5;
+  --md-sys-color-inverse-on-surface: #313033;
+  --md-sys-color-inverse-primary: #6750A4;
+
+  // Shadow & Scrim
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+}
+
+// Base styles
+@use "layout";
+@use "nav";
+@use "toc";
+@use "markdown";
+@use "search";
+@use "highlight";
+
+// Material Symbols configuration
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+}
+
+// Global styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--md-layout-top-app-bar-height) + 16px);
+}
+
+body {
+  margin: 0;
+  font-family: var(--md-ref-typeface-plain);
+  font-size: var(--md-sys-typescale-body-large);
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Typography classes
+.md-typescale-display-large {
+  font-size: var(--md-sys-typescale-display-large);
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.md-typescale-display-medium {
+  font-size: var(--md-sys-typescale-display-medium);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.md-typescale-display-small {
+  font-size: var(--md-sys-typescale-display-small);
+  font-weight: 400;
+  line-height: 1.22;
+}
+
+.md-typescale-headline-large {
+  font-size: var(--md-sys-typescale-headline-large);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.md-typescale-headline-medium {
+  font-size: var(--md-sys-typescale-headline-medium);
+  font-weight: 400;
+  line-height: 1.29;
+}
+
+.md-typescale-headline-small {
+  font-size: var(--md-sys-typescale-headline-small);
+  font-weight: 400;
+  line-height: 1.33;
+}
+
+.md-typescale-title-large {
+  font-size: var(--md-sys-typescale-title-large);
+  font-weight: 500;
+  line-height: 1.27;
+}
+
+.md-typescale-title-medium {
+  font-size: var(--md-sys-typescale-title-medium);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.15px;
+}
+
+.md-typescale-title-small {
+  font-size: var(--md-sys-typescale-title-small);
+  font-weight: 500;
+  line-height: 1.43;
+  letter-spacing: 0.1px;
+}
+
+.md-typescale-body-large {
+  font-size: var(--md-sys-typescale-body-large);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+.md-typescale-body-medium {
+  font-size: var(--md-sys-typescale-body-medium);
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+}
+
+.md-typescale-body-small {
+  font-size: var(--md-sys-typescale-body-small);
+  font-weight: 400;
+  line-height: 1.33;
+  letter-spacing: 0.4px;
+}
+
+.md-typescale-label-large {
+  font-size: var(--md-sys-typescale-label-large);
+  font-weight: 500;
+  line-height: 1.43;
+  letter-spacing: 0.1px;
+}
+
+.md-typescale-label-medium {
+  font-size: var(--md-sys-typescale-label-medium);
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 0.5px;
+}
+
+.md-typescale-label-small {
+  font-size: var(--md-sys-typescale-label-small);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.5px;
+}
+
+// Link styles
+a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  transition: color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+// Focus styles
+:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+// Selection styles
+::selection {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline);
+}
+
+// Print styles
+@media print {
+  .md-top-app-bar,
+  .md-nav-drawer,
+  .md-affix,
+  .md-contribution,
+  .md-next-article {
+    display: none !important;
+  }
+
+  .md-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+// View transition
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion) {
+  @view-transition {
+    navigation: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

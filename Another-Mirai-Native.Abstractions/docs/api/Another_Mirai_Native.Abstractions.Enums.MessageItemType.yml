@@ -1,0 +1,369 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  id: MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.At
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Bface
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Dice
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Face
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Image
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Poke
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Record
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Reply
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rich
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rps
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Shake
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Text
+  - Another_Mirai_Native.Abstractions.Enums.MessageItemType.Unknown
+  langs:
+  - csharp
+  - vb
+  name: MessageItemType
+  nameWithType: MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 消息片段类型。
+  example: []
+  syntax:
+    content: public enum MessageItemType
+    content.vb: Public Enum MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Unknown
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Unknown
+  id: Unknown
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Unknown
+  nameWithType: MessageItemType.Unknown
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Unknown
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 默认值
+  example: []
+  syntax:
+    content: Unknown = 0
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Face
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Face
+  id: Face
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Face
+  nameWithType: MessageItemType.Face
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Face
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: QQ表情
+  example: []
+  syntax:
+    content: Face = 1
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Bface
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Bface
+  id: Bface
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Bface
+  nameWithType: MessageItemType.Bface
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Bface
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 原创表情
+  example: []
+  syntax:
+    content: Bface = 2
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Image
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Image
+  id: Image
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Image
+  nameWithType: MessageItemType.Image
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Image
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 图片
+  example: []
+  syntax:
+    content: Image = 3
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Record
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Record
+  id: Record
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Record
+  nameWithType: MessageItemType.Record
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Record
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 语音
+  example: []
+  syntax:
+    content: Record = 4
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.At
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.At
+  id: At
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: At
+  nameWithType: MessageItemType.At
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.At
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: At默认
+  example: []
+  syntax:
+    content: At = 5
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rps
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rps
+  id: Rps
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Rps
+  nameWithType: MessageItemType.Rps
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rps
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 猜拳魔法表情
+  example: []
+  syntax:
+    content: Rps = 6
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Shake
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Shake
+  id: Shake
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Shake
+  nameWithType: MessageItemType.Shake
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Shake
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 屏幕抖动
+  example: []
+  syntax:
+    content: Shake = 7
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Dice
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Dice
+  id: Dice
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Dice
+  nameWithType: MessageItemType.Dice
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Dice
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 掷骰子魔法表情
+  example: []
+  syntax:
+    content: Dice = 8
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Poke
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Poke
+  id: Poke
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Poke
+  nameWithType: MessageItemType.Poke
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Poke
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 戳一戳
+  example: []
+  syntax:
+    content: Poke = 9
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rich
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rich
+  id: Rich
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Rich
+  nameWithType: MessageItemType.Rich
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Rich
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 卡片消息
+  example: []
+  syntax:
+    content: Rich = 10
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Reply
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Reply
+  id: Reply
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Reply
+  nameWithType: MessageItemType.Reply
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Reply
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 引用消息
+  example: []
+  syntax:
+    content: Reply = 11
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Text
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageItemType.Text
+  id: Text
+  parent: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  langs:
+  - csharp
+  - vb
+  name: Text
+  nameWithType: MessageItemType.Text
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType.Text
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/MessageItemType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 纯文本
+  example: []
+  syntax:
+    content: Text = 12
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageItemType.html
+  name: MessageItemType
+  nameWithType: MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType

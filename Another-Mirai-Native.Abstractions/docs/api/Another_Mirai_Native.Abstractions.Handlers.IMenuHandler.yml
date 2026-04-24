@@ -1,0 +1,140 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  id: IMenuHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  children:
+  - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  langs:
+  - csharp
+  - vb
+  name: IMenuHandler
+  nameWithType: IMenuHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 为处理菜单事件的处理器。
+  example: []
+  syntax:
+    content: public interface IMenuHandler
+    content.vb: Public Interface IMenuHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  commentId: M:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  id: OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  parent: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  langs:
+  - csharp
+  - vb
+  name: OnMenu(MenuContext)
+  nameWithType: IMenuHandler.OnMenu(MenuContext)
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu(Another_Mirai_Native.Abstractions.Context.MenuContext)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/MenuHandler.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Handlers
+  summary: 当框架调用菜单事件时执行的操作。框架上层会在独立的 UI 线程中同步执行此方法，阻塞此方法不会导致框架卡死。
+  example: []
+  syntax:
+    content: void OnMenu(MenuContext e)
+    parameters:
+    - id: e
+      type: Another_Mirai_Native.Abstractions.Context.MenuContext
+    content.vb: Sub OnMenu(e As MenuContext)
+  overload: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
+references:
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.html#Another_Mirai_Native_Abstractions_Handlers_IMenuHandler_OnMenu_Another_Mirai_Native_Abstractions_Context_MenuContext_
+  name: OnMenu
+  nameWithType: IMenuHandler.OnMenu
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.OnMenu
+- uid: Another_Mirai_Native.Abstractions.Context.MenuContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.MenuContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.MenuContext.html
+  name: MenuContext
+  nameWithType: MenuContext
+  fullName: Another_Mirai_Native.Abstractions.Context.MenuContext
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html

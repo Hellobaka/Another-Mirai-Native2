@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Model.Enums;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using System.IO;
 using System.Text;
@@ -127,6 +128,11 @@ namespace Another_Mirai_Native.Model
             return stream.ToArray();
         }
 
+        public static GroupMemberInfo FromNative(string raw)
+        {
+            return FromNative(Convert.FromBase64String(raw));
+        }
+
         public static GroupMemberInfo FromNative(byte[] buffer)
         {
             GroupMemberInfo info = new();
@@ -168,6 +174,11 @@ namespace Another_Mirai_Native.Model
                 binaryWriter.Write(buffer);
             }
             return Convert.ToBase64String(stream.ToArray());
+        }
+
+        public static List<GroupMemberInfo> RawToList(string raw)
+        {
+            return RawToList(Convert.FromBase64String(raw));
         }
 
         public static List<GroupMemberInfo> RawToList(byte[] buffer)

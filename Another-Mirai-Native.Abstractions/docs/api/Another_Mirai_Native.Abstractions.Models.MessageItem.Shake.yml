@@ -1,0 +1,500 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  id: Shake
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem
+  children:
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString
+  langs:
+  - csharp
+  - vb
+  name: Shake
+  nameWithType: Shake
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageItem/Shake.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
+  summary: 屏幕抖动消息片段。
+  example: []
+  syntax:
+    content: 'public class Shake : MessageItemBase'
+    content.vb: Public Class Shake Inherits MessageItemBase
+  inheritance:
+  - System.Object
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  inheritedMembers:
+  - Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.Raw
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString
+  id: ToString
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: Shake.ToString()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString()
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageItem/Shake.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
+  summary: 返回当前消息片段的 CQ 码字符串表示。
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+      description: CQ 码文本。
+    content.vb: Public Overrides Function ToString() As String
+  overridden: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString
+  overload: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString*
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor
+  id: '#ctor'
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  langs:
+  - csharp
+  - vb
+  name: Shake()
+  nameWithType: Shake.Shake()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.Shake()
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageItem/Shake.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
+  syntax:
+    content: public Shake()
+    content.vb: Public Sub New()
+  overload: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor*
+  nameWithType.vb: Shake.New()
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.New()
+  name.vb: New()
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+  commentId: P:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+  id: MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+  langs:
+  - csharp
+  - vb
+  name: MessageItemType
+  nameWithType: Shake.MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/MessageItem/Shake.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Models.MessageItem
+  summary: 获取或设置消息片段类型。
+  example: []
+  syntax:
+    content: public override MessageItemType MessageItemType { get; set; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+    content.vb: Public Overrides Property MessageItemType As MessageItemType
+  overridden: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.MessageItemType
+  overload: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType*
+references:
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+  commentId: N:Another_Mirai_Native.Abstractions.Models.MessageItem
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models.MessageItem
+  nameWithType: Another_Mirai_Native.Abstractions.Models.MessageItem
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+    name: MessageItem
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+    name: MessageItem
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  commentId: T:Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html
+  name: MessageItemBase
+  nameWithType: MessageItemBase
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.Raw
+  commentId: P:Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.Raw
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html#Another_Mirai_Native_Abstractions_Models_MessageItem_MessageItemBase_Raw
+  name: Raw
+  nameWithType: MessageItemBase.Raw
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.Raw
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString
+  commentId: M:Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html#Another_Mirai_Native_Abstractions_Models_MessageItem_MessageItemBase_ToString
+  name: ToString()
+  nameWithType: MessageItemBase.ToString()
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString()
+  spec.csharp:
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString
+    name: ToString
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html#Another_Mirai_Native_Abstractions_Models_MessageItem_MessageItemBase_ToString
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.ToString
+    name: ToString
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html#Another_Mirai_Native_Abstractions_Models_MessageItem_MessageItemBase_ToString
+  - name: (
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.html#Another_Mirai_Native_Abstractions_Models_MessageItem_Shake_ToString
+  name: ToString
+  nameWithType: Shake.ToString
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.ToString
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.html#Another_Mirai_Native_Abstractions_Models_MessageItem_Shake__ctor
+  name: Shake
+  nameWithType: Shake.Shake
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.Shake
+  nameWithType.vb: Shake.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.New
+  name.vb: New
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.MessageItemType
+  commentId: P:Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.html#Another_Mirai_Native_Abstractions_Models_MessageItem_MessageItemBase_MessageItemType
+  name: MessageItemType
+  nameWithType: MessageItemBase.MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.html#Another_Mirai_Native_Abstractions_Models_MessageItem_Shake_MessageItemType
+  name: MessageItemType
+  nameWithType: Shake.MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageItemType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageItemType.html
+  name: MessageItemType
+  nameWithType: MessageItemType
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html

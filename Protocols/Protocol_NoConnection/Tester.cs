@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +43,7 @@ namespace Protocol_NoConnection
 
         private bool AutoRecall => UseAutoRecall.Checked;
 
-        private int AutoRecallInteval => int.TryParse(AutoRecallValue.Text, out int value) ? value : -1;
+        private int AutoRecallInterval => int.TryParse(AutoRecallValue.Text, out int value) ? value : -1;
 
         private bool UseCustomMessageID => UseMessageID.Checked;
 
@@ -51,16 +53,6 @@ namespace Protocol_NoConnection
         public Protocol Protocol { get; set; }
 
         private byte[] AlterQRCodePicture { get; set; } = [];
-
-        private void Tester_Load(object sender, EventArgs e)
-        {
-            GroupValue.Text = CommonConfig.GetConfig("TesterGroup", @"conf/Test.json", (long)1919810).ToString();
-            QQValue.Text = CommonConfig.GetConfig("TesterQQ", @"conf/Test.json", (long)1145141919).ToString();
-            MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
-
-            PicButton.Enabled = PicServer.Instance?.Running ?? false;
-            SendValue.Focus();
-        }
 
         private void SendButton_Click(object sender, EventArgs e)
         {
@@ -93,6 +85,7 @@ namespace Protocol_NoConnection
                 {
                     msgId = MsgId++;
                 }
+                RequestCache.AddMessageCache(msgId, msg);
                 if (PrivateSelector.Checked)
                 {
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "[↓]收到好友消息", $"QQ:{QQId} 消息: {msg}", "处理中...");
@@ -106,11 +99,11 @@ namespace Protocol_NoConnection
                 sw.Stop();
                 Task.Run(() =>
                 {
-                    if (AutoRecall is false || AutoRecallInteval < 0)
+                    if (AutoRecall is false || AutoRecallInterval < 0)
                     {
                         return;
                     }
-                    Thread.Sleep((int)TimeSpan.FromSeconds(AutoRecallInteval).TotalMilliseconds);
+                    Thread.Sleep((int)TimeSpan.FromSeconds(AutoRecallInterval).TotalMilliseconds);
                     if (PrivateSelector.Checked)
                     {
                         PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(msgId, QQId, msg);

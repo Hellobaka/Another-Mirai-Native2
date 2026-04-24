@@ -1,0 +1,266 @@
+### YamlMime:TableOfContent
+items:
+- uid: Another_Mirai_Native.Abstractions
+  name: Another_Mirai_Native.Abstractions
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.CommandHandlerBase
+    name: CommandHandlerBase
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.PluginBase
+    name: PluginBase
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Attributes
+  name: Another_Mirai_Native.Abstractions.Attributes
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
+    name: CommandAttribute
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Attributes.EventPriorityAttribute
+    name: EventPriorityAttribute
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Attributes.MenuAttribute
+    name: MenuAttribute
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Attributes.PluginInfo
+    name: PluginInfo
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Context
+  name: Another_Mirai_Native.Abstractions.Context
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Context.AdminChangedContext
+    name: AdminChangedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
+    name: FriendAddRequestContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.FriendAddedContext
+    name: FriendAddedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupAddRequestContext
+    name: GroupAddRequestContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupFileUploadedContext
+    name: GroupFileUploadedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+    name: GroupInviteRequestContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+    name: GroupMemberBannedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext
+    name: GroupMemberDecreaseContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberIncreaseContext
+    name: GroupMemberIncreaseContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupMemberUnbannedContext
+    name: GroupMemberUnbannedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupMessageContext
+    name: GroupMessageContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupWholeBannedContext
+    name: GroupWholeBannedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.GroupWholeUnbannedContext
+    name: GroupWholeUnbannedContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.MenuContext
+    name: MenuContext
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Context.PrivateMessageContext
+    name: PrivateMessageContext
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Enums
+  name: Another_Mirai_Native.Abstractions.Enums
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Enums.AdminChangedType
+    name: AdminChangedType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.CQFace
+    name: CQFace
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.ChatHistoryType
+    name: ChatHistoryType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+    name: EventHandleResult
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MatchMode
+    name: MatchMode
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MessageItemType
+    name: MessageItemType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
+    name: MessageScope
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.PluginEventType
+    name: PluginEventType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.QQGroupMemberType
+    name: QQGroupMemberType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.QQSex
+    name: QQSex
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+    name: RequestHandleResult
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.RichContentType
+    name: RichContentType
+    type: Enum
+  - uid: Another_Mirai_Native.Abstractions.Enums.RpsType
+    name: RpsType
+    type: Enum
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  name: Another_Mirai_Native.Abstractions.Handlers
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler
+    name: IAdminChangeHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+    name: IFriendAddRequestHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
+    name: IFriendAddedHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
+    name: IGroupAddRequestHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+    name: IGroupFileUploadHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+    name: IGroupInviteRequestHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+    name: IGroupMemberBannedHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
+    name: IGroupMemberDecreaseHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
+    name: IGroupMemberIncreaseHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
+    name: IGroupMemberUnbannedHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+    name: IGroupMessageHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
+    name: IGroupWholeBannedHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
+    name: IGroupWholeUnbannedHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+    name: IMenuHandler
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+    name: IPrivateMessageHandler
+    type: Interface
+- uid: Another_Mirai_Native.Abstractions.Models
+  name: Another_Mirai_Native.Abstractions.Models
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Models.ChatHistory
+    name: ChatHistory
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.FriendInfo
+    name: FriendInfo
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.Group
+    name: Group
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupFileInfo
+    name: GroupFileInfo
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupInfo
+    name: GroupInfo
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
+    name: GroupMemberInfo
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.Message
+    name: Message
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
+    name: MessageBuilder
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.QQ
+    name: QQ
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Models.MessageItem
+  name: Another_Mirai_Native.Abstractions.Models.MessageItem
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.At
+    name: At
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.BFace
+    name: BFace
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Dice
+    name: Dice
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Face
+    name: Face
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Image
+    name: Image
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.MessageItemBase
+    name: MessageItemBase
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Poke
+    name: Poke
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RPS
+    name: RPS
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Record
+    name: Record
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Reply
+    name: Reply
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.RichContent
+    name: RichContent
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Shake
+    name: Shake
+    type: Class
+  - uid: Another_Mirai_Native.Abstractions.Models.MessageItem.Text
+    name: Text
+    type: Class
+- uid: Another_Mirai_Native.Abstractions.Services
+  name: Another_Mirai_Native.Abstractions.Services
+  type: Namespace
+  items:
+  - uid: Another_Mirai_Native.Abstractions.Services.IAppApi
+    name: IAppApi
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Services.IFriendApi
+    name: IFriendApi
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Services.IGroupApi
+    name: IGroupApi
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Services.ILogger
+    name: ILogger
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Services.IMessageApi
+    name: IMessageApi
+    type: Interface
+  - uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    name: IPluginApi
+    type: Interface
+memberLayout: SamePage

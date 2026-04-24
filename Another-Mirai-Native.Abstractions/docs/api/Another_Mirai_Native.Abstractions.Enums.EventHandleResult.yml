@@ -1,0 +1,116 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  id: EventHandleResult
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  - Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  langs:
+  - csharp
+  - vb
+  name: EventHandleResult
+  nameWithType: EventHandleResult
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/EventHandleResult.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 插件对于事件的处理结果枚举。用于指示事件处理程序在处理事件后是否允许事件继续传播给其他处理程序，或者阻止事件传播以独占事件的处理权。
+  example: []
+  syntax:
+    content: public enum EventHandleResult
+    content.vb: Public Enum EventHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  id: Pass
+  parent: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  langs:
+  - csharp
+  - vb
+  name: Pass
+  nameWithType: EventHandleResult.Pass
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/EventHandleResult.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 表示将事件传播到下一个处理程序，允许其他处理程序继续处理该事件。使用此选项可以实现事件的多层处理，使多个处理程序能够对同一事件进行响应和处理。
+  example: []
+  syntax:
+    content: Pass = 0
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  id: Block
+  parent: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  langs:
+  - csharp
+  - vb
+  name: Block
+  nameWithType: EventHandleResult.Block
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Block
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/EventHandleResult.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 表示阻塞事件的传播，防止其他处理程序继续处理该事件。使用此选项可以确保当前处理程序独占事件的处理权，适用于需要完全控制事件处理流程的情况。
+  example: []
+  syntax:
+    content: Block = 1
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.EventHandleResult
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.EventHandleResult.html
+  name: EventHandleResult
+  nameWithType: EventHandleResult
+  fullName: Another_Mirai_Native.Abstractions.Enums.EventHandleResult

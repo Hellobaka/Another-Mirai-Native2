@@ -1,3 +1,5 @@
+using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -99,19 +101,19 @@ namespace Another_Mirai_Native.UI.Controls.Chat
 
             switch (cqcode.Function)
             {
-                case CQCodeType.Image:
+                case MessageItemType.Image:
                     ProcessImageCQCode(cqcode, imageCount, splitCount);
                     break;
 
-                case CQCodeType.At:
+                case MessageItemType.At:
                     await ProcessAtCQCode(cqcode);
                     break;
 
-                case CQCodeType.Face:
+                case MessageItemType.Face:
                     ProcessFaceCQCode(cqcode, item);
                     break;
 
-                case CQCodeType.Reply:
+                case MessageItemType.Reply:
                     await ProcessReplyCQCode(cqcode, item);
                     break;
 

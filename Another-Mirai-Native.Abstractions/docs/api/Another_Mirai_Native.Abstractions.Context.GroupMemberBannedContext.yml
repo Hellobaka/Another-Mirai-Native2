@@ -1,0 +1,713 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  id: GroupMemberBannedContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  children:
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ,System.Nullable{System.TimeSpan})
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+  - Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberBannedContext
+  nameWithType: GroupMemberBannedContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述群成员被禁言事件参数的类
+  example: []
+  syntax:
+    content: public class GroupMemberBannedContext
+    content.vb: Public Class GroupMemberBannedContext
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ,System.Nullable{System.TimeSpan})
+  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ,System.Nullable{System.TimeSpan})
+  id: '#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,Another_Mirai_Native.Abstractions.Models.QQ,System.Nullable{System.TimeSpan})'
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: GroupMemberBannedContext(IPluginApi, DateTime, Group, QQ, QQ, TimeSpan?)
+  nameWithType: GroupMemberBannedContext.GroupMemberBannedContext(IPluginApi, DateTime, Group, QQ, QQ, TimeSpan?)
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.GroupMemberBannedContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.QQ, System.TimeSpan?)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述群成员被禁言事件参数的类
+  example: []
+  syntax:
+    content: public GroupMemberBannedContext(IPluginApi api, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ, TimeSpan? banSpeakTimeSpan)
+    parameters:
+    - id: api
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    - id: sendTime
+      type: System.DateTime
+    - id: fromGroup
+      type: Another_Mirai_Native.Abstractions.Models.Group
+    - id: fromQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    - id: beingOperateQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    - id: banSpeakTimeSpan
+      type: System.Nullable{System.TimeSpan}
+    content.vb: Public Sub New(api As IPluginApi, sendTime As Date, fromGroup As Group, fromQQ As QQ, beingOperateQQ As QQ, banSpeakTimeSpan As TimeSpan?)
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor*
+  nameWithType.vb: GroupMemberBannedContext.New(IPluginApi, Date, Group, QQ, QQ, TimeSpan?)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Date, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, Another_Mirai_Native.Abstractions.Models.QQ, System.TimeSpan?)
+  name.vb: New(IPluginApi, Date, Group, QQ, QQ, TimeSpan?)
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: GroupMemberBannedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取插件 API 实例
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+  id: SendTime
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: SendTime
+  nameWithType: GroupMemberBannedContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的发送时间
+  example: []
+  syntax:
+    content: public DateTime SendTime { get; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public ReadOnly Property SendTime As Date
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+  id: FromGroup
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: FromGroup
+  nameWithType: GroupMemberBannedContext.FromGroup
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的来源群
+  example: []
+  syntax:
+    content: public Group FromGroup { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.Group
+    content.vb: Public ReadOnly Property FromGroup As Group
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+  id: FromQQ
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: FromQQ
+  nameWithType: GroupMemberBannedContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的操作者QQ
+  example: []
+  syntax:
+    content: public QQ FromQQ { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    content.vb: Public ReadOnly Property FromQQ As QQ
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+  id: BeingOperateQQ
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: BeingOperateQQ
+  nameWithType: GroupMemberBannedContext.BeingOperateQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的被操作QQ
+  example: []
+  syntax:
+    content: public QQ BeingOperateQQ { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    content.vb: Public ReadOnly Property BeingOperateQQ As QQ
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan
+  id: BanSpeakTimeSpan
+  parent: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext
+  langs:
+  - csharp
+  - vb
+  name: BanSpeakTimeSpan
+  nameWithType: GroupMemberBannedContext.BanSpeakTimeSpan
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupMemberBannedContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的禁言时长
+  example: []
+  syntax:
+    content: public TimeSpan? BanSpeakTimeSpan { get; }
+    parameters: []
+    return:
+      type: System.Nullable{System.TimeSpan}
+    content.vb: Public ReadOnly Property BanSpeakTimeSpan As TimeSpan?
+  overload: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan*
+references:
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext__ctor_Another_Mirai_Native_Abstractions_Services_IPluginApi_System_DateTime_Another_Mirai_Native_Abstractions_Models_Group_Another_Mirai_Native_Abstractions_Models_QQ_Another_Mirai_Native_Abstractions_Models_QQ_System_Nullable_System_TimeSpan__
+  name: GroupMemberBannedContext
+  nameWithType: GroupMemberBannedContext.GroupMemberBannedContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.GroupMemberBannedContext
+  nameWithType.vb: GroupMemberBannedContext.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.New
+  name.vb: New
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: Another_Mirai_Native.Abstractions.Models.Group
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Group
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Group.html
+  name: Group
+  nameWithType: Group
+  fullName: Another_Mirai_Native.Abstractions.Models.Group
+- uid: Another_Mirai_Native.Abstractions.Models.QQ
+  commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.QQ.html
+  name: QQ
+  nameWithType: QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: System.Nullable{System.TimeSpan}
+  commentId: T:System.Nullable{System.TimeSpan}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan?
+  nameWithType: TimeSpan?
+  fullName: System.TimeSpan?
+  spec.csharp:
+  - uid: System.TimeSpan
+    name: TimeSpan
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.timespan
+  - name: '?'
+  spec.vb:
+  - uid: System.TimeSpan
+    name: TimeSpan
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.timespan
+  - name: '?'
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_API
+  name: API
+  nameWithType: GroupMemberBannedContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.API
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_SendTime
+  name: SendTime
+  nameWithType: GroupMemberBannedContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_FromGroup
+  name: FromGroup
+  nameWithType: GroupMemberBannedContext.FromGroup
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromGroup
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_FromQQ
+  name: FromQQ
+  nameWithType: GroupMemberBannedContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.FromQQ
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_BeingOperateQQ
+  name: BeingOperateQQ
+  nameWithType: GroupMemberBannedContext.BeingOperateQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BeingOperateQQ
+- uid: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.html#Another_Mirai_Native_Abstractions_Context_GroupMemberBannedContext_BanSpeakTimeSpan
+  name: BanSpeakTimeSpan
+  nameWithType: GroupMemberBannedContext.BanSpeakTimeSpan
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupMemberBannedContext.BanSpeakTimeSpan

@@ -1,7 +1,9 @@
 ﻿using Another_Mirai_Native;
+using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,6 +142,7 @@ namespace Protocol_NoConnection
                     {
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
+                        WinNative.SetProcessDPIAware();
                         TesterForm = new Tester();
                         TesterForm.Protocol = this;
                         Application.Run(TesterForm);

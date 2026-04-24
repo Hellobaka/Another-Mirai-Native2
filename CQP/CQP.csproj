@@ -95,6 +95,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj">
+      <Project>{AED54416-8304-4979-9446-5AE994E78EF3}</Project>
+      <Name>Another-Mirai-Native.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj">
       <Project>{28fdfd9e-59dc-4eff-bb5f-d07c077c74c5}</Project>
       <Name>Another-Mirai-Native</Name>

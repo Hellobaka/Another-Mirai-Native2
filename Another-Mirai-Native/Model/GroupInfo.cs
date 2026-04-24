@@ -49,6 +49,11 @@ namespace Another_Mirai_Native.Model
             return stream.ToArray();
         }
 
+        public static GroupInfo FromNative(string raw)
+        {
+            return FromNative(Convert.FromBase64String(raw));
+        }
+
         public static GroupInfo FromNative(byte[] buffer)
         {
             GroupInfo info = new();
@@ -79,6 +84,11 @@ namespace Another_Mirai_Native.Model
                 binaryWriter.Write(buffer);
             }
             return Convert.ToBase64String(stream.ToArray());
+        }
+
+        public static List<GroupInfo> RawToList(string raw)
+        {
+            return RawToList(Convert.FromBase64String(raw));
         }
 
         public static List<GroupInfo> RawToList(byte[] buffer)

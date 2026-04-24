@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -197,7 +198,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch stopwatch = Stopwatch.StartNew();
             string msg = "";
             var msgCache = RequestCache.Message.FirstOrDefault(x => x.Item1 == msgId);
-            if (string.IsNullOrEmpty(msgCache.Item2))
+            if (!string.IsNullOrEmpty(msgCache.Item2))
             {
                 msg = msgCache.Item2;
             }
@@ -509,7 +510,7 @@ namespace Another_Mirai_Native.Native
                 fromId = value.Item1;
                 nick = value.Item2;
             }
-            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 0 ? "同意" : "拒绝")}", "处理中...");
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, $"好友添加申请", $"来源: {fromId}({nick}) 操作: {(requestType == 1 ? "同意" : "拒绝")}", "处理中...");
             int ret = ProtocolManager.Instance.CurrentProtocol.SetFriendAddRequest(identifying, requestType, appendMsg);
             stopwatch.Stop();
             LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");

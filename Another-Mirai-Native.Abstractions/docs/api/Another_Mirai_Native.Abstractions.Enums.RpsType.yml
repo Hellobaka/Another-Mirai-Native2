@@ -1,0 +1,139 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RpsType
+  id: RpsType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  children:
+  - Another_Mirai_Native.Abstractions.Enums.RpsType.Paper
+  - Another_Mirai_Native.Abstractions.Enums.RpsType.Rock
+  - Another_Mirai_Native.Abstractions.Enums.RpsType.Scissors
+  langs:
+  - csharp
+  - vb
+  name: RpsType
+  nameWithType: RpsType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/RpsType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 猜拳类型。
+  example: []
+  syntax:
+    content: public enum RpsType
+    content.vb: Public Enum RpsType
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType.Rock
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RpsType.Rock
+  id: Rock
+  parent: Another_Mirai_Native.Abstractions.Enums.RpsType
+  langs:
+  - csharp
+  - vb
+  name: Rock
+  nameWithType: RpsType.Rock
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType.Rock
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/RpsType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 石头。
+  example: []
+  syntax:
+    content: Rock = 1
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RpsType
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType.Scissors
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RpsType.Scissors
+  id: Scissors
+  parent: Another_Mirai_Native.Abstractions.Enums.RpsType
+  langs:
+  - csharp
+  - vb
+  name: Scissors
+  nameWithType: RpsType.Scissors
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType.Scissors
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/RpsType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 剪刀。
+  example: []
+  syntax:
+    content: Scissors = 2
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RpsType
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType.Paper
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.RpsType.Paper
+  id: Paper
+  parent: Another_Mirai_Native.Abstractions.Enums.RpsType
+  langs:
+  - csharp
+  - vb
+  name: Paper
+  nameWithType: RpsType.Paper
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType.Paper
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/RpsType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Enums
+  summary: 布。
+  example: []
+  syntax:
+    content: Paper = 3
+    return:
+      type: Another_Mirai_Native.Abstractions.Enums.RpsType
+references:
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Enums.RpsType
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RpsType
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RpsType.html
+  name: RpsType
+  nameWithType: RpsType
+  fullName: Another_Mirai_Native.Abstractions.Enums.RpsType

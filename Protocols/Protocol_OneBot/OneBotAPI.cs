@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -8,6 +10,10 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text.RegularExpressions;
+
+using FriendInfo = Another_Mirai_Native.Model.FriendInfo;
+using GroupInfo = Another_Mirai_Native.Model.GroupInfo;
+using GroupMemberInfo = Another_Mirai_Native.Model.GroupMemberInfo;
 
 namespace Another_Mirai_Native.Protocol.OneBot
 {
@@ -752,7 +758,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             LogHelper.WriteLog(LogLevel.Warning, "发送图片", "缓存文件不存在", "");
                             continue;
                         }
-                        newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", cachedImage.Url));
+                        newCQcode = new(MessageItemType.Image, new KeyValuePair<string, string>("file", cachedImage.Url));
                         if (item.Items.ContainsKey("flash"))
                         {
                             newCQcode.Items.Add("type", "flash");
@@ -766,7 +772,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     {
                         continue;
                     }
-                    newCQcode = new(CQCodeType.Image, new KeyValuePair<string, string>("file", "base64://" + picBase64));
+                    newCQcode = new(MessageItemType.Image, new KeyValuePair<string, string>("file", "base64://" + picBase64));
                     if (item.Items.ContainsKey("flash"))
                     {
                         newCQcode.Items.Add("type", "flash");
@@ -775,7 +781,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 }
                 else if (item.IsRecordCQCode)
                 {
-                    newCQcode = new CQCode(CQCodeType.Record);
+                    newCQcode = new CQCode(MessageItemType.Record);
                     string recordPath = item.Items["file"];
                     recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordPath);
                     if (File.Exists(recordPath))

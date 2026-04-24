@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using System.Text;
 
@@ -24,7 +26,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 }
                 switch (cqcode.Function)
                 {
-                    case Model.Enums.CQCodeType.Face:
+                    case MessageItemType.Face:
                         if (int.TryParse(cqcode.Items["id"], out int faceId))
                         {
                             stringBuilder.Append($"[CQ:face,id={faceId}]");
@@ -35,7 +37,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.Image:
+                    case MessageItemType.Image:
                         (string imageFile, string imageSubType) = HandleFileDownload(cqcode);
 
                         // 转换完毕
@@ -57,7 +59,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.Record:
+                    case MessageItemType.Record:
                         (string recordFile, _) = HandleFileDownload(cqcode);
                         // 转换完毕
                         if (string.IsNullOrEmpty(recordFile))
@@ -78,14 +80,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         stringBuilder.Append($"[CQ:record,file={recordFile}]");
                         break;
 
-                    case Model.Enums.CQCodeType.At:
+                    case MessageItemType.At:
                         if (long.TryParse(cqcode.Items["qq"], out long qq))
                         {
                             stringBuilder.Append($"[CQ:at,qq={qq}]");
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.Reply:
+                    case MessageItemType.Reply:
                         if (int.TryParse(cqcode.Items["id"], out int id))
                         {
                             stringBuilder.Append($"[CQ:reply,id={id}]");

@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Enums;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
@@ -159,17 +161,12 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Dice:
                         var dice = (MiraiMessageTypeDetail.Dice)item;
-                        Result.Append($"[CQ:dice,point={dice.value}]");
+                        Result.Append($"[CQ:dice,type={dice.value}]");
                         break;
 
                     case MiraiMessageType.MarketFace:
                         var marketFace = (MiraiMessageTypeDetail.MarketFace)item;
-                        Result.Append($"[CQ:bigface,id={marketFace.id}]");
-                        break;
-
-                    case MiraiMessageType.MusicShare:
-                        var musicShare = (MiraiMessageTypeDetail.MusicShare)item;
-                        Result.Append(CQCode.CQCode_DIYMusic(musicShare.jumpUrl, musicShare.musicUrl, musicShare.title, musicShare.brief, musicShare.pictureUrl));
+                        Result.Append($"[CQ:bface,id={marketFace.id}]");
                         break;
 
                     case MiraiMessageType.Forward:
@@ -286,13 +283,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             quoteId = -1;
             switch (cqCode.Function)
             {
-                case CQCodeType.Face:
+                case MessageItemType.Face:
                     return new MiraiMessageTypeDetail.Face { faceId = Convert.ToInt32(cqCode.Items["id"]) };
 
-                case CQCodeType.Bface:
+                case MessageItemType.Bface:
                     return new MiraiMessageTypeDetail.MarketFace { id = Convert.ToInt32(cqCode.Items["id"]) };
 
-                case CQCodeType.Image:
+                case MessageItemType.Image:
                     string picPath = cqCode.Items["file"];
                     // 以下为两个纠错路径, 防止拼接路径时出现以下两种情况
                     // basePath + "\foo.jpg"
@@ -336,7 +333,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
                     return new MiraiMessageTypeDetail.Image { base64 = picBase64 };
 
-                case CQCodeType.Record:
+                case MessageItemType.Record:
                     string recordPath = cqCode.Items["file"];
                     recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordPath);
                     if (File.Exists(recordPath))
@@ -365,16 +362,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     {
                         return null;
                     }
-                case CQCodeType.At:
+                case MessageItemType.At:
                     return new MiraiMessageTypeDetail.At { target = Convert.ToInt64(cqCode.Items["qq"]), display = "" };
 
-                case CQCodeType.Dice:
+                case MessageItemType.Dice:
                     return new MiraiMessageTypeDetail.Dice { value = Convert.ToInt32(cqCode.Items["point"]) };
 
-                case CQCodeType.Music:
-                    return new MiraiMessageTypeDetail.MusicShare { brief = cqCode.Items["content"], jumpUrl = cqCode.Items["url"], musicUrl = cqCode.Items["audio"], pictureUrl = cqCode.Items["imageUrl"], title = cqCode.Items["title"] };
-
-                case CQCodeType.Rich:
+                case MessageItemType.Rich:
                     return (object)cqCode.Items["type"] switch
                     {
                         "xml" => new MiraiMessageTypeDetail.Xml { xml = UnescapeRawMessage(cqCode.Items["content"]) },
@@ -383,7 +377,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         _ => null,
                     };
 
-                case CQCodeType.Reply:
+                case MessageItemType.Reply:
                     quoteId = Convert.ToInt32(cqCode.Items["id"]);
                     return null;
 

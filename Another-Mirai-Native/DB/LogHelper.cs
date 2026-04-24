@@ -56,11 +56,11 @@ namespace Another_Mirai_Native.DB
 
         public static void Debug(string type, string message)
         {
-            System.Diagnostics.Debug.WriteLine($"[{type}]", $"\t{message}");
             if (AppConfig.Instance.DebugMode is false)
             {
                 return;
             }
+            System.Diagnostics.Debug.WriteLine($"[{type}]", $"\t{message}");
             var logModel = new LogModel
             {
                 detail = message,
@@ -176,6 +176,11 @@ namespace Another_Mirai_Native.DB
         public static int Error(string type, string message)
         {
             return WriteLog(LogLevel.Error, type, message);
+        }
+
+        public static int Warning(string type, string message)
+        {
+            return WriteLog(LogLevel.Warning, type, message);
         }
 
         public static int Error(string type, Exception e)

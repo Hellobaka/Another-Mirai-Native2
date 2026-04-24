@@ -1,0 +1,116 @@
+/**
+ * Search styles for Material Design 3 theme
+ */
+
+.md-search-results {
+  display: none;
+  padding: 24px;
+  max-width: var(--md-layout-content-max-width);
+  margin: 0 auto;
+}
+
+[data-search] .md-search-results {
+  display: block;
+}
+
+.md-search-results .search-list {
+  font-size: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: 16px;
+}
+
+.md-search-results .sr-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.md-search-results .sr-item {
+  padding: 16px;
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-medium);
+  transition: box-shadow var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+.md-search-results .sr-item:hover {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.md-search-results .item-title {
+  font-size: var(--md-sys-typescale-title-large);
+  margin-bottom: 8px;
+}
+
+.md-search-results .item-title a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+
+.md-search-results .item-title a:hover {
+  text-decoration: underline;
+}
+
+.md-search-results .item-href {
+  font-size: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-tertiary);
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.md-search-results .item-brief {
+  font-size: var(--md-sys-typescale-body-medium);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-search-results .item-brief b {
+  color: var(--md-sys-color-primary);
+  font-weight: 500;
+}
+
+// Pagination
+.md-search-results nav {
+  margin-top: 24px;
+}
+
+.md-search-results .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-search-results .page-item {
+  display: inline-flex;
+}
+
+.md-search-results .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: var(--md-sys-typescale-label-large);
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+}
+
+.md-search-results .page-link:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.md-search-results .page-item.active .page-link {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.md-search-results .page-item.disabled .page-link {
+  color: var(--md-sys-color-on-surface-variant);
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,0 +1,139 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  commentId: T:Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  id: QQGroupMemberType
+  parent: Another_Mirai_Native.Model.Enums
+  children:
+  - Another_Mirai_Native.Model.Enums.QQGroupMemberType.Creator
+  - Another_Mirai_Native.Model.Enums.QQGroupMemberType.Manage
+  - Another_Mirai_Native.Model.Enums.QQGroupMemberType.Member
+  langs:
+  - csharp
+  - vb
+  name: QQGroupMemberType
+  nameWithType: QQGroupMemberType
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  type: Enum
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQGroupMemberType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 表示群成员对于所在群的群成员类型
+  example: []
+  syntax:
+    content: public enum QQGroupMemberType
+    content.vb: Public Enum QQGroupMemberType
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Member
+  commentId: F:Another_Mirai_Native.Model.Enums.QQGroupMemberType.Member
+  id: Member
+  parent: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  langs:
+  - csharp
+  - vb
+  name: Member
+  nameWithType: QQGroupMemberType.Member
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Member
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQGroupMemberType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 成员
+  example: []
+  syntax:
+    content: Member = 1
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Manage
+  commentId: F:Another_Mirai_Native.Model.Enums.QQGroupMemberType.Manage
+  id: Manage
+  parent: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  langs:
+  - csharp
+  - vb
+  name: Manage
+  nameWithType: QQGroupMemberType.Manage
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Manage
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQGroupMemberType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 管理
+  example: []
+  syntax:
+    content: Manage = 2
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Creator
+  commentId: F:Another_Mirai_Native.Model.Enums.QQGroupMemberType.Creator
+  id: Creator
+  parent: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  langs:
+  - csharp
+  - vb
+  name: Creator
+  nameWithType: QQGroupMemberType.Creator
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType.Creator
+  type: Field
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/69e426666eb3f4c996896fdd5a49c2ecb858eec1/Another-Mirai-Native.Abstractions/Enums/QQGroupMemberType.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Model.Enums
+  summary: 群主
+  example: []
+  syntax:
+    content: Creator = 3
+    return:
+      type: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+references:
+- uid: Another_Mirai_Native.Model.Enums
+  commentId: N:Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Model.Enums
+  nameWithType: Another_Mirai_Native.Model.Enums
+  fullName: Another_Mirai_Native.Model.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Model
+    name: Model
+    isExternal: true
+    href: Another_Mirai_Native.Model.html
+  - name: .
+  - uid: Another_Mirai_Native.Model.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Model.Enums.html
+- uid: Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  commentId: T:Another_Mirai_Native.Model.Enums.QQGroupMemberType
+  parent: Another_Mirai_Native.Model.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Model.Enums.QQGroupMemberType.html
+  name: QQGroupMemberType
+  nameWithType: QQGroupMemberType
+  fullName: Another_Mirai_Native.Model.Enums.QQGroupMemberType

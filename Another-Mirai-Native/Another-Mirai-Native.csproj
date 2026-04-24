@@ -6,11 +6,12 @@
 		<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Another_Mirai_Native</RootNamespace>
 		<Platforms>AnyCPU;x86</Platforms>
 		<LangVersion>12</LangVersion>
-		<Version>2.10.1</Version>
+		<Version>2.12.0</Version>
 		<WeaverConfiguration Condition="'$(TargetFramework)' == 'net48'">
 			<Weavers>
 				<Costura />
@@ -44,7 +45,7 @@
 
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-		<PackageReference Include="SqlSugar" Version="5.1.4.170" />
+		<PackageReference Include="SqlSugar" Version="5.1.4.207" />
 		<PackageReference Include="Costura.Fody" Version="5.7.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -53,12 +54,25 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
 		<PackageReference Include="SqlSugarCore">
-			<Version>5.1.4.170</Version>
+			<Version>5.1.4.214</Version>
 		</PackageReference>
 		<PackageReference Include="Net.Codecrete.QrCodeGenerator" Version="1.6.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd ..&#xD;&#xA;call copy.bat" />
 	</Target>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Another-Mirai-Native-WebUI</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Another-Mirai-Native-UI</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 </Project>

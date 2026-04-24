@@ -257,7 +257,7 @@ namespace Another_Mirai_Native.Native
                 PluginLoaderType = (PluginLoaderType)AppInfo.LoaderType;
                 LoaderProcessPath = PluginLoaderType switch
                 {
-                    PluginLoaderType.Net8 => @"loaders\Net8\Another-Mirai-Native.exe",
+                    PluginLoaderType.NetCore => @"loaders\NetCore\Another-Mirai-Native.exe",
                     _ => @"loaders\NetFramework48\Another-Mirai-Native.exe",
                 };
 
@@ -266,7 +266,7 @@ namespace Another_Mirai_Native.Native
                     if (!HasShownNoLoaderMessage)
                     {
                         HasShownNoLoaderMessage = true;
-                        LogHelper.Error("加载插件", $"指定的加载器文件不存在，将尝试使用主程序加载");
+                        LogHelper.Info("加载插件", $"将使用主程序加载");
                     }
                     LoaderProcessPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\{AppDomain.CurrentDomain.FriendlyName}";
                 }

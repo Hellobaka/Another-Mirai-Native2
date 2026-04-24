@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Lagrange.Core.Message;
@@ -120,7 +122,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             return message.ToString();
         }
 
-        public static void ParseCQCodeToMessageChain(MessageBuilder builder, string message)
+        public static void ParseCQCodeToMessageChain(Lagrange.Core.Message.MessageBuilder builder, string message)
         {
             var splits = message.SplitV2("\\[CQ:.*?\\]");
             foreach (var s in splits)
@@ -137,7 +139,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 switch (cqcode.Function)
                 {
-                    case Model.Enums.CQCodeType.Face:
+                    case MessageItemType.Face:
                         if (ushort.TryParse(cqcode.Items["id"], out ushort faceId))
                         {
                             builder.Face(faceId);
@@ -148,7 +150,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.Image:
+                    case MessageItemType.Image:
                         string file = cqcode.Items["file"];
                         string picPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "image", file);
                         if (File.Exists(picPath))
@@ -170,7 +172,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.Record:
+                    case MessageItemType.Record:
                         string recordPath = cqcode.Items["file"];
                         recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordPath);
                         if (File.Exists(recordPath))
@@ -206,12 +208,12 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         }
                         break;
 
-                    case Model.Enums.CQCodeType.At:
+                    case MessageItemType.At:
                         uint qq = uint.TryParse(cqcode.Items["qq"], out uint l) ? l : 0;
                         builder.Mention(qq);
                         break;
 
-                    case Model.Enums.CQCodeType.Reply:
+                    case MessageItemType.Reply:
                         if (int.TryParse(cqcode.Items["id"], out int msgId))
                         {
                             var msg = MessageCacher.GetMessageById(msgId);

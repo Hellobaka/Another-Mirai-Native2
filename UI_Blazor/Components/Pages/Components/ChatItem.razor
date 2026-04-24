@@ -1,7 +1,10 @@
 ﻿@using System.Text.RegularExpressions
 @using System.Diagnostics
 @using System.Text
+@using Another_Mirai_Native.Abstractions.Enums
+@using Another_Mirai_Native.Abstractions.Models
 @inject ISnackbar Snackbar
+
 @if (Item.DetailItemType == DetailItemType.Notice)
 {
     <div style="display:flex; justify-content:center;" id="@($"chatItem_{Item.HistoryId}")">
@@ -430,13 +433,13 @@ else
                         renderItem.Text = part;
                         switch (item.Function)
                         {
-                            case Model.Enums.CQCodeType.Image:
+                            case MessageItemType.Image:
                                 renderItem.RenderType = RenderType.Image;
                                 renderItem.ImageUrl = await GetImageUrlFromCQCode(item);
                                 renderItem.ImageFailed = string.IsNullOrWhiteSpace(renderItem.ImageUrl);
                                 break;
 
-                            case Model.Enums.CQCodeType.Reply:
+                            case MessageItemType.Reply:
                                 renderItem.RenderType = RenderType.Reply;
                                 renderItem.ReplyId = int.Parse(item.Items["id"]);
                                 result.Insert(0, renderItem);
@@ -458,7 +461,7 @@ else
                                 });
                                 continue;
 
-                            case Model.Enums.CQCodeType.At:
+                            case MessageItemType.At:
                                 renderItem.RenderType = RenderType.At;
                                 renderItem.AtTarget = long.Parse(item.Items["qq"]);
                                 renderItem.AtNick = "@" + renderItem.AtTarget.ToString();
@@ -471,7 +474,7 @@ else
                                 });
                                 break;
 
-                            case Model.Enums.CQCodeType.Face:
+                            case MessageItemType.Face:
                                 renderItem.RenderType = RenderType.Face;
                                 renderItem.FaceId = int.Parse(item.Items["id"]);
                                 break;

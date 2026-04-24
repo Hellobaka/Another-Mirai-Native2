@@ -1,0 +1,803 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  commentId: T:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  id: GroupInviteRequestContext
+  parent: Another_Mirai_Native.Abstractions.Context
+  children:
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  - Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  langs:
+  - csharp
+  - vb
+  name: GroupInviteRequestContext
+  nameWithType: GroupInviteRequestContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  type: Class
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述被邀请加入群事件参数的类
+  example: []
+  syntax:
+    content: public class GroupInviteRequestContext
+    content.vb: Public Class GroupInviteRequestContext
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,System.String,System.String)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.DateTime,Another_Mirai_Native.Abstractions.Models.Group,Another_Mirai_Native.Abstractions.Models.QQ,System.String,System.String)'
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: GroupInviteRequestContext(IPluginApi, DateTime, Group, QQ, string, string)
+  nameWithType: GroupInviteRequestContext.GroupInviteRequestContext(IPluginApi, DateTime, Group, QQ, string, string)
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.GroupInviteRequestContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, string, string)
+  type: Constructor
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 提供用于描述被邀请加入群事件参数的类
+  example: []
+  syntax:
+    content: public GroupInviteRequestContext(IPluginApi api, DateTime sendTime, Group fromGroup, QQ fromQQ, string appendMessage, string requestFlag)
+    parameters:
+    - id: api
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    - id: sendTime
+      type: System.DateTime
+    - id: fromGroup
+      type: Another_Mirai_Native.Abstractions.Models.Group
+    - id: fromQQ
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    - id: appendMessage
+      type: System.String
+    - id: requestFlag
+      type: System.String
+    content.vb: Public Sub New(api As IPluginApi, sendTime As Date, fromGroup As Group, fromQQ As QQ, appendMessage As String, requestFlag As String)
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor*
+  nameWithType.vb: GroupInviteRequestContext.New(IPluginApi, Date, Group, QQ, String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Date, Another_Mirai_Native.Abstractions.Models.Group, Another_Mirai_Native.Abstractions.Models.QQ, String, String)
+  name.vb: New(IPluginApi, Date, Group, QQ, String, String)
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  id: SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: SetRequestResult(RequestHandleResult)
+  nameWithType: GroupInviteRequestContext.SetRequestResult(RequestHandleResult)
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 处理请求结果的方法
+  example: []
+  syntax:
+    content: public void SetRequestResult(RequestHandleResult result)
+    parameters:
+    - id: result
+      type: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+      description: 处理结果
+    content.vb: Public Sub SetRequestResult(result As RequestHandleResult)
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  id: SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: SetRequestResultAsync(RequestHandleResult)
+  nameWithType: GroupInviteRequestContext.SetRequestResultAsync(RequestHandleResult)
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 异步处理请求结果的方法
+  example: []
+  syntax:
+    content: public Task SetRequestResultAsync(RequestHandleResult result)
+    parameters:
+    - id: result
+      type: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+      description: 处理结果
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Public Function SetRequestResultAsync(result As RequestHandleResult) As Task
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+  id: API
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: API
+  nameWithType: GroupInviteRequestContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取插件 API 实例
+  example: []
+  syntax:
+    content: public IPluginApi API { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Services.IPluginApi
+    content.vb: Public ReadOnly Property API As IPluginApi
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+  id: SendTime
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: SendTime
+  nameWithType: GroupInviteRequestContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的发送时间
+  example: []
+  syntax:
+    content: public DateTime SendTime { get; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public ReadOnly Property SendTime As Date
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+  id: FromGroup
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: FromGroup
+  nameWithType: GroupInviteRequestContext.FromGroup
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的来源群
+  example: []
+  syntax:
+    content: public Group FromGroup { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.Group
+    content.vb: Public ReadOnly Property FromGroup As Group
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+  id: FromQQ
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: FromQQ
+  nameWithType: GroupInviteRequestContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的来源QQ
+  example: []
+  syntax:
+    content: public QQ FromQQ { get; }
+    parameters: []
+    return:
+      type: Another_Mirai_Native.Abstractions.Models.QQ
+    content.vb: Public ReadOnly Property FromQQ As QQ
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ*
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage
+  commentId: P:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage
+  id: AppendMessage
+  parent: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext
+  langs:
+  - csharp
+  - vb
+  name: AppendMessage
+  nameWithType: GroupInviteRequestContext.AppendMessage
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage
+  type: Property
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/GroupInviteRequestContext.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Context
+  summary: 获取当前事件的附加消息
+  example: []
+  syntax:
+    content: public string AppendMessage { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property AppendMessage As String
+  overload: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage*
+references:
+- uid: Another_Mirai_Native.Abstractions.Context
+  commentId: N:Another_Mirai_Native.Abstractions.Context
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Context
+  nameWithType: Another_Mirai_Native.Abstractions.Context
+  fullName: Another_Mirai_Native.Abstractions.Context
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Context
+    name: Context
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Context.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.#ctor
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext__ctor_Another_Mirai_Native_Abstractions_Services_IPluginApi_System_DateTime_Another_Mirai_Native_Abstractions_Models_Group_Another_Mirai_Native_Abstractions_Models_QQ_System_String_System_String_
+  name: GroupInviteRequestContext
+  nameWithType: GroupInviteRequestContext.GroupInviteRequestContext
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.GroupInviteRequestContext
+  nameWithType.vb: GroupInviteRequestContext.New
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.New
+  name.vb: New
+- uid: Another_Mirai_Native.Abstractions.Services.IPluginApi
+  commentId: T:Another_Mirai_Native.Abstractions.Services.IPluginApi
+  parent: Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.IPluginApi.html
+  name: IPluginApi
+  nameWithType: IPluginApi
+  fullName: Another_Mirai_Native.Abstractions.Services.IPluginApi
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: Another_Mirai_Native.Abstractions.Models.Group
+  commentId: T:Another_Mirai_Native.Abstractions.Models.Group
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.Group.html
+  name: Group
+  nameWithType: Group
+  fullName: Another_Mirai_Native.Abstractions.Models.Group
+- uid: Another_Mirai_Native.Abstractions.Models.QQ
+  commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
+  parent: Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Models.QQ.html
+  name: QQ
+  nameWithType: QQ
+  fullName: Another_Mirai_Native.Abstractions.Models.QQ
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Models
+  commentId: N:Another_Mirai_Native.Abstractions.Models
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Models
+  nameWithType: Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Models
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Models
+    name: Models
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Models.html
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_SetRequestResult_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_
+  name: SetRequestResult
+  nameWithType: GroupInviteRequestContext.SetRequestResult
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResult
+- uid: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult.html
+  name: RequestHandleResult
+  nameWithType: RequestHandleResult
+  fullName: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
+- uid: Another_Mirai_Native.Abstractions.Enums
+  commentId: N:Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Enums
+  nameWithType: Another_Mirai_Native.Abstractions.Enums
+  fullName: Another_Mirai_Native.Abstractions.Enums
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Enums
+    name: Enums
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Enums.html
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_SetRequestResultAsync_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_
+  name: SetRequestResultAsync
+  nameWithType: GroupInviteRequestContext.SetRequestResultAsync
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SetRequestResultAsync
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_API
+  name: API
+  nameWithType: GroupInviteRequestContext.API
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.API
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_SendTime
+  name: SendTime
+  nameWithType: GroupInviteRequestContext.SendTime
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.SendTime
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_FromGroup
+  name: FromGroup
+  nameWithType: GroupInviteRequestContext.FromGroup
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromGroup
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_FromQQ
+  name: FromQQ
+  nameWithType: GroupInviteRequestContext.FromQQ
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.FromQQ
+- uid: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.html#Another_Mirai_Native_Abstractions_Context_GroupInviteRequestContext_AppendMessage
+  name: AppendMessage
+  nameWithType: GroupInviteRequestContext.AppendMessage
+  fullName: Another_Mirai_Native.Abstractions.Context.GroupInviteRequestContext.AppendMessage

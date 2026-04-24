@@ -47,23 +47,26 @@
             UseAutoRecall = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             tabPage2 = new System.Windows.Forms.TabPage();
+            EventArgumentsPanel = new System.Windows.Forms.Panel();
+            InvokeEventButton = new System.Windows.Forms.Button();
+            EventSelector = new System.Windows.Forms.ComboBox();
             label4 = new System.Windows.Forms.Label();
             tabPage3 = new System.Windows.Forms.TabPage();
-            HideQRCodeButton = new System.Windows.Forms.Button();
-            groupBox3 = new System.Windows.Forms.GroupBox();
             groupBox4 = new System.Windows.Forms.GroupBox();
             BotOnlineButton = new System.Windows.Forms.Button();
             BotOfflineButton = new System.Windows.Forms.Button();
-            ShowQRCodeButton = new System.Windows.Forms.Button();
+            groupBox3 = new System.Windows.Forms.GroupBox();
             ChangeQRCodeButton = new System.Windows.Forms.Button();
+            ShowQRCodeButton = new System.Windows.Forms.Button();
+            HideQRCodeButton = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             tabPage2.SuspendLayout();
             tabPage3.SuspendLayout();
-            groupBox3.SuspendLayout();
             groupBox4.SuspendLayout();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -271,6 +274,9 @@
             // tabPage2
             // 
             tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            tabPage2.Controls.Add(EventArgumentsPanel);
+            tabPage2.Controls.Add(InvokeEventButton);
+            tabPage2.Controls.Add(EventSelector);
             tabPage2.Controls.Add(label4);
             tabPage2.Location = new System.Drawing.Point(4, 26);
             tabPage2.Name = "tabPage2";
@@ -279,15 +285,41 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "事件测试";
             // 
+            // EventArgumentsPanel
+            // 
+            EventArgumentsPanel.AutoScroll = true;
+            EventArgumentsPanel.Location = new System.Drawing.Point(12, 42);
+            EventArgumentsPanel.Name = "EventArgumentsPanel";
+            EventArgumentsPanel.Size = new System.Drawing.Size(442, 147);
+            EventArgumentsPanel.TabIndex = 3;
+            // 
+            // InvokeEventButton
+            // 
+            InvokeEventButton.Location = new System.Drawing.Point(360, 11);
+            InvokeEventButton.Name = "InvokeEventButton";
+            InvokeEventButton.Size = new System.Drawing.Size(94, 25);
+            InvokeEventButton.TabIndex = 2;
+            InvokeEventButton.Text = "发送";
+            InvokeEventButton.UseVisualStyleBackColor = true;
+            InvokeEventButton.Click += EventInvokeButton_Click;
+            // 
+            // EventSelector
+            // 
+            EventSelector.FormattingEnabled = true;
+            EventSelector.Location = new System.Drawing.Point(74, 11);
+            EventSelector.Name = "EventSelector";
+            EventSelector.Size = new System.Drawing.Size(280, 25);
+            EventSelector.TabIndex = 0;
+            EventSelector.SelectedIndexChanged += EventMethodSelector_SelectedIndexChanged;
+            // 
             // label4
             // 
-            label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            label4.Location = new System.Drawing.Point(3, 3);
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(12, 14);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(456, 189);
-            label4.TabIndex = 0;
-            label4.Text = "哈喵？";
-            label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label4.Size = new System.Drawing.Size(68, 17);
+            label4.TabIndex = 1;
+            label4.Text = "事件类型：";
             // 
             // tabPage3
             // 
@@ -300,28 +332,6 @@
             tabPage3.Size = new System.Drawing.Size(462, 195);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "框架事件";
-            // 
-            // HideQRCodeButton
-            // 
-            HideQRCodeButton.Location = new System.Drawing.Point(91, 22);
-            HideQRCodeButton.Name = "HideQRCodeButton";
-            HideQRCodeButton.Size = new System.Drawing.Size(79, 25);
-            HideQRCodeButton.TabIndex = 1;
-            HideQRCodeButton.Text = "隐藏二维码";
-            HideQRCodeButton.UseVisualStyleBackColor = true;
-            HideQRCodeButton.Click += HideQRCodeButton_Click;
-            // 
-            // groupBox3
-            // 
-            groupBox3.Controls.Add(ChangeQRCodeButton);
-            groupBox3.Controls.Add(ShowQRCodeButton);
-            groupBox3.Controls.Add(HideQRCodeButton);
-            groupBox3.Location = new System.Drawing.Point(8, 6);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new System.Drawing.Size(446, 61);
-            groupBox3.TabIndex = 2;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "二维码事件";
             // 
             // groupBox4
             // 
@@ -354,15 +364,17 @@
             BotOfflineButton.UseVisualStyleBackColor = true;
             BotOfflineButton.Click += BotOfflineButton_Click;
             // 
-            // ShowQRCodeButton
+            // groupBox3
             // 
-            ShowQRCodeButton.Location = new System.Drawing.Point(6, 22);
-            ShowQRCodeButton.Name = "ShowQRCodeButton";
-            ShowQRCodeButton.Size = new System.Drawing.Size(79, 25);
-            ShowQRCodeButton.TabIndex = 0;
-            ShowQRCodeButton.Text = "显示二维码";
-            ShowQRCodeButton.UseVisualStyleBackColor = true;
-            ShowQRCodeButton.Click += ShowQRCodeButton_Click;
+            groupBox3.Controls.Add(ChangeQRCodeButton);
+            groupBox3.Controls.Add(ShowQRCodeButton);
+            groupBox3.Controls.Add(HideQRCodeButton);
+            groupBox3.Location = new System.Drawing.Point(8, 6);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(446, 61);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "二维码事件";
             // 
             // ChangeQRCodeButton
             // 
@@ -373,6 +385,26 @@
             ChangeQRCodeButton.Text = "修改二维码图片";
             ChangeQRCodeButton.UseVisualStyleBackColor = true;
             ChangeQRCodeButton.Click += ChangeQRCodeButton_Click;
+            // 
+            // ShowQRCodeButton
+            // 
+            ShowQRCodeButton.Location = new System.Drawing.Point(6, 22);
+            ShowQRCodeButton.Name = "ShowQRCodeButton";
+            ShowQRCodeButton.Size = new System.Drawing.Size(79, 25);
+            ShowQRCodeButton.TabIndex = 0;
+            ShowQRCodeButton.Text = "显示二维码";
+            ShowQRCodeButton.UseVisualStyleBackColor = true;
+            ShowQRCodeButton.Click += ShowQRCodeButton_Click;
+            // 
+            // HideQRCodeButton
+            // 
+            HideQRCodeButton.Location = new System.Drawing.Point(91, 22);
+            HideQRCodeButton.Name = "HideQRCodeButton";
+            HideQRCodeButton.Size = new System.Drawing.Size(79, 25);
+            HideQRCodeButton.TabIndex = 1;
+            HideQRCodeButton.Text = "隐藏二维码";
+            HideQRCodeButton.UseVisualStyleBackColor = true;
+            HideQRCodeButton.Click += HideQRCodeButton_Click;
             // 
             // Tester
             // 
@@ -396,9 +428,10 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
             tabPage3.ResumeLayout(false);
-            groupBox3.ResumeLayout(false);
             groupBox4.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -423,7 +456,6 @@
         private System.Windows.Forms.CheckBox UseMessageID;
         private System.Windows.Forms.TextBox AutoRecallValue;
         private System.Windows.Forms.CheckBox UseAutoRecall;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button BotOnlineButton;
@@ -432,5 +464,9 @@
         private System.Windows.Forms.Button HideQRCodeButton;
         private System.Windows.Forms.Button ChangeQRCodeButton;
         private System.Windows.Forms.Button ShowQRCodeButton;
+        private System.Windows.Forms.Button InvokeEventButton;
+        private System.Windows.Forms.ComboBox EventSelector;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel EventArgumentsPanel;
     }
 }

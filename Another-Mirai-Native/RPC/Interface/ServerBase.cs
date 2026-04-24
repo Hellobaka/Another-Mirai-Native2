@@ -1,9 +1,11 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -15,12 +17,12 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public bool ShowErrorDialogEventHasSubscribed => OnShowErrorDialogCalled?.GetInvocationList().Length > 0;
 
-        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
+        public ConcurrentDictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
         /// <summary>
         /// PID/Object
         /// </summary>
-        private Dictionary<int, object> Connections { get; set; } = new();
+        private ConcurrentDictionary<int, object> Connections { get; set; } = new();
 
         public void ActiveShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {
@@ -190,7 +192,7 @@ namespace Another_Mirai_Native.RPC.Interface
             switch (command)
             {
                 case "ClientStartUp":
-                    Connections.Add(Convert.ToInt32(pid), connection);
+                    Connections.AddOrUpdate(Convert.ToInt32(pid), connection, (key, oldValue) => connection);
                     ClientStartup(Convert.ToInt32(pid), result.Result?.ToString());
                     break;
 
@@ -285,10 +287,10 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public void ShowErrorDialog(string guid, int authCode, string? title, string? content, bool canIgnore)
         {
-            WaitingMessage.Add(guid, new InvokeResult());
+            WaitingMessage.AddOrUpdate(guid, new InvokeResult(), (key, oldValue) => new InvokeResult());
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title ?? "", content ?? "", canIgnore);
             RequestWaiter.Wait(guid, -1, null, out _);
-            WaitingMessage.Remove(guid);
+            WaitingMessage.TryRemove(guid, out _);
         }
 
         public void NotifyCurrentQQChanged(long currentQQ, string nickName)

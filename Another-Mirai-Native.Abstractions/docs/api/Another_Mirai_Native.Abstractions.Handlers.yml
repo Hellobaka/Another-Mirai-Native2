@@ -1,0 +1,175 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  id: Another_Mirai_Native.Abstractions.Handlers
+  children:
+  - Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  - Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler.html
+  name: IAdminChangeHandler
+  nameWithType: IAdminChangeHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IAdminChangeHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler.html
+  name: IFriendAddedHandler
+  nameWithType: IFriendAddedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IFriendAddedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler.html
+  name: IFriendAddRequestHandler
+  nameWithType: IFriendAddRequestHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IFriendAddRequestHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler.html
+  name: IGroupAddRequestHandler
+  nameWithType: IGroupAddRequestHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupAddRequestHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler.html
+  name: IGroupFileUploadHandler
+  nameWithType: IGroupFileUploadHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupFileUploadHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler.html
+  name: IGroupInviteRequestHandler
+  nameWithType: IGroupInviteRequestHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupInviteRequestHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler.html
+  name: IGroupMemberBannedHandler
+  nameWithType: IGroupMemberBannedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberBannedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler.html
+  name: IGroupMemberDecreaseHandler
+  nameWithType: IGroupMemberDecreaseHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler.html
+  name: IGroupMemberIncreaseHandler
+  nameWithType: IGroupMemberIncreaseHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberIncreaseHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler.html
+  name: IGroupMemberUnbannedHandler
+  nameWithType: IGroupMemberUnbannedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberUnbannedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler.html
+  name: IGroupMessageHandler
+  nameWithType: IGroupMessageHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMessageHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler.html
+  name: IGroupWholeBannedHandler
+  nameWithType: IGroupWholeBannedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeBannedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler.html
+  name: IGroupWholeUnbannedHandler
+  nameWithType: IGroupWholeUnbannedHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupWholeUnbannedHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler.html
+  name: IMenuHandler
+  nameWithType: IMenuHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IMenuHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+  commentId: T:Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+  parent: Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler.html
+  name: IPrivateMessageHandler
+  nameWithType: IPrivateMessageHandler
+  fullName: Another_Mirai_Native.Abstractions.Handlers.IPrivateMessageHandler
+- uid: Another_Mirai_Native.Abstractions.Handlers
+  commentId: N:Another_Mirai_Native.Abstractions.Handlers
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Handlers
+  nameWithType: Another_Mirai_Native.Abstractions.Handlers
+  fullName: Another_Mirai_Native.Abstractions.Handlers
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Handlers
+    name: Handlers
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Handlers.html

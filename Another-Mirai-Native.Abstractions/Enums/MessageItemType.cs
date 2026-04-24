@@ -1,0 +1,73 @@
+﻿namespace Another_Mirai_Native.Abstractions.Enums
+{
+    /// <summary>
+    /// 消息片段类型。
+    /// </summary>
+    public enum MessageItemType
+    {
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        /// QQ表情
+        /// </summary>
+        Face,
+
+        /// <summary>
+        /// 原创表情
+        /// </summary>
+        Bface,
+
+        /// <summary>
+        /// 图片
+        /// </summary>
+        Image,
+
+        /// <summary>
+        /// 语音
+        /// </summary>
+        Record,
+
+        /// <summary>
+        /// At默认
+        /// </summary>
+        At,
+
+        /// <summary>
+        /// 猜拳魔法表情
+        /// </summary>
+        Rps,
+
+        /// <summary>
+        /// 屏幕抖动
+        /// </summary>
+        Shake,
+
+        /// <summary>
+        /// 掷骰子魔法表情
+        /// </summary>
+        Dice,
+
+        /// <summary>
+        /// 戳一戳
+        /// </summary>
+        Poke,
+
+        /// <summary>
+        /// 卡片消息
+        /// </summary>
+        Rich,
+
+        /// <summary>
+        /// 引用消息
+        /// </summary>
+        Reply,
+
+        /// <summary>
+        /// 纯文本
+        /// </summary>
+        Text
+    }
+}

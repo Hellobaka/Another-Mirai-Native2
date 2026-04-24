@@ -1,0 +1,281 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger
+  commentId: T:Another_Mirai_Native.Abstractions.Services.ILogger
+  id: ILogger
+  parent: Another_Mirai_Native.Abstractions.Services
+  children:
+  - Another_Mirai_Native.Abstractions.Services.ILogger.Debug(System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Services.ILogger.Error(System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Services.ILogger.Fatal(System.String)
+  - Another_Mirai_Native.Abstractions.Services.ILogger.Info(System.String,System.String)
+  - Another_Mirai_Native.Abstractions.Services.ILogger.Warn(System.String,System.String)
+  langs:
+  - csharp
+  - vb
+  name: ILogger
+  nameWithType: ILogger
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger
+  type: Interface
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 定义在不同严重级别（包括调试、信息、警告、错误和致命）记录消息的契约。
+  remarks: >-
+    此接口的实现应提供记录日志消息的基础机制。这使得应用程序能够以一致的方式记录诊断和操作信息，
+                同时在日志的存储位置和显示方式上提供灵活性。每个方法对应特定的日志级别，使开发人员能够根据需要
+                对日志输出进行分类和筛选。
+  example: []
+  syntax:
+    content: public interface ILogger
+    content.vb: Public Interface ILogger
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Debug(System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.ILogger.Debug(System.String,System.String)
+  id: Debug(System.String,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.ILogger
+  langs:
+  - csharp
+  - vb
+  name: Debug(string, string)
+  nameWithType: ILogger.Debug(string, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Debug(string, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 记录 Debug 等级的日志
+  example: []
+  syntax:
+    content: void Debug(string type, string message)
+    parameters:
+    - id: type
+      type: System.String
+      description: 日志的类别
+    - id: message
+      type: System.String
+      description: 要记录的消息。
+    content.vb: Sub Debug(type As String, message As String)
+  overload: Another_Mirai_Native.Abstractions.Services.ILogger.Debug*
+  nameWithType.vb: ILogger.Debug(String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.ILogger.Debug(String, String)
+  name.vb: Debug(String, String)
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Info(System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.ILogger.Info(System.String,System.String)
+  id: Info(System.String,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.ILogger
+  langs:
+  - csharp
+  - vb
+  name: Info(string, string)
+  nameWithType: ILogger.Info(string, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Info(string, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 记录 Info 等级的日志
+  example: []
+  syntax:
+    content: void Info(string type, string message)
+    parameters:
+    - id: type
+      type: System.String
+      description: 日志的类别
+    - id: message
+      type: System.String
+      description: 要记录的消息。
+    content.vb: Sub Info(type As String, message As String)
+  overload: Another_Mirai_Native.Abstractions.Services.ILogger.Info*
+  nameWithType.vb: ILogger.Info(String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.ILogger.Info(String, String)
+  name.vb: Info(String, String)
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Warn(System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.ILogger.Warn(System.String,System.String)
+  id: Warn(System.String,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.ILogger
+  langs:
+  - csharp
+  - vb
+  name: Warn(string, string)
+  nameWithType: ILogger.Warn(string, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Warn(string, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 记录 Warn 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。
+  example: []
+  syntax:
+    content: void Warn(string type, string message)
+    parameters:
+    - id: type
+      type: System.String
+      description: 日志的类别
+    - id: message
+      type: System.String
+      description: 要记录的消息。
+    content.vb: Sub Warn(type As String, message As String)
+  overload: Another_Mirai_Native.Abstractions.Services.ILogger.Warn*
+  nameWithType.vb: ILogger.Warn(String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.ILogger.Warn(String, String)
+  name.vb: Warn(String, String)
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Error(System.String,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.ILogger.Error(System.String,System.String)
+  id: Error(System.String,System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.ILogger
+  langs:
+  - csharp
+  - vb
+  name: Error(string, string)
+  nameWithType: ILogger.Error(string, string)
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Error(string, string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 记录 Error 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。
+  example: []
+  syntax:
+    content: void Error(string type, string message)
+    parameters:
+    - id: type
+      type: System.String
+      description: 日志的类别
+    - id: message
+      type: System.String
+      description: 要记录的消息。
+    content.vb: Sub [Error](type As String, message As String)
+  overload: Another_Mirai_Native.Abstractions.Services.ILogger.Error*
+  nameWithType.vb: ILogger.Error(String, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.ILogger.Error(String, String)
+  name.vb: Error(String, String)
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal(System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Services.ILogger.Fatal(System.String)
+  id: Fatal(System.String)
+  parent: Another_Mirai_Native.Abstractions.Services.ILogger
+  langs:
+  - csharp
+  - vb
+  name: Fatal(string)
+  nameWithType: ILogger.Fatal(string)
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal(string)
+  type: Method
+  source:
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/ILogger.cs
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+  namespace: Another_Mirai_Native.Abstractions.Services
+  summary: 记录 Fatal 等级的日志，在这个等级下，根据框架的设置可能会有桌面通知提醒。
+  example: []
+  syntax:
+    content: void Fatal(string message)
+    parameters:
+    - id: message
+      type: System.String
+      description: 要记录的消息。
+    content.vb: Sub Fatal(message As String)
+  overload: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal*
+  nameWithType.vb: ILogger.Fatal(String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal(String)
+  name.vb: Fatal(String)
+references:
+- uid: Another_Mirai_Native.Abstractions.Services
+  commentId: N:Another_Mirai_Native.Abstractions.Services
+  isExternal: true
+  href: Another_Mirai_Native.html
+  name: Another_Mirai_Native.Abstractions.Services
+  nameWithType: Another_Mirai_Native.Abstractions.Services
+  fullName: Another_Mirai_Native.Abstractions.Services
+  spec.csharp:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+  spec.vb:
+  - uid: Another_Mirai_Native
+    name: Another_Mirai_Native
+    isExternal: true
+    href: Another_Mirai_Native.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions
+    name: Abstractions
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.html
+  - name: .
+  - uid: Another_Mirai_Native.Abstractions.Services
+    name: Services
+    isExternal: true
+    href: Another_Mirai_Native.Abstractions.Services.html
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Debug*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.ILogger.Debug
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html#Another_Mirai_Native_Abstractions_Services_ILogger_Debug_System_String_System_String_
+  name: Debug
+  nameWithType: ILogger.Debug
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Debug
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Info*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.ILogger.Info
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html#Another_Mirai_Native_Abstractions_Services_ILogger_Info_System_String_System_String_
+  name: Info
+  nameWithType: ILogger.Info
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Info
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Warn*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.ILogger.Warn
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html#Another_Mirai_Native_Abstractions_Services_ILogger_Warn_System_String_System_String_
+  name: Warn
+  nameWithType: ILogger.Warn
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Warn
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Error*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.ILogger.Error
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html#Another_Mirai_Native_Abstractions_Services_ILogger_Error_System_String_System_String_
+  name: Error
+  nameWithType: ILogger.Error
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Error
+- uid: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Services.ILogger.Fatal
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Services.ILogger.html#Another_Mirai_Native_Abstractions_Services_ILogger_Fatal_System_String_
+  name: Fatal
+  nameWithType: ILogger.Fatal
+  fullName: Another_Mirai_Native.Abstractions.Services.ILogger.Fatal

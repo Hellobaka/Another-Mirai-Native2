@@ -1,0 +1,32 @@
+### YamlMime:ManagedReference
+items:
+- uid: Another_Mirai_Native.Abstractions
+  commentId: N:Another_Mirai_Native.Abstractions
+  id: Another_Mirai_Native.Abstractions
+  children:
+  - Another_Mirai_Native.Abstractions.CommandHandlerBase
+  - Another_Mirai_Native.Abstractions.PluginBase
+  langs:
+  - csharp
+  - vb
+  name: Another_Mirai_Native.Abstractions
+  nameWithType: Another_Mirai_Native.Abstractions
+  fullName: Another_Mirai_Native.Abstractions
+  type: Namespace
+  assemblies:
+  - Another-Mirai-Native.Abstractions
+references:
+- uid: Another_Mirai_Native.Abstractions.CommandHandlerBase
+  commentId: T:Another_Mirai_Native.Abstractions.CommandHandlerBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.CommandHandlerBase.html
+  name: CommandHandlerBase
+  nameWithType: CommandHandlerBase
+  fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase
+- uid: Another_Mirai_Native.Abstractions.PluginBase
+  commentId: T:Another_Mirai_Native.Abstractions.PluginBase
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.PluginBase.html
+  name: PluginBase
+  nameWithType: PluginBase
+  fullName: Another_Mirai_Native.Abstractions.PluginBase

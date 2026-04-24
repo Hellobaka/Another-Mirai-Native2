@@ -1,0 +1,178 @@
+/**
+ * Table of Contents styles for Material Design 3 theme
+ */
+
+.md-toc {
+  padding: 16px 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.md-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-toc li {
+  margin: 2px 0;
+}
+
+.md-toc li > ul {
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.md-toc a {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: var(--md-sys-color-on-surface);
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-large);
+  font-size: var(--md-sys-typescale-body-medium);
+  line-height: 1.4;
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard);
+  word-break: break-word;
+}
+
+.md-toc a:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  text-decoration: none;
+}
+
+.md-toc li.active > a {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font-weight: 500;
+}
+
+.md-toc a.nav-link {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+// Expand/collapse button
+.md-toc .expand-stub {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-small);
+  margin-right: 4px;
+  transition: background-color var(--md-sys-motion-duration-short200) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-short300) var(--md-sys-motion-easing-standard);
+}
+
+.md-toc .expand-stub:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.md-toc .expand-stub::before {
+  content: 'chevron_right';
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-toc li.expanded > .expand-stub {
+  transform: rotate(90deg);
+}
+
+// Name only (for category headers)
+.md-toc .name-only {
+  display: block;
+  padding: 12px 12px 8px;
+  font-size: var(--md-sys-typescale-label-small);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+// TOC Filter
+.md-toc .filter {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 12px;
+  padding: 0 8px;
+}
+
+.md-toc .filter .material-symbols-outlined {
+  position: absolute;
+  left: 20px;
+  font-size: 18px;
+  color: var(--md-sys-color-on-surface-variant);
+  pointer-events: none;
+}
+
+.md-toc .filter input {
+  width: 100%;
+  height: 40px;
+  padding: 0 16px 0 44px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  font-size: var(--md-sys-typescale-body-medium);
+  font-family: var(--md-ref-typeface-plain);
+}
+
+.md-toc .filter input::placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-toc .filter input:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 3px rgba(103, 80, 164, 0.12);
+}
+
+// No result message
+.md-toc .no-result {
+  padding: 16px;
+  text-align: center;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-medium);
+}
+
+// PDF link
+.md-toc a.pdf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-large);
+  font-size: var(--md-sys-typescale-body-medium);
+  margin-top: 8px;
+}
+
+.md-toc a.pdf-link:hover {
+  background-color: var(--md-sys-color-primary-container);
+  text-decoration: none;
+}
+
+.md-toc a.pdf-link::before {
+  content: 'picture_as_pdf';
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+}
+
+// Scroll container
+.md-toc > .flex-fill {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+// Overflow Y auto utility
+.overflow-y-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

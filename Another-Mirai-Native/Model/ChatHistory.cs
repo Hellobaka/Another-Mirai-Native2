@@ -1,4 +1,5 @@
-﻿using Another_Mirai_Native.Native;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Native;
 using SqlSugar;
 
 namespace Another_Mirai_Native.Model
@@ -38,6 +39,11 @@ namespace Another_Mirai_Native.Model
             BinaryWriterExpand.Write_Ex(binaryWriter, MsgId);
             BinaryWriterExpand.Write_Ex(binaryWriter, Recalled ? 1 : 0);
             return stream.ToArray();
+        }
+
+        public static ChatHistory FromNative(string raw)
+        {
+            return FromNative(Convert.FromBase64String(raw));
         }
 
         public static ChatHistory FromNative(byte[] buffer)
@@ -90,13 +96,5 @@ namespace Another_Mirai_Native.Model
         {
             return Convert.ToBase64String(ToNative());
         }
-    }
-
-    public enum ChatHistoryType
-    {
-        Group,
-        Private,
-        Notice,
-        Other
     }
 }
