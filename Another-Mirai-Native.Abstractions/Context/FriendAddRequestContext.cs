@@ -40,20 +40,20 @@ namespace Another_Mirai_Native.Abstractions.Context
         /// 处理请求结果的方法
         /// </summary>
         /// <param name="result">处理结果</param>
-        /// <param name="refuseReason">拒绝原因</param>
-        public void SetRequestResult(RequestHandleResult result, string refuseReason = "")
+        /// <param name="card">同意后的备注</param>
+        public void SetRequestResult(RequestHandleResult result, string card = "")
         {
-            API.FriendApi.SetFriendAddRequest(RequestFlag, result == RequestHandleResult.Accept, refuseReason);
+            API.FriendApi.SetFriendAddRequest(RequestFlag, result == RequestHandleResult.Accept, card);
         }
 
         /// <summary>
         /// 异步处理请求结果的方法
         /// </summary>
         /// <param name="result">处理结果</param>
-        /// <param name="refuseReason">拒绝原因</param>
-        public async Task SetRequestResultAsync(RequestHandleResult result, string refuseReason = "")
+        /// <param name="card">同意后的备注</param>
+        public async Task SetRequestResultAsync(RequestHandleResult result, string card = "")
         {
-            await API.FriendApi.SetFriendAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept, refuseReason);
+            await API.FriendApi.SetFriendAddRequestAsync(RequestFlag, result == RequestHandleResult.Accept, card);
         }
     }
 }
