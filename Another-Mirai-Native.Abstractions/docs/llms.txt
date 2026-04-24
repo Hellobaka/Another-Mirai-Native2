@@ -1,0 +1,601 @@
+# AMN2 Plugin Development Guide (llms.txt)
+
+> This document is designed for AI coding assistants (Claude, Copilot, etc.) to autonomously build plugins for the Another-Mirai-Native2 (AMN2) QQ bot framework. It contains everything needed: project setup, API reference, patterns, and pitfalls.
+
+## 1. Framework Overview
+
+- TARGET: Windows only, ClassLibrary, .NET Framework 4.8 OR .NET 9.0 (choose one)
+- SDK NuGet: `Another-Mirai-Native.Abstractions` (netstandard2.0)
+- Native API docs: The NuGet package ships with complete XML documentation at `lib\netstandard2.0\Another-Mirai-Native.Abstractions.xml`. All public types, methods, and parameters have doc comments — refer to this file for precise signatures and descriptions not covered here.
+- Message format: CQ codes. Use `MessageBuilder` (never hand-write CQ codes unless for Text passthrough).
+- Plugin isolation: Plugins run in separate processes, communicating with the host via RPC. This is transparent to plugin code.
+- Output naming: The SDK auto-renames output to `Native_<AssemblyName>.dll` + generates `Native_<AssemblyName>.json` manifest. These two files are your distributable.
+
+## 2. Project Setup (MANDATORY steps)
+
+### 2.1 .csproj requirements
+
+```xml
+<PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>  <!-- or net48 -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+</PropertyGroup>
+```
+
+- Windows-specific TFMs (net9.0-windows, net48) are required if using WinForms/WPF menus.
+- `CopyLocalLockFileAssemblies>true` is MANDATORY for any plugin — without it, dependencies are not copied and the plugin fails to load.
+- The SDK auto-generates manifest and merges dependencies. Default behavior is correct; only customize `GenerateAmnManifest` / `CleanAmnOutputDir` / `IgnoreDependencyVersion` if needed.
+
+### 2.2 Install the SDK NuGet
+
+```
+Install-Package Another-Mirai-Native.Abstractions
+```
+
+### 2.3 File path conventions (THIS IS CRITICAL)
+
+The framework allocates a dedicated directory for each plugin. All plugin-generated files (config, database, cache, etc.) MUST be stored in this directory.
+
+```csharp
+string appDir = API.AppApi.GetAppDirectory();  // e.g., "D:\AMN2\data\plugins\com.example.myplugin\"
+```
+
+**Do NOT** write files to current working directory (`Directory.GetCurrentDirectory()`), program base directory (`AppDomain.CurrentDomain.BaseDirectory`), or hard-coded relative paths. Always use `GetAppDirectory()`.
+
+When sending local images or audio, the file MUST exist under the framework's media directories:
+
+| Media type | Required directory | Subdirectories allowed | Example path |
+|------------|-------------------|----------------------|--------------|
+| Image | `<framework root>\data\image\` | Yes | `data\image\avatars\user123.png` |
+| Audio | `<framework root>\data\record\` | Yes | `data\record\voices\greeting.amr` |
+
+When calling `MessageBuilder.Image()` or `MessageBuilder.Record()`, use paths relative to these directories:
+
+```csharp
+// Image is at D:\AMN2\data\image\avatars\reward.png
+new MessageBuilder().Image("avatars/reward.png")  // relative to data\image
+
+// Audio is at D:\AMN2\data\record\sounds\ding.amr
+new MessageBuilder().Record("sounds/ding.amr")    // relative to data\record
+```
+
+Absolute paths are also accepted but NOT recommended — plugins should use relative paths within the designated media directories.
+
+**The file MUST already exist on disk before calling send.** The framework does not auto-upload or auto-generate images; it only references existing files.
+
+## 3. Plugin Entry Point
+
+### 3.1 Minimal plugin skeleton
+
+```csharp
+using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Models;
+
+namespace MyPlugin;
+
+[PluginInfo(
+    appId: "com.example.myplugin",   // REVERSE DOMAIN FORMAT REQUIRED
+    name: "My Plugin",
+    version: "1.0.0",
+    description: "Does something useful",  // optional
+    author: "Your Name"                     // optional
+)]
+public class Entry : PluginBase
+{
+    public override async Task OnEnableAsync(CancellationToken ct)
+    {
+        API.Logger.Info("MyPlugin", "Plugin enabled!");
+    }
+
+    public override async Task OnDisableAsync(CancellationToken ct)
+    {
+        API.Logger.Info("MyPlugin", "Plugin disabled, cleaning up...");
+    }
+}
+```
+
+### 3.2 Key rules
+
+- `[PluginInfo]` appId MUST use reverse domain format (e.g., `com.example.myplugin`).
+- The entry class MUST inherit `PluginBase`.
+- The entry class MUST be `public`.
+- PluginInfo can be set via `[PluginInfo]` attribute OR by overriding the `PluginInfo` property. Attribute is preferred.
+- `OnEnableAsync` is called after plugin is loaded; use it for initialization (load config, connect DB).
+- `OnDisableAsync` is called before plugin unload; use it for cleanup.
+- Rule-of-thumb: at most ONE class should inherit `PluginBase` per plugin DLL.
+
+## 4. Handling Events
+
+### 4.1 Interface-based event handling
+
+Implement one or more handler interfaces. The class does NOT need to be the PluginBase class — any `public` class works.
+
+Available handlers and their signatures:
+
+```csharp
+// Message handlers
+IGroupMessageHandler    → Task<EventHandleResult> OnReceiveGroupMessageAsync(GroupMessageContext e, CancellationToken ct)
+IPrivateMessageHandler  → Task<EventHandleResult> OnReceivePrivateMessageAsync(PrivateMessageContext e, CancellationToken ct)
+
+// Group member events
+IGroupMemberIncreaseHandler → Task<EventHandleResult> OnGroupMemberIncreaseAsync(GroupMemberIncreaseContext e, CancellationToken ct)
+IGroupMemberDecreaseHandler → Task<EventHandleResult> OnGroupMemberDecreaseAsync(GroupMemberDecreaseContext e, CancellationToken ct)
+IGroupMemberBannedHandler   → Task<EventHandleResult> OnGroupMemberBannedAsync(GroupMemberBannedContext e, CancellationToken ct)
+IGroupMemberUnbannedHandler → Task<EventHandleResult> OnGroupMemberUnbannedAsync(GroupMemberUnbannedContext e, CancellationToken ct)
+
+// Admin & whole-ban events
+IAdminChangeHandler        → Task<EventHandleResult> OnAdminChangeAsync(AdminChangedContext e, CancellationToken ct)
+IGroupWholeBannedHandler   → Task<EventHandleResult> OnGroupWholeBannedAsync(GroupWholeBannedContext e, CancellationToken ct)
+IGroupWholeUnbannedHandler → Task<EventHandleResult> OnGroupWholeUnbannedAsync(GroupWholeUnbannedContext e, CancellationToken ct)
+
+// Request handlers (add friend, add group, group invite)
+IFriendAddRequestHandler   → Task<EventHandleResult> OnFriendAddRequestAsync(FriendAddRequestContext e, CancellationToken ct)
+IGroupAddRequestHandler    → Task<EventHandleResult> OnGroupAddRequestAsync(GroupAddRequestContext e, CancellationToken ct)
+IGroupInviteRequestHandler → Task<EventHandleResult> OnGroupInviteRequestAsync(GroupInviteRequestContext e, CancellationToken ct)
+
+// Other
+IFriendAddedHandler      → Task<EventHandleResult> OnFriendAddedAsync(FriendAddedContext e, CancellationToken ct)
+IGroupFileUploadHandler  → Task<EventHandleResult> OnGroupFileUploadedAsync(GroupFileUploadedContext e, CancellationToken ct)
+IMenuHandler             → void OnMenu(MenuContext e)  // called on UI thread!
+```
+
+### 4.2 EventHandleResult
+
+| Value | Meaning |
+|-------|---------|
+| `EventHandleResult.Block` | Stop event propagation; no further plugins receive it |
+| `EventHandleResult.Pass`  | Allow event to continue to next plugins |
+
+### 4.3 EventPriority
+
+```csharp
+[EventPriority(PluginEventType.GroupMsg, 100)]  // Higher = earlier execution
+public class MyHandler : IGroupMessageHandler { ... }
+```
+
+- `PluginEventType` enum values match handler types (e.g., `GroupMsg`, `PrivateMsg`, `GroupMemberIncrease`, etc.).
+- Can be declared on either PluginBase class or handler class.
+
+### 4.4 Context object pattern
+
+Every handler receives a context object. Example for `GroupMessageContext`:
+
+| Member | Type | Description |
+|--------|------|-------------|
+| `e.Message` | `Message` | Parsed message object |
+| `e.Message.Text` | `string` | Raw message text |
+| `e.Message.MessageChain` | `List<MessageItemBase>` | Structured message elements (At, Image, Face, etc.) |
+| `e.FromQQ` | `QQ` | Sender info (`.Id`, `.NickName`) |
+| `e.FromGroup` | `Group` | Source group (`.Id`, `.Name`) |
+| `e.SendMessageAsync(string)` | `Task<Message>` | Quick reply to source |
+| `e.Reply(string)` | `Task<Message>` | Reply with quote |
+| `e.API` | `IPluginApi` | Full API access |
+
+For request-type contexts (friend add, group add, etc.), there are additional methods:
+- `e.SetRequestResultAsync(RequestHandleResult.Accept)` or `.Deny`
+- `e.AppendMessage` / `e.Flag` for request data
+
+## 5. Command Mode (alternative to raw event handling)
+
+Inherit `CommandHandlerBase` instead of implementing message handlers manually.
+
+```csharp
+using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Attributes;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Enums;
+
+public class Commands : CommandHandlerBase
+{
+    [Command(MatchMode.FullMatch, "/ping")]
+    public void Ping(GroupMessageContext e)
+    {
+        e.SendMessage("pong");
+    }
+
+    [Command(MatchMode.Regex, @"^/give (?<userId>\S+) (?<itemId>\d+) (?<count>\d+)$")]
+    public Task<EventHandleResult> Give(GroupMessageContext e, string userId, int itemId, int count)
+    {
+        e.SendMessage($"Gave {itemId} x{count} to {userId}");
+        return Task.FromResult(EventHandleResult.Block);
+    }
+}
+```
+
+### Match modes
+
+| Mode | Behavior |
+|------|----------|
+| `MatchMode.FullMatch` | Exact match |
+| `MatchMode.StartWith` | Message starts with template |
+| `MatchMode.EndWith` | Message ends with template |
+| `MatchMode.Contain` | Template appears anywhere |
+| `MatchMode.Regex` | Regex match; named groups → method params |
+
+### Method parameters (order-independent, all optional)
+
+- `GroupMessageContext` — only filled for group messages; ensure Scope includes group
+- `PrivateMessageContext` — only filled for private messages; ensure Scope includes private
+- `CancellationToken` — cancellation token
+- `string raw` — the raw message text (parameter name must be exactly `raw`)
+- Named regex capture groups — auto-converted to target type via `Convert.ChangeType`
+
+### Return types
+
+| Return type | Behavior |
+|-------------|----------|
+| `void` | Treated as Block |
+| `EventHandleResult` | Explicit Block/Pass |
+| `Task` | Async, treated as Block |
+| `Task<EventHandleResult>` | Async, explicit Block/Pass |
+
+### DO NOT re-implement IGroupMessageHandler or IPrivateMessageHandler when using CommandHandlerBase
+
+CommandHandlerBase already implements them. Duplicate implementation causes unpredictable dispatch.
+
+### Override fallback
+
+```csharp
+protected override Task<EventHandleResult> OnNoMatchAsync(GroupMessageContext e, CancellationToken ct)
+{
+    // Called when no [Command] matches
+    return base.OnNoMatchAsync(e, ct);
+}
+```
+
+## 6. Sending Messages
+
+### 6.1 Using MessageBuilder (ALWAYS use this)
+
+```csharp
+var msg = new MessageBuilder()
+    .At(qq)
+    .Text(" Hello!")
+    .Face(CQFace.doge)
+    .Image("path/to/image.png")
+    .Build();
+
+await e.SendMessageAsync(msg);
+```
+
+### Available builder methods
+
+| Method | Parameter | Notes |
+|--------|-----------|-------|
+| `.Text(string)` | Text content | Raw text or CQ code string |
+| `.At(long)` | QQ number | @ someone |
+| `.AtAll()` | — | @ everyone (group only) |
+| `.Face(CQFace)` | CQFace enum | QQ emoji; use enum (CQFace.doge, CQFace.点赞, etc.) |
+| `.Image(string)` | File path | Relative to `data\image\` (file MUST exist on disk before sending) |
+| `.ImageHash(string)` | 32-char hash | Reference received image by hash |
+| `.Record(string)` | File path | Relative to `data\record\` (file MUST exist on disk before sending) |
+| `.RecordHash(string)` | Hash | Reference received audio by hash |
+
+### 6.2 Sending via context (preferred for event replies)
+
+```csharp
+await e.SendMessageAsync("text or MessageBuilder output");
+await e.FromGroup.SendGroupMessageAsync("text");
+await e.Reply("reply with quote");
+```
+
+### 6.3 Sending via API (for proactive messages)
+
+```csharp
+// In PluginBase-derived class:
+await API.MessageApi.SendGroupMessageAsync(groupId, "text");
+await API.MessageApi.SendPrivateMessageAsync(userId, "text");
+
+// Message result:
+var result = await API.MessageApi.SendGroupMessageAsync(groupId, "msg");
+if (result.IsSuccess) { /* result.Id is message ID */ }
+```
+
+### 6.4 Deleting messages
+
+```csharp
+await API.MessageApi.DeleteMessageAsync(messageId);
+// Or from Message object:
+await message.DeleteMessageAsync();
+```
+
+## 7. Full API Reference
+
+### 7.1 IPluginApi (aggregate entry point)
+
+Access via `API` property in PluginBase, or `e.API` in context objects.
+
+| Property | Interface | Purpose |
+|----------|-----------|---------|
+| `.Logger` | ILogger | Logging |
+| `.MessageApi` | IMessageApi | Message send/delete/history |
+| `.FriendApi` | IFriendApi | Friend operations |
+| `.GroupApi` | IGroupApi | Group management |
+| `.AppApi` | IAppApi | App info, plugin control |
+
+### 7.2 ILogger
+
+```csharp
+API.Logger.Debug("tag", "message");
+API.Logger.Info("tag", "message");
+API.Logger.Warn("tag", "message");   // May show desktop notification
+API.Logger.Error("tag", "message");  // May show desktop notification
+API.Logger.Fatal("message");         // May show desktop notification
+```
+
+First parameter (`type`) is a free-form tag for categorizing log entries (e.g., "初始化", "处理消息").
+
+### 7.3 IMessageApi
+
+```csharp
+// Send (returns Message with .IsSuccess, .Id)
+int SendPrivateMessage(long userId, string message)
+int SendGroupMessage(long groupId, string message)
+// + Async variants returning Task<int>
+
+// Delete (returns bool)
+bool DeleteMessage(long messageId)
+// + Async variant
+
+// Chat history (private: groupId=0)
+List<ChatHistory> GetChatHistories(long groupId, long qq, int count)
+ChatHistory? GetChatHistoryById(long parentId, bool isGroup, int messageId)
+// + Async variants
+```
+
+### 7.4 IGroupApi
+
+```csharp
+// Info queries
+GroupInfo? GetGroupInfo(long groupId)
+List<GroupInfo> GetGroupList()
+GroupMemberInfo? GetGroupMemberInfo(long groupId, long qq)
+List<GroupMemberInfo> GetGroupMembers(long groupId)  // slow for large groups
+// + Async variants
+
+// Moderation (requires admin/owner, can't target self or owner)
+bool BanGroup(long groupId, bool enable)
+bool BanMember(long groupId, long qq, long durationSeconds)  // 0 = unban
+bool Kick(long groupId, long qq, bool rejectAddRequest = false)
+bool Leave(long groupId)  // dissolves group if owner
+// + Async variants
+
+// Admin
+bool SetAdmin(long groupId, long qq, bool isAdmin)  // owner only
+bool SetMemberCard(long groupId, long qq, string card)
+bool SetMemberTitle(long groupId, long qq, string title)  // owner only
+// + Async variants
+
+// Request handling
+bool SetGroupAddRequest(string flag, bool accept, string refuseReason = "")
+bool SetGroupInviteRequest(string flag, bool accept, string refuseReason = "")
+// + Async variants
+```
+
+### 7.5 IFriendApi
+
+```csharp
+List<FriendInfo> GetFriendInfos()
+bool SendPraise(long qq, int count)  // daily limits may apply
+bool SetFriendAddRequest(string flag, bool accept, string card = "")
+// + Async variants
+```
+
+### 7.6 IAppApi
+
+```csharp
+string GetAppDirectory()     // Plugin data directory (absolute path)
+long GetLoginQQ()            // Current login QQ, 0 if not logged in
+string GetLoginQQNick()      // Current login nickname
+void ReloadPlugin()          // Kills the plugin process
+void DisablePlugin()         // Kills the plugin process
+```
+
+Note: `ReloadPlugin()` and `DisablePlugin()` terminate the plugin process immediately — code after them will not execute.
+
+## 8. Creating UI Windows (WinForms/WPF)
+
+### 8.1 Prerequisites
+
+- TFM MUST include `-windows` suffix (e.g., `net9.0-windows`). Pure `net9.0` will fail.
+- Add `<UseWindowsForms>true</UseWindowsForms>` or `<UseWPF>true</UseWPF>` to .csproj.
+
+### 8.2 Menu-driven window pattern
+
+```csharp
+using Another_Mirai_Native.Abstractions.Attributes;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Handlers;
+
+[Menu("Open My Window")]
+public class WindowEntry : IMenuHandler
+{
+    private MyForm? _form;
+
+    public void OnMenu(MenuContext e)
+    {
+        if (_form == null)
+        {
+            _form = new MyForm();
+            _form.FormClosing += (s, ev) => { _form.Hide(); ev.Cancel = true; };  // reuse
+        }
+        _form.Show();
+    }
+}
+```
+
+- `OnMenu` is called on the UI thread — safe to create/manipulate UI controls.
+- Hide instead of close to reuse window instances across multiple menu clicks.
+- For WPF, use `Closing` event: `e.Cancel = true; window.Hide();`.
+
+## 9. Receiving & Parsing Messages
+
+### 9.1 Message chain traversal
+
+```csharp
+foreach (var item in e.Message.MessageChain)
+{
+    switch (item)
+    {
+        case At at:
+            Console.WriteLine($"@ {at.TargetQQ}");
+            break;
+        case Image img:
+            Console.WriteLine($"Image: {img.FilePath} / hash:{img.Hash}");
+            break;
+        case Face face:
+            Console.WriteLine($"Emoji ID: {face.Id}");
+            break;
+        case Text text:
+            Console.WriteLine($"Text: {text.Content}");
+            break;
+        case Reply reply:
+            Console.WriteLine($"Reply to msg #{reply.MessageId}");
+            break;
+        case RichContent rich:
+            Console.WriteLine($"{rich.Type}: {rich.Content}");
+            break;
+        case Dice dice:
+            Console.WriteLine($"Dice: {dice.Type}");
+            break;
+        case RPS rps:
+            Console.WriteLine($"RPS: {rps.Type}");
+            break;
+        case Record record:
+            Console.WriteLine($"Audio: {record.FilePath}");
+            break;
+        case Poke poke:
+            Console.WriteLine($"Poke: {poke.Name}");
+            break;
+    }
+}
+```
+
+### 9.2 CQCode model
+
+Messages are CQ codes in format `[CQ:type,key=value,...]`. Common types:
+- `[CQ:at,qq=114514]`
+- `[CQ:image,file=abc123.png]`
+- `[CQ:face,id=14]`
+- `[CQ:record,file=audio.amr]`
+- `[CQ:reply,id=123456]`
+- `[CQ:dice,type=1]`
+- `[CQ:json,content=...]` / `[CQ:xml,content=...]`
+
+## 10. Build & Distribution
+
+### 10.1 Build output
+
+After building, find:
+- `Native_<AssemblyName>.dll` — the merged plugin assembly
+- `Native_<AssemblyName>.json` — auto-generated plugin manifest
+
+These two files go into the framework's `data\plugins\` folder.
+
+### 10.2 Native dependency notes
+
+Some NuGet packages depend on native DLLs (e.g., `e_sqlite3.dll`, `libSkiaSharp.dll`). These are NOT auto-merged and must be placed manually in:
+- The framework root directory, OR
+- The `libraries\` folder
+
+### 10.3 Framework built-in dependencies
+
+To minimize plugin size, prefer dependencies already bundled with the framework. See `DependencyManifest-dotnet9.json` in the SDK tools folder for the list.
+
+## 11. Error Patterns & Pitfalls
+
+### DO NOT:
+- Forget `<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>` — plugin silently fails to load
+- Write plugin files (config, DB, cache) to CWD or base directory — use `API.AppApi.GetAppDirectory()` instead
+- Send an image/audio before the file exists on disk — the framework only references existing files
+- Send images from outside `data\image\` or audio from outside `data\record\` — they must be under the framework's media folders
+- Implement both `CommandHandlerBase` AND `IGroupMessageHandler`/`IPrivateMessageHandler` on the same class
+- Use `net9.0` TFM for UI plugins — must be `net9.0-windows`
+- Throw unhandled exceptions in event handlers — they may crash the plugin process
+- Call `ReloadPlugin()` or `DisablePlugin()` and expect code after to execute
+- Use `GroupMessageContext` parameter in `[Command]` with `Scope = MessageScope.Private` — method won't be called; same for the reverse
+
+### ALWAYS:
+- Use `API.AppApi.GetAppDirectory()` for all plugin file storage
+- Ensure images/audio files are placed under `data\image\` / `data\record\` before sending
+- Use `async/await` for event handlers that call async APIs
+- Check `CancellationToken` in long operations
+- Return `EventHandleResult.Block` when you handled the event and want to stop propagation
+- Use `MessageBuilder` instead of manual CQ code strings
+- Test with the `Protocol_NoConnection` protocol for offline development
+
+### CancellationToken usage
+
+```csharp
+public async Task<EventHandleResult> OnReceiveGroupMessageAsync(GroupMessageContext e, CancellationToken ct)
+{
+    if (ct.IsCancellationRequested) return EventHandleResult.Pass;
+    await Task.Delay(5000, ct);  // throws OperationCanceledException if canceled
+    // ... or pass ct to all async methods you call
+}
+```
+
+## 12. Debugging
+
+1. Build the plugin, copy `Native_*.dll` + `Native_*.json` to `data\plugins\`.
+2. In the framework UI, click "Reload Plugins" or restart.
+3. Check framework logs for your plugin name.
+4. To attach a debugger: In Visual Studio, Debug > Attach to Process, find the `Another-Mirai-Native.exe` process with your plugin path in the command line.
+5. Enable `DebugMode` and `DebugLazyLoad` in `conf/Config.json` to pause before `OnEnableAsync` so you can attach a debugger early.
+6. Increase `LoadTimeout` and `PluginInvokeTimeout` in config when debugging to avoid timeout kills.
+
+## 13. Complete Plugin Example
+
+```csharp
+using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Attributes;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Handlers;
+using Another_Mirai_Native.Abstractions.Models;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace DicePlugin;
+
+[PluginInfo("com.example.dice", "Dice Plugin", "1.0.0", "A dice rolling plugin", "Author")]
+public class Entry : PluginBase, IGroupMessageHandler
+{
+    public async Task<EventHandleResult> OnReceiveGroupMessageAsync(GroupMessageContext e, CancellationToken ct)
+    {
+        if (e.Message.Text.Trim().ToLower() is not ("r" or "roll"))
+            return EventHandleResult.Pass;
+
+        var dice = Random.Shared.Next(1, 7);
+        var msg = new MessageBuilder()
+            .At(e.FromQQ.Id)
+            .Text($" You rolled {dice}!")
+            .Build();
+
+        await e.SendMessageAsync(msg);
+        return EventHandleResult.Block;
+    }
+}
+```
+
+## 14. PackageReference Checklist
+
+When adding NuGet packages beyond the SDK, verify:
+1. The package supports your target framework (net48 or net9.0-windows).
+2. Any native dependencies are handled (see section 10.2).
+3. The dependency is not already bundled with the framework (see section 10.3).
+4. `<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>` is set.
+
+## 15. Namespace Quick Reference
+
+```
+Another_Mirai_Native.Abstractions                    PluginBase, CommandHandlerBase
+Another_Mirai_Native.Abstractions.Attributes         PluginInfo, Command, EventPriority, Menu
+Another_Mirai_Native.Abstractions.Context             *Context classes (GroupMessageContext, etc.)
+Another_Mirai_Native.Abstractions.Enums               CQFace, EventHandleResult, MatchMode, MessageScope, etc.
+Another_Mirai_Native.Abstractions.Handlers            I*Handler interfaces
+Another_Mirai_Native.Abstractions.Models              Message, MessageBuilder, Group, QQ, etc.
+Another_Mirai_Native.Abstractions.Models.MessageItem  At, Face, Image, Text, Reply, etc.
+Another_Mirai_Native.Abstractions.Services            IPluginApi, ILogger, IMessageApi, IGroupApi, etc.
+```
