@@ -70,7 +70,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// <returns>当前构建器实例。</returns>
         public MessageBuilder Record(string filePath)
         {
-            Items.Add(new Record(filePath));
+            Items.Add(new Record(filePath: filePath));
             return this;
         }
 
@@ -81,7 +81,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// <returns>当前构建器实例。</returns>
         public MessageBuilder RecordHash(string hash)
         {
-            Items.Add(new Record(hash));
+            Items.Add(new Record(hash: hash));
             return this;
         }
 
