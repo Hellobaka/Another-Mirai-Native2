@@ -209,7 +209,7 @@ namespace Another_Mirai_Native.Abstractions
                     args[i] = ct;
                     continue;
                 }
-                if (param.Name == "raw")
+                if (param.Name == "raw" && paramType == typeof(string))
                 {
                     args[i] = raw;
                     continue;
