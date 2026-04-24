@@ -19,6 +19,8 @@ namespace Another_Mirai_Native.Abstractions
     /// </summary>
     public abstract class CommandHandlerBase : IGroupMessageHandler, IPrivateMessageHandler
     {
+        private readonly object _commandCacheLock = new object();
+
         /// <summary>
         /// 当前实例的指令方法缓存。首次调度时通过反射构建，后续复用以避免重复扫描。
         /// </summary>
@@ -320,32 +322,37 @@ namespace Another_Mirai_Native.Abstractions
         /// </exception>
         private List<(MethodInfo, CommandAttribute)> GetCommandMethods()
         {
-            if (_commandCache != null)
+            lock (_commandCacheLock)
             {
+                if (_commandCache != null)
+                {
+                    return _commandCache;
+                }
+
+                List<(MethodInfo, CommandAttribute)> commandCache = [];
+
+                foreach (var method in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    foreach (CommandAttribute attr in method.GetCustomAttributes(typeof(CommandAttribute), true))
+                    {
+                        if (method.ReturnType != typeof(Task<EventHandleResult>)
+                            && method.ReturnType != typeof(Task)
+                            && method.ReturnType != typeof(EventHandleResult)
+                            && method.ReturnType != typeof(void))
+                        {
+                            throw new InvalidOperationException(
+                                $"方法 {method.DeclaringType?.Name}.{method.Name} 标注了 CommandAttribute，" +
+                                $"但其返回类型为 {method.ReturnType.Name}，" +
+                                $"必须为 Task<EventHandleResult>、Task、EventHandleResult 或 void 之一。");
+                        }
+
+                        commandCache.Add((method, attr));
+                    }
+                }
+
+                _commandCache = commandCache;
                 return _commandCache;
             }
-
-            _commandCache = [];
-
-            foreach (var method in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                foreach (CommandAttribute attr in method.GetCustomAttributes(typeof(CommandAttribute), true))
-                {
-                    if (method.ReturnType != typeof(Task<EventHandleResult>)
-                        && method.ReturnType != typeof(Task)
-                        && method.ReturnType != typeof(EventHandleResult)
-                        && method.ReturnType != typeof(void))
-                    {
-                        throw new InvalidOperationException(
-                            $"方法 {method.DeclaringType?.Name}.{method.Name} 标注了 CommandAttribute，" +
-                            $"但其返回类型为 {method.ReturnType.Name}，" +
-                            $"必须为 Task<EventHandleResult>、Task、EventHandleResult 或 void 之一。");
-                    }
-
-                    _commandCache.Add((method, attr));
-                }
-            }
-            return _commandCache;
         }
     }
 }
