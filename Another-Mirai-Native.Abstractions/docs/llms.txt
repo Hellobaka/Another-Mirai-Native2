@@ -219,7 +219,7 @@ public class Commands : CommandHandlerBase
 - `PrivateMessageContext` — only filled for private messages; ensure Scope includes private
 - `CancellationToken` — cancellation token
 - `string raw` — the raw message text (parameter name must be exactly `raw`)
-- Named regex capture groups — auto-converted to target type via `Convert.ChangeType`
+- Named regex capture groups — auto-converted from string to target type via `Convert.ChangeType`
 
 ### Return types
 
