@@ -55,23 +55,43 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             if (!string.IsNullOrEmpty(FilePath))
             {
                 string baseDirectory = Environment.CurrentDirectory;
-                // 检查路径是否在data\image下
+                string imageDirectory = Path.GetFullPath(Path.Combine(baseDirectory, "data", "image"));
+                string imageDirectoryWithSeparator = imageDirectory.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
+                    ? imageDirectory
+                    : imageDirectory + Path.DirectorySeparatorChar;
+                // 检查路径是否在 data\image 下
                 string absolute = Path.GetFullPath(FilePath);
                 if (!File.Exists(absolute))
                 {
                     throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
                 }
-
-                bool isInImageFolder = absolute.StartsWith(baseDirectory);
+                bool isInImageFolder = absolute.StartsWith(imageDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(absolute, imageDirectory, StringComparison.OrdinalIgnoreCase);
                 string relative;
                 if (isInImageFolder)
                 {
-                    relative = Helper.GetRelativePath(absolute, Path.Combine(baseDirectory, "data", "image"));
+                    relative = Helper.GetRelativePath(absolute, imageDirectory);
                 }
                 else
                 {
-                    // 将图片拷贝到 data\image\cached下
-                    string newPath = Path.Combine(baseDirectory, "data", "image", "cached", Path.GetFileName(absolute));
+                    // 将图片拷贝到 data\image\cached 下
+                    string cachedDirectory = Path.Combine(imageDirectory, "cached");
+                    Directory.CreateDirectory(cachedDirectory);
+                    string fileName = Path.GetFileName(absolute);
+                    string newPath = Path.Combine(cachedDirectory, fileName);
+                    if (File.Exists(newPath))
+                    {
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        string extension = Path.GetExtension(fileName);
+                        int counter = 1;
+                        do
+                        {
+                            fileName = $"{fileNameWithoutExtension}_{counter}{extension}";
+                            newPath = Path.Combine(cachedDirectory, fileName);
+                            counter++;
+                        }
+                        while (File.Exists(newPath));
+                    }
                     File.Copy(absolute, newPath);
                     relative = $"cached\\{Path.GetFileName(newPath)}";
                 }

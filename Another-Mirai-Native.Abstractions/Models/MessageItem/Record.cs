@@ -39,23 +39,44 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             if (!string.IsNullOrEmpty(FilePath))
             {
                 string baseDirectory = Environment.CurrentDirectory;
-                // 检查路径是否在data\record下
+                string recordDirectory = Path.GetFullPath(Path.Combine(baseDirectory, "data", "record"));
+                string recordDirectoryWithSeparator = recordDirectory.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
+                    ? recordDirectory
+                    : recordDirectory + Path.DirectorySeparatorChar;
+                // 检查路径是否在 data\record 下
                 string absolute = Path.GetFullPath(FilePath);
                 if (!File.Exists(absolute))
                 {
                     throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
                 }
 
-                bool isInRecordFolder = absolute.StartsWith(baseDirectory);
+                bool isInRecordFolder = absolute.StartsWith(recordDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(absolute, recordDirectory, StringComparison.OrdinalIgnoreCase);
                 string relative;
                 if (isInRecordFolder)
                 {
-                    relative = Helper.GetRelativePath(absolute, Path.Combine(baseDirectory, "data", "record"));
+                    relative = Helper.GetRelativePath(absolute, recordDirectory);
                 }
                 else
                 {
-                    // 将图片拷贝到 data\record\cached下
-                    string newPath = Path.Combine(baseDirectory, "data", "record", "cached", Path.GetFileName(absolute));
+                    // 将语音拷贝到 data\record\cached 下
+                    string cachedDirectory = Path.Combine(recordDirectory, "cached");
+                    Directory.CreateDirectory(cachedDirectory);
+                    string fileName = Path.GetFileName(absolute);
+                    string newPath = Path.Combine(cachedDirectory, fileName);
+                    if (File.Exists(newPath))
+                    {
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        string extension = Path.GetExtension(fileName);
+                        int counter = 1;
+                        do
+                        {
+                            fileName = $"{fileNameWithoutExtension}_{counter}{extension}";
+                            newPath = Path.Combine(cachedDirectory, fileName);
+                            counter++;
+                        }
+                        while (File.Exists(newPath));
+                    }
                     File.Copy(absolute, newPath);
                     relative = $"cached\\{Path.GetFileName(newPath)}";
                 }
@@ -66,7 +87,7 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             {
                 return $"[CQ:record,file={Hash}]";
             }
-            throw new ArgumentNullException("图片元素参数无效，无法转换出发送文本，需要至少传递一个文件路径或者Hash");
+            throw new ArgumentNullException("音频元素参数无效，无法转换出发送文本，需要至少传递一个文件路径或者Hash");
         }
     }
 }
