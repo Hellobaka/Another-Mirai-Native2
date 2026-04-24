@@ -29,7 +29,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType
   type: Enum
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -50,7 +50,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.PrivateMsg
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -72,7 +72,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMsg
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -94,7 +94,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.DiscussMsg
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -116,7 +116,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Upload
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -138,7 +138,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.AdminChange
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -160,7 +160,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberDecrease
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -182,7 +182,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupMemberIncrease
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -204,7 +204,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupBan
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -226,7 +226,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendAdded
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -248,7 +248,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.FriendRequest
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -270,7 +270,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.GroupAddRequest
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -292,7 +292,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.StartUp
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -314,7 +314,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Exit
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -336,7 +336,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Enable
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -358,7 +358,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Disable
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums
@@ -380,7 +380,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Enums.PluginEventType.Menu
   type: Field
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Enums/PluginEventType.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Enums

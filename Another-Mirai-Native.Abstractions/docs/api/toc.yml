@@ -23,6 +23,9 @@ items:
   - uid: Another_Mirai_Native.Abstractions.Attributes.MenuAttribute
     name: MenuAttribute
     type: Class
+  - uid: Another_Mirai_Native.Abstractions.Attributes.PluginInfo
+    name: PluginInfo
+    type: Class
 - uid: Another_Mirai_Native.Abstractions.Context
   name: Another_Mirai_Native.Abstractions.Context
   type: Namespace
@@ -191,9 +194,6 @@ items:
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.MessageBuilder
     name: MessageBuilder
-    type: Class
-  - uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
-    name: PluginInfo
     type: Class
   - uid: Another_Mirai_Native.Abstractions.Models.QQ
     name: QQ

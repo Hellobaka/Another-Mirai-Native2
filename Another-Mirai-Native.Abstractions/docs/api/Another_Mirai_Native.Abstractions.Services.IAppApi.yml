@@ -23,7 +23,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -45,7 +45,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectory()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -70,7 +70,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetAppDirectoryAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -95,7 +95,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQ()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -120,7 +120,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -145,7 +145,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNick()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -170,7 +170,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.GetLoginQQNickAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -195,7 +195,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPlugin()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -217,7 +217,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.ReloadPluginAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -241,7 +241,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePlugin()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services
@@ -263,7 +263,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Services.IAppApi.DisablePluginAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Services/IAppApi.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Services

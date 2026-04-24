@@ -20,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -50,7 +50,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.GroupInfo(long, string, int, int, long)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -86,7 +86,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.ToString()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -111,7 +111,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Group
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -136,7 +136,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.Name
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -161,7 +161,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.CurrentMemberCount
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -186,7 +186,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.MaxMemberCount
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -211,7 +211,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.GroupInfo.LastUpdateTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/GroupInfo.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models

@@ -6,11 +6,11 @@ items:
   parent: Another_Mirai_Native.Abstractions.Models
   children:
   - Another_Mirai_Native.Abstractions.Models.Message.#ctor(Another_Mirai_Native.Abstractions.Services.IPluginApi,System.Int32,System.String)
+  - Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage
+  - Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync
   - Another_Mirai_Native.Abstractions.Models.Message.Id
   - Another_Mirai_Native.Abstractions.Models.Message.IsSuccess
   - Another_Mirai_Native.Abstractions.Models.Message.MessageChain
-  - Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
-  - Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
   - Another_Mirai_Native.Abstractions.Models.Message.Text
   langs:
   - csharp
@@ -20,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -51,7 +51,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Message(Another_Mirai_Native.Abstractions.Services.IPluginApi, int, string)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -74,56 +74,56 @@ items:
   nameWithType.vb: Message.New(IPluginApi, Integer, String)
   fullName.vb: Another_Mirai_Native.Abstractions.Models.Message.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Integer, String)
   name.vb: New(IPluginApi, Integer, String)
-- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
-  commentId: M:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
-  id: RemoveMessage
+- uid: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage
+  commentId: M:Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage
+  id: DeleteMessage
   parent: Another_Mirai_Native.Abstractions.Models.Message
   langs:
   - csharp
   - vb
-  name: RemoveMessage()
-  nameWithType: Message.RemoveMessage()
-  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage()
+  name: DeleteMessage()
+  nameWithType: Message.DeleteMessage()
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
   summary: 撤回消息
   example: []
   syntax:
-    content: public bool RemoveMessage()
+    content: public bool DeleteMessage()
     return:
       type: System.Boolean
       description: 消息撤回成功与否
-    content.vb: Public Function RemoveMessage() As Boolean
-  overload: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage*
-- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
-  commentId: M:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
-  id: RemoveMessageAsync
+    content.vb: Public Function DeleteMessage() As Boolean
+  overload: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage*
+- uid: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync
+  commentId: M:Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync
+  id: DeleteMessageAsync
   parent: Another_Mirai_Native.Abstractions.Models.Message
   langs:
   - csharp
   - vb
-  name: RemoveMessageAsync()
-  nameWithType: Message.RemoveMessageAsync()
-  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync()
+  name: DeleteMessageAsync()
+  nameWithType: Message.DeleteMessageAsync()
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync()
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
   summary: 异步撤回消息
   example: []
   syntax:
-    content: public Task<bool> RemoveMessageAsync()
+    content: public Task<bool> DeleteMessageAsync()
     return:
       type: System.Threading.Tasks.Task{System.Boolean}
       description: 消息撤回成功与否
-    content.vb: Public Function RemoveMessageAsync() As Task(Of Boolean)
-  overload: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync*
+    content.vb: Public Function DeleteMessageAsync() As Task(Of Boolean)
+  overload: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync*
 - uid: Another_Mirai_Native.Abstractions.Models.Message.Id
   commentId: P:Another_Mirai_Native.Abstractions.Models.Message.Id
   id: Id
@@ -136,7 +136,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Id
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -161,7 +161,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.IsSuccess
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -186,7 +186,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.Text
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -211,7 +211,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Models.Message.MessageChain
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Models/Message.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Models/Message.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Models
@@ -584,13 +584,13 @@ references:
     name: Services
     isExternal: true
     href: Another_Mirai_Native.Abstractions.Services.html
-- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
+- uid: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_RemoveMessage
-  name: RemoveMessage
-  nameWithType: Message.RemoveMessage
-  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessage
+  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_DeleteMessage
+  name: DeleteMessage
+  nameWithType: Message.DeleteMessage
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessage
 - uid: System.Boolean
   commentId: T:System.Boolean
   parent: System
@@ -602,13 +602,13 @@ references:
   nameWithType.vb: Boolean
   fullName.vb: Boolean
   name.vb: Boolean
-- uid: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync*
-  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+- uid: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync*
+  commentId: Overload:Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_RemoveMessageAsync
-  name: RemoveMessageAsync
-  nameWithType: Message.RemoveMessageAsync
-  fullName: Another_Mirai_Native.Abstractions.Models.Message.RemoveMessageAsync
+  href: Another_Mirai_Native.Abstractions.Models.Message.html#Another_Mirai_Native_Abstractions_Models_Message_DeleteMessageAsync
+  name: DeleteMessageAsync
+  nameWithType: Message.DeleteMessageAsync
+  fullName: Another_Mirai_Native.Abstractions.Models.Message.DeleteMessageAsync
 - uid: System.Threading.Tasks.Task{System.Boolean}
   commentId: T:System.Threading.Tasks.Task{System.Boolean}
   parent: System.Threading.Tasks

@@ -10,8 +10,8 @@ items:
   - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.AppendMessage
   - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.FromQQ
   - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SendTime
-  - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
-  - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
+  - Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
   langs:
   - csharp
   - vb
@@ -20,7 +20,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -51,7 +51,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.FriendAddRequestContext(Another_Mirai_Native.Abstractions.Services.IPluginApi, System.DateTime, Another_Mirai_Native.Abstractions.Models.QQ, string, string)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -75,60 +75,72 @@ items:
   nameWithType.vb: FriendAddRequestContext.New(IPluginApi, Date, QQ, String, String)
   fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.New(Another_Mirai_Native.Abstractions.Services.IPluginApi, Date, Another_Mirai_Native.Abstractions.Models.QQ, String, String)
   name.vb: New(IPluginApi, Date, QQ, String, String)
-- uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
-  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
-  id: SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
+  id: SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
   parent: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
   langs:
   - csharp
   - vb
-  name: SetRequestResult(RequestHandleResult)
-  nameWithType: FriendAddRequestContext.SetRequestResult(RequestHandleResult)
-  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  name: SetRequestResult(RequestHandleResult, string)
+  nameWithType: FriendAddRequestContext.SetRequestResult(RequestHandleResult, string)
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
   summary: 处理请求结果的方法
   example: []
   syntax:
-    content: public void SetRequestResult(RequestHandleResult result)
+    content: public void SetRequestResult(RequestHandleResult result, string refuseReason = "")
     parameters:
     - id: result
       type: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
       description: 处理结果
-    content.vb: Public Sub SetRequestResult(result As RequestHandleResult)
+    - id: refuseReason
+      type: System.String
+      description: 拒绝原因
+    content.vb: Public Sub SetRequestResult(result As RequestHandleResult, refuseReason As String = "")
   overload: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult*
-- uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
-  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
-  id: SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  nameWithType.vb: FriendAddRequestContext.SetRequestResult(RequestHandleResult, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult, String)
+  name.vb: SetRequestResult(RequestHandleResult, String)
+- uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
+  commentId: M:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
+  id: SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult,System.String)
   parent: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext
   langs:
   - csharp
   - vb
-  name: SetRequestResultAsync(RequestHandleResult)
-  nameWithType: FriendAddRequestContext.SetRequestResultAsync(RequestHandleResult)
-  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult)
+  name: SetRequestResultAsync(RequestHandleResult, string)
+  nameWithType: FriendAddRequestContext.SetRequestResultAsync(RequestHandleResult, string)
+  fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult, string)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
   summary: 异步处理请求结果的方法
   example: []
   syntax:
-    content: public Task SetRequestResultAsync(RequestHandleResult result)
+    content: public Task SetRequestResultAsync(RequestHandleResult result, string refuseReason = "")
     parameters:
     - id: result
       type: Another_Mirai_Native.Abstractions.Enums.RequestHandleResult
       description: 处理结果
+    - id: refuseReason
+      type: System.String
+      description: 拒绝原因
     return:
       type: System.Threading.Tasks.Task
-    content.vb: Public Function SetRequestResultAsync(result As RequestHandleResult) As Task
+    content.vb: Public Function SetRequestResultAsync(result As RequestHandleResult, refuseReason As String = "") As Task
   overload: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync*
+  nameWithType.vb: FriendAddRequestContext.SetRequestResultAsync(RequestHandleResult, String)
+  fullName.vb: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync(Another_Mirai_Native.Abstractions.Enums.RequestHandleResult, String)
+  name.vb: SetRequestResultAsync(RequestHandleResult, String)
 - uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.API
   commentId: P:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.API
   id: API
@@ -141,7 +153,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.API
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -166,7 +178,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SendTime
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -191,7 +203,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.FromQQ
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -216,7 +228,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.AppendMessage
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Context/FriendAddRequestContext.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Context
@@ -629,7 +641,7 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddRequestContext_SetRequestResult_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddRequestContext_SetRequestResult_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_System_String_
   name: SetRequestResult
   nameWithType: FriendAddRequestContext.SetRequestResult
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResult
@@ -681,7 +693,7 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync*
   commentId: Overload:Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddRequestContext_SetRequestResultAsync_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_
+  href: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.html#Another_Mirai_Native_Abstractions_Context_FriendAddRequestContext_SetRequestResultAsync_Another_Mirai_Native_Abstractions_Enums_RequestHandleResult_System_String_
   name: SetRequestResultAsync
   nameWithType: FriendAddRequestContext.SetRequestResultAsync
   fullName: Another_Mirai_Native.Abstractions.Context.FriendAddRequestContext.SetRequestResultAsync

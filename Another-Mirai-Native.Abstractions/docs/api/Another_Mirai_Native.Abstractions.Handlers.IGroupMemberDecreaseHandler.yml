@@ -14,7 +14,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler
   type: Interface
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Handlers/GroupMemberDecreaseHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/GroupMemberDecreaseHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers
@@ -35,7 +35,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Handlers.IGroupMemberDecreaseHandler.OnGroupMemberDecreaseAsync(Another_Mirai_Native.Abstractions.Context.GroupMemberDecreaseContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Handlers/GroupMemberDecreaseHandler.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Handlers/GroupMemberDecreaseHandler.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Handlers

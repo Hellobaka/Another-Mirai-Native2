@@ -19,7 +19,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -61,7 +61,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnReceiveGroupMessageAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -95,7 +95,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnReceivePrivateMessageAsync(Another_Mirai_Native.Abstractions.Context.PrivateMessageContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -129,21 +129,24 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnNoMatchAsync(Another_Mirai_Native.Abstractions.Context.GroupMessageContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
-  summary: 当没有任何指令匹配时调用。可在派生类中重写以实现自定义的回退逻辑。
+  summary: 当没有任何指令匹配群聊消息时调用。可在派生类中重写以实现自定义的回退逻辑。
   example: []
   syntax:
     content: protected virtual Task<EventHandleResult> OnNoMatchAsync(GroupMessageContext e, CancellationToken ct)
     parameters:
     - id: e
       type: Another_Mirai_Native.Abstractions.Context.GroupMessageContext
+      description: 包含当前群聊消息事件信息的上下文。
     - id: ct
       type: System.Threading.CancellationToken
+      description: 可用于取消操作的取消令牌。
     return:
       type: System.Threading.Tasks.Task{Another_Mirai_Native.Abstractions.Enums.EventHandleResult}
+      description: 事件的处理结果。默认返回 <xref href="Another_Mirai_Native.Abstractions.Enums.EventHandleResult.Pass" data-throw-if-not-resolved="false"></xref>。
     content.vb: Protected Overridable Function OnNoMatchAsync(e As GroupMessageContext, ct As CancellationToken) As Task(Of EventHandleResult)
   overload: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnNoMatchAsync*
 - uid: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnNoMatchAsync(Another_Mirai_Native.Abstractions.Context.PrivateMessageContext,System.Threading.CancellationToken)
@@ -158,7 +161,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnNoMatchAsync(Another_Mirai_Native.Abstractions.Context.PrivateMessageContext, System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -190,7 +193,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.OnParameterParseError(string, string, System.Type)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -225,7 +228,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.CommandHandlerBase.CommandHandlerBase()
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/CommandHandlerBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions

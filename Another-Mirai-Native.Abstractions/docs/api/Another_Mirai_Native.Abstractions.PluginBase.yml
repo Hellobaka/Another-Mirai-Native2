@@ -18,7 +18,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -52,7 +52,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase.OnEnableAsync(System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -82,7 +82,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase.OnDisableAsync(System.Threading.CancellationToken)
   type: Method
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -112,7 +112,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase.PluginBase()
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -135,7 +135,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase.API
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -160,7 +160,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.PluginBase.PluginInfo
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/PluginBase.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/PluginBase.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions
@@ -170,7 +170,7 @@ items:
     content: public virtual PluginInfo PluginInfo { get; }
     parameters: []
     return:
-      type: Another_Mirai_Native.Abstractions.Models.PluginInfo
+      type: Another_Mirai_Native.Abstractions.Attributes.PluginInfo
     content.vb: Public Overridable ReadOnly Property PluginInfo As PluginInfo
   overload: Another_Mirai_Native.Abstractions.PluginBase.PluginInfo*
 references:
@@ -601,21 +601,21 @@ references:
   name: PluginInfo
   nameWithType: PluginBase.PluginInfo
   fullName: Another_Mirai_Native.Abstractions.PluginBase.PluginInfo
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
-  parent: Another_Mirai_Native.Abstractions.Models
+- uid: Another_Mirai_Native.Abstractions.Attributes.PluginInfo
+  commentId: T:Another_Mirai_Native.Abstractions.Attributes.PluginInfo
+  parent: Another_Mirai_Native.Abstractions.Attributes
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html
+  href: Another_Mirai_Native.Abstractions.Attributes.PluginInfo.html
   name: PluginInfo
   nameWithType: PluginInfo
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
-- uid: Another_Mirai_Native.Abstractions.Models
-  commentId: N:Another_Mirai_Native.Abstractions.Models
+  fullName: Another_Mirai_Native.Abstractions.Attributes.PluginInfo
+- uid: Another_Mirai_Native.Abstractions.Attributes
+  commentId: N:Another_Mirai_Native.Abstractions.Attributes
   isExternal: true
   href: Another_Mirai_Native.html
-  name: Another_Mirai_Native.Abstractions.Models
-  nameWithType: Another_Mirai_Native.Abstractions.Models
-  fullName: Another_Mirai_Native.Abstractions.Models
+  name: Another_Mirai_Native.Abstractions.Attributes
+  nameWithType: Another_Mirai_Native.Abstractions.Attributes
+  fullName: Another_Mirai_Native.Abstractions.Attributes
   spec.csharp:
   - uid: Another_Mirai_Native
     name: Another_Mirai_Native
@@ -627,10 +627,10 @@ references:
     isExternal: true
     href: Another_Mirai_Native.Abstractions.html
   - name: .
-  - uid: Another_Mirai_Native.Abstractions.Models
-    name: Models
+  - uid: Another_Mirai_Native.Abstractions.Attributes
+    name: Attributes
     isExternal: true
-    href: Another_Mirai_Native.Abstractions.Models.html
+    href: Another_Mirai_Native.Abstractions.Attributes.html
   spec.vb:
   - uid: Another_Mirai_Native
     name: Another_Mirai_Native
@@ -642,7 +642,7 @@ references:
     isExternal: true
     href: Another_Mirai_Native.Abstractions.html
   - name: .
-  - uid: Another_Mirai_Native.Abstractions.Models
-    name: Models
+  - uid: Another_Mirai_Native.Abstractions.Attributes
+    name: Attributes
     isExternal: true
-    href: Another_Mirai_Native.Abstractions.Models.html
+    href: Another_Mirai_Native.Abstractions.Attributes.html

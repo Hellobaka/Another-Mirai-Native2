@@ -12,7 +12,6 @@ items:
   - Another_Mirai_Native.Abstractions.Models.GroupMemberInfo
   - Another_Mirai_Native.Abstractions.Models.Message
   - Another_Mirai_Native.Abstractions.Models.MessageBuilder
-  - Another_Mirai_Native.Abstractions.Models.PluginInfo
   - Another_Mirai_Native.Abstractions.Models.QQ
   langs:
   - csharp
@@ -87,14 +86,6 @@ references:
   name: MessageBuilder
   nameWithType: MessageBuilder
   fullName: Another_Mirai_Native.Abstractions.Models.MessageBuilder
-- uid: Another_Mirai_Native.Abstractions.Models.PluginInfo
-  commentId: T:Another_Mirai_Native.Abstractions.Models.PluginInfo
-  parent: Another_Mirai_Native.Abstractions.Models
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Models.PluginInfo.html
-  name: PluginInfo
-  nameWithType: PluginInfo
-  fullName: Another_Mirai_Native.Abstractions.Models.PluginInfo
 - uid: Another_Mirai_Native.Abstractions.Models.QQ
   commentId: T:Another_Mirai_Native.Abstractions.Models.QQ
   parent: Another_Mirai_Native.Abstractions.Models

@@ -5,7 +5,7 @@ items:
   id: CommandAttribute
   parent: Another_Mirai_Native.Abstractions.Attributes
   children:
-  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
+  - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String,Another_Mirai_Native.Abstractions.Enums.MessageScope)
   - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
   - Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
@@ -17,7 +17,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   type: Class
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -91,19 +91,19 @@ items:
     - name: AllowMultiple
       type: System.Boolean
       value: true
-- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
-  commentId: M:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)
-  id: '#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String)'
+- uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String,Another_Mirai_Native.Abstractions.Enums.MessageScope)
+  commentId: M:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String,Another_Mirai_Native.Abstractions.Enums.MessageScope)
+  id: '#ctor(Another_Mirai_Native.Abstractions.Enums.MatchMode,System.String,Another_Mirai_Native.Abstractions.Enums.MessageScope)'
   parent: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute
   langs:
   - csharp
   - vb
-  name: CommandAttribute(MatchMode, string)
-  nameWithType: CommandAttribute.CommandAttribute(MatchMode, string)
-  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.CommandAttribute(Another_Mirai_Native.Abstractions.Enums.MatchMode, string)
+  name: CommandAttribute(MatchMode, string, MessageScope)
+  nameWithType: CommandAttribute.CommandAttribute(MatchMode, string, MessageScope)
+  fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.CommandAttribute(Another_Mirai_Native.Abstractions.Enums.MatchMode, string, Another_Mirai_Native.Abstractions.Enums.MessageScope)
   type: Constructor
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -113,7 +113,7 @@ items:
     自动将匹配的消息路由到该方法。
   example: []
   syntax:
-    content: public CommandAttribute(MatchMode matchMode, string template)
+    content: public CommandAttribute(MatchMode matchMode, string template, MessageScope scope = MessageScope.All)
     parameters:
     - id: matchMode
       type: Another_Mirai_Native.Abstractions.Enums.MatchMode
@@ -121,11 +121,14 @@ items:
     - id: template
       type: System.String
       description: 用于匹配消息内容的模板字符串。
-    content.vb: Public Sub New(matchMode As MatchMode, template As String)
+    - id: scope
+      type: Another_Mirai_Native.Abstractions.Enums.MessageScope
+      description: 此指令响应的消息来源范围。默认为 <xref href="Another_Mirai_Native.Abstractions.Enums.MessageScope.All" data-throw-if-not-resolved="false"></xref>。
+    content.vb: Public Sub New(matchMode As MatchMode, template As String, scope As MessageScope = MessageScope.All)
   overload: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor*
-  nameWithType.vb: CommandAttribute.New(MatchMode, String)
-  fullName.vb: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.New(Another_Mirai_Native.Abstractions.Enums.MatchMode, String)
-  name.vb: New(MatchMode, String)
+  nameWithType.vb: CommandAttribute.New(MatchMode, String, MessageScope)
+  fullName.vb: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.New(Another_Mirai_Native.Abstractions.Enums.MatchMode, String, Another_Mirai_Native.Abstractions.Enums.MessageScope)
+  name.vb: New(MatchMode, String, MessageScope)
 - uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   commentId: P:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   id: MatchMode
@@ -138,7 +141,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.MatchMode
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -163,7 +166,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -191,7 +194,7 @@ items:
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
   type: Property
   source:
-    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/4d35f42100273c30444c7e20ffbff0107e3bf781/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
+    href: https://github.com/Hellobaka/Another-Mirai-Native2/blob/08c7eec1283ff52cebc65682b7e940f24fe22fec/Another-Mirai-Native.Abstractions/Attributes/CommandAttribute.cs
   assemblies:
   - Another-Mirai-Native.Abstractions
   namespace: Another_Mirai_Native.Abstractions.Attributes
@@ -219,6 +222,13 @@ references:
   name: Template
   nameWithType: CommandAttribute.Template
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
+  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageScope.All
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html#Another_Mirai_Native_Abstractions_Enums_MessageScope_All
+  name: All
+  nameWithType: MessageScope.All
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
 - uid: Another_Mirai_Native.Abstractions.Attributes
   commentId: N:Another_Mirai_Native.Abstractions.Attributes
   isExternal: true
@@ -2053,7 +2063,7 @@ references:
 - uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor*
   commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.#ctor
   isExternal: true
-  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute__ctor_Another_Mirai_Native_Abstractions_Enums_MatchMode_System_String_
+  href: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.html#Another_Mirai_Native_Abstractions_Attributes_CommandAttribute__ctor_Another_Mirai_Native_Abstractions_Enums_MatchMode_System_String_Another_Mirai_Native_Abstractions_Enums_MessageScope_
   name: CommandAttribute
   nameWithType: CommandAttribute.CommandAttribute
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.CommandAttribute
@@ -2079,6 +2089,14 @@ references:
   nameWithType.vb: String
   fullName.vb: String
   name.vb: String
+- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
+  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageScope
+  parent: Another_Mirai_Native.Abstractions.Enums
+  isExternal: true
+  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html
+  name: MessageScope
+  nameWithType: MessageScope
+  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope
 - uid: Another_Mirai_Native.Abstractions.Enums
   commentId: N:Another_Mirai_Native.Abstractions.Enums
   isExternal: true
@@ -2137,13 +2155,6 @@ references:
   name: Template
   nameWithType: CommandAttribute.Template
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Template
-- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
-  commentId: F:Another_Mirai_Native.Abstractions.Enums.MessageScope.All
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html#Another_Mirai_Native_Abstractions_Enums_MessageScope_All
-  name: All
-  nameWithType: MessageScope.All
-  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope.All
 - uid: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope*
   commentId: Overload:Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
   isExternal: true
@@ -2151,11 +2162,3 @@ references:
   name: Scope
   nameWithType: CommandAttribute.Scope
   fullName: Another_Mirai_Native.Abstractions.Attributes.CommandAttribute.Scope
-- uid: Another_Mirai_Native.Abstractions.Enums.MessageScope
-  commentId: T:Another_Mirai_Native.Abstractions.Enums.MessageScope
-  parent: Another_Mirai_Native.Abstractions.Enums
-  isExternal: true
-  href: Another_Mirai_Native.Abstractions.Enums.MessageScope.html
-  name: MessageScope
-  nameWithType: MessageScope
-  fullName: Another_Mirai_Native.Abstractions.Enums.MessageScope
