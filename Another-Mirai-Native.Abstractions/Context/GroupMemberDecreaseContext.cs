@@ -5,7 +5,7 @@ using System;
 namespace Another_Mirai_Native.Abstractions.Context
 {
     /// <summary>
-    /// 为处理群成员退出群聊事件的处理器。
+    /// 提供用于描述群成员退出群聊事件参数的上下文类。
     /// </summary>
     public class GroupMemberDecreaseContext(IPluginApi api, bool isKicked, DateTime sendTime, Group fromGroup, QQ fromQQ, QQ beingOperateQQ)
     {
