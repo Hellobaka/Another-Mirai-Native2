@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.Abstractions.Models
         /// <summary>
         /// 当前构建中的消息片段集合。
         /// </summary>
-        public List<MessageItemBase> Items { get; set; }
+        public List<MessageItemBase> Items { get; set; } = [];
 
         /// <summary>
         /// 构建最终消息字符串。
