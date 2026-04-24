@@ -16,11 +16,6 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
         public abstract MessageItemType MessageItemType { get; set; }
 
         /// <summary>
-        /// 获取原始消息内容。
-        /// </summary>
-        public string Raw { get; }
-
-        /// <summary>
         /// 返回当前消息片段的 CQ 码字符串表示。
         /// </summary>
         /// <returns>CQ 码文本。</returns>
