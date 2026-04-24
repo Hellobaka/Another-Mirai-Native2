@@ -1,4 +1,4 @@
-﻿using Another_Mirai_Native.Abstractions.Models;
+﻿using Another_Mirai_Native.Abstractions.Attributes;
 using Another_Mirai_Native.Abstractions.Services;
 using Another_Mirai_Native.Native.Handler.CSharp.APIHandlers;
 

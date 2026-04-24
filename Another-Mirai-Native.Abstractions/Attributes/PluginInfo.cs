@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Another_Mirai_Native.Abstractions.Models
+namespace Another_Mirai_Native.Abstractions.Attributes
 {
     /// <summary>
     /// 表示插件的元数据信息，包括其标识符、名称、版本、描述和作者。

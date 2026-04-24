@@ -70,6 +70,7 @@ Absolute paths are also accepted but NOT recommended — plugins should use rela
 ```csharp
 using Another_Mirai_Native.Abstractions;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Attributes;
 
 namespace MyPlugin;
 
