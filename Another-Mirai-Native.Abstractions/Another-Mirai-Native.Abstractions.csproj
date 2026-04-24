@@ -12,6 +12,7 @@
 	<Description>用于 Another-Mirai-Native2 的原生 C# 插件 SDK，文档见 https://amn2-docs.hellobaka.moe/</Description>
 	<RepositoryUrl>https://github.com/Hellobaka/Another-Mirai-Native2</RepositoryUrl>
 	<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>  
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,5 +48,6 @@
 		<None Include="tools\ILRepack.exe" Pack="true" PackagePath="tools\" />
 		<None Include="tools\ILRepack.runtimeconfig.json" Pack="true" PackagePath="tools\" />
 		<None Include="buildTransitive\Another-Mirai-Native.Abstractions.targets" Pack="true" PackagePath="buildTransitive\" />
+		<None Include="readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 </Project>
