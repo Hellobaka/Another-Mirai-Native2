@@ -7,8 +7,6 @@
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
 - [x] 实现[OneBot](https://github.com/botuniverse/onebot-11)协议
 - [x] 实现[Lagrange.Core](https://github.com/LagrangeDev/Lagrange.Core)协议
-- [ ] 实现官方协议
-- [ ] 实现OPQBot协议
 
 以下仅代表本框架实现程度，具体能否发送或调用还需要看协议实现方是否实现了此功能
 
@@ -53,8 +51,6 @@
 |reply|⭕|⭕|⭕|
 |poke|⭕|⭕|❌|
 
-</details>
-
 ## 关于 Lagrange.Core
 - 协议由于社区原因，可能无法正常使用
 - 登录逻辑借鉴于Lagrange.Onebot项目
@@ -63,9 +59,12 @@
 - 协议端会可能有很多的异常输出，正常现象
 - 若需要更新Lagrange.Core版本，查看[Wiki](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E6%9B%B4%E6%96%B0Lagrange.Core%E7%89%88%E6%9C%AC)
 
+</details>
+
 ## 可加载插件
 - [x] 酷Q
-- [x] [小栗子](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E5%8A%A0%E8%BD%BD%E5%B0%8F%E6%A0%97%E5%AD%90%E6%8F%92%E4%BB%B6)
+- [x] [小栗子(不完全支持)](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E5%8A%A0%E8%BD%BD%E5%B0%8F%E6%A0%97%E5%AD%90%E6%8F%92%E4%BB%B6)
+- [x] [C# 原生插件](https://amn2-docs.hellobaka.moe)
 
 ## 音频支持
 - [音频支持](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E9%9F%B3%E9%A2%91%E6%94%AF%E6%8C%81)
