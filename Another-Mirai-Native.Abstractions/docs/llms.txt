@@ -236,6 +236,14 @@ public class Commands : CommandHandlerBase
 
 CommandHandlerBase already implements them. Duplicate implementation causes unpredictable dispatch.
 
+### Framework instantiation rules (applies to ALL framework-managed classes)
+
+The framework auto-discovers ALL public classes that inherit `PluginBase` or `CommandHandlerBase`, or implement any handler interface. It instantiates them using the **parameterless default constructor**. This means:
+
+- **NEVER** define a constructor with parameters on `PluginBase`, `CommandHandlerBase`, or any handler class. The framework cannot call it and will fail silently or throw.
+- **NEVER** manually instantiate these classes yourself (e.g., `new Commands()`, `new MyHandler()`). The framework creates and owns these instances; user-created instances are disconnected from the event pipeline and waste memory.
+- If you need to share state or services across handlers, use static fields/properties or a singleton pattern, NOT constructor injection.
+
 ### Override fallback
 
 ```csharp
