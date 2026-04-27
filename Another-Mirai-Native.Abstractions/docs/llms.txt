@@ -46,22 +46,48 @@ string appDir = API.AppApi.GetAppDirectory();  // e.g., "D:\AMN2\data\plugins\co
 
 When sending local images or audio, the file MUST exist under the framework's media directories:
 
-| Media type | Required directory | Subdirectories allowed | Example path |
-|------------|-------------------|----------------------|--------------|
-| Image | `<framework root>\data\image\` | Yes | `data\image\avatars\user123.png` |
-| Audio | `<framework root>\data\record\` | Yes | `data\record\voices\greeting.amr` |
+| Media type | Required directory | Subdirectories allowed |
+|------------|-------------------|----------------------|
+| Image | `<framework root>\data\image\` | Yes |
+| Audio | `<framework root>\data\record\` | Yes |
 
-When calling `MessageBuilder.Image()` or `MessageBuilder.Record()`, use paths relative to these directories:
+#### Locating the framework root directory
+
+Use one of these two methods — pick the one that fits your context:
+
+**Method 1 — via `GetAppDirectory()` (preferred when called from a PluginBase or handler context):**
+
+`GetAppDirectory()` returns the plugin's own data folder, e.g. `D:\AMN2\data\plugins\com.example.myplugin\`.  
+Go **up two levels** (`..\..\`) to reach the framework root, then append `data\image` or `data\record`:
 
 ```csharp
-// Image is at D:\AMN2\data\image\avatars\reward.png
-new MessageBuilder().Image("avatars/reward.png")  // relative to data\image
-
-// Audio is at D:\AMN2\data\record\sounds\ding.amr
-new MessageBuilder().Record("sounds/ding.amr")    // relative to data\record
+string appDir = API.AppApi.GetAppDirectory();           // D:\AMN2\data\app\com.example.myplugin\
+string frameworkRoot = Path.GetFullPath(Path.Combine(appDir, @"..\..")); // D:\AMN2\
+string imageDir = Path.Combine(frameworkRoot, @"data\image");
+string recordDir = Path.Combine(frameworkRoot, @"data\record");
 ```
 
-Absolute paths are also accepted but NOT recommended — plugins should use relative paths within the designated media directories.
+**Method 2 — via `Directory.GetCurrentDirectory()` (usable anywhere):**
+
+The framework sets the working directory to its own root before launching the plugin process:
+
+```csharp
+string frameworkRoot = Directory.GetCurrentDirectory();  // D:\AMN2\
+string imageDir = Path.Combine(frameworkRoot, @"data\image");
+string recordDir = Path.Combine(frameworkRoot, @"data\record");
+```
+
+When calling `MessageBuilder.Image()` or `MessageBuilder.Record()`, pass paths **relative to those directories** (or an absolute path):
+
+```csharp
+// Save a file to the image directory first, then reference it
+string imageDir = Path.Combine(Directory.GetCurrentDirectory(), @"data\image");
+string fileName = "reward.png";
+File.WriteAllBytes(Path.Combine(imageDir, fileName), imageBytes);
+
+new MessageBuilder().Image(fileName)   // relative to data\image
+new MessageBuilder().Record("voices\\greeting.amr")  // relative to data\record
+```
 
 **The file MUST already exist on disk before calling send.** The framework does not auto-upload or auto-generate images; it only references existing files.
 
