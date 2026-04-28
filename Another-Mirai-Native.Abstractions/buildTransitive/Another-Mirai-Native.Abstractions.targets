@@ -6,6 +6,8 @@
 
 			<!-- 是否清理输出目录（合并依赖并删除多余文件），默认启用 -->
 			<CleanAmnOutputDir Condition="'$(CleanAmnOutputDir)'==''">true</CleanAmnOutputDir>
+			<!-- 传递给 ILRepack 的额外参数 -->
+			<ILRepackAdditionParam Condition="'$(ILRepackAdditionParam)'==''"></ILRepackAdditionParam>
 			<!-- 是否忽略依赖版本匹配（仅匹配程序集名称），默认禁用 -->
 			<IgnoreDependencyVersion Condition="'$(IgnoreDependencyVersion)'==''">false</IgnoreDependencyVersion>
 
@@ -25,6 +27,7 @@
 			<Message Importance="high" Text="[AMN] ManifestGenExists=$([System.IO.File]::Exists('$(AmnManifestGenExe)'))" />
 			<Message Importance="high" Text="[AMN] CleanAmnOutputDir=$(CleanAmnOutputDir)" />
 			<Message Importance="high" Text="[AMN] IgnoreDependencyVersion=$(IgnoreDependencyVersion)" />
+			<Message Importance="high" Text="[AMN] ILRepackAdditionParam=$(ILRepackAdditionParam)" />
 
 			<Warning Condition="!Exists('$(AmnManifestGenExe)')" Text="[AMN] Manifest generator not found:
   $(AmnManifestGenExe)" />
@@ -35,6 +38,7 @@
 				<AmnManifestGenArgs>-i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot; -t &quot;$(TargetFramework)&quot;</AmnManifestGenArgs>
 				<AmnManifestGenArgs Condition="'$(CleanAmnOutputDir)'=='true'">$(AmnManifestGenArgs) -c</AmnManifestGenArgs>
 				<AmnManifestGenArgs Condition="'$(IgnoreDependencyVersion)'=='true'">$(AmnManifestGenArgs) --ignoreDependencyVersion</AmnManifestGenArgs>
+				<AmnManifestGenArgs Condition="'$(ILRepackAdditionParam)'!=''">$(AmnManifestGenArgs) --ilrepackAdditionParam &quot;$(ILRepackAdditionParam)&quot;</AmnManifestGenArgs>
 			</PropertyGroup>
 
 			<Exec Condition="Exists('$(AmnManifestGenExe)')"
