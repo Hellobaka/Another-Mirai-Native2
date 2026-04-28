@@ -8,6 +8,12 @@ namespace Another_Mirai_Native.Model
     [AddINotifyPropertyChangedInterface]
     public class LogModel
     {
+        private const int DetailNoWrapPreviewMaxLength = 200;
+
+        private string _detail = "";
+
+        private string? _detailNoWrapCache;
+
         [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
         public int id { get; set; }
 
@@ -39,14 +45,37 @@ namespace Another_Mirai_Native.Model
         /// <summary>
         /// 日志内容
         /// </summary>
-        public string detail { get; set; } = "";
+        public string detail
+        {
+            get
+            {
+                return _detail;
+            }
+            set
+            {
+                _detail = value ?? "";
+                _detailNoWrapCache = null;
+            }
+        }
 
         [SugarColumn(IsIgnore = true)]
         public string detailNoWrap
         {
             get
             {
-                return detail.Replace("\r", " ").Replace("\n", " ");
+                if (_detailNoWrapCache != null)
+                {
+                    return _detailNoWrapCache;
+                }
+
+                string content = detail.Replace("\r", " ").Replace("\n", " ");
+                if (content.Length > DetailNoWrapPreviewMaxLength)
+                {
+                    content = content.Substring(0, DetailNoWrapPreviewMaxLength) + "...";
+                }
+
+                _detailNoWrapCache = content;
+                return _detailNoWrapCache;
             }
         }
 
