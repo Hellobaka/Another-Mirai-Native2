@@ -40,45 +40,31 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             {
                 string baseDirectory = Environment.CurrentDirectory;
                 string recordDirectory = Path.GetFullPath(Path.Combine(baseDirectory, "data", "record"));
-                string recordDirectoryWithSeparator = recordDirectory.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
-                    ? recordDirectory
-                    : recordDirectory + Path.DirectorySeparatorChar;
-                // 检查路径是否在 data\record 下
-                string absolute = Path.GetFullPath(FilePath);
-                if (!File.Exists(absolute))
-                {
-                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
-                }
 
-                bool isInRecordFolder = absolute.StartsWith(recordDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(absolute, recordDirectory, StringComparison.OrdinalIgnoreCase);
-                string relative;
-                if (isInRecordFolder)
+                // 检查路径是否绝对路径或是在 data\record 目录下的相对路径
+                string absolute = FilePath;
+                string relative = Path.Combine(recordDirectory, FilePath);
+
+                bool isAbsolute = File.Exists(absolute);
+                bool isRelative = File.Exists(relative);
+
+                if (isRelative)
                 {
-                    relative = Helper.GetRelativePath(absolute, recordDirectory);
+                    relative = Helper.GetRelativePath(relative, recordDirectory);
                 }
-                else
+                else if (isAbsolute)
                 {
                     // 将语音拷贝到 data\record\cached 下
                     string cachedDirectory = Path.Combine(recordDirectory, "cached");
                     Directory.CreateDirectory(cachedDirectory);
                     string fileName = Path.GetFileName(absolute);
                     string newPath = Path.Combine(cachedDirectory, fileName);
-                    if (File.Exists(newPath))
-                    {
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                        string extension = Path.GetExtension(fileName);
-                        int counter = 1;
-                        do
-                        {
-                            fileName = $"{fileNameWithoutExtension}_{counter}{extension}";
-                            newPath = Path.Combine(cachedDirectory, fileName);
-                            counter++;
-                        }
-                        while (File.Exists(newPath));
-                    }
-                    File.Copy(absolute, newPath);
+                    File.Copy(absolute, newPath, true);
                     relative = $"cached\\{Path.GetFileName(newPath)}";
+                }
+                else
+                {
+                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
                 }
 
                 return $"[CQ:record,file={relative}]";

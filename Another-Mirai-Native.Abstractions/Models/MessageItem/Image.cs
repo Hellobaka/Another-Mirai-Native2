@@ -56,44 +56,31 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
             {
                 string baseDirectory = Environment.CurrentDirectory;
                 string imageDirectory = Path.GetFullPath(Path.Combine(baseDirectory, "data", "image"));
-                string imageDirectoryWithSeparator = imageDirectory.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
-                    ? imageDirectory
-                    : imageDirectory + Path.DirectorySeparatorChar;
-                // 检查路径是否在 data\image 下
-                string absolute = Path.GetFullPath(FilePath);
-                if (!File.Exists(absolute))
+                
+                // 检查路径是否绝对路径或是在 data\image 目录下的相对路径
+                string absolute = FilePath;
+                string relative = Path.Combine(imageDirectory, FilePath);
+
+                bool isAbsolute = File.Exists(absolute);
+                bool isRelative = File.Exists(relative);
+
+                if (isRelative)
                 {
-                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
+                    relative = Helper.GetRelativePath(relative, imageDirectory);
                 }
-                bool isInImageFolder = absolute.StartsWith(imageDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
-                    || string.Equals(absolute, imageDirectory, StringComparison.OrdinalIgnoreCase);
-                string relative;
-                if (isInImageFolder)
-                {
-                    relative = Helper.GetRelativePath(absolute, imageDirectory);
-                }
-                else
+                else if (isAbsolute)
                 {
                     // 将图片拷贝到 data\image\cached 下
                     string cachedDirectory = Path.Combine(imageDirectory, "cached");
                     Directory.CreateDirectory(cachedDirectory);
                     string fileName = Path.GetFileName(absolute);
                     string newPath = Path.Combine(cachedDirectory, fileName);
-                    if (File.Exists(newPath))
-                    {
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                        string extension = Path.GetExtension(fileName);
-                        int counter = 1;
-                        do
-                        {
-                            fileName = $"{fileNameWithoutExtension}_{counter}{extension}";
-                            newPath = Path.Combine(cachedDirectory, fileName);
-                            counter++;
-                        }
-                        while (File.Exists(newPath));
-                    }
-                    File.Copy(absolute, newPath);
+                    File.Copy(absolute, newPath, true);
                     relative = $"cached\\{Path.GetFileName(newPath)}";
+                }
+                else
+                {
+                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
                 }
 
                 return $"[CQ:image,file={relative}{(IsFlash ? ",flash=true" : "")}{(IsEmoji ? $",sub_type={(IsEmoji ? 1 : 0)}" : "")}]";
