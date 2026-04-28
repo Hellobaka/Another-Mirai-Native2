@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.Model
 
         public override string ToString()
         {
-            return $"QQ={QQ}; 昵称={Nick}; 性别={Sex.GetDescription()}; 年龄={Age}";
+            return $"QQ={QQ}; 昵称={Nick}; 性别={Sex}; 年龄={Age}";
         }
 
         public byte[] ToNative()
