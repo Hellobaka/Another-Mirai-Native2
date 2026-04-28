@@ -56,6 +56,13 @@ or in a .csproj:
 
 Apply the same rule to **every** other NuGet package added to the project.
 
+**Prefer packages already bundled by the framework** — they are de-duplicated at build time and will NOT be merged into the plugin DLL, reducing output size.
+
+Before picking a package version, read the framework's dependency manifest to see what is already included:
+1. Find the NuGet global packages folder: run `dotnet nuget locals global-packages --list`
+2. Open: `<global-packages>\another-mirai-native.abstractions\<installed-version>\tools\DependencyManifest-dotnet9.json`
+3. If the package you need is listed there, you **MUST** install that exact version. Using a different version will prevent de-duplication and the package will be merged into the plugin DLL.
+
 ### 2.3 File path conventions (THIS IS CRITICAL)
 
 The framework allocates a dedicated directory for each plugin. All plugin-generated files (config, database, cache, etc.) MUST be stored in this directory.
