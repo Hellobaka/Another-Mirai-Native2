@@ -47,7 +47,17 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
                 string absolute = Path.GetFullPath(FilePath);
                 if (!File.Exists(absolute))
                 {
-                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
+                    // 尝试相对于 data\record 目录解析路径
+                    string absoluteFromRecordDir = Path.GetFullPath(Path.Combine(recordDirectory, FilePath));
+                    if (absoluteFromRecordDir.StartsWith(recordDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
+                        && File.Exists(absoluteFromRecordDir))
+                    {
+                        absolute = absoluteFromRecordDir;
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
+                    }
                 }
 
                 bool isInRecordFolder = absolute.StartsWith(recordDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)

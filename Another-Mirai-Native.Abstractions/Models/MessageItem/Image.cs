@@ -63,7 +63,17 @@ namespace Another_Mirai_Native.Abstractions.Models.MessageItem
                 string absolute = Path.GetFullPath(FilePath);
                 if (!File.Exists(absolute))
                 {
-                    throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
+                    // 尝试相对于 data\image 目录解析路径
+                    string absoluteFromImageDir = Path.GetFullPath(Path.Combine(imageDirectory, FilePath));
+                    if (absoluteFromImageDir.StartsWith(imageDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
+                        && File.Exists(absoluteFromImageDir))
+                    {
+                        absolute = absoluteFromImageDir;
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException($"无法从提供的路径({FilePath})获取到文件路径");
+                    }
                 }
                 bool isInImageFolder = absolute.StartsWith(imageDirectoryWithSeparator, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(absolute, imageDirectory, StringComparison.OrdinalIgnoreCase);
