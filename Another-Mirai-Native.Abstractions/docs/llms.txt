@@ -25,14 +25,36 @@
 
 - Windows-specific TFMs (net9.0-windows, net48) are required if using WinForms/WPF menus.
 - `<CopyLocalLockFileAssemblies>true` is MANDATORY for any plugin — without it, dependencies are not copied and the plugin fails to load.
-- The SDK auto-generates manifest and merges dependencies. Default behavior is correct; only customize `GenerateAmnManifest` / `CleanAmnOutputDir` / `IgnoreDependencyVersion` if needed.
+- The SDK auto-generates manifest and merges dependencies. Default behavior is correct; only customize `GenerateAmnManifest` / `CleanAmnOutputDir` / `IgnoreDependencyVersion` / `ILRepackAdditionParam` if needed.
+  - `GenerateAmnManifest` — enable/disable dependency merging and manifest generation (default: true)
+  - `CleanAmnOutputDir` — clean output dir and remove merged DLLs after pack (default: true)
+  - `IgnoreDependencyVersion` — match dependencies by assembly name only, ignore version/PublicKeyToken (default: false)
+  - `ILRepackAdditionParam` — extra command-line arguments forwarded verbatim to ILRepack (default: empty)
 - `EnableDynamicLoading` is Required.
 
 ### 2.2 Install the SDK NuGet
 
+**NEVER** use a wildcard or floating version (`*`, `*-*`, `latest`). You MUST resolve an exact version first.
+
+Step 1 — query available versions:
 ```
-Install-Package Another-Mirai-Native.Abstractions
+Find-Package Another-Mirai-Native.Abstractions -AllVersions
 ```
+or
+```
+dotnet package search Another-Mirai-Native.Abstractions --exact-match --take 10
+```
+
+Step 2 — install the newest **stable** version from the list (no `-preview` / `-beta` suffix unless the user explicitly asks for pre-release):
+```
+Install-Package Another-Mirai-Native.Abstractions -Version <exact-version>
+```
+or in a .csproj:
+```xml
+<PackageReference Include="Another-Mirai-Native.Abstractions" Version="<exact-version>" />
+```
+
+Apply the same rule to **every** other NuGet package added to the project.
 
 ### 2.3 File path conventions (THIS IS CRITICAL)
 

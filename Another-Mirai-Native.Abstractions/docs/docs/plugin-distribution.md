@@ -11,6 +11,7 @@
 | `GenerateAmnManifest` | 是否执行依赖合并和自动元数据生成，默认启用 |
 | `CleanAmnOutputDir` | 是否清理输出目录，并在合并依赖后删除多余文件，默认启用 |
 | `IgnoreDependencyVersion` | 是否忽略依赖版本匹配，仅按程序集名称匹配，默认禁用 |
+| `ILRepackAdditionParam` | 传递给 ILRepack 的额外参数，默认为空 |
 
 > 💡 **提示**：这些选项都可以直接写在项目文件的 `PropertyGroup` 中。
 
