@@ -4,3 +4,6 @@
 [submodule "Another-Mirai-Native2.WebUI"]
 	path = Another-Mirai-Native.WebUI
 	url = https://github.com/Hellobaka/Another-Mirai-Native2.WebUI
+[submodule "Another-Mirai-Native.WebUI"]
+	path = Another-Mirai-Native.WebUI
+	url = https://github.com/Hellobaka/Another-Mirai-Native2.WebUI.git
