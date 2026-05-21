@@ -1,0 +1,6 @@
+@Another_Mirai_Native.WebAPI_HostAddress = http://localhost:5109
+
+GET {{Another_Mirai_Native.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
