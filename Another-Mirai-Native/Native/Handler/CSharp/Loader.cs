@@ -15,6 +15,9 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
     public class Loader(string path)
         : PluginHandlerBase(path)
     {
+        private const string SDKAssemblyFullName = "Another-Mirai-Native.Abstractions";
+        private readonly Version MinimalSDKVersion = new Version(1, 2, 1, 0);
+
         private PluginBase Plugin { get; set; }
 
         private PluginInfo PluginInfo { get; set; }
@@ -60,6 +63,10 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
             try
             {
                 var assembly = Assembly.Load(File.ReadAllBytes(PluginPath));
+                if (!CheckSDKVersion(assembly, out Version pluginSdkVersion))
+                {
+                    LogHelper.Warning("加载 C# 插件", $"插件使用的 SDK({pluginSdkVersion}) 版本过低，不受支持，框架支持的最低 SDK 版本为 {MinimalSDKVersion}。使用过程中可能不稳定或者无法使用。");
+                }
                 AssemblyTypes = assembly.GetTypes();
                 var pluginType = AssemblyTypes.FirstOrDefault(t => t.IsSubclassOf(typeof(PluginBase)));
                 if (pluginType == null)
@@ -92,6 +99,18 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("加载 C# 插件", $"加载过程发生异常：{e}");
                 return false;
             }
+        }
+
+        private bool CheckSDKVersion(Assembly assembly, out Version pluginSdkVersion)
+        {
+            var sdkAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(x => !string.IsNullOrEmpty(x.Name) && x.Name.Equals(SDKAssemblyFullName));
+            if (sdkAssembly == null || sdkAssembly.Version == null)
+            {
+                throw new BadImageFormatException($"无法从当前插件中找到 {SDKAssemblyFullName} 类型，可能插件不是 Another-Mirai-Native2 原生插件。");
+            }
+
+            pluginSdkVersion = sdkAssembly.Version;
+            return pluginSdkVersion >= MinimalSDKVersion;
         }
 
         private AppInfo ParseNativePluginInfo()
