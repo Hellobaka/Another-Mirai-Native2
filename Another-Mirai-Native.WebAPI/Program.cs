@@ -1,4 +1,6 @@
+using Another_Mirai_Native.WebAPI.Controllers;
 using Another_Mirai_Native.WebAPI.Models;
+using Another_Mirai_Native.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,7 +31,7 @@ namespace Another_Mirai_Native.WebAPI
                       IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
                       {
                           // 每次验证时都从配置中获取密钥，确保使用最新的密钥进行验证
-                          string key = WebUIConfig.Instance.Password;
+                          string key = AuthController.CurrentPassword;
                           var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
                           return [signingKey];
                       }
@@ -76,6 +78,9 @@ namespace Another_Mirai_Native.WebAPI
                     }
                 });
             });
+
+            builder.Services.AddSingleton<DashboardService>(); 
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<DashboardService>());
 
             var app = builder.Build();
 

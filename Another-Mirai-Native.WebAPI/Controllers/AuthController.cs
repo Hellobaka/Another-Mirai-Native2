@@ -12,6 +12,8 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [Authorize]
     public class AuthController : ControllerBase
     {
+        public static string CurrentPassword => WebUIConfig.Instance.Password.PadRight(32, '~');
+
         [HttpPost("login")]
         [AllowAnonymous]
         public IActionResult Login([FromBody] LoginRequest request)
@@ -39,9 +41,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             }));
         }
 
-        private (string, DateTime) CreateJwtToken()
+        private static (string, DateTime) CreateJwtToken()
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebUIConfig.Instance.Password));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(CurrentPassword));
             var handler = new JsonWebTokenHandler();
             var expiresAt = DateTime.UtcNow.AddDays(7);
             var jwt = handler.CreateToken(new SecurityTokenDescriptor
