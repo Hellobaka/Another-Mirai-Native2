@@ -214,7 +214,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             CPUBaseFrequencyCounter.NextValue();
         }
 
-        private string GetDetailedOSVersion()
+        private static string GetDetailedOSVersion()
         {
             string osName = "Unknown OS";
             string version = "Unknown Version";
@@ -244,32 +244,41 @@ namespace Another_Mirai_Native.WebAPI.Services
             return cpuName?.ToString() ?? "Unknown";
         }
 
-        private uint GetCpuFrequency()
+        private static uint GetCpuFrequency()
         {
             using var searcher = new ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
             var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
             return (uint)(maxClockSpeed ?? 0);
         }
 
-        private uint GetCpuCurrentFrequency()
+        private static uint GetCpuCurrentFrequency()
         {
             using var searcher = new ManagementObjectSearcher("select CurrentClockSpeed from Win32_Processor");
             var currentClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["CurrentClockSpeed"];
             return (uint)(currentClockSpeed ?? 0);
         }
 
-        private ulong GetTotalPhysicalMemory()
+        private static ulong GetTotalPhysicalMemory()
         {
             using var searcher = new ManagementObjectSearcher("select TotalVisibleMemorySize from Win32_OperatingSystem");
             var totalMemory = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["TotalVisibleMemorySize"];
             return (ulong)(totalMemory ?? 0) / 1024;
         }
 
-        private string GetLocalIPAddress()
+        private static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             var ip = host.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             return ip?.ToString() ?? "No network adapters with an IPv4 address in the system!";
+        }
+
+        private static TimeSpan GetProcessCpuUsage(Process process)
+        {
+            WinNative.FILETIME ftIdle, ftKernel, ftUser;
+            WinNative.GetSystemTimes(out ftIdle, out ftKernel, out ftUser);
+
+            var cpuTime = process.TotalProcessorTime;
+            return cpuTime;
         }
 
         private ulong GetUsedMemory()
@@ -304,15 +313,6 @@ namespace Another_Mirai_Native.WebAPI.Services
             }
 
             return cpu;
-        }
-
-        private TimeSpan GetProcessCpuUsage(Process process)
-        {
-            WinNative.FILETIME ftIdle, ftKernel, ftUser;
-            WinNative.GetSystemTimes(out ftIdle, out ftKernel, out ftUser);
-
-            var cpuTime = process.TotalProcessorTime;
-            return cpuTime;
         }
     }
 }
