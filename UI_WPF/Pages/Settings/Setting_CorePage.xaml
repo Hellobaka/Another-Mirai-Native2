@@ -76,6 +76,12 @@
                     🔌 插件管理
                 </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
+                    x:Name="ParallelPluginLoad"
+                    Title="插件并行加载"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="加快插件的加载速度" />
+
+                <controls:SettingItem_ToggleButton
                     x:Name="PluginExitWhenCoreExit"
                     Title="框架退出时插件自动退出"
                     OnToggled="SettingItem_Toggled"
