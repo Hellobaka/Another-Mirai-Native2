@@ -2,6 +2,7 @@
 using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Lagrange.Core.Message;
 using Lagrange.Core.Message.Entity;
@@ -45,7 +46,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is ImageEntity image)
                 {
-                    string imgId = ChatHistoryHelper.CacheMessageImage(image.ImageUrl).Result
+                    string imgId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Image, image.ImageUrl).Result
                         ?? BitConverter.ToString(image.ImageMd5).ToUpper().Replace("-", "");
                     message.Append($"[CQ:image,file={imgId},sub_type={image.SubType}]");
                 }
@@ -94,9 +95,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is RecordEntity record)
                 {
-                    string voiceId = BitConverter.ToString(record.AudioMd5).ToUpper().Replace("-", "");
-                    Directory.CreateDirectory("data\\record");
-                    File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={record.AudioUrl}");
+                    string voiceId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Record, record.AudioUrl).Result
+                        ?? BitConverter.ToString(record.AudioMd5).ToUpper().Replace("-", "");
                     message.Append($"[CQ:record,file={voiceId}]");
                 }
                 else if (item is SpecialPokeEntity specialPoke)
@@ -109,9 +109,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 }
                 else if (item is VideoEntity video)
                 {
-                    string videoId = video.VideoHash;
-                    Directory.CreateDirectory("data\\video");
-                    File.WriteAllText($"data\\video\\{videoId}.cqvideo", $"[video]\nurl={video.VideoUrl}\nlength={video.VideoLength}");
+                    string videoId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Video, video.VideoUrl).Result
+                        ?? video.VideoHash;
                     message.Append($"[CQ:video,file={videoId}]");
                 }
                 else if (item is XmlEntity xml)
@@ -159,22 +158,22 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         }
                         else
                         {
-                            var cacheImagePath = CachedImage.GetCachedImageByHash(file);
+                            var cacheImagePath = CachedFile.GetCachedImageByHash(file);
                             if (cacheImagePath == null)
                             {
                                 LogHelper.Error("构建消息", $"图片文件不存在：{picPath}");
                             }
                             else
                             {
-                                string baseDirectory = Helper.GetCachePictureDirectory();
+                                string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Image);
                                 builder.Image(Path.Combine(baseDirectory, cacheImagePath.FileName));
                             }
                         }
                         break;
 
                     case MessageItemType.Record:
-                        string recordPath = cqcode.Items["file"];
-                        recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordPath);
+                        string recordHash = cqcode.Items["file"];
+                        string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordHash);
                         if (File.Exists(recordPath))
                         {
                             string extension = new FileInfo(recordPath).Extension;
@@ -193,18 +192,18 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                             recordPath = Path.GetFullPath(recordPath);
                             builder.Record(recordPath);
                         }
-                        else if (File.Exists(recordPath + ".cqrecord"))
+                        else
                         {
-                            recordPath = Path.ChangeExtension(recordPath, ".amr");
-                            string picUrl = File.ReadAllText(recordPath).Split('\n').Last().Replace("url=", "");
-                            string cachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", "cache");
-                            (bool success, string path) = Helper.DownloadFile(picUrl, Path.GetFileName(recordPath), cachePath, true).Result;
-                            if (!success)
+                            var cachedRecord = CachedFile.GetCachedRecordByHash(recordHash);
+                            if (cachedRecord == null)
                             {
-                                LogHelper.Error("构建消息", $"从缓存下载音频失败：{recordPath}");
-                                break;
+                                LogHelper.Error("构建消息", $"音频文件不存在：{recordHash}");
                             }
-                            builder.Record(path);
+                            else
+                            {
+                                string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Record);
+                                builder.Record(Path.Combine(baseDirectory, cachedRecord.FileName));
+                            }
                         }
                         break;
 

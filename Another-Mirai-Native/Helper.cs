@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Xml.Linq;
 using System.Security.Cryptography;
 using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Model.Enums;
 
 namespace Another_Mirai_Native
 {
@@ -174,9 +175,20 @@ namespace Another_Mirai_Native
             return cqimg.Items.TryGetValue("file", out var file) ? file : "";
         }
 
-        public static string GetCachePictureDirectory()
+        public static string GetCachePictureDirectory(bool cache = true)
         {
-            return Path.Combine("data", "image", "cached");
+            return GetCacheDirectoryByCachedFileType(CachedFileType.Image, cache);
+        }
+
+        public static string GetCacheDirectoryByCachedFileType(CachedFileType cachedFileType, bool cache = true)
+        {
+            string type = cachedFileType switch
+            {
+                CachedFileType.Video => "video",
+                CachedFileType.Record => "record",
+                _ => "image"
+            };
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, cache ?  Path.Combine("data", type, "cached") : Path.Combine("data", type));
         }
 
         /// <summary>
@@ -275,7 +287,7 @@ namespace Another_Mirai_Native
             }
         }
 
-        public static string GetPicNameFromUrl(string imageUrl)
+        public static string GetFileNameFromUrl(string imageUrl)
         {
             Regex regex = new(".*gchat\\.qpic\\.cn\\/gchatpic_new.*?-.*?-(.*)\\/.*");
             if (regex.Match(imageUrl).Success)
@@ -363,32 +375,31 @@ namespace Another_Mirai_Native
         }
 
         /// <summary>
-        /// 下载或读取缓存图片
+        /// 下载或读取缓存文件
         /// </summary>
-        /// <param name="imageUrl">欲下载的图片URL</param>
-        /// <returns>本地图片绝对路径</returns>
-        public static async Task<string?> DownloadImageAsync(string imageUrl, string fileName = "")
+        /// <param name="fileUrl">欲下载的文件URL</param>
+        /// <returns>本地文件绝对路径</returns>
+        public static async Task<string?> DownloadFileAsync(string baseDirectory, string fileUrl, string fileName = "")
         {
             try
             {
-                if (string.IsNullOrEmpty(imageUrl))
+                if (string.IsNullOrEmpty(fileUrl))
                 {
                     return null;
                 }
-                string cacheImagePath = Helper.GetCachePictureDirectory();
 
-                Directory.CreateDirectory(cacheImagePath);
-                if (!imageUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
+                Directory.CreateDirectory(baseDirectory);
+                if (!fileUrl.StartsWith("http"))// 下载并非http请求, 则更改为本地文件
                 {
-                    return new FileInfo(imageUrl).FullName;
+                    return new FileInfo(fileUrl).FullName;
                 }
                 string name;
                 if (fileName == "")
                 {
-                    name = GetPicNameFromUrl(imageUrl);// 解析图片唯一ID
+                    name = GetFileNameFromUrl(fileUrl);// 解析图片唯一ID
                     if (string.IsNullOrEmpty(name))
                     {
-                        name = imageUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
+                        name = fileUrl.MD5(); // 无法解析时尝试使用哈希作为文件名
                     }
                 }
                 else
@@ -396,17 +407,17 @@ namespace Another_Mirai_Native
                     name = fileName;
                 }
                 // 尝试从本地读取缓存
-                string? path = GetFromCache(cacheImagePath, name);
+                string? path = GetFromCache(baseDirectory, name);
                 if (!string.IsNullOrEmpty(path))
                 {
                     return path;
                 }
 
-                return await DownloadFileFromWebAsync(cacheImagePath, name, imageUrl);
+                return await DownloadFileFromWebAsync(baseDirectory, name, fileUrl);
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog((int)Model.Enums.LogLevel.Debug, "DownloadImageAsync", ex.Message + ex.StackTrace);
+                LogHelper.WriteLog((int)Model.Enums.LogLevel.Debug, "DownloadFileAsync", ex.Message + ex.StackTrace);
                 return null;
             }
         }

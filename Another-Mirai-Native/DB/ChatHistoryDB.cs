@@ -49,7 +49,7 @@ namespace Another_Mirai_Native.DB
                 typeof(GroupEntity),
                 typeof(GroupMemberEntity),
                 typeof(ChatCategoryEntity),
-                typeof(CachedImage)
+                typeof(CachedFile)
             );
         }
     }
@@ -358,10 +358,12 @@ namespace Another_Mirai_Native.DB
     }
 
     [SugarTable]
-    public class CachedImage
+    public class CachedFile
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int ID { get; set; }
+
+        public CachedFileType CachedFileType { get; set; } = CachedFileType.Image;
 
         public string Hash { get; set; } = string.Empty;
 
@@ -375,10 +377,22 @@ namespace Another_Mirai_Native.DB
 
         public bool Deleted { get; set; }
 
-        public static CachedImage? GetCachedImageByHash(string hash)
+        public static CachedFile? GetCachedImageByHash(string hash)
         {
             var db = ChatHistoryDB.GetInstance();
-            return db.Queryable<CachedImage>().Where(ci => ci.Hash == hash && !ci.Deleted).First();
+            return db.Queryable<CachedFile>().Where(x => x.Hash == hash && !x.Deleted && x.CachedFileType == CachedFileType.Image).First();
+        }
+
+        public static CachedFile? GetCachedRecordByHash(string hash)
+        {
+            var db = ChatHistoryDB.GetInstance();
+            return db.Queryable<CachedFile>().Where(x => x.Hash == hash && !x.Deleted && x.CachedFileType == CachedFileType.Record).First();
+        }
+
+        public static CachedFile? GetCachedVideoByHash(string hash)
+        {
+            var db = ChatHistoryDB.GetInstance();
+            return db.Queryable<CachedFile>().Where(x => x.Hash == hash && !x.Deleted && x.CachedFileType == CachedFileType.Video).First();
         }
     }
 }

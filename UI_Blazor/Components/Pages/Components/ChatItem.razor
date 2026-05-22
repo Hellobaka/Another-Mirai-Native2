@@ -501,7 +501,7 @@ else
         {
             string file = cqCode.GetPicName();
             // TODO: 适配本地图片
-            var cachedImage = CachedImage.GetCachedImageByHash(file);
+            var cachedImage = CachedFile.GetCachedImageByHash(file);
             if (cachedImage == null)
             {
                 return null;

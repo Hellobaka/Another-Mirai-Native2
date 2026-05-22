@@ -752,13 +752,14 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     else
                     {
                         // 若以上两个路径均不存在, 判断对应的缓存文件是否存在
-                        var cachedImage = CachedImage.GetCachedImageByHash(picPath);
+                        var cachedImage = CachedFile.GetCachedImageByHash(picPath);
                         if (cachedImage == null)
                         {
                             LogHelper.WriteLog(LogLevel.Warning, "发送图片", "缓存文件不存在", "");
                             continue;
                         }
-                        newCQcode = new(MessageItemType.Image, new KeyValuePair<string, string>("file", cachedImage.Url));
+                        newCQcode = new(MessageItemType.Image);
+                        newCQcode.Items.Add("file", cachedImage.Url);
                         if (item.Items.ContainsKey("flash"))
                         {
                             newCQcode.Items.Add("type", "flash");
@@ -782,8 +783,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 else if (item.IsRecordCQCode)
                 {
                     newCQcode = new CQCode(MessageItemType.Record);
-                    string recordPath = item.Items["file"];
-                    recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordPath);
+                    string recordHash = item.Items["file"];
+                    string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordHash);
                     if (File.Exists(recordPath))
                     {
                         string extension = new FileInfo(recordPath).Extension;
@@ -802,14 +803,17 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         newCQcode.Items.Add("file", $"base64://{Helper.ParsePic2Base64(recordPath)}");
                         msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
                     }
-                    else if (File.Exists(recordPath + ".cqrecord"))
-                    {
-                        string recordUrl = File.ReadAllText(recordPath + ".cqrecord").Replace("[record]\nurl=", "");
-                        newCQcode.Items.Add("file", recordUrl);
-                        msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
-                    }
                     else
                     {
+                        var cachedRecord = CachedFile.GetCachedRecordByHash(recordHash);
+                        if (cachedRecord == null)
+                        {
+                            LogHelper.WriteLog(LogLevel.Warning, "发送音频", "缓存文件不存在", "");
+                            continue;
+                        }
+                        newCQcode = new(MessageItemType.Record);
+                        newCQcode.Items.Add("file", cachedRecord.Url);
+                        msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
                         continue;
                     }
                 }
