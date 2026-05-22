@@ -23,7 +23,7 @@
 
 ### 📚 框架已内置的依赖
 
-可以参考 [DependencyManifest-dotnet9.json](https://github.com/Hellobaka/Another-Mirai-Native2/blob/csharp-plugin/Another-Mirai-Native.Abstractions/tools/DependencyManifest-dotnet9.json)。
+可以参考 [DependencyManifest-dotnet9.json](https://github.com/Hellobaka/Another-Mirai-Native2/blob/master/Another-Mirai-Native.Abstractions/tools/DependencyManifest-dotnet9.json)。
 
 > 💡 **提示**：选择依赖时，优先使用框架已经提供的同版本依赖，这样可以减少最终插件包的体积。
 
