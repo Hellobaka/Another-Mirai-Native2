@@ -272,15 +272,6 @@ namespace Another_Mirai_Native.WebAPI.Services
             return ip?.ToString() ?? "No network adapters with an IPv4 address in the system!";
         }
 
-        private static TimeSpan GetProcessCpuUsage(Process process)
-        {
-            WinNative.FILETIME ftIdle, ftKernel, ftUser;
-            WinNative.GetSystemTimes(out ftIdle, out ftKernel, out ftUser);
-
-            var cpuTime = process.TotalProcessorTime;
-            return cpuTime;
-        }
-
         private ulong GetUsedMemory()
         {
             using var searcher = new ManagementObjectSearcher("select FreePhysicalMemory from Win32_OperatingSystem");
@@ -294,7 +285,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             double cpu = 0;
             if (PluginCPUUsage.TryGetValue(pluginProcess.Id, out (DateTime lastUpdateTime, TimeSpan lastCpuUsage) usage))
             {
-                var cpuUsage = GetProcessCpuUsage(pluginProcess);
+                var cpuUsage = pluginProcess.TotalProcessorTime;
                 var updateTime = DateTime.UtcNow;
 
                 PluginCPUUsage[pluginProcess.Id] = (updateTime, cpuUsage);
@@ -306,7 +297,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             }
             else
             {
-                var startCpuUsage = GetProcessCpuUsage(pluginProcess);
+                var startCpuUsage = pluginProcess.TotalProcessorTime;
                 var startTime = DateTime.UtcNow;
 
                 PluginCPUUsage[pluginProcess.Id] = (startTime, startCpuUsage);
