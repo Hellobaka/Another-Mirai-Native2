@@ -590,29 +590,32 @@ namespace Another_Mirai_Native.DB
 
         public static void Initialize()
         {
-            if (AppConfig.Instance.EnableChat is false || !AppConfig.Instance.IsCore)
+            if (!AppConfig.Instance.IsCore)
             {
                 return;
             }
 
-            // 加载缓存
-            Task.Run(LoadCacheFromDatabaseAsync);
+            if (AppConfig.Instance.EnableChat)
+            {
+                // 加载缓存
+                Task.Run(LoadCacheFromDatabaseAsync);
 
-            PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
-            PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
-            PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
-            PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
-            PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
-            PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
-            PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
-            PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
-            PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
-            PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
-            PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
-            PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
+                PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
+                PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
+                PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
+                PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
+                PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
+                PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
+                PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
+                PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
+                PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
+                PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
+                PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
+                PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
 
-            CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
-            CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+                CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
+                CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+            }
 
             ScheduleDailyMaintenance();
         }
@@ -767,7 +770,7 @@ namespace Another_Mirai_Native.DB
             {
                 return null;
             }
-            CachedFile exist = db.Queryable<CachedFile>().Where(x => x.Hash == hash).First();
+            CachedFile exist = db.Queryable<CachedFile>().Where(x => x.Hash == hash && x.CachedFileType == cachedFileType).First();
             if (exist != null)
             {
                 cachedFile.ID = exist.ID;
