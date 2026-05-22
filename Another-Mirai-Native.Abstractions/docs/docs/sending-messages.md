@@ -167,7 +167,7 @@ await e.API.MessageApi.DeleteMessageAsync(message.Id);
 
 ## ⚠️ 发送结果判断
 
-消息发送不会抛出异常，而是通过返回的 `Message` 对象的 `IsSuccess` 属性判断是否成功：
+消息发送失败不会抛出异常，而是通过返回的 `Message` 对象的 `IsSuccess` 属性判断是否成功：
 
 ```csharp
 var message = await e.SendMessageAsync("测试消息");
