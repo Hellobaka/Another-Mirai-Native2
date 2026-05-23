@@ -199,6 +199,7 @@ namespace Another_Mirai_Native
             Directory.CreateDirectory(Path.Combine(basePath, "data", "plugins"));
             Directory.CreateDirectory(Path.Combine(basePath, "data", "image"));
             Directory.CreateDirectory(Path.Combine(basePath, "data", "record"));
+            Directory.CreateDirectory(Path.Combine(basePath, "data", "video"));
             Directory.CreateDirectory(Path.Combine(basePath, "logs"));
             Directory.CreateDirectory(Path.Combine(basePath, "protocols"));
             Directory.CreateDirectory(Path.Combine(basePath, "loaders"));
