@@ -242,7 +242,7 @@ namespace Another_Mirai_Native.Native
         {
             string baseDirectory = Helper.GetCachePictureDirectory();
 
-            var cached = CachedImage.GetCachedImageByHash(file);
+            var cached = CachedFile.GetCachedImageByHash(file);
             if (cached != null && !cached.Deleted
                 && File.Exists(Path.Combine(baseDirectory, cached.FileName)))
             {

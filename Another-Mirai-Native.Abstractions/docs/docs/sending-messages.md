@@ -17,9 +17,9 @@ CQ码是指`酷Q`所定义的一种用纯文本表示非文本元素格式，以
 > 💡 **提示**：可以直接发送 CQ码字符串，框架会自动解析。在构造器中对应使用 `Text()` 方法：
 >
 > ```csharp
-> await e.SendMessageAsync("");
+> await e.SendMessageAsync("[CQ:at,qq=114514] 你好");
 > // 等价于
-> await e.SendMessageAsync(new MessageBuilder().Text("[CQ:at,qq=114514] 你好").Build());
+> await e.SendMessageAsync(new MessageBuilder().At(114514).Text(" 你好").Build());
 > ```
 
 > ⚠️ **注意**：虽然 CQ码支持的元素类别很多，但本框架不保证所有格式都支持。
@@ -167,7 +167,7 @@ await e.API.MessageApi.DeleteMessageAsync(message.Id);
 
 ## ⚠️ 发送结果判断
 
-消息发送不会抛出异常，而是通过返回的 `Message` 对象的 `IsSuccess` 属性判断是否成功：
+消息发送失败不会抛出异常，而是通过返回的 `Message` 对象的 `IsSuccess` 属性判断是否成功：
 
 ```csharp
 var message = await e.SendMessageAsync("测试消息");

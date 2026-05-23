@@ -2,6 +2,7 @@
 using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
 using System.Text;
 
 namespace Another_Mirai_Native.Protocol.OneBot
@@ -68,15 +69,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             break;
                         }
 
-                        // 检查是否下载成功
-                        string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record", recordFile);
-
-                        if (!File.Exists(recordPath) && !File.Exists(recordPath + ".cqrecord"))
-                        {
-                            LogHelper.Error("构建消息", $"下载音频失败：{recordPath}");
-                            break;
-                        }
-
                         stringBuilder.Append($"[CQ:record,file={recordFile}]");
                         break;
 
@@ -106,19 +98,25 @@ namespace Another_Mirai_Native.Protocol.OneBot
         {
             string imageFile = cqcode.Items["file"];
             string url = cqcode.Items.TryGetValue("url", out string? u) ? u : string.Empty;
-            string folderName = cqcode.Function.ToString().ToLower();
+            CachedFileType cachedFileType = cqcode.Function switch
+            {
+                MessageItemType.Image => CachedFileType.Image,
+                MessageItemType.Record => CachedFileType.Record,
+                MessageItemType.Video => CachedFileType.Video,
+                _ => throw new InvalidOperationException($"不支持缓存的消息类型：{cqcode.Function}")
+            };
 
             if (imageFile.StartsWith("http") || !string.IsNullOrEmpty(url))
             {
-                return HandleHttpFile(cqcode, folderName);
+                return HandleHttpFile(cqcode, cachedFileType);
             }
             else if (imageFile.StartsWith("base64://"))
             {
-                return HandleBase64File(cqcode, folderName);
+                return HandleBase64File(cqcode, cachedFileType);
             }
             else if (imageFile.StartsWith("file:///"))
             {
-                return HandleLocalFile(cqcode, folderName);
+                return HandleLocalFile(cqcode, cachedFileType);
             }
             else
             {
@@ -139,7 +137,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             return (Path.GetFileNameWithoutExtension(file), subType);
         }
 
-        private (string file, string subType) HandleLocalFile(CQCode cqcode, string folderName)
+        private (string file, string subType) HandleLocalFile(CQCode cqcode, CachedFileType cachedFileType)
         {
             // file字段为本地文件路径，应当复制文件到图片目录
             string file = cqcode.Items["file"].Replace("file://", "");
@@ -149,7 +147,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
             string fileName = Path.GetFileName(file);
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, fileName);
+            string filePath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
             if (File.Exists(filePath))
             {
                 return (fileName, subType);
@@ -170,7 +168,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
         }
 
-        private (string file, string subType) HandleBase64File(CQCode cqcode, string folderName)
+        private (string file, string subType) HandleBase64File(CQCode cqcode, CachedFileType cachedFileType)
         {
             // file字段为base64编码的图片，应当解码并保存到图片目录
             string base64 = cqcode.Items["file"].Replace("base64://", "");
@@ -180,13 +178,19 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
             byte[] imageBytes = Convert.FromBase64String(base64);
-            string fileName = $"{base64.MD5()}.jpg";
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", folderName, fileName);
+            string fileDefaultFormat = cachedFileType switch
+            {
+                CachedFileType.Record => ".mp3",
+                CachedFileType.Video => ".mp4",
+                _ => ".jpg",
+            };
+            string fileName = $"{base64.MD5()}{fileDefaultFormat}";
+            string filePath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
             File.WriteAllBytes(filePath, imageBytes);
             return (fileName, subType);
         }
 
-        private (string file, string subType) HandleHttpFile(CQCode cqcode, string folderName)
+        private (string file, string subType) HandleHttpFile(CQCode cqcode, CachedFileType cachedFileType)
         {
             // file字段为http链接，应当写入cqimg文件
             string u = cqcode.Items.TryGetValue("url", out string? o) ? o : string.Empty;
@@ -199,7 +203,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
 
-            string hash = ChatHistoryHelper.CacheMessageImage(url).Result ?? (file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file));
+            string hash = ChatHistoryHelper.CacheMessageFile(cachedFileType, url).Result ?? (file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file));
             return (hash, subType);
         }
 

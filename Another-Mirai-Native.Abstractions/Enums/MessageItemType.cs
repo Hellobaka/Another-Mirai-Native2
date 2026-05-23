@@ -40,6 +40,12 @@ namespace Another_Mirai_Native.Abstractions.Enums
         Record,
 
         /// <summary>
+        /// 视频
+        /// </summary>
+        [Description("video")]
+        Video,
+
+        /// <summary>
         /// At默认
         /// </summary>
         [Description("at")]

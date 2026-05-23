@@ -229,7 +229,7 @@
                             Grid.Column="2"
                             Margin="5,0"
                             HorizontalAlignment="Stretch"
-                            Command="{Binding Command_OpenPluginPath}">
+                            Command="{Binding Command_OpenDataDirectory}">
                             数据
                         </Button>
                         <Button

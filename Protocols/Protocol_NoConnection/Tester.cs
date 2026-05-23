@@ -160,7 +160,7 @@ namespace Protocol_NoConnection
                     SendValue.Text += $"[CQ:image,file={Path.GetFileNameWithoutExtension(path)}] ";
                     continue;
                 }
-                string imgId = await ChatHistoryHelper.CacheMessageImage($"{PicServer.Instance.ListenURL}{path}");
+                string imgId = await ChatHistoryHelper.CacheMessageFile(CachedFileType.Image, $"{PicServer.Instance.ListenURL}{path}");
                 SendValue.Text += $"[CQ:image,file={imgId}] ";
             }
         }

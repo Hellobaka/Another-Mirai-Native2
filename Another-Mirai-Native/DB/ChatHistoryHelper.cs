@@ -590,29 +590,32 @@ namespace Another_Mirai_Native.DB
 
         public static void Initialize()
         {
-            if (AppConfig.Instance.EnableChat is false || !AppConfig.Instance.IsCore)
+            if (!AppConfig.Instance.IsCore)
             {
                 return;
             }
 
-            // 加载缓存
-            Task.Run(LoadCacheFromDatabaseAsync);
+            if (AppConfig.Instance.EnableChat)
+            {
+                // 加载缓存
+                Task.Run(LoadCacheFromDatabaseAsync);
 
-            PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
-            PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
-            PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
-            PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
-            PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
-            PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
-            PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
-            PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
-            PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
-            PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
-            PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
-            PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
+                PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
+                PluginManagerProxy.OnGroupAdded += PluginManagerProxy_OnGroupAdded;
+                PluginManagerProxy.OnGroupMsg += PluginManagerProxy_OnGroupMsg;
+                PluginManagerProxy.OnGroupLeft += PluginManagerProxy_OnGroupLeft;
+                PluginManagerProxy.OnAdminChanged += PluginManagerProxy_OnAdminChanged;
+                PluginManagerProxy.OnFriendAdded += PluginManagerProxy_OnFriendAdded;
+                PluginManagerProxy.OnPrivateMsg += PluginManagerProxy_OnPrivateMsg;
+                PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
+                PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
+                PluginManagerProxy.OnGroupMemberCardChanged += PluginManagerProxy_OnGroupMemberCardChanged;
+                PluginManagerProxy.OnGroupNameChanged += PluginManagerProxy_OnGroupNameChanged;
+                PluginManagerProxy.OnFriendNickChanged += PluginManagerProxy_OnFriendNickChanged;
 
-            CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
-            CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+                CQPImplementation.OnPrivateMessageSend += CQPImplementation_OnPrivateMessageSend;
+                CQPImplementation.OnGroupMessageSend += CQPImplementation_OnGroupMessageSend;
+            }
 
             ScheduleDailyMaintenance();
         }
@@ -753,45 +756,54 @@ namespace Another_Mirai_Native.DB
         }
 
         /// <summary>
-        /// 通过url下载图片
+        /// 通过url下载多媒体文件
         /// </summary>
         /// <param name="url"></param>
         /// <param name="fileName">若提供文件名可填</param>
-        /// <returns>图片 Hash</returns>
-        public static async Task<string?> CacheMessageImage(string url, string? fileName = null)
+        /// <returns>Hash</returns>
+        public static async Task<string?> CacheMessageFile(CachedFileType cachedFileType, string url, string? fileName = null)
         {
-            using var db = ChatHistoryDB.GetInstance();
+            var db = ChatHistoryDB.GetInstance();
 
-            string baseDirectory = Helper.GetCachePictureDirectory();
+            (CachedFile? cachedFile, string? hash) = await DownloadFileAsync(cachedFileType, url, fileName);
+            if (cachedFile == null)
+            {
+                return null;
+            }
+            CachedFile exist = db.Queryable<CachedFile>().Where(x => x.Hash == hash && x.CachedFileType == cachedFileType).First();
+            if (exist != null)
+            {
+                cachedFile.ID = exist.ID;
+                await db.Updateable(cachedFile).ExecuteCommandAsync();
+            }
+            else
+            {
+                await db.Insertable(cachedFile).ExecuteCommandAsync();
+            }
+            return hash;
+        }
+
+        private static async Task<(CachedFile? cachedFile, string? hash)> DownloadFileAsync(CachedFileType cachedFileType, string url, string? fileName = null)
+        {
+            string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(cachedFileType);
             Directory.CreateDirectory(baseDirectory);
-            string? absoluteFilePath = await Helper.DownloadImageAsync(url, fileName ?? Helper.GetPicNameFromUrl(url));
-            if (string.IsNullOrEmpty(absoluteFilePath)
-                || !File.Exists(absoluteFilePath))
+            string? absoluteFilePath = await Helper.DownloadFileAsync(baseDirectory, url, fileName ?? Helper.GetFileNameFromUrl(url));
+            if (string.IsNullOrEmpty(absoluteFilePath) || !File.Exists(absoluteFilePath))
             {
                 // 下载失败了
-                return null;
+                return (null, null);
             }
             var fileBuffer = File.ReadAllBytes(absoluteFilePath);
             string hash = Helper.MD5(fileBuffer);
-            CachedImage cachedImage = new()
+            return (new()
             {
                 FileName = Helper.GetRelativePath(absoluteFilePath!, baseDirectory),
                 Hash = hash,
                 InsertTime = DateTime.Now,
                 Url = url,
                 FileSizeInKB = fileBuffer.Length / 1024.0f,
-            };
-            CachedImage exist = db.Queryable<CachedImage>().Where(x => x.Hash == hash).First();
-            if (exist != null)
-            {
-                cachedImage.ID = exist.ID;
-                await db.Updateable(cachedImage).ExecuteCommandAsync();
-            }
-            else
-            {
-                await db.Insertable(cachedImage).ExecuteCommandAsync();
-            }
-            return hash;
+                CachedFileType = cachedFileType,
+            }, hash);
         }
 
         private static async Task CheckAndFreeCache()
@@ -831,7 +843,7 @@ namespace Another_Mirai_Native.DB
                     DateTime expireTime = DateTime.Now.AddDays(-AppConfig.Instance.ChatImageCacheExpireTime);
                     
                     // 查询过期的缓存图片
-                    var expiredImages = db.Queryable<CachedImage>()
+                    var expiredImages = db.Queryable<CachedFile>()
                         .Where(x => x.InsertTime < expireTime && !x.Deleted)
                         .ToList();
 
@@ -839,7 +851,7 @@ namespace Another_Mirai_Native.DB
                     {
                         try
                         {
-                            string fullPath = Path.Combine(Helper.GetCachePictureDirectory(), image.FileName);
+                            string fullPath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(image.CachedFileType), image.FileName);
                             // 删除文件
                             if (File.Exists(fullPath))
                             {
@@ -869,17 +881,29 @@ namespace Another_Mirai_Native.DB
             {
                 return;
             }
+            foreach(var dir in Enum.GetValues(typeof(CachedFileType)))
+            {
+                string folderFullPath = Helper.GetCacheDirectoryByCachedFileType((CachedFileType)dir);
+                await FreeFolderSpaceBySize(folderFullPath);
+            }
+        }
+
+        private static async Task FreeFolderSpaceBySize(string folderFullPath)
+        {
             await Task.Run(() =>
             {
                 try
                 {
-                    string dir = Helper.GetCachePictureDirectory();
                     double length = 0;
+                    if (!Directory.Exists(folderFullPath))
+                    {
+                        return;
+                    }
                     var db = ChatHistoryDB.GetInstance();
-                    
+
                     // 统计缓存文件夹总大小
                     List<FileInfo> files = [];
-                    foreach (var item in Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly))
+                    foreach (var item in Directory.GetFiles(folderFullPath, "*.*", SearchOption.TopDirectoryOnly))
                     {
                         var info = new FileInfo(item);
                         length += info.Length;
@@ -900,19 +924,18 @@ namespace Another_Mirai_Native.DB
 
                                 try
                                 {
+                                    string relativeFilePath = Helper.GetRelativePath(file.FullName, folderFullPath);
                                     file.Delete();
-                                    
+
                                     // 同步更新数据库
-                                    var cachedImage = db.Queryable<CachedImage>()
-                                        .Where(x => x.FileName == Path.GetFileName(file.FullName))
+                                    var cachedImage = db.Queryable<CachedFile>()
+                                        .Where(x => x.FileName == relativeFilePath)
                                         .First();
-                                    
+
                                     if (cachedImage != null)
                                     {
-                                        db.Updateable<CachedImage>()
-                                            .SetColumns(x => x.Deleted)
-                                            .Where(x => x.ID == cachedImage.ID)
-                                            .ExecuteCommand();
+                                        cachedImage.Deleted = true;
+                                        db.Updateable(cachedImage).ExecuteCommand();
                                     }
                                 }
                                 catch (Exception ex)
@@ -933,6 +956,7 @@ namespace Another_Mirai_Native.DB
                     LogHelper.WriteLog($"按大小清理缓存图片失败：{ex.Message}\n{ex.StackTrace}");
                 }
             });
+
         }
 
         public static async Task LoadFriendCaches()

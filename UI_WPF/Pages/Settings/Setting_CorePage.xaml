@@ -76,6 +76,12 @@
                     🔌 插件管理
                 </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
+                    x:Name="ParallelPluginLoad"
+                    Title="插件并行加载"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="加快插件的加载速度" />
+
+                <controls:SettingItem_ToggleButton
                     x:Name="PluginExitWhenCoreExit"
                     Title="框架退出时插件自动退出"
                     OnToggled="SettingItem_Toggled"
@@ -153,11 +159,17 @@
                     FontSize="16"
                     FontWeight="SemiBold"
                     Style="{StaticResource TitleTextBlockStyle}">
-                    💬 图片缓存
+                    💬 缓存管理
                 </emoji:TextBlock>
                 <controls:SettingItem_ToggleButton
+                    x:Name="EnableChat"
+                    Title="启用聊天页面"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="启用或禁用聊天页面功能" />
+
+                <controls:SettingItem_ToggleButton
                     x:Name="EnableChatImageCacheMaxSizeControl"
-                    Title="启用最大缓存图片体积控制"
+                    Title="启用最大缓存体积控制"
                     OnToggled="SettingItem_Toggled"
                     Subtitle="缓存文件夹超出体积时，会从最久的图片开始删除" />
 
@@ -169,13 +181,13 @@
 
                 <controls:SettingItem_ToggleButton
                     x:Name="EnableChatImageCacheExpireTimeControl"
-                    Title="启用缓存图片最大储存时限控制"
+                    Title="启用缓存最大储存时限控制"
                     OnToggled="SettingItem_Toggled"
-                    Subtitle="图片最大保留一定天数后，会从最久的图片开始删除" />
+                    Subtitle="缓存文件最大保留一定天数后，会从最久的图片开始删除" />
 
                 <controls:SettingItem_TextBox
                     x:Name="ChatImageCacheExpireTime"
-                    Title="缓存图片最大储存时限"
+                    Title="缓存文件最大储存时限"
                     DataChanged="SettingItem_TextBox_DataChanged"
                     Unit="天" />
             </ui:SimpleStackPanel>

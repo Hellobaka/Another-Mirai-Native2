@@ -107,7 +107,7 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                     else
                     {
-                        var cachedImage = CachedImage.GetCachedImageByHash(img_file);
+                        var cachedImage = CachedFile.GetCachedImageByHash(img_file);
                         if (cachedImage == null)
                         {
                             DialogHelper.ShowSimpleDialog("打开图片失败了", "缓存结果可能已经被删除或不存在");

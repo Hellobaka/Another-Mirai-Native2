@@ -98,45 +98,20 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
 
                     case MiraiMessageType.Image:
                         var image = (MiraiMessageTypeDetail.Image)item;
-                        
-                        string imgId = ChatHistoryHelper.CacheMessageImage(image.url).Result;
-                        if (string.IsNullOrEmpty(imgId))
-                        {
-                            if (image.imageId.StartsWith("http"))
-                            {
-                                imgId = image.imageId.MD5();
-                            }
-                            else
-                            {
-                                imgId = image.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
-                            }
-                        }
+                        string imgId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Image, image.url).Result;
                         Result.Append($"[CQ:image,file={imgId},sub_type={(image.isEmoji ? 1 : 0)}]");
                         break;
 
                     case MiraiMessageType.FlashImage:
                         var flashImage = (MiraiMessageTypeDetail.FlashImage)item;
-                        string flashImgId = ChatHistoryHelper.CacheMessageImage(flashImage.url).Result;
-                        if (string.IsNullOrEmpty(flashImgId))
-                        {
-                            if (flashImage.imageId.StartsWith("http"))
-                            {
-                                flashImgId = flashImage.imageId.MD5();
-                            }
-                            else
-                            {
-                                flashImgId = flashImage.imageId.Replace("-", "").Replace("{", "").Replace("}", "").Split('.').First();
-                            }
-                        }
+                        string flashImgId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Image, flashImage.url).Result;
                         Result.Append($"[CQ:image,file={flashImgId},flash=true]");
                         break;
 
                     case MiraiMessageType.Voice:
                         var voice = (MiraiMessageTypeDetail.Voice)item;
-                        string voiceId = voice.voiceId.Replace(".amr", "");
-                        Directory.CreateDirectory("data\\record");
-                        File.WriteAllText($"data\\record\\{voiceId}.cqrecord", $"[record]\nurl={voice.url}");
-                        Result.Append($"[CQ:record,file={voice.voiceId}]");
+                        string recordId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Record, voice.url).Result;
+                        Result.Append($"[CQ:record,file={recordId}]");
                         break;
 
                     case MiraiMessageType.Xml:
@@ -307,7 +282,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     else
                     {
                         // 若以上两个路径均不存在, 判断对应的缓存文件是否存在
-                        var cacheImagePath = CachedImage.GetCachedImageByHash(picPath);
+                        var cacheImagePath = CachedFile.GetCachedImageByHash(picPath);
                         if (cacheImagePath == null)
                         {
                             // 未找到缓存结果
@@ -334,8 +309,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     return new MiraiMessageTypeDetail.Image { base64 = picBase64 };
 
                 case MessageItemType.Record:
-                    string recordPath = cqCode.Items["file"];
-                    recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordPath);
+                    string recordHash = cqCode.Items["file"];
+                    string recordPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\record", recordHash);
                     if (File.Exists(recordPath))
                     {
                         string extension = new FileInfo(recordPath).Extension;
@@ -353,14 +328,19 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         recordPath = new FileInfo(recordPath).FullName;
                         return new MiraiMessageTypeDetail.Voice { base64 = Helper.ParsePic2Base64(recordPath) };
                     }
-                    else if (File.Exists(recordPath + ".cqrecord"))
-                    {
-                        string recordUrl = File.ReadAllText(recordPath + ".cqrecord").Replace("[record]\nurl=", "");
-                        return new MiraiMessageTypeDetail.Voice { url = recordUrl };
-                    }
                     else
                     {
-                        return null;
+                        var cacheFilePath = CachedFile.GetCachedRecordByHash(recordHash);
+                        if (cacheFilePath == null)
+                        {
+                            // 未找到缓存结果
+                            LogHelper.WriteLog(LogLevel.Warning, "发送音频", "缓存文件不存在", "");
+                            return null;
+                        }
+                        else
+                        {
+                            return new MiraiMessageTypeDetail.Voice { url = cacheFilePath.Url };
+                        }
                     }
                 case MessageItemType.At:
                     return new MiraiMessageTypeDetail.At { target = Convert.ToInt64(cqCode.Items["qq"]), display = "" };
