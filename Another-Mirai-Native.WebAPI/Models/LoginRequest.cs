@@ -1,7 +1,11 @@
-﻿namespace Another_Mirai_Native.WebAPI.Models
+using System.ComponentModel;
+
+namespace Another_Mirai_Native.WebAPI.Models
 {
+    [Description("登录请求")]
     public class LoginRequest
     {
-        public string Password { get; set; }
+        [Description("WebUI 管理面板密码")]
+        public string Password { get; set; } = string.Empty;
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace Another_Mirai_Native.WebAPI.Hubs
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace Another_Mirai_Native.WebAPI.Hubs
 {
-    public class MainHub
+    public class MainHub : Hub
     {
     }
 }

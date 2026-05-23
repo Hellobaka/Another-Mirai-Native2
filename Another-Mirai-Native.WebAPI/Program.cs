@@ -1,10 +1,16 @@
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebAPI.Controllers;
+using Another_Mirai_Native.WebAPI.Hubs;
 using Another_Mirai_Native.WebAPI.Models;
 using Another_Mirai_Native.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Another_Mirai_Native.WebAPI
 {
@@ -12,13 +18,91 @@ namespace Another_Mirai_Native.WebAPI
     {
         public static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                // TODO: For Local Test
+                Task.Run(() => Entry.Main(args));
+            }
+            else
+            {
+                Entry.Main(args);
+                return;
+            }
+
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            AddOpenAPIService(builder);
+            AddJWTAuthenticationService(builder);
+
+            builder.Services.AddSingleton<DashboardService>();
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<DashboardService>());
+            builder.Services.ConfigureHttpJsonOptions(o =>
+            {
+                o.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping; // 允许输出未经转义的 Unicode 字符，避免中文等字符被转义成 \uXXXX 形式
+            });
+            builder.Services.AddSignalR();
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+                app.MapScalarApiReference(x =>
+                {
+                    x.PersistentAuthentication = true; // 刷新不丢失鉴权状态
+                });
+            }
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+            app.MapHub<MainHub>("/realtime");
+
+            AddStaticFile(app);
+
+            app.Run();
+        }
+
+        private static void AddOpenAPIService(WebApplicationBuilder builder)
+        {
+            builder.Services.AddOpenApi(options =>
+            {
+                options.AddDocumentTransformer((document, context, ct) =>
+                {
+                    document.Components ??= new();
+                    document.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme>
+                    {
+                        ["Bearer"] = new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.Http,
+                            Scheme = "bearer",
+                            Description = "输入 JWT Token"
+                        }
+                    };
+                    document.SecurityRequirements = [new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            Array.Empty<string>()
+                        }
+                    }];
+                    return Task.CompletedTask;
+                });
+            });
+        }
+
+        private static void AddJWTAuthenticationService(WebApplicationBuilder builder)
+        {
             builder.Services
               .AddAuthentication("Bearer")
               .AddJwtBearer(o =>
@@ -49,54 +133,26 @@ namespace Another_Mirai_Native.WebAPI
                       }
                   };
               });
-
             builder.Services.AddAuthorization();
-            builder.Services.AddSwaggerGen(x =>
+        }
+
+        private static void AddStaticFile(WebApplication app)
+        {
+            app.UseStaticFiles(new StaticFileOptions(new SharedOptions()
             {
-                // Swagger UI 中添加 JWT 认证支持
-                x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Token",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer"
-                });
-
-                x.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
-            });
-
-            builder.Services.AddSingleton<DashboardService>(); 
-            builder.Services.AddHostedService(sp => sp.GetRequiredService<DashboardService>());
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+                FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "data", "image")),
+                RequestPath = $"/external/{CachedFileType.Image}"
+            }));
+            app.UseStaticFiles(new StaticFileOptions(new SharedOptions()
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+                FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "data", "record")),
+                RequestPath = $"/external/{CachedFileType.Record}"
+            }));
+            app.UseStaticFiles(new StaticFileOptions(new SharedOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "data", "video")),
+                RequestPath = $"/external/{CachedFileType.Video}"
+            }));
         }
     }
 }
