@@ -36,7 +36,9 @@ namespace Another_Mirai_Native.WebAPI
             AddOpenAPIService(builder);
             AddJWTAuthenticationService(builder);
 
+            builder.Services.AddSingleton<EventBridgeService>();
             builder.Services.AddSingleton<DashboardService>();
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<EventBridgeService>());
             builder.Services.AddHostedService(sp => sp.GetRequiredService<DashboardService>());
             builder.Services.ConfigureHttpJsonOptions(o =>
             {
@@ -122,6 +124,17 @@ namespace Another_Mirai_Native.WebAPI
                   };
                   o.Events = new JwtBearerEvents
                   {
+                      OnMessageReceived = context =>
+                      {
+                          // SignalR 发起的 WebSocket 请求没法加 Header，token 走 Query String
+                          var token = context.Request.Query["access_token"];
+                          if (!string.IsNullOrEmpty(token) && context.HttpContext.Request.Path.StartsWithSegments("/realtime"))
+                          {
+                              context.Token = token;
+                          }
+
+                          return Task.CompletedTask;
+                      },
                       OnChallenge = context =>
                       {
                           // Skip the default logic.

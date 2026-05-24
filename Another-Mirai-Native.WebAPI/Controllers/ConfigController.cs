@@ -3,6 +3,7 @@ using Another_Mirai_Native.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.Net;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -16,13 +17,25 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     {
         public ConfigController()
         {
-            if (AppConfigProperties == null) LoadCoreConfigProperties();
-            if (ProtocolConfigDefinitions == null) LoadProtocolConfigDefinitions();
+            if (AppConfigProperties == null)
+            {
+                LoadCoreConfigProperties();
+                LoadWebUIConfigProperties();
+            }
+
+            if (ProtocolConfigDefinitions == null)
+            {
+                LoadProtocolConfigDefinitions();
+            }
         }
 
         private static PropertyInfo[] AppConfigProperties { get; set; }
 
         private static string[] AppConfigPropertiesKeys { get; set; }
+
+        private static PropertyInfo[] WebUIConfigProperties { get; set; }
+
+        private static string[] WebUIConfigPropertiesKeys { get; set; }
 
         private static Dictionary<string, Dictionary<string, (string Title, string Description, string ConfigPath, object DefaultValue)>> ProtocolConfigDefinitions { get; set; }
 
@@ -72,7 +85,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public IActionResult GetProtocolConfig([Description("协议名称，如 OneBot v11、LagrangeCore 等")] string name)
         {
             if (!ProtocolConfigDefinitions.TryGetValue(name, out var definitions))
+            {
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {name} 的协议配置"));
+            }
 
             Dictionary<string, GetConfigResponseItem> response = [];
             foreach (var item in definitions)
@@ -98,14 +113,18 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
         {
             if (!ProtocolConfigDefinitions.TryGetValue(name, out var definitions))
+            {
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {name} 的协议配置"));
+            }
 
             if (!definitions.TryGetValue(request.Key, out var definition))
+            {
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的协议配置项"));
+            }
 
             try
             {
-                var valueToSet = DeserializeProtocolConfigValue(request.Value, definition.DefaultValue);
+                var valueToSet = DeserializeProtocolConfigValue(request.Value!, definition.DefaultValue);
                 CommonConfig.SetConfig(request.Key, valueToSet, definition.ConfigPath);
                 return Ok(ApiResponse.Ok());
             }
@@ -128,7 +147,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
         {
             if (!AppConfigPropertiesKeys.Contains(request.Key))
+            {
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的配置项"));
+            }
 
             try
             {
@@ -155,10 +176,92 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             }
         }
 
+        [HttpGet("webui")]
+        [EndpointSummary("获取 WebUI 配置")]
+        [EndpointDescription("返回 WebUI 自身的配置项（监听地址、端口、HTTPS、证书路径等），每项含标题、描述和当前值")]
+        [ProducesResponseType(typeof(ApiResponse<Dictionary<string, GetConfigResponseItem>>), StatusCodes.Status200OK)]
+        public IActionResult GetWebUIConfig()
+        {
+            Dictionary<string, GetConfigResponseItem> response = new()
+            {
+                { "ListenIP", new() { Title = "监听 IP", Description = "WebUI 服务监听的 IP 地址，* 表示监听所有地址", Value = WebUIConfig.Instance.ListenIP } },
+                { "ListenPort", new() { Title = "监听端口", Description = "WebUI 服务监听的端口号", Value = WebUIConfig.Instance.ListenPort } },
+                { "EnableHTTPS", new() { Title = "启用 HTTPS", Description = "是否启用 HTTPS 加密连接", Value = WebUIConfig.Instance.EnableHTTPS } },
+                { "CertificatePath", new() { Title = "HTTPS 证书路径", Description = "HTTPS 证书文件（PEM 或 PFX）的存放路径", Value = WebUIConfig.Instance.CertificatePath } },
+                { "CertificateKeyPath", new() { Title = "证书密钥路径", Description = "HTTPS 证书密钥文件的存放路径", Value = WebUIConfig.Instance.CertificateKeyPath } },
+            };
+
+            return Ok(ApiResponse.Ok(response));
+        }
+
+        [HttpPost("webui")]
+        [EndpointSummary("修改 WebUI 配置")]
+        [EndpointDescription("修改 WebUI 监听地址、端口、HTTPS 证书路径及管理密码。修改后需重启 WebUI 生效")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public IActionResult SetWebUIConfig([Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
+        {
+            if (!WebUIConfigPropertiesKeys.Contains(request.Key))
+            {
+                return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的 WebUI 配置项"));
+            }
+
+            try
+            {
+                var configItem = WebUIConfigProperties.First(p => p.Name == request.Key);
+
+                // 特殊校验
+                if (configItem.Name == nameof(WebUIConfig.ListenIP))
+                {
+                    var ip = request.Value.Deserialize<string>() ?? "";
+                    if (IPAddress.TryParse(ip, out _) == false && ip != "*")
+                    {
+                        return BadRequest(ApiResponse.Error(400, $"无效的 IP 地址：{ip}"));
+                    }
+                }
+                else if (configItem.Name == nameof(WebUIConfig.ListenPort))
+                {
+                    var port = request.Value.Deserialize<int>();
+                    if (port < 0 || port > 65535)
+                    {
+                        return BadRequest(ApiResponse.Error(400, "端口号需在 0 ~ 65535 之间"));
+                    }
+                }
+                else if (configItem.Name == nameof(WebUIConfig.Password))
+                {
+                    var pwd = request.Value.Deserialize<string>();
+                    if (string.IsNullOrWhiteSpace(pwd))
+                    {
+                        return BadRequest(ApiResponse.Error(400, "密码不能为空"));
+                    }
+                }
+
+                var valueToSet = request.Value.Deserialize(configItem.PropertyType);
+                configItem.SetValue(WebUIConfig.Instance, valueToSet);
+                WebUIConfig.Instance.SetConfig(request.Key, valueToSet);
+                return Ok(ApiResponse.Ok());
+            }
+            catch (Exception e) when (e is FormatException or InvalidCastException or JsonException)
+            {
+                return BadRequest(ApiResponse.Error(400, "无效的数值转换，检查写入值是否与配置类型匹配"));
+            }
+            catch (Exception)
+            {
+                return BadRequest(ApiResponse.Error(400, "由于服务器异常，设置 WebUI 配置时失败"));
+            }
+        }
+
         private static void LoadCoreConfigProperties()
         {
             AppConfigProperties = typeof(AppConfig).GetProperties();
             AppConfigPropertiesKeys = AppConfigProperties.Select(p => p.Name).ToArray();
+        }
+
+        private static void LoadWebUIConfigProperties()
+        {
+            WebUIConfigProperties = typeof(WebUIConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            WebUIConfigPropertiesKeys = WebUIConfigProperties.Select(p => p.Name).ToArray();
         }
 
         private static void LoadProtocolConfigDefinitions()

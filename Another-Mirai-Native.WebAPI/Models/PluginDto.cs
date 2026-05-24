@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Another_Mirai_Native.Native;
+using Another_Mirai_Native.Model.Enums;
 
 namespace Another_Mirai_Native.WebAPI.Models
 {
@@ -30,6 +31,9 @@ namespace Another_Mirai_Native.WebAPI.Models
         [Description("插件申请的 API 权限列表")]
         public int[] Auth { get; set; } = [];
 
+        [Description("插件类型")]
+        public PluginType PluginType { get; set; }
+
         public static PluginDto CreateFromPlugin(CQPluginProxy plugin)
         {
             return new PluginDto
@@ -41,7 +45,8 @@ namespace Another_Mirai_Native.WebAPI.Models
                 Author = plugin.Author,
                 Description = plugin.Description,
                 Version = plugin.Version,
-                Auth = plugin.AppInfo.auth
+                Auth = plugin.AppInfo.auth,
+                PluginType = plugin.PluginType
             };
         }
     }
