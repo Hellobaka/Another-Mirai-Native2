@@ -27,7 +27,7 @@ namespace Another_Mirai_Native.WebAPI
 
         public void LoadConfig()
         {
-            Password = GetConfig("Password", Guid.NewGuid().ToString());
+            Password = GetConfig("Password", Guid.NewGuid().ToString().Replace("-", "")[..16]);
             ListenIP = GetConfig("ListenIP", "127.0.0.1");
             ListenPort = GetConfig("ListenPort", 5000);
             if (IPAddress.TryParse(ListenIP, out _) is false && ListenIP != "*")
