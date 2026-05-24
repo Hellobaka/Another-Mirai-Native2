@@ -251,13 +251,14 @@ namespace Another_Mirai_Native.Native
             string jsonContent = File.ReadAllText(appInfoPath);
             try
             {
+                int originalAuthCode = AppInfo?.AuthCode ?? 0;
                 AppInfo = JsonConvert.DeserializeObject<AppInfo>(jsonContent) ?? new();
                 if (string.IsNullOrWhiteSpace(AppInfo.name))
                 {
                     LogHelper.Error("加载插件", $"{PluginPath} 的 json 文件格式错误，无法加载插件");
                     return false;
                 }
-                AppInfo.AuthCode = PluginManagerProxy.MakeAuthCode();
+                AppInfo.AuthCode = originalAuthCode == 0 ? PluginManagerProxy.MakeAuthCode() : originalAuthCode;
 
                 PluginLoaderType = (PluginLoaderType)AppInfo.LoaderType;
                 LoaderProcessPath = PluginLoaderType switch
