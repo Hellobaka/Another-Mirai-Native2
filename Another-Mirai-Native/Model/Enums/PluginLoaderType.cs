@@ -10,6 +10,7 @@
     public enum PluginType
     {
         CoolQ,
-        XiaoLiZi
+        XiaoLiZi,
+        Native
     }
 }

@@ -31,9 +31,14 @@ namespace Another_Mirai_Native.Native
         public CQPluginProxy(string dllPath)
         {
             PluginBasePath = dllPath;
-            if (Path.GetFileName(dllPath).StartsWith("XiaoLiZi_"))
+            string fileName = Path.GetFileName(dllPath);
+            if (fileName.StartsWith("XiaoLiZi_"))
             {
                 PluginType = PluginType.XiaoLiZi;
+            }
+            else if (fileName.StartsWith("Native_"))
+            {
+                PluginType = PluginType.Native;
             }
         }
 
