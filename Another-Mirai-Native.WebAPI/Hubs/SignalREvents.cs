@@ -10,6 +10,7 @@
 
         public const string PluginEnableChanged = "PluginEnableChanged";
         public const string PluginAdded = "PluginAdded";
+        public const string PluginRemoved = "PluginRemoved";
         public const string PluginConnectStatusChanged = "PluginConnectStatusChanged";
 
         public const string ProtocolOnline = "ProtocolOnline";

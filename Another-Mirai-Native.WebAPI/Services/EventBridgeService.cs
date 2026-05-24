@@ -24,6 +24,7 @@ namespace Another_Mirai_Native.WebAPI.Services
 
             PluginManagerProxy.OnPluginEnableChanged += PluginManagerProxy_OnPluginEnableChanged;
             PluginManagerProxy.OnPluginProxyAdded += PluginManagerProxy_OnPluginProxyAdded;
+            PluginManagerProxy.OnPluginProxyRemoved += PluginManagerProxy_OnPluginProxyRemoved;
             PluginManagerProxy.OnPluginProxyConnectStatusChanged += PluginManagerProxy_OnPluginProxyConnectStatusChanged;
 
             PluginManagerProxy.OnGroupBan += PluginManagerProxy_OnGroupBan;
@@ -112,6 +113,11 @@ namespace Another_Mirai_Native.WebAPI.Services
         private void PluginManagerProxy_OnPluginProxyAdded(CQPluginProxy proxy)
         {
             Hub.Clients.All.SendAsync(SignalREvents.PluginAdded, new { plugin = PluginDto.CreateFromPlugin(proxy) });
+        }
+
+        private void PluginManagerProxy_OnPluginProxyRemoved(CQPluginProxy proxy)
+        {
+            Hub.Clients.All.SendAsync(SignalREvents.PluginRemoved, new { plugin = PluginDto.CreateFromPlugin(proxy) });
         }
 
         private void PluginManagerProxy_OnPluginEnableChanged(CQPluginProxy proxy)

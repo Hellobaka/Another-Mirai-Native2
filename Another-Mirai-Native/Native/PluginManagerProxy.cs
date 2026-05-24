@@ -19,6 +19,8 @@ namespace Another_Mirai_Native.Native
 
         public static event Action<CQPluginProxy> OnPluginProxyAdded;
 
+        public static event Action<CQPluginProxy> OnPluginProxyRemoved;
+
         public static event Action<CQPluginProxy> OnPluginProxyConnectStatusChanged;
 
         public static event Action<string, Dictionary<string, object>> OnTestInvoked;
@@ -194,7 +196,13 @@ namespace Another_Mirai_Native.Native
                     item.KillProcess();
                 }
                 // 清空插件列表并重新加载
-                Proxies.Clear();
+                int count = Proxies.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    var item = Proxies[0];
+                    OnPluginProxyRemoved?.Invoke(item);
+                    Proxies.Remove(item);
+                }
                 if (LoadPlugins())
                 {
                     EnablePluginByConfig();
