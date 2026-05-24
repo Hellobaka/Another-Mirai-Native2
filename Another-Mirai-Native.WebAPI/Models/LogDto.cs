@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.WebAPI.Models
                 Time = Helper.TimeStamp2DateTime(log.time),
                 Priority = log.priority,
                 Source = log.source,
-                Status = log.status,
+                Status = log.status.Replace("√", "✔️").Replace("x", "❌"),
                 Name = log.name,
                 Detail = log.detail,
             };
