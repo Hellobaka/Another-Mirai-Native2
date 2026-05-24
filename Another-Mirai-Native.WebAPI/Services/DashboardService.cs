@@ -22,19 +22,13 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private string CPUName { get; set; }
 
-        private string LocalIPAddress { get; set; }
-
         private float CPUBaseFrequency { get; set; }
-
-        private double CPUFrequencyRatio { get; set; }
 
         private ulong TotalMemory { get; set; }
 
         private ulong UsedMemory { get; set; }
 
         private double MemoryUsage { get; set; }
-
-        private double CPUCurrentFrequency { get; set; }
 
         private float CPUUsage { get; set; }
 
@@ -48,8 +42,6 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private PerformanceCounter CPUUsageCounter { get; set; }
 
-        private PerformanceCounter CPUFrequencyCounter { get; set; }
-
         private PerformanceCounter CPUBaseFrequencyCounter { get; set; }
 
         private Dictionary<int, (DateTime, TimeSpan)> PluginCPUUsage { get; set; } = [];
@@ -59,6 +51,14 @@ namespace Another_Mirai_Native.WebAPI.Services
         private Process CurrentProcess { get; set; } = Process.GetCurrentProcess();
 
         private string AssemblyVersion { get; set; }
+
+        private string DotNetRuntimeVersion { get; set; } = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+
+        private string WorkingDirectory { get; set; } = Environment.CurrentDirectory;
+
+        private double DiskFreeSpaceInGB { get; set; }
+
+        private double DiskTotalSpaceInGB { get; set; }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -88,7 +88,11 @@ namespace Another_Mirai_Native.WebAPI.Services
                 Version = AssemblyVersion,
                 CurrentBotQQ = AppConfig.Instance.CurrentQQ,
                 CurrentBotNick = AppConfig.Instance.CurrentNickName,
-                LoadedPluginCount = PluginManagerProxy.Proxies.Count(x => x.Enabled)
+                LoadedPluginCount = PluginManagerProxy.Proxies.Count(x => x.Enabled),
+                DotNetRuntimeVersion,
+                WorkingDirectory,
+                DiskFreeSpaceInGB,
+                DiskTotalSpaceInGB
             };
         }
 
@@ -98,7 +102,6 @@ namespace Another_Mirai_Native.WebAPI.Services
             {
                 CPUUsage,
                 MemoryUsage,
-                CPUCurrentFrequency,
                 UsedMemoryInMB = UsedMemory,
                 TotalMemoryInMB = TotalMemory
             };
@@ -112,6 +115,8 @@ namespace Another_Mirai_Native.WebAPI.Services
                 {
                     TotalProcessMemory,
                     TotalProcessCPU,
+                    AppConfig.Instance.ProcessedMessageCount,
+                    AppConfig.Instance.SentMessageCount,
                     PluginUsages
                 };
             }
@@ -188,11 +193,9 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void UsageTimer_Ticked(object? sender, ElapsedEventArgs e)
         {
-            CPUFrequencyRatio = CPUFrequencyCounter.NextValue() / 100.0;
             CPUUsage = CPUUsageCounter.NextValue();
             UsedMemory = GetUsedMemory();
 
-            CPUCurrentFrequency = GetCpuCurrentFrequency() * CPUFrequencyRatio;
             MemoryUsage = (UsedMemory / (TotalMemory * 1.0)) * 100.0;
 
             OnUsageUpdated?.Invoke();
@@ -204,14 +207,18 @@ namespace Another_Mirai_Native.WebAPI.Services
             CPUName = GetCpuName();
             CPUBaseFrequency = GetCpuFrequency();
             TotalMemory = GetTotalPhysicalMemory();
-            LocalIPAddress = GetLocalIPAddress();
             CPUUsageCounter = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total");
             CPUBaseFrequencyCounter = new PerformanceCounter("Processor Information", "Processor Frequency", "_Total");
-            CPUFrequencyCounter = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total");
 
             CPUUsageCounter.NextValue();
-            CPUFrequencyCounter.NextValue();
             CPUBaseFrequencyCounter.NextValue();
+
+            var currentDrive = DriveInfo.GetDrives().FirstOrDefault(d => d.IsReady && d.RootDirectory.FullName == Path.GetPathRoot(Environment.CurrentDirectory));
+            if (currentDrive != null)
+            {
+                DiskFreeSpaceInGB = currentDrive.AvailableFreeSpace / 1024.0 / 1024 / 1024;
+                DiskTotalSpaceInGB = currentDrive.TotalSize / 1024.0 / 1024 / 1024;
+            }
         }
 
         private static string GetDetailedOSVersion()
@@ -250,26 +257,11 @@ namespace Another_Mirai_Native.WebAPI.Services
             var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
             return (uint)(maxClockSpeed ?? 0);
         }
-
-        private static uint GetCpuCurrentFrequency()
-        {
-            using var searcher = new ManagementObjectSearcher("select CurrentClockSpeed from Win32_Processor");
-            var currentClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["CurrentClockSpeed"];
-            return (uint)(currentClockSpeed ?? 0);
-        }
-
         private static ulong GetTotalPhysicalMemory()
         {
             using var searcher = new ManagementObjectSearcher("select TotalVisibleMemorySize from Win32_OperatingSystem");
             var totalMemory = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["TotalVisibleMemorySize"];
             return (ulong)(totalMemory ?? 0) / 1024;
-        }
-
-        private static string GetLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            var ip = host.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
-            return ip?.ToString() ?? "No network adapters with an IPv4 address in the system!";
         }
 
         private ulong GetUsedMemory()

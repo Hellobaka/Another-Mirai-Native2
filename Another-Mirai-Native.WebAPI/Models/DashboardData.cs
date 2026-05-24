@@ -28,6 +28,18 @@ namespace Another_Mirai_Native.WebAPI.Models
 
         [Description("已启用的插件数量")]
         public int LoadedPluginCount { get; set; }
+
+        [Description("运行时使用的 .NET 版本")]
+        public string DotNetRuntimeVersion { get; set; } = string.Empty;
+
+        [Description("当前工作目录")]
+        public string WorkingDirectory { get; set; } = string.Empty;
+
+        [Description("当前磁盘剩余空间（GB）")]
+        public double DiskFreeSpaceInGB { get; set; }
+
+        [Description("当前磁盘总空间（GB）")]
+        public double DiskTotalSpaceInGB { get; set; }
     }
 
     [Description("系统资源占用（整体 CPU / 内存）")]
@@ -38,9 +50,6 @@ namespace Another_Mirai_Native.WebAPI.Models
 
         [Description("内存占用百分比")]
         public double MemoryUsage { get; set; }
-
-        [Description("CPU 当前频率（MHz）")]
-        public double CPUCurrentFrequency { get; set; }
 
         [Description("已用内存（MB）")]
         public ulong UsedMemoryInMB { get; set; }
@@ -57,6 +66,12 @@ namespace Another_Mirai_Native.WebAPI.Models
 
         [Description("所有进程 CPU 合计（%）")]
         public double TotalProcessCPU { get; set; }
+
+        [Description("已处理的消息数量")]
+        public int ProcessedMessageCount { get; set; }
+        
+        [Description("已发送的消息数量")]
+        public int SentMessageCount { get; set; }
 
         [Description("各进程详情")]
         public List<DashboardPluginItem> PluginUsages { get; set; } = [];

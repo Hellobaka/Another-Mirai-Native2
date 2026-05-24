@@ -83,6 +83,10 @@ namespace Another_Mirai_Native.Native
                 }
                 LogHelper.Debug("调用前置检查", $"{CurrentPlugin.PluginName} => 调用 {functionName}, 参数: {string.Join(",", transformedArgs)}");
                 object? result = methodInfo.Invoke(this, transformedArgs);
+                if (functionName == "CQ_sendGroupMsg" || functionName == "CQ_sendPrivateMsg" || functionName == "CQ_sendGroupQuoteMsg" || functionName == "CQ_sendDiscussMsg")
+                {
+                    AppConfig.Instance.SentMessageCount++;
+                }
                 return result;
             }
             catch (Exception ex)

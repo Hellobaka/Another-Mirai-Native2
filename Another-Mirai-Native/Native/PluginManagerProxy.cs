@@ -139,6 +139,10 @@ namespace Another_Mirai_Native.Native
                 LogHelper.WriteLog(LogLevel.Warning, "AMN框架", "插件逻辑处理", "插件加载中...", "x 不处理");
                 return null;
             }
+            if (eventType == PluginEventType.GroupMsg || eventType == PluginEventType.PrivateMsg)
+            {
+                AppConfig.Instance.ProcessedMessageCount++;
+            }
             foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.type == (int)eventType))
                 .OrderByDescending(x => x.AppInfo._event.First(o => o.type == (int)eventType).priority))
             {
