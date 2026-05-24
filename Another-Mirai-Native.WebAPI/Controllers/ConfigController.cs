@@ -189,6 +189,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 { "EnableHTTPS", new() { Title = "启用 HTTPS", Description = "是否启用 HTTPS 加密连接", Value = WebUIConfig.Instance.EnableHTTPS } },
                 { "CertificatePath", new() { Title = "HTTPS 证书路径", Description = "HTTPS 证书文件（PEM 或 PFX）的存放路径", Value = WebUIConfig.Instance.CertificatePath } },
                 { "CertificateKeyPath", new() { Title = "证书密钥路径", Description = "HTTPS 证书密钥文件的存放路径", Value = WebUIConfig.Instance.CertificateKeyPath } },
+                { "Password", new() { Title = "登录密码", Description = "WebUI 登录密码", Value = WebUIConfig.Instance.Password } },
             };
 
             return Ok(ApiResponse.Ok(response));
