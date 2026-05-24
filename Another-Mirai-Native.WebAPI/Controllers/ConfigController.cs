@@ -165,7 +165,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             ProtocolConfigDefinitions = new()
             {
-                ["LagrangeCore"] = new()
+                ["Lagrange.Core"] = new()
                 {
                     ["SignUrl"] = ("签名服务器 Url", "仅限 Lagrange 签名 与其他的签名服务器不通用", @"conf\LagrangeCore.json", "https://sign.lagrangecore.org/api/sign/30366"),
                     ["SignFallbackPlatform"] = ("登录操作系统", "", @"conf\LagrangeCore.json", "Linux"),
