@@ -26,6 +26,11 @@ namespace Another_Mirai_Native
         public bool IsConnected { get; set; }
 
         /// <summary>
+        /// 是否已经调用了 Disconnect 方法
+        /// </summary>
+        public bool IsDisposed { get; set; }
+
+        /// <summary>
         /// 主动与协议连接端断开连接, 通常指示着要切换协议, 此时应当中断所有线程以及定时器
         /// </summary>
         /// <returns>是否断开成功</returns>

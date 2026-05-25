@@ -16,6 +16,8 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool IsConnected { get; set; }
 
+        public bool IsDisposed { get; set; }
+
         public bool ForceQRLogin { get; set; } = false;
 
         public bool ClearDeviceInfo { get; set; } = false;
@@ -40,6 +42,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool Connect()
         {
+            IsDisposed = false;
             _ = new LagrangeConfig();
             if (!InitBotContext())
             {
@@ -70,6 +73,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
 
         public bool Disconnect()
         {
+            IsDisposed = true;
             return DisposeBotContext();
         }
 
