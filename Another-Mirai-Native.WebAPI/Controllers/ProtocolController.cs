@@ -27,7 +27,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var p = ProtocolManager.Instance.CurrentProtocol;
             if (p == null)
+            {
                 return NotFound(ApiResponse.Error(404, "当前没有已连接协议"));
+            }
 
             return Ok(ApiResponse.Ok(new ProtocolStatusData
             {
@@ -45,7 +47,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var p = ProtocolManager.Instance.CurrentProtocol;
             if (p == null)
+            {
                 return BadRequest(ApiResponse.Error(400, "当前没有已连接协议，无法执行断开"));
+            }
 
             try
             {
@@ -68,10 +72,20 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var p = ProtocolManager.Instance.CurrentProtocol;
             if (p != null && p.IsConnected)
+            {
                 return BadRequest(ApiResponse.Error(400, $"当前已连接到 {p.Name} 协议，连接到其他协议前请先断开"));
+            }
 
             try
             {
+                if (p != null && !p.IsDisposed)
+                {
+                    bool disconnectSuccess = await Task.Run(p.Disconnect);
+                    if (!disconnectSuccess)
+                    {
+                        return BadRequest(ApiResponse.Error(500, $"断开当前协议 {p.Name} 失败，无法连接到 {name} 协议"));
+                    }
+                }
                 bool success = await Task.Run(() => ProtocolManager.Instance.Start(name));
                 return success ? Ok(ApiResponse.Ok()) : BadRequest(ApiResponse.Error(500, $"连接到 {name} 协议失败"));
             }
@@ -90,7 +104,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var p = ProtocolManager.Protocols.FirstOrDefault(x => x.Name == name);
             if (p == null)
+            {
                 return NotFound(ApiResponse.Error(404, $"未找到名称为 {name} 的协议"));
+            }
 
             try
             {
@@ -114,7 +130,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var p = ProtocolManager.Protocols.FirstOrDefault(x => x.Name == name);
             if (p == null)
+            {
                 return NotFound(ApiResponse.Error(404, $"未找到名称为 {name} 的协议"));
+            }
 
             try
             {
