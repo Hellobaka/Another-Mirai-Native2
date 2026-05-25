@@ -1,4 +1,6 @@
-﻿using Another_Mirai_Native.DB;
+﻿using Another_Mirai_Native.Abstractions.Models.MessageItem;
+using Another_Mirai_Native.Abstractions.Services;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebAPI.Hubs;
@@ -82,7 +84,7 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
         {
-            Hub.Clients.All.SendAsync(SignalREvents.OnPrivateMsg, new { msgId, qq, msg, time });
+            Hub.Clients.All.SendAsync(SignalREvents.OnPrivateMsg, new { msgId, qq, msg = msg.ToMessageChain(), time });
         }
 
         private void PluginManagerProxy_OnGroupLeft(long group, long qq)
@@ -92,7 +94,7 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void PluginManagerProxy_OnGroupMsg(int msgId, long group, long qq, string msg, DateTime time)
         {
-            Hub.Clients.All.SendAsync(SignalREvents.OnGroupMsg, new { msgId, group, qq, msg, time });
+            Hub.Clients.All.SendAsync(SignalREvents.OnGroupMsg, new { msgId, group, qq, msg = msg.ToMessageChain(), time });
         }
 
         private void PluginManagerProxy_OnGroupAdded(long group, long qq)

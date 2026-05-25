@@ -1,21 +1,23 @@
-﻿using Another_Mirai_Native.Config;
+﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.RPC;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Collections.Concurrent;
-using System.Globalization;
-using System.Xml.Linq;
 using System.Security.Cryptography;
-using Another_Mirai_Native.Abstractions.Models;
-using Another_Mirai_Native.Model.Enums;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Another_Mirai_Native
 {
@@ -111,6 +113,124 @@ namespace Another_Mirai_Native
             var ls = parts.ToList();
             ls.RemoveAll(string.IsNullOrEmpty);
             return ls.ToArray();
+        }
+
+        public static MessageItemBase[] ToMessageChain(this string text)
+        {
+            var parts = text.SplitV2("\\[CQ:.*?\\]");
+            List<MessageItemBase> messageChain = [];
+            foreach (var item in parts)
+            {
+                if (item.StartsWith("[CQ:"))
+                {
+                    var cqcode = CQCode.Parse(item).FirstOrDefault();
+                    if (cqcode == null)
+                    {
+                        continue;
+                    }
+                    switch (cqcode.Function)
+                    {
+                        case MessageItemType.Face:
+                            if (int.TryParse(cqcode.Items["id"], out int id))
+                            {
+                                messageChain.Add(new Face(id));
+                            }
+                            break;
+
+                        case MessageItemType.Bface:
+                            if (int.TryParse(cqcode.Items["id"], out id))
+                            {
+                                messageChain.Add(new BFace(id));
+                            }
+                            break;
+
+                        case MessageItemType.Image:
+                            string file = cqcode.Items["file"];
+                            bool isFlash = cqcode.Items.ContainsKey("flash") && cqcode.Items["flash"] == "true";
+                            bool isPath = file.Contains("\\");
+                            bool isEmoji = cqcode.Items.ContainsKey("sub_type") && cqcode.Items["sub_type"] == "1";
+                            if (isPath)
+                            {
+                                messageChain.Add(new Abstractions.Models.MessageItem.Image(filePath: file, isFlash: isFlash, isEmoji: isEmoji));
+                            }
+                            else
+                            {
+                                messageChain.Add(new Abstractions.Models.MessageItem.Image(hash: file, isFlash: isFlash, isEmoji: isEmoji));
+                            }
+
+                            break;
+
+                        case MessageItemType.Record:
+                            file = cqcode.Items["file"];
+                            isPath = file.Contains("\\");
+                            if (isPath)
+                            {
+                                messageChain.Add(new Record(filePath: file));
+                            }
+                            else
+                            {
+                                messageChain.Add(new Record(hash: file));
+                            }
+                            break;
+
+                        case MessageItemType.At:
+                            var qq = cqcode.Items["qq"];
+                            if (qq == "all")
+                            {
+                                messageChain.Add(new At(0, true));
+                            }
+                            else if (long.TryParse(qq, out long qqNum))
+                            {
+                                messageChain.Add(new At(qqNum, false));
+                            }
+                            break;
+
+                        case MessageItemType.Rps:
+                            if (int.TryParse(cqcode.Items["type"], out int type))
+                            {
+                                messageChain.Add(new RPS((RpsType)type));
+                            }
+                            break;
+
+                        case MessageItemType.Shake:
+                            messageChain.Add(new Shake());
+                            break;
+
+                        case MessageItemType.Dice:
+                            if (int.TryParse(cqcode.Items["type"], out type))
+                            {
+                                messageChain.Add(new Dice(type));
+                            }
+                            break;
+
+                        case MessageItemType.Poke:
+                            messageChain.Add(new Poke(cqcode.Items["name"]));
+                            break;
+
+                        case MessageItemType.Rich:
+                            RichContentType richContentType = Enum.TryParse<RichContentType>(cqcode.Items["type"], true, out var result) ? result : RichContentType.Json;
+                            messageChain.Add(new RichContent(richContentType, cqcode.Items["content"]));
+                            break;
+
+                        case MessageItemType.Reply:
+                            if (int.TryParse(cqcode.Items["id"], out id))
+                            {
+                                messageChain.Add(new Reply(id));
+                            }
+                            break;
+
+                        default:
+                            // 无效的CQ码
+                            continue;
+                    }
+                }
+                else
+                {
+                    messageChain.Add(new Text(item));
+                }
+            }
+
+            return messageChain.ToArray();
         }
 
         /// <summary>

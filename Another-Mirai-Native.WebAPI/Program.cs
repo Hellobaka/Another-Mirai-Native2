@@ -11,13 +11,49 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using System.Security.Cryptography.X509Certificates;
+using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Another_Mirai_Native.WebAPI
 {
     public class Program
     {
+        private static readonly IJsonTypeInfoResolver MessageItemBaseResolver = new DefaultJsonTypeInfoResolver
+        {
+            Modifiers =
+            {
+                jsonTypeInfo =>
+                {
+                    if (jsonTypeInfo.Type == typeof(MessageItemBase))
+                    {
+                        jsonTypeInfo.PolymorphismOptions = new()
+                        {
+                            TypeDiscriminatorPropertyName = "messageItemType",
+                            DerivedTypes =
+                            {
+                                new(typeof(Face),  (int)MessageItemType.Face),
+                                new(typeof(BFace), (int)MessageItemType.Bface),
+                                new(typeof(Image), (int)MessageItemType.Image),
+                                new(typeof(Record),(int)MessageItemType.Record),
+                                new(typeof(At),    (int)MessageItemType.At),
+                                new(typeof(RPS),   (int)MessageItemType.Rps),
+                                new(typeof(Shake), (int)MessageItemType.Shake),
+                                new(typeof(Dice),  (int)MessageItemType.Dice),
+                                new(typeof(Poke),  (int)MessageItemType.Poke),
+                                new(typeof(RichContent), (int)MessageItemType.Rich),
+                                new(typeof(Reply), (int)MessageItemType.Reply),
+                                new(typeof(Text),  (int)MessageItemType.Text),
+                            }
+                        };
+                    }
+                }
+            }
+        };
+
         public static void Main(string[] args)
         {
             if (args.Length == 0)
@@ -46,7 +82,12 @@ namespace Another_Mirai_Native.WebAPI
             builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
                 p.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(_ => true)));
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                    o.JsonSerializerOptions.TypeInfoResolver = MessageItemBaseResolver;
+                });
 
             AddOpenAPIService(builder);
             AddJWTAuthenticationService(builder);
@@ -55,11 +96,12 @@ namespace Another_Mirai_Native.WebAPI
             builder.Services.AddSingleton<DashboardService>();
             builder.Services.AddHostedService(sp => sp.GetRequiredService<EventBridgeService>());
             builder.Services.AddHostedService(sp => sp.GetRequiredService<DashboardService>());
-            builder.Services.ConfigureHttpJsonOptions(o =>
+            builder.Services.AddSignalR()
+            .AddJsonProtocol(o =>
             {
-                o.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping; // 允许输出未经转义的 Unicode 字符，避免中文等字符被转义成 \uXXXX 形式
+                o.PayloadSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                o.PayloadSerializerOptions.TypeInfoResolver = MessageItemBaseResolver;
             });
-            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
