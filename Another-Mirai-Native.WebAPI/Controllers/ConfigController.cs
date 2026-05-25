@@ -57,6 +57,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 { "LoadTimeout", new() { Title = "插件载入超时", Description = "", Value = AppConfig.Instance.LoadTimeout } },
                 { "UseDatabase", new() { Title = "日志使用数据库", Description = "是否将日志存储到数据库", Value = AppConfig.Instance.UseDatabase } },
                 { "MessageCacheSize", new() { Title = "消息缓存数量", Description = "内存中缓存的消息数量限制", Value = AppConfig.Instance.MessageCacheSize } },
+                { "EnableChat", new() { Title = "启用聊天功能", Description = "", Value = AppConfig.Instance.EnableChatImageCacheMaxSizeControl } },
                 { "EnableChatImageCacheMaxSizeControl", new() { Title = "启用最大缓存图片体积控制", Description = "缓存文件夹超出体积时，会从最久的图片开始删除", Value = AppConfig.Instance.EnableChatImageCacheMaxSizeControl } },
                 { "MaxChatImageCacheFolderSize", new() { Title = "缓存文件夹最大大小", Description = "", Value = AppConfig.Instance.MaxChatImageCacheFolderSize } },
                 { "EnableChatImageCacheExpireTimeControl", new() { Title = "启用缓存图片最大储存时限控制", Description = "图片最大保留一定天数后，会从最久的图片开始删除", Value = AppConfig.Instance.EnableChatImageCacheExpireTimeControl } },
