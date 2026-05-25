@@ -1,3 +1,4 @@
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
             if (plugin == null)
+            {
                 return NotFound(ApiResponse.Error(404, "未找到对应 AuthCode 的插件"));
+            }
 
             return Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)));
         }
@@ -42,12 +45,20 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
             if (plugin == null)
+            {
                 return NotFound(ApiResponse.Error(404, "未找到对应 AuthCode 的插件"));
+            }
 
             var success = await Task.Run(() => PluginManagerProxy.Instance.SetPluginEnabled(plugin, true));
-            return success
-                ? Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)))
-                : BadRequest(ApiResponse.Error(400, "使插件启动失败"));
+            if (success)
+            {
+                AppConfig.Instance.AutoEnablePlugin.Add(plugin.PluginName);
+                AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+
+                return Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)));
+            }
+            return BadRequest(ApiResponse.Error(400, "使插件启动失败"));
         }
 
         [HttpPost("{authCode}/disable")]
@@ -59,12 +70,20 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
             if (plugin == null)
+            {
                 return NotFound(ApiResponse.Error(404, "未找到对应 AuthCode 的插件"));
+            }
 
             var success = await Task.Run(() => PluginManagerProxy.Instance.SetPluginEnabled(plugin, false));
-            return success
-                ? Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)))
-                : BadRequest(ApiResponse.Error(400, "使插件停止失败"));
+            if (success)
+            {
+                AppConfig.Instance.AutoEnablePlugin.Remove(plugin.PluginName);
+                AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
+                AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
+
+                return Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)));
+            }
+            return BadRequest(ApiResponse.Error(400, "使插件停止失败"));
         }
 
         [HttpPost("{authCode}/reload")]
@@ -77,10 +96,14 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
             if (plugin == null)
+            {
                 return NotFound(ApiResponse.Error(404, "未找到对应 AuthCode 的插件"));
+            }
 
             if (!plugin.Enabled)
+            {
                 return BadRequest(ApiResponse.Error(400, $"插件 {plugin.PluginName} 处于禁用状态，无法重启"));
+            }
 
             await Task.Run(() => PluginManagerProxy.Instance.ReloadPlugin(plugin));
             return Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)));
