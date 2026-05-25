@@ -233,7 +233,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             {
                 Stopwatch sw = Stopwatch.StartNew();
                 int logId = LogHelper.WriteLog(LogLevel.InfoSend, "[↑]发送私聊消息", $"QQ:{qq} 消息:{message}", "处理中...");
-                int msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
+                msgId = ProtocolManager.Instance.CurrentProtocol.SendPrivateMessage(qq, message);
                 sw.Stop();
                 LogHelper.UpdateLogStatus(logId, $"√ {sw.ElapsedMilliseconds / 1000.0:f2} s");
             });
