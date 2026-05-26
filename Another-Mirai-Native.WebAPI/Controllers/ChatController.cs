@@ -1,8 +1,11 @@
 ﻿using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebAPI.Models;
+using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -133,6 +136,139 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             else
             {
                 return BadRequest(ApiResponse.Error(400, "消息发送失败"));
+            }
+        }
+
+        [HttpGet("message-chain")]
+        public IActionResult ConvertToMessageChain(string message)
+        {
+            if (WebUIConfig.Instance.EnableChat is false)
+            {
+                return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            return Ok(ApiResponse.Ok(new { Message = message.ToMessageChain() }));
+        }
+
+        [HttpPost("recall")]
+        public async Task<IActionResult> RecallMessage(ChatHistoryType chatHistoryType, long parentId, int messageId)
+        {
+            if (WebUIConfig.Instance.EnableChat is false)
+            {
+                return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            if (chatHistoryType != ChatHistoryType.Group && chatHistoryType != ChatHistoryType.Private)
+            {
+                return BadRequest(ApiResponse.Error(400, "发送目标类型无效"));
+            }
+
+            var message = await Task.Run(() => ChatHistoryHelper.GetHistoriesByMsgId(parentId, messageId, chatHistoryType));
+            if (message == null)
+            {
+                return NotFound(ApiResponse.Error(404, "未找到对应的聊天消息"));
+            }
+
+            bool success = (await Task.Run(() => ProtocolManager.Instance.CurrentProtocol.DeleteMsg(messageId))) == 1;
+            if (success)
+            {
+                message.Recalled = true;
+                ChatHistoryHelper.UpdateHistory(message);
+                if (chatHistoryType == ChatHistoryType.Group)
+                {
+                    PluginManagerProxy.Instance.Event_OnGroupMsgRecall(messageId, parentId, message.Message);
+                }
+                else
+                {
+                    PluginManagerProxy.Instance.Event_OnPrivateMsgRecall(messageId, parentId, message.Message);
+                }
+                return Ok(ApiResponse.Ok());
+            }
+            else
+            {
+                return BadRequest(ApiResponse.Error(400, "撤回消息失败"));
+            }
+        }
+
+        [HttpGet("collected")]
+        public async Task<IActionResult> GetCollectedPictures()
+        {
+            if (WebUIConfig.Instance.EnableChat is false)
+            {
+                return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            var dir = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
+            if (Directory.Exists(dir))
+            {
+                string[] extensions = { ".png", ".jpg", ".jpeg", ".gif" };
+                var files = Directory.GetFiles(dir).Where(f => extensions.Any(ext => string.Equals(Path.GetExtension(f), ext, StringComparison.OrdinalIgnoreCase))).Select(Path.GetFileName).ToArray();
+                return Ok(ApiResponse.Ok(files));
+            }
+            else
+            {
+                return Ok(ApiResponse.Ok(Array.Empty<string>()));
+            }
+        }
+
+        [HttpPost("collect")]
+        public async Task<IActionResult> CollectPicture(string file)
+        {
+            if (WebUIConfig.Instance.EnableChat is false)
+            {
+                return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            try
+            {
+                var collectPath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
+                Directory.CreateDirectory(collectPath);
+                string cachePath = Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
+                var img = CachedFile.GetCachedFileByHash(Model.Enums.CachedFileType.Image, file);
+                string filePath = Path.Combine(cachePath, img?.FileName ?? "");
+                if (img == null || !System.IO.File.Exists(filePath))
+                {
+                    return NotFound(ApiResponse.Error(404, "找不到此哈希对应的缓存文件；可能未缓存或已删除"));
+                }
+
+                System.IO.File.Copy(filePath, Path.Combine(collectPath, img.FileName));
+                return Ok(ApiResponse.Ok(img.FileName));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, ApiResponse.Error(500, $"由于服务器内部错误，收藏图片失败: {e.Message}"));
+            }
+        }
+
+        [HttpPost("upload-picture")]
+        public async Task<IActionResult> UploadPicture(IFormFile file)
+        {
+            if (WebUIConfig.Instance.EnableChat is false)
+            {
+                return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest(ApiResponse.Error(400, "请选择要上传的图片文件"));
+            }
+            var allowedExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif" };
+            var extension = Path.GetExtension(file.FileName).ToLower();
+            if (!allowedExtensions.Contains(extension))
+            {
+                return BadRequest(ApiResponse.Error(400, "仅支持 PNG、JPG、JPEG 和 GIF 格式的图片文件"));
+            }
+            try
+            {
+                var cachePath = Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
+                Directory.CreateDirectory(cachePath);
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var filePath = Path.Combine(cachePath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return Ok(ApiResponse.Ok(new { item = new Image(filePath: "cached\\" + fileName, isFlash: false, isEmoji: false) }));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, ApiResponse.Error(500, $"由于服务器内部错误，上传图片失败: {e.Message}"));
             }
         }
 
