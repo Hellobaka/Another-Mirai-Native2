@@ -38,12 +38,12 @@ copy "%ROOT%\Protocols\Protocol_LagrangeCore\bin\x86\Debug\net9.0-windows\Lagran
 copy "%ROOT%\Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.OneBot\bin\Debug\net9.0\protobuf-net.Core.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 copy "%ROOT%\Protocols\Protocol_LagrangeCore\Lagrange.Core\Lagrange.OneBot\bin\Debug\net9.0\protobuf-net.dll" "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" /Y
 
-mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders"
-mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
-xcopy "%ROOT%\UI_Blazor\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" /E /I /H /Y
+mkdir "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net9.0-windows\loaders"
+mkdir "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
+xcopy "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net48\loaders\NetFramework48" "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net9.0-windows\loaders\NetFramework48" /E /I /H /Y
 
-mkdir "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\protocols"
-xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" "%ROOT%\UI_Blazor\bin\x86\Debug\net9.0-windows\protocols" /E /I /H /Y
+mkdir "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net9.0-windows\protocols"
+xcopy "%ROOT%\Another-Mirai-Native\bin\x86\Debug\net9.0-windows\protocols" "%ROOT%\Another-Mirai-Native.WebAPI\bin\x86\Debug\net9.0-windows\protocols" /E /I /H /Y
 
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders"
 mkdir "%ROOT%\UI_WPF\bin\x86\Debug\net9.0-windows\loaders\NetFramework48"
