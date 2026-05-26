@@ -186,7 +186,8 @@ namespace Another_Mirai_Native.WebAPI
                       {
                           // SignalR 发起的 WebSocket 请求没法加 Header，token 走 Query String
                           var token = context.Request.Query["access_token"];
-                          if (!string.IsNullOrEmpty(token) && context.HttpContext.Request.Path.StartsWithSegments("/realtime"))
+                          if (!string.IsNullOrEmpty(token) 
+                            && (context.HttpContext.Request.Path.StartsWithSegments("/realtime") || context.HttpContext.Request.Path.StartsWithSegments("/api/cache")))
                           {
                               context.Token = token;
                           }

@@ -191,6 +191,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 { "CertificatePath", new() { Title = "HTTPS 证书路径", Description = "HTTPS 证书文件（PEM 或 PFX）的存放路径", Value = WebUIConfig.Instance.CertificatePath } },
                 { "CertificateKeyPath", new() { Title = "证书密钥路径", Description = "HTTPS 证书密钥文件的存放路径", Value = WebUIConfig.Instance.CertificateKeyPath } },
                 { "Password", new() { Title = "登录密码", Description = "WebUI 登录密码", Value = WebUIConfig.Instance.Password } },
+                { "EnableChat", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableChat } },
+                { "EnableFileManager", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableFileManager } },
+                { "EnableTerminal", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableTerminal } },
             };
 
             return Ok(ApiResponse.Ok(response));
@@ -237,6 +240,12 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     {
                         return BadRequest(ApiResponse.Error(400, "密码不能为空"));
                     }
+                }
+                else if (configItem.Name == nameof(WebUIConfig.EnableChat)
+                    || configItem.Name == nameof(WebUIConfig.EnableFileManager)
+                    || configItem.Name == nameof(WebUIConfig.EnableTerminal))
+                {
+                    return BadRequest(ApiResponse.Error(400, "不允许通过 WebAPI 修改此配置"));
                 }
 
                 var valueToSet = request.Value.Deserialize(configItem.PropertyType);

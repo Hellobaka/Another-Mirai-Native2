@@ -23,14 +23,20 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("文件名（含扩展名）或缓存哈希值")] string file)
         {
             if (!Enum.TryParse(type, true, out CachedFileType fileType))
+            {
                 return BadRequest(ApiResponse.Error(400, "无效的文件类型"));
+            }
 
             if (file.Contains('.'))
+            {
                 return Redirect($"/external/{fileType}/{Uri.EscapeDataString(file)}");
+            }
 
             var cache = CachedFile.GetCachedFileByHash(fileType, file);
             if (cache == null)
+            {
                 return NotFound(ApiResponse.Error(404, "找不到此哈希对应的缓存文件；可能未缓存或已删除"));
+            }
 
             return Redirect($"/external/{fileType}/cached/{Uri.EscapeDataString(cache.FileName)}");
         }

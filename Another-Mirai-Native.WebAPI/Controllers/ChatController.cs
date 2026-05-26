@@ -17,7 +17,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [HttpGet("categories")]
         public async Task<IActionResult> GetChatCategories()
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (WebUIConfig.Instance.EnableChat is false)
             {
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetChatHistory(ChatHistoryType chatHistoryType, long parentId, int pageIndex = 1, int pageSize = 50)
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (WebUIConfig.Instance.EnableChat is false)
             {
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
@@ -40,7 +40,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [HttpGet("message")]
         public async Task<IActionResult> GetChatMessage(ChatHistoryType chatHistoryType, long parentId, int messageId)
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (WebUIConfig.Instance.EnableChat is false)
             {
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
@@ -77,7 +77,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [HttpPost("clear-unread")]
         public async Task<IActionResult> ClearUnread(ChatHistoryType chatHistoryType, long parentId)
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (WebUIConfig.Instance.EnableChat is false)
             {
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
@@ -88,7 +88,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [HttpPost("send")]
         public async Task<IActionResult> SendMessage([FromBody] ChatMessageSendRequest request)
         {
-            if (AppConfig.Instance.EnableChat is false)
+            if (WebUIConfig.Instance.EnableChat is false)
             {
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
