@@ -104,7 +104,7 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void PluginManagerProxy_OnGroupBan(long group, long qq, long operatedQQ, long time)
         {
-            Hub.Clients.All.SendAsync(SignalREvents.OnGroupBan, new { group, qq, operatedQQ, time = Helper.TimeStamp2DateTime(time) });
+            Hub.Clients.All.SendAsync(SignalREvents.OnGroupBan, new { group, qq, operatedQQ, time });
         }
 
         private void PluginManagerProxy_OnPluginProxyConnectStatusChanged(CQPluginProxy proxy)
