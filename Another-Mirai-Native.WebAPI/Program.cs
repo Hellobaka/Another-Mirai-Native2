@@ -122,6 +122,7 @@ namespace Another_Mirai_Native.WebAPI
             app.MapControllers();
             app.MapHub<MainHub>("/realtime");
 
+            app.UseDefaultFiles();
             AddStaticFile(app);
 
             app.Run();
@@ -279,6 +280,7 @@ namespace Another_Mirai_Native.WebAPI
                 FileProvider = new PhysicalFileProvider(Path.Combine(AppContext.BaseDirectory, "data", "video")),
                 RequestPath = $"/external/{CachedFileType.Video}"
             }));
+            app.UseStaticFiles();
         }
     }
 }
