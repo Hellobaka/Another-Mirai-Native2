@@ -12,7 +12,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [Authorize]
     public class CachedFileController : ControllerBase
     {
-        [HttpGet("{type}/{file}")]
+        [HttpGet("{type}/{*file}")]
         [EndpointSummary("获取缓存文件")]
         [EndpointDescription("若 file 含 '.' 则按文件名直接返回文件；否则按哈希查询缓存后重定向到文件路径")]
         [ProducesResponseType(StatusCodes.Status302Found)]
@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
 
             if (file.Contains('.'))
             {
-                return Redirect($"/external/{fileType}/{Uri.EscapeDataString(file)}");
+                return Redirect($"/external/{fileType}/{EscapePath(file)}");
             }
 
             var cache = CachedFile.GetCachedFileByHash(fileType, file);
@@ -38,7 +38,12 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 return NotFound(ApiResponse.Error(404, "找不到此哈希对应的缓存文件；可能未缓存或已删除"));
             }
 
-            return Redirect($"/external/{fileType}/cached/{Uri.EscapeDataString(cache.FileName)}");
+            return Redirect($"/external/{fileType}/cached/{EscapePath(cache.FileName)}");
+        }
+
+        private static string EscapePath(string path)
+        {
+            return string.Join("/", path.Split('/').Select(Uri.EscapeDataString));
         }
     }
 }
