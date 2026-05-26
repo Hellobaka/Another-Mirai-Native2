@@ -367,7 +367,7 @@ namespace Another_Mirai_Native.DB
             {
                 var db = ChatHistoryDB.GetInstance();
                 var entities = await db.Queryable<ChatHistoryEntity>()
-                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .Where(x => x.ParentID == id && (x.Type == historyType || x.Type == ChatHistoryType.Notice))
                     .OrderByDescending(x => x.Time)
                     .ToPageListAsync(pageIndex, pageSize);
 
@@ -400,7 +400,7 @@ namespace Another_Mirai_Native.DB
             {
                 var db = ChatHistoryDB.GetInstance();
                 var entities = db.Queryable<ChatHistoryEntity>()
-                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .Where(x => x.ParentID == id && (x.Type == historyType || x.Type == ChatHistoryType.Notice))
                     .OrderByDescending(x => x.Time)
                     .ToPageList(pageIndex, pageSize);
 
@@ -436,7 +436,7 @@ namespace Another_Mirai_Native.DB
 
                 var db = ChatHistoryDB.GetInstance();
                 var entities = db.Queryable<ChatHistoryEntity>()
-                    .Where(x => x.ParentID == id && x.Type == historyType)
+                    .Where(x => x.ParentID == id && (x.Type == historyType || x.Type == ChatHistoryType.Notice))
                     .WhereIF(qq > 0 && groupId > 0, x => x.SenderID == qq)
                     .OrderByDescending(x => x.Time)
                     .Take(count)
