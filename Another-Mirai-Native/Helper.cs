@@ -219,6 +219,14 @@ namespace Another_Mirai_Native
                             }
                             break;
 
+                        case MessageItemType.File:
+                            if (int.TryParse(cqcode.Items["file_size"], out int fileSize)
+                                && cqcode.Items.TryGetValue("file", out string fileName))
+                            {
+                                messageChain.Add(new FileItem(fileName, fileSize));
+                            }
+                            break;
+
                         default:
                             // 无效的CQ码
                             continue;

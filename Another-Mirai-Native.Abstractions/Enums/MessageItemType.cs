@@ -91,6 +91,12 @@ namespace Another_Mirai_Native.Abstractions.Enums
         /// 纯文本
         /// </summary>
         [Description("text")]
-        Text
+        Text,
+
+        /// <summary>
+        /// 文件
+        /// </summary>
+        [Description("file")]
+        File
     }
 }
