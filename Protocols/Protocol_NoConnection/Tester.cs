@@ -288,5 +288,42 @@ namespace Protocol_NoConnection
             Protocol.SetProtocolOffline();
             LogHelper.Info("模拟离线", $"已触发离线事件，{AppConfig.Instance.ActionAfterOfflineSeconds}秒后执行离线操作");
         }
+
+        private async void AudioButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new()
+            {
+                InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "record"),
+                Filter = "音频文件|*.mp3;*.wav;*.ogg|任何文件|*.*",
+                Title = "选择音频",
+                Multiselect = true,
+                AddExtension = false
+            };
+            dialog.ShowDialog();
+            foreach (var item in dialog.FileNames)
+            {
+                var path1 = Path.GetFullPath(item).TrimEnd(Path.DirectorySeparatorChar);
+                var path2 = Path.GetFullPath(dialog.InitialDirectory).TrimEnd(Path.DirectorySeparatorChar);
+                string path;
+                if (path1.StartsWith(path2 + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    // 为同一目录
+                    path = Helper.GetRelativePath(item, dialog.InitialDirectory);
+                }
+                else
+                {
+                    // 移动文件至默认目录
+                    File.Copy(item, Path.Combine(dialog.InitialDirectory, Path.GetFileName(item)), true);
+                    path = Path.GetFileName(item);
+                }
+                if (path.EndsWith(".cqrecord"))
+                {
+                    SendValue.Text += $"[CQ:record,file={Path.GetFileNameWithoutExtension(path)}] ";
+                    continue;
+                }
+                string imgId = await ChatHistoryHelper.CacheMessageFile(CachedFileType.Record, $"{PicServer.Instance.ListenURL}{path}");
+                SendValue.Text += $"[CQ:record,file={imgId}] ";
+            }
+        }
     }
 }

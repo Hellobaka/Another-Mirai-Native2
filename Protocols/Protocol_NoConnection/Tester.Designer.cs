@@ -59,6 +59,7 @@
             ChangeQRCodeButton = new System.Windows.Forms.Button();
             ShowQRCodeButton = new System.Windows.Forms.Button();
             HideQRCodeButton = new System.Windows.Forms.Button();
+            AudioButton = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -131,10 +132,10 @@
             // SendValue
             // 
             SendValue.AcceptsReturn = true;
-            SendValue.Location = new System.Drawing.Point(79, 74);
+            SendValue.Location = new System.Drawing.Point(110, 74);
             SendValue.Margin = new System.Windows.Forms.Padding(2);
             SendValue.Name = "SendValue";
-            SendValue.Size = new System.Drawing.Size(287, 23);
+            SendValue.Size = new System.Drawing.Size(256, 23);
             SendValue.TabIndex = 6;
             SendValue.KeyDown += SendValue_KeyDown;
             // 
@@ -254,6 +255,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(AudioButton);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(AtButton);
             groupBox1.Controls.Add(PrivateSelector);
@@ -406,6 +408,18 @@
             HideQRCodeButton.UseVisualStyleBackColor = true;
             HideQRCodeButton.Click += HideQRCodeButton_Click;
             // 
+            // AudioButton
+            // 
+            AudioButton.Enabled = false;
+            AudioButton.Location = new System.Drawing.Point(78, 74);
+            AudioButton.Margin = new System.Windows.Forms.Padding(2);
+            AudioButton.Name = "AudioButton";
+            AudioButton.Size = new System.Drawing.Size(28, 23);
+            AudioButton.TabIndex = 9;
+            AudioButton.Text = "音";
+            AudioButton.UseVisualStyleBackColor = true;
+            AudioButton.Click += AudioButton_Click;
+            // 
             // Tester
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -468,5 +482,6 @@
         private System.Windows.Forms.ComboBox EventSelector;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel EventArgumentsPanel;
+        private System.Windows.Forms.Button AudioButton;
     }
 }

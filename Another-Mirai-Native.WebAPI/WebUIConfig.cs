@@ -25,6 +25,12 @@ namespace Another_Mirai_Native.WebAPI
 
         public string CertificateKeyPath { get; set; }
 
+        public bool EnableChat { get; set; }
+
+        public bool EnableFileManager { get; set; }
+
+        public bool EnableTerminal { get; set; }
+
         public void LoadConfig()
         {
             Password = GetConfig("Password", Guid.NewGuid().ToString().Replace("-", "")[..16]);
@@ -43,6 +49,9 @@ namespace Another_Mirai_Native.WebAPI
             CertificatePath = GetConfig("CertificatePath", "");
             CertificateKeyPath = GetConfig("CertificateKeyPath", "");
             EnableHTTPS = GetConfig("EnableHTTPS", false);
+            EnableChat = GetConfig("EnableChat", true);
+            EnableFileManager = GetConfig("EnableFileManager", false);
+            EnableTerminal = GetConfig("EnableTerminal", false);
         }
     }
 }
