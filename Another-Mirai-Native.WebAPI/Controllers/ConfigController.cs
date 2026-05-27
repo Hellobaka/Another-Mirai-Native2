@@ -202,15 +202,15 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             _logger.LogInformation("获取 WebUI 配置");
             Dictionary<string, GetConfigResponseItem> response = new()
             {
-                { "ListenIP", new() { Title = "监听 IP", Description = "WebUI 服务监听的 IP 地址，* 表示监听所有地址", Value = WebUIConfig.Instance.ListenIP } },
-                { "ListenPort", new() { Title = "监听端口", Description = "WebUI 服务监听的端口号", Value = WebUIConfig.Instance.ListenPort } },
-                { "EnableHTTPS", new() { Title = "启用 HTTPS", Description = "是否启用 HTTPS 加密连接", Value = WebUIConfig.Instance.EnableHTTPS } },
-                { "CertificatePath", new() { Title = "HTTPS 证书路径", Description = "HTTPS 证书文件（PEM 或 PFX）的存放路径", Value = WebUIConfig.Instance.CertificatePath } },
-                { "CertificateKeyPath", new() { Title = "证书密钥路径", Description = "HTTPS 证书密钥文件的存放路径", Value = WebUIConfig.Instance.CertificateKeyPath } },
-                { "Password", new() { Title = "登录密码", Description = "WebUI 登录密码", Value = WebUIConfig.Instance.Password } },
-                { "EnableChat", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableChat } },
-                { "EnableFileManager", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableFileManager } },
-                { "EnableTerminal", new() { Title = "", Description = "", Value = WebUIConfig.Instance.EnableTerminal } },
+                { "ListenIP", new() { Title = "监听 IP", Description = "WebUI 服务监听的 IP 地址，* 表示监听所有地址", Value = WebAPIConfig.Instance.ListenIP } },
+                { "ListenPort", new() { Title = "监听端口", Description = "WebUI 服务监听的端口号", Value = WebAPIConfig.Instance.ListenPort } },
+                { "EnableHTTPS", new() { Title = "启用 HTTPS", Description = "是否启用 HTTPS 加密连接", Value = WebAPIConfig.Instance.EnableHTTPS } },
+                { "CertificatePath", new() { Title = "HTTPS 证书路径", Description = "HTTPS 证书文件（PEM 或 PFX）的存放路径", Value = WebAPIConfig.Instance.CertificatePath } },
+                { "CertificateKeyPath", new() { Title = "证书密钥路径", Description = "HTTPS 证书密钥文件的存放路径", Value = WebAPIConfig.Instance.CertificateKeyPath } },
+                { "Password", new() { Title = "登录密码", Description = "WebUI 登录密码", Value = WebAPIConfig.Instance.Password } },
+                { "EnableChat", new() { Title = "", Description = "", Value = WebAPIConfig.Instance.EnableChat } },
+                { "EnableFileManager", new() { Title = "", Description = "", Value = WebAPIConfig.Instance.EnableFileManager } },
+                { "EnableTerminal", new() { Title = "", Description = "", Value = WebAPIConfig.Instance.EnableTerminal } },
             };
 
             return Ok(ApiResponse.Ok(response));
@@ -236,7 +236,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 var configItem = WebUIConfigProperties.First(p => p.Name == request.Key);
 
                 // 特殊校验
-                if (configItem.Name == nameof(WebUIConfig.ListenIP))
+                if (configItem.Name == nameof(WebAPIConfig.ListenIP))
                 {
                     var ip = request.Value.Deserialize<string>() ?? "";
                     if (IPAddress.TryParse(ip, out _) == false && ip != "*")
@@ -245,7 +245,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                         return BadRequest(ApiResponse.Error(400, $"无效的 IP 地址：{ip}"));
                     }
                 }
-                else if (configItem.Name == nameof(WebUIConfig.ListenPort))
+                else if (configItem.Name == nameof(WebAPIConfig.ListenPort))
                 {
                     var port = request.Value.Deserialize<int>();
                     if (port < 0 || port > 65535)
@@ -254,7 +254,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                         return BadRequest(ApiResponse.Error(400, "端口号需在 0 ~ 65535 之间"));
                     }
                 }
-                else if (configItem.Name == nameof(WebUIConfig.Password))
+                else if (configItem.Name == nameof(WebAPIConfig.Password))
                 {
                     var pwd = request.Value.Deserialize<string>();
                     if (string.IsNullOrWhiteSpace(pwd))
@@ -263,17 +263,17 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                         return BadRequest(ApiResponse.Error(400, "密码不能为空"));
                     }
                 }
-                else if (configItem.Name == nameof(WebUIConfig.EnableChat)
-                    || configItem.Name == nameof(WebUIConfig.EnableFileManager)
-                    || configItem.Name == nameof(WebUIConfig.EnableTerminal))
+                else if (configItem.Name == nameof(WebAPIConfig.EnableChat)
+                    || configItem.Name == nameof(WebAPIConfig.EnableFileManager)
+                    || configItem.Name == nameof(WebAPIConfig.EnableTerminal))
                 {
                     _logger.LogWarning("修改 WebUI 配置失败：禁止通过 API 修改 Key={Key}", request.Key);
                     return BadRequest(ApiResponse.Error(400, "不允许通过 WebAPI 修改此配置"));
                 }
 
                 var valueToSet = request.Value.Deserialize(configItem.PropertyType);
-                configItem.SetValue(WebUIConfig.Instance, valueToSet);
-                WebUIConfig.Instance.SetConfig(request.Key, valueToSet);
+                configItem.SetValue(WebAPIConfig.Instance, valueToSet);
+                WebAPIConfig.Instance.SetConfig(request.Key, valueToSet);
                 _logger.LogInformation("修改 WebUI 配置成功: Key={Key}", request.Key);
                 return Ok(ApiResponse.Ok());
             }
@@ -297,7 +297,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
 
         private static void LoadWebUIConfigProperties()
         {
-            WebUIConfigProperties = typeof(WebUIConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            WebUIConfigProperties = typeof(WebAPIConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             WebUIConfigPropertiesKeys = WebUIConfigProperties.Select(p => p.Name).ToArray();
         }
 

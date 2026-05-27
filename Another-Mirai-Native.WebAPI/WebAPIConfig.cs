@@ -3,15 +3,15 @@ using System.Net;
 
 namespace Another_Mirai_Native.WebAPI
 {
-    public class WebUIConfig : ConfigBase
+    public class WebAPIConfig : ConfigBase
     {
-        public WebUIConfig() : base("conf\\Blazor_Config.json")
+        public WebAPIConfig() : base("conf\\WebAPI_Config.json")
         {
             ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigPath);
             LoadConfig();
         }
 
-        public static WebUIConfig Instance { get; private set; } = new();
+        public static WebAPIConfig Instance { get; private set; } = new();
 
         public string ListenIP { get; set; } = "127.0.0.1";
 
@@ -24,6 +24,8 @@ namespace Another_Mirai_Native.WebAPI
         public string CertificatePath { get; set; }
 
         public string CertificateKeyPath { get; set; }
+
+        public bool EnableScalar { get; set; }
 
         public bool EnableChat { get; set; }
 
@@ -49,6 +51,7 @@ namespace Another_Mirai_Native.WebAPI
             CertificatePath = GetConfig("CertificatePath", "");
             CertificateKeyPath = GetConfig("CertificateKeyPath", "");
             EnableHTTPS = GetConfig("EnableHTTPS", false);
+            EnableScalar = GetConfig("EnableScalar", false);
             EnableChat = GetConfig("EnableChat", true);
             EnableFileManager = GetConfig("EnableFileManager", false);
             EnableTerminal = GetConfig("EnableTerminal", false);

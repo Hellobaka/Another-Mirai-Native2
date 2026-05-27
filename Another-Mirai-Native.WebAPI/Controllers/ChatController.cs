@@ -26,7 +26,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public async Task<IActionResult> GetChatCategories()
         {
             _logger.LogInformation("获取聊天会话列表");
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("获取聊天会话列表失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -48,7 +48,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("每页条数")] int pageSize = 50)
         {
             _logger.LogInformation("查询聊天记录: Type={Type}, ParentId={ParentId}, Page={Page}, Size={Size}", chatHistoryType, parentId, pageIndex, pageSize);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("查询聊天记录失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -70,7 +70,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("消息 ID")] int messageId)
         {
             _logger.LogInformation("查询单条消息: Type={Type}, ParentId={ParentId}, MessageId={MessageId}", chatHistoryType, parentId, messageId);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("查询单条消息失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -134,7 +134,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("群号或好友 QQ")] long parentId)
         {
             _logger.LogInformation("清除未读计数: Type={Type}, ParentId={ParentId}", chatHistoryType, parentId);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("清除未读计数失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -154,7 +154,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("消息发送请求体")] [FromBody] ChatMessageSendRequest request)
         {
             _logger.LogInformation("发送消息: Type={Type}, ParentId={ParentId}, MessageLength={Length}", request.ChatType, request.ParentId, request.Message?.Length ?? 0);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("发送消息失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -218,7 +218,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("原始 CQ 码字符串")] string message)
         {
             _logger.LogInformation("CQ 码转消息链: MessageLength={Length}", message?.Length ?? 0);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("CQ 码转消息链失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -245,7 +245,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("消息 ID")] int messageId)
         {
             _logger.LogInformation("撤回消息: Type={Type}, ParentId={ParentId}, MessageId={MessageId}", chatHistoryType, parentId, messageId);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("撤回消息失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -294,7 +294,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public async Task<IActionResult> GetCollectedPictures()
         {
             _logger.LogInformation("获取收藏图片列表");
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("获取收藏图片列表失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -324,7 +324,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("图片缓存哈希")] string file)
         {
             _logger.LogInformation("收藏图片: Hash={Hash}", file);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("收藏图片失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
@@ -364,7 +364,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("图片文件（multipart/form-data）")] IFormFile file)
         {
             _logger.LogInformation("上传图片: FileName={FileName}, Size={Size}", file?.FileName, file?.Length);
-            if (WebUIConfig.Instance.EnableChat is false)
+            if (WebAPIConfig.Instance.EnableChat is false)
             {
                 _logger.LogWarning("上传图片失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));

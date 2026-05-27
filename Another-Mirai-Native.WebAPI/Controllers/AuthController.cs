@@ -16,7 +16,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     {
         private readonly ILogger<AuthController> _logger = logger;
 
-        public static string CurrentPassword => WebUIConfig.Instance.Password.PadRight(32, '~');
+        public static string CurrentPassword => WebAPIConfig.Instance.Password.PadRight(32, '~');
 
         [HttpPost("login")]
         [AllowAnonymous]
@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public IActionResult Login([Description("包含密码字段的请求体")][FromBody] LoginRequest request)
         {
             _logger.LogInformation("登录请求来自 {IP}", HttpContext.Connection.RemoteIpAddress);
-            if (request.Password == WebUIConfig.Instance.Password)
+            if (request.Password == WebAPIConfig.Instance.Password)
             {
                 _logger.LogInformation("登录成功");
                 return Ok(ApiResponse.Ok(CreateLoginResponse()));
