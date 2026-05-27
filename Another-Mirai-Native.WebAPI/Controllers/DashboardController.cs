@@ -8,8 +8,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [ApiController]
     [Route("/api/dashboard")]
     [Authorize]
-    public class DashboardController(DashboardService dashboardService) : ControllerBase
+    public class DashboardController(DashboardService dashboardService, ILogger<DashboardController> logger) : ControllerBase
     {
+        private readonly ILogger<DashboardController> _logger = logger;
         public DashboardService DashboardService { get; } = dashboardService;
 
         [HttpGet("base-information")]
@@ -18,7 +19,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<DashboardInfoData>), StatusCodes.Status200OK)]
         public IActionResult GetBaseInformation()
         {
-            return Ok(ApiResponse.Ok(DashboardService.GetBaseInformation().MapTo<DashboardInfoData>()));
+            _logger.LogInformation("获取系统基础信息");
+            var data = DashboardService.GetBaseInformation().MapTo<DashboardInfoData>();
+            _logger.LogInformation("获取系统基础信息成功: OS={OS}, Version={Version}", data.OsVersion, data.Version);
+            return Ok(ApiResponse.Ok(data));
         }
 
         [HttpGet("usages")]
@@ -27,7 +31,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<UsageData>), StatusCodes.Status200OK)]
         public IActionResult GetUsage()
         {
-            return Ok(ApiResponse.Ok(DashboardService.GetUsages().MapTo<UsageData>()));
+            _logger.LogInformation("获取系统资源占用");
+            var data = DashboardService.GetUsages().MapTo<UsageData>();
+            _logger.LogInformation("获取系统资源占用成功: CPU={CPU}%, Memory={Memory}%", data.CpuUsage, data.MemoryUsage);
+            return Ok(ApiResponse.Ok(data));
         }
 
         [HttpGet("plugin-usages")]
@@ -36,7 +43,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<PluginUsageData>), StatusCodes.Status200OK)]
         public IActionResult GetPluginUsage()
         {
-            return Ok(ApiResponse.Ok(DashboardService.GetPluginUsages().MapTo<PluginUsageData>()));
+            _logger.LogInformation("获取插件资源占用");
+            var data = DashboardService.GetPluginUsages().MapTo<PluginUsageData>();
+            _logger.LogInformation("获取插件资源占用成功: 插件数={Count}, 总内存={Memory}MB, 总CPU={CPU}%", data.PluginUsages.Count, data.TotalProcessMemory, data.TotalProcessCPU);
+            return Ok(ApiResponse.Ok(data));
         }
     }
 }

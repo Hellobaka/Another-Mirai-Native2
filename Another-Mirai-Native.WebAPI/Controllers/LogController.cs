@@ -9,8 +9,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [ApiController]
     [Route("/api/log")]
     [Authorize]
-    public class LogController : ControllerBase
+    public class LogController(ILogger<LogController> logger) : ControllerBase
     {
+        private readonly ILogger<LogController> _logger = logger;
+
         [HttpGet]
         [EndpointSummary("分页查询日志")]
         [EndpointDescription("按日志等级、关键词、时间范围等条件分页查询日志")]
@@ -25,6 +27,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("结束时间（可选）")] DateTime? end = null,
             [Description("是否时间升序排列")] bool asc = false)
         {
+            _logger.LogInformation("查询日志: Priority={Priority}, Page={Page}, Size={Size}, Search={Search}", priority, pageIndex, pageSize, search);
             try
             {
                 var logs = await Task.Run(() =>
@@ -33,6 +36,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     return (items, totalCount, totalPage);
                 });
 
+                _logger.LogInformation("查询日志成功: TotalCount={TotalCount}, TotalPage={TotalPage}", logs.totalCount, logs.totalPage);
                 return Ok(ApiResponse.Ok(new LogQueryResultData
                 {
                     Items = logs.items.Select(LogDto.CreateFromLogModel),
@@ -40,8 +44,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     TotalPage = logs.totalPage
                 }));
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "查询日志异常: Priority={Priority}, Search={Search}", priority, search);
                 return StatusCode(500, ApiResponse.Error(500, "由于服务器异常，无法查询日志。"));
             }
         }

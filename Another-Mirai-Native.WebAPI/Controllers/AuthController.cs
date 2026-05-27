@@ -12,8 +12,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [ApiController]
     [Route("/api/auth")]
     [Authorize]
-    public class AuthController : ControllerBase
+    public class AuthController(ILogger<AuthController> logger) : ControllerBase
     {
+        private readonly ILogger<AuthController> _logger = logger;
+
         public static string CurrentPassword => WebUIConfig.Instance.Password.PadRight(32, '~');
 
         [HttpPost("login")]
@@ -25,10 +27,13 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
         public IActionResult Login([Description("包含密码字段的请求体")][FromBody] LoginRequest request)
         {
+            _logger.LogInformation("登录请求来自 {IP}", HttpContext.Connection.RemoteIpAddress);
             if (request.Password == WebUIConfig.Instance.Password)
             {
+                _logger.LogInformation("登录成功");
                 return Ok(ApiResponse.Ok(CreateLoginResponse()));
             }
+            _logger.LogWarning("登录失败：密码错误，尝试密码「{Password}」，来源 IP: {IP}", request.Password, HttpContext.Connection.RemoteIpAddress);
             return Unauthorized(ApiResponse.Error(401, "密码错误"));
         }
 
@@ -39,6 +44,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
         public IActionResult Refresh()
         {
+            _logger.LogInformation("刷新 Token");
             return Ok(ApiResponse.Ok(CreateLoginResponse()));
         }
 

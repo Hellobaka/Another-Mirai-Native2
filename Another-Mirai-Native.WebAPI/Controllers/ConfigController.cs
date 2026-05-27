@@ -13,9 +13,11 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     [ApiController]
     [Route("/api/config")]
     [Authorize]
-    public class ConfigController : ControllerBase
+    public class ConfigController(ILogger<ConfigController> logger) : ControllerBase
     {
-        public ConfigController()
+        private readonly ILogger<ConfigController> _logger = logger;
+
+        static ConfigController()
         {
             if (AppConfigProperties == null)
             {
@@ -45,6 +47,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<Dictionary<string, GetConfigResponseItem>>), StatusCodes.Status200OK)]
         public IActionResult GetCoreConfig()
         {
+            _logger.LogInformation("获取核心配置");
             Dictionary<string, GetConfigResponseItem> response = new()
             {
                 { "AutoConnect", new() { Title = "协议自动连接", Description = "", Value = AppConfig.Instance.AutoConnect } },
@@ -85,8 +88,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public IActionResult GetProtocolConfig([Description("协议名称，如 OneBot v11、LagrangeCore 等")] string name)
         {
+            _logger.LogInformation("获取协议配置: Name={Name}", name);
             if (!ProtocolConfigDefinitions.TryGetValue(name, out var definitions))
             {
+                _logger.LogWarning("获取协议配置失败：未找到协议 Name={Name}", name);
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {name} 的协议配置"));
             }
 
@@ -113,13 +118,16 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             [Description("协议名称")] string name,
             [Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
         {
+            _logger.LogInformation("修改协议配置: Name={Name}, Key={Key}, Value={Value}", name, request.Key, request.Value);
             if (!ProtocolConfigDefinitions.TryGetValue(name, out var definitions))
             {
+                _logger.LogWarning("修改协议配置失败：未找到协议 Name={Name}", name);
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {name} 的协议配置"));
             }
 
             if (!definitions.TryGetValue(request.Key, out var definition))
             {
+                _logger.LogWarning("修改协议配置失败：未找到配置项 Key={Key}", request.Key);
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的协议配置项"));
             }
 
@@ -127,14 +135,17 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             {
                 var valueToSet = DeserializeProtocolConfigValue(request.Value!, definition.DefaultValue);
                 CommonConfig.SetConfig(request.Key, valueToSet, definition.ConfigPath);
+                _logger.LogInformation("修改协议配置成功: Name={Name}, Key={Key}", name, request.Key);
                 return Ok(ApiResponse.Ok());
             }
             catch (Exception e) when (e is FormatException or InvalidCastException or JsonException)
             {
+                _logger.LogWarning(e, "修改协议配置无效值: Name={Name}, Key={Key}", name, request.Key);
                 return BadRequest(ApiResponse.Error(400, "无效的数值转换，检查写入值是否与配置类型匹配"));
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "修改协议配置异常: Name={Name}, Key={Key}", name, request.Key);
                 return BadRequest(ApiResponse.Error(400, "由于服务器异常，设置协议配置时失败"));
             }
         }
@@ -147,8 +158,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public IActionResult SetCoreConfig(
             [Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
         {
+            _logger.LogInformation("修改核心配置: Key={Key}, Value={Value}", request.Key, request.Value);
             if (!AppConfigPropertiesKeys.Contains(request.Key))
             {
+                _logger.LogWarning("修改核心配置失败：未找到配置项 Key={Key}", request.Key);
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的配置项"));
             }
 
@@ -165,14 +178,17 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 var valueToSet = request.Value.Deserialize(configItem.PropertyType);
                 configItem.SetValue(AppConfig.Instance, valueToSet);
                 AppConfig.Instance.SetConfig(request.Key, valueToSet);
+                _logger.LogInformation("修改核心配置成功: Key={Key}", request.Key);
                 return Ok(ApiResponse.Ok());
             }
             catch (Exception e) when (e is FormatException or InvalidCastException or JsonException)
             {
+                _logger.LogWarning(e, "修改核心配置无效值: Key={Key}", request.Key);
                 return BadRequest(ApiResponse.Error(400, "无效的数值转换，检查写入值是否与配置类型匹配"));
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "修改核心配置异常: Key={Key}", request.Key);
                 return BadRequest(ApiResponse.Error(400, "由于服务器异常，设置配置时失败"));
             }
         }
@@ -183,6 +199,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<Dictionary<string, GetConfigResponseItem>>), StatusCodes.Status200OK)]
         public IActionResult GetWebUIConfig()
         {
+            _logger.LogInformation("获取 WebUI 配置");
             Dictionary<string, GetConfigResponseItem> response = new()
             {
                 { "ListenIP", new() { Title = "监听 IP", Description = "WebUI 服务监听的 IP 地址，* 表示监听所有地址", Value = WebUIConfig.Instance.ListenIP } },
@@ -207,8 +224,10 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public IActionResult SetWebUIConfig([Description("包含 Key（配置项名）和 Value（新值）")][FromBody] SetConfigRequest request)
         {
+            _logger.LogInformation("修改 WebUI 配置: Key={Key}", request.Key);
             if (!WebUIConfigPropertiesKeys.Contains(request.Key))
             {
+                _logger.LogWarning("修改 WebUI 配置失败：未找到配置项 Key={Key}", request.Key);
                 return NotFound(ApiResponse.Error(404, $"未能找到名称为 {request.Key} 的 WebUI 配置项"));
             }
 
@@ -222,6 +241,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     var ip = request.Value.Deserialize<string>() ?? "";
                     if (IPAddress.TryParse(ip, out _) == false && ip != "*")
                     {
+                        _logger.LogWarning("修改 WebUI 配置失败：无效的 IP Key={Key}, Value={Value}", request.Key, ip);
                         return BadRequest(ApiResponse.Error(400, $"无效的 IP 地址：{ip}"));
                     }
                 }
@@ -230,6 +250,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     var port = request.Value.Deserialize<int>();
                     if (port < 0 || port > 65535)
                     {
+                        _logger.LogWarning("修改 WebUI 配置失败：端口超出范围 Key={Key}, Value={Value}", request.Key, port);
                         return BadRequest(ApiResponse.Error(400, "端口号需在 0 ~ 65535 之间"));
                     }
                 }
@@ -238,6 +259,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     var pwd = request.Value.Deserialize<string>();
                     if (string.IsNullOrWhiteSpace(pwd))
                     {
+                        _logger.LogWarning("修改 WebUI 配置失败：密码为空 Key={Key}", request.Key);
                         return BadRequest(ApiResponse.Error(400, "密码不能为空"));
                     }
                 }
@@ -245,20 +267,24 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     || configItem.Name == nameof(WebUIConfig.EnableFileManager)
                     || configItem.Name == nameof(WebUIConfig.EnableTerminal))
                 {
+                    _logger.LogWarning("修改 WebUI 配置失败：禁止通过 API 修改 Key={Key}", request.Key);
                     return BadRequest(ApiResponse.Error(400, "不允许通过 WebAPI 修改此配置"));
                 }
 
                 var valueToSet = request.Value.Deserialize(configItem.PropertyType);
                 configItem.SetValue(WebUIConfig.Instance, valueToSet);
                 WebUIConfig.Instance.SetConfig(request.Key, valueToSet);
+                _logger.LogInformation("修改 WebUI 配置成功: Key={Key}", request.Key);
                 return Ok(ApiResponse.Ok());
             }
             catch (Exception e) when (e is FormatException or InvalidCastException or JsonException)
             {
+                _logger.LogWarning(e, "修改 WebUI 配置无效值: Key={Key}", request.Key);
                 return BadRequest(ApiResponse.Error(400, "无效的数值转换，检查写入值是否与配置类型匹配"));
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "修改 WebUI 配置异常: Key={Key}", request.Key);
                 return BadRequest(ApiResponse.Error(400, "由于服务器异常，设置 WebUI 配置时失败"));
             }
         }
