@@ -213,6 +213,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [EndpointDescription("将原始 CQ 码字符串解析为结构化的 MessageItemBase 数组，用于发送前预览")]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public IActionResult ConvertToMessageChain(
             [Description("原始 CQ 码字符串")] string message)
         {
@@ -221,6 +222,11 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             {
                 _logger.LogWarning("CQ 码转消息链失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
+            }
+            if (string.IsNullOrEmpty(message))
+            {
+                _logger.LogWarning("CQ 码转消息链失败：输入消息为空");
+                return BadRequest(ApiResponse.Error(400, "输入消息不得为空"));
             }
             var chain = message.ToMessageChain();
             _logger.LogInformation("CQ 码转消息链成功，共 {Count} 个片段", chain.Length);
