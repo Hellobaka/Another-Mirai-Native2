@@ -383,7 +383,7 @@
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-		<ProjectReference Include="..\UI_Blazor\UI_Blazor.csproj" />
+		<ProjectReference Include="..\Another-Mirai-Native.WebAPI\Another-Mirai-Native.WebAPI.csproj" />
 	</ItemGroup>
 	
 	

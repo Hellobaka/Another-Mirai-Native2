@@ -1,8 +1,5 @@
 ﻿using Another_Mirai_Native.DB;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,17 +34,18 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 return false;
             }
-            await Task.Run(BlazorUI.Entry_Blazor.StartBlazorService);
-            LogHelper.Info("启动 WebUI", $"WebUI 已尝试启动");
+            await Task.Run(() => WebAPI.Program.BuildWebAPI([]));
+            await WebAPI.Program.StartAsync();
+            LogHelper.Info("启动 WebAPI", $"WebAPI 服务已尝试启动");
             return true;
         }
 
         public async Task<bool> StopWebUI()
         {
-            if (BlazorUI.Entry_Blazor.BlazorHost != null)
+            if (WebAPI.Program.WebAPIHost != null && WebAPI.Program.IsRunning)
             {
-                await BlazorUI.Entry_Blazor.BlazorHost.StopAsync();
-                LogHelper.Info("停止 WebUI", $"WebUI 已停止");
+                await WebAPI.Program.StopAsync();
+                LogHelper.Info("停止 WebAPI", $"WebAPI 服务已停止");
                 return true;
             }
             return false;
@@ -55,7 +53,7 @@ namespace Another_Mirai_Native.UI.Pages
 #else
         public bool StartWebUI()
         {
-            LogHelper.Error("启动 WebUI", "启动 WebUI 需要 .net8 以上版本");
+            LogHelper.Error("启动 WebAPI", "启动 WebAPI 需要 .net8 以上版本");
             return false;
         }
 
@@ -83,7 +81,7 @@ namespace Another_Mirai_Native.UI.Pages
 #endif
         }
 
-        private void Program_OnBlazorServiceStoped()
+        private void Program_OnBlazorServiceStopped()
         {
             Dispatcher.InvokeAsync(() =>
             {
@@ -115,7 +113,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             await StopWebUI();
-        }        
+        }
 #else
         private void WebUIStopButton_Click(object sender, RoutedEventArgs e)
         {
@@ -129,40 +127,43 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             PageLoaded = true;
-#if NET5_0_OR_GREATER
-            BlazorUI.Logging.Instance.Logger.LogEvent += Logger_LogEvent;
+            LogHelper.LogAdded += (logId, log) =>
+            {
+                if (log.source != "WebAPI")
+                {
+                    return;
+                }
 
-            BlazorUI.Entry_Blazor.OnBlazorServiceStarted += Program_OnBlazorServiceStarted;
-            BlazorUI.Entry_Blazor.OnBlazorServiceStopped += Program_OnBlazorServiceStoped;
+                Dispatcher.InvokeAsync(() =>
+                {
+                    var text = $"[{log.time}][{log.name}] {log.detail}{Environment.NewLine}";
+                    if (log.priority >= 20)
+                    {
+                        if (Terminal_Error.Text.Length > 10000)
+                        {
+                            Terminal_Error.Text = "";
+                        }
+
+                        Terminal_Error.AppendText(text);
+                    }
+                    else
+                    {
+                        if (Terminal_Output.Text.Length > 10000)
+                        {
+                            Terminal_Output.Text = "";
+                        }
+
+                        Terminal_Output.AppendText(text);
+                    }
+                });
+            };
+#if NET5_0_OR_GREATER
+            WebAPI.Program.OnWebAPIServiceStarted += Program_OnBlazorServiceStarted;
+            WebAPI.Program.OnWebAPIServiceStopped += Program_OnBlazorServiceStopped;
 #else
             WebUIStartButton.IsEnabled = false;
             WebUIStopButton.IsEnabled = false;
 #endif
-        }
-
-        private async void Logger_LogEvent(bool error, string msg, Exception? exception)
-        {
-            await Dispatcher.InvokeAsync(() =>
-            {
-                if (error)
-                {
-                    if (Terminal_Error.Text.Length > 10000)
-                    {
-                        Terminal_Error.Text = "";
-                    }
-                    Terminal_Error.AppendText(msg);
-                    ScrollContainer_Error.ScrollToEnd();
-                }
-                else
-                {
-                    if (Terminal_Output.Text.Length > 10000)
-                    {
-                        Terminal_Output.Text = "";
-                    }
-                    Terminal_Output.AppendText(msg);
-                    ScrollContainer_Output.ScrollToEnd();
-                }
-            });
         }
 
         private void TerminalOutputClearButton_Click(object sender, RoutedEventArgs e)
