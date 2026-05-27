@@ -23,6 +23,16 @@ namespace Another_Mirai_Native.WebAPI
 {
     public class Program
     {
+        public static IHost WebAPIHost { get; private set; }
+
+        public static bool IsRunning { get; private set; }
+
+        public static event Action OnWebAPIServiceStarted;
+        public static event Action OnWebAPIServiceStopped;
+
+        private static CancellationTokenRegistration _startedRegistration;
+        private static CancellationTokenRegistration _stoppedRegistration;
+
         private static readonly IJsonTypeInfoResolver MessageItemBaseResolver = new DefaultJsonTypeInfoResolver
         {
             Modifiers =
@@ -60,15 +70,25 @@ namespace Another_Mirai_Native.WebAPI
         {
             if (args.Length == 0)
             {
-                // TODO: For Local Test
+                // Local test: run framework in background
                 Task.Run(() => Entry.Main(args));
             }
             else
             {
+                // Framework mode: build only, framework controls start/stop
                 Entry.Main(args);
+                BuildWebAPI(args);
                 return;
             }
 
+            // Standalone mode
+            BuildWebAPI(args);
+            StartAsync().GetAwaiter().GetResult();
+            WebAPIHost.WaitForShutdown();
+        }
+
+        private static void BuildWebAPI(string[] args)
+        {
             WebUIConfig.Instance.LoadConfig();
 
             var builder = WebApplication.CreateBuilder(args);
@@ -130,6 +150,8 @@ namespace Another_Mirai_Native.WebAPI
                 });
             });
 
+            builder.Host.UseNLog();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -168,7 +190,38 @@ namespace Another_Mirai_Native.WebAPI
             });
             AddStaticFile(app);
 
-            app.Run();
+            WebAPIHost = app;
+        }
+
+        public static async Task StartAsync()
+        {
+            if (IsRunning) return;
+
+            var lifetime = WebAPIHost.Services.GetRequiredService<IHostApplicationLifetime>();
+
+            _startedRegistration = lifetime.ApplicationStarted.Register(() =>
+            {
+                IsRunning = true;
+                OnWebAPIServiceStarted?.Invoke();
+            });
+
+            _stoppedRegistration = lifetime.ApplicationStopped.Register(() =>
+            {
+                IsRunning = false;
+                OnWebAPIServiceStopped?.Invoke();
+            });
+
+            await WebAPIHost.StartAsync();
+        }
+
+        public static async Task StopAsync()
+        {
+            if (!IsRunning) return;
+
+            _startedRegistration.Dispose();
+            _stoppedRegistration.Dispose();
+
+            await WebAPIHost.StopAsync();
         }
 
         private static void AddOpenAPIService(WebApplicationBuilder builder)
