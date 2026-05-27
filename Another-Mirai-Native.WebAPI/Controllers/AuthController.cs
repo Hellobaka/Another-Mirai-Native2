@@ -1,6 +1,7 @@
 using Another_Mirai_Native.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
+        [EnableRateLimiting("login")]
         [EndpointSummary("密码登录")]
         [EndpointDescription("使用 WebUI 配置文件中的密码验证身份，成功则返回 7 天有效的 JWT Token")]
         [ProducesResponseType(typeof(ApiResponse<LoginResponseData>), StatusCodes.Status200OK)]

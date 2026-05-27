@@ -1,9 +1,13 @@
+using Another_Mirai_Native.Abstractions.Enums;
+using Another_Mirai_Native.Abstractions.Models.MessageItem;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.WebAPI.Controllers;
 using Another_Mirai_Native.WebAPI.Hubs;
 using Another_Mirai_Native.WebAPI.Models;
 using Another_Mirai_Native.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.FileProviders;
@@ -11,11 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using System.Security.Cryptography.X509Certificates;
-using Another_Mirai_Native.Abstractions.Enums;
-using Another_Mirai_Native.Abstractions.Models.MessageItem;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
 namespace Another_Mirai_Native.WebAPI
@@ -83,6 +84,14 @@ namespace Another_Mirai_Native.WebAPI
             builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
                 p.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(_ => true)));
 
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                // 处理nginx转发的请求头
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
             builder.Services.AddControllers()
                 .AddJsonOptions(o =>
                 {
@@ -104,6 +113,23 @@ namespace Another_Mirai_Native.WebAPI
                 o.PayloadSerializerOptions.TypeInfoResolver = MessageItemBaseResolver;
             });
 
+            builder.Services.AddRateLimiter(options =>
+            {
+                // 登录接口限流，防止暴力破解密码
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddPolicy("login", context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                    return System.Threading.RateLimiting.RateLimitPartition.GetSlidingWindowLimiter(ip, _ => new System.Threading.RateLimiting.SlidingWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromMinutes(1),
+                        SegmentsPerWindow = 6,
+                        QueueLimit = 0,
+                    });
+                });
+            });
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -115,7 +141,9 @@ namespace Another_Mirai_Native.WebAPI
                 });
             }
 
+            app.UseForwardedHeaders();
             app.UseCors();
+            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -123,6 +151,21 @@ namespace Another_Mirai_Native.WebAPI
             app.MapHub<MainHub>("/realtime");
 
             app.UseDefaultFiles();
+
+            app.Use(async (context, next) =>
+            {
+                // 静态文件鉴权
+                if (context.Request.Path.StartsWithSegments("/external"))
+                {
+                    var authResult = await context.AuthenticateAsync();
+                    if (!authResult.Succeeded)
+                    {
+                        context.Response.StatusCode = 401;
+                        return;
+                    }
+                }
+                await next();
+            });
             AddStaticFile(app);
 
             app.Run();
@@ -188,8 +231,8 @@ namespace Another_Mirai_Native.WebAPI
                       {
                           // SignalR 发起的 WebSocket 请求没法加 Header，token 走 Query String
                           var token = context.Request.Query["access_token"];
-                          if (!string.IsNullOrEmpty(token) 
-                            && (context.HttpContext.Request.Path.StartsWithSegments("/realtime") || context.HttpContext.Request.Path.StartsWithSegments("/api/cache")))
+                          if (!string.IsNullOrEmpty(token)
+                            && (context.HttpContext.Request.Path.StartsWithSegments("/realtime") || context.HttpContext.Request.Path.StartsWithSegments("/api/cache") || context.HttpContext.Request.Path.StartsWithSegments("/external")))
                           {
                               context.Token = token;
                           }
