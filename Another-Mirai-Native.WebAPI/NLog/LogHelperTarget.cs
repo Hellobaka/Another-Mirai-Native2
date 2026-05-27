@@ -1,10 +1,9 @@
 using Another_Mirai_Native.DB;
-using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Model;
 using NLog;
-using NLog.Common;
 using NLog.Targets;
 
-namespace Another_Mirai_Native.WebAPI.NLog;
+namespace Another_Mirai_Native.WebAPI;
 
 /// <summary>
 /// 将 NLog 日志桥接到框架主线 LogHelper
@@ -22,7 +21,7 @@ public class LogHelperTarget : TargetWithLayout
                 source = "WebAPI",
                 name = logEvent.LoggerName ?? "WebAPI",
                 detail = RenderLogEvent(Layout, logEvent),
-                time = DateTime.Now,
+                time = Helper.DateTime2TimeStamp(DateTime.Now),
                 status = ""
             };
 
@@ -30,7 +29,6 @@ public class LogHelperTarget : TargetWithLayout
         }
         catch
         {
-            // 框架未就绪时静默丢弃，文件目标仍正常工作
         }
     }
 
@@ -38,13 +36,13 @@ public class LogHelperTarget : TargetWithLayout
     {
         return level.Name switch
         {
-            "Trace" => (int)LogLevel.Debug,
-            "Debug" => (int)LogLevel.Debug,
-            "Info"  => (int)LogLevel.Info,
-            "Warn"  => (int)LogLevel.Warning,
-            "Error" => (int)LogLevel.Error,
-            "Fatal" => (int)LogLevel.Fatal,
-            _       => (int)LogLevel.Info,
+            "Trace" => (int)Model.Enums.LogLevel.Debug,
+            "Debug" => (int)Model.Enums.LogLevel.Debug,
+            "Info"  => (int)Model.Enums.LogLevel.Info,
+            "Warn"  => (int)Model.Enums.LogLevel.Warning,
+            "Error" => (int)Model.Enums.LogLevel.Error,
+            "Fatal" => (int)Model.Enums.LogLevel.Fatal,
+            _       => (int)Model.Enums.LogLevel.Info,
         };
     }
 }
