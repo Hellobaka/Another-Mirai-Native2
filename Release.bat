@@ -4,7 +4,7 @@ setlocal
 echo Release...
 dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
 dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net48.pubxml -f net48
-dotnet publish UI_Blazor\UI_Blazor.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
+dotnet publish Another-Mirai-Native.WebAPI\Another-Mirai-Native.WebAPI.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
 dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net48.pubxml -f net48
 dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
 
@@ -83,8 +83,8 @@ del /Q ".\build\WPF\net9\*.pdb"
 del /Q ".\build\WPF\net9\*.xml"
 del /Q ".\build\WPF\net9\Another-Mirai-Native.exe"
 del /Q ".\build\WPF\net9\Another-Mirai-Native.runtimeconfig.json"
-del /Q ".\build\WPF\net9\Another-Mirai-Native-WebUI.exe"
-del /Q ".\build\WPF\net9\Another-Mirai-Native-WebUI.runtimeconfig.json"
+del /Q ".\build\WPF\net9\Another-Mirai-Native.WebAPI.exe"
+del /Q ".\build\WPF\net9\Another-Mirai-Native.WebAPI.runtimeconfig.json"
 
 echo Create zip Archives
 where 7z.exe >nul 2>&1
