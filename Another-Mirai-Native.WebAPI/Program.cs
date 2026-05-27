@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog.Web;
 using Scalar.AspNetCore;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -26,6 +27,22 @@ namespace Another_Mirai_Native.WebAPI
         public static IHost WebAPIHost { get; private set; }
 
         public static bool IsRunning { get; private set; }
+
+        public static string WebUIURL
+        {
+            get
+            {
+                var displayIp = WebAPIConfig.Instance.ListenIP switch
+                {
+                    "0.0.0.0" => "127.0.0.1",
+                    "*" => "127.0.0.1",
+                    "[::]" => "[::1]",
+                    _ => WebAPIConfig.Instance.ListenIP
+                };
+                var scheme = WebAPIConfig.Instance.EnableHTTPS ? "https" : "http";
+                return $"{scheme}://{displayIp}:{WebAPIConfig.Instance.ListenPort}";
+            }
+        }
 
         public static event Action OnWebAPIServiceStarted;
         public static event Action OnWebAPIServiceStopped;
@@ -87,16 +104,16 @@ namespace Another_Mirai_Native.WebAPI
             WebAPIHost.WaitForShutdown();
         }
 
-        private static void BuildWebAPI(string[] args)
+        public static void BuildWebAPI(string[] args)
         {
-            WebUIConfig.Instance.LoadConfig();
+            WebAPIConfig.Instance.LoadConfig();
 
             var builder = WebApplication.CreateBuilder(args);
 
-            var scheme = WebUIConfig.Instance.EnableHTTPS ? "https" : "http";
-            builder.WebHost.UseUrls($"{scheme}://{WebUIConfig.Instance.ListenIP}:{WebUIConfig.Instance.ListenPort}");
+            var scheme = WebAPIConfig.Instance.EnableHTTPS ? "https" : "http";
+            builder.WebHost.UseUrls($"{scheme}://{WebAPIConfig.Instance.ListenIP}:{WebAPIConfig.Instance.ListenPort}");
 
-            if (WebUIConfig.Instance.EnableHTTPS)
+            if (WebAPIConfig.Instance.EnableHTTPS)
             {
                 ConfigureHTTPS(builder.WebHost);
             }
@@ -113,6 +130,7 @@ namespace Another_Mirai_Native.WebAPI
             });
 
             builder.Services.AddControllers()
+                .AddApplicationPart(typeof(Program).Assembly)
                 .AddJsonOptions(o =>
                 {
                     o.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -154,7 +172,7 @@ namespace Another_Mirai_Native.WebAPI
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
+            if (WebAPIConfig.Instance.EnableScalar)
             {
                 app.MapOpenApi();
                 app.MapScalarApiReference(x =>
@@ -218,10 +236,10 @@ namespace Another_Mirai_Native.WebAPI
         {
             if (!IsRunning) return;
 
+            await WebAPIHost.StopAsync();
+
             _startedRegistration.Dispose();
             _stoppedRegistration.Dispose();
-
-            await WebAPIHost.StopAsync();
         }
 
         private static void AddOpenAPIService(WebApplicationBuilder builder)
@@ -308,7 +326,7 @@ namespace Another_Mirai_Native.WebAPI
 
         private static void ConfigureHTTPS(ConfigureWebHostBuilder webHost)
         {
-            if (File.Exists(WebUIConfig.Instance.CertificatePath) && File.Exists(WebUIConfig.Instance.CertificateKeyPath))
+            if (File.Exists(WebAPIConfig.Instance.CertificatePath) && File.Exists(WebAPIConfig.Instance.CertificateKeyPath))
             {
                 webHost.ConfigureKestrel(serverOptions =>
                 {
@@ -332,7 +350,7 @@ namespace Another_Mirai_Native.WebAPI
             try
             {
                 options.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile(
-                    WebUIConfig.Instance.CertificatePath, WebUIConfig.Instance.CertificateKeyPath);
+                    WebAPIConfig.Instance.CertificatePath, WebAPIConfig.Instance.CertificateKeyPath);
                 return true;
             }
             catch (Exception ex)
@@ -347,7 +365,7 @@ namespace Another_Mirai_Native.WebAPI
             try
             {
                 var pemCert = X509Certificate2.CreateFromPemFile(
-                    WebUIConfig.Instance.CertificatePath, WebUIConfig.Instance.CertificateKeyPath);
+                    WebAPIConfig.Instance.CertificatePath, WebAPIConfig.Instance.CertificateKeyPath);
                 byte[] pfxBytes = pemCert.Export(X509ContentType.Pfx);
                 options.ServerCertificate = X509CertificateLoader.LoadPkcs12(pfxBytes, null);
                 return true;
