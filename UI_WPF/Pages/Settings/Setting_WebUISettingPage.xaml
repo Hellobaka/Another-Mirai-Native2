@@ -83,6 +83,43 @@
                         Subtitle="SSL/TLS 证书私钥文件路径（.key 或 .pem）" />
                 </ui:SimpleStackPanel>
             </Border>
+
+            <Border
+                Margin="0,0,0,10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ui:SimpleStackPanel Spacing="10">
+                    <emoji:TextBlock
+                        Margin="0,0,0,5"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Style="{StaticResource TitleTextBlockStyle}">
+                        ✨ 特性设置
+                    </emoji:TextBlock>
+                    <controls:SettingItem_ToggleButton
+                        x:Name="EnableChat"
+                        Title="启用聊天页"
+                        OnToggled="SettingItem_Toggled" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="EnableFileManager"
+                        Title="启用文件管理页"
+                        IsEnabled="False"
+                        OnToggled="SettingItem_Toggled" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="EnableTerminal"
+                        Title="启用终端页"
+                        IsEnabled="False"
+                        OnToggled="SettingItem_Toggled" />
+                    <controls:SettingItem_ToggleButton
+                        x:Name="EnableScalar"
+                        Title="启用 Scalar 文档"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="展示后端 API 的调试页面，可通过 [后端网址]/scalar 访问" />
+                </ui:SimpleStackPanel>
+            </Border>
         </StackPanel>
     </ui:SimpleStackPanel>
 </Page>
