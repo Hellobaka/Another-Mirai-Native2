@@ -127,16 +127,12 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
             PageLoaded = true;
-            LogHelper.LogAdded += (logId, log) =>
+#if NET5_0_OR_GREATER
+            WebAPI.LogHelperTarget.OnLogReceived += (log) =>
             {
-                if (log.source != "WebAPI")
-                {
-                    return;
-                }
-
                 Dispatcher.InvokeAsync(() =>
                 {
-                    var text = $"[{log.time}][{log.name}] {log.detail}{Environment.NewLine}";
+                    var text = $"[{Helper.TimeStamp2DateTime(log.time):G}][{log.name}] {log.detail}{Environment.NewLine}";
                     if (log.priority >= 20)
                     {
                         if (Terminal_Error.Text.Length > 10000)
@@ -145,6 +141,7 @@ namespace Another_Mirai_Native.UI.Pages
                         }
 
                         Terminal_Error.AppendText(text);
+                        LogHelper.WriteLog(log);
                     }
                     else
                     {
@@ -157,7 +154,6 @@ namespace Another_Mirai_Native.UI.Pages
                     }
                 });
             };
-#if NET5_0_OR_GREATER
             WebAPI.Program.OnWebAPIServiceStarted += Program_OnBlazorServiceStarted;
             WebAPI.Program.OnWebAPIServiceStopped += Program_OnBlazorServiceStopped;
 #else

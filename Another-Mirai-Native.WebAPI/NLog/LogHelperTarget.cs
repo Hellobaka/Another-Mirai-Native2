@@ -11,6 +11,8 @@ namespace Another_Mirai_Native.WebAPI;
 [Target("LogHelper")]
 public class LogHelperTarget : TargetWithLayout
 {
+    public static event Action<LogModel>? OnLogReceived;
+
     protected override void Write(LogEventInfo logEvent)
     {
         try
@@ -19,13 +21,13 @@ public class LogHelperTarget : TargetWithLayout
             {
                 priority = MapLevel(logEvent.Level),
                 source = "WebAPI",
-                name = logEvent.LoggerName ?? "WebAPI",
-                detail = RenderLogEvent(Layout, logEvent),
+                name = logEvent.LoggerName?.Split('.').Last() ?? "WebAPI",
+                detail = RenderLogEvent("${message}${onexception:inner= ${exception:format=toString}}", logEvent),
                 time = Helper.DateTime2TimeStamp(DateTime.Now),
                 status = ""
             };
 
-            LogHelper.WriteLog(model);
+            OnLogReceived?.Invoke(model);
         }
         catch
         {
