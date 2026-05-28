@@ -242,7 +242,7 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadAppInfo()
         {
-            string appInfoPath = PluginPath.Replace(".dll", ".json");
+            string appInfoPath = Path.ChangeExtension(PluginPath, ".json");
             if (File.Exists(appInfoPath) is false)
             {
                 LogHelper.Error("加载插件", $"{PluginPath} 同名的 json 文件不存在，无法加载插件");

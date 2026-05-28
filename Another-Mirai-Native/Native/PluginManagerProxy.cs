@@ -169,7 +169,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch sw = Stopwatch.StartNew();
             foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {
-                if (File.Exists(item.Replace(".dll", ".json")))
+                if (File.Exists(Path.ChangeExtension(item, ".json")))
                 {
                     CQPluginProxy plugin = new(item);
                     if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
@@ -179,9 +179,60 @@ namespace Another_Mirai_Native.Native
                         plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
                     }
                 }
-            };
+            }
+            ;
             LogHelper.Info("加载插件", "加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
+        }
+
+        public bool AddPlugin(string filePath)
+        {
+            try
+            {
+                string rawDllPath = Path.GetFullPath(filePath);
+                string rawJsonPath = Path.ChangeExtension(rawDllPath, ".json");
+                string fileName = Path.GetFileName(rawDllPath);
+                // 检查dll与json文件是否存在
+                if (!File.Exists(rawDllPath) || !File.Exists(rawJsonPath))
+                {
+                    LogHelper.Error("添加插件", "添加插件失败，由于期望加载的文件或其对应的json文件不存在");
+                    return false;
+                }
+                // 检查路径是否重复
+                if (Proxies.Any(x => x.PluginBasePath == rawDllPath))
+                {
+                    LogHelper.Error("添加插件", "添加插件失败，由于已加载相同路径的文件");
+                    return false;
+                }
+                // 若未处于plugins文件夹则移动至plugins文件夹下
+                string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "plugins");
+                string pluginDllPath = Path.Combine(pluginPath, fileName);
+                string pluginJsonPath = Path.ChangeExtension(pluginDllPath, ".json");
+                if (!File.Exists(Path.Combine(pluginPath, fileName)))
+                {
+                    File.Copy(rawDllPath, pluginDllPath, true);
+                    File.Copy(rawJsonPath, pluginJsonPath, true);
+                }
+                // 移动至临时目录并加载插件元数据
+                CQPluginProxy plugin = new(pluginDllPath);
+                if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
+                {
+                    Proxies.Add(plugin);
+                    OnPluginProxyAdded?.Invoke(plugin);
+                    plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
+                    return true;
+                }
+                else
+                {
+                    LogHelper.Error("添加插件", "添加插件失败，移动文件或加载插件元数据时发生错误");
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error("添加插件", $"添加插件失败，由于发生意料之外的异常：{e}");
+                return false;
+            }
         }
 
         public void ReloadAllPlugins()
