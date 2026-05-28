@@ -1,3 +1,4 @@
+using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.WebAPI.Models;
@@ -127,6 +128,115 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             await Task.Run(() => PluginManagerProxy.Instance.ReloadPlugin(plugin));
             _logger.LogInformation("重载插件成功: AuthCode={AuthCode}, Name={Name}", authCode, plugin.PluginName);
             return Ok(ApiResponse.Ok(PluginDto.CreateFromPlugin(plugin)));
+        }
+
+        [HttpPost("{authCode}/menu")]
+        [EndpointSummary("调用插件菜单事件")]
+        [EndpointDescription("根据授权码触发插件的菜单事件")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CallPluginMenu(
+            [Description("插件授权码")] int authCode,
+            [Description("菜单名称")] string menuName)
+        {
+            _logger.LogInformation("调用插件菜单: AuthCode={AuthCode}, MenuName={MenuName}", authCode, menuName);
+            var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
+            if (plugin == null)
+            {
+                _logger.LogWarning("调用插件菜单失败：未找到插件 AuthCode={AuthCode}", authCode);
+                return NotFound(ApiResponse.Error(404, "未找到对应 AuthCode 的插件"));
+            }
+            if (string.IsNullOrWhiteSpace(menuName))
+            {
+                _logger.LogWarning("调用插件菜单失败：菜单名称为空");
+                return BadRequest(ApiResponse.Error(400, "菜单名称不能为空"));
+            }
+
+            _ = Task.Run(() => PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menuName));
+            _logger.LogInformation("调用插件菜单完成: AuthCode={AuthCode}, MenuName={MenuName}", authCode, menuName);
+            return Ok(ApiResponse.Ok());
+        }
+
+        [HttpPost("add")]
+        [EndpointSummary("添加插件")]
+        [EndpointDescription("上传 DLL 与 JSON 文件以添加新插件")]
+        [ProducesResponseType(typeof(ApiResponse<PluginDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        [RequestSizeLimit(50 * 1024 * 1024)]
+        public async Task<IActionResult> AddPlugin(
+            [Description("插件 DLL 文件")] IFormFile dll,
+            [Description("插件 JSON 清单文件")] IFormFile json)
+        {
+            _logger.LogInformation("添加插件: Dll={Dll}, Json={Json}", dll?.FileName, json?.FileName);
+            if (dll == null || dll.Length == 0)
+            {
+                _logger.LogWarning("添加插件失败：DLL 文件为空");
+                return BadRequest(ApiResponse.Error(400, "请选择要上传的插件 DLL 文件"));
+            }
+            if (!string.Equals(Path.GetExtension(dll.FileName), ".dll", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogWarning("添加插件失败：文件不是 DLL FileName={FileName}", dll.FileName);
+                return BadRequest(ApiResponse.Error(400, "仅支持 DLL 格式的插件文件"));
+            }
+            if (json == null || json.Length == 0)
+            {
+                _logger.LogWarning("添加插件失败：JSON 文件为空");
+                return BadRequest(ApiResponse.Error(400, "请选择要上传的插件 JSON 清单文件"));
+            }
+
+            var tmpDir = Path.Combine(Path.GetTempPath(), $"amn_plugin_{Guid.NewGuid()}");
+            try
+            {
+                Directory.CreateDirectory(tmpDir);
+
+                var safeName = Path.GetFileName(dll.FileName);
+                var dllPath = Path.Combine(tmpDir, safeName);
+
+                // 校验 PE 头 (MZ)，仅读头 2 字节
+                using var readStream = dll.OpenReadStream();
+                var header = new byte[2];
+                if (await readStream.ReadAsync(header.AsMemory(0, 2)) != 2 || header[0] != 0x4D || header[1] != 0x5A)
+                {
+                    _logger.LogWarning("添加插件失败：PE 头校验失败 FileName={FileName}", dll.FileName);
+                    return BadRequest(ApiResponse.Error(400, "文件不是有效的 DLL 格式"));
+                }
+
+                // 校验通过，从头写入文件
+                using (var writeStream = new FileStream(dllPath, FileMode.Create))
+                {
+                    await writeStream.WriteAsync(header.AsMemory(0, 2));
+                    await readStream.CopyToAsync(writeStream);
+                }
+
+                var jsonPath = Path.ChangeExtension(dllPath, ".json");
+                using (var stream = new FileStream(jsonPath, FileMode.Create))
+                    await json.CopyToAsync(stream);
+
+                var success = await Task.Run(() => PluginManagerProxy.Instance.AddPlugin(dllPath));
+                if (success)
+                {
+                    _logger.LogInformation("添加插件成功: {FileName}", dll.FileName);
+                    var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x =>
+                        string.Equals(Path.GetFileName(x.PluginBasePath), safeName, StringComparison.OrdinalIgnoreCase));
+                    return Ok(ApiResponse.Ok(plugin != null ? PluginDto.CreateFromPlugin(plugin) : null));
+                }
+                else
+                {
+                    _logger.LogError("添加插件失败: AddPlugin 返回 false FileName={FileName}", dll.FileName);
+                    return BadRequest(ApiResponse.Error(400, "添加插件失败，查看日志排查原因"));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "添加插件异常: FileName={FileName}", dll.FileName);
+                return StatusCode(500, ApiResponse.Error(500, $"由于服务器内部错误，添加插件失败: {e.Message}"));
+            }
+            finally
+            {
+                try { Directory.Delete(tmpDir, true); } catch { }
+            }
         }
 
         [HttpPost("reload-all")]
