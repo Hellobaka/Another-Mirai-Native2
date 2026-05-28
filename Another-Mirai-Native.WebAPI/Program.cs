@@ -19,6 +19,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization.Metadata;
+using System.Threading.RateLimiting;
 
 namespace Another_Mirai_Native.WebAPI
 {
@@ -119,7 +120,8 @@ namespace Another_Mirai_Native.WebAPI
             }
 
             builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-                p.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(_ => true)));
+                p.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(_ => true)
+                .WithExposedHeaders("Retry-After")));
 
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -154,11 +156,20 @@ namespace Another_Mirai_Native.WebAPI
             builder.Services.AddRateLimiter(options =>
             {
                 // 登录接口限流，防止暴力破解密码
-                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.OnRejected = async (context, ct) =>
+                {
+                    var retryAfter = (int)TimeSpan.FromMinutes(1).TotalSeconds;
+                    if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan ts))
+                    {
+                        retryAfter = (int)ts.TotalSeconds;
+                    }
+                    context.HttpContext.Response.Headers.RetryAfter = retryAfter.ToString();
+                    context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                };
                 options.AddPolicy("login", context =>
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-                    return System.Threading.RateLimiting.RateLimitPartition.GetSlidingWindowLimiter(ip, _ => new System.Threading.RateLimiting.SlidingWindowRateLimiterOptions
+                    return RateLimitPartition.GetSlidingWindowLimiter(ip, _ => new System.Threading.RateLimiting.SlidingWindowRateLimiterOptions
                     {
                         PermitLimit = 5,
                         Window = TimeSpan.FromMinutes(1),
