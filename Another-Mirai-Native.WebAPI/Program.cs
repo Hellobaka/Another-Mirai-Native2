@@ -77,6 +77,7 @@ namespace Another_Mirai_Native.WebAPI
                                 new(typeof(Reply), (int)MessageItemType.Reply),
                                 new(typeof(Text),  (int)MessageItemType.Text),
                                 new(typeof(FileItem),  (int)MessageItemType.File),
+                                new(typeof(Unknown),  (int)MessageItemType.Unknown),
                             }
                         };
                     }

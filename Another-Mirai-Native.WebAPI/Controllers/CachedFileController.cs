@@ -14,6 +14,27 @@ namespace Another_Mirai_Native.WebAPI.Controllers
     {
         private readonly ILogger<CachedFileController> _logger = logger;
 
+        private string? Token
+        {
+            get
+            {
+                var queryToken = HttpContext.Request.Query["access_token"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(queryToken)) return queryToken;
+
+                var authHeader = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+                if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+                    return authHeader["Bearer ".Length..];
+
+                return null;
+            }
+        }
+
+        private string AppendAccessToken(string url)
+        {
+            var token = Token;
+            return token != null ? $"{url}?access_token={Uri.EscapeDataString(token)}" : url;
+        }
+
         [HttpGet("{type}/{*file}")]
         [EndpointSummary("获取缓存文件")]
         [EndpointDescription("若 file 含 '.' 则按文件名直接返回文件；否则按哈希查询缓存后重定向到文件路径")]
@@ -34,7 +55,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             if (file.Contains('.'))
             {
                 _logger.LogInformation("按文件名重定向: /external/{FileType}/{File}", fileType, file);
-                return Redirect($"/external/{fileType}/{EscapePath(file)}");
+                return Redirect(AppendAccessToken($"/external/{fileType}/{EscapePath(file)}"));
             }
 
             var cache = CachedFile.GetCachedFileByHash(fileType, file);
@@ -45,7 +66,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             }
 
             _logger.LogInformation("按哈希重定向: Hash={Hash}, FileName={FileName}", file, cache.FileName);
-            return Redirect($"/external/{fileType}/cached/{EscapePath(cache.FileName)}");
+            return Redirect(AppendAccessToken($"/external/{fileType}/cached/{EscapePath(cache.FileName)}"));
         }
 
         private static string EscapePath(string path)

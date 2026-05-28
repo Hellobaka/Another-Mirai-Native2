@@ -229,6 +229,7 @@ namespace Another_Mirai_Native
 
                         default:
                             // 无效的CQ码
+                            messageChain.Add(new Unknown(item));
                             continue;
                     }
                 }
