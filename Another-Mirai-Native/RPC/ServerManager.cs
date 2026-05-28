@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model.Enums;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
 
 namespace Another_Mirai_Native.RPC

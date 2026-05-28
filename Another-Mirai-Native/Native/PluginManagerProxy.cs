@@ -238,7 +238,7 @@ namespace Another_Mirai_Native.Native
                     item.Load();
                 }
             }
-            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
+            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Count(x => x.HasConnection)} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
             sw = Stopwatch.StartNew();
             if (AppConfig.Instance.ParallelPluginLoad)
             {
@@ -306,6 +306,7 @@ namespace Another_Mirai_Native.Native
                 }
                 success = success && InvokeEvent(plugin, PluginEventType.StartUp) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
+                plugin.ExitFlag = false;
                 RequestWaiter.TriggerByKey($"PluginEnabled_{plugin.AppInfo.name}");
                 if (!success)
                 {
@@ -318,6 +319,7 @@ namespace Another_Mirai_Native.Native
                 {
                     return true;
                 }
+                plugin.ExitFlag = true;
                 success = InvokeEvent(plugin, PluginEventType.Disable) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 0);
                 plugin.KillProcess();
@@ -349,8 +351,11 @@ namespace Another_Mirai_Native.Native
             }
             plugin.Enabled = false;
             OnPluginEnableChanged?.Invoke(plugin);
-            LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
             RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
+            if (!plugin.ExitFlag)
+            {
+                LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
+            }
 
             if (plugin.ExitFlag is false && AppConfig.Instance.RestartPluginIfDead)
             {
