@@ -299,12 +299,50 @@ The framework auto-discovers ALL public classes that inherit `PluginBase` or `Co
 - **NEVER** manually instantiate these classes yourself (e.g., `new Commands()`, `new MyHandler()`). The framework creates and owns these instances; user-created instances are disconnected from the event pipeline and waste memory.
 - If you need to share state or services across handlers, use static fields/properties or a singleton pattern, NOT constructor injection.
 
+### DynamicCommand: Runtime-modifiable triggers
+
+Use `[DynamicCommand]` when you need to change a command's trigger template at runtime without restarting the plugin. Instead of a hardcoded template string, you pass `nameof(SomeProperty)` — the framework reads the current property/field value on every dispatch.
+
+```csharp
+public class Commands : CommandHandlerBase
+{
+    // Modifiable at runtime
+    public string PingTrigger { get; set; } = "/ping";
+    public string RollPattern { get; set; } = @"^/roll\s+(?<dice>\d+d\d+)$";
+
+    [DynamicCommand(nameof(PingTrigger), MatchMode.FullMatch)]
+    public void Ping(GroupMessageContext e)
+    {
+        e.SendMessage("pong");
+    }
+
+    [DynamicCommand(nameof(RollPattern), MatchMode.Regex)]
+    public Task<EventHandleResult> Roll(GroupMessageContext e, string dice)
+    {
+        // parse dice...
+        return Task.FromResult(EventHandleResult.Block);
+    }
+}
+
+// Hot-modify at runtime:
+// commands.PingTrigger = "/p";
+// commands.RollPattern = @"^/r\s+(?<dice>\d+d\d+)$";
+// Changes take effect on the next message — no restart needed.
+```
+
+**Rules:**
+- `memberName` must reference a `string`-typed property or field on the **same class** (including non-public).
+- The member's current value is read via reflection on every message dispatch, so changes take effect immediately.
+- If the named member doesn't exist or isn't a string, the command silently never matches (no exception thrown).
+- You can mix `[Command]` and `[DynamicCommand]` on the same class, even on the same method.
+- `ClearCommandCache()` invalidates the cached reflection data, forcing a rescan on next dispatch. Use this if you've dynamically added/removed methods (rare).
+
 ### Override fallback
 
 ```csharp
 protected override Task<EventHandleResult> OnNoMatchAsync(GroupMessageContext e, CancellationToken ct)
 {
-    // Called when no [Command] matches
+    // Called when no [Command] or [DynamicCommand] matches
     return base.OnNoMatchAsync(e, ct);
 }
 ```
@@ -657,7 +695,7 @@ When adding NuGet packages beyond the SDK, verify:
 
 ```
 Another_Mirai_Native.Abstractions                    PluginBase, CommandHandlerBase
-Another_Mirai_Native.Abstractions.Attributes         PluginInfo, Command, EventPriority, Menu
+Another_Mirai_Native.Abstractions.Attributes         PluginInfo, Command, DynamicCommand, EventPriority, Menu
 Another_Mirai_Native.Abstractions.Context             *Context classes (GroupMessageContext, etc.)
 Another_Mirai_Native.Abstractions.Enums               CQFace, EventHandleResult, MatchMode, MessageScope, etc.
 Another_Mirai_Native.Abstractions.Handlers            I*Handler interfaces
