@@ -1,7 +1,7 @@
 [
   {
     "AssemblyName": "Another-Mirai-Native.Abstractions",
-    "Version": "1.2.1.0",
+    "Version": "1.2.2.0",
     "PublicToken": "null"
   },
   {
@@ -128,6 +128,11 @@
     "AssemblyName": "Oscar.Data.SqlClient",
     "Version": "4.0.4.0",
     "PublicToken": "c769aeeb30786f39"
+  },
+  {
+    "AssemblyName": "PropertyChanged",
+    "Version": "4.1.0.0",
+    "PublicToken": "ee3ee20bcf148ddd"
   },
   {
     "AssemblyName": "QrCodeGenerator",

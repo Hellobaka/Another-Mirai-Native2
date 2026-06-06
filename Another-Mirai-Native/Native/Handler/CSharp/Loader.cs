@@ -86,6 +86,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                     AppInfo = ParseNativePluginInfo();
                     PluginName = AppInfo.name;
                     LogHelper.Info("加载 C# 插件", $"{PluginName}, 加载成功");
+                    if (AppConfig.Instance.DebugMode)
+                    {
+                        LogHelper.Info("加载 C# 插件", $"插件使用的 SDK 版本为 {pluginSdkVersion}");
+                        Abstractions.Helper.OnInternalLog += Helper_OnInternalLog;
+                    }
                     return true;
                 }
                 else
@@ -362,6 +367,11 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 }
             }
             return r.ToArray();
+        }
+
+        private void Helper_OnInternalLog(string log)
+        {
+            LogHelper.LocalDebug("SDK", log);
         }
 
         #region 事件分发

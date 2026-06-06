@@ -4,6 +4,7 @@ using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Handlers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -187,7 +188,9 @@ namespace Another_Mirai_Native.Abstractions
         /// <returns>匹配成功时返回方法调用的 <see cref="Task{EventHandleResult}"/>；匹配失败时返回 <see langword="null"/>。</returns>
         private Task<EventHandleResult>? TryDispatch(CachedCommand cmd, string messageText, GroupMessageContext? groupCtx, PrivateMessageContext? privateCtx, CancellationToken ct)
         {
+            Helper.InternalLog($"尝试匹配指令：{messageText}");
             string template = cmd.GetTemplate(this);
+            Helper.InternalLog($"获取到模板：{template}");
             Match? regexMatch = null;
 
             if (cmd.MatchMode == MatchMode.Regex)
@@ -205,11 +208,13 @@ namespace Another_Mirai_Native.Abstractions
                     return null;
                 }
             }
+            Helper.InternalLog($"匹配完成");
 
             ParameterInfo[] parameters = cmd.Method.GetParameters();
 
             if (!TryBuildArgs(parameters, regexMatch, groupCtx, privateCtx, ct, messageText, out object[] args))
             {
+                Helper.InternalLog($"构建参数列表失败");
                 return null;
             }
 
@@ -251,7 +256,7 @@ namespace Another_Mirai_Native.Abstractions
                     // 与特性设置的Scope不匹配
                     if (groupCtx == null)
                     {
-                        return false;
+                        continue;
                     }
 
                     args[i] = groupCtx;
@@ -262,7 +267,7 @@ namespace Another_Mirai_Native.Abstractions
                     // 与特性设置的Scope不匹配
                     if (privateCtx == null)
                     {
-                        return false;
+                        continue;
                     }
 
                     args[i] = privateCtx;
@@ -282,12 +287,13 @@ namespace Another_Mirai_Native.Abstractions
                 if (regexMatch == null)
                 {
                     // 非 Regex 模式
-                    return false;
+                    continue;
                 }
 
                 string? paramName = param.Name;
                 if (paramName == null)
                 {
+                    Helper.InternalLog($"获取到的第 {i + 1} 个参数名称为空");
                     return false;
                 }
 
@@ -295,7 +301,7 @@ namespace Another_Mirai_Native.Abstractions
                 Group group = regexMatch.Groups[paramName];
                 if (!group.Success)
                 {
-                    return false;
+                    continue;
                 }
 
                 try
@@ -329,7 +335,9 @@ namespace Another_Mirai_Native.Abstractions
         /// <returns>表示指令处理结果的 <see cref="Task{EventHandleResult}"/>。</returns>
         private Task<EventHandleResult> InvokeMethod(MethodInfo method, object[] args)
         {
+            Helper.InternalLog($"开始调用：{method.Name}；参数：{string.Join(",", args)}");
             object? returnValue = method.Invoke(this, args);
+            Helper.InternalLog($"调用完成，返回结果：{returnValue}");
 
             if (method.ReturnType == typeof(void))
             {
@@ -403,6 +411,7 @@ namespace Another_Mirai_Native.Abstractions
                     {
                         ValidateCommandReturnType(method);
                         commandCache.Add(new CachedCommand(method, attr.MatchMode, attr.Scope, attr.Template));
+                        Helper.InternalLog($"发现指令方法：{type.Name}.{method.Name}，匹配模式：{attr.MatchMode}，作用域：{attr.Scope}，模板：{attr.Template}");
                     }
 
                     foreach (DynamicCommandAttribute attr in method.GetCustomAttributes(typeof(DynamicCommandAttribute), true))
@@ -410,6 +419,7 @@ namespace Another_Mirai_Native.Abstractions
                         ValidateCommandReturnType(method);
                         var getter = ResolveMemberGetter(type, attr.MemberName);
                         commandCache.Add(new CachedCommand(method, attr.MatchMode, attr.Scope, attr.MemberName, getter));
+                        Helper.InternalLog($"发现动态指令方法：{type.Name}.{attr.MemberName}，匹配模式：{attr.MatchMode}，作用域：{attr.Scope}");
                     }
                 }
 
