@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         public IActionResult ListPlugins()
         {
             _logger.LogInformation("获取插件列表");
-            var plugins = PluginManagerProxy.Proxies.Select(PluginDto.CreateFromPlugin).ToList();
+            var plugins = PluginManagerProxy.Proxies.Select(x => PluginDto.CreateFromPlugin(x, false)).ToList();
             _logger.LogInformation("获取插件列表成功，共 {Count} 个插件", plugins.Count);
             return Ok(ApiResponse.Ok(plugins));
         }
@@ -152,8 +152,13 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 _logger.LogWarning("调用插件菜单失败：菜单名称为空");
                 return BadRequest(ApiResponse.Error(400, "菜单名称不能为空"));
             }
-
-            _ = Task.Run(() => PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, menuName));
+            var functionName = plugin.AppInfo.menu.FirstOrDefault(x => x.name == menuName)?.function;
+            if (string.IsNullOrWhiteSpace(functionName))
+            {
+                _logger.LogWarning("调用插件菜单失败：菜单对应的函数为空");
+                return BadRequest(ApiResponse.Error(400, "菜单对应的函数为空"));
+            }
+            _ = Task.Run(() => PluginManagerProxy.Instance.InvokeEvent(plugin, PluginEventType.Menu, functionName));
             _logger.LogInformation("调用插件菜单完成: AuthCode={AuthCode}, MenuName={MenuName}", authCode, menuName);
             return Ok(ApiResponse.Ok());
         }
@@ -215,12 +220,16 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     await json.CopyToAsync(stream);
 
                 var success = await Task.Run(() => PluginManagerProxy.Instance.AddPlugin(dllPath));
-                if (success)
+                if (success.Success)
                 {
                     _logger.LogInformation("添加插件成功: {FileName}", dll.FileName);
                     var plugin = PluginManagerProxy.Proxies.FirstOrDefault(x =>
                         string.Equals(Path.GetFileName(x.PluginBasePath), safeName, StringComparison.OrdinalIgnoreCase));
-                    return Ok(ApiResponse.Ok(plugin != null ? PluginDto.CreateFromPlugin(plugin) : null));
+                    return Ok(ApiResponse.Ok(new
+                    {
+                        Plugin = plugin != null ? PluginDto.CreateFromPlugin(plugin) : null,
+                        success.Existed
+                    }));
                 }
                 else
                 {
