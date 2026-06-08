@@ -34,9 +34,13 @@ namespace Another_Mirai_Native.WebAPI.Models
         [Description("插件类型")]
         public PluginType PluginType { get; set; }
 
-        public static PluginDto CreateFromPlugin(CQPluginProxy plugin)
+        public static PluginDto CreateFromPlugin(CQPluginProxy plugin, bool simple = false)
         {
-            return new PluginDto
+            return simple ? new PluginDto
+            {
+                PluginId = plugin.PluginDisplayId,
+                PluginName = plugin.PluginName,
+            } : new PluginDto
             {
                 AuthCode = plugin.AppInfo.AuthCode,
                 Enabled = plugin.Enabled,

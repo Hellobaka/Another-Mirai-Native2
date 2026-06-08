@@ -74,12 +74,12 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void CQPImplementation_OnGroupMessageSend(int msgId, long group, string msg, CQPluginProxy plugin)
         {
-            Hub.Clients.All.SendAsync(SignalREvents.OnGroupMessageSend, new { msgId, group, msg, plugin = PluginDto.CreateFromPlugin(plugin) });
+            Hub.Clients.All.SendAsync(SignalREvents.OnGroupMessageSend, new { msgId, group, msg, plugin = PluginDto.CreateFromPlugin(plugin, true) });
         }
 
         private void CQPImplementation_OnPrivateMessageSend(int msgId, long qq, string msg, CQPluginProxy plugin)
         {
-            Hub.Clients.All.SendAsync(SignalREvents.OnPrivateMessageSend, new { msgId, qq, msg, plugin = PluginDto.CreateFromPlugin(plugin) });
+            Hub.Clients.All.SendAsync(SignalREvents.OnPrivateMessageSend, new { msgId, qq, msg, plugin = PluginDto.CreateFromPlugin(plugin, true) });
         }
 
         private void PluginManagerProxy_OnPrivateMsg(int msgId, long qq, string msg, DateTime time)
