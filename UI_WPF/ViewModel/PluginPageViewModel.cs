@@ -210,9 +210,14 @@ namespace Another_Mirai_Native.UI.ViewModel
                 DialogHelper.ShowSimpleDialog("哎呀", "与插件文件同名的 JSON 文件不存在，无法添加插件");
                 return;
             }
-            if (!PluginManagerProxy.Instance.AddPlugin(path))
+            var (Success, Existed) = PluginManagerProxy.Instance.AddPlugin(path);
+            if (!Success)
             {
                 DialogHelper.ShowSimpleDialog("哎呀", "添加失败了，查看日志排查原因");
+            }
+            else if (Existed)
+            {
+                DialogHelper.ShowSimpleDialog("嗯嗯", "添加成功了，重载插件来使插件更新");
             }
         }
 
