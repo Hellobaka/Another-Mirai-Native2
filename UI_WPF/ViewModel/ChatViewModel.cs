@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Interop;
@@ -33,6 +34,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             Instance = this;
             PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
+            ChatHistoryHelper.OnUnreadCountChanged += OnUnreadCountChanged;
         }
 
         public event Action<int>? OnMessageJumpRequested;
@@ -507,7 +509,14 @@ namespace Another_Mirai_Native.UI.ViewModel
                 item.GroupName = await ChatHistoryHelper.GetFriendNick(qq);
                 item.Detail = msg;
                 item.Time = DateTime.Now;
-                item.UnreadCount++;
+                if (SelectedChat != item)
+                {
+                    item.UnreadCount++;
+                }
+                else
+                {
+                    item.UnreadCount = 0;
+                }
             }
             else
             {
@@ -610,6 +619,20 @@ namespace Another_Mirai_Native.UI.ViewModel
                 {
                     item.Recalled = true;
                 }
+            }
+        }
+
+        private void OnUnreadCountChanged(long parentId, ChatHistoryType type, int unreadCount)
+        {
+            var chatType = type == ChatHistoryType.Group ? ChatType.QQGroup : ChatType.QQPrivate;
+            var item = ChatList.FirstOrDefault(x => x.Id == parentId && x.AvatarType == chatType);
+            if (item != null && item.UnreadCount != unreadCount)
+            {
+                Application.Current?.Dispatcher.BeginInvoke(() =>
+                {
+                    item.UnreadCount = unreadCount;
+                    item.InvokePropertyChanged("");
+                });
             }
         }
 

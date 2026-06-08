@@ -10,6 +10,7 @@ namespace Another_Mirai_Native.DB
 {
     public static class ChatHistoryHelper
     {
+        public static event Action<long, ChatHistoryType, int>? OnUnreadCountChanged;
         /// <summary>
         /// 好友信息列表缓存
         /// </summary>
@@ -581,6 +582,7 @@ namespace Another_Mirai_Native.DB
                     .SetColumns(x => x.UnreadCount == unreadCount)
                     .Where(x => x.ParentID == parentId && x.Type == type)
                     .ExecuteCommand();
+                OnUnreadCountChanged?.Invoke(parentId, type, unreadCount);
             }
             catch (Exception ex)
             {
