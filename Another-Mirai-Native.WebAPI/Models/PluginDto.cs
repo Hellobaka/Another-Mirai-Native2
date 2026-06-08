@@ -31,6 +31,9 @@ namespace Another_Mirai_Native.WebAPI.Models
         [Description("插件申请的 API 权限列表")]
         public int[] Auth { get; set; } = [];
 
+        [Description("插件暴露的菜单列表")]
+        public string[] Menu { get; set; } = [];
+
         [Description("插件类型")]
         public PluginType PluginType { get; set; }
 
@@ -50,6 +53,7 @@ namespace Another_Mirai_Native.WebAPI.Models
                 Description = plugin.Description,
                 Version = plugin.Version,
                 Auth = plugin.AppInfo.auth,
+                Menu = plugin.AppInfo.menu.Select(x => x.name).ToArray(),
                 PluginType = plugin.PluginType
             };
         }
