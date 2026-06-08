@@ -56,7 +56,7 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private string WorkingDirectory { get; set; } = Environment.CurrentDirectory;
 
-        private double DiskFreeSpaceInGB { get; set; }
+        private double DiskFreeUsedInGB { get; set; }
 
         private double DiskTotalSpaceInGB { get; set; }
 
@@ -91,7 +91,7 @@ namespace Another_Mirai_Native.WebAPI.Services
                 LoadedPluginCount = PluginManagerProxy.Proxies.Count(x => x.Enabled),
                 DotNetRuntimeVersion,
                 WorkingDirectory,
-                DiskFreeSpaceInGB,
+                DiskFreeUsedInGB,
                 DiskTotalSpaceInGB
             };
         }
@@ -216,7 +216,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             var currentDrive = DriveInfo.GetDrives().FirstOrDefault(d => d.IsReady && d.RootDirectory.FullName == Path.GetPathRoot(Environment.CurrentDirectory));
             if (currentDrive != null)
             {
-                DiskFreeSpaceInGB = currentDrive.AvailableFreeSpace / 1024.0 / 1024 / 1024;
+                DiskFreeUsedInGB = (currentDrive.TotalSize - currentDrive.AvailableFreeSpace) / 1024.0 / 1024 / 1024;
                 DiskTotalSpaceInGB = currentDrive.TotalSize / 1024.0 / 1024 / 1024;
             }
         }
