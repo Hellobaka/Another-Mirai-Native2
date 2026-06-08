@@ -35,8 +35,8 @@ namespace Another_Mirai_Native.WebAPI.Models
         [Description("当前工作目录")]
         public string WorkingDirectory { get; set; } = string.Empty;
 
-        [Description("当前磁盘剩余空间（GB）")]
-        public double DiskFreeSpaceInGB { get; set; }
+        [Description("当前磁盘已使用空间（GB）")]
+        public double DiskUsedSpaceInGB { get; set; }
 
         [Description("当前磁盘总空间（GB）")]
         public double DiskTotalSpaceInGB { get; set; }
