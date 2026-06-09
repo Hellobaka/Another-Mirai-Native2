@@ -61,7 +61,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             var cache = CachedFile.GetCachedFileByHash(fileType, file);
             if (cache == null)
             {
-                _logger.LogWarning("获取缓存文件失败：哈希对应的缓存文件不存在 Hash={Hash}", file);
+                _logger.LogInformation("获取缓存文件失败：哈希对应的缓存文件不存在 Hash={Hash}", file);
                 return NotFound(ApiResponse.Error(404, "找不到此哈希对应的缓存文件；可能未缓存或已删除"));
             }
 

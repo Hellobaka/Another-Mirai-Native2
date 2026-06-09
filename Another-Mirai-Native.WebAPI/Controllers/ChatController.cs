@@ -78,7 +78,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             var message = await Task.Run(() => ChatHistoryHelper.GetHistoriesByMsgId(parentId, messageId, chatHistoryType));
             if (message == null)
             {
-                _logger.LogWarning("查询单条消息失败：消息不存在 Type={Type}, ParentId={ParentId}, MessageId={MessageId}", chatHistoryType, parentId, messageId);
+                _logger.LogInformation("查询单条消息失败：消息不存在 Type={Type}, ParentId={ParentId}, MessageId={MessageId}", chatHistoryType, parentId, messageId);
                 return NotFound(ApiResponse.Error(404, "未找到对应的聊天消息"));
             }
             var dto = ChatHistoryDto.CreateFromChatHistoryEntity(message);
