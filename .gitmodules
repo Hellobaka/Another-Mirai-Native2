@@ -1,9 +1,6 @@
 [submodule "Protocol_LagrangeCore/Lagrange.Core"]
 	path = Protocols/Protocol_LagrangeCore/Lagrange.Core
 	url = https://github.com/LagrangeDev/Lagrange.Core.git
-[submodule "Another-Mirai-Native2.WebUI"]
-	path = Another-Mirai-Native.WebUI
-	url = https://github.com/Hellobaka/Another-Mirai-Native2.WebUI
 [submodule "Another-Mirai-Native.WebUI"]
 	path = Another-Mirai-Native.WebUI
 	url = https://github.com/Hellobaka/Another-Mirai-Native2.WebUI.git
