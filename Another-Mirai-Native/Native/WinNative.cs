@@ -30,15 +30,5 @@ namespace Another_Mirai_Native.Native
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr GetConsoleWindow();
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool GetSystemTimes(out FILETIME lpIdleTime, out FILETIME lpKernelTime, out FILETIME lpUserTime);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct FILETIME
-        {
-            public uint dwLowDateTime;
-            public uint dwHighDateTime;
-        }
     }
 }
