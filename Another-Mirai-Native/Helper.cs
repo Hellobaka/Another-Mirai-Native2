@@ -162,7 +162,7 @@ namespace Another_Mirai_Native
 
                         case MessageItemType.Record:
                             file = cqcode.Items["file"];
-                            isPath = file.Contains("\\");
+                            isPath = file.Contains(Path.DirectorySeparatorChar) || file.Contains(Path.AltDirectorySeparatorChar);
                             if (isPath)
                             {
                                 messageChain.Add(new Record(filePath: file));
