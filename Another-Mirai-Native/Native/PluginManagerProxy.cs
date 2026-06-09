@@ -209,10 +209,11 @@ namespace Another_Mirai_Native.Native
                 string pluginDllPath = Path.Combine(pluginPath, fileName);
                 string pluginJsonPath = Path.ChangeExtension(pluginDllPath, ".json");
 
+                bool alreadyExist = File.Exists(Path.Combine(pluginPath, fileName));
                 File.Copy(rawDllPath, pluginDllPath, true);
                 File.Copy(rawJsonPath, pluginJsonPath, true);
 
-                if (!File.Exists(Path.Combine(pluginPath, fileName)))
+                if (!alreadyExist)
                 {
                     // 移动至临时目录并加载插件元数据
                     CQPluginProxy plugin = new(pluginDllPath);
