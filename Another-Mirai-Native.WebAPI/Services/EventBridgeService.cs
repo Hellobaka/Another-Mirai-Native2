@@ -139,12 +139,12 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private void DashboardService_OnUsageUpdated()
         {
-            Hub.Clients.All.SendAsync(SignalREvents.UsageUpdated, DashboardService.GetUsages().MapTo<UsageData>());
+            Hub.Clients.All.SendAsync(SignalREvents.UsageUpdated, DashboardService.GetUsages());
         }
 
         private void DashboardService_OnPluginUsageUpdated()
         {
-            Hub.Clients.All.SendAsync(SignalREvents.PluginUsageUpdated, DashboardService.GetPluginUsages().MapTo<PluginUsageData>());
+            Hub.Clients.All.SendAsync(SignalREvents.PluginUsageUpdated, DashboardService.GetPluginUsages());
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -156,6 +156,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             LogHelper.LogStatusUpdated -= LogHelper_LogStatusUpdated;
 
             PluginManagerProxy.OnPluginEnableChanged -= PluginManagerProxy_OnPluginEnableChanged;
+            PluginManagerProxy.OnPluginProxyRemoved -= PluginManagerProxy_OnPluginProxyRemoved;
             PluginManagerProxy.OnPluginProxyAdded -= PluginManagerProxy_OnPluginProxyAdded;
             PluginManagerProxy.OnPluginProxyConnectStatusChanged -= PluginManagerProxy_OnPluginProxyConnectStatusChanged;
             PluginManagerProxy.OnGroupBan -= PluginManagerProxy_OnGroupBan;

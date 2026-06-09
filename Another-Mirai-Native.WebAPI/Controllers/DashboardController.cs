@@ -19,7 +19,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<DashboardInfoData>), StatusCodes.Status200OK)]
         public IActionResult GetBaseInformation()
         {
-            var data = DashboardService.GetBaseInformation().MapTo<DashboardInfoData>();
+            var data = DashboardService.GetBaseInformation();
             return Ok(ApiResponse.Ok(data));
         }
 
@@ -29,7 +29,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<UsageData>), StatusCodes.Status200OK)]
         public IActionResult GetUsage()
         {
-            var data = DashboardService.GetUsages().MapTo<UsageData>();
+            var data = DashboardService.GetUsages();
             return Ok(ApiResponse.Ok(data));
         }
 
@@ -39,7 +39,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse<PluginUsageData>), StatusCodes.Status200OK)]
         public IActionResult GetPluginUsage()
         {
-            var data = DashboardService.GetPluginUsages().MapTo<PluginUsageData>();
+            var data = DashboardService.GetPluginUsages();
             return Ok(ApiResponse.Ok(data));
         }
     }

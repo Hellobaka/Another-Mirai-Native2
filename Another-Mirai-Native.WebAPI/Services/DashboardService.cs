@@ -76,48 +76,48 @@ namespace Another_Mirai_Native.WebAPI.Services
             return Task.CompletedTask;
         }
 
-        public object GetBaseInformation()
+        public DashboardInfoData GetBaseInformation()
         {
             var startedSpan = DateTime.UtcNow - CurrentProcess.StartTime.ToUniversalTime();
-            return new
+            return new()
             {
-                OSVersion,
+                OSVersion = OSVersion,
                 CPU = $"{CPUName} @ {CPUBaseFrequency / 1000.0:f2} GHz",
-                TotalMemory,
+                TotalMemory = TotalMemory,
                 StartedTime = $"{(int)startedSpan.TotalDays:00}:{startedSpan.Hours:00}:{startedSpan.Minutes:00}:{startedSpan.Seconds:00}",
                 Version = AssemblyVersion,
                 CurrentBotQQ = AppConfig.Instance.CurrentQQ,
                 CurrentBotNick = AppConfig.Instance.CurrentNickName,
                 LoadedPluginCount = PluginManagerProxy.Proxies.Count(x => x.Enabled),
-                DotNetRuntimeVersion,
-                WorkingDirectory,
-                DiskUsedSpaceInGB,
-                DiskTotalSpaceInGB
+                DotNetRuntimeVersion = DotNetRuntimeVersion,
+                WorkingDirectory = WorkingDirectory,
+                DiskUsedSpaceInGB = DiskUsedSpaceInGB,
+                DiskTotalSpaceInGB = DiskTotalSpaceInGB
             };
         }
 
-        public object GetUsages()
+        public UsageData GetUsages()
         {
-            return new
+            return new()
             {
-                CPUUsage,
-                MemoryUsage,
+                CPUUsage = CPUUsage,
+                MemoryUsage = MemoryUsage,
                 UsedMemoryInMB = UsedMemory,
                 TotalMemoryInMB = TotalMemory
             };
         }
 
-        public object GetPluginUsages()
+        public PluginUsageData GetPluginUsages()
         {
             lock (UsageLock)
             {
-                return new
+                return new()
                 {
-                    TotalProcessMemory,
-                    TotalProcessCPU,
-                    AppConfig.Instance.ProcessedMessageCount,
-                    AppConfig.Instance.SentMessageCount,
-                    PluginUsages
+                    TotalProcessMemory = TotalProcessMemory,
+                    TotalProcessCPU = TotalProcessCPU,
+                    ProcessedMessageCount = AppConfig.Instance.ProcessedMessageCount,
+                    SentMessageCount = AppConfig.Instance.SentMessageCount,
+                    PluginUsages = PluginUsages
                 };
             }
         }
