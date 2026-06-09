@@ -139,3 +139,63 @@ public void Give(GroupMessageContext e, string userId, int itemId, int count)
 >     return await base.OnReceiveGroupMessageAsync(e, ct);
 > }
 > ```
+
+## 🔧 动态指令
+
+`[DynamicCommand]` 特性允许在插件运行时**热修改**指令触发词，无需重启插件。与 `[Command]` 不同的是，`[DynamicCommand]` 的匹配模板不是硬编码字符串，而是通过 `nameof` 指向当前类的某个 `string` 类型属性或字段。框架在每次收到消息时都会**重新读取**该成员的值来参与匹配。
+
+
+```csharp
+using Another_Mirai_Native.Abstractions;
+using Another_Mirai_Native.Abstractions.Attributes;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Enums;
+
+public class Command : CommandHandlerBase
+{
+    // 可运行时修改的属性
+    public string PingTrigger { get; set; } = "/ping";
+    public string RollPattern { get; set; } = @"^/roll\s+(?<dice>\d+d\d+)$";
+
+    // 动态指令：每次收到消息时读取 PingTrigger 的当前值作为匹配模板
+    [DynamicCommand(nameof(PingTrigger), MatchMode.FullMatch)]
+    public void Ping(GroupMessageContext e)
+    {
+        e.SendMessage("pong");
+    }
+
+    // 动态指令的正则模式
+    [DynamicCommand(nameof(RollPattern), MatchMode.Regex)]
+    public Task<EventHandleResult> Roll(GroupMessageContext e, string dice)
+    {
+        // 解析 dice ...
+        e.SendMessage($"Roll: {dice}");
+        return Task.FromResult(EventHandleResult.Block);
+    }
+}
+
+// 运行时修改触发词，下一次消息即生效：
+// command.PingTrigger = "/p";
+// command.RollPattern = @"^/r\s+(?<dice>\d+d\d+)$";
+```
+
+### 📌 特性参数
+
+`DynamicCommand` 特性同样支持三个参数：
+
+- 成员名称：通过 `nameof` 指定的属性或字段名，框架在每次消息调度时读取其当前值。
+- 匹配模式：与 `[Command]` 相同的五种匹配模式之一。
+- 指令范围：指定该指令可在哪些来源中生效（`MessageScope.All` / `Group` / `Private`）。
+
+```csharp
+[DynamicCommand(nameof(MyTrigger), MatchMode.StartWith, MessageScope.Group)]
+```
+
+### ⚙️ 规则与注意事项
+
+- 成员名称必须指向当前类上标记为`public`的 `string` 类型属性。
+- 若成员不存在或类型不是 `string`，该指令将静默跳过，永远不匹配。
+- 修改属性值后，**下一次收到消息时立即生效**。
+- `[Command]` 和 `[DynamicCommand]` 可以混合使用在同一个类或同一个方法上。
+- 方法返回值、方法参数等规则与 `[Command]` 完全一致。
+- `ClearCommandCache()` 可强制清空反射缓存，使下次调度时重新扫描所有指令方法。
