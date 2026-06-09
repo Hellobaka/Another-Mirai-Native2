@@ -147,7 +147,7 @@ namespace Another_Mirai_Native
                         case MessageItemType.Image:
                             string file = cqcode.Items["file"];
                             bool isFlash = cqcode.Items.ContainsKey("flash") && cqcode.Items["flash"] == "true";
-                            bool isPath = file.Contains("\\");
+                            bool isPath = file.Contains(Path.DirectorySeparatorChar) || file.Contains(Path.AltDirectorySeparatorChar);
                             bool isEmoji = cqcode.Items.ContainsKey("sub_type") && cqcode.Items["sub_type"] == "1";
                             if (isPath)
                             {
