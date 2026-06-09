@@ -321,8 +321,8 @@ namespace Protocol_NoConnection
                     SendValue.Text += $"[CQ:record,file={Path.GetFileNameWithoutExtension(path)}] ";
                     continue;
                 }
-                string imgId = await ChatHistoryHelper.CacheMessageFile(CachedFileType.Record, $"{PicServer.Instance.ListenURL}{path}");
-                SendValue.Text += $"[CQ:record,file={imgId}] ";
+                string recordId = await ChatHistoryHelper.CacheMessageFile(CachedFileType.Record, $"{PicServer.Instance.ListenURL}{path}");
+                SendValue.Text += $"[CQ:record,file={recordId}] ";
             }
         }
     }
