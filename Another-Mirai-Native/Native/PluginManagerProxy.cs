@@ -19,6 +19,8 @@ namespace Another_Mirai_Native.Native
 
         public static event Action<CQPluginProxy> OnPluginProxyAdded;
 
+        public static event Action<CQPluginProxy> OnPluginProxyRemoved;
+
         public static event Action<CQPluginProxy> OnPluginProxyConnectStatusChanged;
 
         public static event Action<string, Dictionary<string, object>> OnTestInvoked;
@@ -139,6 +141,10 @@ namespace Another_Mirai_Native.Native
                 LogHelper.WriteLog(LogLevel.Warning, "AMN框架", "插件逻辑处理", "插件加载中...", "x 不处理");
                 return null;
             }
+            if (eventType == PluginEventType.GroupMsg || eventType == PluginEventType.PrivateMsg)
+            {
+                AppConfig.Instance.ProcessedMessageCount++;
+            }
             foreach (var item in Proxies.Where(x => x.Enabled && x.AppInfo._event.Any(o => o.type == (int)eventType))
                 .OrderByDescending(x => x.AppInfo._event.First(o => o.type == (int)eventType).priority))
             {
@@ -163,7 +169,7 @@ namespace Another_Mirai_Native.Native
             Stopwatch sw = Stopwatch.StartNew();
             foreach (var item in Directory.GetFiles(@"data\plugins", "*.dll"))
             {
-                if (File.Exists(item.Replace(".dll", ".json")))
+                if (File.Exists(Path.ChangeExtension(item, ".json")))
                 {
                     CQPluginProxy plugin = new(item);
                     if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
@@ -173,9 +179,68 @@ namespace Another_Mirai_Native.Native
                         plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
                     }
                 }
-            };
+            }
+            ;
             LogHelper.Info("加载插件", "加载完成，启用插件...", $"√ {sw.ElapsedMilliseconds} ms");
             return true;
+        }
+
+        public (bool Success, bool Existed) AddPlugin(string filePath)
+        {
+            try
+            {
+                string rawDllPath = Path.GetFullPath(filePath);
+                string rawJsonPath = Path.ChangeExtension(rawDllPath, ".json");
+                string fileName = Path.GetFileName(rawDllPath);
+                // 检查dll与json文件是否存在
+                if (!File.Exists(rawDllPath) || !File.Exists(rawJsonPath))
+                {
+                    LogHelper.Error("添加插件", "添加插件失败，由于期望加载的文件或其对应的json文件不存在");
+                    return (false, false);
+                }
+                // 检查路径是否重复
+                if (Proxies.Any(x => x.PluginBasePath == rawDllPath))
+                {
+                    LogHelper.Error("添加插件", "添加插件失败，由于已加载相同路径的文件");
+                    return (false, false);
+                }
+                // 若未处于plugins文件夹则移动至plugins文件夹下
+                string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "plugins");
+                string pluginDllPath = Path.Combine(pluginPath, fileName);
+                string pluginJsonPath = Path.ChangeExtension(pluginDllPath, ".json");
+
+                bool alreadyExist = File.Exists(Path.Combine(pluginPath, fileName));
+                File.Copy(rawDllPath, pluginDllPath, true);
+                File.Copy(rawJsonPath, pluginJsonPath, true);
+
+                if (!alreadyExist)
+                {
+                    // 移动至临时目录并加载插件元数据
+                    CQPluginProxy plugin = new(pluginDllPath);
+                    if (plugin.MovePluginToTmpDir() && plugin.LoadAppInfo())
+                    {
+                        Proxies.Add(plugin);
+                        OnPluginProxyAdded?.Invoke(plugin);
+                        plugin.OnPluginProcessExited += Plugin_OnPluginProcessExited;
+                        return (true, false);
+                    }
+                    else
+                    {
+                        LogHelper.Error("添加插件", "添加插件失败，移动文件或加载插件元数据时发生错误");
+                        return (false, false);
+                    }
+                }
+                else
+                {
+                    // 文件已存在于plugins目录，下次重载后会读取插件元数据
+                    return (true, true);
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error("添加插件", $"添加插件失败，由于发生意料之外的异常：{e}");
+                return (false, false);
+            }
         }
 
         public void ReloadAllPlugins()
@@ -190,7 +255,13 @@ namespace Another_Mirai_Native.Native
                     item.KillProcess();
                 }
                 // 清空插件列表并重新加载
-                Proxies.Clear();
+                int count = Proxies.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    var item = Proxies[0];
+                    OnPluginProxyRemoved?.Invoke(item);
+                    Proxies.Remove(item);
+                }
                 if (LoadPlugins())
                 {
                     EnablePluginByConfig();
@@ -226,7 +297,7 @@ namespace Another_Mirai_Native.Native
                     item.Load();
                 }
             }
-            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Where(x => x.HasConnection).Count()} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
+            LogHelper.Info("启用插件", $"插件启用完成，共加载了 {Proxies.Count(x => x.HasConnection)} 个插件，开始调用启动事件...", $"√ {sw.ElapsedMilliseconds} ms");
             sw = Stopwatch.StartNew();
             if (AppConfig.Instance.ParallelPluginLoad)
             {
@@ -294,6 +365,7 @@ namespace Another_Mirai_Native.Native
                 }
                 success = success && InvokeEvent(plugin, PluginEventType.StartUp) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Enable) == 0);
+                plugin.ExitFlag = false;
                 RequestWaiter.TriggerByKey($"PluginEnabled_{plugin.AppInfo.name}");
                 if (!success)
                 {
@@ -306,6 +378,7 @@ namespace Another_Mirai_Native.Native
                 {
                     return true;
                 }
+                plugin.ExitFlag = true;
                 success = InvokeEvent(plugin, PluginEventType.Disable) == 0;
                 success = success && (InvokeEvent(plugin, PluginEventType.Exit) == 0);
                 plugin.KillProcess();
@@ -337,8 +410,11 @@ namespace Another_Mirai_Native.Native
             }
             plugin.Enabled = false;
             OnPluginEnableChanged?.Invoke(plugin);
-            LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
             RequestWaiter.ResetSignalByProcess(plugin.PluginProcess.Id);// 由于进程退出，中断所有由此进程等待的请求
+            if (!plugin.ExitFlag)
+            {
+                LogHelper.Info("插件进程监控", $"{plugin.PluginName} 进程不存在");
+            }
 
             if (plugin.ExitFlag is false && AppConfig.Instance.RestartPluginIfDead)
             {

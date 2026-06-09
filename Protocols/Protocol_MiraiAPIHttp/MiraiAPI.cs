@@ -27,6 +27,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
         }
 
+        public bool IsDisposed { get; set; }
+
         public string Name { get; set; } = "MiraiAPIHttp";
 
         public int CanSendImage()
@@ -42,6 +44,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public bool Connect()
         {
             ExitFlag = false;
+            IsDisposed = false;
             GetConnectionConfig();
             return ConnectEventServer() && ConnectMessageServer();
         }
@@ -61,6 +64,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
         public bool Disconnect()
         {
             ExitFlag = true;
+            IsDisposed = true;
             SessionKey_Event = "";
             SessionKey_Message = "";
             EventConnection.Close();

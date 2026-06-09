@@ -163,6 +163,7 @@ namespace Protocol_NoConnection
             MessageHistories = CommonConfig.GetConfig("MessageHistories", @"conf/Test.json", new List<string>());
 
             PicButton.Enabled = PicServer.Instance?.Running ?? false;
+            AudioButton.Enabled = PicServer.Instance?.Running ?? false;
             InitializeEventTester();
             SendValue.Focus();
         }

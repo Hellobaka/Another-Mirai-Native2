@@ -39,6 +39,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
             }
         }
 
+        public bool IsDisposed { get; set; }
+
         public string Name { get; set; } = "OneBot v11";
 
         private bool DiscardOfflineMessage { get; set; } = true;
@@ -78,6 +80,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         public bool Connect()
         {
             ExitFlag = false;
+            IsDisposed = false;
             GetConnectionConfig();
             return ConnectAPIServer() && ConnectEventServer();
         }
@@ -93,6 +96,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         public bool Disconnect()
         {
             ExitFlag = true;
+            IsDisposed = true;
             APIClient.Close();
             EventClient.Close();
             StopAPIReconnectLoop();

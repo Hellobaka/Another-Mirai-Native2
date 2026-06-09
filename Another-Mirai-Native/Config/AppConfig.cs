@@ -107,6 +107,10 @@ namespace Another_Mirai_Native.Config
 
         public bool ParallelPluginLoad { get; set; }
 
+        public int ProcessedMessageCount { get; set; }
+
+        public int SentMessageCount { get; set; }
+
         public void LoadConfig()
         {
             PluginExitWhenCoreExit = GetConfig("PluginExitWhenCoreExit", true);

@@ -9,6 +9,10 @@ namespace Another_Mirai_Native
 {
     public class ProtocolManager
     {
+        public static event Action<(string nick, long qq)> CurrentBotInfoChanged;
+        public static event Action<IProtocol> CurrentProtocolOnline;
+        public static event Action<IProtocol> CurrentProtocolOffline;
+
         public static ProtocolManager Instance { get; set; }
 
         public static List<IProtocol> Protocols { get; set; } = new();
@@ -62,6 +66,7 @@ namespace Another_Mirai_Native
                     OfflineHandled = false;
                     protocol.OnProtocolOnline += Protocol_OnProtocolOnline;
                     protocol.OnProtocolOffline += Protocol_OnProtocolOffline;
+                    CurrentBotInfoChanged?.Invoke((AppConfig.Instance.CurrentNickName, AppConfig.Instance.CurrentQQ));
                     ServerManager.Server.NotifyCurrentQQChanged(AppConfig.Instance.CurrentQQ, AppConfig.Instance.CurrentNickName);
                     flag = true;
                 }
@@ -88,6 +93,7 @@ namespace Another_Mirai_Native
             OfflineHandled = true;
             OfflineActionCancel = new();
             new Debouncer(OfflineActionCancel).Debounce(OfflineAction, TimeSpan.FromSeconds(AppConfig.Instance.ActionAfterOfflineSeconds));
+            CurrentProtocolOffline?.Invoke(CurrentProtocol);
         }
 
         private void Protocol_OnProtocolOnline()
@@ -95,6 +101,7 @@ namespace Another_Mirai_Native
             LastOnlineTime = DateTime.Now;
             OfflineActionCancel?.Cancel();
             OfflineHandled = false;
+            CurrentProtocolOnline?.Invoke(CurrentProtocol);
         }
 
         public bool Start(string protocolName)

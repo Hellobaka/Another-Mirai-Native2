@@ -299,12 +299,50 @@ The framework auto-discovers ALL public classes that inherit `PluginBase` or `Co
 - **NEVER** manually instantiate these classes yourself (e.g., `new Commands()`, `new MyHandler()`). The framework creates and owns these instances; user-created instances are disconnected from the event pipeline and waste memory.
 - If you need to share state or services across handlers, use static fields/properties or a singleton pattern, NOT constructor injection.
 
+### DynamicCommand: Runtime-modifiable triggers
+
+Use `[DynamicCommand]` when you need to change a command's trigger template at runtime without restarting the plugin. Instead of a hardcoded template string, you pass `nameof(SomeProperty)` — the framework reads the current property/field value on every dispatch.
+
+```csharp
+public class Commands : CommandHandlerBase
+{
+    // Modifiable at runtime
+    public string PingTrigger { get; set; } = "/ping";
+    public string RollPattern { get; set; } = @"^/roll\s+(?<dice>\d+d\d+)$";
+
+    [DynamicCommand(nameof(PingTrigger), MatchMode.FullMatch)]
+    public void Ping(GroupMessageContext e)
+    {
+        e.SendMessage("pong");
+    }
+
+    [DynamicCommand(nameof(RollPattern), MatchMode.Regex)]
+    public Task<EventHandleResult> Roll(GroupMessageContext e, string dice)
+    {
+        // parse dice...
+        return Task.FromResult(EventHandleResult.Block);
+    }
+}
+
+// Hot-modify at runtime:
+// commands.PingTrigger = "/p";
+// commands.RollPattern = @"^/r\s+(?<dice>\d+d\d+)$";
+// Changes take effect on the next message — no restart needed.
+```
+
+**Rules:**
+- `memberName` must reference a `string`-typed property or field on the **same class** (including non-public).
+- The member's current value is read via reflection on every message dispatch, so changes take effect immediately.
+- If the named member doesn't exist or isn't a string, the command silently never matches (no exception thrown).
+- You can mix `[Command]` and `[DynamicCommand]` on the same class, even on the same method.
+- `ClearCommandCache()` invalidates the cached reflection data, forcing a rescan on next dispatch. Use this if you've dynamically added/removed methods (rare).
+
 ### Override fallback
 
 ```csharp
 protected override Task<EventHandleResult> OnNoMatchAsync(GroupMessageContext e, CancellationToken ct)
 {
-    // Called when no [Command] matches
+    // Called when no [Command] or [DynamicCommand] matches
     return base.OnNoMatchAsync(e, ct);
 }
 ```
@@ -461,12 +499,19 @@ Note: `ReloadPlugin()` and `DisablePlugin()` terminate the plugin process immedi
 
 ## 8. Creating UI Windows (WinForms/WPF)
 
-### 8.1 Prerequisites
+### 8.1 Framework UI thread
+
+When a plugin implements `IMenuHandler`, the framework auto-creates a dedicated UI thread via `CreateUIThread()`. This thread runs a **WinForms** message pump (`Application.Run` + `UIForm.BeginInvoke`). `OnMenu` is invoked on this thread.
+
+- **WinForms** controls work natively — the WinForms message pump handles keyboard input, painting, and window messages correctly.
+- **WPF** controls do NOT process keyboard input on this thread. WPF has its own input pipeline driven by `Dispatcher.Run()`. Without a WPF dispatcher loop, the window renders but TextBox / keyboard input silently fails.
+
+### 8.2 Prerequisites
 
 - TFM MUST include `-windows` suffix (e.g., `net9.0-windows`). Pure `net9.0` will fail.
 - Add `<UseWindowsForms>true</UseWindowsForms>` or `<UseWPF>true</UseWPF>` to .csproj.
 
-### 8.2 Menu-driven window pattern
+### 8.3 WinForms window pattern (recommended for simple UIs)
 
 ```csharp
 using Another_Mirai_Native.Abstractions.Attributes;
@@ -490,9 +535,93 @@ public class WindowEntry : IMenuHandler
 }
 ```
 
-- `OnMenu` is called on the UI thread — safe to create/manipulate UI controls.
+- `OnMenu` is called on the WinForms UI thread — safe to create/manipulate controls.
 - Hide instead of close to reuse window instances across multiple menu clicks.
-- For WPF, use `Closing` event: `e.Cancel = true; window.Hide();`.
+
+### 8.4 WPF window pattern (requires dedicated Dispatcher thread)
+
+WPF windows MUST run on a separate STA thread with their own `Dispatcher.Run()` loop. Cross-thread window operations use `Dispatcher.Invoke()`:
+
+```csharp
+using Another_Mirai_Native.Abstractions.Attributes;
+using Another_Mirai_Native.Abstractions.Context;
+using Another_Mirai_Native.Abstractions.Handlers;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+
+[Menu("Open My WPF Window")]
+public class WpfWindowEntry : IMenuHandler
+{
+    private MyWpfWindow? _window;
+    private Thread? _uiThread;
+
+    public void OnMenu(MenuContext e)
+    {
+        if (_window == null)
+        {
+            using var ready = new ManualResetEventSlim(false);
+            _uiThread = new Thread(() =>
+            {
+                _window = new MyWpfWindow();
+                _window.Closing += (s, ev) => { ev.Cancel = true; _window.Hide(); };
+                ready.Set();
+                Dispatcher.Run();
+            })
+            {
+                IsBackground = true,
+            };
+            _uiThread.SetApartmentState(ApartmentState.STA);
+            _uiThread.Start();
+            ready.Wait();
+        }
+
+        _window.Dispatcher.Invoke(() => _window.Show());
+    }
+}
+```
+
+#### Third-party WPF component libraries (MaterialDesign, HandyControl, etc.)
+
+Third-party WPF component libraries typically rely on `Application.Current.Resources` to locate their global styles and theme dictionaries. Since there is no `App.xaml` in a plugin project, you must create an `Application` instance and manually merge resource dictionaries BEFORE creating any window:
+
+```csharp
+_uiThread = new Thread(() =>
+{
+    // Create Application instance so component libraries can find Application.Current
+    var app = new Application();
+
+    // Equivalent to <ResourceDictionary.MergedDictionaries> in App.xaml
+    app.Resources.MergedDictionaries.Add(new ResourceDictionary
+    {
+        Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml")
+    });
+    app.Resources.MergedDictionaries.Add(new ResourceDictionary
+    {
+        Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml")
+    });
+
+    _window = new MyWpfWindow();
+    _window.Closing += (s, ev) => { ev.Cancel = true; _window.Hide(); };
+    ready.Set();
+    app.Run();  // app.Run() starts the dispatcher AND ties Application lifecycle
+    // NOTE: app.Run() returns when the Application exits, which happens when
+    // the last window closes. Since Closing is handled (Hide + Cancel), the
+    // Application stays alive until Dispatcher.InvokeShutdown() is called.
+});
+```
+
+- Use `Dispatcher.Run()` (not `app.Run()`) if you want the dispatcher loop without Application lifecycle binding.
+- Use `app.Run()` if the component library requires a full `Application` lifecycle (most do not; `new Application()` alone suffices).
+- If using `app.Run()`, call `app.Shutdown()` from `OnDisableAsync` to cleanly exit the dispatcher loop on plugin unload.
+- Use `pack://application:,,,/` URI scheme to reference resources from referenced NuGet assemblies.
+
+- The WPF window is created on a **background STA thread**.
+- `ManualResetEventSlim` ensures the window is fully created before `OnMenu` returns.
+- Use `_window.Dispatcher.Invoke()` for all cross-thread calls (`Show`, `Hide`, etc.).
+- Event handlers (Click, Loaded, etc.) execute on the WPF thread naturally — no extra marshaling needed.
+- `IsBackground = true` ensures the process can exit even if the thread is still running.
+- For WPF modal behavior, use `ShowDialog()` instead of `Show()` — it internally pumps a nested dispatcher frame.
 
 ## 9. Receiving & Parsing Messages
 
@@ -571,6 +700,7 @@ To minimize plugin size, prefer dependencies already bundled with the framework.
 ## 11. Error Patterns & Pitfalls
 
 ### DO NOT:
+- Create a WPF window on the framework UI thread with `Show()` — it renders but keyboard input is broken. WPF needs its own STA thread with `Dispatcher.Run()` (see §8.4).
 - Forget `<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>` — plugin silently fails to load
 - Write plugin files (config, DB, cache) to CWD or base directory — use `API.AppApi.GetAppDirectory()` instead
 - Send an image/audio before the file exists on disk — the framework only references existing files
@@ -657,7 +787,7 @@ When adding NuGet packages beyond the SDK, verify:
 
 ```
 Another_Mirai_Native.Abstractions                    PluginBase, CommandHandlerBase
-Another_Mirai_Native.Abstractions.Attributes         PluginInfo, Command, EventPriority, Menu
+Another_Mirai_Native.Abstractions.Attributes         PluginInfo, Command, DynamicCommand, EventPriority, Menu
 Another_Mirai_Native.Abstractions.Context             *Context classes (GroupMessageContext, etc.)
 Another_Mirai_Native.Abstractions.Enums               CQFace, EventHandleResult, MatchMode, MessageScope, etc.
 Another_Mirai_Native.Abstractions.Handlers            I*Handler interfaces

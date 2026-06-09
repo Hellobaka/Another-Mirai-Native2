@@ -4,6 +4,7 @@ using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Handlers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,7 +25,52 @@ namespace Another_Mirai_Native.Abstractions
         /// <summary>
         /// 当前实例的指令方法缓存。首次调度时通过反射构建，后续复用以避免重复扫描。
         /// </summary>
-        private List<(MethodInfo Method, CommandAttribute Attr)>? _commandCache;
+        private List<CachedCommand>? _commandCache;
+
+        #region CachedCommand
+
+        private sealed class CachedCommand
+        {
+            public MethodInfo Method { get; }
+            public MatchMode MatchMode { get; }
+            public MessageScope Scope { get; set; }
+
+            /// <summary>静态指令的模板（<see cref="CommandAttribute"/> 提供）。</summary>
+            public string? Template { get; }
+
+            /// <summary>动态指令的成员名（<see cref="DynamicCommandAttribute"/> 提供）。</summary>
+            public string? MemberName { get; }
+
+            /// <summary>动态指令的取值委托，签名 <c>object? → string?</c>，返回值可能为 null。</summary>
+            public Func<object, string?>? TemplateGetter { get; }
+
+            public CachedCommand(MethodInfo method, MatchMode matchMode, MessageScope scope, string template)
+            {
+                Method = method;
+                MatchMode = matchMode;
+                Scope = scope;
+                Template = template;
+            }
+
+            public CachedCommand(MethodInfo method, MatchMode matchMode, MessageScope scope, string memberName, Func<object, string?>? templateGetter)
+            {
+                Method = method;
+                MatchMode = matchMode;
+                Scope = scope;
+                MemberName = memberName;
+                TemplateGetter = templateGetter;
+            }
+
+            /// <summary>
+            /// 获取当前指令的匹配模板。
+            /// 静态指令直接返回缓存的 <see cref="Template"/>；
+            /// 动态指令通过 <see cref="TemplateGetter"/> 从目标实例实时读取。
+            /// </summary>
+            public string GetTemplate(object target)
+                => Template ?? TemplateGetter?.Invoke(target) ?? "";
+        }
+
+        #endregion
 
         /// <inheritdoc/>
         public virtual Task<EventHandleResult> OnReceiveGroupMessageAsync(GroupMessageContext e, CancellationToken ct)
@@ -69,8 +115,28 @@ namespace Another_Mirai_Native.Abstractions
         protected virtual void OnParameterParseError(string paramName, string rawValue, Type targetType) { }
 
         /// <summary>
-        /// 遍历当前实例上所有标注了 <see cref="CommandAttribute"/> 的方法，依次检查作用域和消息匹配条件，
-        /// 将消息路由到第一个匹配的处理方法。若无任何方法匹配，则调用对应的
+        /// 清除当前实例的指令方法缓存。下次消息调度时将重新通过反射扫描所有
+        /// <see cref="CommandAttribute"/> 和 <see cref="DynamicCommandAttribute"/> 方法。
+        /// </summary>
+        /// <remarks>
+        /// 在以下场景中调用此方法：
+        /// <list type="bullet">
+        ///   <item>插件运行时启用了新编译的 DLL 版本。</item>
+        ///   <item>动态添加了标注 <see cref="CommandAttribute"/> 的方法（例如通过动态代理）。</item>
+        /// </list>
+        /// </remarks>
+        protected void ClearCommandCache()
+        {
+            lock (_commandCacheLock)
+            {
+                _commandCache = null;
+            }
+        }
+
+        /// <summary>
+        /// 遍历当前实例上所有标注了 <see cref="CommandAttribute"/> 或 <see cref="DynamicCommandAttribute"/> 的方法，
+        /// 依次检查作用域和消息匹配条件，将消息路由到第一个匹配的处理方法。
+        /// 若无任何方法匹配，则调用对应的
         /// <see cref="OnNoMatchAsync(GroupMessageContext, CancellationToken)"/> 或
         /// <see cref="OnNoMatchAsync(PrivateMessageContext, CancellationToken)"/>。
         /// </summary>
@@ -83,21 +149,19 @@ namespace Another_Mirai_Native.Abstractions
         {
             bool isGroup = groupCtx != null;
 
-            foreach (var (method, attribute) in GetCommandMethods())
+            foreach (var cmd in GetCommandMethods())
             {
-                if (isGroup && attribute.Scope == MessageScope.Private)
+                if (isGroup && cmd.Scope == MessageScope.Private)
                 {
                     continue;
                 }
 
-                if (!isGroup && attribute.Scope == MessageScope.Group)
+                if (!isGroup && cmd.Scope == MessageScope.Group)
                 {
                     continue;
                 }
 
-                var parameters = method.GetParameters();
-
-                Task<EventHandleResult>? result = TryDispatch(method, attribute, parameters, messageText, groupCtx, privateCtx, ct);
+                Task<EventHandleResult>? result = TryDispatch(cmd, messageText, groupCtx, privateCtx, ct);
 
                 if (result != null)
                 {
@@ -116,21 +180,22 @@ namespace Another_Mirai_Native.Abstractions
         /// 其他模式使用 <see cref="MatchMessage"/> 执行简单字符串匹配。
         /// 匹配成功后调用 <see cref="TryBuildArgs"/> 构造参数并通过反射调用目标方法。
         /// </summary>
-        /// <param name="method">目标指令方法的反射信息。</param>
-        /// <param name="attribute">该方法上标注的 <see cref="CommandAttribute"/>。</param>
-        /// <param name="parameters">目标方法的参数列表。</param>
+        /// <param name="cmd">缓存的指令信息。</param>
         /// <param name="messageText">待匹配的消息原文。</param>
         /// <param name="groupCtx">群消息上下文；来自私聊时为 <see langword="null"/>。</param>
         /// <param name="privateCtx">私聊消息上下文；来自群聊时为 <see langword="null"/>。</param>
         /// <param name="ct">可用于取消操作的取消令牌。</param>
         /// <returns>匹配成功时返回方法调用的 <see cref="Task{EventHandleResult}"/>；匹配失败时返回 <see langword="null"/>。</returns>
-        private Task<EventHandleResult>? TryDispatch(MethodInfo method, CommandAttribute attribute, ParameterInfo[] parameters, string messageText, GroupMessageContext? groupCtx, PrivateMessageContext? privateCtx, CancellationToken ct)
+        private Task<EventHandleResult>? TryDispatch(CachedCommand cmd, string messageText, GroupMessageContext? groupCtx, PrivateMessageContext? privateCtx, CancellationToken ct)
         {
+            Helper.InternalLog($"尝试匹配指令：{messageText}");
+            string template = cmd.GetTemplate(this);
+            Helper.InternalLog($"获取到模板：{template}");
             Match? regexMatch = null;
 
-            if (attribute.MatchMode == MatchMode.Regex)
+            if (cmd.MatchMode == MatchMode.Regex)
             {
-                regexMatch = Regex.Match(messageText, attribute.Template);
+                regexMatch = Regex.Match(messageText, template);
                 if (!regexMatch.Success)
                 {
                     return null;
@@ -138,18 +203,22 @@ namespace Another_Mirai_Native.Abstractions
             }
             else
             {
-                if (!MatchMessage(messageText, attribute))
+                if (!MatchMessage(messageText, template, cmd.MatchMode))
                 {
                     return null;
                 }
             }
+            Helper.InternalLog($"匹配完成");
+
+            ParameterInfo[] parameters = cmd.Method.GetParameters();
 
             if (!TryBuildArgs(parameters, regexMatch, groupCtx, privateCtx, ct, messageText, out object[] args))
             {
+                Helper.InternalLog($"构建参数列表失败");
                 return null;
             }
 
-            return InvokeMethod(method, args);
+            return InvokeMethod(cmd.Method, args);
         }
 
         /// <summary>
@@ -187,7 +256,7 @@ namespace Another_Mirai_Native.Abstractions
                     // 与特性设置的Scope不匹配
                     if (groupCtx == null)
                     {
-                        return false;
+                        continue;
                     }
 
                     args[i] = groupCtx;
@@ -198,7 +267,7 @@ namespace Another_Mirai_Native.Abstractions
                     // 与特性设置的Scope不匹配
                     if (privateCtx == null)
                     {
-                        return false;
+                        continue;
                     }
 
                     args[i] = privateCtx;
@@ -218,12 +287,13 @@ namespace Another_Mirai_Native.Abstractions
                 if (regexMatch == null)
                 {
                     // 非 Regex 模式
-                    return false;
+                    continue;
                 }
 
                 string? paramName = param.Name;
                 if (paramName == null)
                 {
+                    Helper.InternalLog($"获取到的第 {i + 1} 个参数名称为空");
                     return false;
                 }
 
@@ -231,7 +301,7 @@ namespace Another_Mirai_Native.Abstractions
                 Group group = regexMatch.Groups[paramName];
                 if (!group.Success)
                 {
-                    return false;
+                    continue;
                 }
 
                 try
@@ -265,7 +335,9 @@ namespace Another_Mirai_Native.Abstractions
         /// <returns>表示指令处理结果的 <see cref="Task{EventHandleResult}"/>。</returns>
         private Task<EventHandleResult> InvokeMethod(MethodInfo method, object[] args)
         {
+            Helper.InternalLog($"开始调用：{method.Name}；参数：{string.Join(",", args)}");
             object? returnValue = method.Invoke(this, args);
+            Helper.InternalLog($"调用完成，返回结果：{returnValue}");
 
             if (method.ReturnType == typeof(void))
             {
@@ -295,32 +367,33 @@ namespace Another_Mirai_Native.Abstractions
         }
 
         /// <summary>
-        /// 使用非正则匹配模式的指令，检查消息文本是否符合指令条件。
+        /// 使用非正则匹配模式，检查消息文本是否符合指令条件。
         /// </summary>
         /// <param name="text">待检查的消息原文。</param>
-        /// <param name="attr">包含匹配模式和模板字符串的指令特性。</param>
+        /// <param name="template">匹配模板字符串。</param>
+        /// <param name="mode">匹配模式。</param>
         /// <returns>消息文本满足匹配条件时返回 <see langword="true"/>；否则返回 <see langword="false"/>。</returns>
-        private static bool MatchMessage(string text, CommandAttribute attr)
+        private static bool MatchMessage(string text, string template, MatchMode mode)
         {
-            return attr.MatchMode switch
+            return mode switch
             {
-                MatchMode.StartWith => text.StartsWith(attr.Template),
-                MatchMode.EndWith => text.EndsWith(attr.Template),
-                MatchMode.Contain => text.Contains(attr.Template),
-                MatchMode.FullMatch => text == attr.Template,
+                MatchMode.StartWith => text.StartsWith(template),
+                MatchMode.EndWith => text.EndsWith(template),
+                MatchMode.Contain => text.Contains(template),
+                MatchMode.FullMatch => text == template,
                 _ => false,
             };
         }
 
         /// <summary>
-        /// 获取当前实例上所有标注了 <see cref="CommandAttribute"/> 的方法及其对应特性。
+        /// 获取当前实例上所有标注了 <see cref="CommandAttribute"/> 或 <see cref="DynamicCommandAttribute"/> 的方法。
         /// 结果在首次调用时通过反射构建并缓存，后续调用直接返回缓存结果。
         /// </summary>
-        /// <returns>包含方法反射信息与对应 <see cref="CommandAttribute"/> 的元组列表。</returns>
+        /// <returns>包含方法反射信息与对应指令信息的 <see cref="CachedCommand"/> 列表。</returns>
         /// <exception cref="InvalidOperationException">
-        /// 当标注了 <see cref="CommandAttribute"/> 的方法返回类型不是 <see cref="Task{EventHandleResult}"/> 时抛出。
+        /// 当标注了指令特性的方法返回类型不是 <see cref="Task{EventHandleResult}"/> 时抛出。
         /// </exception>
-        private List<(MethodInfo, CommandAttribute)> GetCommandMethods()
+        private List<CachedCommand> GetCommandMethods()
         {
             lock (_commandCacheLock)
             {
@@ -329,30 +402,73 @@ namespace Another_Mirai_Native.Abstractions
                     return _commandCache;
                 }
 
-                List<(MethodInfo, CommandAttribute)> commandCache = [];
+                List<CachedCommand> commandCache = [];
+                Type type = GetType();
 
-                foreach (var method in GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
                 {
                     foreach (CommandAttribute attr in method.GetCustomAttributes(typeof(CommandAttribute), true))
                     {
-                        if (method.ReturnType != typeof(Task<EventHandleResult>)
-                            && method.ReturnType != typeof(Task)
-                            && method.ReturnType != typeof(EventHandleResult)
-                            && method.ReturnType != typeof(void))
-                        {
-                            throw new InvalidOperationException(
-                                $"方法 {method.DeclaringType?.Name}.{method.Name} 标注了 CommandAttribute，" +
-                                $"但其返回类型为 {method.ReturnType.Name}，" +
-                                $"必须为 Task<EventHandleResult>、Task、EventHandleResult 或 void 之一。");
-                        }
+                        ValidateCommandReturnType(method);
+                        commandCache.Add(new CachedCommand(method, attr.MatchMode, attr.Scope, attr.Template));
+                        Helper.InternalLog($"发现指令方法：{type.Name}.{method.Name}，匹配模式：{attr.MatchMode}，作用域：{attr.Scope}，模板：{attr.Template}");
+                    }
 
-                        commandCache.Add((method, attr));
+                    foreach (DynamicCommandAttribute attr in method.GetCustomAttributes(typeof(DynamicCommandAttribute), true))
+                    {
+                        ValidateCommandReturnType(method);
+                        var getter = ResolveMemberGetter(type, attr.MemberName);
+                        commandCache.Add(new CachedCommand(method, attr.MatchMode, attr.Scope, attr.MemberName, getter));
+                        Helper.InternalLog($"发现动态指令方法：{type.Name}.{attr.MemberName}，匹配模式：{attr.MatchMode}，作用域：{attr.Scope}");
                     }
                 }
 
                 _commandCache = commandCache;
                 return _commandCache;
             }
+        }
+
+        /// <summary>
+        /// 验证指令方法的返回类型是否合法。
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// 当方法返回类型不是 <see cref="Task{EventHandleResult}"/> 时抛出。
+        /// </exception>
+        private static void ValidateCommandReturnType(MethodInfo method)
+        {
+            if (method.ReturnType != typeof(Task<EventHandleResult>)
+                && method.ReturnType != typeof(Task)
+                && method.ReturnType != typeof(EventHandleResult)
+                && method.ReturnType != typeof(void))
+            {
+                throw new InvalidOperationException(
+                    $"方法 {method.DeclaringType?.Name}.{method.Name} 标注了指令特性，" +
+                    $"但其返回类型为 {method.ReturnType.Name}，" +
+                    $"必须为 Task<EventHandleResult>、Task、EventHandleResult 或 void 之一。");
+            }
+        }
+
+        /// <summary>
+        /// 从当前类型解析动态指令成员（属性或字段）的取值委托。
+        /// </summary>
+        /// <param name="type">继承 <see cref="CommandHandlerBase"/> 的具体类型。</param>
+        /// <param name="memberName">属性或字段的名称。</param>
+        /// <returns>取值委托；若找不到匹配的 string 类型成员则返回 <see langword="null"/>。</returns>
+        private static Func<object, string?>? ResolveMemberGetter(Type type, string memberName)
+        {
+            var prop = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (prop != null && prop.PropertyType == typeof(string))
+            {
+                return obj => (string?)prop.GetValue(obj);
+            }
+
+            var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field != null && field.FieldType == typeof(string))
+            {
+                return obj => (string?)field.GetValue(obj);
+            }
+
+            return null;
         }
     }
 }

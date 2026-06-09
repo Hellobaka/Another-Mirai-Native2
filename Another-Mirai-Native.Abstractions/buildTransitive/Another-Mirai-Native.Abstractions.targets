@@ -6,6 +6,8 @@
 
 			<!-- 是否清理输出目录（合并依赖并删除多余文件），默认启用 -->
 			<CleanAmnOutputDir Condition="'$(CleanAmnOutputDir)'==''">true</CleanAmnOutputDir>
+			<!-- ILRepack 是否保留调试符号，默认开启 -->
+			<ILRepackKeepPDB Condition="'$(ILRepackKeepPDB)'==''">true</ILRepackKeepPDB>
 			<!-- 传递给 ILRepack 的额外参数 -->
 			<ILRepackAdditionParam Condition="'$(ILRepackAdditionParam)'==''"></ILRepackAdditionParam>
 			<!-- 是否忽略依赖版本匹配（仅匹配程序集名称），默认禁用 -->
@@ -13,7 +15,7 @@
 
 			<AmnNormalizedName Condition="$([System.String]::Copy('$(TargetName)').StartsWith('Native_'))">$(TargetName)</AmnNormalizedName>
 			<AmnNormalizedName Condition="'$(AmnNormalizedName)'==''">Native_$(TargetName)</AmnNormalizedName>
-		</PropertyGroup>
+	</PropertyGroup>
 
 		<Target Name="AmnGenerateManifestAndRename"
 				AfterTargets="Build"
@@ -28,6 +30,7 @@
 			<Message Importance="high" Text="[AMN] CleanAmnOutputDir=$(CleanAmnOutputDir)" />
 			<Message Importance="high" Text="[AMN] IgnoreDependencyVersion=$(IgnoreDependencyVersion)" />
 			<Message Importance="high" Text="[AMN] ILRepackAdditionParam=$(ILRepackAdditionParam)" />
+			<Message Importance="high" Text="[AMN] ILRepackKeepPDB=$(ILRepackKeepPDB)" />
 
 			<Warning Condition="!Exists('$(AmnManifestGenExe)')" Text="[AMN] Manifest generator not found:
   $(AmnManifestGenExe)" />
@@ -38,6 +41,7 @@
 				<AmnManifestGenArgs>-i &quot;$(TargetPath)&quot; -o &quot;$(TargetDir)$(AmnNormalizedName).json&quot; -t &quot;$(TargetFramework)&quot;</AmnManifestGenArgs>
 				<AmnManifestGenArgs Condition="'$(CleanAmnOutputDir)'=='true'">$(AmnManifestGenArgs) -c</AmnManifestGenArgs>
 				<AmnManifestGenArgs Condition="'$(IgnoreDependencyVersion)'=='true'">$(AmnManifestGenArgs) --ignoreDependencyVersion</AmnManifestGenArgs>
+				<AmnManifestGenArgs Condition="'$(ILRepackKeepPDB)'=='true'">$(AmnManifestGenArgs) --ilRepackKeepPDB</AmnManifestGenArgs>
 				<AmnManifestGenArgs Condition="'$(ILRepackAdditionParam)'!=''">$(AmnManifestGenArgs) --ilrepackAdditionParam &quot;$(ILRepackAdditionParam)&quot;</AmnManifestGenArgs>
 			</PropertyGroup>
 
@@ -86,19 +90,6 @@
 			<Message Importance="high"
 						Condition="'$(AmnNormalizedName)'!='$(TargetName)'"
 						Text="[AMN] DLL renamed: $(TargetName).dll -> $(AmnNormalizedName).dll" />
-
-			<Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
-				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).pdb"
-				  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
-			<Delete Files="$(TargetDir)$(TargetName).pdb"
-					Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).pdb')" />
-
-			<Copy SourceFiles="$(TargetDir)$(TargetName).xml"
-				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).xml"
-				  Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
-			<Delete Files="$(TargetDir)$(TargetName).xml"
-					Condition="'$(AmnNormalizedName)'!='$(TargetName)' and Exists('$(TargetDir)$(TargetName).xml')" />
-
 			<Message Importance="high" Text="[AMN] Target done." />
 		</Target>
 	</Project>

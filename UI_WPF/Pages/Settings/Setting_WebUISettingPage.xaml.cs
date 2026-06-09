@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 #if NET5_0_OR_GREATER
-using Another_Mirai_Native.BlazorUI;
+using Another_Mirai_Native.WebAPI;
 #endif
 
 namespace Another_Mirai_Native.UI.Pages
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native.UI.Pages
                 return;
             }
 #if NET5_0_OR_GREATER
-            AppConfigProperties = typeof(Blazor_Config).GetProperties();
+            AppConfigProperties = typeof(WebAPIConfig).GetProperties();
             SetConfigToControl();
 #endif
             FormLoaded = true;
@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.UI.Pages
         private void SetConfigToControl()
         {
 #if NET5_0_OR_GREATER
-            var properties = Blazor_Config.Instance.GetType().GetProperties();
+            var properties = WebAPIConfig.Instance.GetType().GetProperties();
             foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var control = field.GetValue(this);
@@ -73,7 +73,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     if (property.Name == field.Name)
                     {
-                        object? value = property.GetValue(Blazor_Config.Instance);
+                        object? value = property.GetValue(WebAPIConfig.Instance);
                         if (value == null)
                         {
                             break;
@@ -109,11 +109,11 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     continue;
                 }
-                var currentValue = property.GetValue(Blazor_Config.Instance);
+                var currentValue = property.GetValue(WebAPIConfig.Instance);
                 if (currentValue?.ToString() != value.ToString())
                 {
-                    property.SetValue(Blazor_Config.Instance, value);
-                    Blazor_Config.Instance.SetConfig(property.Name, value);
+                    property.SetValue(WebAPIConfig.Instance, value);
+                    WebAPIConfig.Instance.SetConfig(property.Name, value);
                 }
             }
             AfterConfigSet(textBox.Name, value);
@@ -133,8 +133,8 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     continue;
                 }
-                property.SetValue(Blazor_Config.Instance, value);
-                Blazor_Config.Instance.SetConfig(property.Name, value);
+                property.SetValue(WebAPIConfig.Instance, value);
+                WebAPIConfig.Instance.SetConfig(property.Name, value);
             }
             AfterConfigSet(toggleButton.Name, value);
 #endif

@@ -1,6 +1,7 @@
 using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.UI.Models;
+using Microsoft.Win32;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,8 @@ namespace Another_Mirai_Native.UI.ViewModel
         public RelayCommand Command_OpenAllDataDirectory { get; set; }
 
         public RelayCommand Command_OpenDataDirectory { get; set; }
+
+        public RelayCommand Command_AddPlugin { get; set; }
 
         public RelayCommand Command_OpenPluginPath { get; set; }
 
@@ -184,6 +187,38 @@ namespace Another_Mirai_Native.UI.ViewModel
                 AppConfig.Instance.AutoEnablePlugin = AppConfig.Instance.AutoEnablePlugin.Distinct().ToList();
                 AppConfig.Instance.SetConfig("AutoEnablePlugins", AppConfig.Instance.AutoEnablePlugin);
             });
+        }
+
+        private void AddPlugin(object? parameter)
+        {
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = Path.Combine(Environment.CurrentDirectory, "data", "plugins"),
+                Multiselect = false,
+                Filter = "插件文件|*.dll",
+                Title = "选择要添加的插件 DLL 文件",
+                CheckFileExists = true,
+            };
+            if (!(dialog.ShowDialog() ?? false))
+            {
+                return;
+            }
+            string path = dialog.FileName;
+            string jsonPath = Path.ChangeExtension(path, ".json");
+            if (!File.Exists(jsonPath))
+            {
+                DialogHelper.ShowSimpleDialog("哎呀", "与插件文件同名的 JSON 文件不存在，无法添加插件");
+                return;
+            }
+            var (Success, Existed) = PluginManagerProxy.Instance.AddPlugin(path);
+            if (!Success)
+            {
+                DialogHelper.ShowSimpleDialog("哎呀", "添加失败了，查看日志排查原因");
+            }
+            else if (Existed)
+            {
+                DialogHelper.ShowSimpleDialog("嗯嗯", "添加成功了，重载插件来使插件更新");
+            }
         }
 
         #endregion Command

@@ -9,6 +9,13 @@ namespace Another_Mirai_Native.Abstractions
 {
     internal static class Helper
     {
+        internal static event Action<string> OnInternalLog;
+
+        internal static void InternalLog(string message)
+        {
+            OnInternalLog?.Invoke(message);
+        }
+
         public static string GetRelativePath(string value, string currentDirectory)
         {
             if (File.Exists(value))

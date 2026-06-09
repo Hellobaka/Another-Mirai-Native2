@@ -22,7 +22,7 @@ namespace Another_Mirai_Native.RPC.Interface
         /// <summary>
         /// PID/Object
         /// </summary>
-        private ConcurrentDictionary<int, object> Connections { get; set; } = new();
+        internal ConcurrentDictionary<int, object> Connections { get; set; } = new();
 
         public void ActiveShowErrorDialog(string guid, int authCode, string title, string content, bool canIgnore)
         {

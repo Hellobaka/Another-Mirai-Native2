@@ -31,9 +31,14 @@ namespace Another_Mirai_Native.Native
         public CQPluginProxy(string dllPath)
         {
             PluginBasePath = dllPath;
-            if (Path.GetFileName(dllPath).StartsWith("XiaoLiZi_"))
+            string fileName = Path.GetFileName(dllPath);
+            if (fileName.StartsWith("XiaoLiZi_"))
             {
                 PluginType = PluginType.XiaoLiZi;
+            }
+            else if (fileName.StartsWith("Native_"))
+            {
+                PluginType = PluginType.Native;
             }
         }
 
@@ -237,7 +242,7 @@ namespace Another_Mirai_Native.Native
 
         public bool LoadAppInfo()
         {
-            string appInfoPath = PluginPath.Replace(".dll", ".json");
+            string appInfoPath = Path.ChangeExtension(PluginPath, ".json");
             if (File.Exists(appInfoPath) is false)
             {
                 LogHelper.Error("加载插件", $"{PluginPath} 同名的 json 文件不存在，无法加载插件");
@@ -246,13 +251,14 @@ namespace Another_Mirai_Native.Native
             string jsonContent = File.ReadAllText(appInfoPath);
             try
             {
+                int originalAuthCode = AppInfo?.AuthCode ?? 0;
                 AppInfo = JsonConvert.DeserializeObject<AppInfo>(jsonContent) ?? new();
                 if (string.IsNullOrWhiteSpace(AppInfo.name))
                 {
                     LogHelper.Error("加载插件", $"{PluginPath} 的 json 文件格式错误，无法加载插件");
                     return false;
                 }
-                AppInfo.AuthCode = PluginManagerProxy.MakeAuthCode();
+                AppInfo.AuthCode = originalAuthCode == 0 ? PluginManagerProxy.MakeAuthCode() : originalAuthCode;
 
                 PluginLoaderType = (PluginLoaderType)AppInfo.LoaderType;
                 LoaderProcessPath = PluginLoaderType switch

@@ -156,7 +156,7 @@ namespace Another_Mirai_Native.RPC.Pipe
                     {
                         ClientDisconnected?.Invoke(pipe);
                         pipe.Disconnect();
-                        LogHelper.Error("Pipe_Disconnect", "与插件连接断开");
+                        LogPipeDisconnect(pipe);
                         break;
                     }
                 }
@@ -164,13 +164,34 @@ namespace Another_Mirai_Native.RPC.Pipe
                 {
                     ClientDisconnected?.Invoke(pipe);
                     pipe.Disconnect();
-                    LogHelper.Error("Pipe_Disconnect", "与插件连接断开");
+                    LogPipeDisconnect(pipe);
                     break;
                 }
             }
 
             pipe.Dispose();
             Pipes.Remove(pipe);
+        }
+
+        private void LogPipeDisconnect(NamedPipe pipe)
+        {
+            var pid = Connections.FirstOrDefault(kvp => kvp.Value == pipe).Key;
+            if (pid == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                if (!Process.GetProcessById(pid).HasExited)
+                {
+                    LogHelper.Error("Pipe_Disconnect", $"与插件连接断开");
+                }
+            }
+            catch
+            {
+                // 进程已退出
+            }
         }
 
         private void HandleClientMessage(string message, NamedPipe server)

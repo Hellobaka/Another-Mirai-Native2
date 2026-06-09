@@ -28,6 +28,8 @@ namespace Protocol_NoConnection
 
         public bool IsConnected { get; set; } = false;
 
+        public bool IsDisposed { get; set; }
+
         public string Name { get; set; } = "NoConnection";
 
         public bool ShowTestDialog { get; set; }
@@ -171,6 +173,7 @@ namespace Protocol_NoConnection
         public bool Connect()
         {
             IsConnected = true;
+            IsDisposed = false;
             BuildMockData();
             return true;
         }
@@ -183,6 +186,7 @@ namespace Protocol_NoConnection
         public bool Disconnect()
         {
             IsConnected = false;
+            IsDisposed = true;
             PicServer?.Stop();
             TesterForm?.Invoke(() =>
             {

@@ -73,6 +73,8 @@ public class FormEntry : IMenuHandler
 }
 ```
 
+> 💡 **提示**：框架的 UI 线程本质上是 WinForms 线程（`Application.Run` + `BeginInvoke`），因此 WinForms 控件的消息处理完全原生，无需额外配置。
+>
 > 💡 **提示**：`OnMenu` 由框架在 UI 线程调用，因此可以直接操作窗口对象。示例中在窗口关闭时调用 `Hide()` 并取消关闭，这样下次点击菜单时仍可复用同一个窗口实例。
 >
 > 💡 **提示**：`OnMenu` 既可以设计为阻塞调用，也可以设计为非阻塞调用。上层会在 UI 线程中通过 `BeginInvoke` 调用该方法，因此这里的阻塞不会卡住上层派发线程。
@@ -112,41 +114,88 @@ public class FormEntry : IMenuHandler
 
 ### 🚀 通过菜单拉起 WPF 窗口
 
+> ⚠️ **重要**：框架的 UI 线程是 WinForms 线程（`Application.Run` + `BeginInvoke`），其消息泵无法驱动 WPF 的输入管道。直接在该线程上 `Show()` WPF 窗口会导致窗口能渲染但 **无法接收键盘输入**（TextBox 等控件无响应）。WPF 窗口必须运行在独立的 STA 线程上，该线程拥有自己的 `Dispatcher.Run()` 消息循环。
+
+正确的做法是创建一个后台 STA 线程，在其中完成窗口的创建和 `Dispatcher.Run()`。窗口的 `Show()` / `Hide()` 通过 `Dispatcher.Invoke()` 跨线程调用：
+
 ```csharp
 using Another_Mirai_Native.Abstractions.Attributes;
 using Another_Mirai_Native.Abstractions.Context;
 using Another_Mirai_Native.Abstractions.Handlers;
-using System.ComponentModel;
+using System.Threading;
+using System.Windows.Threading;
 
 [Menu("WPF 示例")]
 public class WPFEntry : IMenuHandler
 {
-    private WPFDemo Form { get; set; }
+    private WPFDemo? _window;
+    private Thread? _uiThread;
 
     public void OnMenu(MenuContext e)
     {
-        e.API.Logger.Info("调用菜单", "调用了 WPF 示例菜单");
-        if (Form == null)
+        if (_window == null)
         {
-            Form = new WPFDemo();
-            Form.Closing += Form_Closing;
+            // 在独立 STA 线程上创建 WPF 窗口并启动 Dispatcher 消息循环
+            using var ready = new ManualResetEventSlim(false);
+            _uiThread = new Thread(() =>
+            {
+                _window = new WPFDemo();
+                _window.Closing += (s, ev) => { ev.Cancel = true; _window.Hide(); };
+                ready.Set();
+                Dispatcher.Run();
+            })
+            {
+                IsBackground = true,
+            };
+            _uiThread.SetApartmentState(ApartmentState.STA);
+            _uiThread.Start();
+            ready.Wait(); // 等待窗口创建完成
         }
-        Form.Show();
-    }
 
-    private void Form_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-    {
-        Form.Hide();
-        e.Cancel = true;
+        // 跨线程唤醒窗口
+        _window.Dispatcher.Invoke(() => _window.Show());
     }
 }
 ```
 
-> 💡 **提示**：WPF 示例与 WinForms 的核心思路一致，都是通过菜单处理器复用同一个窗口实例。`OnMenu` 既可以设计为阻塞调用，也可以设计为非阻塞调用。上层会在 UI 线程中通过 `BeginInvoke` 调用该方法，因此这里的阻塞不会卡住上层派发线程。
+> 💡 **提示**：`ManualResetEventSlim` 确保窗口创建完成后才返回，避免后续 `Dispatcher.Invoke` 时窗口尚未初始化。
+>
+> 💡 **提示**：窗口的事件处理（Click、Loaded 等）天然运行在 WPF 线程上，无需额外封送。线程设为 `IsBackground = true` 确保进程退出时不会因该线程而挂起。
+>
+> 💡 **提示**：WinForms 窗口无此问题，因为框架 UI 线程本身就是 WinForms 消息泵，WinForms 控件可在此线程上直接使用（参见上方 WinForms 示例）。
 >
 > ⚠️ **注意**：WPF 窗口在调用 `Close()` 后默认会被销毁；如果希望下次点击菜单时继续复用同一实例，应在 `Closing` 事件中改为隐藏窗口。
+
+### 🎨 使用第三方 WPF 组件库
+
+第三方 WPF 组件库（如 MaterialDesign、HandyControl 等）通常依赖 `Application.Current.Resources` 来加载全局样式和主题字典。插件项目没有 `App.xaml`，因此需要手动创建 `Application` 实例并合并资源字典：
+
+```csharp
+_uiThread = new Thread(() =>
+{
+    // 创建 Application 实例，使组件库可通过 Application.Current 查找样式
+    var app = new Application();
+
+    // 等效于 App.xaml 中的 <ResourceDictionary.MergedDictionaries>
+    app.Resources.MergedDictionaries.Add(new ResourceDictionary
+    {
+        Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml")
+    });
+    app.Resources.MergedDictionaries.Add(new ResourceDictionary
+    {
+        Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml")
+    });
+
+    _window = new MyWPFDemo();
+    _window.Closing += (s, ev) => { ev.Cancel = true; _window.Hide(); };
+    ready.Set();
+    Dispatcher.Run();  // 只启动消息循环，不绑定窗口生命周期
+});
+```
+
+> 💡 **提示**：多数组件库只需要 `new Application()` 来设置 `Application.Current`，无需完整的 `app.Run()` 生命周期。如果 `Dispatcher.Run()` 不够用，可改用 `app.Run()`，但需在插件 `OnDisableAsync` 中调用 `app.Shutdown()` 以干净退出消息循环。
 >
-> 💡 **提示**：如果你需要真正销毁窗口，请去掉 `e.Cancel = true` 和 `Hide()`，并在下次打开时重新创建窗口实例。如果你选择让 `OnMenu` 持续阻塞来维持某种交互流程，建议在窗口关闭或隐藏时结束阻塞，避免单次菜单处理长时间不返回。
+> 💡 **提示**：资源 URI 使用 `pack://application:,,,/` 协议，可引用来自 NuGet 引用程序集的资源。
 
 ### 👀 WPF 效果示例
 

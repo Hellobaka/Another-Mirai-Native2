@@ -377,6 +377,12 @@ namespace Another_Mirai_Native.DB
 
         public bool Deleted { get; set; }
 
+        public static CachedFile? GetCachedFileByHash(CachedFileType fileType, string hash)
+        {
+            var db = ChatHistoryDB.GetInstance();
+            return db.Queryable<CachedFile>().Where(x => x.Hash == hash && !x.Deleted && x.CachedFileType == fileType).First();
+        }
+
         public static CachedFile? GetCachedImageByHash(string hash)
         {
             var db = ChatHistoryDB.GetInstance();
