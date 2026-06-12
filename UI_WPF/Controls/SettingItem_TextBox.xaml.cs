@@ -65,9 +65,9 @@ namespace Another_Mirai_Native.UI.Controls
         public static readonly DependencyProperty UnitProperty =
             DependencyProperty.Register("Unit", typeof(string), typeof(SettingItem_TextBox), new PropertyMetadata(""));
 
-        public event Action<object, object> DataChanged;
+        public event Action<object, object?>? DataChanged;
 
-        private bool TryParse(string text, out object data)
+        private bool TryParse(string text, out object? data)
         {
             data = null;
             if (InitPropertyType.Equals(typeof(int))
@@ -105,9 +105,9 @@ namespace Another_Mirai_Native.UI.Controls
 
         private void Input_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (TryParse(Input.Text, out object data))
+            if (TryParse(Input.Text, out object? data))
             {
-                Data = data;
+                Data = data!;
                 DataChanged?.Invoke(this, Data);
             }
         }

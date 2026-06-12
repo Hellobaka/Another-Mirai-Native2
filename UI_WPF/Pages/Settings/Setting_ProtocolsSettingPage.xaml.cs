@@ -147,7 +147,7 @@ namespace Another_Mirai_Native.UI.Pages
                         Title = config.DescriptionTitle,
                         Subtitle = config.DescriptionSubtitle,
                         ItemSources = config.DisplayValues,
-                        SelectedItem = json[config.Key]?.ToObject(config.ValueType),
+                        SelectedItem = json[config.Key]?.ToObject(config.ValueType)!,
                         Tag = filePath
                     };
                     comboBox.SelectedItemChanged += ComboBox_SelectedItemChanged;
@@ -160,7 +160,7 @@ namespace Another_Mirai_Native.UI.Pages
                         Name = config.Key,
                         Title = config.DescriptionTitle,
                         Subtitle = config.DescriptionSubtitle,
-                        Data = json[config.Key]?.ToObject(config.ValueType),
+                        Data = json[config.Key]?.ToObject(config.ValueType)!,
                         Tag = filePath
                     };
                     textBox.DataChanged += TextBox_DataChanged;
@@ -194,7 +194,7 @@ namespace Another_Mirai_Native.UI.Pages
             CommonConfig.SetConfig(name, value, filePath);
         }
 
-        private void TextBox_DataChanged(object sender, object value)
+        private void TextBox_DataChanged(object sender, object? value)
         {
             if (!FormLoaded
                 || sender is not SettingItem_TextBox textBox

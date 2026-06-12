@@ -221,7 +221,7 @@ namespace Another_Mirai_Native
 
                         case MessageItemType.File:
                             if (int.TryParse(cqcode.Items["file_size"], out int fileSize)
-                                && cqcode.Items.TryGetValue("file", out string fileName))
+                                && cqcode.Items.TryGetValue("file", out string? fileName))
                             {
                                 messageChain.Add(new FileItem(fileName, fileSize));
                             }

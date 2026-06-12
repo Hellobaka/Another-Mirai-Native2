@@ -34,7 +34,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             Instance = this;
             PluginManagerProxy.OnGroupMsgRecall += PluginManagerProxy_OnGroupMsgRecall;
             PluginManagerProxy.OnPrivateMsgRecall += PluginManagerProxy_OnPrivateMsgRecall;
-            ChatHistoryHelper.OnUnreadCountChanged += OnUnreadCountChanged;
+            ChatHistoryHelper.OnUnreadCountChanged += HandleUnreadCountChanged;
         }
 
         public event Action<int>? OnMessageJumpRequested;
@@ -622,7 +622,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             }
         }
 
-        private void OnUnreadCountChanged(long parentId, ChatHistoryType type, int unreadCount)
+        private void HandleUnreadCountChanged(long parentId, ChatHistoryType type, int unreadCount)
         {
             var chatType = type == ChatHistoryType.Group ? ChatType.QQGroup : ChatType.QQPrivate;
             var item = ChatList.FirstOrDefault(x => x.Id == parentId && x.AvatarType == chatType);

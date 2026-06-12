@@ -87,7 +87,12 @@ namespace Another_Mirai_Native.UI.Pages
                 DialogHelper.ShowSimpleDialog("调用测试方法", $"未选择测试方法");
                 return;
             }
-            List<object> arugments = [TestPlugin];
+            if (TestPlugin == null)
+            {
+                DialogHelper.ShowSimpleDialog("调用测试方法", $"未选择测试插件");
+                return;
+            }
+            List<object?> arugments = [TestPlugin];
             foreach (var item in InvokeArugments)
             {
                 item.Value = item.Value?.Trim() ?? "";

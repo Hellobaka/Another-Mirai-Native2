@@ -1,4 +1,4 @@
-﻿using Another_Mirai_Native.Config;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Native;
 using System;
 using System.Collections.Generic;
@@ -39,13 +39,13 @@ namespace Another_Mirai_Native.UI.Converters
 
     public class EnumToItemsSourceConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Type enumType = value is Array array && array.Length > 0 ? array.GetValue(0)?.GetType() : null;
-            return enumType != null && enumType.IsEnum ? Enum.GetValues(enumType) : (object)null;
+            Type? enumType = value is Array array && array.Length > 0 ? array.GetValue(0)?.GetType() : null;
+            return enumType != null && enumType.IsEnum ? Enum.GetValues(enumType) : null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.UI.Converters
 
     public class EnumDescriptionConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
             {
@@ -81,7 +81,7 @@ namespace Another_Mirai_Native.UI.Converters
             return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : name;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null || !targetType.IsEnum)
             {
@@ -98,6 +98,5 @@ namespace Another_Mirai_Native.UI.Converters
             }
             return null;
         }
-
     }
 }

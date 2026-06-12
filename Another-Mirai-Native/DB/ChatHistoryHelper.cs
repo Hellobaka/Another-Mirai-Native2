@@ -1048,6 +1048,10 @@ namespace Another_Mirai_Native.DB
                         return await GetGroupMemberNick(groupId, qq, true);
                     }
 
+                    if (info == null)
+                    {
+                        return qq.ToString();
+                    }
                     if (string.IsNullOrEmpty(info.Card))
                     {
                         return string.IsNullOrEmpty(info.Nick) ? qq.ToString() : info.Nick;

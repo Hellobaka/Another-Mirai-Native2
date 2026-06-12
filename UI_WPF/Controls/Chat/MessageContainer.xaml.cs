@@ -67,7 +67,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             }
         }
 
-        private void ScrollToBottomBtn_Click(object sender, RoutedEventArgs e)
+        private void ScrollToBottomBtn_Click(object? sender, RoutedEventArgs? e)
         {
             // 滚动到最底部
             MessageScrollViewer.ScrollToBottom();

@@ -161,7 +161,7 @@ namespace Another_Mirai_Native.UI.Pages
                 {
                     continue;
                 }
-                commands.Add(item.ToString());
+                commands.Add(item.ToString()!);
             }
             AppConfig.Instance.OfflineActionCommands = commands;
             AppConfig.Instance.SetConfig("OfflineActionCommands", commands);
