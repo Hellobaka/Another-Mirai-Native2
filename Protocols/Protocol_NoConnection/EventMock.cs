@@ -165,6 +165,7 @@ namespace Protocol_NoConnection
             PicButton.Enabled = PicServer.Instance?.Running ?? false;
             AudioButton.Enabled = PicServer.Instance?.Running ?? false;
             InitializeEventTester();
+            InitializeMCPTab();
             SendValue.Focus();
         }
 

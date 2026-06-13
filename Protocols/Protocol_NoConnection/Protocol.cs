@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native;
 using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Config;
+using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
@@ -40,11 +41,23 @@ namespace Protocol_NoConnection
 
         public ushort PicServerListenPort { get; set; } = 45000;
 
+#if NET9_0_OR_GREATER
+        public bool MCPServerEnabled { get; set; }
+
+        public string MCPServerListenIP { get; set; } = "127.0.0.1";
+
+        public ushort MCPServerListenPort { get; set; } = 46000;
+#endif
+
         public long TestLoginQQ { get; set; } = 100000;
 
         public string TestNickName { get; set; } = "";
 
         public PicServer PicServer { get; set; }
+
+#if NET9_0_OR_GREATER
+        public MCPServer MCPServer { get; set; }
+#endif
 
         private List<FriendInfo> FriendInfos { get; set; } = new();
 
@@ -55,6 +68,11 @@ namespace Protocol_NoConnection
         private Tester TesterForm { get; set; }
 
         private int MsgId { get; set; } = 10;
+
+        /// <summary>
+        /// MCP 服务使用的消息 ID 计数器（线程安全）
+        /// </summary>
+        public int MCPMsgIdCounter;
 
         public void BuildMockData()
         {
@@ -158,6 +176,13 @@ namespace Protocol_NoConnection
                 PicServer = new PicServer(@"data\image", PicServerListenIP, PicServerListenPort);
                 PicServer.Start();
             }
+#if NET9_0_OR_GREATER
+            if (MCPServerEnabled)
+            {
+                MCPServer = new MCPServer(MCPServerListenIP, MCPServerListenPort, Instance);
+                MCPServer?.Start();
+            }
+#endif
         }
 
         public int CanSendImage()
@@ -188,6 +213,9 @@ namespace Protocol_NoConnection
             IsConnected = false;
             IsDisposed = true;
             PicServer?.Stop();
+#if NET9_0_OR_GREATER
+            MCPServer?.Stop();
+#endif
             TesterForm?.Invoke(() =>
             {
                 TesterForm.Close();
@@ -293,6 +321,11 @@ namespace Protocol_NoConnection
             BuildTestPicServer = GetConfig("BuildTestPicServer", false);
             PicServerListenIP = GetConfig("PicServerListenIP", "127.0.0.1");
             PicServerListenPort = GetConfig("PicServerListenPort", (ushort)45000);
+#if NET9_0_OR_GREATER
+            MCPServerEnabled = GetConfig("MCPServerEnabled", false);
+            MCPServerListenIP = GetConfig("MCPServerListenIP", "127.0.0.1");
+            MCPServerListenPort = GetConfig("MCPServerListenPort", (ushort)46000);
+#endif
         }
 
         public int SendDiscussMsg(long discussId, string msg)

@@ -325,5 +325,166 @@ namespace Protocol_NoConnection
                 SendValue.Text += $"[CQ:record,file={recordId}] ";
             }
         }
+
+        #region MCP 服务器控制
+
+        /// <summary>
+        /// 初始化 MCP Tab 页的控件状态
+        /// </summary>
+        private void InitializeMCPTab()
+        {
+#if !NET9_0_OR_GREATER
+            if (DesignMode)
+            {
+                return; // VS 设计器中保持控件可见，不做任何修改
+            }
+            // .NET Framework 4.8 运行时下禁用 MCP Tab
+            tabPage4.Enabled = false;
+            foreach (Control c in tabPage4.Controls)
+            {
+                c.Enabled = false;
+            }
+            MCPStatusLabel.Text = "状态: 不可用 (.NET 9 独占功能)";
+            return;
+#else
+            if (Protocol == null)
+            {
+                return;
+            }
+
+            MCPEnableCheckBox.Checked = Protocol.MCPServerEnabled;
+            MCPIPValue.Text = Protocol.MCPServerListenIP;
+            MCPPortValue.Text = Protocol.MCPServerListenPort.ToString();
+
+            MCPIPValue.Enabled = Protocol.MCPServerEnabled;
+            MCPPortValue.Enabled = Protocol.MCPServerEnabled;
+            MCPApplyButton.Enabled = Protocol.MCPServerEnabled;
+
+            UpdateMCPStatusLabel();
+#endif
+        }
+
+        /// <summary>
+        /// 更新 MCP 状态标签
+        /// </summary>
+        private void UpdateMCPStatusLabel()
+        {
+#if NET9_0_OR_GREATER
+            if (Protocol?.MCPServer?.Running == true)
+            {
+                MCPStatusLabel.Text = $"状态: 运行中 ({Protocol.MCPServer.ListenURL})";
+                MCPStatusLabel.ForeColor = System.Drawing.Color.Green;
+            }
+            else if (Protocol?.MCPServerEnabled == true)
+            {
+                MCPStatusLabel.Text = "状态: 已启用（等待启动）";
+                MCPStatusLabel.ForeColor = System.Drawing.Color.DarkOrange;
+            }
+            else
+            {
+                MCPStatusLabel.Text = "状态: 未启动";
+                MCPStatusLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            }
+#endif
+        }
+
+        /// <summary>
+        /// MCP 启用复选框状态变更
+        /// </summary>
+        private void MCPEnableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+#if NET9_0_OR_GREATER
+            bool enabled = MCPEnableCheckBox.Checked;
+            MCPIPValue.Enabled = enabled;
+            MCPPortValue.Enabled = enabled;
+            MCPApplyButton.Enabled = enabled;
+
+            if (Protocol != null)
+            {
+                Protocol.MCPServerEnabled = enabled;
+                Protocol.SetConfig("MCPServerEnabled", enabled);
+            }
+#endif
+        }
+
+        /// <summary>
+        /// MCP 配置值（IP/端口）文本变更时同步到配置文件
+        /// </summary>
+        private void MCPConfigValue_Changed(object sender, EventArgs e)
+        {
+#if NET9_0_OR_GREATER
+            if (Protocol == null)
+            {
+                return;
+            }
+
+            if (sender == MCPIPValue)
+            {
+                Protocol.MCPServerListenIP = MCPIPValue.Text;
+                Protocol.SetConfig("MCPServerListenIP", MCPIPValue.Text);
+            }
+            else if (sender == MCPPortValue)
+            {
+                if (ushort.TryParse(MCPPortValue.Text, out ushort port))
+                {
+                    Protocol.MCPServerListenPort = port;
+                    Protocol.SetConfig("MCPServerListenPort", port);
+                }
+            }
+#endif
+        }
+
+        /// <summary>
+        /// MCP 应用按钮点击 - 重启 MCP 服务器以应用新配置
+        /// </summary>
+        private void MCPApplyButton_Click(object sender, EventArgs e)
+        {
+#if NET9_0_OR_GREATER
+            if (Protocol == null)
+            {
+                return;
+            }
+
+            // 保存当前配置
+            Protocol.MCPServerEnabled = MCPEnableCheckBox.Checked;
+            Protocol.MCPServerListenIP = MCPIPValue.Text;
+            if (ushort.TryParse(MCPPortValue.Text, out ushort port))
+            {
+                Protocol.MCPServerListenPort = port;
+            }
+            Protocol.SetConfig("MCPServerEnabled", Protocol.MCPServerEnabled);
+            Protocol.SetConfig("MCPServerListenIP", Protocol.MCPServerListenIP);
+            Protocol.SetConfig("MCPServerListenPort", Protocol.MCPServerListenPort);
+
+            // 停止现有服务
+            Protocol.MCPServer?.Stop();
+
+            // 如果启用则启动新服务（通过动态加载 MCP 程序集）
+            if (Protocol.MCPServerEnabled)
+            {
+                Protocol.MCPServer = new MCPServer(Protocol.MCPServerListenIP, Protocol.MCPServerListenPort, Protocol);
+                Protocol.MCPServer?.Start();
+                MCPStatusLabel.Text = "状态: 启动中...";
+                MCPStatusLabel.ForeColor = System.Drawing.Color.DarkOrange;
+
+                // 延迟更新状态
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    if (Protocol?.MCPServer?.Running == true)
+                    {
+                        this.Invoke(() => UpdateMCPStatusLabel());
+                    }
+                });
+            }
+            else
+            {
+                Protocol.MCPServer = null;
+                UpdateMCPStatusLabel();
+            }
+#endif
+        }
+
+        #endregion
     }
 }

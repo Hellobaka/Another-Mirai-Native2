@@ -4,10 +4,10 @@
     <TargetFrameworks>net9.0-windows;net48</TargetFrameworks>
     <LangVersion>12</LangVersion>
     <Platforms>AnyCPU;x86</Platforms>
-	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.13.0</Version>
-	  <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
-	  <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+      <UseWindowsForms>True</UseWindowsForms>
+      <Version>2.13.0</Version>
+      <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+      <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Another-Mirai-Native\Another-Mirai-Native.csproj" />
   </ItemGroup>
-
+	
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+        <PackageReference Include="ModelContextProtocol.AspNetCore">
+            <Version>1.4.0</Version>
+        </PackageReference>
+    </ItemGroup>
 </Project>

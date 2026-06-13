@@ -60,6 +60,15 @@
             ShowQRCodeButton = new System.Windows.Forms.Button();
             HideQRCodeButton = new System.Windows.Forms.Button();
             AudioButton = new System.Windows.Forms.Button();
+            tabPage4 = new System.Windows.Forms.TabPage();
+            groupBox5 = new System.Windows.Forms.GroupBox();
+            MCPStatusLabel = new System.Windows.Forms.Label();
+            MCPApplyButton = new System.Windows.Forms.Button();
+            MCPPortValue = new System.Windows.Forms.TextBox();
+            label6 = new System.Windows.Forms.Label();
+            MCPIPValue = new System.Windows.Forms.TextBox();
+            label5 = new System.Windows.Forms.Label();
+            MCPEnableCheckBox = new System.Windows.Forms.CheckBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -167,6 +176,7 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage4);
             tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             tabControl1.Location = new System.Drawing.Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -420,6 +430,104 @@
             AudioButton.UseVisualStyleBackColor = true;
             AudioButton.Click += AudioButton_Click;
             // 
+            // tabPage4
+            // 
+            tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            tabPage4.Controls.Add(groupBox5);
+            tabPage4.Location = new System.Drawing.Point(4, 26);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            tabPage4.Size = new System.Drawing.Size(462, 195);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "MCP服务";
+            // 
+            // groupBox5
+            // 
+            groupBox5.Controls.Add(MCPStatusLabel);
+            groupBox5.Controls.Add(MCPApplyButton);
+            groupBox5.Controls.Add(MCPPortValue);
+            groupBox5.Controls.Add(label6);
+            groupBox5.Controls.Add(MCPIPValue);
+            groupBox5.Controls.Add(label5);
+            groupBox5.Controls.Add(MCPEnableCheckBox);
+            groupBox5.Location = new System.Drawing.Point(8, 6);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new System.Drawing.Size(446, 120);
+            groupBox5.TabIndex = 3;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "MCP 服务器配置";
+            // 
+            // MCPEnableCheckBox
+            // 
+            MCPEnableCheckBox.AutoSize = true;
+            MCPEnableCheckBox.Location = new System.Drawing.Point(10, 22);
+            MCPEnableCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            MCPEnableCheckBox.Name = "MCPEnableCheckBox";
+            MCPEnableCheckBox.Size = new System.Drawing.Size(120, 21);
+            MCPEnableCheckBox.TabIndex = 0;
+            MCPEnableCheckBox.Text = "启用 MCP 服务器";
+            MCPEnableCheckBox.UseVisualStyleBackColor = true;
+            MCPEnableCheckBox.CheckedChanged += MCPEnableCheckBox_CheckedChanged;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(10, 52);
+            label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(56, 17);
+            label5.TabIndex = 1;
+            label5.Text = "监听 IP:";
+            // 
+            // MCPIPValue
+            // 
+            MCPIPValue.Location = new System.Drawing.Point(70, 49);
+            MCPIPValue.Margin = new System.Windows.Forms.Padding(2);
+            MCPIPValue.Name = "MCPIPValue";
+            MCPIPValue.Size = new System.Drawing.Size(140, 23);
+            MCPIPValue.TabIndex = 2;
+            MCPIPValue.TextChanged += MCPConfigValue_Changed;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new System.Drawing.Point(218, 52);
+            label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(68, 17);
+            label6.TabIndex = 3;
+            label6.Text = "监听端口:";
+            // 
+            // MCPPortValue
+            // 
+            MCPPortValue.Location = new System.Drawing.Point(290, 49);
+            MCPPortValue.Margin = new System.Windows.Forms.Padding(2);
+            MCPPortValue.Name = "MCPPortValue";
+            MCPPortValue.Size = new System.Drawing.Size(80, 23);
+            MCPPortValue.TabIndex = 4;
+            MCPPortValue.TextChanged += MCPConfigValue_Changed;
+            // 
+            // MCPApplyButton
+            // 
+            MCPApplyButton.Location = new System.Drawing.Point(10, 82);
+            MCPApplyButton.Margin = new System.Windows.Forms.Padding(2);
+            MCPApplyButton.Name = "MCPApplyButton";
+            MCPApplyButton.Size = new System.Drawing.Size(110, 25);
+            MCPApplyButton.TabIndex = 5;
+            MCPApplyButton.Text = "应用并重启";
+            MCPApplyButton.UseVisualStyleBackColor = true;
+            MCPApplyButton.Click += MCPApplyButton_Click;
+            // 
+            // MCPStatusLabel
+            // 
+            MCPStatusLabel.AutoSize = true;
+            MCPStatusLabel.Location = new System.Drawing.Point(130, 86);
+            MCPStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            MCPStatusLabel.Name = "MCPStatusLabel";
+            MCPStatusLabel.Size = new System.Drawing.Size(80, 17);
+            MCPStatusLabel.TabIndex = 6;
+            MCPStatusLabel.Text = "状态: 未启动";
+            // 
             // Tester
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -446,6 +554,9 @@
             tabPage3.ResumeLayout(false);
             groupBox4.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
+            tabPage4.ResumeLayout(false);
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -483,5 +594,14 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel EventArgumentsPanel;
         private System.Windows.Forms.Button AudioButton;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.CheckBox MCPEnableCheckBox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox MCPIPValue;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox MCPPortValue;
+        private System.Windows.Forms.Button MCPApplyButton;
+        private System.Windows.Forms.Label MCPStatusLabel;
     }
 }
