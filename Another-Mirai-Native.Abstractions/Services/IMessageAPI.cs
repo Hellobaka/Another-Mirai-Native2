@@ -42,6 +42,38 @@ namespace Another_Mirai_Native.Abstractions.Services
         Task<int> SendGroupMessageAsync(long groupId, string message);
 
         /// <summary>
+        /// 发送私聊合并转发消息
+        /// </summary>
+        /// <param name="userId">目标QQ</param>
+        /// <param name="message">将要发送的消息数组</param>
+        /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
+        int SendPrivateForwardMessage(long userId, string[] message);
+
+        /// <summary>
+        /// 异步发送私聊合并转发消息
+        /// </summary>
+        /// <param name="userId">目标QQ</param>
+        /// <param name="message">将要发送的消息数组</param>
+        /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
+        Task<int> SendPrivateForwardMessageAsync(long userId, string[] message);
+
+        /// <summary>
+        /// 发送群聊合并转发消息
+        /// </summary>
+        /// <param name="groupId">目标群聊ID</param>
+        /// <param name="message">将要发送的消息数组</param>
+        /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
+        int SendGroupForwardMessage(long groupId, string[] message);
+
+        /// <summary>
+        /// 异步发送群聊合并转发消息
+        /// </summary>
+        /// <param name="groupId">目标群聊ID</param>
+        /// <param name="message">将要发送的消息数组</param>
+        /// <returns>若发送成功则返回消息ID（根据不同的框架实现，可能会有负数），若发送失败则返回 0</returns>
+        Task<int> SendGroupForwardMessageAsync(long groupId, string[] message);
+
+        /// <summary>
         /// 撤回消息
         /// </summary>
         /// <param name="messageId">通过发送消息接口返回的消息ID</param>

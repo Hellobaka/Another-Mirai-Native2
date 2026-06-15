@@ -188,6 +188,22 @@ namespace Another_Mirai_Native
         public int SendGroupMessage(long groupId, string msg, int msgId = 0);
 
         /// <summary>
+        /// 发送私聊合并转发消息
+        /// </summary>
+        /// <param name="qqId">好友 ID</param>
+        /// <param name="content">欲发送的消息集合</param>
+        /// <returns></returns>
+        public int SendPrivateForwardMessage(long qqId, string[] content);
+
+        /// <summary>
+        /// 发送群组合并转发消息
+        /// </summary>
+        /// <param name="groupId">群 ID</param>
+        /// <param name="content">欲发送的消息集合</param>
+        /// <returns></returns>
+        public int SendGroupForwardMessage(long groupId, string[] content);
+
+        /// <summary>
         /// 发送名片赞
         /// </summary>
         /// <param name="qqId">欲发送的 ID</param>
@@ -198,7 +214,7 @@ namespace Another_Mirai_Native
         /// <summary>
         /// 发送单聊信息
         /// </summary>
-        /// <param name="qqId">群 ID</param>
+        /// <param name="qqId">好友 ID</param>
         /// <param name="msg">欲发送的消息</param>
         /// <returns>消息ID 失败时返回0</returns>
         public int SendPrivateMessage(long qqId, string msg);

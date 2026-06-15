@@ -9,6 +9,7 @@ using Another_Mirai_Native.Protocol.OneBot.Enums;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using FriendInfo = Another_Mirai_Native.Model.FriendInfo;
@@ -355,7 +356,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             var ls = CQCode.Parse(msg);
             var s = regex.Split(msg).ToList();
             s.RemoveAll(string.IsNullOrEmpty);
-            List<JObject> result = new();
+            JArray result = [];
             foreach (var item in s)
             {
                 if (cqCodeCaptures.Contains(item))
@@ -823,6 +824,75 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 }
             }
             return msg;
+        }
+
+        public int SendPrivateForwardMessage(long qqId, string[] content)
+        {
+            return SendForwardMessage(qqId, "user_id", APIType.send_private_msg, content);
+        }
+
+        public int SendGroupForwardMessage(long groupId, string[] content)
+        {
+            return SendForwardMessage(groupId, "group_id", APIType.send_group_msg, content);
+        }
+
+        private int SendForwardMessage(long targetId, string targetKey, APIType apiType, string[] content)
+        {
+            List<string> chain = [];
+            foreach (var item in content)
+            {
+                var msg = RepackCQCode(item);
+                if (string.IsNullOrEmpty(msg))
+                {
+                    continue;
+                }
+                chain.Add(msg);
+            }
+            long qq = GetLoginQQ();
+            string nick = GetLoginNick();
+            if (MessageType == "Array")
+            {
+                JArray array = [];
+                foreach (var item in chain)
+                {
+                    var i = PackCQCodeMessage(item);
+                    JObject o = new()
+                    {
+                        new JProperty("uni", qq),
+                        new JProperty("user_id", qq),
+                        new JProperty("nickname", nick),
+                        new JProperty("content", i),
+                    };
+                    JObject parent = new()
+                    {
+                        new JProperty("type", "node"),
+                        new JProperty("data", o)
+                    };
+                    array.Add(parent);
+                }
+                var r = CallOneBotAPI(apiType, new Dictionary<string, object>
+                {
+                    {targetKey, targetId },
+                    {"message", array },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
+            }
+            else
+            {
+                StringBuilder builder = new();
+                foreach (var item in chain)
+                {
+                    builder.Append($"[CQ:node,user_id={qq},nickname={nick},content={item}]");
+                }
+                var r = CallOneBotAPI(apiType, new Dictionary<string, object>
+                {
+                    {targetKey, targetId },
+                    {"message", builder.ToString() },
+                    {"auto_escape", false },
+                });
+                return r != null ? (int?)r["message_id"] ?? 0 : 0;
+            }
         }
 
         public event Action<string, byte[]> QRCodeDisplayAction;

@@ -108,7 +108,7 @@ namespace Another_Mirai_Native.Native
         /// 发送好友消息
         /// </summary>
         /// <param name="authCode"></param>
-        /// <param name="groupId">目标帐号</param>
+        /// <param name="qqId">目标帐号</param>
         /// <param name="msg">消息内容</param>
         /// <returns></returns>
         private int CQ_sendPrivateMsg(int authCode, long qqId, string msg)
@@ -686,6 +686,52 @@ namespace Another_Mirai_Native.Native
         private string CQ_getChatHistoryById(int authCode, long parentId, bool isGroup, int messageId)
         {
             return ChatHistoryHelper.GetHistoriesByMsgId(parentId, messageId, isGroup ? ChatHistoryType.Group : ChatHistoryType.Private)?.ToNativeBase64() ?? new ChatHistory().ToNativeBase64();
+        }
+
+        /// <summary>
+        /// 发送群合并消息
+        /// </summary>
+        /// <param name="authCode"></param>
+        /// <param name="groupId">目标群</param>
+        /// <param name="msg">消息内容</param>
+        /// <returns></returns>
+        private int CQ_sendGroupForwardMsg(int authCode, long groupId, string[] msg)
+        {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendGroupForwardMsg", new() { { "groupId", groupId }, { "msg", msg } });
+                return 1;
+            }
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送群聊合并消息", $"群:{groupId} 消息:{string.Join("; ", msg)}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SendGroupForwardMessage(groupId, msg);
+            OnGroupMessageSend?.Invoke(ret, groupId, string.Join("; ", msg), CurrentPlugin);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
+        }
+
+        /// <summary>
+        /// 发送好友合并消息
+        /// </summary>
+        /// <param name="authCode"></param>
+        /// <param name="qqId">目标帐号</param>
+        /// <param name="msg">消息内容</param>
+        /// <returns></returns>
+        private int CQ_sendPrivateForwardMsg(int authCode, long qqId, string[] msg)
+        {
+            if (Testing)
+            {
+                PluginManagerProxy.TriggerTestInvoke("CQ_sendPrivateForwardMsg", new() { { "qqId", qqId }, { "msg", msg } });
+                return 1;
+            }
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int logId = LogHelper.WriteLog(CurrentPlugin, LogLevel.InfoSend, "[↑]发送私聊合并消息", $"QQ:{qqId} 消息:{string.Join("; ", msg)}", "处理中...");
+            int ret = ProtocolManager.Instance.CurrentProtocol.SendPrivateForwardMessage(qqId, msg);
+            OnPrivateMessageSend?.Invoke(ret, qqId, string.Join("; ", msg), CurrentPlugin);
+            stopwatch.Stop();
+            LogHelper.UpdateLogStatus(logId, $"√ {stopwatch.ElapsedMilliseconds / (double)1000:f2} s");
+            return ret;
         }
     }
 }

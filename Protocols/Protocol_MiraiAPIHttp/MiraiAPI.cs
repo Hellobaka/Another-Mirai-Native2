@@ -635,6 +635,56 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             return sex == null ? QQSex.Unknown : sex == "MALE" ? QQSex.Man : sex == "FEMALE" ? QQSex.Woman : QQSex.Unknown;
         }
 
+        public int SendPrivateForwardMessage(long qqId, string[] content)
+        {
+            return SendForwardMessage(qqId, content, MiraiApiType.sendFriendMessage);
+        }
+
+        public int SendGroupForwardMessage(long groupId, string[] content)
+        {
+            return SendForwardMessage(groupId, content, MiraiApiType.sendGroupMessage);
+        }
+
+        private int SendForwardMessage(long id, string[] content, MiraiApiType apiType)
+        {
+            var nodes = new List<MiraiMessageTypeDetail.ForwardMessage.NodeList>();
+            long qq = GetLoginQQ();
+            string nick = GetLoginNick();
+            foreach (var item in content)
+            {
+                IMiraiMessageBase[] chain = CQCodeBuilder.BuildMessageChains(item, out _).ToArray();
+                if (chain.Length == 0)
+                {
+                    continue;
+                }
+                MiraiMessageTypeDetail.ForwardMessage.NodeList node = new()
+                {
+                    messageChain = chain,
+                    senderId = qq,
+                    senderName = nick,
+                    time = (int)Helper.DateTime2TimeStamp(DateTime.Now)
+                };
+                nodes.Add(node);
+            }
+            if (nodes.Count <= 0)
+            {
+                return 0;
+            }
+            var messageChain = new MiraiMessageTypeDetail.ForwardMessage()
+            {
+                nodeList = nodes.ToArray(),
+                display = null
+            };
+            object request = new
+            {
+                sessionKey = SessionKey_Message,
+                target = id,
+                messageChain = messageChain
+            };
+            JObject json = CallMiraiAPI(apiType, request);
+            return json == null || ((int)json["code"]) != 0 ? 0 : (int)json["messageId"];
+        }
+
         public event Action<string, byte[]> QRCodeDisplayAction;
 
         public event Action QRCodeFinishedAction;

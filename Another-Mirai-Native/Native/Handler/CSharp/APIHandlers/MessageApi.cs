@@ -130,6 +130,26 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             throw new InvalidCastException($"GetChatHistoryByIdAsync 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
         }
 
+        public int SendGroupForwardMessage(long groupId, string[] message)
+        {
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_sendGroupForwardMsg", true, AuthCode, groupId, message);
+            if (ret is long r)
+            {
+                return (int)r;
+            }
+            throw new InvalidCastException($"SendGroupForwardMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public async Task<int> SendGroupForwardMessageAsync(long groupId, string[] message)
+        {
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_sendGroupForwardMsg", true, AuthCode, groupId, message);
+            if (ret is long r)
+            {
+                return (int)r;
+            }
+            throw new InvalidCastException($"SendGroupForwardMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
         public int SendGroupMessage(long groupId, string message)
         {
             var ret = ClientManager.Client.InvokeCQPFunction("CQ_sendGroupMsg", true, AuthCode, groupId, message);
@@ -148,6 +168,26 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
                 return (int)r;
             }
             throw new InvalidCastException($"SendGroupMessageAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public int SendPrivateForwardMessage(long userId, string[] message)
+        {
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_sendPrivateForwardMsg", true, AuthCode, userId, message);
+            if (ret is long r)
+            {
+                return (int)r;
+            }
+            throw new InvalidCastException($"SendPrivateForwardMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
+        }
+
+        public async Task<int> SendPrivateForwardMessageAsync(long userId, string[] message)
+        {
+            var ret = await ClientManager.Client.InvokeCQPFunctionAsync("CQ_sendPrivateForwardMsg", true, AuthCode, userId, message);
+            if (ret is long r)
+            {
+                return (int)r;
+            }
+            throw new InvalidCastException($"SendPrivateForwardMessage 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
 
         public int SendPrivateMessage(long userId, string message)

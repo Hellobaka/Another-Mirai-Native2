@@ -469,5 +469,21 @@ namespace Protocol_NoConnection
         {
             OnProtocolOffline?.Invoke();
         }
+
+        public int SendPrivateForwardMessage(long qqId, string[] content)
+        {
+            lock (msgIdLock)
+            {
+                return MsgId++;
+            }
+        }
+
+        public int SendGroupForwardMessage(long groupId, string[] content)
+        {
+            lock (msgIdLock)
+            {
+                return MsgId++;
+            }
+        }
     }
 }

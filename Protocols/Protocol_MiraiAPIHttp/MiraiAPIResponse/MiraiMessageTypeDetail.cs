@@ -205,28 +205,6 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public string brief { get; set; }
         }
 
-        public class Forward : IMiraiMessageBase
-        {
-            public string type { get; set; } = "Forward";
-
-            public MiraiMessageType messageType { get; set; } = MiraiMessageType.Forward;
-
-            public Nodelist[] nodeList { get; set; }
-
-            public class Nodelist
-            {
-                public long senderId { get; set; }
-
-                public long time { get; set; }
-
-                public string senderName { get; set; }
-
-                public object[] messageChain { get; set; }
-
-                public long? messageId { get; set; }
-            }
-        }
-
         public class File : IMiraiMessageBase
         {
             public string type { get; set; } = "File";
@@ -247,6 +225,53 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp.MiraiAPIResponse
             public MiraiMessageType messageType { get; set; } = MiraiMessageType.MiraiCode;
 
             public string code { get; set; }
+        }
+
+        public class ForwardMessage : IMiraiMessageBase
+        {
+            public string type { get; set; } = "Forward";
+
+            public MiraiMessageType messageType { get; set; } = MiraiMessageType.Forward;
+
+            public Display? display { get; set; }
+
+            public NodeList[] nodeList { get; set; }
+
+            public class Display
+            {
+                public string title { get; set; }
+
+                public string brief { get; set; }
+
+                public string source { get; set; }
+
+                public string[] preview { get; set; }
+
+                public string summary { get; set; }
+            }
+
+            // (senderId, time, senderName, messageChain), messageId, messageRef 是三种不同构造引用节点的方式，选其中一个/组传参即可
+            public class NodeList
+            {
+                public long senderId { get; set; }
+
+                public int time { get; set; }
+
+                public string senderName { get; set; }
+
+                public object[] messageChain { get; set; }
+
+                public int? messageId { get; set; }
+
+                public MessageRef? messageRef { get; set; }
+            }
+
+            public class MessageRef
+            {
+                public int messageId { get; set; }
+
+                public int target { get; set; }
+            }
         }
     }
 }

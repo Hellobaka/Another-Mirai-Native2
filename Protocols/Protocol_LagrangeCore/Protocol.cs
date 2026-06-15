@@ -273,6 +273,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             return 0;
         }
 
+        public int SendGroupForwardMessage(long groupId, string[] content)
+        {
+            throw new NotSupportedException();
+        }
+
         public int SendGroupMessage(long groupId, string msg, int msgId = 0)
         {
             if (msgId != 0)
@@ -294,6 +299,11 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
         {
             var r = BotContext.Like((uint)qqId, (uint)count).Result;
             return r ? 0 : 1;
+        }
+
+        public int SendPrivateForwardMessage(long qqId, string[] content)
+        {
+            throw new NotSupportedException();
         }
 
         public int SendPrivateMessage(long qqId, string msg)

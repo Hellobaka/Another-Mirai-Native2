@@ -231,7 +231,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         break;
 
                     case MiraiMessageType.Forward:
-                        chainMsg.Add(item.ToObject<MiraiMessageTypeDetail.Forward>());
+                        chainMsg.Add(item.ToObject<MiraiMessageTypeDetail.ForwardMessage>());
                         break;
 
                     case MiraiMessageType.File:
