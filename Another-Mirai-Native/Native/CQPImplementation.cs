@@ -3,6 +3,7 @@ using Another_Mirai_Native.Config;
 using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -74,6 +75,27 @@ namespace Another_Mirai_Native.Native
 
                         case "String":
                             transformedArgs[i] = args[i].ToString();
+                            break;
+
+                        case "String[]":
+                            if (args[i] is string[] stringArray)
+                            {
+                                transformedArgs[i] = stringArray;
+                            }
+                            else if (args[i] is JArray array)
+                            {
+                                string[] values = new string[array.Count];
+                                for (int j = 0; j < array.Count; j++)
+                                {
+                                    values[j] = array[j]?.ToString() ?? string.Empty;
+                                }
+                                transformedArgs[i] = values;
+                            }
+                            else
+                            {
+                                LogHelper.Error("调用前置检查", $"{CurrentPlugin.PluginName} => 调用 {functionName} 参数{i + 1} 无法转换为 String[]");
+                                return null;
+                            }
                             break;
 
                         case "Boolean":
