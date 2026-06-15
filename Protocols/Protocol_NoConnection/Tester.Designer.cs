@@ -64,6 +64,7 @@
             groupBox5 = new System.Windows.Forms.GroupBox();
             MCPStatusLabel = new System.Windows.Forms.Label();
             MCPApplyButton = new System.Windows.Forms.Button();
+            MCPStopButton = new System.Windows.Forms.Button();
             MCPPortValue = new System.Windows.Forms.TextBox();
             label6 = new System.Windows.Forms.Label();
             MCPIPValue = new System.Windows.Forms.TextBox();
@@ -445,6 +446,7 @@
             // 
             groupBox5.Controls.Add(MCPStatusLabel);
             groupBox5.Controls.Add(MCPApplyButton);
+            groupBox5.Controls.Add(MCPStopButton);
             groupBox5.Controls.Add(MCPPortValue);
             groupBox5.Controls.Add(label6);
             groupBox5.Controls.Add(MCPIPValue);
@@ -518,10 +520,22 @@
             MCPApplyButton.UseVisualStyleBackColor = true;
             MCPApplyButton.Click += MCPApplyButton_Click;
             // 
+            // MCPStopButton
+            // 
+            MCPStopButton.Location = new System.Drawing.Point(130, 82);
+            MCPStopButton.Margin = new System.Windows.Forms.Padding(2);
+            MCPStopButton.Name = "MCPStopButton";
+            MCPStopButton.Size = new System.Drawing.Size(80, 25);
+            MCPStopButton.TabIndex = 5;
+            MCPStopButton.Text = "停止";
+            MCPStopButton.Enabled = false;
+            MCPStopButton.UseVisualStyleBackColor = true;
+            MCPStopButton.Click += MCPStopButton_Click;
+            // 
             // MCPStatusLabel
             // 
             MCPStatusLabel.AutoSize = true;
-            MCPStatusLabel.Location = new System.Drawing.Point(130, 86);
+            MCPStatusLabel.Location = new System.Drawing.Point(220, 86);
             MCPStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             MCPStatusLabel.Name = "MCPStatusLabel";
             MCPStatusLabel.Size = new System.Drawing.Size(80, 17);
@@ -602,6 +616,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox MCPPortValue;
         private System.Windows.Forms.Button MCPApplyButton;
+        private System.Windows.Forms.Button MCPStopButton;
         private System.Windows.Forms.Label MCPStatusLabel;
     }
 }

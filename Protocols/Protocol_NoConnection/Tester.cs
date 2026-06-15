@@ -374,16 +374,19 @@ namespace Protocol_NoConnection
             {
                 MCPStatusLabel.Text = $"状态: 运行中 ({Protocol.MCPServer.ListenURL})";
                 MCPStatusLabel.ForeColor = System.Drawing.Color.Green;
+                MCPStopButton.Enabled = true;
             }
             else if (Protocol?.MCPServerEnabled == true)
             {
                 MCPStatusLabel.Text = "状态: 已启用（等待启动）";
                 MCPStatusLabel.ForeColor = System.Drawing.Color.DarkOrange;
+                MCPStopButton.Enabled = false;
             }
             else
             {
                 MCPStatusLabel.Text = "状态: 未启动";
                 MCPStatusLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+                MCPStopButton.Enabled = false;
             }
 #endif
         }
@@ -394,6 +397,18 @@ namespace Protocol_NoConnection
         private void MCPEnableCheckBox_CheckedChanged(object sender, EventArgs e)
         {
 #if NET9_0_OR_GREATER
+            if (!MCPEnableCheckBox.Checked && Protocol?.MCPServer?.Running == true)
+            {
+                if (MessageBox.Show("MCP 服务器正在运行，是否停止？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Task.Run(() => Protocol?.MCPServer?.Stop());
+                }
+                else
+                {
+                    MCPEnableCheckBox.Checked = true;
+                    return;
+                }
+            }
             bool enabled = MCPEnableCheckBox.Checked;
             MCPIPValue.Enabled = enabled;
             MCPPortValue.Enabled = enabled;
@@ -404,6 +419,7 @@ namespace Protocol_NoConnection
                 Protocol.MCPServerEnabled = enabled;
                 Protocol.SetConfig("MCPServerEnabled", enabled);
             }
+            UpdateMCPStatusLabel();
 #endif
         }
 
@@ -480,6 +496,17 @@ namespace Protocol_NoConnection
             else
             {
                 Protocol.MCPServer = null;
+                UpdateMCPStatusLabel();
+            }
+#endif
+        }
+
+        public async void MCPStopButton_Click(object sender, EventArgs e)
+        {
+#if NET9_0_OR_GREATER
+            if (Protocol?.MCPServer?.Running == true)
+            {
+                await Task.Run(() => Protocol?.MCPServer?.Stop());
                 UpdateMCPStatusLabel();
             }
 #endif
