@@ -42,6 +42,18 @@ namespace Another_Mirai_Native.Abstractions.Context
         }
 
         /// <summary>
+        /// 异步回复当前消息
+        /// </summary>
+        /// <param name="msg">回复内容</param>
+        /// <returns>回复后消息</returns>
+        public async Task<Message> ReplyAsync(string msg)
+        {
+            string content = $"[CQ:reply,id={Message.Id}]" + msg;
+            int msgId = await API.MessageApi.SendGroupMessageAsync(FromGroup.Id, content);
+            return new(API, msgId, content);
+        }
+
+        /// <summary>
         /// 向当前消息的来源群发送消息
         /// </summary>
         /// <param name="msg">消息内容</param>
