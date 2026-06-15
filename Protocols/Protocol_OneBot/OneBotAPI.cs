@@ -112,6 +112,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             {
                 { "Ws", WsURL },
                 { "AuthKey", AuthKey },
+                { "bool_LLOnebot", LLOnebotCompatibility.ToString().ToLower() },
             };
         }
 
@@ -437,6 +438,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             if (config == null
                 || !config.ContainsKey("Ws")
                 || !config.ContainsKey("AuthKey")
+                || !config.ContainsKey("bool_LLOnebot")
                 || string.IsNullOrEmpty(config["Ws"]))
             {
                 return false;
@@ -448,8 +450,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 WsURL = WsURL.Substring(0, WsURL.Length - 1);
             }
             AuthKey = config["AuthKey"];
+            LLOnebotCompatibility = config["bool_LLOnebot"] == "true";
             SetConfig("WebSocketURL", WsURL);
             SetConfig("AuthKey", AuthKey);
+            SetConfig("LLOnebotCompatibility", LLOnebotCompatibility);
             return true;
         }
 
@@ -828,12 +832,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
 
         public int SendPrivateForwardMessage(long qqId, string[] content)
         {
-            return SendForwardMessage(qqId, "user_id", APIType.send_private_msg, content);
+            return SendForwardMessage(qqId, "user_id", LLOnebotCompatibility ? APIType.send_private_forward_msg : APIType.send_private_msg, content);
         }
 
         public int SendGroupForwardMessage(long groupId, string[] content)
         {
-            return SendForwardMessage(groupId, "group_id", APIType.send_group_msg, content);
+            return SendForwardMessage(groupId, "group_id", LLOnebotCompatibility ? APIType.send_group_forward_msg : APIType.send_private_msg, content);
         }
 
         private int SendForwardMessage(long targetId, string targetKey, APIType apiType, string[] content)

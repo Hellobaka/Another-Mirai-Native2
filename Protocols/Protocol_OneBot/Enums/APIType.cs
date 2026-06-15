@@ -191,5 +191,15 @@
         ///清理缓存
         ///</summary>
         clean_cache,
+
+        ///<summary>
+        ///发送群合并消息（LLOnebot）
+        ///</summary>
+        send_group_forward_msg,
+
+        ///<summary>
+        ///发送私聊合并消息（LLOnebot）
+        ///</summary>
+        send_private_forward_msg,
     }
 }

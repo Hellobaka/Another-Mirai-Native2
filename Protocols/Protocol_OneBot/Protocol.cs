@@ -33,8 +33,6 @@ namespace Another_Mirai_Native.Protocol.OneBot
        
         private object EventReconnectLock { get; set; } = new object();
 
-        public static string AuthKey { get; set; } = "";
-
         public string MessageType { get; set; } = "Array";
        
         public bool ExitFlag { get; private set; }
@@ -47,6 +45,10 @@ namespace Another_Mirai_Native.Protocol.OneBot
         /// 与OneBot通信的连接, 通常以ws开头
         /// </summary>
         public string WsURL { get; set; } = "";
+
+        public static string AuthKey { get; set; } = "";
+
+        public static bool LLOnebotCompatibility { get; set; }
 
         /// <summary>
         /// 标志是否需要进行消息处理
