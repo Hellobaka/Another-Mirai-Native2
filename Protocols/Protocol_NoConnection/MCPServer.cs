@@ -179,7 +179,7 @@ namespace Protocol_NoConnection
                 _ => Another_Mirai_Native.Model.Enums.LogLevel.Info
             };
 
-            LogHelper.WriteLog(amnLevel, $"MCP/{_category}", "MCP日志", message);
+            LogHelper.WriteLog(amnLevel, "MCP日志", message);
         }
     }
 #else
