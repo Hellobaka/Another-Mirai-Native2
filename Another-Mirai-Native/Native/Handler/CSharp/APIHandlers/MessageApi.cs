@@ -209,5 +209,25 @@ namespace Another_Mirai_Native.Native.Handler.CSharp.APIHandlers
             }
             throw new InvalidCastException($"SendPrivateMessageAsync 返回值类型错误，应当返回 int，实际返回 {ret?.GetType()}");
         }
+
+        public (bool Success, string FilePath) TryGetImageByHash(string hash)
+        {
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getImage", true, AuthCode, hash);
+            if (ret is string r)
+            {
+                return ((!string.IsNullOrEmpty(r) && File.Exists(r)), r);
+            }
+            throw new InvalidCastException($"TryGetImageByHash 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
+        }
+
+        public async Task<(bool Success, string FilePath)> TryGetImageByHashAsync(string hash)
+        {
+            var ret = ClientManager.Client.InvokeCQPFunction("CQ_getImage", true, AuthCode, hash);
+            if (ret is string r)
+            {
+                return ((!string.IsNullOrEmpty(r) && File.Exists(r)), r);
+            }
+            throw new InvalidCastException($"TryGetImageByHash 返回值类型错误，应当返回 string，实际返回 {ret?.GetType()}");
+        }
     }
 }

@@ -129,5 +129,19 @@ namespace Another_Mirai_Native.Abstractions.Services
         /// <param name="messageId">通过发送消息接口返回的消息ID</param>
         /// <returns>对应的聊天记录，未找到时返回 <see langword="null"/>。</returns>
         Task<ChatHistory?> GetChatHistoryByIdAsync(long parentId, bool isGroup, int messageId);
+
+        /// <summary>
+        /// 尝试通过图片 Hash 获取图片文件路径。
+        /// </summary>
+        /// <param name="hash">图片元素中的 Hash 字段</param>
+        /// <returns>若成功则返回 true 和绝对路径，若失败则返回 false 和空字符串。</returns>
+        (bool Success, string FilePath) TryGetImageByHash(string hash);
+
+        /// <summary>
+        /// 尝试异步通过图片 Hash 获取图片文件路径。
+        /// </summary>
+        /// <param name="hash">图片元素中的 Hash 字段</param>
+        /// <returns>若成功则返回 true 和绝对路径，若失败则返回 false 和空字符串。</returns>
+        Task<(bool Success, string FilePath)> TryGetImageByHashAsync(string hash);
     }
 }
