@@ -12,6 +12,8 @@
 			<ILRepackAdditionParam Condition="'$(ILRepackAdditionParam)'==''"></ILRepackAdditionParam>
 			<!-- 是否忽略依赖版本匹配（仅匹配程序集名称），默认禁用 -->
 			<IgnoreDependencyVersion Condition="'$(IgnoreDependencyVersion)'==''">false</IgnoreDependencyVersion>
+			<!-- 是否保留原始文件，默认禁用 -->
+			<KeepOriginalFile Condition="'$(KeepOriginalFile)'==''">false</KeepOriginalFile>
 
 			<AmnNormalizedName Condition="$([System.String]::Copy('$(TargetName)').StartsWith('Native_'))">$(TargetName)</AmnNormalizedName>
 			<AmnNormalizedName Condition="'$(AmnNormalizedName)'==''">Native_$(TargetName)</AmnNormalizedName>
@@ -85,7 +87,7 @@
 				  DestinationFiles="$(TargetDir)$(AmnNormalizedName).dll"
 				  Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
 			<Delete Files="$(TargetDir)$(TargetName).dll"
-					Condition="'$(AmnNormalizedName)'!='$(TargetName)'" />
+					Condition="'$(AmnNormalizedName)'!='$(TargetName)' and '$(KeepOriginalFile)'!='true'" />
 
 			<Message Importance="high"
 						Condition="'$(AmnNormalizedName)'!='$(TargetName)'"
