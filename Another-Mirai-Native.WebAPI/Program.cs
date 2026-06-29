@@ -61,7 +61,7 @@ namespace Another_Mirai_Native.WebAPI
                     {
                         jsonTypeInfo.PolymorphismOptions = new()
                         {
-                            TypeDiscriminatorPropertyName = "messageItemType",
+                            TypeDiscriminatorPropertyName = "$type",
                             DerivedTypes =
                             {
                                 new(typeof(Face),  (int)MessageItemType.Face),
