@@ -317,6 +317,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     ["AuthKey"] = ("鉴权 Token", "", @"conf\OneBot_v11.json", ""),
                     ["MessageType"] = ("消息类型", "大部分情况下请用 Array 类型", @"conf\OneBot_v11.json", "Array"),
                     ["DiscardOfflineMessage"] = ("抛弃离线消息", "只有在收到 Online 元数据时才处理消息", @"conf\OneBot_v11.json", true),
+                    ["LLOnebotCompatibility"] = ("LLOnebot 发送合并消息支持", "", @"conf\OneBot_v11.json", true),
                 },
                 ["MiraiAPIHttp"] = new()
                 {
