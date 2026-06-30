@@ -41,7 +41,7 @@ namespace Another_Mirai_Native.WebAPI
                     _ => WebAPIConfig.Instance.ListenIP
                 };
                 var scheme = WebAPIConfig.Instance.EnableHTTPS ? "https" : "http";
-                return $"{scheme}://{displayIp}:{WebAPIConfig.Instance.ListenPort}";
+                return $"{scheme}://{displayIp}:{WebAPIConfig.Instance.ListenPort}/scalar";
             }
         }
 
@@ -89,14 +89,13 @@ namespace Another_Mirai_Native.WebAPI
         {
             if (args.Length == 0)
             {
-                // Local test: run framework in background
+                // 宿主模式
                 Task.Run(() => Entry.Main(args));
             }
             else
             {
-                // Framework mode: build only, framework controls start/stop
+                // 插件模式
                 Entry.Main(args);
-                BuildWebAPI(args);
                 return;
             }
 
