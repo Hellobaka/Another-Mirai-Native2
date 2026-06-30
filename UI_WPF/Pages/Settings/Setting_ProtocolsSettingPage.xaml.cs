@@ -38,6 +38,7 @@ namespace Another_Mirai_Native.UI.Pages
             new(){ Key = "AuthKey", ValueType = typeof(string), DescriptionTitle = "鉴权 Token", DescriptionSubtitle = "", DisplayControl = typeof(SettingItem_TextBox) },
             new(){ Key = "MessageType", ValueType = typeof(string), DescriptionTitle = "消息类型", DescriptionSubtitle = "大部分情况下请用 Array 类型", DisplayControl = typeof(SettingItem_ComboBox), DisplayValues = new string[]{ "Array", "CQCode" } },
             new(){ Key = "DiscardOfflineMessage", ValueType = typeof(bool), DescriptionTitle = "抛弃离线消息", DescriptionSubtitle = "只有在收到 Online 元数据时才处理消息", DisplayControl = typeof(SettingItem_ToggleButton) },
+            new(){ Key = "LLOnebotCompatibility", ValueType = typeof(bool), DescriptionTitle = "LLOnebot 发送合并消息支持", DescriptionSubtitle = "", DisplayControl = typeof(SettingItem_ToggleButton) },
         ];
 
         private ProtocolConfigItem[] MiraiAPIHttpConfigs { get; set; } = 
