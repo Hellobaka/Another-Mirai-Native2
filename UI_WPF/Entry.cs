@@ -66,9 +66,9 @@ namespace Another_Mirai_Native.UI
         {
             AppConfig.Instance.IsCore = true;
             Another_Mirai_Native.Entry.CreateInitFolders();
-            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            if (AppConfig.Instance.UseDatabase)
             {
-                LogHelper.CreateDB();
+                LogHelper.EnsureLogDatabase();
                 ChatHistoryDB.GetInstance();
             }
         }

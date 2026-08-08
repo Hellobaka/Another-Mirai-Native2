@@ -45,13 +45,38 @@ namespace Another_Mirai_Native.DB
         /// </summary>
         public static void CreateDB()
         {
-            using (var db = GetInstance())
+            using (var db = CreateClient(GetLogFilePath()))
             {
                 string DBPath = GetLogFilePath();
                 db.DbMaintenance.CreateDatabase(DBPath);
                 db.CodeFirst.InitTables(typeof(LogModel));
             }
             WriteLog(LogLevel.InfoSuccess, "运行日志", $"日志数据库初始化完毕{DateTime.Now:yyMMdd}。");
+        }
+
+        /// <summary>
+        /// 确保日志数据库已创建。判断条件为“文件不存在或为空”，
+        /// 避免建库中断留下的 0 字节空文件导致永久无法重试
+        /// </summary>
+        public static void EnsureLogDatabase()
+        {
+            if (AppConfig.Instance.UseDatabase is false)
+            {
+                return;
+            }
+            string dbPath = GetLogFilePath();
+            if (File.Exists(dbPath) && new FileInfo(dbPath).Length > 0)
+            {
+                return;
+            }
+            lock (writeLock)
+            {
+                if (File.Exists(dbPath) && new FileInfo(dbPath).Length > 0)
+                {
+                    return;
+                }
+                CreateDB();
+            }
         }
 
         public static void Debug(string type, string message)
@@ -313,10 +338,6 @@ namespace Another_Mirai_Native.DB
 
         public static int WriteLog(LogModel model)
         {
-            if (AppConfig.Instance.UseDatabase && File.Exists(GetLogFilePath()) is false)
-            {
-                CreateDB();
-            }
             if (!string.IsNullOrWhiteSpace(model.detail) && string.IsNullOrWhiteSpace(model.name))
             {
                 model.name = "";
@@ -389,9 +410,15 @@ namespace Another_Mirai_Native.DB
 
         private static SqlSugarClient GetInstance()
         {
+            EnsureLogDatabase();
+            return CreateClient(GetLogFilePath());
+        }
+
+        private static SqlSugarClient CreateClient(string dbPath)
+        {
             SqlSugarClient db = new(new ConnectionConfig()
             {
-                ConnectionString = $"data source={GetLogFilePath()}",
+                ConnectionString = $"data source={dbPath}",
                 DbType = DbType.Sqlite,
                 IsAutoCloseConnection = false,
                 InitKeyType = InitKeyType.Attribute,

@@ -49,9 +49,9 @@ namespace Another_Mirai_Native
                 Console.WriteLine($"Args: {string.Join(" ", args)}");
             }
 
-            if (AppConfig.Instance.UseDatabase && File.Exists(LogHelper.GetLogFilePath()) is false)
+            if (AppConfig.Instance.UseDatabase)
             {
-                LogHelper.CreateDB();
+                LogHelper.EnsureLogDatabase();
             }
             if (args.Length == 0)
             {
