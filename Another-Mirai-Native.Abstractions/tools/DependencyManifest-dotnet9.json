@@ -1,12 +1,12 @@
 [
   {
     "AssemblyName": "Another-Mirai-Native.Abstractions",
-    "Version": "1.2.3.0",
+    "Version": "1.2.4.0",
     "PublicToken": "null"
   },
   {
     "AssemblyName": "Another-Mirai-Native",
-    "Version": "2.13.1.0",
+    "Version": "2.13.2.0",
     "PublicToken": "null"
   },
   {
