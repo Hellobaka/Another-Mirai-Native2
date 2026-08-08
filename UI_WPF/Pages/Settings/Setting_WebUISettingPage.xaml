@@ -106,7 +106,6 @@
                     <controls:SettingItem_ToggleButton
                         x:Name="EnableFileManager"
                         Title="启用文件管理页"
-                        IsEnabled="False"
                         OnToggled="SettingItem_Toggled" />
                     <controls:SettingItem_ToggleButton
                         x:Name="EnableTerminal"

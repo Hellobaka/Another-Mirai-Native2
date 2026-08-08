@@ -33,6 +33,8 @@ namespace Another_Mirai_Native.WebAPI
 
         public bool EnableTerminal { get; set; }
 
+        public string FileManagerRoot { get; set; }
+
         public void LoadConfig()
         {
             Password = GetConfig("Password", Guid.NewGuid().ToString().Replace("-", "")[..16]);
@@ -55,6 +57,7 @@ namespace Another_Mirai_Native.WebAPI
             EnableChat = GetConfig("EnableChat", true);
             EnableFileManager = GetConfig("EnableFileManager", false);
             EnableTerminal = GetConfig("EnableTerminal", false);
+            FileManagerRoot = GetConfig("FileManagerRoot", "");
         }
     }
 }
