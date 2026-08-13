@@ -107,6 +107,11 @@
                         x:Name="EnableFileManager"
                         Title="启用文件管理页"
                         OnToggled="SettingItem_Toggled" />
+                    <controls:SettingItem_TextBox
+                        x:Name="FileManagerRoot"
+                        Title="文件管理根目录"
+                        DataChanged="SettingItem_TextBox_DataChanged"
+                        Subtitle="文件管理页访问的根目录（绝对路径或相对路径），留空默认使用运行目录下的 data 文件夹" />
                     <controls:SettingItem_ToggleButton
                         x:Name="EnableTerminal"
                         Title="启用终端页"
