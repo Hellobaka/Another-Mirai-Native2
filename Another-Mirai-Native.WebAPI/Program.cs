@@ -331,13 +331,35 @@ namespace Another_Mirai_Native.WebAPI
                                 || context.HttpContext.Request.Path.StartsWithSegments("/api/cache")
                                 || context.HttpContext.Request.Path.StartsWithSegments("/external")
                                 || context.HttpContext.Request.Path.StartsWithSegments("/api/files/image")))
-                          {
-                              context.Token = token;
-                          }
+                      {
+                          context.Token = token;
+                      }
 
-                          return Task.CompletedTask;
-                      },
-                      OnChallenge = context =>
+                      return Task.CompletedTask;
+                  },
+                  OnTokenValidated = context =>
+                  {
+                      // 图片预览短时效令牌：只能用于 /api/files/image，且路径必须与签发时一致
+                      if (context.Principal?.FindFirst("purpose")?.Value == "file_image")
+                      {
+                          if (!context.HttpContext.Request.Path.StartsWithSegments("/api/files/image"))
+                          {
+                              context.Fail("该令牌仅限图片预览接口使用");
+                          }
+                          else
+                          {
+                              var claimPath = context.Principal.FindFirst("path")?.Value ?? "";
+                              var requestPath = context.HttpContext.Request.Query["path"].ToString();
+                              if (!string.Equals(claimPath, requestPath, StringComparison.Ordinal))
+                              {
+                                  context.Fail("图片预览令牌与请求路径不匹配");
+                              }
+                          }
+                      }
+
+                      return Task.CompletedTask;
+                  },
+                  OnChallenge = context =>
                       {
                           // Skip the default logic.
                           context.HandleResponse();

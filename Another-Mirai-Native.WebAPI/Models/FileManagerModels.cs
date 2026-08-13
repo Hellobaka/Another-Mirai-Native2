@@ -229,4 +229,14 @@ namespace Another_Mirai_Native.WebAPI.Models
         [Description("全部命中数量（可能超过返回条数）")]
         public long Total { get; set; }
     }
+
+    [Description("图片预览令牌结果")]
+    public class ImageTokenResult
+    {
+        [Description("短时效 JWT，仅可用于 /api/files/image 且路径必须匹配")]
+        public string Token { get; set; } = string.Empty;
+
+        [Description("过期时间")]
+        public DateTime ExpiresAt { get; set; }
+    }
 }
