@@ -52,6 +52,7 @@ namespace Another_Mirai_Native.WebAPI.Services
         public const long MaxTextFileSize = 10L * 1024 * 1024;
         public const int MaxQueryRows = 1000;
         public const int MaxPreviewPageSize = 200;
+        public const int MaxBlobPreviewBytes = 1024 * 1024;
 
         private static readonly HashSet<string> SqliteExtensions = new(StringComparer.OrdinalIgnoreCase)
         {
@@ -71,6 +72,19 @@ namespace Another_Mirai_Native.WebAPI.Services
         /// 判断异常是否由文件/数据库被其他进程占用导致（共享冲突、锁冲突、SQLite busy/locked）
         /// </summary>
         public static bool IsFileInUse(Exception exception)
+        {
+            // 部分库（如 SqlSugar）会包装底层异常，需遍历 InnerException 链
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                if (IsFileInUseException(current))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool IsFileInUseException(Exception exception)
         {
             if (exception is SqliteException sqlite && sqlite.SqliteErrorCode is 5 or 6)
             {
@@ -103,7 +117,7 @@ namespace Another_Mirai_Native.WebAPI.Services
         }
 
         /// <summary>
-        /// 获取文件管理器根目录：空/空白取程序目录，相对路径相对程序目录解析，绝对路径原样使用
+        /// 获取文件管理器根目录：空/空白取 运行目录\data，相对路径相对运行目录解析，绝对路径原样使用
         /// </summary>
         public static string GetRootPath()
         {
@@ -111,7 +125,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             string root;
             if (string.IsNullOrWhiteSpace(configured))
             {
-                root = AppContext.BaseDirectory;
+                root = Path.Combine(Environment.CurrentDirectory, "data");
             }
             else if (Path.IsPathRooted(configured))
             {
@@ -119,9 +133,15 @@ namespace Another_Mirai_Native.WebAPI.Services
             }
             else
             {
-                root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, configured));
+                root = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, configured));
             }
-            return Path.TrimEndingDirectorySeparator(root);
+            var trimmed = Path.TrimEndingDirectorySeparator(root);
+            if (trimmed.Length == 2 && trimmed[1] == ':')
+            {
+                // 盘根（如 D:\ 或 D:）保留分隔符，避免 Path.Combine 按盘符相对路径解析
+                return trimmed + Path.DirectorySeparatorChar;
+            }
+            return trimmed;
         }
 
         /// <summary>
@@ -166,10 +186,26 @@ namespace Another_Mirai_Native.WebAPI.Services
             var items = new List<FileEntryDto>();
             try
             {
-                foreach (var info in directory.EnumerateFileSystemInfos()
+                using var enumerator = directory.EnumerateFileSystemInfos()
                     .OrderBy(x => x is DirectoryInfo ? 0 : 1)
-                    .ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase))
+                    .ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase)
+                    .GetEnumerator();
+                while (true)
                 {
+                    FileSystemInfo? info;
+                    try
+                    {
+                        if (!enumerator.MoveNext())
+                        {
+                            break;
+                        }
+                        info = enumerator.Current;
+                    }
+                    catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+                    {
+                        // 枚举期间条目被删除或无权限：跳过单个条目，不中断整个目录
+                        continue;
+                    }
                     items.Add(ToFileEntry(info, root));
                 }
             }
@@ -259,6 +295,8 @@ namespace Another_Mirai_Native.WebAPI.Services
             EnsureDirectoryExists(targetFull, "目标目录不存在");
             var root = GetRootPath();
 
+            // 先完整预检，确保 404/409/自复制等常见错误在产生任何副作用前暴露
+            var operations = new List<(string SourceFull, string Destination)>();
             foreach (var source in sources)
             {
                 var sourceFull = ResolvePath(source);
@@ -281,14 +319,39 @@ namespace Another_Mirai_Native.WebAPI.Services
                     {
                         throw new FileManagerException(400, "不能将文件夹复制到其自身内部");
                     }
-                    CopyDirectory(sourceFull, destination, root, new HashSet<string>
-                    {
-                        Path.TrimEndingDirectorySeparator(sourceFull)
-                    });
                 }
-                else
+                operations.Add((sourceFull, destination));
+            }
+            EnsureNoNestedSources(operations.Select(o => o.SourceFull).ToList());
+
+            for (var i = 0; i < operations.Count; i++)
+            {
+                var (sourceFull, destination) = operations[i];
+                try
                 {
-                    File.Copy(sourceFull, destination);
+                    if (Directory.Exists(sourceFull))
+                    {
+                        CopyDirectory(sourceFull, destination, root, new HashSet<string>
+                        {
+                            Path.TrimEndingDirectorySeparator(sourceFull)
+                        });
+                    }
+                    else
+                    {
+                        File.Copy(sourceFull, destination);
+                    }
+                }
+                catch (FileManagerException e)
+                {
+                    throw new FileManagerException(e.StatusCode, $"{e.Message}（已完成 {i}/{operations.Count} 项）");
+                }
+                catch (Exception e) when (IsFileInUse(e))
+                {
+                    throw new FileManagerException(400, $"复制失败：文件被占用（已完成 {i}/{operations.Count} 项）");
+                }
+                catch (Exception e)
+                {
+                    throw new FileManagerException(500, $"复制失败：{e.Message}（已完成 {i}/{operations.Count} 项）");
                 }
             }
         }
@@ -299,6 +362,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             EnsureDirectoryExists(targetFull, "目标目录不存在");
             var root = GetRootPath();
 
+            var operations = new List<(string SourceFull, string Destination)>();
             foreach (var source in sources)
             {
                 var sourceFull = ResolvePath(source);
@@ -321,32 +385,98 @@ namespace Another_Mirai_Native.WebAPI.Services
                     {
                         throw new FileManagerException(400, "不能将文件夹移动到其自身内部");
                     }
-                    Directory.Move(sourceFull, destination);
                 }
-                else
+                operations.Add((sourceFull, destination));
+            }
+            EnsureNoNestedSources(operations.Select(o => o.SourceFull).ToList());
+
+            for (var i = 0; i < operations.Count; i++)
+            {
+                var (sourceFull, destination) = operations[i];
+                try
                 {
-                    File.Move(sourceFull, destination);
+                    if (Directory.Exists(sourceFull))
+                    {
+                        Directory.Move(sourceFull, destination);
+                    }
+                    else
+                    {
+                        File.Move(sourceFull, destination);
+                    }
+                }
+                catch (FileManagerException e)
+                {
+                    throw new FileManagerException(e.StatusCode, $"{e.Message}（已完成 {i}/{operations.Count} 项）");
+                }
+                catch (Exception e) when (IsFileInUse(e))
+                {
+                    throw new FileManagerException(400, $"移动失败：文件被占用（已完成 {i}/{operations.Count} 项）");
+                }
+                catch (Exception e)
+                {
+                    throw new FileManagerException(500, $"移动失败：{e.Message}（已完成 {i}/{operations.Count} 项）");
                 }
             }
         }
 
         public static void Delete(List<string> paths)
         {
+            var resolved = new List<string>();
             foreach (var path in paths)
             {
                 var full = ResolvePath(path);
                 EnsureNotRoot(full, "不能删除根目录");
-                if (File.Exists(full))
-                {
-                    FileSystem.DeleteFile(full, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin, UICancelOption.ThrowException);
-                }
-                else if (Directory.Exists(full))
-                {
-                    FileSystem.DeleteDirectory(full, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin, UICancelOption.ThrowException);
-                }
-                else
+                if (!File.Exists(full) && !Directory.Exists(full))
                 {
                     throw new FileManagerException(404, $"文件或文件夹不存在：{path}");
+                }
+                resolved.Add(full);
+            }
+
+            for (var i = 0; i < resolved.Count; i++)
+            {
+                var full = resolved[i];
+                try
+                {
+                    if (!File.Exists(full) && !Directory.Exists(full))
+                    {
+                        // 父级已在同一批次内被删除
+                        continue;
+                    }
+                    if (File.Exists(full))
+                    {
+                        FileSystem.DeleteFile(full, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin, UICancelOption.ThrowException);
+                    }
+                    else
+                    {
+                        FileSystem.DeleteDirectory(full, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin, UICancelOption.ThrowException);
+                    }
+                }
+                catch (FileManagerException e)
+                {
+                    throw new FileManagerException(e.StatusCode, $"{e.Message}（已完成 {i}/{resolved.Count} 项）");
+                }
+                catch (Exception e) when (IsFileInUse(e))
+                {
+                    throw new FileManagerException(400, $"删除失败：文件被占用（已完成 {i}/{resolved.Count} 项）");
+                }
+                catch (Exception e)
+                {
+                    throw new FileManagerException(500, $"删除失败：{e.Message}（已完成 {i}/{resolved.Count} 项）");
+                }
+            }
+        }
+
+        private static void EnsureNoNestedSources(List<string> sources)
+        {
+            for (var i = 0; i < sources.Count; i++)
+            {
+                for (var j = i + 1; j < sources.Count; j++)
+                {
+                    if (IsWithinRoot(sources[i], sources[j]) || IsWithinRoot(sources[j], sources[i]))
+                    {
+                        throw new FileManagerException(400, "选择的源路径存在包含关系，无法批量操作");
+                    }
                 }
             }
         }
@@ -365,7 +495,12 @@ namespace Another_Mirai_Native.WebAPI.Services
             }
 
             var bytes = File.ReadAllBytes(full);
-            var (encoding, hadBom, content) = DecodeTextBytes(bytes, ResolveExplicitEncoding(encodingName));
+            if (bytes.Length > MaxTextFileSize)
+            {
+                // 读取后复查实际大小，防止检查与读取之间文件被并发写大
+                throw new FileManagerException(400, $"文件超过 {MaxTextFileSize / 1024 / 1024}MB，无法编辑");
+            }
+            var (encoding, hadBom, content) = DecodeTextBytes(bytes, ResolveExplicitEncoding(encodingName), AllowEscapeControl(full));
 
             return new ReadTextResult
             {
@@ -389,13 +524,18 @@ namespace Another_Mirai_Native.WebAPI.Services
             }
 
             var existing = File.ReadAllBytes(full);
+            if (existing.Length > MaxTextFileSize)
+            {
+                // 读取后复查实际大小，防止检查与读取之间文件被并发写大
+                throw new FileManagerException(400, $"文件超过 {MaxTextFileSize / 1024 / 1024}MB，无法编辑");
+            }
             if (!string.IsNullOrWhiteSpace(encodingName))
             {
                 var requestedEncoding = ResolveExplicitEncoding(encodingName);
                 if (requestedEncoding == null)
                 {
                     // 未知编码名回退为自动探测写回
-                    var (detectedEncoding, detectedBom, _) = DecodeTextBytes(existing);
+                    var (detectedEncoding, detectedBom, _) = DecodeTextBytes(existing, null, AllowEscapeControl(full));
                     if (detectedEncoding.GetByteCount(content) > MaxTextFileSize)
                     {
                         throw new FileManagerException(400, $"文件内容超过 {MaxTextFileSize / 1024 / 1024}MB，无法保存");
@@ -425,7 +565,7 @@ namespace Another_Mirai_Native.WebAPI.Services
                 return;
             }
 
-            var (encoding, hadBom, _) = DecodeTextBytes(existing);
+            var (encoding, hadBom, _) = DecodeTextBytes(existing, null, AllowEscapeControl(full));
             if (encoding.GetByteCount(content) > MaxTextFileSize)
             {
                 throw new FileManagerException(400, $"文件内容超过 {MaxTextFileSize / 1024 / 1024}MB，无法保存");
@@ -486,7 +626,7 @@ namespace Another_Mirai_Native.WebAPI.Services
         /// 探测文件/文件夹大小：文件返回自身字节数，文件夹递归统计所有文件；
         /// 指向根目录外的链接、循环链接与无法读取的文件不统计
         /// </summary>
-        public static long GetSize(string? path)
+        public static long GetSize(string? path, CancellationToken cancellationToken = default)
         {
             var full = ResolvePath(path);
             if (File.Exists(full))
@@ -514,18 +654,22 @@ namespace Another_Mirai_Native.WebAPI.Services
             {
                 Path.TrimEndingDirectorySeparator(full)
             };
-            return GetDirectorySize(full, root, visitedDirectories);
+            return GetDirectorySize(full, root, visitedDirectories, cancellationToken);
         }
 
         /// <summary>
         /// 按文件名递归搜索：支持 * 和 ? 通配符，无通配符时按包含匹配（忽略大小写）；
         /// 指向根目录外的链接与循环链接不搜索；命中数超过 limit 时仅返回前 limit 条
         /// </summary>
-        public static FileSearchResult Search(string? path, string pattern, int limit)
+        public static FileSearchResult Search(string? path, string pattern, int limit, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(pattern))
             {
                 throw new FileManagerException(400, "搜索关键字不能为空");
+            }
+            if (pattern.Length > 255 || pattern.Count(c => c is '*' or '?') > 32)
+            {
+                throw new FileManagerException(400, "搜索模式过于复杂");
             }
             var full = ResolvePath(path);
             if (!Directory.Exists(full))
@@ -541,7 +685,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             };
             var items = new List<FileEntryDto>();
             long total = 0;
-            SearchDirectory(full, root, matcher, limit, items, ref total, visitedDirectories);
+            SearchDirectory(full, root, matcher, limit, items, ref total, visitedDirectories, cancellationToken);
             return new FileSearchResult
             {
                 Items = items,
@@ -549,11 +693,12 @@ namespace Another_Mirai_Native.WebAPI.Services
             };
         }
 
-        private static long GetDirectorySize(string directoryPath, string root, HashSet<string> visitedDirectories)
+        private static long GetDirectorySize(string directoryPath, string root, HashSet<string> visitedDirectories, CancellationToken cancellationToken)
         {
             long total = 0;
             foreach (var info in new DirectoryInfo(directoryPath).EnumerateFileSystemInfos())
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 if (info is DirectoryInfo)
                 {
                     var resolvedPath = info.FullName;
@@ -573,7 +718,7 @@ namespace Another_Mirai_Native.WebAPI.Services
                         // 循环链接：不重复统计
                         continue;
                     }
-                    total += GetDirectorySize(info.FullName, root, visitedDirectories);
+                    total += GetDirectorySize(info.FullName, root, visitedDirectories, cancellationToken);
                     visitedDirectories.Remove(key);
                 }
                 else
@@ -622,10 +767,12 @@ namespace Another_Mirai_Native.WebAPI.Services
             int limit,
             List<FileEntryDto> items,
             ref long total,
-            HashSet<string> visitedDirectories)
+            HashSet<string> visitedDirectories,
+            CancellationToken cancellationToken)
         {
             foreach (var info in new DirectoryInfo(directoryPath).EnumerateFileSystemInfos())
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 if (info is DirectoryInfo)
                 {
                     var resolvedPath = info.FullName;
@@ -651,7 +798,7 @@ namespace Another_Mirai_Native.WebAPI.Services
                             items.Add(ToFileEntry(info, root));
                         }
                     }
-                    SearchDirectory(info.FullName, root, matcher, limit, items, ref total, visitedDirectories);
+                    SearchDirectory(info.FullName, root, matcher, limit, items, ref total, visitedDirectories, cancellationToken);
                     visitedDirectories.Remove(key);
                 }
                 else
@@ -770,7 +917,7 @@ namespace Another_Mirai_Native.WebAPI.Services
         /// <summary>
         /// 将多个文件/文件夹直接打包写入指定流（非 seekable 流也可），不产生临时文件
         /// </summary>
-        public static async Task WriteZipAsync(Stream output, IReadOnlyList<ZipSource> sources)
+        public static async Task WriteZipAsync(Stream output, IReadOnlyList<ZipSource> sources, CancellationToken cancellationToken = default)
         {
             var root = GetRootPath();
             await Task.Run(() =>
@@ -778,20 +925,23 @@ namespace Another_Mirai_Native.WebAPI.Services
                 using var archive = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: true);
                 foreach (var source in sources)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     if (source.IsDirectory)
                     {
+                        // 顶层文件夹本身也生成目录条目，空文件夹也能在压缩包中保留
+                        _ = archive.CreateEntry(source.EntryName + "/");
                         var visitedDirectories = new HashSet<string>
                         {
                             Path.TrimEndingDirectorySeparator(source.FullPath)
                         };
-                        AddDirectoryToZip(archive, source.FullPath, source.EntryName, root, visitedDirectories);
+                        AddDirectoryToZip(archive, source.FullPath, source.EntryName, root, visitedDirectories, cancellationToken);
                     }
                     else
                     {
-                        AddFileToZip(archive, source.FullPath, source.EntryName, root);
+                        AddFileToZip(archive, source.FullPath, source.EntryName, root, cancellationToken);
                     }
                 }
-            });
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -815,19 +965,11 @@ namespace Another_Mirai_Native.WebAPI.Services
             var encoding = ResolveExplicitEncoding(encodingName);
             if (encoding == null)
             {
-                try
-                {
-                    encoding = DetectEncoding(head).Encoding;
-                }
-                catch (DecoderFallbackException)
-                {
-                    // 全部尝试失败时按 GBK 兜底，乱码也是一种解
-                    encoding = Encoding.GetEncoding(936);
-                }
+                encoding = DetectEncoding(head).Encoding;
             }
             var offset = GetBomOffset(head, encoding);
             var headText = encoding.GetString(head, offset, head.Length - offset);
-            if (IsBinaryContent(headText))
+            if (IsBinaryContent(headText, AllowEscapeControl(full)))
             {
                 throw new BinaryFileException("不支持的文件格式");
             }
@@ -920,15 +1062,20 @@ namespace Another_Mirai_Native.WebAPI.Services
             pageSize = Math.Clamp(pageSize, 1, MaxPreviewPageSize);
             var quoted = QuoteIdentifier(table);
             var total = Convert.ToInt64(db.Ado.GetDataTable($"SELECT COUNT(1) AS C FROM {quoted}").Rows[0]["C"]);
-            var data = db.Ado.GetDataTable(
-                $"SELECT * FROM {quoted} LIMIT @limit OFFSET @offset",
-                new SugarParameter("@limit", pageSize),
-                new SugarParameter("@offset", (page - 1) * pageSize));
+
+            using var connection = CreateRawConnection(full, true);
+            connection.Open();
+            using var command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM {quoted} LIMIT @limit OFFSET @offset";
+            command.Parameters.AddWithValue("@limit", pageSize);
+            command.Parameters.AddWithValue("@offset", (long)(page - 1) * pageSize);
+            using var reader = command.ExecuteReader();
+            var (columns, rows, _) = ReadQueryResult(reader, pageSize);
 
             return new SqliteDataResult
             {
-                Columns = ColumnNames(data),
-                Rows = Rows(data),
+                Columns = columns,
+                Rows = rows,
                 Total = total,
                 Page = page,
                 PageSize = pageSize
@@ -961,17 +1108,16 @@ namespace Another_Mirai_Native.WebAPI.Services
             {
                 if (IsQueryStatement(stripped))
                 {
-                    var data = db.Ado.GetDataTable(sql);
-                    var rows = Rows(data);
-                    var truncated = rows.Count > MaxQueryRows;
-                    if (truncated)
-                    {
-                        rows = rows.Take(MaxQueryRows).ToList();
-                    }
+                    using var connection = CreateRawConnection(full, true);
+                    connection.Open();
+                    using var command = connection.CreateCommand();
+                    command.CommandText = sql;
+                    using var reader = command.ExecuteReader();
+                    var (columns, rows, truncated) = ReadQueryResult(reader, MaxQueryRows);
                     return new SqliteQueryResult
                     {
                         Type = "query",
-                        Columns = ColumnNames(data),
+                        Columns = columns,
                         Rows = rows,
                         Truncated = truncated
                     };
@@ -1039,6 +1185,10 @@ namespace Another_Mirai_Native.WebAPI.Services
             if (segment.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
                 throw new FileManagerException(400, "路径包含非法字符");
+            }
+            if (segment.Length > 255)
+            {
+                throw new FileManagerException(400, "路径段过长（超过 255 字符）");
             }
             var baseName = segment;
             var dotIndex = segment.IndexOf('.');
@@ -1146,6 +1296,10 @@ namespace Another_Mirai_Native.WebAPI.Services
             if (cleaned.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
                 throw new FileManagerException(400, "文件名包含非法字符");
+            }
+            if (cleaned.Length > 255)
+            {
+                throw new FileManagerException(400, "文件名过长（超过 255 字符）");
             }
             var baseName = cleaned;
             var dotIndex = cleaned.IndexOf('.');
@@ -1255,10 +1409,11 @@ namespace Another_Mirai_Native.WebAPI.Services
             using var probe = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
 
-        private static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string entryPrefix, string root, HashSet<string> visitedDirectories)
+        private static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string entryPrefix, string root, HashSet<string> visitedDirectories, CancellationToken cancellationToken)
         {
             foreach (var info in new DirectoryInfo(sourceDir).EnumerateFileSystemInfos())
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var entryName = entryPrefix.Length == 0 ? info.Name : entryPrefix + "/" + info.Name;
                 if (info is DirectoryInfo)
                 {
@@ -1273,17 +1428,17 @@ namespace Another_Mirai_Native.WebAPI.Services
                         throw new FileManagerException(400, "检测到循环链接，无法打包");
                     }
                     _ = archive.CreateEntry(entryName + "/");
-                    AddDirectoryToZip(archive, info.FullName, entryName, root, visitedDirectories);
+                    AddDirectoryToZip(archive, info.FullName, entryName, root, visitedDirectories, cancellationToken);
                     visitedDirectories.Remove(key);
                 }
                 else
                 {
-                    AddFileToZip(archive, info.FullName, entryName, root);
+                    AddFileToZip(archive, info.FullName, entryName, root, cancellationToken);
                 }
             }
         }
 
-        private static void AddFileToZip(ZipArchive archive, string fullPath, string entryName, string root)
+        private static void AddFileToZip(ZipArchive archive, string fullPath, string entryName, string root, CancellationToken cancellationToken)
         {
             var info = new FileInfo(fullPath);
             if ((info.Attributes & FileAttributes.ReparsePoint) != 0)
@@ -1294,6 +1449,7 @@ namespace Another_Mirai_Native.WebAPI.Services
             using var entryStream = entry.Open();
             using var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             fileStream.CopyTo(entryStream);
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         private static (Encoding Encoding, bool HadBom) DetectEncoding(byte[] bytes)
@@ -1366,22 +1522,22 @@ namespace Another_Mirai_Native.WebAPI.Services
         /// <summary>
         /// 解码文本字节：默认自动探测编码，也可指定编码严格解码；去除 BOM 并拒绝二进制内容
         /// </summary>
-        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytes(byte[] bytes, Encoding? explicitEncoding = null)
+        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytes(byte[] bytes, Encoding? explicitEncoding = null, bool allowEscapeControl = false)
         {
             if (explicitEncoding != null)
             {
-                return DecodeTextBytesWithEncoding(bytes, explicitEncoding);
+                return DecodeTextBytesWithEncoding(bytes, explicitEncoding, allowEscapeControl);
             }
 
-            return DecodeTextBytesWithDetection(bytes);
+            return DecodeTextBytesWithDetection(bytes, allowEscapeControl);
         }
 
-        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytesWithDetection(byte[] bytes)
+        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytesWithDetection(byte[] bytes, bool allowEscapeControl)
         {
             var (encoding, hadBom) = DetectEncoding(bytes);
             var preambleLength = hadBom ? encoding.GetPreamble().Length : 0;
             var content = encoding.GetString(bytes, preambleLength, bytes.Length - preambleLength);
-            if (IsBinaryContent(content))
+            if (IsBinaryContent(content, allowEscapeControl))
             {
                 throw new BinaryFileException("不支持的文件格式");
             }
@@ -1409,12 +1565,12 @@ namespace Another_Mirai_Native.WebAPI.Services
             return head;
         }
 
-        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytesWithEncoding(byte[] bytes, Encoding encoding)
+        private static (Encoding Encoding, bool HadBom, string Content) DecodeTextBytesWithEncoding(byte[] bytes, Encoding encoding, bool allowEscapeControl)
         {
             var offset = GetBomOffset(bytes, encoding);
             // 显式指定编码时宽容解码：无法表示的字节显示为替换符，不报错
             var content = encoding.GetString(bytes, offset, bytes.Length - offset);
-            if (IsBinaryContent(content))
+            if (IsBinaryContent(content, allowEscapeControl))
             {
                 throw new BinaryFileException("不支持的文件格式");
             }
@@ -1523,21 +1679,26 @@ namespace Another_Mirai_Native.WebAPI.Services
             };
         }
 
-        private static bool IsBinaryContent(string content)
+        private static bool IsBinaryContent(string content, bool allowEscapeControl = false)
         {
             if (content.Contains('\0'))
             {
                 return true;
             }
-            // 文本文件允许 \t \r \n，其余 C0 控制字符视为二进制内容
+            // 文本文件允许 \t \r \n；日志文件额外允许 ESC（ANSI 颜色码）；其余 C0 控制字符视为二进制内容
             foreach (var c in content)
             {
-                if (c < 0x20 && c is not '\t' and not '\r' and not '\n')
+                if (c < 0x20 && c is not '\t' and not '\r' and not '\n' && !(allowEscapeControl && c == 0x1B))
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        private static bool AllowEscapeControl(string fullPath)
+        {
+            return Path.GetExtension(fullPath).Equals(".log", StringComparison.OrdinalIgnoreCase);
         }
 
         private static string ResolveSqliteFile(string? path)
@@ -1556,16 +1717,28 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         private static SqlSugarClient CreateClient(string fullPath, bool readOnly)
         {
-            var connectionString = readOnly
-                ? $"Data Source={fullPath};Mode=ReadOnly"
-                : $"Data Source={fullPath}";
             return new SqlSugarClient(new ConnectionConfig
             {
-                ConnectionString = connectionString,
+                ConnectionString = BuildConnectionString(fullPath, readOnly),
                 DbType = SqlSugar.DbType.Sqlite,
                 IsAutoCloseConnection = true,
                 InitKeyType = InitKeyType.Attribute
             });
+        }
+
+        private static SqliteConnection CreateRawConnection(string fullPath, bool readOnly)
+        {
+            return new SqliteConnection(BuildConnectionString(fullPath, readOnly));
+        }
+
+        private static string BuildConnectionString(string fullPath, bool readOnly)
+        {
+            // 用连接串构造器转义路径，避免文件名中的特殊字符（如分号）干扰连接串解析
+            return new SqliteConnectionStringBuilder
+            {
+                DataSource = fullPath,
+                Mode = readOnly ? SqliteOpenMode.ReadOnly : SqliteOpenMode.ReadWriteCreate
+            }.ToString();
         }
 
         private static void EnsureTableExists(SqlSugarClient db, string table)
@@ -1652,24 +1825,60 @@ namespace Another_Mirai_Native.WebAPI.Services
             return builder.ToString();
         }
 
-        private static List<string> ColumnNames(DataTable table)
+        /// <summary>
+        /// 从 DataReader 读取结果：最多读取 maxRows 行，超出时标记截断，避免结果集整体载入内存
+        /// </summary>
+        private static (List<string> Columns, List<List<object?>> Rows, bool Truncated) ReadQueryResult(SqliteDataReader reader, int maxRows)
         {
-            return table.Columns.Cast<DataColumn>().Select(c => c.ColumnName).ToList();
+            var columns = new List<string>(reader.FieldCount);
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                columns.Add(reader.GetName(i));
+            }
+
+            var rows = new List<List<object?>>();
+            var truncated = false;
+            while (reader.Read())
+            {
+                if (rows.Count >= maxRows)
+                {
+                    truncated = true;
+                    break;
+                }
+
+                var row = new List<object?>(reader.FieldCount);
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    if (reader.IsDBNull(i))
+                    {
+                        row.Add(null);
+                        continue;
+                    }
+                    if (reader.GetFieldType(i) == typeof(byte[]))
+                    {
+                        row.Add(ReadBlobValue(reader, i));
+                        continue;
+                    }
+                    row.Add(reader.GetValue(i));
+                }
+                rows.Add(row);
+            }
+            return (columns, rows, truncated);
         }
 
-        private static List<List<object?>> Rows(DataTable table)
+        /// <summary>
+        /// 读取 BLOB 值：先取长度不分配内存，超大 BLOB 替换为占位文本，避免整块载入内存并序列化成 base64
+        /// </summary>
+        private static object ReadBlobValue(SqliteDataReader reader, int ordinal)
         {
-            var rows = new List<List<object?>>(table.Rows.Count);
-            foreach (DataRow row in table.Rows)
+            var length = reader.GetBytes(ordinal, 0, null, 0, 0);
+            if (length > MaxBlobPreviewBytes)
             {
-                var values = new List<object?>(row.ItemArray.Length);
-                foreach (var value in row.ItemArray)
-                {
-                    values.Add(value is DBNull ? null : value);
-                }
-                rows.Add(values);
+                return $"[BLOB {length} bytes 已截断]";
             }
-            return rows;
+            var buffer = new byte[(int)length];
+            reader.GetBytes(ordinal, 0, buffer, 0, buffer.Length);
+            return buffer;
         }
     }
 }
