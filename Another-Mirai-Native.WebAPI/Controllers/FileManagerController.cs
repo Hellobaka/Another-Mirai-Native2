@@ -142,6 +142,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             {
                 var (fullPath, contentType) = FileManagerService.GetRawTextInfo(path, encoding);
                 _logger.LogInformation("文件管理-流式读取文本: Path={Path}, Encoding={Encoding}", path, encoding ?? "auto");
+                Response.Headers.CacheControl = "no-store";
                 return PhysicalFile(fullPath, contentType);
             });
         }
@@ -173,11 +174,12 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 {
                     var (fullPath, contentType, fileName) = FileManagerService.GetDownloadInfo(path[0]);
                     _logger.LogInformation("文件管理-下载文件: Path={Path}", path[0]);
+                    Response.Headers.CacheControl = "no-store";
                     return PhysicalFile(fullPath, contentType, fileName);
                 }
                 var (sources, zipName) = FileManagerService.PrepareZipSources(path);
                 _logger.LogInformation("文件管理-下载打包: Paths={Paths}, ZipName={ZipName}", string.Join(",", path), zipName);
-                return new ZipFileResult(sources, zipName);
+                return new ZipFileResult(sources, zipName, HttpContext.RequestAborted);
             });
         }
 
@@ -190,7 +192,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         {
             return ExecuteAsync("GetSize", async () =>
             {
-                var size = await Task.Run(() => FileManagerService.GetSize(path));
+                var size = await Task.Run(() => FileManagerService.GetSize(path, HttpContext.RequestAborted), HttpContext.RequestAborted);
                 _logger.LogInformation("文件管理-探测大小: Path={Path}, Size={Size}", path, size);
                 return Ok(ApiResponse.Ok(new FileSizeResult { Size = size }));
             });
@@ -207,7 +209,30 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             {
                 var (fullPath, contentType) = FileManagerService.GetImageInfo(path);
                 _logger.LogInformation("文件管理-图片预览: Path={Path}, Type={Type}", path, contentType);
+                // SVG 等图片可包含脚本，直接打开时禁止执行（同源 XSS 防护）；对 <img> 嵌入无影响
+                Response.Headers["Content-Security-Policy"] = "sandbox; default-src 'none'";
+                Response.Headers.CacheControl = "no-store";
                 return PhysicalFile(fullPath, contentType);
+            });
+        }
+
+        [HttpGet("image-token")]
+        [EndpointSummary("获取图片预览令牌")]
+        [EndpointDescription("校验图片文件存在后返回 5 分钟有效、仅限该路径的图片预览令牌；<img> 请求通过 access_token 参数携带，避免长期 JWT 暴露在 URL 中")]
+        [ProducesResponseType(typeof(ApiResponse<ImageTokenResult>), StatusCodes.Status200OK)]
+        public IActionResult GetImageToken(
+            [Description("相对根目录的路径")][FromQuery] string path)
+        {
+            return Execute("GetImageToken", () =>
+            {
+                _ = FileManagerService.GetImageInfo(path);
+                var token = AuthController.CreateFileImageToken(path);
+                _logger.LogInformation("文件管理-获取图片令牌: Path={Path}", path);
+                return Ok(ApiResponse.Ok(new ImageTokenResult
+                {
+                    Token = token,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+                }));
             });
         }
 
@@ -223,7 +248,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             return ExecuteAsync("Search", async () =>
             {
                 limit = Math.Clamp(limit, 1, 1000);
-                var result = await Task.Run(() => FileManagerService.Search(path, pattern, limit));
+                var result = await Task.Run(() => FileManagerService.Search(path, pattern, limit, HttpContext.RequestAborted), HttpContext.RequestAborted);
                 _logger.LogInformation("文件管理-文件名搜索: Path={Path}, Pattern={Pattern}, Total={Total}", path, pattern, result.Total);
                 return Ok(ApiResponse.Ok(result));
             });
@@ -276,10 +301,31 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                     targets.Add((file, fullPath));
                 }
 
-                foreach (var (file, fullPath) in targets)
+                var written = new List<string>();
+                try
                 {
-                    await using var stream = new FileStream(fullPath, FileMode.CreateNew, FileAccess.Write);
-                    await file.CopyToAsync(stream);
+                    foreach (var (file, fullPath) in targets)
+                    {
+                        await using var stream = new FileStream(fullPath, FileMode.CreateNew, FileAccess.Write);
+                        await file.CopyToAsync(stream);
+                        written.Add(fullPath);
+                    }
+                }
+                catch
+                {
+                    // 清理本次已写入的文件，避免多文件上传中途失败留下半成品
+                    foreach (var path in written)
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(path);
+                        }
+                        catch
+                        {
+                            // 清理失败不掩盖原始错误
+                        }
+                    }
+                    throw;
                 }
                 _logger.LogInformation("文件管理-上传: Target={Target}, Count={Count}", targetDir, targets.Count);
                 return Ok(ApiResponse.Ok());
@@ -351,49 +397,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
 
         private IActionResult Execute(string operation, Func<IActionResult> action)
         {
-            var guard = EnsureEnabled();
-            if (guard != null)
-            {
-                return guard;
-            }
-            try
-            {
-                return action();
-            }
-            catch (SqlSyntaxException e)
-            {
-                _logger.LogWarning("文件管理 SQL 语法错误: Error={Error}", e.Message);
-                return StatusCode(400, new ApiResponse
-                {
-                    Code = 400,
-                    Message = $"SQL 语法错误：{e.Message}",
-                    Data = new { ErrorType = "sql_syntax_error" }
-                });
-            }
-            catch (FileManagerException e)
-            {
-                // 二进制文件被当作文本加载属预期行为，不记录 Warning 日志
-                if (e is not BinaryFileException)
-                {
-                    _logger.LogWarning("文件管理操作失败: Operation={Operation}, Error={Error}", operation, e.Message);
-                }
-                return StatusCode(e.StatusCode, ApiResponse.Error(e.StatusCode, e.Message));
-            }
-            catch (Exception e) when (FileManagerService.IsFileInUse(e))
-            {
-                _logger.LogWarning("文件管理操作失败：文件被占用 Operation={Operation}, Error={Error}", operation, e.Message);
-                return StatusCode(400, new ApiResponse
-                {
-                    Code = 400,
-                    Message = "文件被其他程序占用，请稍后重试",
-                    Data = new { ErrorType = "file_in_use", Detail = e.Message }
-                });
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "文件管理操作异常: Operation={Operation}", operation);
-                return StatusCode(500, ApiResponse.Error(500, "由于服务器异常，操作失败"));
-            }
+            return ExecuteAsync(operation, () => Task.FromResult(action())).GetAwaiter().GetResult();
         }
 
         private async Task<IActionResult> ExecuteAsync(string operation, Func<Task<IActionResult>> action)
@@ -406,6 +410,16 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             try
             {
                 return await action();
+            }
+            catch (OperationCanceledException)
+            {
+                if (HttpContext.RequestAborted.IsCancellationRequested)
+                {
+                    // 客户端已断开，直接让请求中止
+                    throw;
+                }
+                _logger.LogWarning("文件管理操作已取消: Operation={Operation}", operation);
+                return StatusCode(400, ApiResponse.Error(400, "操作已取消"));
             }
             catch (SqlSyntaxException e)
             {
@@ -456,7 +470,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
         /// <summary>
         /// 将多个文件/文件夹流式打包为 ZIP 并直接写入响应体，不产生临时文件
         /// </summary>
-        private sealed class ZipFileResult(IReadOnlyList<FileManagerService.ZipSource> sources, string fileName) : IActionResult
+        private sealed class ZipFileResult(IReadOnlyList<FileManagerService.ZipSource> sources, string fileName, CancellationToken cancellationToken) : IActionResult
         {
             public async Task ExecuteResultAsync(ActionContext context)
             {
@@ -464,7 +478,8 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 response.ContentType = "application/zip";
                 response.Headers.ContentDisposition =
                     $"attachment; filename=\"{fileName}\"; filename*=UTF-8''{Uri.EscapeDataString(fileName)}";
-                await FileManagerService.WriteZipAsync(response.Body, sources);
+                response.Headers.CacheControl = "no-store";
+                await FileManagerService.WriteZipAsync(response.Body, sources, cancellationToken);
                 await response.Body.FlushAsync();
             }
         }
