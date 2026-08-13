@@ -1084,6 +1084,10 @@ namespace Another_Mirai_Native.WebAPI.Services
 
         public static SqliteQueryResult SqliteQuery(string? path, string sql)
         {
+            if (!WebAPIConfig.Instance.EnableSqlQuery)
+            {
+                throw new FileManagerException(403, "SQL 执行功能未启用");
+            }
             if (string.IsNullOrWhiteSpace(sql))
             {
                 throw new FileManagerException(400, "SQL 不能为空");

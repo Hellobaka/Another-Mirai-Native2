@@ -113,6 +113,11 @@
                         DataChanged="SettingItem_TextBox_DataChanged"
                         Subtitle="文件管理页访问的根目录（绝对路径或相对路径），留空默认使用运行目录下的 data 文件夹" />
                     <controls:SettingItem_ToggleButton
+                        x:Name="EnableSqlQuery"
+                        Title="允许执行 SQL"
+                        OnToggled="SettingItem_Toggled"
+                        Subtitle="允许在文件管理页对 SQLite 数据库执行任意 SQL（含写入），默认关闭" />
+                    <controls:SettingItem_ToggleButton
                         x:Name="EnableTerminal"
                         Title="启用终端页"
                         IsEnabled="False"

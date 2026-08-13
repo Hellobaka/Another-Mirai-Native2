@@ -31,6 +31,8 @@ namespace Another_Mirai_Native.WebAPI
 
         public bool EnableFileManager { get; set; }
 
+        public bool EnableSqlQuery { get; set; }
+
         public bool EnableTerminal { get; set; }
 
         public string FileManagerRoot { get; set; }
@@ -56,6 +58,7 @@ namespace Another_Mirai_Native.WebAPI
             EnableScalar = GetConfig("EnableScalar", false);
             EnableChat = GetConfig("EnableChat", true);
             EnableFileManager = GetConfig("EnableFileManager", false);
+            EnableSqlQuery = GetConfig("EnableSqlQuery", false);
             EnableTerminal = GetConfig("EnableTerminal", false);
             FileManagerRoot = GetConfig("FileManagerRoot", "");
         }
