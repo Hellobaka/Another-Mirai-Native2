@@ -64,5 +64,24 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 ExpiresAt = expiresAt
             };
         }
+
+        /// <summary>
+        /// 生成 5 分钟有效、仅限指定图片路径使用的短时效令牌，避免主 JWT 暴露在 URL 中
+        /// </summary>
+        public static string CreateFileImageToken(string path)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(CurrentPassword));
+            var handler = new JsonWebTokenHandler();
+            return handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                SigningCredentials = new(key, "HS256"),
+                Claims = new Dictionary<string, object>
+                {
+                    ["purpose"] = "file_image",
+                    ["path"] = path
+                }
+            });
+        }
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Web;
 using Scalar.AspNetCore;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -107,12 +108,21 @@ namespace Another_Mirai_Native.WebAPI
 
         public static void BuildWebAPI(string[] args)
         {
+            // 支持 GBK 等 Windows 代码页编码，用于文本文件编辑时自动识别编码
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             WebAPIConfig.Instance.LoadConfig();
 
             var builder = WebApplication.CreateBuilder(args);
 
             var scheme = WebAPIConfig.Instance.EnableHTTPS ? "https" : "http";
             builder.WebHost.UseUrls($"{scheme}://{WebAPIConfig.Instance.ListenIP}:{WebAPIConfig.Instance.ListenPort}");
+
+            // 文件管理器 ZIP 流式打包依赖 ZipArchive 同步写入响应流（ZipArchive 不支持异步输出）
+            builder.WebHost.ConfigureKestrel(o =>
+            {
+                o.AllowSynchronousIO = true;
+            });
 
             if (WebAPIConfig.Instance.EnableHTTPS)
             {
@@ -127,8 +137,11 @@ namespace Another_Mirai_Native.WebAPI
             {
                 // 处理nginx转发的请求头
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
+                options.ForwardLimit = 1;
+                // 只信任 nginx 所在机器的地址，防止伪造 X-Forwarded-For 绕过登录限流
+                // 同机部署（nginx 在本机转发）信任回环地址；nginx 在别的机器时改为其 IP
+                options.KnownProxies.Add(IPAddress.Loopback);
+                options.KnownProxies.Add(IPAddress.IPv6Loopback);
             });
 
             builder.Services.AddControllers()
@@ -314,14 +327,39 @@ namespace Another_Mirai_Native.WebAPI
                           // SignalR 发起的 WebSocket 请求没法加 Header，token 走 Query String
                           var token = context.Request.Query["access_token"];
                           if (!string.IsNullOrEmpty(token)
-                            && (context.HttpContext.Request.Path.StartsWithSegments("/realtime") || context.HttpContext.Request.Path.StartsWithSegments("/api/cache") || context.HttpContext.Request.Path.StartsWithSegments("/external")))
-                          {
-                              context.Token = token;
-                          }
+                            && (context.HttpContext.Request.Path.StartsWithSegments("/realtime")
+                                || context.HttpContext.Request.Path.StartsWithSegments("/api/cache")
+                                || context.HttpContext.Request.Path.StartsWithSegments("/external")
+                                || context.HttpContext.Request.Path.StartsWithSegments("/api/files/image")))
+                      {
+                          context.Token = token;
+                      }
 
-                          return Task.CompletedTask;
-                      },
-                      OnChallenge = context =>
+                      return Task.CompletedTask;
+                  },
+                  OnTokenValidated = context =>
+                  {
+                      // 图片预览短时效令牌：只能用于 /api/files/image，且路径必须与签发时一致
+                      if (context.Principal?.FindFirst("purpose")?.Value == "file_image")
+                      {
+                          if (!context.HttpContext.Request.Path.StartsWithSegments("/api/files/image"))
+                          {
+                              context.Fail("该令牌仅限图片预览接口使用");
+                          }
+                          else
+                          {
+                              var claimPath = context.Principal.FindFirst("path")?.Value ?? "";
+                              var requestPath = context.HttpContext.Request.Query["path"].ToString();
+                              if (!string.Equals(claimPath, requestPath, StringComparison.Ordinal))
+                              {
+                                  context.Fail("图片预览令牌与请求路径不匹配");
+                              }
+                          }
+                      }
+
+                      return Task.CompletedTask;
+                  },
+                  OnChallenge = context =>
                       {
                           // Skip the default logic.
                           context.HandleResponse();

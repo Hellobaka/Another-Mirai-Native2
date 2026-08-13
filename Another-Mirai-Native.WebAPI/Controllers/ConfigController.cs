@@ -265,7 +265,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 }
                 else if (configItem.Name == nameof(WebAPIConfig.EnableChat)
                     || configItem.Name == nameof(WebAPIConfig.EnableFileManager)
-                    || configItem.Name == nameof(WebAPIConfig.EnableTerminal))
+                    || configItem.Name == nameof(WebAPIConfig.EnableSqlQuery)
+                    || configItem.Name == nameof(WebAPIConfig.EnableTerminal)
+                    || configItem.Name == nameof(WebAPIConfig.FileManagerRoot))
                 {
                     _logger.LogWarning("修改 WebUI 配置失败：禁止通过 API 修改 Key={Key}", request.Key);
                     return BadRequest(ApiResponse.Error(400, "不允许通过 WebAPI 修改此配置"));
