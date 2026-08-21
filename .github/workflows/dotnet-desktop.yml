@@ -22,9 +22,9 @@ jobs:
 
     # Install the .NET Core workload
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
         
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1
@@ -56,11 +56,11 @@ jobs:
              name: Minimal_Console
              path: build\Console\net48\
 
-    - name: Upload a Build Artifact(Console_net9)
+    - name: Upload a Build Artifact(Console_net10)
       uses: actions/upload-artifact@v4
       with:
-             name: Console_net9
-             path: build\Console\net9\
+             name: Console_net10
+             path: build\Console\net10\
 
     - name: Upload a Build Artifact(Blazor)
       uses: actions/upload-artifact@v4
@@ -68,11 +68,11 @@ jobs:
              name: WebUI
              path: build\Web\
 
-    - name: Upload a Build Artifact(WPF_net8)
+    - name: Upload a Build Artifact(WPF_net10)
       uses: actions/upload-artifact@v4
       with:
-             name: WPF_net9
-             path: build\WPF\net9\
+             name: WPF_net10
+             path: build\WPF\net10\
 
     - name: Upload a Build Artifact(WPF_net48)
       uses: actions/upload-artifact@v4
