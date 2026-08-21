@@ -5,7 +5,7 @@
     <LangVersion>12</LangVersion>
     <Platforms>AnyCPU;x86</Platforms>
       <UseWindowsForms>True</UseWindowsForms>
-      <Version>2.13.2</Version>
+      <Version>2.14.0</Version>
       <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
       <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
