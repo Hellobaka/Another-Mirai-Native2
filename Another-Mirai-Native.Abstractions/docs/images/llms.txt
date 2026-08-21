@@ -4,7 +4,7 @@
 
 ## 1. Framework Overview
 
-- TARGET: Windows only, ClassLibrary, .NET Framework 4.8 OR .NET 9.0 (choose one)
+- TARGET: Windows only, ClassLibrary, .NET Framework 4.8 OR .NET 10.0 (choose one)
 - SDK NuGet: `Another-Mirai-Native.Abstractions` (netstandard2.0)
 - Native API docs: The NuGet package ships with complete XML documentation at `lib\netstandard2.0\Another-Mirai-Native.Abstractions.xml`. All public types, methods, and parameters have doc comments — refer to this file for precise signatures and descriptions not covered here.
 - Message format: CQ codes. Use `MessageBuilder` (never hand-write CQ codes unless for Text passthrough).
@@ -17,13 +17,13 @@
 
 ```xml
 <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>  <!-- or net48 -->
+    <TargetFramework>net10.0-windows</TargetFramework>  <!-- or net48 -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <EnableDynamicLoading>true</EnableDynamicLoading>
 </PropertyGroup>
 ```
 
-- Windows-specific TFMs (net9.0-windows, net48) are required if using WinForms/WPF menus.
+- Windows-specific TFMs (net10.0-windows, net48) are required if using WinForms/WPF menus.
 - `<CopyLocalLockFileAssemblies>true` is MANDATORY for any plugin — without it, dependencies are not copied and the plugin fails to load.
 - The SDK auto-generates manifest and merges dependencies. Default behavior is correct; only customize `GenerateAmnManifest` / `CleanAmnOutputDir` / `IgnoreDependencyVersion` / `ILRepackAdditionParam` if needed.
   - `GenerateAmnManifest` — enable/disable dependency merging and manifest generation (default: true)
@@ -60,7 +60,7 @@ Apply the same rule to **every** other NuGet package added to the project.
 
 Before picking a package version, read the framework's dependency manifest to see what is already included:
 1. Find the NuGet global packages folder: run `dotnet nuget locals global-packages --list`
-2. Open: `<global-packages>\another-mirai-native.abstractions\<installed-version>\tools\DependencyManifest-dotnet9.json`
+2. Open: `<global-packages>\another-mirai-native.abstractions\<installed-version>\tools\DependencyManifest-dotnet10.json`
 3. If the package you need is listed there, you **MUST** install that exact version. Using a different version will prevent de-duplication and the package will be merged into the plugin DLL.
 
 ### 2.3 File path conventions (THIS IS CRITICAL)
@@ -508,7 +508,7 @@ When a plugin implements `IMenuHandler`, the framework auto-creates a dedicated 
 
 ### 8.2 Prerequisites
 
-- TFM MUST include `-windows` suffix (e.g., `net9.0-windows`). Pure `net9.0` will fail.
+- TFM MUST include `-windows` suffix (e.g., `net10.0-windows`). Pure `net10.0` will fail.
 - Add `<UseWindowsForms>true</UseWindowsForms>` or `<UseWPF>true</UseWPF>` to .csproj.
 
 ### 8.3 WinForms window pattern (recommended for simple UIs)
@@ -695,7 +695,7 @@ Some NuGet packages depend on native DLLs (e.g., `e_sqlite3.dll`, `libSkiaSharp.
 
 ### 10.3 Framework built-in dependencies
 
-To minimize plugin size, prefer dependencies already bundled with the framework. See `DependencyManifest-dotnet9.json` in the SDK tools folder for the list.
+To minimize plugin size, prefer dependencies already bundled with the framework. See `DependencyManifest-dotnet10.json` in the SDK tools folder for the list.
 
 ## 11. Error Patterns & Pitfalls
 
@@ -706,7 +706,7 @@ To minimize plugin size, prefer dependencies already bundled with the framework.
 - Send an image/audio before the file exists on disk — the framework only references existing files
 - Send images from outside `data\image\` or audio from outside `data\record\` — they must be under the framework's media folders
 - Implement both `CommandHandlerBase` AND `IGroupMessageHandler`/`IPrivateMessageHandler` on the same class
-- Use `net9.0` TFM for UI plugins — must be `net9.0-windows`
+- Use `net10.0` TFM for UI plugins — must be `net10.0-windows`
 - Throw unhandled exceptions in event handlers — they may crash the plugin process
 - Call `ReloadPlugin()` or `DisablePlugin()` and expect code after to execute
 - Use `GroupMessageContext` parameter in `[Command]` with `Scope = MessageScope.Private` — method won't be called; same for the reverse
@@ -778,7 +778,7 @@ public class Entry : PluginBase, IGroupMessageHandler
 ## 14. PackageReference Checklist
 
 When adding NuGet packages beyond the SDK, verify:
-1. The package supports your target framework (net48 or net9.0-windows).
+1. The package supports your target framework (net48 or net10.0-windows).
 2. Any native dependencies are handled (see section 10.2).
 3. The dependency is not already bundled with the framework (see section 10.3).
 4. `<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>` is set.

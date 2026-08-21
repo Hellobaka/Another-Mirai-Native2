@@ -1,7 +1,7 @@
 [
   {
     "AssemblyName": "Another-Mirai-Native.Abstractions",
-    "Version": "1.2.4.0",
+    "Version": "1.3.0.0",
     "PublicToken": "null"
   },
   {
@@ -63,51 +63,6 @@
     "AssemblyName": "Microsoft.Extensions.AI.Abstractions",
     "Version": "10.5.0.0",
     "PublicToken": "31bf3856ad364e35"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Caching.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Configuration.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Diagnostics.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.FileProviders.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Hosting.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Logging.Abstractions",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Options",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
-  },
-  {
-    "AssemblyName": "Microsoft.Extensions.Primitives",
-    "Version": "10.0.0.0",
-    "PublicToken": "adb9793829ddae60"
   },
   {
     "AssemblyName": "Microsoft.Identity.Client",
@@ -245,11 +200,6 @@
     "PublicToken": "db937bc2d44ff139"
   },
   {
-    "AssemblyName": "System.Diagnostics.DiagnosticSource",
-    "Version": "10.0.0.0",
-    "PublicToken": "cc7b13ffcd2ddd51"
-  },
-  {
     "AssemblyName": "System.DirectoryServices.Protocols",
     "Version": "8.0.0.0",
     "PublicToken": "b03f5f7f11d50a3a"
@@ -260,33 +210,13 @@
     "PublicToken": "31bf3856ad364e35"
   },
   {
-    "AssemblyName": "System.IO.Pipelines",
-    "Version": "10.0.0.0",
-    "PublicToken": "cc7b13ffcd2ddd51"
-  },
-  {
     "AssemblyName": "System.Memory.Data",
     "Version": "1.0.2.0",
-    "PublicToken": "cc7b13ffcd2ddd51"
-  },
-  {
-    "AssemblyName": "System.Net.ServerSentEvents",
-    "Version": "10.0.0.0",
     "PublicToken": "cc7b13ffcd2ddd51"
   },
   {
     "AssemblyName": "System.Runtime.Caching",
     "Version": "8.0.0.0",
     "PublicToken": "b03f5f7f11d50a3a"
-  },
-  {
-    "AssemblyName": "System.Text.Encodings.Web",
-    "Version": "10.0.0.0",
-    "PublicToken": "cc7b13ffcd2ddd51"
-  },
-  {
-    "AssemblyName": "System.Text.Json",
-    "Version": "10.0.0.0",
-    "PublicToken": "cc7b13ffcd2ddd51"
   }
 ]
