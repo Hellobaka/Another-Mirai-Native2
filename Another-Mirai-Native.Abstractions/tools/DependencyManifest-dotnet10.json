@@ -20,29 +20,9 @@
     "PublicToken": "92742159e12e44c8"
   },
   {
-    "AssemblyName": "DM.DmProvider",
-    "Version": "8.3.1.37876",
-    "PublicToken": "7a2d44aa446c6d01"
-  },
-  {
-    "AssemblyName": "EntityFramework",
-    "Version": "6.0.0.0",
-    "PublicToken": "b77a5c561934e089"
-  },
-  {
-    "AssemblyName": "EntityFramework.SqlServer",
-    "Version": "6.0.0.0",
-    "PublicToken": "b77a5c561934e089"
-  },
-  {
     "AssemblyName": "Fleck",
     "Version": "1.2.0.0",
     "PublicToken": "null"
-  },
-  {
-    "AssemblyName": "Kdbndp",
-    "Version": "9.3.8.122",
-    "PublicToken": "5d8b90d52f46fda7"
   },
   {
     "AssemblyName": "Microsoft.Bcl.AsyncInterfaces",
@@ -56,7 +36,7 @@
   },
   {
     "AssemblyName": "Microsoft.Data.Sqlite",
-    "Version": "9.0.0.0",
+    "Version": "10.0.11.0",
     "PublicToken": "adb9793829ddae60"
   },
   {
@@ -76,17 +56,17 @@
   },
   {
     "AssemblyName": "Microsoft.IdentityModel.Abstractions",
-    "Version": "6.35.0.0",
+    "Version": "7.6.3.0",
     "PublicToken": "31bf3856ad364e35"
   },
   {
     "AssemblyName": "Microsoft.IdentityModel.JsonWebTokens",
-    "Version": "6.35.0.0",
+    "Version": "7.6.3.0",
     "PublicToken": "31bf3856ad364e35"
   },
   {
     "AssemblyName": "Microsoft.IdentityModel.Logging",
-    "Version": "6.35.0.0",
+    "Version": "7.6.3.0",
     "PublicToken": "31bf3856ad364e35"
   },
   {
@@ -101,7 +81,7 @@
   },
   {
     "AssemblyName": "Microsoft.IdentityModel.Tokens",
-    "Version": "6.35.0.0",
+    "Version": "7.6.3.0",
     "PublicToken": "31bf3856ad364e35"
   },
   {
@@ -125,34 +105,9 @@
     "PublicToken": "cc7b13ffcd2ddd51"
   },
   {
-    "AssemblyName": "MySqlConnector",
-    "Version": "2.0.0.0",
-    "PublicToken": "d33d3e53aa5f8c92"
-  },
-  {
     "AssemblyName": "Newtonsoft.Json",
     "Version": "13.0.0.0",
     "PublicToken": "30ad4fe6b2a6aeed"
-  },
-  {
-    "AssemblyName": "Npgsql",
-    "Version": "5.0.18.0",
-    "PublicToken": "5d8b90d52f46fda7"
-  },
-  {
-    "AssemblyName": "Oracle.ManagedDataAccess",
-    "Version": "23.1.0.0",
-    "PublicToken": "89b483f429c47342"
-  },
-  {
-    "AssemblyName": "Oscar.Data.SqlClient",
-    "Version": "4.0.4.0",
-    "PublicToken": "c769aeeb30786f39"
-  },
-  {
-    "AssemblyName": "PropertyChanged",
-    "Version": "4.1.0.0",
-    "PublicToken": "ee3ee20bcf148ddd"
   },
   {
     "AssemblyName": "QrCodeGenerator",
@@ -161,22 +116,22 @@
   },
   {
     "AssemblyName": "SQLitePCLRaw.batteries_v2",
-    "Version": "2.1.10.2445",
+    "Version": "2.1.12.3116",
     "PublicToken": "8226ea5df37bcae9"
   },
   {
     "AssemblyName": "SQLitePCLRaw.core",
-    "Version": "2.1.10.2445",
+    "Version": "2.1.12.3116",
     "PublicToken": "1488e028ca7ab535"
   },
   {
     "AssemblyName": "SQLitePCLRaw.provider.e_sqlite3",
-    "Version": "2.1.10.2445",
+    "Version": "2.1.12.3116",
     "PublicToken": "9c301db686d0bd12"
   },
   {
     "AssemblyName": "SqlSugar",
-    "Version": "5.1.4.211",
+    "Version": "5.1.4.217",
     "PublicToken": "null"
   },
   {
@@ -185,28 +140,8 @@
     "PublicToken": "92742159e12e44c8"
   },
   {
-    "AssemblyName": "System.Data.SqlClient",
-    "Version": "4.6.1.6",
-    "PublicToken": "b03f5f7f11d50a3a"
-  },
-  {
-    "AssemblyName": "System.Data.SQLite",
-    "Version": "1.0.119.0",
-    "PublicToken": "db937bc2d44ff139"
-  },
-  {
-    "AssemblyName": "System.Data.SQLite.EF6",
-    "Version": "1.0.119.0",
-    "PublicToken": "db937bc2d44ff139"
-  },
-  {
-    "AssemblyName": "System.DirectoryServices.Protocols",
-    "Version": "8.0.0.0",
-    "PublicToken": "b03f5f7f11d50a3a"
-  },
-  {
     "AssemblyName": "System.IdentityModel.Tokens.Jwt",
-    "Version": "6.35.0.0",
+    "Version": "7.6.3.0",
     "PublicToken": "31bf3856ad364e35"
   },
   {
