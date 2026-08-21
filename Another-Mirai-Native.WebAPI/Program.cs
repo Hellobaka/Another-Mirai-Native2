@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NLog.Web;
 using Scalar.AspNetCore;
 using System.Net;
@@ -273,7 +273,7 @@ namespace Another_Mirai_Native.WebAPI
                 options.AddDocumentTransformer((document, context, ct) =>
                 {
                     document.Components ??= new();
-                    document.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme>
+                    document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>
                     {
                         ["Bearer"] = new OpenApiSecurityScheme
                         {
@@ -282,18 +282,11 @@ namespace Another_Mirai_Native.WebAPI
                             Description = "输入 JWT Token"
                         }
                     };
-                    document.SecurityRequirements = [new OpenApiSecurityRequirement
+                    document.Security = [new OpenApiSecurityRequirement
                     {
                         {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            Array.Empty<string>()
+                            new OpenApiSecuritySchemeReference("Bearer", document),
+                            new List<string>()
                         }
                     }];
                     return Task.CompletedTask;
