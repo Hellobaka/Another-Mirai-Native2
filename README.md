@@ -2,6 +2,8 @@
 
 交流群: 671467200
 
+## 运行环境
+- 运行 .NET 10 版本前，请在 [.NET 10 下载页](https://dotnet.microsoft.com/zh-cn/download/dotnet/10.0) 安装 Windows x86 的 `.NET 桌面运行时` 和 `ASP.NET Core 运行时`，完成后重新启动程序。
 
 ## 协议实现进度
 - [x] 实现[MiraiAPIHttp](https://github.com/project-mirai/mirai-api-http)协议
@@ -54,7 +56,7 @@
 ## 关于 Lagrange.Core
 - 协议由于社区原因，可能无法正常使用
 - 登录逻辑借鉴于Lagrange.Onebot项目
-- 仅.net9.0版本可用
+- 仅.net10.0版本可用
 - 若控制台输出的二维码无法扫码，可修改`conf\Config.json`配置中的`QRCodeCompatibilityMode`为true
 - 协议端会可能有很多的异常输出，正常现象
 - 若需要更新Lagrange.Core版本，查看[Wiki](https://github.com/Hellobaka/Another-Mirai-Native2/wiki/%E6%9B%B4%E6%96%B0Lagrange.Core%E7%89%88%E6%9C%AC)

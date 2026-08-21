@@ -2,10 +2,10 @@
 setlocal
 
 echo Release...
-dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
+dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net10.pubxml -f net10.0-windows
 dotnet publish Another-Mirai-Native\Another-Mirai-Native.csproj /p:PublishProfile=net48.pubxml -f net48
 dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net48.pubxml -f net48
-dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net9.pubxml -f net9.0-windows
+dotnet publish UI_WPF\UI_WPF.csproj /p:PublishProfile=net10.pubxml -f net10.0-windows
 
 echo Loaders...
 mkdir ".\build\loaders\NetFramework48"
@@ -14,7 +14,7 @@ xcopy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\x86" ".
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe" ".\build\loaders\NetFramework48" /Y
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\Another-Mirai-Native.exe.config" ".\build\loaders\NetFramework48" /Y
 copy ".\Another-Mirai-Native\bin\x86\Debug\net48\loaders\NetFramework48\CQP.dll" ".\build\loaders\NetFramework48" /Y
-copy ".\build\Console\net9\Another-Mirai-Native.exe" ".\build\loaders\NetCore\Another-Mirai-Native.exe" /Y
+copy ".\build\Console\net10\Another-Mirai-Native.exe" ".\build\loaders\NetCore\Another-Mirai-Native.exe" /Y
 
 echo Generate Minimal Console(.net48)
 echo Copy Protocols
@@ -32,14 +32,14 @@ for %%f in (".\build\Console\net48\*.dll") do (
     )
 )
 
-echo Generate Console(net9)
+echo Generate Console(net10)
 echo Copy Loaders
-xcopy ".\build\loaders\NetFramework48" ".\build\Console\net9\loaders\NetFramework48" /E /I /H /Y
+xcopy ".\build\loaders\NetFramework48" ".\build\Console\net10\loaders\NetFramework48" /E /I /H /Y
 echo Copy Protocols
-xcopy ".\UI_WPF\bin\x86\Debug\net9.0-windows\protocols" ".\build\Console\net9\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net10.0-windows\protocols" ".\build\Console\net10\protocols" /E /I /H /Y
 echo Clean Unnecessary Files
-del /Q ".\build\Console\net9\*.pdb"
-del /Q ".\build\Console\net9\*.xml"
+del /Q ".\build\Console\net10\*.pdb"
+del /Q ".\build\Console\net10\*.xml"
 
 echo Generate WPF(.net48)
 echo Copy Loaders
@@ -59,21 +59,21 @@ for %%f in (".\build\WPF\net48\*.dll") do (
     )
 )
 
-echo Generate WPF(.net9)
+echo Generate WPF(.net10)
 echo Copy Loaders
-xcopy ".\build\loaders\NetFramework48" ".\build\WPF\net9\loaders\NetFramework48" /E /I /H /Y
+xcopy ".\build\loaders\NetFramework48" ".\build\WPF\net10\loaders\NetFramework48" /E /I /H /Y
 echo Copy Protocols
-xcopy ".\UI_WPF\bin\x86\Debug\net9.0-windows\protocols" ".\build\WPF\net9\protocols" /E /I /H /Y
+xcopy ".\UI_WPF\bin\x86\Debug\net10.0-windows\protocols" ".\build\WPF\net10\protocols" /E /I /H /Y
 echo Clean Unnecessary Files
-rd /s /q ".\build\WPF\net9\conf"
-del /Q ".\build\WPF\net9\*.pdb"
-del /Q ".\build\WPF\net9\*.xml"
-del /Q ".\build\WPF\net9\Another-Mirai-Native.exe"
-del /Q ".\build\WPF\net9\Another-Mirai-Native.runtimeconfig.json"
-del /Q ".\build\WPF\net9\appsettings.Development.json"
-del /Q ".\build\WPF\net9\appsettings.json"
-del /Q ".\build\WPF\net9\Another-Mirai-Native.WebAPI.exe"
-del /Q ".\build\WPF\net9\Another-Mirai-Native.WebAPI.runtimeconfig.json"
+rd /s /q ".\build\WPF\net10\conf"
+del /Q ".\build\WPF\net10\*.pdb"
+del /Q ".\build\WPF\net10\*.xml"
+del /Q ".\build\WPF\net10\Another-Mirai-Native.exe"
+del /Q ".\build\WPF\net10\Another-Mirai-Native.runtimeconfig.json"
+del /Q ".\build\WPF\net10\appsettings.Development.json"
+del /Q ".\build\WPF\net10\appsettings.json"
+del /Q ".\build\WPF\net10\Another-Mirai-Native.WebAPI.exe"
+del /Q ".\build\WPF\net10\Another-Mirai-Native.WebAPI.runtimeconfig.json"
 
 echo Create zip Archives
 where 7z.exe >nul 2>&1
@@ -83,8 +83,8 @@ if %errorlevel% neq 0 (
     exit /b
 )
 7z.exe a -tzip ".\build\Minimal_Console.zip" ".\build\Console\net48\*"
-7z.exe a -tzip ".\build\Console_net9.zip" ".\build\Console\net9\*"
-7z.exe a -tzip ".\build\WPF_net9.zip" ".\build\WPF\net9\*"
+7z.exe a -tzip ".\build\Console_net10.zip" ".\build\Console\net10\*"
+7z.exe a -tzip ".\build\WPF_net10.zip" ".\build\WPF\net10\*"
 7z.exe a -tzip ".\build\WPF_net48.zip" ".\build\WPF\net48\*"
 
 endlocal

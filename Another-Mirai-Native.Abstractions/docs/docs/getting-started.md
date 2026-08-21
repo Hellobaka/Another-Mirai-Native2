@@ -7,7 +7,7 @@
 ## 先决条件
 
 - **Windows** 操作系统
-- **.NET Framework 4.8** 或 **.NET 9.0**（任选其一）
+- **.NET Framework 4.8** 或 **.NET 10.0**（任选其一）
 - **Visual Studio 2022 或更新版本**或其他 C# 开发环境
 
 ## 创建项目
@@ -18,7 +18,7 @@
 ![创建项目](/images/CreateProject.png)
 2. 根据要使用的目标框架，选择对应的 `类库`模板
     1. 假如选择`.net framework4.8`，则搜索`类库(.Net Framework)`
-    2. 假如选择`.net9.0`，则搜索`类库`
+    2. 假如选择`.net10.0`，则搜索`类库`
     ![选择模板](/images/CreateClassLibrary.png)
 3. 下一步选择项目位置，随后选择模板框架。
 4. 看见代码页面后即为创建完成。

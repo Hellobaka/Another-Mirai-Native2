@@ -16,13 +16,13 @@
 ### 🔧 启用 WinForms
 
 1. 双击插件项目，或使用文本编辑器打开项目文件（.csproj）。
-2. 将 `TargetFramework` 修改为带 `-windows` 后缀的目标框架，例如 `net9.0-windows`。
+2. 将 `TargetFramework` 修改为带 `-windows` 后缀的目标框架，例如 `net10.0-windows`。
 3. 在 `<PropertyGroup>` 中添加 `<UseWindowsForms>true</UseWindowsForms>`。
 4. 保存项目文件并重新加载项目。
 
 ```xml
 <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -89,13 +89,13 @@ public class FormEntry : IMenuHandler
 ### 🔧 启用 WPF
 
 1. 双击插件项目，或使用文本编辑器打开项目文件（.csproj）。
-2. 将 `TargetFramework` 修改为带 `-windows` 后缀的目标框架，例如 `net9.0-windows`。
+2. 将 `TargetFramework` 修改为带 `-windows` 后缀的目标框架，例如 `net10.0-windows`。
 3. 在 `<PropertyGroup>` 中添加 `<UseWPF>true</UseWPF>`。
 4. 保存项目文件并重新加载项目。
 
 ```xml
 <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>

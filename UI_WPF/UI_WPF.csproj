@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net9.0-windows;net48</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows;net48</TargetFrameworks>
       <RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -21,7 +21,7 @@
             <PropertyChanged />
         </Weavers>
     </WeaverConfiguration>
-    <WeaverConfiguration Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <WeaverConfiguration Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <Weavers>
             <PropertyChanged />
         </Weavers>
@@ -58,7 +58,7 @@
       </PackageReference>
   </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
         <ProjectReference Include="..\Another-Mirai-Native.WebAPI\Another-Mirai-Native.WebAPI.csproj" />
     </ItemGroup>
     

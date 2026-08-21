@@ -12,8 +12,7 @@ namespace Another_Mirai_Native
         public static void Output(string text, bool compatibilityMode)
         {
 #if NET5_0_OR_GREATER
-            var segments = QrSegment.MakeSegments(text);
-            var qrCode = QrCode.EncodeSegments(segments, QrCode.Ecc.Low);
+            var qrCode = QrCode.EncodeText(text, QrCode.Ecc.Low);
 
             if (compatibilityMode)
             {
