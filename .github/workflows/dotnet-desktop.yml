@@ -15,7 +15,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v7.0.1
       with:
         fetch-depth: 0
         submodules: true
@@ -27,10 +27,10 @@ jobs:
         dotnet-version: 10.0.x
         
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1
+      uses: microsoft/setup-msbuild@v3
       
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1
+      uses: NuGet/setup-nuget@v4.0
     
     - name: Restore NuGet packages
       run: nuget restore Another-Mirai-Native2.sln 
@@ -51,31 +51,25 @@ jobs:
       run: .\Release.bat 
 
     - name: Upload a Build Artifact(Console_net48)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
              name: Minimal_Console
              path: build\Console\net48\
 
     - name: Upload a Build Artifact(Console_net10)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
              name: Console_net10
              path: build\Console\net10\
 
-    - name: Upload a Build Artifact(Blazor)
-      uses: actions/upload-artifact@v4
-      with:
-             name: WebUI
-             path: build\Web\
-
     - name: Upload a Build Artifact(WPF_net10)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
              name: WPF_net10
              path: build\WPF\net10\
 
     - name: Upload a Build Artifact(WPF_net48)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7.0.1
       with:
              name: WPF_net48
              path: build\WPF\net48\
