@@ -308,6 +308,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
             AuthKey = GetConfig("AuthKey", "");
             MessageType = GetConfig("MessageType", "Array");
             DiscardOfflineMessage = GetConfig("DiscardOfflineMessage", true);
+            LLOnebotCompatibility = GetConfig("LLOnebotCompatibility", true);
         }
 
         public int SendDiscussMsg(long discussId, string msg)
