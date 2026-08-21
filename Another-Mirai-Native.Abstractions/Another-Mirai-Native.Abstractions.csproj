@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<Version>1.2.4</Version>
+	<Version>1.3.0</Version>
 	<PackageProjectUrl>https://github.com/Hellobaka/Another-Mirai-Native2</PackageProjectUrl>
 	<Description>用于 Another-Mirai-Native2 的原生 C# 插件 SDK，文档见 https://amn2-docs.hellobaka.moe/</Description>
 	<RepositoryUrl>https://github.com/Hellobaka/Another-Mirai-Native.Abstractions</RepositoryUrl>
@@ -44,7 +44,7 @@
 	
 	<ItemGroup>
 		<None Include="tools\AMN.ManifestGen.exe" Pack="true" PackagePath="tools\" />
-		<None Include="tools\DependencyManifest-dotnet9.json" Pack="true" PackagePath="tools\" />
+		<None Include="tools\DependencyManifest-dotnet10.json" Pack="true" PackagePath="tools\" />
 		<None Include="tools\ILRepack.exe" Pack="true" PackagePath="tools\" />
 		<None Include="tools\ILRepack.runtimeconfig.json" Pack="true" PackagePath="tools\" />
 		<None Include="buildTransitive\Another-Mirai-Native.Abstractions.targets" Pack="true" PackagePath="buildTransitive\" />
