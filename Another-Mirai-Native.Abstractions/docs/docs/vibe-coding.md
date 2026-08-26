@@ -55,6 +55,7 @@ appId 用 com.example.checkin
 - 如何使用指令模式
 - 插件文件应放在什么路径
 - 返回值 Block/Pass 的含义
+- 如何启用 MCP 服务器、有哪些 MCP 工具可用
 
 ## 🏗️ 构建与部署
 
@@ -73,6 +74,63 @@ AI 生成代码后的操作步骤：
 - "签到成功时加一个表情回复，积分榜前三名显示头衔"
 - "图片审核增加一个理由输入框，拒绝时必须填写理由"
 - "把数据库从 sqlite 换成 json 文件存储"
+
+## 🤖 MCP 服务器：让 AI 直接操作框架
+
+前面的迭代循环（构建 → 复制文件 → 重载 → 观察 → 再改）需要不少人工操作。框架提供了一个捷径：NoConnection 测试协议内置了 MCP（Model Context Protocol）服务器。启用后，AI 客户端可以通过标准 MCP 协议直接操作运行中的框架——上传插件、发送模拟消息、查询日志——从而自主完成"测试 → 修复"的完整循环，全程无需打开框架 UI，也无需真实的 QQ 连接。
+
+### 启用
+
+1. 让框架连接到 **NoConnection 协议**（连接后会自动弹出 Tester 测试窗口）
+2. 在 Tester 页面切换到 **"MCP服务"** 选项卡
+3. 勾选 **"启用 MCP 服务器"**
+4. 点击 **"应用并重启"**
+
+启动成功后，页面状态标签会显示 `状态: 运行中 (http://127.0.0.1:46000/)`，框架日志也会输出 `MCP 服务已启动，监听 http://127.0.0.1:46000/`。
+
+监听 IP 与端口（默认 `127.0.0.1:46000`）可以在同一选项卡中修改，改完后再次点击"应用并重启"即可生效；也可以通过页面上的"停止"按钮随时停止服务。
+
+> ⚠️ **注意**：MCP 服务器仅在 .NET 10（`net10.0-windows`）运行时可用，.NET Framework 4.8 构建下"MCP服务"选项卡会被禁用。
+
+### 连接 MCP 客户端
+
+MCP 端点位于**根路径** `http://127.0.0.1:46000/`（注意不是 `/mcp`），使用 Streamable HTTP 传输（stateless 无状态模式）。支持远程 HTTP 服务器的 MCP 客户端，配置示例：
+
+```json
+{
+  "mcpServers": {
+    "amn2": {
+      "url": "http://127.0.0.1:46000/"
+    }
+  }
+}
+```
+
+> ⚠️ **注意**：MCP 服务器没有任何认证机制，请勿将端口暴露到公网。
+
+### 工具列表
+
+服务器共公开 7 个工具：
+
+| 工具名 | 用途 | 参数 |
+| -- | -- | -- |
+| `send_message` | 模拟接收一条群聊/私聊消息（支持 CQ 码），可选延时自动撤回 | `isPrivateChat`、`groupId`（私聊填 0）、`senderId`、`message` 必填；`autoRevoke`（默认 false）、`autoRevokeSeconds`（默认 10）、`messageId` 可选 |
+| `add_plugin` | 上传插件：指定 DLL 与 JSON 文件的绝对路径，复制到插件目录并注册 | `dllPath`、`jsonPath` |
+| `enable_plugin` | 按插件的**中文名称**（JSON 清单 `name` 字段，区分大小写）启用插件 | `pluginName` |
+| `reload_plugin` | 按 AuthCode 重新加载插件（需处于启用状态） | `authCode` |
+| `disable_plugin` | 按 AuthCode 禁用插件 | `authCode` |
+| `list_plugins` | 获取所有已加载插件的详细信息（名称、AuthCode、版本、启用状态等） | 无 |
+| `get_latest_logs` | 获取框架最近的运行日志条目，用于诊断 | `logEntryCount`（默认 10，最大 100） |
+
+### 典型工作流
+
+1. 让 AI 构建插件，生成 `Native_*.dll` 和 `Native_*.json`
+2. `add_plugin` 上传到运行中的框架
+3. 首次用 `enable_plugin` 启用；之后迭代用 `reload_plugin` 重载
+4. `send_message` 发送模拟消息触发插件逻辑（返回值会告知哪个插件处理了该消息；配合 `autoRevoke` 可测试撤回处理）
+5. `get_latest_logs` 查看日志，把结果反馈给 AI 继续修复
+
+如此，AI 即可自主完成"写代码 → 部署 → 测试 → 修复"的闭环，人只需要在旁边看着。
 
 ## ⚠️ 常见踩坑点
 

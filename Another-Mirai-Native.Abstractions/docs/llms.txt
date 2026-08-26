@@ -795,3 +795,59 @@ Another_Mirai_Native.Abstractions.Models              Message, MessageBuilder, G
 Another_Mirai_Native.Abstractions.Models.MessageItem  At, Face, Image, Text, Reply, etc.
 Another_Mirai_Native.Abstractions.Services            IPluginApi, ILogger, IMessageApi, IGroupApi, etc.
 ```
+
+## 16. MCP Server (NoConnection Protocol)
+
+The NoConnection protocol can host an MCP (Model Context Protocol) server so AI clients can drive the live framework over HTTP. This is a HOST-side feature, not a plugin API. It is the ideal channel for AI-driven plugin development: deploy, trigger, and debug your plugin without a real QQ connection or the framework UI.
+
+### Key facts
+
+- Only available in the modern .NET runtime (`net10.0-windows` builds). Absent in the .NET Framework 4.8 build.
+- Built on the official `ModelContextProtocol.AspNetCore` SDK (1.4.0); Kestrel; Streamable HTTP transport in **stateless** mode (each request is independent, POST-only endpoint).
+- Server name: `Another-Mirai-Native`. Starts when the NoConnection protocol connects, stops on disconnect.
+- **No authentication** — do not expose the port to untrusted networks.
+
+### Enabling (via the Tester UI)
+
+MCP settings are managed through the Tester dialog, not by hand-editing config files:
+
+1. Connect the framework to the **NoConnection** protocol (the Tester dialog opens automatically on connect).
+2. In the Tester dialog, switch to the **"MCP服务"** (MCP Service) tab.
+3. Check **"启用 MCP 服务器"** (Enable MCP server).
+4. Click **"应用并重启"** (Apply and restart).
+
+When it is up, the status label reads `状态: 运行中 (http://127.0.0.1:46000/)` and the log shows `MCP 服务已启动，监听 http://127.0.0.1:46000/`. The listen IP/port (defaults `127.0.0.1` / `46000`) can be edited in the same tab; click "应用并重启" again to apply changes, or use the "停止" button to stop the service.
+
+**The MCP endpoint is the ROOT path**: `http://127.0.0.1:46000/` (NOT `/mcp`).
+
+MCP client configuration (any client supporting streamable HTTP):
+
+```json
+{ "mcpServers": { "amn2": { "url": "http://127.0.0.1:46000/" } } }
+```
+
+Probe manually:
+
+```
+curl.exe http://127.0.0.1:46000/ -X POST -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+```
+
+### Tools (7)
+
+| Tool | Purpose | Parameters |
+|---|---|---|
+| `send_message` | Simulate receiving a message in NoConnection (group or private); optional auto-revoke | Required: `isPrivateChat` (bool), `groupId` (long, use 0 for private), `senderId` (long), `message` (string, CQ codes OK). Optional: `autoRevoke` (bool, default false), `autoRevokeSeconds` (int, default 10), `messageId` (int, auto-generated if omitted) |
+| `add_plugin` | Add or re-upload a plugin: copies the DLL + JSON manifest into `data\plugins\` and registers it | `dllPath` (string, absolute path), `jsonPath` (string, absolute path) |
+| `list_plugins` | List all loaded plugins with name, AuthCode, version, enabled status, etc. | — |
+| `enable_plugin` | Enable a plugin by its **Chinese display name** (the `name` field of the plugin JSON manifest, case-sensitive) | `pluginName` (string) |
+| `disable_plugin` | Disable a plugin | `authCode` (int) |
+| `reload_plugin` | Reload a plugin (must already be enabled) | `authCode` (int) |
+| `get_latest_logs` | Fetch recent framework log entries for diagnostics | `logEntryCount` (int, default 10, max 100) |
+
+### Typical AI plugin-development workflow
+
+1. `dotnet build` your plugin → produces `Native_<Name>.dll` + `Native_<Name>.json`
+2. `add_plugin(dllPath, jsonPath)` — deploy into the running framework
+3. `enable_plugin("中文名称")` on first run; `reload_plugin(authCode)` on redeploys
+4. `send_message(...)` — trigger plugin logic with fake group/private messages (set `autoRevoke` to test recall handlers)
+5. `get_latest_logs()` — verify behavior and debug errors; the `send_message` result also reports which plugin handled the event
