@@ -266,7 +266,8 @@ namespace Another_Mirai_Native.Native
                 LoaderProcessPath = PluginLoaderType switch
                 {
                     PluginLoaderType.NetCore => @"loaders\NetCore\Another-Mirai-Native.exe",
-                    _ => @"loaders\NetFramework48\Another-Mirai-Native.exe",
+                    PluginLoaderType.NetFramework48 => @"loaders\NetFramework48\Another-Mirai-Native.exe",
+                    _ => @"loaders\Cpp\Another-Mirai-Native.Loader.Cpp.exe",
                 };
 
                 if (File.Exists(LoaderProcessPath) is false)

@@ -5,7 +5,7 @@ VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Another-Mirai-Native", "Another-Mirai-Native\Another-Mirai-Native.csproj", "{28FDFD9E-59DC-4EFF-BB5F-D07C077C74C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQP", "CQP\CQP.csproj", "{FAF82352-4013-4622-911A-DAD4E6F1754B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQP", "Natives\CQP\CQP.csproj", "{FAF82352-4013-4622-911A-DAD4E6F1754B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol_MiraiAPIHttp", "Protocols\Protocol_MiraiAPIHttp\Protocol_MiraiAPIHttp.csproj", "{7EAE6816-8FD9-4456-9387-851F075F73FC}"
 EndProject
@@ -30,6 +30,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Another-Mirai-Native.Abstra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Another-Mirai-Native.WebAPI", "Another-Mirai-Native.WebAPI\Another-Mirai-Native.WebAPI.csproj", "{58C4D4C4-8E2F-4DF8-825B-D7B35D0A79BD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Natives", "Natives", "{31C12AA9-695A-49F4-A4C6-0061A07FDFD6}"
+EndProject
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "Another-Mirai-Native.Loader.Cpp", "Natives\Another-Mirai-Native.Loader.Cpp\Another-Mirai-Native.Loader.Cpp.vcxproj", "{ED38C061-04E9-40AE-8F01-96829605916D}"
+EndProject
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "CQP.Bridge", "Natives\Another-Mirai-Native.Loader.Cpp\CQP.Bridge.vcxproj", "{54C519F2-3296-4B45-9920-F48FC0BAE799}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +44,22 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Debug|Any CPU.Build.0 = Debug|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Debug|x86.ActiveCfg = Debug|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Debug|x86.Build.0 = Debug|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Release|Any CPU.Build.0 = Release|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Release|x86.ActiveCfg = Release|Win32
+		{ED38C061-04E9-40AE-8F01-96829605916D}.Release|x86.Build.0 = Release|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Debug|Any CPU.Build.0 = Debug|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Debug|x86.ActiveCfg = Debug|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Debug|x86.Build.0 = Debug|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Release|Any CPU.ActiveCfg = Release|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Release|Any CPU.Build.0 = Release|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Release|x86.ActiveCfg = Release|Win32
+		{54C519F2-3296-4B45-9920-F48FC0BAE799}.Release|x86.Build.0 = Release|Win32
 		{28FDFD9E-59DC-4EFF-BB5F-D07C077C74C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28FDFD9E-59DC-4EFF-BB5F-D07C077C74C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28FDFD9E-59DC-4EFF-BB5F-D07C077C74C5}.Debug|x86.ActiveCfg = Debug|x86
@@ -123,6 +145,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FAF82352-4013-4622-911A-DAD4E6F1754B} = {31C12AA9-695A-49F4-A4C6-0061A07FDFD6}
+		{ED38C061-04E9-40AE-8F01-96829605916D} = {31C12AA9-695A-49F4-A4C6-0061A07FDFD6}
+		{54C519F2-3296-4B45-9920-F48FC0BAE799} = {31C12AA9-695A-49F4-A4C6-0061A07FDFD6}
 		{7EAE6816-8FD9-4456-9387-851F075F73FC} = {2D9E67CC-6EDC-495E-876E-50DD65E6B28B}
 		{D1C15118-1FBC-4FD6-BE22-A85EDABB7321} = {2D9E67CC-6EDC-495E-876E-50DD65E6B28B}
 		{40258B40-0DBD-4E63-9D04-E09A4BF3E5B3} = {2D9E67CC-6EDC-495E-876E-50DD65E6B28B}
