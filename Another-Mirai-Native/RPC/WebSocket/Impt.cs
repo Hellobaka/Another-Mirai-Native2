@@ -16,6 +16,15 @@ namespace Another_Mirai_Native.RPC.WebSocket
 
         public WebSocketClient(string uri)
         {
+            if (uri.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                uri = "wss://" + uri.Substring("https://".Length);
+            }
+            else if (uri.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+            {
+                uri = "ws://" + uri.Substring("http://".Length);
+            }
+
             ServerUri = new Uri(uri);
         }
 
