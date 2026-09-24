@@ -1,5 +1,6 @@
 ﻿using Another_Mirai_Native.DB;
 using Another_Mirai_Native.Model;
+using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -191,6 +192,15 @@ namespace Another_Mirai_Native.RPC.Pipe
             catch
             {
                 // 进程已退出
+            }
+            finally
+            {
+                var proxy = PluginManagerProxy.Proxies.FirstOrDefault(x => x.PluginProcess?.Id == pid);
+                if (proxy != null)
+                {
+                    RequestWaiter.ResetSignalByPluginProxy(proxy);
+                }
+                RequestWaiter.ResetSignalByProcess(pid);
             }
         }
 
