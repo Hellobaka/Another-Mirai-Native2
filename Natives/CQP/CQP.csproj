@@ -71,7 +71,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,17 +89,17 @@
     <Compile Include="XiaoLiZI_API.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\.editorconfig">
+    <None Include="..\..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj">
+    <ProjectReference Include="..\..\Another-Mirai-Native.Abstractions\Another-Mirai-Native.Abstractions.csproj">
       <Project>{AED54416-8304-4979-9446-5AE994E78EF3}</Project>
       <Name>Another-Mirai-Native.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Another-Mirai-Native\Another-Mirai-Native.csproj">
+    <ProjectReference Include="..\..\Another-Mirai-Native\Another-Mirai-Native.csproj">
       <Project>{28fdfd9e-59dc-4eff-bb5f-d07c077c74c5}</Project>
       <Name>Another-Mirai-Native</Name>
     </ProjectReference>
@@ -109,8 +109,8 @@
     <Import Project="$(SolutionDir)packages\DllExport.1.7.4\tools\net.r_eg.DllExport.targets" Condition="Exists($([MSBuild]::Escape('$(SolutionDir)packages\DllExport.1.7.4\tools\net.r_eg.DllExport.targets')))" Label="8337224c9ad9e356" />
   </ImportGroup>
   <Target Name="DllExportRestorePkg" BeforeTargets="PrepareForBuild">
-    <Error Condition="!Exists('$(SolutionDir)DllExport.bat')" Text="DllExport.bat is not found. Path: '$(SolutionDir)' - https://github.com/3F/DllExport" />
-    <Exec Condition="('$(DllExportModImported)' != 'true' Or !Exists('$(SolutionDir)packages\DllExport.1.7.4\tools\net.r_eg.DllExport.targets')) And Exists('$(SolutionDir)DllExport.bat')" Command=".\DllExport.bat  -action Restore" WorkingDirectory="$(SolutionDir)" />
+    <Error Condition="!Exists('$(SolutionDir)tools\DllExport.bat')" Text="DllExport.bat is not found. Path: '$(SolutionDir)tools' - https://github.com/3F/DllExport" />
+    <Exec Condition="('$(DllExportModImported)' != 'true' Or !Exists('$(SolutionDir)packages\DllExport.1.7.4\tools\net.r_eg.DllExport.targets')) And Exists('$(SolutionDir)tools\DllExport.bat')" Command=".\tools\DllExport.bat -action Restore" WorkingDirectory="$(SolutionDir)" />
     <MSBuild Condition="'$(DllExportModImported)' != 'true'" Projects="$(SolutionDir)packages\DllExport.1.7.4\tools\net.r_eg.DllExport.targets" Targets="DllExportMetaXBaseTarget" Properties="TargetFramework=$(TargetFramework)">
       <Output TaskParameter="TargetOutputs" PropertyName="DllExportMetaXBase" />
     </MSBuild>

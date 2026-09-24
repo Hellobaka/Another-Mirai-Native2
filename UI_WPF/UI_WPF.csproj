@@ -116,7 +116,7 @@
   </ItemGroup>
     
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="cd ..&#xD;&#xA;call copy.bat" />
+        <Exec Command="cd ..&#xD;&#xA;call tools\copy.bat" />
     </Target>
 
 </Project>
