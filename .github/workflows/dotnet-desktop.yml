@@ -48,7 +48,7 @@ jobs:
       run: msbuild Another-Mirai-Native2.sln -p:Configuration=Debug -p:Platform=x86
       
     - name: Build Publish Result
-      run: .\Release.bat 
+      run: .\tools\Release.bat 
 
     - name: Upload a Build Artifact(Console_net48)
       uses: actions/upload-artifact@v7.0.1
@@ -56,20 +56,8 @@ jobs:
              name: Minimal_Console
              path: build\Console\net48\
 
-    - name: Upload a Build Artifact(Console_net10)
-      uses: actions/upload-artifact@v7.0.1
-      with:
-             name: Console_net10
-             path: build\Console\net10\
-
     - name: Upload a Build Artifact(WPF_net10)
       uses: actions/upload-artifact@v7.0.1
       with:
              name: WPF_net10
              path: build\WPF\net10\
-
-    - name: Upload a Build Artifact(WPF_net48)
-      uses: actions/upload-artifact@v7.0.1
-      with:
-             name: WPF_net48
-             path: build\WPF\net48\
