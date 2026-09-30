@@ -4,6 +4,8 @@
 #include <windows.h>
 
 #include <cstdio>
+#include <cstdlib>
+#include <crtdbg.h>
 #include <mutex>
 #include <string>
 
@@ -13,6 +15,19 @@ namespace {
 std::mutex console_mutex;
 
 } // namespace
+
+void ConfigureRuntimeErrorReporting() {
+    SetErrorMode(GetErrorMode() | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX |
+                 SEM_NOOPENFILEERRORBOX);
+    _set_error_mode(_OUT_TO_STDERR);
+    _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+#ifdef _DEBUG
+    for (int report_type : {_CRT_WARN, _CRT_ERROR, _CRT_ASSERT}) {
+        _CrtSetReportMode(report_type, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+        _CrtSetReportFile(report_type, _CRTDBG_FILE_STDERR);
+    }
+#endif
+}
 
 void ConsoleLog(ConsoleLevel level, std::string_view stage, std::string_view detail) {
     HANDLE output = GetStdHandle(STD_ERROR_HANDLE);

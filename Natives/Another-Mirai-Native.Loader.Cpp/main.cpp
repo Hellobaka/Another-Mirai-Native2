@@ -80,6 +80,7 @@ extern "C" __declspec(dllexport) const char* __cdecl amn_call(
 }
 
 int wmain(int argc, wchar_t** argv) {
+    amn::ConfigureRuntimeErrorReporting();
     const Options options = ParseOptions(argc, argv);
     if (options.plugin_path.empty() || options.core_pid <= 0) {
         amn::ConsoleLog(amn::ConsoleLevel::Error, "arguments", "-Path and -PID are required");
