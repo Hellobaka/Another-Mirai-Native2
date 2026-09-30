@@ -19,9 +19,9 @@ namespace Another_Mirai_Native.UI
 
         public string AccentColor { get; set; } = "";
 
-        public double Width { get; set; } = 900;
+        public double Width { get; set; } = 1300;
 
-        public double Height { get; set; } = 600;
+        public double Height { get; set; } = 850;
 
         public int LogPageSize { get; set; } = 500;
 
@@ -48,8 +48,8 @@ namespace Another_Mirai_Native.UI
             Theme = (SystemTheme)GetConfig("Theme", 0);
             WindowMaterial = (WindowMaterial)GetConfig("WindowMaterial", 0);
             AccentColor = GetConfig("AccentColor", "");
-            Width = GetConfig("Window_Width", 900);
-            Height = GetConfig("Window_Height", 600);
+            Width = GetConfig("Window_Width", 1300);
+            Height = GetConfig("Window_Height", 850);
             LogPageSize = GetConfig("LogPageSize", 500);
             MessageContainerMaxCount = Math.Max(GetConfig("MessageContainerMaxCount", 15), 10);
             LogAutoScroll = GetConfig("LogAutoScroll", true);

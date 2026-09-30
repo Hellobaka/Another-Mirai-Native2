@@ -53,7 +53,7 @@ namespace Another_Mirai_Native.UI.Pages
                 var column = LogGridView.Columns[i];
                 try
                 {
-                    column.Width = UIConfig.Instance.GetConfig($"LogColumn{i + 1}_Width", 200);
+                    column.Width = UIConfig.Instance.GetConfig($"LogColumn{i + 1}_Width", GetColumnDefaultWidth(i));
                 }
                 catch
                 {
@@ -65,6 +65,16 @@ namespace Another_Mirai_Native.UI.Pages
                 descriptor.AddValueChanged(item, ColumnWidthChanged);
             }
         }
+
+        private double GetColumnDefaultWidth(int i) => i switch
+        {
+            0 => 150,
+            1 => 120,
+            2 => 95,
+            3 => 750,
+            4 => 90,
+            _ => 200,
+        };
 
         private void ListViewItem_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
