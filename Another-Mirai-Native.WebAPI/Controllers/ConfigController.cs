@@ -61,6 +61,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 { "UseDatabase", new() { Title = "日志使用数据库", Description = "是否将日志存储到数据库", Value = AppConfig.Instance.UseDatabase } },
                 { "MessageCacheSize", new() { Title = "消息缓存数量", Description = "内存中缓存的消息数量限制", Value = AppConfig.Instance.MessageCacheSize } },
                 { "EnableChat", new() { Title = "启用聊天功能", Description = "", Value = AppConfig.Instance.EnableChat } },
+                { "SaveVideoToLocal", new() { Title = "保存视频到本地", Description = "默认关闭；关闭时保留视频 URL 或原始 file，开启后缓存到 data/video", Value = AppConfig.Instance.SaveVideoToLocal } },
                 { "EnableChatImageCacheMaxSizeControl", new() { Title = "启用最大缓存图片体积控制", Description = "缓存文件夹超出体积时，会从最久的图片开始删除", Value = AppConfig.Instance.EnableChatImageCacheMaxSizeControl } },
                 { "MaxChatImageCacheFolderSize", new() { Title = "缓存文件夹最大大小", Description = "", Value = AppConfig.Instance.MaxChatImageCacheFolderSize } },
                 { "EnableChatImageCacheExpireTimeControl", new() { Title = "启用缓存图片最大储存时限控制", Description = "图片最大保留一定天数后，会从最久的图片开始删除", Value = AppConfig.Instance.EnableChatImageCacheExpireTimeControl } },
@@ -323,6 +324,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 },
                 ["MiraiAPIHttp"] = new()
                 {
+                    ["HttpURL"] = ("HTTP 上传服务器 Url", "用于视频上传；留空时由 WebSocket URL 转为 HTTP/HTTPS，需启用 HTTP/uploading adapter", @"conf\MiraiAPIHttp.json", ""),
                     ["WebSocketURL"] = ("正向 WebSocket 服务器 Url", "", @"conf\MiraiAPIHttp.json", ""),
                     ["AuthKey"] = ("鉴权 Token", "", @"conf\MiraiAPIHttp.json", ""),
                     ["QQ"] = ("目标 QQ", "", @"conf\MiraiAPIHttp.json", (long)100000),

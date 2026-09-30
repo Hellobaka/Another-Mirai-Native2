@@ -168,6 +168,12 @@
                     Subtitle="启用或禁用聊天页面功能" />
 
                 <controls:SettingItem_ToggleButton
+                    x:Name="SaveVideoToLocal"
+                    Title="保存视频到本地"
+                    OnToggled="SettingItem_Toggled"
+                    Subtitle="默认关闭；开启后将收到的视频缓存到 data/video" />
+
+                <controls:SettingItem_ToggleButton
                     x:Name="EnableChatImageCacheMaxSizeControl"
                     Title="启用最大缓存体积控制"
                     OnToggled="SettingItem_Toggled"
