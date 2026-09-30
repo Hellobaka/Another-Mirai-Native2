@@ -118,7 +118,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                         case "pic":
                             if (keyValues.TryGetValue("path", out value))
                             {
-                                value = Helper.GetRelativePath(value, Environment.CurrentDirectory);
+                                value = CommonHelper.GetRelativePath(value, Environment.CurrentDirectory);
                                 if (!string.IsNullOrEmpty(value))
                                 {
                                     sb.Append($"[CQ:image,file={value}]");
@@ -133,7 +133,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                         case "AudioFile":
                             if (keyValues.TryGetValue("path", out value))
                             {
-                                value = Helper.GetRelativePath(value, Environment.CurrentDirectory);
+                                value = CommonHelper.GetRelativePath(value, Environment.CurrentDirectory);
                                 if (!string.IsNullOrEmpty(value))
                                 {
                                     sb.Append($"[CQ:record,file={value}]");

@@ -19,7 +19,7 @@ namespace Another_Mirai_Native.UI
             }
             if (Directory.Exists("wwwroot"))
             {
-                Helper.CreateDirectoryLink(@"wwwroot\image", @"data\image");
+                CommonHelper.CreateDirectoryLink(@"wwwroot\image", @"data\image");
             }
             AppConfig.Instance.StartTime = DateTime.Now;
 

@@ -89,7 +89,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void OpenAllDataDirectory(object? parameter)
         {
-            Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "app"));
+            CommonHelper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "app"));
         }
 
         private void OpenDataDirectory(object? parameter)
@@ -98,7 +98,7 @@ namespace Another_Mirai_Native.UI.ViewModel
             string path = Path.Combine(Environment.CurrentDirectory, "data", "app", SelectedPlugin.PluginId);
             if (Directory.Exists(path))
             {
-                Helper.OpenFolder(path);
+                CommonHelper.OpenFolder(path);
             }
             else
             {
@@ -108,7 +108,7 @@ namespace Another_Mirai_Native.UI.ViewModel
 
         private void OpenPluginPath(object? parameter)
         {
-            Helper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
+            CommonHelper.OpenFolder(Path.Combine(Environment.CurrentDirectory, "data", "plugins"));
         }
 
         private async Task ReloadAll(object? parameter)

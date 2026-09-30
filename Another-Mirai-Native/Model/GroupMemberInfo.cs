@@ -145,13 +145,13 @@ namespace Another_Mirai_Native.Model
             info.Sex = (QQSex)binaryReader.ReadInt32_Ex();
             info.Age = binaryReader.ReadInt32_Ex();
             info.Area = binaryReader.ReadString_Ex();
-            info.JoinGroupDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
-            info.LastSpeakDateTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.JoinGroupDateTime = CommonHelper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.LastSpeakDateTime = CommonHelper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
             info.Level = binaryReader.ReadString_Ex();
             info.MemberType = (QQGroupMemberType)binaryReader.ReadInt32_Ex();
             info.IsBadRecord = binaryReader.ReadInt32_Ex() == 1;
             info.ExclusiveTitle = binaryReader.ReadString_Ex();
-            info.ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
+            info.ExclusiveTitleExpirationTime = CommonHelper.TimeStamp2DateTime(binaryReader.ReadInt32_Ex());
             info.IsAllowEditorCard = binaryReader.ReadInt32_Ex() == 1;
 
             return info;

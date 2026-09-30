@@ -88,7 +88,7 @@ namespace Another_Mirai_Native.UI.Pages
             StringBuilder sb = new StringBuilder();
             foreach (var item in LogCollections)
             {
-                sb.AppendLine($"{Helper.TimeStamp2DateTime(item.time):G}\t{item.source}\t{item.name}\t{item.detail}");
+                sb.AppendLine($"{CommonHelper.TimeStamp2DateTime(item.time):G}\t{item.source}\t{item.name}\t{item.detail}");
             }
             string fileName = $"{DateTime.Now:yyyyMMddHHmmss}.log";
             File.WriteAllText(Path.Combine(dir, fileName), sb.ToString());

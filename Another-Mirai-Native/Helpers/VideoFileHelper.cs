@@ -25,7 +25,7 @@ namespace Another_Mirai_Native
             {
                 file = uri.LocalPath;
             }
-            string path = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Video, false), file);
+            string path = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(CachedFileType.Video, false), file);
             if (File.Exists(path))
             {
                 return Path.GetFullPath(path);
@@ -33,7 +33,7 @@ namespace Another_Mirai_Native
             var cached = CachedFile.GetCachedVideoByHash(file);
             if (cached != null)
             {
-                path = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Video), cached.FileName);
+                path = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(CachedFileType.Video), cached.FileName);
                 if (File.Exists(path))
                 {
                     return path;

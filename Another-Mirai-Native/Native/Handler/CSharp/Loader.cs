@@ -393,7 +393,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnGroupAddRequestAsync; 参数类型不匹配，期望 (long, long, long, long, string, string) 但实际 ({args[0].GetType()}, {args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()}, {args[5].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             if (subType == 1)
             {
                 if (GroupAddRequestHandler == null)
@@ -434,7 +434,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddRequestAsync; 参数类型不匹配，期望 (long, long, string, string) 但实际 ({args[1].GetType()}, {args[2].GetType()}, {args[3].GetType()}, {args[4].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             FriendAddRequestContext context = new(PluginApi, dateTime, new QQ(PluginApi, fromQQ), msg, responseFlag);
             return FriendAddRequestHandler.OnFriendAddRequestAsync(context, CancellationTokenSource.Token);
         }
@@ -457,7 +457,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 LogHelper.Error("调用 C# 插件事件", $"事件：OnFriendAddedAsync; 参数类型不匹配，期望 (long, long) 但实际 ({args[1].GetType()}, {args[2].GetType()})");
                 return Task.FromResult(EventHandleResult.Pass);
             }
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             FriendAddedContext context = new(PluginApi, dateTime, new QQ(PluginApi, fromQQ));
             return FriendAddedHandler.OnFriendAddedAsync(context, CancellationTokenSource.Token);
         }
@@ -481,7 +481,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             Group group = new(PluginApi, fromGroup);
             QQ operatorQQ = new(PluginApi, fromQQ);
 
@@ -561,7 +561,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             GroupMemberIncreaseContext context = new(
                 PluginApi,
                 subType == 2,
@@ -599,7 +599,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             GroupMemberDecreaseContext context = new(
                 PluginApi,
                 subType == 2,
@@ -636,7 +636,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             AdminChangedContext context = new(
                 PluginApi,
                 (AdminChangedType)subType,
@@ -683,7 +683,7 @@ namespace Another_Mirai_Native.Native.Handler.CSharp
                 return Task.FromResult(EventHandleResult.Pass);
             }
 
-            DateTime dateTime = Helper.TimeStamp2DateTime(sendTime);
+            DateTime dateTime = CommonHelper.TimeStamp2DateTime(sendTime);
             GroupFileUploadedContext context = new(
                 PluginApi,
                 dateTime,

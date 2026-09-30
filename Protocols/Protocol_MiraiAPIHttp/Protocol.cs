@@ -91,7 +91,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             string syncId;
             do
             {
-                syncId = Helper.MakeUniqueID().ToString();
+                syncId = CommonHelper.MakeUniqueID().ToString();
             } while (WaitingMessages.ContainsKey(syncId));
             object body = new
             {
@@ -421,7 +421,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             Stopwatch sw = new();
             sw.Start();
-            MiraiEvents events = Helper.String2Enum<MiraiEvents>(msg["type"].ToString());
+            MiraiEvents events = CommonHelper.String2Enum<MiraiEvents>(msg["type"].ToString());
             int logId = 0;
             CQPluginProxy handledPlugin = null;
             switch (events)
@@ -471,19 +471,19 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
 
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot权限变更", $"群:{botGroupPermissionChange.group.id}({botGroupPermissionChange.group.name}) 新权限为:{botGroupPermissionChange.current}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(botGroupPermissionChangeStatus, Helper.TimeStamp, botGroupPermissionChange.group.id, QQ);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(botGroupPermissionChangeStatus, CommonHelper.TimeStamp, botGroupPermissionChange.group.id, QQ);
                     break;
 
                 case MiraiEvents.BotMuteEvent:
                     var botMute = msg.ToObject<BotMuteEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot被禁言", $"群:{botMute._operator.group.id}({botMute._operator.group.name}) 禁言时长:{botMute.durationSeconds} 秒 操作人:{botMute._operator.id}({botMute._operator.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(2, Helper.TimeStamp, botMute._operator.group.id, botMute._operator.id, QQ, botMute.durationSeconds);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(2, CommonHelper.TimeStamp, botMute._operator.group.id, botMute._operator.id, QQ, botMute.durationSeconds);
                     break;
 
                 case MiraiEvents.BotUnmuteEvent:
                     var botUnmute = msg.ToObject<BotUnmuteEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "Bot解除禁言", $"群:{botUnmute._operator.group.id}({botUnmute._operator.group.name}) 操作人:{botUnmute._operator.id}({botUnmute._operator.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(1, Helper.TimeStamp, botUnmute._operator.group.id, botUnmute._operator.id, QQ, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(1, CommonHelper.TimeStamp, botUnmute._operator.group.id, botUnmute._operator.id, QQ, 0);
                     break;
 
                 case MiraiEvents.BotJoinGroupEvent:
@@ -571,7 +571,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         memberName = AppConfig.Instance.CurrentNickName
                     };
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", $"全体{(groupMuteAllRecall.current ? "" : "解除")}禁言", $"群:{groupMuteAllRecall._operator.group.id}({groupMuteAllRecall._operator.group.name}) 操作人:{groupMuteAllRecall._operator.id}({groupMuteAllRecall._operator.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(groupMuteAllRecall.current ? 1 : 2, Helper.TimeStamp, groupMuteAllRecall._operator.group.id, groupMuteAllRecall._operator.id, 0, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(groupMuteAllRecall.current ? 1 : 2, CommonHelper.TimeStamp, groupMuteAllRecall._operator.group.id, groupMuteAllRecall._operator.id, 0, 0);
                     break;
 
                 case MiraiEvents.GroupAllowAnonymousChatEvent:
@@ -602,7 +602,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 case MiraiEvents.MemberJoinEvent:
                     var memberJoin = msg.ToObject<MemberJoinEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员增加", $"群:{memberJoin.member.group.id}({memberJoin.member.group.name}) QQ:{memberJoin.member.id}({memberJoin.member.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(memberJoin.invitor == null ? 1 : 2, Helper.TimeStamp, memberJoin.member.group.id, memberJoin.member.id, memberJoin.member.id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(memberJoin.invitor == null ? 1 : 2, CommonHelper.TimeStamp, memberJoin.member.group.id, memberJoin.member.id, memberJoin.member.id);
                     break;
 
                 case MiraiEvents.MemberLeaveEventKick:
@@ -614,13 +614,13 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     };
 
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员被踢出", $"群:{memberLeaveEventKick.member.group.id}({memberLeaveEventKick.member.group.name}) QQ:{memberLeaveEventKick.member.id}({memberLeaveEventKick.member.memberName}) 操作者:{memberLeaveEventKick._operator.group.id}({memberLeaveEventKick._operator.group.name})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.TimeStamp, memberLeaveEventKick.member.group.id, memberLeaveEventKick.member.group.id, memberLeaveEventKick.member.id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, CommonHelper.TimeStamp, memberLeaveEventKick.member.group.id, memberLeaveEventKick.member.group.id, memberLeaveEventKick.member.id);
                     break;
 
                 case MiraiEvents.MemberLeaveEventQuit:
                     var memberLeaveEventQuit = msg.ToObject<MemberLeaveEventQuit>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群成员离开", $"群:{memberLeaveEventQuit.member.group.id}({memberLeaveEventQuit.member.group.name}) QQ:{memberLeaveEventQuit.member.id}({memberLeaveEventQuit.member.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.TimeStamp, memberLeaveEventQuit.member.group.id, 0, memberLeaveEventQuit.member.id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, CommonHelper.TimeStamp, memberLeaveEventQuit.member.group.id, 0, memberLeaveEventQuit.member.id);
                     break;
 
                 case MiraiEvents.MemberCardChangeEvent:
@@ -643,7 +643,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     }
 
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员权限变更", $"群:{memberPermissionChangeEvent.member.group.id}({memberPermissionChangeEvent.member.group.name}) QQ:{memberPermissionChangeEvent.member.id}({memberPermissionChangeEvent.member.memberName}) 新权限为:{memberPermissionChangeEvent.current}", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(memberPermissionChangeStatus, Helper.TimeStamp, memberPermissionChangeEvent.member.group.id, memberPermissionChangeEvent.member.id);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(memberPermissionChangeStatus, CommonHelper.TimeStamp, memberPermissionChangeEvent.member.group.id, memberPermissionChangeEvent.member.id);
                     break;
 
                 case MiraiEvents.MemberMuteEvent:
@@ -654,7 +654,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         memberName = AppConfig.Instance.CurrentNickName
                     };
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员被禁言", $"群:{memberMuteEvent.member.group.id}({memberMuteEvent.member.group.name}) QQ:{memberMuteEvent.member.id}({memberMuteEvent.member.memberName}) 禁言时长:{memberMuteEvent.durationSeconds} 秒 操作人:{memberMuteEvent._operator?.id}({memberMuteEvent._operator?.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(2, Helper.TimeStamp, memberMuteEvent.member.group.id, memberMuteEvent._operator.id, memberMuteEvent.member.id, memberMuteEvent.durationSeconds);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(2, CommonHelper.TimeStamp, memberMuteEvent.member.group.id, memberMuteEvent._operator.id, memberMuteEvent.member.id, memberMuteEvent.durationSeconds);
                     break;
 
                 case MiraiEvents.MemberUnmuteEvent:
@@ -668,7 +668,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         };
                     }
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "群员被解除禁言", $"群:{memberUnmuteEvent.member.group.id}({memberUnmuteEvent.member.group.name}) QQ:{memberUnmuteEvent.member.id}({memberUnmuteEvent.member.memberName}) 操作人:{memberUnmuteEvent._operator?.id}({memberUnmuteEvent._operator?.memberName})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(1, Helper.TimeStamp, memberUnmuteEvent.member.group.id, memberUnmuteEvent._operator.id, memberUnmuteEvent.member.id, 0);
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(1, CommonHelper.TimeStamp, memberUnmuteEvent.member.group.id, memberUnmuteEvent._operator.id, memberUnmuteEvent.member.id, 0);
                     break;
 
                 case MiraiEvents.MemberHonorChangeEvent:
@@ -680,14 +680,14 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     var newFriendRequestEvent = msg.ToObject<NewFriendRequestEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加好友请求", $"QQ:{newFriendRequestEvent.fromId}({newFriendRequestEvent.nick}) 备注:{newFriendRequestEvent.message} 来源群:{newFriendRequestEvent.groupId}", "处理中...");
                     RequestCache.FriendRequest.Add(newFriendRequestEvent.eventId.ToString(), (newFriendRequestEvent.fromId, newFriendRequestEvent.nick));
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, Helper.TimeStamp, newFriendRequestEvent.fromId, newFriendRequestEvent.message, newFriendRequestEvent.eventId.ToString());
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, CommonHelper.TimeStamp, newFriendRequestEvent.fromId, newFriendRequestEvent.message, newFriendRequestEvent.eventId.ToString());
                     break;
 
                 case MiraiEvents.MemberJoinRequestEvent:
                     var memberJoinRequestEvent = msg.ToObject<MemberJoinRequestEvent>();
                     logId = LogHelper.WriteLog(LogLevel.Info, "AMN框架", "添加群请求", $"群:{memberJoinRequestEvent.groupId}({memberJoinRequestEvent.groupName}) QQ:{memberJoinRequestEvent.fromId}({memberJoinRequestEvent.nick}) 备注:{memberJoinRequestEvent.message}", "处理中...");
                     RequestCache.GroupRequest.Add(memberJoinRequestEvent.eventId.ToString(), (memberJoinRequestEvent.fromId, memberJoinRequestEvent.nick, memberJoinRequestEvent.groupId, memberJoinRequestEvent.groupName));
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, Helper.TimeStamp, memberJoinRequestEvent.groupId, memberJoinRequestEvent.fromId, memberJoinRequestEvent.message, memberJoinRequestEvent.eventId.ToString());
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, CommonHelper.TimeStamp, memberJoinRequestEvent.groupId, memberJoinRequestEvent.fromId, memberJoinRequestEvent.message, memberJoinRequestEvent.eventId.ToString());
                     break;
 
                 case MiraiEvents.BotInvitedJoinGroupRequestEvent:
@@ -728,7 +728,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             }
             Stopwatch sw = new();
             sw.Start();
-            MiraiMessageEvents events = Helper.String2Enum<MiraiMessageEvents>(msg["type"].ToString());
+            MiraiMessageEvents events = CommonHelper.String2Enum<MiraiMessageEvents>(msg["type"].ToString());
 
             MiraiMessageTypeDetail.Source source = null;
             var chainMsg = CQCodeBuilder.ParseJArray2MiraiMessageBaseList(msg["messageChain"] as JArray);
@@ -751,7 +751,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 BinaryWriterExpand.Write_Ex(binaryWriter, file.name);
                 BinaryWriterExpand.Write_Ex(binaryWriter, file.size);
                 BinaryWriterExpand.Write_Ex(binaryWriter, 0);
-                PluginManagerProxy.Instance.Event_OnUpload(1, Helper.TimeStamp, group.sender.group.id, group.sender.id, Convert.ToBase64String(stream.ToArray()));
+                PluginManagerProxy.Instance.Event_OnUpload(1, CommonHelper.TimeStamp, group.sender.group.id, group.sender.id, Convert.ToBase64String(stream.ToArray()));
                 sw.Stop();
                 LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传", $"来源群:{group.sender.group.id}({group.sender.group.name}) 来源QQ:{group.sender.id}({group.sender.memberName}) " +
                     $"文件名:{file.name} 大小:{file.size / 1000}KB FileID:{file.id}", $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s");

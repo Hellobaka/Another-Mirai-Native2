@@ -32,7 +32,7 @@ namespace Another_Mirai_Native.WebAPI.Models
             return new LogDto
             {
                 Id = log.id,
-                Time = Helper.TimeStamp2DateTime(log.time),
+                Time = CommonHelper.TimeStamp2DateTime(log.time),
                 Priority = log.priority,
                 Source = log.source,
                 Status = log.status.Replace("√", "✔️").Replace("x", "❌"),

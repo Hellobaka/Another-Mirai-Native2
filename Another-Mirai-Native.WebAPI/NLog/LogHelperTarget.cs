@@ -23,7 +23,7 @@ public class LogHelperTarget : TargetWithLayout
                 source = "WebAPI",
                 name = logEvent.LoggerName?.Split('.').Last() ?? "WebAPI",
                 detail = RenderLogEvent("${message}${onexception:inner= ${exception:format=toString}}", logEvent),
-                time = Helper.DateTime2TimeStamp(DateTime.Now),
+                time = CommonHelper.DateTime2TimeStamp(DateTime.Now),
                 status = ""
             };
 

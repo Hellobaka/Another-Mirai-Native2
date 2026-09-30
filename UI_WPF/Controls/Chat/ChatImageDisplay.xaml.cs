@@ -165,7 +165,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
                 CachedFile? cachedImage = CachedFile.GetCachedImageByHash(fileName);
                 if (cachedImage != null)
                 {
-                    imagePath = Path.Combine(Helper.GetCachePictureDirectory(), cachedImage.FileName);
+                    imagePath = Path.Combine(CommonHelper.GetCachePictureDirectory(), cachedImage.FileName);
                 }
                 else
                 {

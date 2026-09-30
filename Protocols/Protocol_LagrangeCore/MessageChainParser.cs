@@ -165,7 +165,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                             }
                             else
                             {
-                                string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Image);
+                                string baseDirectory = CommonHelper.GetCacheDirectoryByCachedFileType(CachedFileType.Image);
                                 builder.Image(Path.Combine(baseDirectory, cacheImagePath.FileName));
                             }
                         }
@@ -221,7 +221,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                             }
                             else
                             {
-                                string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Record);
+                                string baseDirectory = CommonHelper.GetCacheDirectoryByCachedFileType(CachedFileType.Record);
                                 builder.Record(Path.Combine(baseDirectory, cachedRecord.FileName));
                             }
                         }

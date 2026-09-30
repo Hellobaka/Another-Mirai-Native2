@@ -42,7 +42,7 @@ namespace Another_Mirai_Native.DB
                 return true;
             }
 
-            return (DateTime.Now - Helper.TimeStamp2DateTime((int)lastUpdateTime)) > CacheStaleThreshold;
+            return (DateTime.Now - CommonHelper.TimeStamp2DateTime((int)lastUpdateTime)) > CacheStaleThreshold;
         }
 
         /// <summary>
@@ -101,12 +101,12 @@ namespace Another_Mirai_Native.DB
                         Sex = member.Sex,
                         Age = member.Age,
                         Area = member.Area,
-                        JoinGroupDateTime = Helper.TimeStamp2DateTime(member.JoinGroupTime),
-                        LastSpeakDateTime = Helper.TimeStamp2DateTime(member.LastSpeakTime),
+                        JoinGroupDateTime = CommonHelper.TimeStamp2DateTime(member.JoinGroupTime),
+                        LastSpeakDateTime = CommonHelper.TimeStamp2DateTime(member.LastSpeakTime),
                         Level = member.Level,
                         ExclusiveTitle = member.ExclusiveTitle,
                         ExclusiveTitleExpirationTime = member.ExclusiveTitleExpirationTime > 0
-                            ? Helper.TimeStamp2DateTime(member.ExclusiveTitleExpirationTime) : null,
+                            ? CommonHelper.TimeStamp2DateTime(member.ExclusiveTitleExpirationTime) : null,
                         IsBadRecord = member.IsBadRecord,
                         IsAllowEditorCard = member.IsAllowEditorCard,
                         LastUpdateTime = member.LastUpdateTime
@@ -136,7 +136,7 @@ namespace Another_Mirai_Native.DB
                     QQ = friend.QQ,
                     Nick = friend.Nick,
                     Postscript = friend.Postscript,
-                    LastUpdateTime = Helper.TimeStamp
+                    LastUpdateTime = CommonHelper.TimeStamp
                 };
 
                 friend.LastUpdateTime = entity.LastUpdateTime;
@@ -179,7 +179,7 @@ namespace Another_Mirai_Native.DB
                     Name = group.Name,
                     CurrentMemberCount = group.CurrentMemberCount,
                     MaxMemberCount = group.MaxMemberCount,
-                    LastUpdateTime = Helper.TimeStamp
+                    LastUpdateTime = CommonHelper.TimeStamp
                 };
 
                 group.LastUpdateTime = entity.LastUpdateTime;
@@ -233,7 +233,7 @@ namespace Another_Mirai_Native.DB
                     ExclusiveTitleExpirationTime = member.ExclusiveTitleExpirationTime.ToTimeStamp(),
                     IsBadRecord = member.IsBadRecord,
                     IsAllowEditorCard = member.IsAllowEditorCard,
-                    LastUpdateTime = Helper.TimeStamp
+                    LastUpdateTime = CommonHelper.TimeStamp
                 };
 
                 member.LastUpdateTime = entity.LastUpdateTime;
@@ -375,7 +375,7 @@ namespace Another_Mirai_Native.DB
                 var result = entities.Select(e => new ChatHistory
                 {
                     ID = (int)e.ID,
-                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Time = CommonHelper.TimeStamp2DateTime(e.Time),
                     Type = e.Type,
                     ParentID = e.ParentID,
                     SenderID = e.SenderID,
@@ -408,7 +408,7 @@ namespace Another_Mirai_Native.DB
                 var result = entities.Select(e => new ChatHistory
                 {
                     ID = (int)e.ID,
-                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Time = CommonHelper.TimeStamp2DateTime(e.Time),
                     Type = e.Type,
                     ParentID = e.ParentID,
                     SenderID = e.SenderID,
@@ -446,7 +446,7 @@ namespace Another_Mirai_Native.DB
                 return entities.Select(e => new ChatHistory
                 {
                     ID = (int)e.ID,
-                    Time = Helper.TimeStamp2DateTime(e.Time),
+                    Time = CommonHelper.TimeStamp2DateTime(e.Time),
                     Type = e.Type,
                     ParentID = e.ParentID,
                     SenderID = e.SenderID,
@@ -480,7 +480,7 @@ namespace Another_Mirai_Native.DB
                 return new ChatHistory
                 {
                     ID = (int)entity.ID,
-                    Time = Helper.TimeStamp2DateTime(entity.Time),
+                    Time = CommonHelper.TimeStamp2DateTime(entity.Time),
                     Type = entity.Type,
                     ParentID = entity.ParentID,
                     SenderID = entity.SenderID,
@@ -791,9 +791,9 @@ namespace Another_Mirai_Native.DB
 
         private static async Task<(CachedFile? cachedFile, string? hash)> DownloadFileAsync(CachedFileType cachedFileType, string url, string? fileName = null)
         {
-            string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(cachedFileType);
+            string baseDirectory = CommonHelper.GetCacheDirectoryByCachedFileType(cachedFileType);
             Directory.CreateDirectory(baseDirectory);
-            string? absoluteFilePath = await Helper.DownloadFileAsync(baseDirectory, url, fileName ?? Helper.GetFileNameFromUrl(url));
+            string? absoluteFilePath = await CommonHelper.DownloadFileAsync(baseDirectory, url, fileName ?? CommonHelper.GetFileNameFromUrl(url));
             if (string.IsNullOrEmpty(absoluteFilePath) || !File.Exists(absoluteFilePath))
             {
                 // 下载失败了
@@ -807,7 +807,7 @@ namespace Another_Mirai_Native.DB
             }
             return (new()
             {
-                FileName = Helper.GetRelativePath(absoluteFilePath!, baseDirectory),
+                FileName = CommonHelper.GetRelativePath(absoluteFilePath!, baseDirectory),
                 Hash = hash,
                 InsertTime = DateTime.Now,
                 Url = url,
@@ -861,7 +861,7 @@ namespace Another_Mirai_Native.DB
                     {
                         try
                         {
-                            string fullPath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(image.CachedFileType), image.FileName);
+                            string fullPath = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(image.CachedFileType), image.FileName);
                             // 删除文件
                             if (File.Exists(fullPath))
                             {
@@ -893,7 +893,7 @@ namespace Another_Mirai_Native.DB
             }
             foreach(var dir in Enum.GetValues(typeof(CachedFileType)))
             {
-                string folderFullPath = Helper.GetCacheDirectoryByCachedFileType((CachedFileType)dir);
+                string folderFullPath = CommonHelper.GetCacheDirectoryByCachedFileType((CachedFileType)dir);
                 await FreeFolderSpaceBySize(folderFullPath);
             }
         }
@@ -934,7 +934,7 @@ namespace Another_Mirai_Native.DB
 
                                 try
                                 {
-                                    string relativeFilePath = Helper.GetRelativePath(file.FullName, folderFullPath);
+                                    string relativeFilePath = CommonHelper.GetRelativePath(file.FullName, folderFullPath);
                                     file.Delete();
 
                                     // 同步更新数据库

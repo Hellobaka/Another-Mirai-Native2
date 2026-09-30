@@ -708,12 +708,12 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 Area = r["area"]?.ToString() ?? "",
                 Card = r["card"]?.ToString() ?? "",
                 ExclusiveTitle = r["title"]?.ToString() ?? "",
-                ExclusiveTitleExpirationTime = Helper.TimeStamp2DateTime((int?)r["title_expire_time"] ?? 0),
+                ExclusiveTitleExpirationTime = CommonHelper.TimeStamp2DateTime((int?)r["title_expire_time"] ?? 0),
                 Group = (long?)r["group_id"] ?? 0,
                 IsAllowEditorCard = (bool?)r["card_changeable"] ?? false,
                 IsBadRecord = (bool?)r["unfriendly"] ?? false,
-                JoinGroupDateTime = Helper.TimeStamp2DateTime((int?)r["join_time"] ?? 0),
-                LastSpeakDateTime = Helper.TimeStamp2DateTime((int?)r["last_sent_time"] ?? 0),
+                JoinGroupDateTime = CommonHelper.TimeStamp2DateTime((int?)r["join_time"] ?? 0),
+                LastSpeakDateTime = CommonHelper.TimeStamp2DateTime((int?)r["last_sent_time"] ?? 0),
                 Level = r["level"]?.ToString() ?? "",
                 Nick = r["nickname"]?.ToString() ?? "",
                 QQ = (long?)r["user_id"] ?? 0,
@@ -778,7 +778,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         continue;
                     }
                     // 将图片转换为 base64
-                    string picBase64 = Helper.ParsePic2Base64(picPath);
+                    string picBase64 = CommonHelper.ParsePic2Base64(picPath);
                     if (string.IsNullOrEmpty(picBase64))
                     {
                         continue;
@@ -841,7 +841,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                             }
                         }
                         recordPath = new FileInfo(recordPath).FullName;
-                        newCQcode.Items.Add("file", $"base64://{Helper.ParsePic2Base64(recordPath)}");
+                        newCQcode.Items.Add("file", $"base64://{CommonHelper.ParsePic2Base64(recordPath)}");
                         msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
                     }
                     else

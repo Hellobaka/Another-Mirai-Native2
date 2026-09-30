@@ -90,7 +90,7 @@ namespace Another_Mirai_Native.DB
             {
                 detail = message,
                 name = type,
-                time = Helper.TimeStamp
+                time = CommonHelper.TimeStamp
             };
             DebugLogs.Add(logModel);
             DebugLogAdded?.Invoke(logModel);
@@ -131,8 +131,8 @@ namespace Another_Mirai_Native.DB
                 {
                     var startTime = new DateTime(start.Value.Year, start.Value.Month, start.Value.Day).AddDays(-1);
                     var endTime = new DateTime(end.Value.Year, end.Value.Month, end.Value.Day).AddDays(1);
-                    long startTimestamp = Helper.DateTime2TimeStamp(startTime);
-                    long endTimestamp = Helper.DateTime2TimeStamp(endTime);
+                    long startTimestamp = CommonHelper.DateTime2TimeStamp(startTime);
+                    long endTimestamp = CommonHelper.DateTime2TimeStamp(endTime);
 
                     r = r.Where(x => x.time >= startTimestamp && x.time <= endTimestamp);
                 }
@@ -164,8 +164,8 @@ namespace Another_Mirai_Native.DB
                 {
                     var startTime = new DateTime(start.Value.Year, start.Value.Month, start.Value.Day).AddDays(-1);
                     var endTime = new DateTime(end.Value.Year, end.Value.Month, end.Value.Day).AddDays(1);
-                    long startTimestamp = Helper.DateTime2TimeStamp(startTime);
-                    long endTimestamp = Helper.DateTime2TimeStamp(endTime);
+                    long startTimestamp = CommonHelper.DateTime2TimeStamp(startTime);
+                    long endTimestamp = CommonHelper.DateTime2TimeStamp(endTime);
 
                     r = r.Where(x => x.time >= startTimestamp && x.time <= endTimestamp);
                 }
@@ -283,7 +283,7 @@ namespace Another_Mirai_Native.DB
         /// <returns></returns>
         public static string GetTimeStampString(long timestamp)
         {
-            DateTime time = Helper.TimeStamp2DateTime(timestamp);
+            DateTime time = CommonHelper.TimeStamp2DateTime(timestamp);
             StringBuilder sb = new();
             sb.Append($"{time:MM/dd HH:mm:ss}");
             return sb.ToString();
@@ -322,7 +322,7 @@ namespace Another_Mirai_Native.DB
                 source = logOrigin,
                 priority = (int)level,
                 name = type,
-                time = Helper.TimeStamp,
+                time = CommonHelper.TimeStamp,
                 status = status
             };
             if (AppConfig.Instance.IsCore)

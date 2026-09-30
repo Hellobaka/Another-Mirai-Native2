@@ -35,7 +35,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             {
                 EventType = subType == 1 ? Model.Enums.Other.XiaoLiZi.EventTypeEnum.Group_AdministratorTook
                     : Model.Enums.Other.XiaoLiZi.EventTypeEnum.Group_AdministratorGave,
-                MessageTimestamp = (int)Helper.TimeStamp,
+                MessageTimestamp = (int)CommonHelper.TimeStamp,
                 SourceGroupName = fromGroup.ToString(),
                 SourceGroupQQ = fromGroup,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
@@ -76,7 +76,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             EventTypeBase e = new()
             {
                 EventType = Model.Enums.Other.XiaoLiZi.EventTypeEnum.Friend_NewFriend,
-                MessageTimestamp = (int)Helper.TimeStamp,
+                MessageTimestamp = (int)CommonHelper.TimeStamp,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
                 TriggerQQ = fromQQ,
                 TriggerQQName = fromQQ.ToString(),
@@ -97,7 +97,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             EventTypeBase e = new()
             {
                 EventType = Model.Enums.Other.XiaoLiZi.EventTypeEnum.Friend_FriendRequest,
-                MessageContent = msg.ToString(Helper.GB18030),
+                MessageContent = msg.ToString(CommonHelper.GB18030),
                 MessageSeq = CacheResponse(responseFlag),
                 EventSubType = 2,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
@@ -119,7 +119,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             {
                 return long.Parse(value);
             }
-            RequestCache.CachedStrings[responseFlag] = Helper.MakeUniqueID().ToString();
+            RequestCache.CachedStrings[responseFlag] = CommonHelper.MakeUniqueID().ToString();
             return long.Parse(RequestCache.CachedStrings[responseFlag]);
         }
 
@@ -128,7 +128,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
             EventTypeBase e = new()
             {
                 EventType = Model.Enums.Other.XiaoLiZi.EventTypeEnum.Group_MemberVerifying,
-                MessageContent = msg.ToString(Helper.GB18030),
+                MessageContent = msg.ToString(CommonHelper.GB18030),
                 MessageSeq = CacheResponse(responseFlag),
                 MessageTimestamp = sendTime,
                 SourceGroupQQ = fromGroup,
@@ -212,18 +212,18 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         private int Proxy_GroupMsg(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, IntPtr msg, int font)
         {
-            string message = msg.ToString(Helper.GB18030);
+            string message = msg.ToString(CommonHelper.GB18030);
             GroupMessageEvent e = new()
             {
                 MessageContent = MessageParser.ParseFromCQCode(message),
                 SenderQQ = fromQQ,
-                MessageSendTime = (int)Helper.TimeStamp,
+                MessageSendTime = (int)CommonHelper.TimeStamp,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
                 MessageGroupQQ = fromGroup,
                 AnonymousNickname = fromAnonymous,
                 FontId = font,
                 MessageReq = msgId,
-                MessageReceiveTime = (int)Helper.TimeStamp,
+                MessageReceiveTime = (int)CommonHelper.TimeStamp,
                 MessageType = Model.Enums.Other.XiaoLiZi.MessageTypeEnum.GroupUsualMessage,
                 AnonymousFalg = 0,
                 SourceGroupName = "",
@@ -250,15 +250,15 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         private int Proxy_PrivateMsg(int subType, int msgId, long fromQQ, IntPtr msg, int font)
         {
-            string message = msg.ToString(Helper.GB18030);
+            string message = msg.ToString(CommonHelper.GB18030);
             PrivateMessageEvent e = new()
             {
                 MessageContent = MessageParser.ParseFromCQCode(message),
                 SenderQQ = fromQQ,
-                MessageSendTime = (int)Helper.TimeStamp,
+                MessageSendTime = (int)CommonHelper.TimeStamp,
                 ThisQQ = AppConfig.Instance.CurrentQQ,
                 MessageReq = msgId,
-                MessageReceiveTime = (int)Helper.TimeStamp,
+                MessageReceiveTime = (int)CommonHelper.TimeStamp,
                 MessageType = Model.Enums.Other.XiaoLiZi.MessageTypeEnum.FriendUsualMessage,
                 MessageRandom = 0,
                 MessageClip = 0,

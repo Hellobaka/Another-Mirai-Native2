@@ -147,7 +147,7 @@ namespace Protocol_NoConnection
                 if (path1.StartsWith(path2 + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
                 {
                     // 为同一目录
-                    path = Helper.GetRelativePath(item, dialog.InitialDirectory);
+                    path = CommonHelper.GetRelativePath(item, dialog.InitialDirectory);
                 }
                 else
                 {
@@ -308,7 +308,7 @@ namespace Protocol_NoConnection
                 if (path1.StartsWith(path2 + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
                 {
                     // 为同一目录
-                    path = Helper.GetRelativePath(item, dialog.InitialDirectory);
+                    path = CommonHelper.GetRelativePath(item, dialog.InitialDirectory);
                 }
                 else
                 {

@@ -20,7 +20,7 @@ namespace Another_Mirai_Native
             {
                 return null;
             }
-            var (success, fullPath) = await Helper.DownloadFile(version.DownloadUrl, Path.GetFileName(version.DownloadUrl), path, true);
+            var (success, fullPath) = await CommonHelper.DownloadFile(version.DownloadUrl, Path.GetFileName(version.DownloadUrl), path, true);
             if (success)
             {
                 return fullPath;
@@ -34,7 +34,7 @@ namespace Another_Mirai_Native
             try
             {
                 string url = "http://assets.hellobaka.xyz/static/AMN2/Update.json";
-                json = await Helper.DownloadString(url);
+                json = await CommonHelper.DownloadString(url);
                 if (string.IsNullOrEmpty(json))
                 {
                     return null;

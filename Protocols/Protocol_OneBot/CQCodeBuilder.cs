@@ -131,7 +131,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 {
                     return (string.IsNullOrEmpty(url) ? imageFile : url, string.Empty);
                 }
-                Directory.CreateDirectory(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false));
+                Directory.CreateDirectory(CommonHelper.GetCacheDirectoryByCachedFileType(cachedFileType, false));
                 if (!VideoFileHelper.IsHttpUrl(imageFile) && string.IsNullOrEmpty(url)
                     && !imageFile.StartsWith("base64://", StringComparison.OrdinalIgnoreCase))
                 {
@@ -187,7 +187,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
             string fileName = Path.GetFileName(file);
-            string filePath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
+            string filePath = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
             if (File.Exists(filePath))
             {
                 return (fileName, subType);
@@ -225,7 +225,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 _ => ".jpg",
             };
             string fileName = $"{base64.MD5()}{fileDefaultFormat}";
-            string filePath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
+            string filePath = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(cachedFileType, false), fileName);
             File.WriteAllBytes(filePath, imageBytes);
             return (fileName, subType);
         }

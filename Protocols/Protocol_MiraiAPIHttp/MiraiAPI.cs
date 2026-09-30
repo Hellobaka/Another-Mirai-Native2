@@ -620,8 +620,8 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                 Group = response.group.id,
                 IsAllowEditorCard = true,
                 IsBadRecord = false,
-                JoinGroupDateTime = Helper.TimeStamp2DateTime(response.joinTimestamp),
-                LastSpeakDateTime = Helper.TimeStamp2DateTime(response.lastSpeakTimestamp),
+                JoinGroupDateTime = CommonHelper.TimeStamp2DateTime(response.joinTimestamp),
+                LastSpeakDateTime = CommonHelper.TimeStamp2DateTime(response.lastSpeakTimestamp),
                 Level = appendInfo == null ? "0" : appendInfo.level.ToString(),
                 MemberType = (QQGroupMemberType)userPermission,
                 Nick = response.memberName,
@@ -662,7 +662,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                     messageChain = chain,
                     senderId = qq,
                     senderName = nick,
-                    time = (int)Helper.DateTime2TimeStamp(DateTime.Now)
+                    time = (int)CommonHelper.DateTime2TimeStamp(DateTime.Now)
                 };
                 nodes.Add(node);
             }

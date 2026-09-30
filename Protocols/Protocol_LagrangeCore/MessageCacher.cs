@@ -82,7 +82,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             int id;
             do
             {
-                id = Math.Abs(Helper.RandomNext());
+                id = Math.Abs(CommonHelper.RandomNext());
             } while (MessageIDCache.ContainsKey(id));
 
             return id;

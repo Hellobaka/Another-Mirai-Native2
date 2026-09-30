@@ -19,7 +19,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_sendGroupMsg", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_sendGroupMsg(int authCode, long groupId, IntPtr msg)
         {
-            string text = msg.ToString(Helper.GB18030);
+            string text = msg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, groupId, text).ToInt();
         }
 
@@ -34,7 +34,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_sendGroupQuoteMsg", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_sendGroupQuoteMsg(int authCode, long groupId, int msgId, IntPtr msg)
         {
-            string text = msg.ToString(Helper.GB18030);
+            string text = msg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, groupId, msgId, text).ToInt();
         }
 
@@ -48,7 +48,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_sendPrivateMsg", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_sendPrivateMsg(int authCode, long qqId, IntPtr msg)
         {
-            string text = msg.ToString(Helper.GB18030);
+            string text = msg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, qqId, text).ToInt();
         }
 
@@ -62,7 +62,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_sendDiscussMsg", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_sendDiscussMsg(int authCode, long discussId, IntPtr msg)
         {
-            string text = msg.ToString(Helper.GB18030);
+            string text = msg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, discussId, text).ToInt();
         }
 
@@ -100,7 +100,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_getCookiesV2", CallingConvention = CallingConvention.StdCall)]
         public static IntPtr CQ_getCookiesV2(int authCode, IntPtr domain)
         {
-            string text = domain.ToString(Helper.GB18030);
+            string text = domain.ToString(CommonHelper.GB18030);
             var r = CallCore(authCode, text);
             return r != null ? r.ToString().ToNative() : "".ToNative();
         }
@@ -115,8 +115,8 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_getRecordV2", CallingConvention = CallingConvention.StdCall)]
         public static IntPtr CQ_getRecordV2(int authCode, IntPtr file, IntPtr format)
         {
-            string path = file.ToString(Helper.GB18030);
-            string f = format.ToString(Helper.GB18030);
+            string path = file.ToString(CommonHelper.GB18030);
+            string f = format.ToString(CommonHelper.GB18030);
             var r = CallCore(authCode, path, f);
             return r != null ? r.ToString().ToNative() : "".ToNative();
         }
@@ -222,7 +222,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setGroupSpecialTitle", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setGroupSpecialTitle(int authCode, long groupId, long qqId, IntPtr title, long durationTime)
         {
-            string text = title.ToString(Helper.GB18030);
+            string text = title.ToString(CommonHelper.GB18030);
             return CallCore(authCode, groupId, qqId, text, durationTime).ToInt();
         }
 
@@ -250,7 +250,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setGroupAnonymousBan", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setGroupAnonymousBan(int authCode, long groupId, IntPtr anonymous, long banTime)
         {
-            string info = anonymous.ToString(Helper.GB18030);
+            string info = anonymous.ToString(CommonHelper.GB18030);
             return CallCore(authCode, groupId, info, banTime).ToInt();
         }
 
@@ -278,7 +278,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setGroupCard", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setGroupCard(int authCode, long groupId, long qqId, IntPtr newCard)
         {
-            string text = newCard.ToString(Helper.GB18030);
+            string text = newCard.ToString(CommonHelper.GB18030);
             return CallCore(authCode, groupId, qqId, text).ToInt();
         }
 
@@ -318,8 +318,8 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setFriendAddRequest", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setFriendAddRequest(int authCode, IntPtr identifying, int requestType, IntPtr appendMsg)
         {
-            string id = identifying.ToString(Helper.GB18030);
-            string text = appendMsg.ToString(Helper.GB18030);
+            string id = identifying.ToString(CommonHelper.GB18030);
+            string text = appendMsg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, id, requestType, text).ToInt();
         }
 
@@ -335,8 +335,8 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setGroupAddRequestV2", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setGroupAddRequestV2(int authCode, IntPtr identifying, int requestType, int responseType, IntPtr appendMsg)
         {
-            string id = identifying.ToString(Helper.GB18030);
-            string text = appendMsg.ToString(Helper.GB18030);
+            string id = identifying.ToString(CommonHelper.GB18030);
+            string text = appendMsg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, id, requestType, responseType, text).ToInt();
         }
 
@@ -351,8 +351,8 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_addLog", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_addLog(int authCode, int priority, IntPtr type, IntPtr msg)
         {
-            string id = type.ToString(Helper.GB18030);
-            string text = msg.ToString(Helper.GB18030);
+            string id = type.ToString(CommonHelper.GB18030);
+            string text = msg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, priority, id, text).ToInt();
         }
 
@@ -365,7 +365,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_setFatal", CallingConvention = CallingConvention.StdCall)]
         public static int CQ_setFatal(int authCode, IntPtr errorMsg)
         {
-            string text = errorMsg.ToString(Helper.GB18030);
+            string text = errorMsg.ToString(CommonHelper.GB18030);
             return CallCore(authCode, text).ToInt();
         }
 
@@ -454,7 +454,7 @@ namespace Another_Mirai_Native.Export
         [DllExport(ExportName = "CQ_getImage", CallingConvention = CallingConvention.StdCall)]
         public static IntPtr CQ_getImage(int authCode, IntPtr file)
         {
-            string text = file.ToString(Helper.GB18030);
+            string text = file.ToString(CommonHelper.GB18030);
             var r = CallCore(authCode, text);
             return r != null ? r.ToString().ToNative() : "".ToNative();
         }

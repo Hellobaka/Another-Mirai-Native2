@@ -163,7 +163,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
             List<IMiraiMessageBase> chainMsg = new();
             foreach (var item in json)
             {
-                MiraiMessageType msgType = Helper.String2Enum<MiraiMessageType>(item["type"].ToString());
+                MiraiMessageType msgType = CommonHelper.String2Enum<MiraiMessageType>(item["type"].ToString());
                 switch (msgType)
                 {
                     case MiraiMessageType.Source:
@@ -297,7 +297,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                         }
                     }
                     // 将图片转换为 base64
-                    string picBase64 = Helper.ParsePic2Base64(picPath);
+                    string picBase64 = CommonHelper.ParsePic2Base64(picPath);
                     if (string.IsNullOrEmpty(picBase64))
                     {
                         return null;
@@ -326,7 +326,7 @@ namespace Another_Mirai_Native.Protocol.MiraiAPIHttp
                             }
                         }
                         recordPath = new FileInfo(recordPath).FullName;
-                        return new MiraiMessageTypeDetail.Voice { base64 = Helper.ParsePic2Base64(recordPath) };
+                        return new MiraiMessageTypeDetail.Voice { base64 = CommonHelper.ParsePic2Base64(recordPath) };
                     }
                     else
                     {

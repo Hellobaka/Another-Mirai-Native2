@@ -115,7 +115,7 @@ namespace Another_Mirai_Native.Native
 		/// <exception cref="IOException">出现 I/O 错误。</exception>
 		public static string ReadString_Ex (this BinaryReader binary)
 		{
-			var encoding = Helper.GB18030;
+			var encoding = CommonHelper.GB18030;
 
             return encoding.GetString (ReadToken_Ex (binary));
 		}

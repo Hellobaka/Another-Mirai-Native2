@@ -132,7 +132,7 @@ namespace Another_Mirai_Native.UI.Pages
             {
                 Dispatcher.InvokeAsync(() =>
                 {
-                    var text = $"[{Helper.TimeStamp2DateTime(log.time):G}][{log.name}] {log.detail}{Environment.NewLine}";
+                    var text = $"[{CommonHelper.TimeStamp2DateTime(log.time):G}][{log.name}] {log.detail}{Environment.NewLine}";
                     if (log.priority >= 20)
                     {
                         if (Terminal_Error.Text.Length > 10000)

@@ -21,7 +21,7 @@ using System.Xml.Linq;
 
 namespace Another_Mirai_Native
 {
-    public static class Helper
+    public static class CommonHelper
     {
         public static Encoding GB18030 { get; set; } = Encoding.GetEncoding("GB18030");
 
@@ -158,6 +158,10 @@ namespace Another_Mirai_Native
                                 messageChain.Add(new Abstractions.Models.MessageItem.Image(hash: file, isFlash: isFlash, isEmoji: isEmoji));
                             }
 
+                            break;
+
+                        case MessageItemType.Video:
+                            messageChain.Add(new Video(cqcode));
                             break;
 
                         case MessageItemType.Record:
@@ -561,7 +565,7 @@ namespace Another_Mirai_Native
         private static async Task<string?> DownloadFileFromWebAsync(string cacheImagePath, string name, string imageUrl)
         {
             using var client = new HttpClient();
-            var response = await client.GetAsync(imageUrl);
+            using var response = await client.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
             // 文件类型已知
             if (string.IsNullOrEmpty(response.Content.Headers.ContentType?.MediaType))
@@ -569,8 +573,20 @@ namespace Another_Mirai_Native
                 return null;
             }
             string path = Path.Combine(cacheImagePath, name + "." + (response.Content.Headers.ContentType?.MediaType.Split('/').Last() ?? "jpg"));
-            var imageBytes = await response.Content.ReadAsByteArrayAsync();
-            File.WriteAllBytes(path, imageBytes);
+            string temporaryPath = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+            try
+            {
+                using (var input = await response.Content.ReadAsStreamAsync())
+                using (var output = File.Create(temporaryPath))
+                {
+                    await input.CopyToAsync(output);
+                }
+                File.Copy(temporaryPath, path, true);
+            }
+            finally
+            {
+                if (File.Exists(temporaryPath)) File.Delete(temporaryPath);
+            }
 
             return new DirectoryInfo(path).FullName;
         }

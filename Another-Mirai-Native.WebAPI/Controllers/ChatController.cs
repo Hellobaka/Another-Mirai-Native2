@@ -299,7 +299,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
                 _logger.LogWarning("获取收藏图片列表失败：聊天功能未启用");
                 return NotFound(ApiResponse.Error(404, "聊天功能未启用"));
             }
-            var dir = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
+            var dir = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
             if (Directory.Exists(dir))
             {
                 string[] extensions = { ".png", ".jpg", ".jpeg", ".gif" };
@@ -331,9 +331,9 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             }
             try
             {
-                var collectPath = Path.Combine(Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
+                var collectPath = Path.Combine(CommonHelper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image, false), "collected");
                 Directory.CreateDirectory(collectPath);
-                string cachePath = Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
+                string cachePath = CommonHelper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
                 var img = CachedFile.GetCachedFileByHash(Model.Enums.CachedFileType.Image, file);
                 string filePath = Path.Combine(cachePath, img?.FileName ?? "");
                 if (img == null || !System.IO.File.Exists(filePath))
@@ -383,7 +383,7 @@ namespace Another_Mirai_Native.WebAPI.Controllers
             }
             try
             {
-                var cachePath = Helper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
+                var cachePath = CommonHelper.GetCacheDirectoryByCachedFileType(Model.Enums.CachedFileType.Image);
                 Directory.CreateDirectory(cachePath);
                 var fileName = $"{Guid.NewGuid()}{extension}";
                 var filePath = Path.Combine(cachePath, fileName);

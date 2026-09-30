@@ -74,7 +74,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
         public void Init()
         {
             Container.CornerRadius = IsRound ? new CornerRadius(double.MaxValue) : new CornerRadius(Width * 0.1);
-            FallbackBrush = new SolidColorBrush(Colors[Helper.RandomNext(0, Colors.Length)]);
+            FallbackBrush = new SolidColorBrush(Colors[CommonHelper.RandomNext(0, Colors.Length)]);
             Container.Background = FallbackBrush;
             FallbackDisplay.FontSize = Width * 0.35;
             FallbackDisplay.Text = FallbackName?.Length > 2 ? FallbackName.Substring(0, 2) : FallbackName ?? Id.ToString().Substring(0, 2);
@@ -120,7 +120,7 @@ namespace Another_Mirai_Native.UI.Controls.Chat
             {
                 await Dispatcher.BeginInvoke(async () =>
                 {
-                    var imgPath = await Helper.DownloadFileAsync(Helper.GetCachePictureDirectory(), url);
+                    var imgPath = await CommonHelper.DownloadFileAsync(CommonHelper.GetCachePictureDirectory(), url);
                     if (imgPath != null)
                     {
                         Container.Background = new ImageBrush(new BitmapImage(new Uri(imgPath)))

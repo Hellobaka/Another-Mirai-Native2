@@ -103,7 +103,7 @@ namespace Another_Mirai_Native.UI.Pages
                     string img_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"data\image", img_file);
                     if (File.Exists(img_path))
                     {
-                        Helper.OpenFolder(img_path);
+                        CommonHelper.OpenFolder(img_path);
                     }
                     else
                     {
@@ -113,15 +113,15 @@ namespace Another_Mirai_Native.UI.Pages
                             DialogHelper.ShowSimpleDialog("打开图片失败了", "缓存结果可能已经被删除或不存在");
                             return;
                         }
-                        string baseDirectory = Helper.GetCachePictureDirectory();
+                        string baseDirectory = CommonHelper.GetCachePictureDirectory();
                         string fileName = Path.Combine(baseDirectory, cachedImage.FileName);
                         if (File.Exists(fileName))
                         {
-                            Helper.OpenFolder(fileName);
+                            CommonHelper.OpenFolder(fileName);
                         }
                         else
                         {
-                            Helper.OpenFolder(cachedImage.Url);
+                            CommonHelper.OpenFolder(cachedImage.Url);
                         }
                     }
                 }

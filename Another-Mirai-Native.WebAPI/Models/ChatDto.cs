@@ -28,7 +28,7 @@ namespace Another_Mirai_Native.WebAPI.Models
                 ParentID = entity.ParentID,
                 SenderID = entity.SenderID,
                 Type = entity.Type,
-                Time = Helper.TimeStamp2DateTime(entity.Time),
+                Time = CommonHelper.TimeStamp2DateTime(entity.Time),
                 Message = entity.Message.ToMessageChain(),
                 UnreadCount = entity.UnreadCount,
                 IsPinned = entity.IsPinned

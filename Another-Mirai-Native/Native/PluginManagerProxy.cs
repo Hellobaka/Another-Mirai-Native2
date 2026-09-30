@@ -85,7 +85,7 @@ namespace Another_Mirai_Native.Native
             return Proxies.FirstOrDefault(x => x.AppInfo.AuthCode == authCode);
         }
 
-        public static int MakeAuthCode() => Helper.MakeUniqueID();
+        public static int MakeAuthCode() => CommonHelper.MakeUniqueID();
 
         public static void SetProxyConnected(CQPluginProxy proxy)
         {

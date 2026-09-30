@@ -13,7 +13,7 @@ namespace Another_Mirai_Native.UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Helper.TimeStamp2DateTime((long)value);
+            return CommonHelper.TimeStamp2DateTime((long)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

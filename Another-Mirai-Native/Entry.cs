@@ -188,7 +188,7 @@ namespace Another_Mirai_Native
         {
             if (e.ExceptionObject is Exception ex)
             {
-                Helper.ShowErrorDialog(ex, false);
+                CommonHelper.ShowErrorDialog(ex, false);
             }
         }
 

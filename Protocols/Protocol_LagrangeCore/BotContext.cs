@@ -92,7 +92,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             BinaryWriterExpand.Write_Ex(binaryWriter, file.FileName);
             BinaryWriterExpand.Write_Ex(binaryWriter, file.FileSize);
             BinaryWriterExpand.Write_Ex(binaryWriter, 0);
-            PluginManagerProxy.Instance.Event_OnUpload(1, Helper.TimeStamp, chain.GroupUin.ToLong(), chain.FriendUin, Convert.ToBase64String(stream.ToArray()));
+            PluginManagerProxy.Instance.Event_OnUpload(1, CommonHelper.TimeStamp, chain.GroupUin.ToLong(), chain.FriendUin, Convert.ToBase64String(stream.ToArray()));
             sw.Stop();
             LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "文件上传",
                 $"来源群:{chain.GroupUin}({ChatHistoryHelper.GetGroupName(chain.GroupUin.ToLong()).Result}) " +
@@ -192,7 +192,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                 $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
             int subType = e.IsMuted ? 2 : 1;
-            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), 0, 0);
+            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), 0, 0);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -237,7 +237,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result}) " +
                 $"时长:{e.Duration}", "处理中...");
             int subType = e.Duration != 0 ? 2 : 1;
-            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), e.TargetUin, e.Duration);
+            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupBan(subType, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.OperatorUin.ToLong(), e.TargetUin, e.Duration);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -254,7 +254,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                 $"新群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
                 $"邀请者:{e.InvitorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.InvitorUin.ToLong()).Result})", "处理中...");
-            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(e.Type == Lagrange.Core.Event.EventArg.GroupMemberIncreaseEvent.EventType.Approve ? 1 : 2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.InvitorUin.ToLong());
+            var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberIncrease(e.Type == Lagrange.Core.Event.EventArg.GroupMemberIncreaseEvent.EventType.Approve ? 1 : 2, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.InvitorUin.ToLong());
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -280,7 +280,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "Bot被踢出群聊",
                         $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                         $"操作人:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
                 case Lagrange.Core.Event.EventArg.GroupMemberDecreaseEvent.EventType.Disband:
@@ -293,7 +293,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                         $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
                         $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(1, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
                 case Lagrange.Core.Event.EventArg.GroupMemberDecreaseEvent.EventType.Kick:
@@ -301,7 +301,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                         $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                         $"群员:{e.MemberUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.MemberUin).Result}) " +
                         $"操作者:{e.OperatorUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.OperatorUin.ToLong()).Result})", "处理中...");
-                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
+                    handledPlugin = PluginManagerProxy.Instance.Event_OnGroupMemberDecrease(2, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.MemberUin, e.OperatorUin.ToLong());
                     break;
 
                 default:
@@ -328,7 +328,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                     $"申请者:{e.TargetUin} " +
                     $"备注:{request.Comment}", "处理中...");
-                var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
+                var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(1, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
 
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
                 if (handledPlugin != null)
@@ -353,7 +353,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                     $"申请者:{e.TargetUin} " +
                     $"邀请者:{request.InvitorMemberUin}({request.InvitorMemberCard}) " +
                     $"备注:{request.Comment}", "处理中...");
-                var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(2, Helper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
+                var handledPlugin = PluginManagerProxy.Instance.Event_OnGroupAddRequest(2, CommonHelper.DateTime2TimeStamp(e.EventTime), e.GroupUin, e.TargetUin, request.Comment ?? "", id.ToString());
                 string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
                 if (handledPlugin != null)
                 {
@@ -382,7 +382,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 $"群:{e.GroupUin}({ChatHistoryHelper.GetGroupName(e.GroupUin).Result}) " +
                 $"QQ:{e.AdminUin}({ChatHistoryHelper.GetGroupMemberNick(e.GroupUin, e.AdminUin).Result}) " +
                 $"新权限为:{(e.IsPromote ? "管理层" : "群员")}", "处理中...");
-            var handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(e.IsPromote ? 2 : 1, Helper.TimeStamp, e.GroupUin, e.AdminUin);
+            var handledPlugin = PluginManagerProxy.Instance.Event_OnAdminChange(e.IsPromote ? 2 : 1, CommonHelper.TimeStamp, e.GroupUin, e.AdminUin);
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
@@ -399,7 +399,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
             int logId = LogHelper.WriteLog(LogLevel.InfoReceive, "AMN框架", "添加好友请求",
                 $"申请者:{e.SourceUin} " +
                 $"备注:{e.Message}", "处理中...");
-            var handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, Helper.DateTime2TimeStamp(e.EventTime), e.SourceUin, e.EventMessage, id.ToString());
+            var handledPlugin = PluginManagerProxy.Instance.Event_OnFriendAddRequest(1, CommonHelper.DateTime2TimeStamp(e.EventTime), e.SourceUin, e.EventMessage, id.ToString());
             string updateMsg = $"√ {sw.ElapsedMilliseconds / (double)1000:f2} s";
             if (handledPlugin != null)
             {
