@@ -1,8 +1,8 @@
 #pragma once
 
-#include "JsonCodec.h"
-#include "MenuUiThread.h"
-#include "PipeClient.h"
+#include "common/JsonCodec.h"
+#include "loader/MenuUiThread.h"
+#include "loader/PipeClient.h"
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX

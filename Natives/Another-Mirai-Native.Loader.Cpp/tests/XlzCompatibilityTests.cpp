@@ -1,6 +1,6 @@
-#include "PluginHost.h"
-#include "Encoding.h"
-#include "XlzMessage.h"
+#include "loader/PluginHost.h"
+#include "common/Encoding.h"
+#include "xlz/XlzMessage.h"
 #include <windows.h>
 #include <cassert>
 #include <filesystem>

@@ -1,10 +1,10 @@
-#include "PluginHost.h"
+#include "loader/PluginHost.h"
 
-#include "Diagnostics.h"
-#include "Encoding.h"
-#include "XlzApiNames.h"
-#include "XlzMessage.h"
-#include "XlzStructs.h"
+#include "common/Diagnostics.h"
+#include "common/Encoding.h"
+#include "generated/XlzApiNames.h"
+#include "xlz/XlzMessage.h"
+#include "generated/XlzStructs.h"
 
 #include <chrono>
 #include <filesystem>

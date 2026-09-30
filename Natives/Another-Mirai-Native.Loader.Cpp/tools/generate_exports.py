@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 
-root = Path(__file__).resolve().parent
+root = Path(__file__).resolve().parent.parent
 source = (root.parent / "CQP" / "DllEntry.cs").read_text(encoding="utf-8-sig")
 pattern = re.compile(r'\[DllExport\(ExportName = "(CQ_[^"]+|cq_start)"[^\n]*\]\s*public static (int|long|IntPtr|bool) \w+\(([^)]*)\)')
 out = []
@@ -33,7 +33,7 @@ for name, result_type, signature in pattern.findall(source):
         '}'
     )
     x86_aliases.append(f"    {name}=_{name}@{stack_bytes}")
-(root / "cqp_exports.inc").write_text("// Generated from CQP/DllEntry.cs.\n" + "\n".join(out) + "\n", encoding="utf-8")
+(root / "generated/cqp_exports.inc").write_text("// Generated from CQP/DllEntry.cs.\n" + "\n".join(out) + "\n", encoding="utf-8")
 # Xlz exposes all signatures, including APIs which the original CQP project
 # deliberately leaves as default-return stubs. Implemented APIs live in the
 # native bridge; fail generation if the source adds an implementation we missed.
@@ -87,11 +87,11 @@ for match in xlz_pattern.finditer(xlz_source):
     xlz_out.append("\n".join(lines))
     names.append(name)
     x86_aliases.append(f"    {name}=_{name}@{stack_bytes}")
-(root / "xlz_exports.inc").write_text("// Generated from CQP/XiaoLiZI_API.cs.\n" + "\n".join(xlz_out) + "\n", encoding="utf-8")
+(root / "generated/xlz_exports.inc").write_text("// Generated from CQP/XiaoLiZI_API.cs.\n" + "\n".join(xlz_out) + "\n", encoding="utf-8")
 
 api_source = (root.parent.parent / "Another-Mirai-Native" / "Native" / "Handler" / "XiaoLiZi" / "API.cs").read_text(encoding="utf-8-sig")
 api_names = re.findall(r'\{ "([^"]*)", "(Function_\d+)" \}', api_source)
-(root / "XlzApiNames.h").write_text('#pragma once\n// Generated from XiaoLiZi/API.cs.\nnamespace amn {\ninline constexpr const char* XlzApiNames[][2] = {\n' +
+(root / "generated/XlzApiNames.h").write_text('#pragma once\n// Generated from XiaoLiZi/API.cs.\nnamespace amn {\ninline constexpr const char* XlzApiNames[][2] = {\n' +
     "\n".join(f'    {{"{name}", "{export}"}},' for name, export in api_names if name) + '\n};\n}\n', encoding="utf-8")
 
 # Mirror the original packed event/output layouts, keeping pointer fields native.
@@ -113,9 +113,9 @@ for name in selected:
         structs.append(f'    {cpp_type} {field}{initializer};')
     structs.append('};')
 structs += ['#pragma pack(pop)', '}']
-(root / "XlzStructs.h").write_text("\n".join(structs) + "\n", encoding="utf-8")
+(root / "generated/XlzStructs.h").write_text("\n".join(structs) + "\n", encoding="utf-8")
 names += ["amn_xlz_cache_request"]
 x86_aliases += ["    amn_xlz_cache_request=_amn_xlz_cache_request@4"]
-(root / "cqp.def").write_text("LIBRARY CQP\nEXPORTS\n" + "\n".join(names) + "\n", encoding="utf-8")
-(root / "cqp_x86.def").write_text("LIBRARY CQP\nEXPORTS\n" + "\n".join(x86_aliases) + "\n", encoding="utf-8")
+(root / "generated/cqp.def").write_text("LIBRARY CQP\nEXPORTS\n" + "\n".join(names) + "\n", encoding="utf-8")
+(root / "generated/cqp_x86.def").write_text("LIBRARY CQP\nEXPORTS\n" + "\n".join(x86_aliases) + "\n", encoding="utf-8")
 print(f"Generated {len(names)} CQP/Xlz exports")

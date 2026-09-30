@@ -1,7 +1,7 @@
-#include "Encoding.h"
-#include "JsonCodec.h"
-#include "XlzApiNames.h"
-#include "XlzStructs.h"
+#include "common/Encoding.h"
+#include "common/JsonCodec.h"
+#include "generated/XlzApiNames.h"
+#include "generated/XlzStructs.h"
 #include <windows.h>
 #include <atomic>
 #include <cassert>

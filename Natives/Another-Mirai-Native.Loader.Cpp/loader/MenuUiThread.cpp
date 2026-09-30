@@ -1,6 +1,6 @@
-#include "MenuUiThread.h"
+#include "loader/MenuUiThread.h"
 
-#include "Diagnostics.h"
+#include "common/Diagnostics.h"
 
 #include <objbase.h>
 

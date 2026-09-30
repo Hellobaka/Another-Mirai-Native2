@@ -2,17 +2,25 @@
 
 > Developed by GPT-6-Sol
 
-用于酷 Q 插件的加载器。插件进程通过命名管道连接主程序，配套的 `CQP.dll` 将 38 个 CQP API 转发为 RPC 请求。
+## 源码目录
 
-插件元数据允许 JSON 注释。
+| 目录 | 用途 |
+| --- | --- |
+| `loader/` | 进程入口、插件加载与事件分发、命名管道、菜单 UI 线程 |
+| `bridge/` | CQP API 桥接入口 |
+| `xlz/` | 小栗子 API 实现与消息格式转换 |
+| `common/` | 字符编码、JSON 编解码、运行日志 |
+| `generated/` | 自动生成的 API 导出、名称表、结构体和 DLL 导出定义 |
+| `tools/` | 导出代码生成器 |
+| `tests/` | 原生及 C# SDK 测试插件、测试程序 |
+| `third_party/` | 第三方头文件 |
 
-旧版 .NET Framework 插件的 SQLite 兼容依赖在构建时通过
-`tools/Prepare-CppLoaderSqlite.ps1` 从核心项目的 net48 NuGet 依赖复制，
-包括加载器目录下的 `System.Data.SQLite.dll`、对应位数目录下的
-`SQLite.Interop.dll` 和 `Another-Mirai-Native.Loader.Cpp.exe.config`。
-配置按实际程序集版本生成绑定重定向，避免旧插件内嵌的 SQLite 程序集
-与新版原生 DLL 混用。首次构建缺少 net48 还原结果时会自动执行还原。
-部署时需完整复制加载器目录，不能仅复制 EXE 和 CQP.dll。
+解决方案和项目文件保留在根目录。运行输出目录及部署方式不变。
 
-修改 `Natives/CQP/DllEntry.cs` 的导出签名后，执行`python Natives/Another-Mirai-Native.Loader.Cpp/generate_exports.py` 更新导出列表。
+## 加载与兼容
+
+用于酷 Q 和小栗子（Xlz）V3/V4 插件的加载器。插件进程通过命名管道连接主程序，配套的 `CQP.dll` 将 CQP API 转发为 RPC 请求。Xlz 支持以原 `Natives/CQP/XiaoLiZI_API.cs` 为基准：导出全部 400 个`Function_N` 签名，移植其中已实现的 36 个接口，其余保留原来的默认返回。
+
+修改 `Natives/CQP/DllEntry.cs`、`Natives/CQP/XiaoLiZI_API.cs`、Xlz 的 API 名称表或结构体定义后，执行 `python Natives/Another-Mirai-Native.Loader.Cpp/tools/generate_exports.py`更新导出列表和 ABI 定义。生成器会在发现原项目新增已实现接口而未移植时失败。
+
 `third_party/picojson.h` 的 BSD 2-Clause 许可声明保留在头文件中。

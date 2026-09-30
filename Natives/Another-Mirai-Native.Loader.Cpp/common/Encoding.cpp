@@ -1,4 +1,4 @@
-#include "Encoding.h"
+#include "common/Encoding.h"
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX

@@ -1,7 +1,7 @@
-#include "Diagnostics.h"
-#include "JsonCodec.h"
-#include "PipeClient.h"
-#include "PluginHost.h"
+#include "common/Diagnostics.h"
+#include "common/JsonCodec.h"
+#include "loader/PipeClient.h"
+#include "loader/PluginHost.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

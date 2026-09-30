@@ -1,6 +1,6 @@
-#include "PipeClient.h"
+#include "loader/PipeClient.h"
 
-#include "Diagnostics.h"
+#include "common/Diagnostics.h"
 
 #include <chrono>
 #include <cstdint>

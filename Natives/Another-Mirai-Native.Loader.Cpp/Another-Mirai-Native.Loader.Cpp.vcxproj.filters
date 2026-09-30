@@ -1,29 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <ItemGroup>
-    <Filter Include="Source Files"><UniqueIdentifier>{B9972D38-C245-4FDB-B066-9E4EA1EE931B}</UniqueIdentifier></Filter>
-    <Filter Include="Header Files"><UniqueIdentifier>{CA330B48-D1B6-429E-AC38-E2208367D62C}</UniqueIdentifier></Filter>
-    <Filter Include="Definitions"><UniqueIdentifier>{18745E5D-67E1-40B3-A81A-FF32658EDE07}</UniqueIdentifier></Filter>
+    <Filter Include="common" />
+    <Filter Include="generated" />
+    <Filter Include="loader" />
+    <Filter Include="third_party" />
+    <Filter Include="xlz" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Diagnostics.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="Encoding.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="main.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="MenuUiThread.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="PipeClient.cpp"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="PluginHost.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="common\Diagnostics.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Encoding.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\main.cpp">
+      <Filter>loader</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\MenuUiThread.cpp">
+      <Filter>loader</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\PipeClient.cpp">
+      <Filter>loader</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\PluginHost.cpp">
+      <Filter>loader</Filter>
+    </ClCompile>
+    <ClInclude Include="common\Diagnostics.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Encoding.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\JsonCodec.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\MenuUiThread.h">
+      <Filter>loader</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\PipeClient.h">
+      <Filter>loader</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\PluginHost.h">
+      <Filter>loader</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\XlzApiNames.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\XlzStructs.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="xlz\XlzMessage.h">
+      <Filter>xlz</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\picojson.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <None Include="loader\loader_x86.def">
+      <Filter>loader</Filter>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Diagnostics.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="Encoding.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="JsonCodec.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="MenuUiThread.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="PipeClient.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="PluginHost.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="XlzApiNames.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="XlzMessage.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="XlzStructs.h"><Filter>Header Files</Filter></ClInclude>
-    <ClInclude Include="third_party\picojson.h"><Filter>Header Files</Filter></ClInclude>
-  </ItemGroup>
-  <ItemGroup><None Include="loader_x86.def"><Filter>Definitions</Filter></None></ItemGroup>
 </Project>

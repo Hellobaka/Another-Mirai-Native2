@@ -1,7 +1,7 @@
-#include "Encoding.h"
-#include "JsonCodec.h"
-#include "XlzMessage.h"
-#include "XlzStructs.h"
+#include "common/Encoding.h"
+#include "common/JsonCodec.h"
+#include "xlz/XlzMessage.h"
+#include "generated/XlzStructs.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -59,6 +59,6 @@ const char* result_text(const Json& result) {
 
 } // namespace
 
-#include "cqp_exports.inc"
-#include "XlzBridge.inc"
-#include "xlz_exports.inc"
+#include "generated/cqp_exports.inc"
+#include "xlz/XlzBridge.inc"
+#include "generated/xlz_exports.inc"
