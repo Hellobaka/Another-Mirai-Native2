@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <Version>2.15.0</Version>
     <TargetFramework>net10.0-windows</TargetFramework>
 	<RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
 	<Platforms>AnyCPU;x86</Platforms>
