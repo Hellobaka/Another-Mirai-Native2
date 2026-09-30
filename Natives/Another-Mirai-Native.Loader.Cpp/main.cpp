@@ -8,6 +8,7 @@
 
 #include <cwchar>
 #include <filesystem>
+#include <iostream>
 #include <string>
 
 namespace {
@@ -18,6 +19,7 @@ struct Options {
     std::wstring plugin_path;
     int core_pid = 0;
     int auth_code = 0;
+    bool debug_lazy_load = false;
 };
 
 Options ParseOptions(int argc, wchar_t** argv) {
@@ -29,6 +31,8 @@ Options ParseOptions(int argc, wchar_t** argv) {
             options.core_pid = _wtoi(argv[++index]);
         } else if (_wcsicmp(argv[index], L"-AuthCode") == 0) {
             options.auth_code = _wtoi(argv[++index]);
+        } else if (_wcsicmp(argv[index], L"-DebugLazyLoad") == 0) {
+            options.debug_lazy_load = _wcsicmp(argv[++index], L"true") == 0;
         }
     }
     return options;
@@ -104,6 +108,16 @@ int wmain(int argc, wchar_t** argv) {
     }
     amn::ConsoleLog(amn::ConsoleLevel::Info, "framework directory set",
                     std::filesystem::current_path().u8string());
+    if (options.debug_lazy_load) {
+        amn::ConsoleLog(amn::ConsoleLevel::Info, "debug lazy load",
+                        "DebugLazyLoad 已开启，可附加调试器；按回车开始加载 DLL");
+        std::string line;
+        if (!std::getline(std::cin, line)) {
+            plugin.ReportError("无法读取回车输入，已取消 DLL 加载");
+            return 7;
+        }
+        amn::ConsoleLog(amn::ConsoleLevel::Info, "debug lazy load", "开始加载 DLL");
+    }
     if (!plugin.Load()) return 4;
 
     // The reader must run before Initialize: plugins may call CQP APIs there.
