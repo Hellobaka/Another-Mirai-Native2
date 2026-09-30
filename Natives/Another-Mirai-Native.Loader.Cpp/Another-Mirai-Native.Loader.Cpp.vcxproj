@@ -120,5 +120,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="PrepareSqliteCompatibility" AfterTargets="Build">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(ProjectDir)..\..\tools\Prepare-CppLoaderSqlite.ps1&quot; -OutputDirectory &quot;$(OutDir).&quot; -Platform &quot;$(Platform)&quot;" />
+  </Target>
   <ImportGroup Label="ExtensionTargets" />
 </Project>

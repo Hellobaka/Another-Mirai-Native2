@@ -2,9 +2,9 @@
 {
     public enum PluginLoaderType
     {
-        Cpp,
-        NetCore,
-        NetFramework48
+        NetFramework48 = 1,
+        NetCore = 2,
+        Cpp = 0
     }
 
     public enum PluginType
