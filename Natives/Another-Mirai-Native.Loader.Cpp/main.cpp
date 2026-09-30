@@ -19,6 +19,7 @@ struct Options {
     std::wstring plugin_path;
     int core_pid = 0;
     int auth_code = 0;
+    int64_t current_qq = 0;
     bool debug_lazy_load = false;
 };
 
@@ -31,6 +32,8 @@ Options ParseOptions(int argc, wchar_t** argv) {
             options.core_pid = _wtoi(argv[++index]);
         } else if (_wcsicmp(argv[index], L"-AuthCode") == 0) {
             options.auth_code = _wtoi(argv[++index]);
+        } else if (_wcsicmp(argv[index], L"-QQ") == 0) {
+            options.current_qq = _wcstoi64(argv[++index], nullptr, 10);
         } else if (_wcsicmp(argv[index], L"-DebugLazyLoad") == 0) {
             options.debug_lazy_load = _wcsicmp(argv[++index], L"true") == 0;
         }
@@ -100,7 +103,7 @@ int wmain(int argc, wchar_t** argv) {
     amn::ConsoleLog(amn::ConsoleLevel::Info, "named pipe connected");
     active_pipe = pipe.get();
 
-    amn::PluginHost plugin(*pipe, options.plugin_path, options.auth_code);
+    amn::PluginHost plugin(*pipe, options.plugin_path, options.auth_code, options.current_qq);
     DWORD directory_error = ERROR_SUCCESS;
     if (!SetFrameworkCurrentDirectory(options.core_pid, directory_error)) {
         plugin.ReportError("无法将工作目录设为主框架根目录，Windows 错误码 " +

@@ -20,6 +20,9 @@
     <ClInclude Include="MenuUiThread.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="PipeClient.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="PluginHost.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="XlzApiNames.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="XlzMessage.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="XlzStructs.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="third_party\picojson.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup><None Include="loader_x86.def"><Filter>Definitions</Filter></None></ItemGroup>

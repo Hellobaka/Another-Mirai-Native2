@@ -63,7 +63,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         private int Proxy_Enable()
         {
-            return SafeInvoke(AppEnabled);
+            return InvokeLifecycle(AppEnabled);
         }
 
         private int Proxy_Exit()
@@ -266,7 +266,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 MessageClipCount = 0,
                 BubbleID = 0,
                 FileID = "",
-                FileMD5 = "",
+                FileMD5 = IntPtr.Zero,
                 FileName = "",
                 FileSize = 0,
                 MessageGroupQQ = 0,
@@ -274,7 +274,7 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
                 MessageSubTemporaryType = 0,
                 MessageSubType = 0,
                 RedEnvelopeType = 0,
-                SessionToken = "",
+                SessionToken = IntPtr.Zero,
                 SourceEventQQ = 0,
                 SourceEventQQName = ""
             };
@@ -284,12 +284,19 @@ namespace Another_Mirai_Native.Native.Handler.XiaoLiZi
 
         private int Proxy_StartUp()
         {
-            return SafeInvoke(AppEnabled);
+            return InvokeLifecycle(AppEnabled);
         }
 
         private int Proxy_Upload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
         {
             // 未找到对应事件
+            return 0;
+        }
+
+        private int InvokeLifecycle(Delegate? action)
+        {
+            // XLZ 的启用回调可能以 1 表示完成，不能作为酷 Q 的失败返回。
+            SafeInvoke(action);
             return 0;
         }
 

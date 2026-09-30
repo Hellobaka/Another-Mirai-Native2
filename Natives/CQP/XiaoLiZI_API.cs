@@ -17,6 +17,41 @@ namespace Another_Mirai_Native.Export
     {
         private static Dictionary<(long, int), long> MessageCache { get; set; } = new();
 
+        private static IntPtr BuildStructList<T>(IReadOnlyList<T> items, int sdkBufferBytes) where T : struct
+        {
+            // 易语言数组：两个 32 位头字段，随后内联成员指针。
+            // C# SDK 3.6.4 使用长度为 2 的结构数组和固定大小 ByValArray，
+            // 补足并清零缓冲区，避免其封送器读取实际成员之后的未分配内存。
+            int bytes = Math.Max(checked(8 + IntPtr.Size * items.Count), checked(2 * (8 + sdkBufferBytes)));
+            IntPtr raw = Marshal.AllocCoTaskMem(bytes);
+            var allocated = new List<IntPtr>();
+            try
+            {
+                Marshal.Copy(new byte[bytes], 0, raw, bytes);
+                Marshal.WriteInt32(raw, 1);
+                Marshal.WriteInt32(raw, 4, items.Count);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    IntPtr item = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(T)));
+                    try { Marshal.StructureToPtr(items[i], item, false); }
+                    catch { Marshal.FreeCoTaskMem(item); throw; }
+                    allocated.Add(item);
+                    Marshal.WriteIntPtr(raw, 8 + i * IntPtr.Size, item);
+                }
+                return raw;
+            }
+            catch
+            {
+                foreach (IntPtr item in allocated)
+                {
+                    Marshal.DestroyStructure(item, typeof(T));
+                    Marshal.FreeCoTaskMem(item);
+                }
+                Marshal.FreeCoTaskMem(raw);
+                throw;
+            }
+        }
+
         /// <summary>
         /// _初始化
         /// </summary>
@@ -666,36 +701,28 @@ namespace Another_Mirai_Native.Export
             {
                 return 0;
             }
-            var friendList = ClientManager.Client.InvokeCQPFunction("CQ_getFriendList", true, authCode, false).ToString();
+            var friendList = ClientManager.Client.InvokeCQPFunction("CQ_getFriendList", true, authCode, false)?.ToString();
             if (string.IsNullOrEmpty(friendList))
             {
                 return 0;
             }
             var list = FriendInfo.RawToList(Convert.FromBase64String(friendList));
 
-            int dataListSize = Marshal.SizeOf(typeof(int)) * 2 + Marshal.SizeOf(typeof(int)) * list.Count;
-            var rawPtr = Marshal.AllocHGlobal(dataListSize);
-            Marshal.WriteInt32(rawPtr, 1);
-            Marshal.WriteInt32(rawPtr + 4, list.Count);
-
+            var friends = new Model.Other.XiaoLiZi.FriendInfo[list.Count];
             for (int i = 0; i < list.Count; i++)
             {
                 var friendInfo = list[i];
-                var info = new Model.Other.XiaoLiZi.FriendInfo
+                friends[i] = new Model.Other.XiaoLiZi.FriendInfo
                 {
                     QQNumber = friendInfo.QQ,
                     Name = friendInfo.Nick,
                     Note = friendInfo.Postscript,
                 };
 
-                var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
-                LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
-                Marshal.StructureToPtr(info, ptr, false);
-                Marshal.WriteInt32(rawPtr + 8 + i * 4, (int)ptr);
             }
 
-            arg1 = rawPtr;
-            return friendList.Length;
+            arg1 = BuildStructList(friends, 10240);
+            return list.Count;
         }
 
         /// <summary>
@@ -722,33 +749,20 @@ namespace Another_Mirai_Native.Export
             }
             var list = GroupInfo.RawToList(Convert.FromBase64String(groupList));
 
-            int dataListSize = Marshal.SizeOf(typeof(int)) * 2 + Marshal.SizeOf(typeof(int)) * list.Count;
-            var rawPtr = Marshal.AllocHGlobal(dataListSize);
-            Marshal.WriteInt32(rawPtr, 1);
-            Marshal.WriteInt32(rawPtr + 4, list.Count);
-
+            var groups = new Model.Other.XiaoLiZi.GroupInfo[list.Count];
             for (int i = 0; i < list.Count; i++)
             {
                 var groupInfo = list[i];
-                var info = new Model.Other.XiaoLiZi.GroupInfo
+                groups[i] = new Model.Other.XiaoLiZi.GroupInfo
                 {
                     GroupQQ = groupInfo.Group,
                     GroupName = groupInfo.Name,
                     GroupMemberCount = groupInfo.CurrentMemberCount,
                 };
 
-                var ptr = Marshal.AllocCoTaskMem(Marshal.SizeOf(info));
-                // LogHelper.LocalDebug("", Marshal.SizeOf(info).ToString());
-                Marshal.StructureToPtr(info, ptr, false);
-                //var buffer = BitConverter.GetBytes(ptr.ToInt32());
-                //Console.WriteLine($"Address: {ptr.ToInt32():X0}, array: {BitConverter.ToString(buffer)}");
-                // Array.Copy(buffer, 0, raw.pAddrList, i * 4, 4);
-                // raw.pAddrList[i] = ptr;
-                Marshal.WriteInt32(rawPtr + 8 + i * 4, (int)ptr);
             }
 
-            //Marshal.StructureToPtr(raw, rawPtr, false);
-            arg1 = rawPtr;
+            arg1 = BuildStructList(groups, 10240);
 
             return list.Count;
         }
@@ -785,7 +799,7 @@ namespace Another_Mirai_Native.Export
                 {
                     QQNumber = memberInfo.QQ.ToString(),
                     Name = memberInfo.Nick,
-                    Nickname = memberInfo.Nick,
+                    Nickname = memberInfo.Card,
                     Gender = (uint)memberInfo.Sex,
                     Age = (uint)memberInfo.Age,
                     JoinTime = memberInfo.JoinGroupDateTime.ToTimeStamp(),
@@ -795,9 +809,8 @@ namespace Another_Mirai_Native.Export
                 };
             }
 
-            arg2 = Marshal.AllocHGlobal(Marshal.SizeOf(memberInfos));
-            Marshal.StructureToPtr(memberInfos, arg2, false);
-            return memberList.Length;
+            arg2 = BuildStructList(memberInfos, 102400);
+            return list.Count;
         }
 
         /// <summary>
@@ -2747,7 +2760,7 @@ namespace Another_Mirai_Native.Export
             {
                 QQNumber = item.QQ.ToString(),
                 Name = item.Nick,
-                Nickname = item.Nick,
+                Nickname = item.Card,
                 Gender = (uint)item.Sex,
                 Age = (uint)item.Age,
                 JoinTime = item.JoinGroupDateTime.ToTimeStamp(),

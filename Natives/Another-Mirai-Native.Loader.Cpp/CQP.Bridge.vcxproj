@@ -78,6 +78,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary Condition="'$(Configuration)'=='Debug'">MultiThreadedDebug</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)'=='Release'">MultiThreaded</RuntimeLibrary>
@@ -88,6 +89,7 @@
       <ModuleDefinitionFile Condition="'$(Platform)'=='Win32'">cqp_x86.def</ModuleDefinitionFile>
       <ModuleDefinitionFile Condition="'$(Platform)'=='x64'">cqp.def</ModuleDefinitionFile>
       <ImportLibrary>$(IntDir)$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation Condition="'$(Configuration)'=='Debug'">true</GenerateDebugInformation>
       <GenerateDebugInformation Condition="'$(Configuration)'=='Release'">false</GenerateDebugInformation>
     </Link>
@@ -99,12 +101,16 @@
   <ItemGroup>
     <ClInclude Include="Encoding.h" />
     <ClInclude Include="JsonCodec.h" />
+    <ClInclude Include="XlzStructs.h" />
+    <ClInclude Include="XlzMessage.h" />
     <ClInclude Include="third_party\picojson.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cqp.def" />
     <None Include="cqp_x86.def" />
     <None Include="cqp_exports.inc" />
+    <None Include="XlzBridge.inc" />
+    <None Include="xlz_exports.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

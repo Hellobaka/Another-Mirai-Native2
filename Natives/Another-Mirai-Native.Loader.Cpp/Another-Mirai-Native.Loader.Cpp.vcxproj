@@ -108,6 +108,9 @@
     <ClInclude Include="MenuUiThread.h" />
     <ClInclude Include="PipeClient.h" />
     <ClInclude Include="PluginHost.h" />
+    <ClInclude Include="XlzApiNames.h" />
+    <ClInclude Include="XlzStructs.h" />
+    <ClInclude Include="XlzMessage.h" />
     <ClInclude Include="third_party\picojson.h" />
   </ItemGroup>
   <ItemGroup>

@@ -12,11 +12,15 @@
   <ItemGroup>
     <ClInclude Include="Encoding.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="JsonCodec.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="XlzMessage.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="XlzStructs.h"><Filter>Header Files</Filter></ClInclude>
     <ClInclude Include="third_party\picojson.h"><Filter>Header Files</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cqp.def"><Filter>Definitions</Filter></None>
     <None Include="cqp_x86.def"><Filter>Definitions</Filter></None>
     <None Include="cqp_exports.inc"><Filter>Definitions</Filter></None>
+    <None Include="xlz_exports.inc"><Filter>Definitions</Filter></None>
+    <None Include="XlzBridge.inc"><Filter>Source Files</Filter></None>
   </ItemGroup>
 </Project>

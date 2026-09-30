@@ -145,8 +145,8 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
         /// <summary>
         /// 会话token
         /// </summary>
-        [MarshalAs(UnmanagedType.LPStr)]
-        public string SessionToken;
+        // 易语言字节集指针，无 token 时为零；不能按 LPStr 封送。
+        public nint SessionToken;
 
         /// <summary>
         /// 来源事件QQ
@@ -168,8 +168,8 @@ namespace Another_Mirai_Native.Model.Other.XiaoLiZi
         /// <summary>
         /// 文件Md5
         /// </summary>
-        [MarshalAs(UnmanagedType.LPStr)]
-        public string FileMD5;
+        // 原生插件将此字段作为字节集复制，不能传入空字符串。
+        public nint FileMD5;
 
         /// <summary>
         /// 文件名
