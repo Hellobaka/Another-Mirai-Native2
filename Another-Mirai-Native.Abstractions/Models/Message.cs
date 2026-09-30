@@ -113,6 +113,10 @@ namespace Another_Mirai_Native.Abstractions.Models
 
                             break;
 
+                        case MessageItemType.Video:
+                            MessageChain.Add(new Video(cqcode));
+                            break;
+
                         case MessageItemType.Record:
                             file = cqcode.Items["file"];
                             isPath = file.Contains("\\");

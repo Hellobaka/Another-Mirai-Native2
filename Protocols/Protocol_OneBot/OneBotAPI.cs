@@ -790,6 +790,37 @@ namespace Another_Mirai_Native.Protocol.OneBot
                     }
                     msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
                 }
+                else if (item.Function == MessageItemType.Video)
+                {
+                    string videoFile = item.Items["file"];
+                    if (VideoFileHelper.IsHttpUrl(videoFile)
+                        || videoFile.StartsWith("base64://", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                    string? videoPath = VideoFileHelper.GetLocalPath(videoFile);
+                    var cachedVideo = videoPath == null ? CachedFile.GetCachedVideoByHash(videoFile) : null;
+                    if (videoPath != null)
+                    {
+                        videoFile = "base64://" + Convert.ToBase64String(File.ReadAllBytes(videoPath));
+                    }
+                    else if (cachedVideo != null && VideoFileHelper.IsHttpUrl(cachedVideo.Url))
+                    {
+                        videoFile = cachedVideo.Url;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog(LogLevel.Warning, "发送视频", "视频文件不存在", "");
+                        continue;
+                    }
+                    newCQcode = new CQCode(MessageItemType.Video,
+                        new KeyValuePair<string, string>("file", videoFile));
+                    foreach (var parameter in item.Items.Where(x => x.Key != "file"))
+                    {
+                        newCQcode.Items.Add(parameter.Key, parameter.Value);
+                    }
+                    msg = msg.Replace(item.ToSendString(), newCQcode.ToSendString());
+                }
                 else if (item.IsRecordCQCode)
                 {
                     newCQcode = new CQCode(MessageItemType.Record);

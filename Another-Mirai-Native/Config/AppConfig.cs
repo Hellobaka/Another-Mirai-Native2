@@ -72,6 +72,11 @@ namespace Another_Mirai_Native.Config
 
         public bool EnableChat { get; set; }
 
+        /// <summary>
+        /// 是否将接收的视频保存到本地，默认关闭。
+        /// </summary>
+        public bool SaveVideoToLocal { get; set; }
+
         public bool EnableChatImageCacheMaxSizeControl { get; set; }
 
         public long MaxChatImageCacheFolderSize { get; set; }
@@ -135,6 +140,7 @@ namespace Another_Mirai_Native.Config
             ServerType = (ServerType)GetConfig("ServerType", 1);
             ShowTaskBar = GetConfig("ShowTaskBar", true);
             EnableChat = GetConfig("EnableChat", false);
+            SaveVideoToLocal = GetConfig("SaveVideoToLocal", false);
             EnableChatImageCacheMaxSizeControl = GetConfig("EnableChatImageCacheMaxSizeControl", false);
             MaxChatImageCacheFolderSize = GetConfig("MaxChatImageCacheFolderSize", (long)1024);
             EnableChatImageCacheExpireTimeControl = GetConfig("EnableChatImageCacheExpireTimeControl", false);

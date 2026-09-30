@@ -765,6 +765,10 @@ namespace Another_Mirai_Native.DB
         /// <returns>Hash</returns>
         public static async Task<string?> CacheMessageFile(CachedFileType cachedFileType, string url, string? fileName = null)
         {
+            if (cachedFileType == CachedFileType.Video && !AppConfig.Instance.SaveVideoToLocal)
+            {
+                return null;
+            }
             var db = ChatHistoryDB.GetInstance();
 
             (CachedFile? cachedFile, string? hash) = await DownloadFileAsync(cachedFileType, url, fileName);
@@ -795,15 +799,19 @@ namespace Another_Mirai_Native.DB
                 // 下载失败了
                 return (null, null);
             }
-            var fileBuffer = File.ReadAllBytes(absoluteFilePath);
-            string hash = Helper.MD5(fileBuffer);
+            string hash;
+            using (var stream = File.OpenRead(absoluteFilePath))
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                hash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "");
+            }
             return (new()
             {
                 FileName = Helper.GetRelativePath(absoluteFilePath!, baseDirectory),
                 Hash = hash,
                 InsertTime = DateTime.Now,
                 Url = url,
-                FileSizeInKB = fileBuffer.Length / 1024.0f,
+                FileSizeInKB = new FileInfo(absoluteFilePath).Length / 1024.0f,
                 CachedFileType = cachedFileType,
             }, hash);
         }

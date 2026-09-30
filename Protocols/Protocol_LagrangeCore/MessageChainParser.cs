@@ -110,7 +110,7 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                 else if (item is VideoEntity video)
                 {
                     string videoId = ChatHistoryHelper.CacheMessageFile(CachedFileType.Video, video.VideoUrl).Result
-                        ?? video.VideoHash;
+                        ?? (string.IsNullOrEmpty(video.VideoUrl) ? video.VideoHash : video.VideoUrl);
                     message.Append($"[CQ:video,file={videoId}]");
                 }
                 else if (item is XmlEntity xml)
@@ -168,6 +168,26 @@ namespace Another_Mirai_Native.Protocol.LagrangeCore
                                 string baseDirectory = Helper.GetCacheDirectoryByCachedFileType(CachedFileType.Image);
                                 builder.Image(Path.Combine(baseDirectory, cacheImagePath.FileName));
                             }
+                        }
+                        break;
+
+                    case MessageItemType.Video:
+                        try
+                        {
+                            string videoFile = cqcode.Items["file"];
+                            string? videoPath = VideoFileHelper.GetLocalPath(videoFile);
+                            if (videoPath != null)
+                            {
+                                builder.Video(videoPath);
+                            }
+                            else
+                            {
+                                builder.Video(VideoFileHelper.ReadAsync(videoFile).GetAwaiter().GetResult());
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("构建消息", $"视频文件处理失败：{ex.Message}");
                         }
                         break;
 

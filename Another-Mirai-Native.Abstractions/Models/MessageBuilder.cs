@@ -74,6 +74,20 @@ namespace Another_Mirai_Native.Abstractions.Models
             return this;
         }
 
+        /// <summary>添加视频本地路径</summary>
+        public MessageBuilder Video(string filePath)
+        {
+            Items.Add(new Video(filePath: filePath));
+            return this;
+        }
+
+        /// <summary>添加缓存视频。</summary>
+        public MessageBuilder VideoHash(string hash)
+        {
+            Items.Add(new Video(hash: hash));
+            return this;
+        }
+
         /// <summary>
         /// 添加语音消息片段（语音哈希）。
         /// </summary>

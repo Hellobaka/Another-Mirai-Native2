@@ -223,7 +223,7 @@ namespace Another_Mirai_Native.Abstractions.Models
             return
             [
                 new(@"\[CQ:([A-Za-z]*)(?:(,[^\[\]]+))?\]", RegexOptions.Compiled),    // 匹配CQ码
-                new(@",([A-Za-z_]+)=([^,\[\]]+)", RegexOptions.Compiled)               // 匹配键值对
+                new(@",([A-Za-z_][A-Za-z0-9_]*)=([^,\[\]]+)", RegexOptions.Compiled)   // 匹配键值对（如 md5）
             ];
         }
 

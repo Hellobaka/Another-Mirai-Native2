@@ -1,6 +1,7 @@
 ﻿using Another_Mirai_Native.Abstractions.Enums;
 using Another_Mirai_Native.Abstractions.Models;
 using Another_Mirai_Native.DB;
+using Another_Mirai_Native.Config;
 using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using System.Text;
@@ -60,6 +61,23 @@ namespace Another_Mirai_Native.Protocol.OneBot
                         }
                         break;
 
+                    case MessageItemType.Video:
+                        try
+                        {
+                            (string videoFile, _) = HandleFileDownload(cqcode);
+                            if (!string.IsNullOrEmpty(videoFile))
+                            {
+                                stringBuilder.Append(new CQCode(MessageItemType.Video,
+                                    new KeyValuePair<string, string>("file", videoFile)).ToSendString());
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error("接收视频", $"视频文件处理失败：{ex.Message}");
+                            stringBuilder.Append(s);
+                        }
+                        break;
+
                     case MessageItemType.Record:
                         (string recordFile, _) = HandleFileDownload(cqcode);
                         // 转换完毕
@@ -106,11 +124,33 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 _ => throw new InvalidOperationException($"不支持缓存的消息类型：{cqcode.Function}")
             };
 
-            if (imageFile.StartsWith("http") || !string.IsNullOrEmpty(url))
+            if (cachedFileType == CachedFileType.Video)
+            {
+                // 关闭缓存时保留可转发的来源，不下载、复制或解码到磁盘。
+                if (!AppConfig.Instance.SaveVideoToLocal)
+                {
+                    return (string.IsNullOrEmpty(url) ? imageFile : url, string.Empty);
+                }
+                Directory.CreateDirectory(Helper.GetCacheDirectoryByCachedFileType(cachedFileType, false));
+                if (!VideoFileHelper.IsHttpUrl(imageFile) && string.IsNullOrEmpty(url)
+                    && !imageFile.StartsWith("base64://", StringComparison.OrdinalIgnoreCase))
+                {
+                    string? localPath = VideoFileHelper.GetLocalPath(imageFile);
+                    if (localPath != null)
+                    {
+                        return HandleLocalFile(new CQCode(MessageItemType.Video,
+                            new KeyValuePair<string, string>("file", localPath)), cachedFileType);
+                    }
+                    return (imageFile, string.Empty);
+                }
+            }
+
+            if (imageFile.StartsWith("http") || !string.IsNullOrEmpty(url)
+                || (cachedFileType == CachedFileType.Video && VideoFileHelper.IsHttpUrl(imageFile)))
             {
                 return HandleHttpFile(cqcode, cachedFileType);
             }
-            else if (imageFile.StartsWith("base64://"))
+            else if (imageFile.StartsWith("base64://", StringComparison.OrdinalIgnoreCase))
             {
                 return HandleBase64File(cqcode, cachedFileType);
             }
@@ -171,7 +211,7 @@ namespace Another_Mirai_Native.Protocol.OneBot
         private (string file, string subType) HandleBase64File(CQCode cqcode, CachedFileType cachedFileType)
         {
             // file字段为base64编码的图片，应当解码并保存到图片目录
-            string base64 = cqcode.Items["file"].Replace("base64://", "");
+            string base64 = cqcode.Items["file"].Substring("base64://".Length);
             string subType = cqcode.Items.TryGetValue("sub_type", out string? s) ? s : string.Empty;
             if (string.IsNullOrEmpty(subType))
             {
@@ -203,7 +243,8 @@ namespace Another_Mirai_Native.Protocol.OneBot
                 subType = cqcode.Items.TryGetValue("subType", out s) ? s : string.Empty;
             }
 
-            string hash = ChatHistoryHelper.CacheMessageFile(cachedFileType, url).Result ?? (file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file));
+            string hash = ChatHistoryHelper.CacheMessageFile(cachedFileType, url).Result
+                ?? (cachedFileType == CachedFileType.Video ? url : (file.StartsWith("http") ? url.MD5() : Path.GetFileNameWithoutExtension(file)));
             return (hash, subType);
         }
 
