@@ -68,6 +68,7 @@ namespace Another_Mirai_Native.WebAPI
                                 new(typeof(Face),  (int)MessageItemType.Face),
                                 new(typeof(BFace), (int)MessageItemType.Bface),
                                 new(typeof(Image), (int)MessageItemType.Image),
+                                new(typeof(Video), (int)MessageItemType.Video),
                                 new(typeof(Record),(int)MessageItemType.Record),
                                 new(typeof(At),    (int)MessageItemType.At),
                                 new(typeof(RPS),   (int)MessageItemType.Rps),
