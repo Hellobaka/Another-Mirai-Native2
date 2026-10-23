@@ -3,6 +3,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Native;
 using Another_Mirai_Native.RPC.Interface;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
@@ -11,11 +12,29 @@ namespace Another_Mirai_Native.RPC.Pipe
 {
     public class NamedPipe : IDisposable
     {
+        private readonly object _sendLock = new();
+
         public string GUID => Guid.NewGuid().ToString();
 
         public NamedPipeServerStream ServerInstance { get; set; }
 
         public int PID { get; set; }
+
+        /// <summary>
+        /// 同一连接上的并发写入会让两个帧交错，必须串行化。
+        /// </summary>
+        public void Send(string message)
+        {
+            lock (_sendLock)
+            {
+                NamedPipeServerStream? stream = ServerInstance;
+                if (stream == null || !stream.IsConnected)
+                {
+                    return;
+                }
+                PipeFraming.WriteFrame(stream, Encoding.UTF8.GetBytes(message));
+            }
+        }
 
         public void Dispose()
         {
@@ -45,17 +64,22 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         private bool IsRunning { get; set; }
 
+        private readonly CancellationTokenSource _cts = new();
+
+        /// <summary>正在等待连接的那个实例；Stop() 通过 Dispose 它来打断等待。</summary>
+        private NamedPipeServerStream? _pendingAccept;
+
         public event Action<NamedPipe> ClientConnected;
         public event Action<NamedPipe> ClientDisconnected;
 
-        private List<NamedPipe> Pipes { get; set; } = [];
+        private ConcurrentDictionary<NamedPipe, byte> Pipes { get; } = new();
 
         public override bool Start()
         {
             try
             {
                 IsRunning = true;
-                Task.Run(() => ListenForClients());
+                _ = Task.Run(ListenForClientsAsync);
                 return true;
             }
             catch (Exception)
@@ -67,7 +91,16 @@ namespace Another_Mirai_Native.RPC.Pipe
         public override bool Stop()
         {
             IsRunning = false;
-            foreach (NamedPipe pipe in Pipes)
+            TryDispose(_pendingAccept);
+            _pendingAccept = null;
+            try
+            {
+                _cts.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            foreach (NamedPipe pipe in Pipes.Keys)
             {
                 try
                 {
@@ -79,99 +112,95 @@ namespace Another_Mirai_Native.RPC.Pipe
             return true;
         }
 
-        private async void ListenForClients()
+        private async Task ListenForClientsAsync()
         {
             while (IsRunning)
             {
-                var pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, -1, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-                await pipeServer.WaitForConnectionAsync();
+                // 自己做了 4 字节长度头分帧，所以必须用字节模式：
+                // Message 模式的读取语义不同，会让分帧更容易出错。
+                NamedPipeServerStream pipeServer = new(PipeName, PipeDirection.InOut, -1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+                _pendingAccept = pipeServer;
+                try
+                {
+                    await pipeServer.WaitForConnectionAsync().ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Debug("Pipe_Accept", $"接受连接结束: {e.Message}");
+                    TryDispose(pipeServer);
+                    break;
+                }
+                _pendingAccept = null;
+
+                if (!IsRunning)
+                {
+                    TryDispose(pipeServer);
+                    break;
+                }
 
                 var connection = new NamedPipe
                 {
                     ServerInstance = pipeServer
                 };
-                Pipes.Add(connection);
+                Pipes.TryAdd(connection, 0);
 
                 ClientConnected?.Invoke(connection);
                 _ = Task.Run(() => HandleClient(connection));
             }
         }
 
+        private static void TryDispose(NamedPipeServerStream? stream)
+        {
+            if (stream == null)
+            {
+                return;
+            }
+            try
+            {
+                stream.Dispose();
+            }
+            catch
+            {
+            }
+        }
+
         private async Task HandleClient(NamedPipe pipe)
         {
-            var buffer = new byte[1024];
-            using MemoryStream messageBuffer = new();
-            var client = pipe.ServerInstance;
-            int targetLength = -1, readLength = 0;
-            while (IsRunning && client.IsConnected)
+            NamedPipeServerStream client = pipe.ServerInstance;
+            while (IsRunning)
             {
-                bool lengthRead = false;
+                byte[]? payload;
                 try
                 {
-#if NET5_0_OR_GREATER
-                    int bytesRead = await client.ReadAsync(new Memory<byte>(buffer));
-#else
-                    int bytesRead = await client.ReadAsync(buffer, 0, buffer.Length);
-#endif
-                    if (bytesRead > 0)
-                    {
-                        if (targetLength < 0 && bytesRead > 4)
-                        {
-                            targetLength = BitConverter.ToInt32(buffer, 0);
-                            lengthRead = true;
-                        }
-                        if (targetLength <= 0)
-                        {
-                            throw new InvalidDataException("Pipe 获得的数据长度无效");
-                        }
-                        if (readLength < targetLength)
-                        {
-                            if (lengthRead)
-                            {
-                                messageBuffer.Write(buffer, 4, bytesRead - 4);
-                                readLength += bytesRead - 4;
-                            }
-                            else
-                            {
-                                messageBuffer.Write(buffer, 0, bytesRead);
-                                readLength += bytesRead;
-                            }
-                            if (readLength < targetLength)
-                            {
-                                continue;
-                            }
-                        }
-#if NET5_0_OR_GREATER
-                        string message = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(messageBuffer.ToArray(), 0, targetLength));
-#else
-                        string message = Encoding.UTF8.GetString(messageBuffer.ToArray(), 0, targetLength);
-#endif
-                        LogHelper.Debug("收到客户端消息", message);
-                        targetLength = -1;
-                        readLength = 0;
-                        messageBuffer.Position = 0;
-                        // 处理消息
-                        new Thread(() => HandleClientMessage(message, pipe)).Start();
-                    }
-                    else
-                    {
-                        ClientDisconnected?.Invoke(pipe);
-                        pipe.Disconnect();
-                        LogPipeDisconnect(pipe);
-                        break;
-                    }
+                    payload = await PipeFraming.ReadFrameAsync(client, _cts.Token).ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
-                    ClientDisconnected?.Invoke(pipe);
-                    pipe.Disconnect();
-                    LogPipeDisconnect(pipe);
                     break;
                 }
+
+                if (payload == null)
+                {
+                    break;
+                }
+
+                string message = Encoding.UTF8.GetString(payload);
+                LogHelper.Debug("收到客户端消息", message);
+                _ = Task.Run(() => HandleClientMessage(message, pipe));
             }
 
-            pipe.Dispose();
-            Pipes.Remove(pipe);
+            try
+            {
+                ClientDisconnected?.Invoke(pipe);
+                LogPipeDisconnect(pipe);
+                pipe.Disconnect();
+            }
+            finally
+            {
+                // 清理必须放在 finally：否则上面任何一处抛出都会把管道永久留在 Pipes 里
+                Pipes.TryRemove(pipe, out _);
+                pipe.Dispose();
+            }
         }
 
         private void LogPipeDisconnect(NamedPipe pipe)
@@ -230,27 +259,13 @@ namespace Another_Mirai_Native.RPC.Pipe
         {
             if (connection is NamedPipe pipe && !string.IsNullOrEmpty(message))
             {
-                SendMessage(client: pipe.ServerInstance, message);
+                pipe.Send(message);
             }
         }
 
         public override bool SetConnectionConfig()
         {
             return true;
-        }
-
-        public void SendMessage(NamedPipeServerStream client, string message)
-        {
-            if (client.IsConnected)
-            {
-                byte[] buffer = Encoding.UTF8.GetBytes(message);
-                buffer = [.. BitConverter.GetBytes(buffer.Length), .. buffer];
-#if NET5_0_OR_GREATER
-                client.Write(new ReadOnlySpan<byte>(buffer));
-#else
-                client.Write(buffer, 0, buffer.Length);
-#endif
-            }
         }
 
         public override void DropConnection(object connection)

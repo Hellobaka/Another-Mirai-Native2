@@ -39,17 +39,18 @@ namespace Another_Mirai_Native.RPC
 
         private void HeartBeatTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            if(Client == null)
+            ClientBase? client = Client;
+            if (client == null)
             {
                 return;
             }
-            Client.HeartBeatLostCount++;
-            if (Client.HeartBeatLostCount > 5)
+            client.HeartBeatLostCount++;
+            if (client.HeartBeatLostCount > 5)
             {
-                Client.Close();
-                Client.Connect();
+                // 统一走 Reconnect()，避免心跳看门狗和读循环各自发起一次重连
+                client.Reconnect();
             }
-            Client.SendHeartBeat();
+            client.SendHeartBeat();
         }
     }
 }

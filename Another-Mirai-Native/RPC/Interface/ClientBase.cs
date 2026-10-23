@@ -5,6 +5,7 @@ using Another_Mirai_Native.Model;
 using Another_Mirai_Native.Model.Enums;
 using Another_Mirai_Native.Native;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Another_Mirai_Native.RPC.Interface
 
         public int HeartBeatLostCount { get; set; }
 
-        public Dictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
+        public ConcurrentDictionary<string, InvokeResult> WaitingMessage { get; set; } = new();
 
         public void HandleMessage(string message)
         {
@@ -40,11 +41,11 @@ namespace Another_Mirai_Native.RPC.Interface
                     {
                         PluginEventType eventType = (PluginEventType)Enum.Parse(typeof(PluginEventType), caller.Function.Replace("InvokeEvent_", ""));
                         result = InvokeEvent(eventType, caller.Args);
-                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result }.ToJson());
+                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = result, Success = true }.ToJson());
                     }
                     else if (caller.Function == "KillProcess")
                     {
-                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = 1 }.ToJson());
+                        Send(new InvokeResult { GUID = caller.GUID, Type = caller.Function, Result = 1, Success = true }.ToJson());
                         KillProcess();
                     }
                     else if (caller.Function == "HeartBeat")
@@ -54,12 +55,13 @@ namespace Another_Mirai_Native.RPC.Interface
                     }
                     else if (caller.Function == "CurrentQQChanged")
                     {
-                        if (caller.Args.Length == 2
+                        if (caller.Args != null 
+                            && caller.Args.Length == 2
                             && long.TryParse(caller.Args[0].ToString(), out long v)
-                            && string.IsNullOrEmpty(caller.Args[1]?.ToString()))
+                            && !string.IsNullOrEmpty(caller.Args[1]?.ToString()))
                         {
                             AppConfig.Instance.CurrentQQ = v;
-                            AppConfig.Instance.CurrentNickName = caller.Args[1].ToString() ?? "";
+                            AppConfig.Instance.CurrentNickName = caller.Args[1]?.ToString() ?? "";
                         }
                     }
                 }
@@ -72,8 +74,9 @@ namespace Another_Mirai_Native.RPC.Interface
                     }
                     if (WaitingMessage.ContainsKey(result.GUID))
                     {
+                        // 不要在这里强行把 Success 置为 true：
+                        // 成功/失败由服务端在结果里给出，否则"结果就是 null"会被当成失败。
                         WaitingMessage[result.GUID] = result;
-                        WaitingMessage[result.GUID].Success = true;
                         RequestWaiter.TriggerByKey(result.GUID);
                     }
                 }
@@ -120,6 +123,15 @@ namespace Another_Mirai_Native.RPC.Interface
             return false;
         }
 
+        /// <summary>
+        /// 重连。默认是"关掉再连"，传输层可覆盖它以加入去重/退避。
+        /// </summary>
+        public virtual void Reconnect()
+        {
+            Close();
+            Connect();
+        }
+
         public virtual object? InvokeCQPFunction(string function, bool waiting, params object[] args)
         {
             string guid = Guid.NewGuid().ToString();
@@ -127,33 +139,29 @@ namespace Another_Mirai_Native.RPC.Interface
             {
                 function = "InvokeCQP_" + function;
             }
-            WaitingMessage.Add(guid, new InvokeResult());
+            WaitingMessage[guid] = new InvokeResult();
             if (!waiting)
             {
                 Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-                WaitingMessage.Remove(guid);
+                WaitingMessage.TryRemove(guid, out _);
                 return null;
             }
             if (RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout,
                 () =>
                 {
                     Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-                }, out _) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
+                }, out _) && WaitingMessage.TryRemove(guid, out InvokeResult? value))
             {
-                var result = value;
-                WaitingMessage.Remove(guid);
-                if (result.Success)
+                if (value.Success)
                 {
-                    return result.Result;
+                    return value.Result;
                 }
-                else
-                {
-                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
-                    return null;
-                }
+                LogHelper.Error("调用失败", $"GUID={guid}, msg={value.Message}");
+                return null;
             }
             else
             {
+                WaitingMessage.TryRemove(guid, out _);
                 LogHelper.Error("调用超时", "Timeout");
                 return null;
             }
@@ -166,33 +174,29 @@ namespace Another_Mirai_Native.RPC.Interface
             {
                 function = "InvokeCQP_" + function;
             }
-            WaitingMessage.Add(guid, new InvokeResult());
+            WaitingMessage[guid] = new InvokeResult();
             if (!waiting)
             {
                 Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-                WaitingMessage.Remove(guid);
+                WaitingMessage.TryRemove(guid, out _);
                 return null;
             }
             if (await Task.Run(() => RequestWaiter.Wait(guid, Connection, AppConfig.Instance.PluginInvokeTimeout,
                 () =>
                 {
                     Send(new InvokeBody { GUID = guid, Function = function, Args = args }.ToJson());
-                }, out _)).ConfigureAwait(false) && WaitingMessage.TryGetValue(guid, out InvokeResult? value))
+                }, out _)).ConfigureAwait(false) && WaitingMessage.TryRemove(guid, out InvokeResult? value))
             {
-                var result = value;
-                WaitingMessage.Remove(guid);
-                if (result.Success)
+                if (value.Success)
                 {
-                    return result.Result;
+                    return value.Result;
                 }
-                else
-                {
-                    LogHelper.Error("调用失败", $"GUID={guid}, msg={result.Message}");
-                    return null;
-                }
+                LogHelper.Error("调用失败", $"GUID={guid}, msg={value.Message}");
+                return null;
             }
             else
             {
+                WaitingMessage.TryRemove(guid, out _);
                 LogHelper.Error("调用超时", "Timeout");
                 return null;
             }
@@ -230,7 +234,8 @@ namespace Another_Mirai_Native.RPC.Interface
                 },
                 Function = "ShowErrorDialog"
             }.ToJson());
-            WaitingMessage.Add(guid, new InvokeResult());
+            // 这里没有任何人在等这个 GUID（服务端的回执会被忽略），
+            // 登记进 WaitingMessage 只会让字典无限增长。
         }
 
         #endregion Virtual

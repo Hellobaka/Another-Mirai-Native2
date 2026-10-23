@@ -81,7 +81,7 @@ namespace Another_Mirai_Native.RPC.Interface
                 return null;
             }
             var property = typeof(AppConfig).GetProperty(key);
-            return property ?? property?.GetValue(null);
+            return property?.GetValue(null);
         }
 
         public string GetCoreVersion() => GetType().Assembly.GetName().Version?.ToString() ?? "未知版本";
@@ -93,36 +93,30 @@ namespace Another_Mirai_Native.RPC.Interface
                 return null;
             }
 
+            // 异常由上层处理，和正常返回 null 区分开。
             string name = caller.Function.Replace("InvokeCore_", "");
-            try
+            switch (name)
             {
-                switch (name)
-                {
-                    case "GetAllPlugins":
-                        return GetAllPlugins();
+                case "GetAllPlugins":
+                    return GetAllPlugins();
 
-                    case "AddLog":
-                        return AddLog(JObject.FromObject(caller.Args[0]).ToObject<LogModel>() ?? null);
+                case "AddLog":
+                    return AddLog(JObject.FromObject(caller.Args[0]).ToObject<LogModel>() ?? null);
 
-                    case "GetCoreVersion":
-                        return GetCoreVersion();
+                case "GetCoreVersion":
+                    return GetCoreVersion();
 
-                    case "GetAppConfig":
-                        return GetAppConfig(caller.Args[0].ToString());
+                case "GetAppConfig":
+                    return GetAppConfig(caller.Args[0].ToString());
 
-                    case "Restart":
-                        return RestartPlugin(Convert.ToInt32(caller.Args[0]));
+                case "Restart":
+                    return RestartPlugin(Convert.ToInt32(caller.Args[0]));
 
-                    case "EnablePlugin":
-                        return EnablePlugin(Convert.ToInt32(caller.Args[0]));
+                case "EnablePlugin":
+                    return EnablePlugin(Convert.ToInt32(caller.Args[0]));
 
-                    case "DisablePlugin":
-                        return DisablePlugin(Convert.ToInt32(caller.Args[0]));
-                }
-            }
-            catch (Exception e)
-            {
-                LogHelper.Error("调用核心方法", e);
+                case "DisablePlugin":
+                    return DisablePlugin(Convert.ToInt32(caller.Args[0]));
             }
             return null;
         }
@@ -134,20 +128,12 @@ namespace Another_Mirai_Native.RPC.Interface
                 return null;
             }
 
-            try
-            {
-                string name = caller.Function.Replace("InvokeCQP_", "");
-                var plugin = PluginManagerProxy.GetProxyByAuthCode(Convert.ToInt32(caller.Args[0]))
-                    ?? throw new Exception("无法获取调用插件实例");
-                var impl = new CQPImplementation(plugin);
+            string name = caller.Function.Replace("InvokeCQP_", "");
+            var plugin = PluginManagerProxy.GetProxyByAuthCode(Convert.ToInt32(caller.Args[0]))
+                ?? throw new Exception("无法获取调用插件实例");
+            var impl = new CQPImplementation(plugin);
 
-                return impl.Invoke(name, caller.Args);
-            }
-            catch (Exception e)
-            {
-                LogHelper.Error("调用CQP方法", e);
-                return null;
-            }
+            return impl.Invoke(name, caller.Args);
         }
 
         public void HandleInvokeBody(InvokeBody? caller, object connection)
@@ -156,28 +142,44 @@ namespace Another_Mirai_Native.RPC.Interface
             {
                 return;
             }
-            object? result = null;
-            if (caller.Function.StartsWith("InvokeCQP"))
-            {
-                result = HandleCQPAPI(caller);
-            }
-            else if (caller.Function.StartsWith("InvokeCore"))
-            {
-                result = HandleCoreAPI(caller);
-            }
-            else if (caller.Function == "ShowErrorDialog")
-            {
-                ShowErrorDialog(caller.GUID, Convert.ToInt32(caller.Args[0]), caller.Args[1].ToString(), caller.Args[2].ToString(), Convert.ToBoolean(caller.Args[3]));
-                result = 1;
-            }
-            else if (caller.Function == "HeartBeat")
+            if (caller.Function == "HeartBeat")
             {
                 // TODO: 管理心跳
                 SendMessage(connection, new InvokeBody() { Function = "HeartBeat" }.ToJson());
                 return;
             }
-            string message = "InvokeFail";
-            SendMessage(connection, new InvokeResult { GUID = caller.GUID, Message = result == null ? message : "", Result = result, Type = caller.Function }.ToJson());
+
+            InvokeResult result = new()
+            {
+                GUID = caller.GUID,
+                Type = caller.Function,
+                Success = true,
+            };
+            try
+            {
+                if (caller.Function.StartsWith("InvokeCQP"))
+                {
+                    result.Result = HandleCQPAPI(caller);
+                }
+                else if (caller.Function.StartsWith("InvokeCore"))
+                {
+                    result.Result = HandleCoreAPI(caller);
+                }
+                else if (caller.Function == "ShowErrorDialog")
+                {
+                    ShowErrorDialog(caller.GUID, Convert.ToInt32(caller.Args[0]), caller.Args[1].ToString(), caller.Args[2].ToString(), Convert.ToBoolean(caller.Args[3]));
+                    result.Result = 1;
+                }
+            }
+            catch (Exception e)
+            {
+                // 于正常返回 null 区分开，否则调用方无法判断
+                result.Success = false;
+                result.Message = e.Message;
+                LogHelper.Error("处理调用", e);
+            }
+
+            SendMessage(connection, result.ToJson());
         }
 
         public void HandleInvokeResult(InvokeResult? result, object connection)
@@ -289,15 +291,23 @@ namespace Another_Mirai_Native.RPC.Interface
         {
             WaitingMessage.AddOrUpdate(guid, new InvokeResult(), (key, oldValue) => new InvokeResult());
             OnShowErrorDialogCalled?.Invoke(guid, authCode, title ?? "", content ?? "", canIgnore);
-            RequestWaiter.Wait(guid, -1, null, out _);
+            // 只有 UI 订阅了事件才会有人 TriggerByKey；没订阅时等待会永远不返回，
+            // 把处理这条消息的线程永久挂住。
+            if (ShowErrorDialogEventHasSubscribed)
+            {
+                RequestWaiter.Wait(guid, -1, null, out _);
+            }
             WaitingMessage.TryRemove(guid, out _);
         }
 
         public void NotifyCurrentQQChanged(long currentQQ, string nickName)
         {
-            foreach (var item in Connections)
+            string message = new InvokeBody() { Function = "CurrentQQChanged", Args = [currentQQ, nickName] }.ToJson();
+            // 必须传真正的连接对象：Connections 的枚举项是 KeyValuePair，
+            // 传输层 SendMessage 里的 `is NamedPipe` / `is IWebSocketConnection` 会直接不匹配，导致一条都发不出去。
+            foreach (var connection in Connections.Values)
             {
-                SendMessage(item, new InvokeBody() { Function = "CurrentQQChanged", Args = [currentQQ, nickName] }.ToJson());
+                SendMessage(connection, message);
             }
         }
 

@@ -8,7 +8,7 @@ namespace Another_Mirai_Native.RPC.Pipe
 {
     public class Client : ClientBase
     {
-        private object _lock = new object();
+        private readonly object _lock = new();
 
         public int ReconnectCount { get; private set; }
 
@@ -16,17 +16,61 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         private static string PipeName => $"Another_Mirai_Native2_NamedPipe_{AppConfig.Instance.Core_PID}";
 
-        private NamedPipeClientStream PipeClient { get; set; }
+        private NamedPipeClientStream? PipeClient { get; set; }
 
         public override void Close()
         {
+            lock (_lock)
+            {
+                NamedPipeClientStream? pipe = PipeClient;
+                PipeClient = null;
+                if (pipe == null)
+                {
+                    return;
+                }
+                try
+                {
+                    pipe.Close();
+                    pipe.Dispose();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        public override void Reconnect()
+        {
+            if (Interlocked.CompareExchange(ref Reconnecting, 1, 0) != 0)
+            {
+                return;
+            }
+            _ = Task.Run(ReconnectLoop);
+        }
+
+        private void ReconnectLoop()
+        {
             try
             {
-                PipeClient?.Close();
-                PipeClient?.Dispose();
+                while (true)
+                {
+                    Reconnecting = true;
+                    Close();
+                    ReconnectCount++;
+                    LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
+                    Thread.Sleep(AppConfig.Instance.ReconnectTime);
+
+                    if (Connect())
+                    {
+                        Reconnecting = false;
+                        UpdateConnection();
+                        return;
+                    }
+                }
             }
-            catch (Exception)
+            finally
             {
+                Reconnecting = false;
             }
         }
 
@@ -34,48 +78,49 @@ namespace Another_Mirai_Native.RPC.Pipe
         {
             try
             {
-                PipeClient = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-                PipeClient.Connect(5000);
+                NamedPipeClientStream pipe = new(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+                pipe.Connect(5000);
+                PipeClient = pipe;
+                // 释放等待
+                Connection = pipe;
+                HeartBeatLostCount = 0;
                 LogHelper.Debug("连接服务端", "连接成功");
                 LogHelper.LocalDebug("Pipe_Connect", "Connection Ok.");
-                Task.Run(ListenForMessages);
+                _ = Task.Run(() => ListenForMessages(pipe));
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogHelper.LocalDebug("Pipe_Connect_Error", e.Message);
                 return false;
             }
         }
 
         public override void Send(string message)
         {
-            lock (_lock) 
-            {
-                SendMessage(message);
-            }
+            SendMessage(message);
         }
 
         public void SendMessage(string message)
         {
-            try
+            lock (_lock)
             {
-                if (PipeClient.IsConnected)
+                try
                 {
-                    LogHelper.LocalDebug("Pipe_Send", message);
+                    NamedPipeClientStream? pipe = PipeClient;
+                    if (pipe == null || !pipe.IsConnected)
+                    {
+                        return;
+                    }
 
-                    byte[] buffer = Encoding.UTF8.GetBytes(message);
-                    buffer = [.. BitConverter.GetBytes(buffer.Length), .. buffer];
-#if NET5_0_OR_GREATER
-                    PipeClient.Write(new ReadOnlySpan<byte>(buffer));
-#else
-                    PipeClient.Write(buffer, 0, buffer.Length);
-#endif
+                    LogHelper.LocalDebug("Pipe_Send", message);
+                    PipeFraming.WriteFrame(pipe, Encoding.UTF8.GetBytes(message));
                     LogHelper.LocalDebug("Pipe_Send", "Send Ok.");
                 }
-            }
-            catch(Exception e)
-            {
-                LogHelper.LocalDebug("Pipe_Send_Error", e.Message);
+                catch (Exception e)
+                {
+                    LogHelper.LocalDebug("Pipe_Send_Error", e.Message);
+                }
             }
         }
 
@@ -84,103 +129,45 @@ namespace Another_Mirai_Native.RPC.Pipe
             return true;
         }
 
-        private void HandleClose()
+        private async Task ListenForMessages(NamedPipeClientStream pipe)
         {
-            bool r = false;
-            lock (_lock)
+            while (true)
             {
-                LogHelper.LocalDebug("Pipe_Close", "Connection Lost...");
-
-                ReconnectCount++;
-                LogHelper.Error("与服务器连接断开", $"{AppConfig.Instance.ReconnectTime} ms后重新连接...");
-                RequestWaiter.ResetSignalByConnection(PipeClient);
-                Thread.Sleep(AppConfig.Instance.ReconnectTime);
-
-                r = Connect();
-            }
-            if (r)
-            {
-                Reconnecting = false;
-                UpdateConnection();
-            }
-            else
-            {
-                HandleClose();
-            }
-        }
-
-        private async Task ListenForMessages()
-        {
-            var buffer = new byte[1024];
-            using MemoryStream messageBuffer = new();
-            int targetLength = -1, readLength = 0;
-
-            while (PipeClient.IsConnected)
-            {
-                bool lengthRead = false;
+                byte[]? payload;
                 try
                 {
-#if NET5_0_OR_GREATER
-                    int bytesRead = await PipeClient.ReadAsync(new Memory<byte>(buffer));
-#else
-                    int bytesRead = await PipeClient.ReadAsync(buffer, 0, buffer.Length);
-#endif
-                    LogHelper.LocalDebug("Pipe_Receive", bytesRead.ToString());
-                    if (bytesRead > 0)
-                    {
-                        if (targetLength < 0 && bytesRead > 4)
-                        {
-                            targetLength = BitConverter.ToInt32(buffer, 0);
-                            lengthRead = true;
-                        }
-                        if (targetLength <= 0)
-                        {
-                            throw new InvalidDataException("Pipe 获得的数据长度无效");
-                        }
-
-                        if (readLength < targetLength)
-                        {
-                            if (lengthRead)
-                            {
-                                messageBuffer.Write(buffer, 4, bytesRead - 4);
-                                readLength += bytesRead - 4;
-                            }
-                            else
-                            {
-                                messageBuffer.Write(buffer, 0, bytesRead);
-                                readLength += bytesRead;
-                            }
-
-                            if (readLength < targetLength)
-                            {
-                                continue;
-                            }
-                        }
-#if NET5_0_OR_GREATER
-                        string message = Encoding.UTF8.GetString(new ReadOnlySpan<byte>(messageBuffer.ToArray(), 0, targetLength));
-#else
-                        string message = Encoding.UTF8.GetString(messageBuffer.ToArray(), 0, targetLength);
-#endif
-                        LogHelper.Debug("收到客户端消息", message);
-                        targetLength = -1;
-                        readLength = 0;
-                        messageBuffer.Position = 0;
-                        // 处理消息
-                        new Thread(() => HandleMessage(message)).Start();
-                    }
-                    else
-                    {
-                        HandleClose();
-                        Close();
-                        break;
-                    }
+                    payload = await PipeFraming.ReadFrameAsync(pipe, CancellationToken.None).ConfigureAwait(false);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    HandleClose();
-                    Close();
+                    LogHelper.LocalDebug("Pipe_Receive_Error", e.Message);
                     break;
                 }
+
+                if (payload == null)
+                {
+                    LogHelper.LocalDebug("Pipe_Close", "Connection Lost...");
+                    break;
+                }
+
+                LogHelper.LocalDebug("Pipe_Receive", payload.Length.ToString());
+                string message = Encoding.UTF8.GetString(payload);
+                LogHelper.Debug("收到服务端消息", message);
+                _ = Task.Run(() => HandleMessage(message));
+            }
+
+            RequestWaiter.ResetSignalByConnection(pipe);
+
+            // 只有当前这条管道仍是在用的那条时才重连；
+            // 否则旧的读循环会把刚建立好的新连接一起拆掉。
+            bool isCurrent;
+            lock (_lock)
+            {
+                isCurrent = ReferenceEquals(PipeClient, pipe);
+            }
+            if (isCurrent)
+            {
+                Reconnect();
             }
         }
     }
