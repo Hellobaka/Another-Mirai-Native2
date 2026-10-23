@@ -41,9 +41,12 @@ namespace Another_Mirai_Native.RPC.Pipe
 
         public override void Reconnect()
         {
-            if (Interlocked.CompareExchange(ref Reconnecting, 1, 0) != 0)
+            lock (_lock)
             {
-                return;
+                if (Reconnecting)
+                {
+                    return;
+                }
             }
             _ = Task.Run(ReconnectLoop);
         }
